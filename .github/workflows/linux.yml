@@ -51,34 +51,33 @@ jobs:
             -DAMReX_MPI=OFF
         cmake --build build -j 2
 
-# TODO: target_compile_features no known features for CUDA compiler "" version .
-#  nvcc11:
-#    name: CUDA@11.2 GNU@9.3.0
-#    runs-on: ubuntu-20.04
-#    env: {CXXFLAGS: "-fno-operator-names"}
-#    steps:
-#    - uses: actions/checkout@v2
-#    - name: Dependencies
-#      run: .github/workflows/dependencies/dependencies_nvcc11.sh
-#    - name: Build & Install
-#      run: |
-#        export PATH=/usr/local/nvidia/bin:/usr/local/cuda/bin:${PATH}
-#        export LD_LIBRARY_PATH=/usr/local/nvidia/lib:/usr/local/nvidia/lib64:/usr/local/cuda/lib64:${LD_LIBRARY_PATH}
-#        which nvcc || echo "nvcc not in PATH!"
-#
-#        export CC=$(which gcc)
-#        export CXX=$(which g++)
-#        export CUDAHOSTCXX=$(which g++)
-#
-#        cmake -S . -B build             \
-#            -DCMAKE_VERBOSE_MAKEFILE=ON \
-#            -DAMReX_GPU_BACKEND=CUDA    \
-#            -DCMAKE_CUDA_STANDARD=17    \
-#            -DCMAKE_CXX_STANDARD=17     \
-#            -DAMReX_CUDA_ARCH=8.0       \
-#            -DAMReX_CUDA_ERROR_CROSS_EXECUTION_SPACE_CALL=ON \
-#            -DAMReX_CUDA_ERROR_CAPTURE_THIS=ON
-#        cmake --build build -j 2
+  nvcc11:
+    name: CUDA@11.2 GNU@9.3.0
+    runs-on: ubuntu-20.04
+    env: {CXXFLAGS: "-fno-operator-names"}
+    steps:
+    - uses: actions/checkout@v2
+    - name: Dependencies
+      run: .github/workflows/dependencies/dependencies_nvcc11.sh
+    - name: Build & Install
+      run: |
+        export PATH=/usr/local/nvidia/bin:/usr/local/cuda/bin:${PATH}
+        export LD_LIBRARY_PATH=/usr/local/nvidia/lib:/usr/local/nvidia/lib64:/usr/local/cuda/lib64:${LD_LIBRARY_PATH}
+        which nvcc || echo "nvcc not in PATH!"
+
+        export CC=$(which gcc)
+        export CXX=$(which g++)
+        export CUDAHOSTCXX=$(which g++)
+
+        cmake -S . -B build             \
+            -DCMAKE_VERBOSE_MAKEFILE=ON \
+            -DAMReX_GPU_BACKEND=CUDA    \
+            -DCMAKE_CUDA_STANDARD=17    \
+            -DCMAKE_CXX_STANDARD=17     \
+            -DAMReX_CUDA_ARCH=8.0       \
+            -DAMReX_CUDA_ERROR_CROSS_EXECUTION_SPACE_CALL=ON \
+            -DAMReX_CUDA_ERROR_CAPTURE_THIS=ON
+        cmake --build build -j 2
 
 # TODO: in pybind11
 #   multiple definition of `scalblnl`, `sinhl', `tanhl`, `tanl`, ...
