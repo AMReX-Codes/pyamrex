@@ -1,0 +1,39 @@
+name: windows
+
+on: [push, pull_request]
+
+jobs:
+  msvc:
+    name: MSVC w/o MPI
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build & Install
+      run: |
+        cmake -S . -B build             `
+            -DCMAKE_VERBOSE_MAKEFILE=ON `
+            -DAMReX_MPI=OFF
+        if (-not $?) { throw "CMake configuration failed" }
+
+        cmake --build build -j 2
+        if (-not $?) { throw "CMake build failed" }
+
+  # Build libamrex and all tutorials
+  clang:
+    name: Clang w/o MPI
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: seanmiddleditch/gha-setup-ninja@master
+    - name: Build & Install
+      shell: cmd
+      run: |
+        call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\vc\Auxiliary\build\vcvarsall.bat" x64
+        cmake -S . -B build               ^
+              -T "ClangCl"                ^
+              -DCMAKE_VERBOSE_MAKEFILE=ON ^
+              -DAMReX_MPI=OFF
+        if errorlevel 1 exit 1
+
+        cmake --build build --config RelWithDebInfo -j 2
+        if errorlevel 1 exit 1

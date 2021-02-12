@@ -16,10 +16,11 @@ endif()
 
 # CMake policies ##############################################################
 #
-# TBD
-#if(POLICY CMPXXXX)
-#    cmake_policy(SET CMPXXXX NEW)
-#endif()
+# CMake 3.18+: CMAKE_CUDA_ARCHITECTURES
+# https://cmake.org/cmake/help/latest/policy/CMP0104.html
+if(POLICY CMP0104)
+    cmake_policy(SET CMP0104 OLD)
+endif()
 
 
 # CCache Support ##############################################################

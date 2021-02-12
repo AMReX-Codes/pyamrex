@@ -1,0 +1,23 @@
+name: macos
+
+on: [push, pull_request]
+
+env:
+  CXXFLAGS: "-Werror -Wshadow -Woverloaded-virtual -Wextra-semi -Wunreachable-code -fno-operator-names -Wno-pass-failed"
+
+jobs:
+  appleclang:
+    name: AppleClang@12.0 w/o MPI
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Dependencies
+      run: .github/workflows/dependencies/dependencies_mac.sh
+    - name: Build & Install
+      run: |
+        cmake -S . -B build             \
+            -DCMAKE_VERBOSE_MAKEFILE=ON \
+            -DAMReX_MPI=OFF
+        cmake --build build -j 2
+
+# TODO: AppleClang w/ MPI
