@@ -46,7 +46,7 @@ spack install
 or macOS/Linux:
 ```bash
 brew update
-brew install ccache cmake fftw libomp mpi4py numpy open-mpi python
+brew install ccache cmake libomp mpi4py numpy open-mpi python
 ```
 
 Now, `cmake --version` should be at version 3.18.0 or newer.
