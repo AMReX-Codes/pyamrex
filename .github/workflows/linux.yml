@@ -1,0 +1,130 @@
+name: linux
+
+on: [push, pull_request]
+
+jobs:
+  # Build and install libamrex as AMReX CMake project
+  gcc7:
+    name: GNU@7.5
+    runs-on: ubuntu-18.04
+    env: {CXXFLAGS: "-Werror -Wshadow -Woverloaded-virtual -Wunreachable-code -fno-operator-names"}
+    steps:
+    - uses: actions/checkout@v2
+    - name: Dependencies
+      run: .github/workflows/dependencies/dependencies.sh
+    - name: Build & Install
+      run: |
+        cmake -S . -B build             \
+            -DCMAKE_VERBOSE_MAKEFILE=ON
+        cmake --build build -j 2
+
+  gcc10:
+    name: GNU@10.1
+    runs-on: ubuntu-18.04
+    env: {CXXFLAGS: "-Werror -Wno-error=deprecated-declarations -Wshadow -Woverloaded-virtual -Wunreachable-code -fno-operator-names"}
+    steps:
+    - uses: actions/checkout@v2
+    - name: Dependencies
+      run: .github/workflows/dependencies/dependencies_gcc10.sh
+    - name: Build & Install
+      run: |
+        export CC=$(which gcc-10)
+        export CXX=$(which g++-10)
+        cmake -S . -B build             \
+            -DCMAKE_VERBOSE_MAKEFILE=ON
+        cmake --build build -j 2
+
+  clang6:
+    name: Clang@6.0 w/o MPI
+    runs-on: ubuntu-18.04
+    env: {CXXFLAGS: "-Werror -Wshadow -Woverloaded-virtual -Wextra-semi -Wunreachable-code -fno-operator-names -Wno-pass-failed"}
+    steps:
+    - uses: actions/checkout@v2
+    - name: Dependencies
+      run: .github/workflows/dependencies/dependencies_clang6.sh
+    - name: Build & Install
+      run: |
+        export CC=$(which clang)
+        export CXX=$(which clang++)
+        cmake -S . -B build             \
+            -DCMAKE_VERBOSE_MAKEFILE=ON \
+            -DAMReX_MPI=OFF
+        cmake --build build -j 2
+
+# TODO: target_compile_features no known features for CUDA compiler "" version .
+#  nvcc11:
+#    name: CUDA@11.2 GNU@9.3.0
+#    runs-on: ubuntu-20.04
+#    env: {CXXFLAGS: "-fno-operator-names"}
+#    steps:
+#    - uses: actions/checkout@v2
+#    - name: Dependencies
+#      run: .github/workflows/dependencies/dependencies_nvcc11.sh
+#    - name: Build & Install
+#      run: |
+#        export PATH=/usr/local/nvidia/bin:/usr/local/cuda/bin:${PATH}
+#        export LD_LIBRARY_PATH=/usr/local/nvidia/lib:/usr/local/nvidia/lib64:/usr/local/cuda/lib64:${LD_LIBRARY_PATH}
+#        which nvcc || echo "nvcc not in PATH!"
+#
+#        export CC=$(which gcc)
+#        export CXX=$(which g++)
+#        export CUDAHOSTCXX=$(which g++)
+#
+#        cmake -S . -B build             \
+#            -DCMAKE_VERBOSE_MAKEFILE=ON \
+#            -DAMReX_GPU_BACKEND=CUDA    \
+#            -DCMAKE_CUDA_STANDARD=17    \
+#            -DCMAKE_CXX_STANDARD=17     \
+#            -DAMReX_CUDA_ARCH=8.0       \
+#            -DAMReX_CUDA_ERROR_CROSS_EXECUTION_SPACE_CALL=ON \
+#            -DAMReX_CUDA_ERROR_CAPTURE_THIS=ON
+#        cmake --build build -j 2
+
+# TODO: in pybind11
+#   multiple definition of `scalblnl`, `sinhl', `tanhl`, `tanl`, ...
+#  dpcpp:
+#    name: DPCPP GFortran@7.5
+#    runs-on: ubuntu-20.04
+#    env: {CXXFLAGS: "-fno-operator-names"}
+#    steps:
+#    - uses: actions/checkout@v2
+#    - name: Dependencies
+#      run: .github/workflows/dependencies/dependencies_dpcpp.sh
+#    - name: Build & Install
+#      run: |
+#        set +e
+#        source /opt/intel/oneapi/setvars.sh
+#        set -e
+#        cmake -S . -B build                                \
+#            -DCMAKE_VERBOSE_MAKEFILE=ON                    \
+#            -DCMAKE_CXX_COMPILER_ID="Clang"                \
+#            -DCMAKE_CXX_COMPILER_VERSION=12.0              \
+#            -DCMAKE_CXX_STANDARD_COMPUTED_DEFAULT="17"     \
+#            -DAMReX_GPU_BACKEND=SYCL                       \
+#            -DCMAKE_C_COMPILER=$(which clang)              \
+#            -DCMAKE_CXX_COMPILER=$(which dpcpp)
+#        cmake --build build -j 2
+    # note: setting the CXX compiler ID is a work-around for
+    # the 2021.1 DPC++ release / CMake 3.19.0-3.19.1
+    # https://gitlab.kitware.com/cmake/cmake/-/issues/21551#note_869580
+
+  hip:
+    name: HIP ROCm@3.8 GFortran@9.3
+    runs-on: ubuntu-20.04
+    env: {CXXFLAGS: "-fno-operator-names"}
+    steps:
+    - uses: actions/checkout@v2
+    - name: Dependencies
+      run: .github/workflows/dependencies/dependencies_hip.sh
+    - name: Build & Install
+      run: |
+        source /etc/profile.d/rocm.sh
+        hipcc --version
+
+        cmake -S . -B build                                \
+            -DCMAKE_VERBOSE_MAKEFILE=ON                    \
+            -DAMReX_GPU_BACKEND=HIP                        \
+            -DAMReX_AMD_ARCH=gfx900                        \
+            -DCMAKE_C_COMPILER=$(which hipcc)              \
+            -DCMAKE_CXX_COMPILER=$(which hipcc)
+        cmake --build build -j 2
