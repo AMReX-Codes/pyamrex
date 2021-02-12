@@ -1,13 +1,13 @@
 # pyAMReX
 
-![Supported Platforms][api-platforms]
+[![Python3][api-py3]](https://www.python.org/) ![Python3 API: Pre-Alpha][dev-pre-alpha]
 [![License AMReX](https://img.shields.io/badge/license-BSD--3--Clause--LBNL-blue.svg)](https://spdx.org/licenses/BSD-3-Clause-LBNL.html)  
 ![linux](https://github.com/AMReX-Codes/pyamrex/workflows/linux/badge.svg?branch=development)
 ![macos](https://github.com/AMReX-Codes/pyamrex/workflows/macos/badge.svg?branch=development)
 ![windows](https://github.com/AMReX-Codes/pyamrex/workflows/windows/badge.svg?branch=development)
 
-[api-platforms]: https://img.shields.io/badge/platforms-linux%20|%20osx%20|%20win-blue "Supported Platforms"
-
+[api-py3]: https://img.shields.io/badge/language-Python3-yellowgreen "Python3 API"
+[dev-pre-alpha]: https://img.shields.io/badge/phase-pre--alpha-yellowgreen "Status: Pre-Alpha"
 
 pyAMReX is part of AMReX.
 
