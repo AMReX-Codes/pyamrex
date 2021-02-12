@@ -21,6 +21,11 @@ endif()
 if(POLICY CMP0104)
     cmake_policy(SET CMP0104 OLD)
 endif()
+# device link step not yet fully implemented in AMReX logic
+# https://cmake.org/cmake/help/latest/policy/CMP0105.html
+if(POLICY CMP0105)
+    cmake_policy(SET CMP0105 OLD)
+endif()
 
 
 # CCache Support ##############################################################
