@@ -17,7 +17,7 @@ We will add further information here once first development versions are ready f
 pyAMReX depends on the following popular third party software.
 
 - a mature [C++14](https://en.wikipedia.org/wiki/C%2B%2B14) compiler: e.g. g++ 5.0+, clang 5.0+, VS 2017+
-- [CMake 3.15.0+](https://cmake.org/)
+- [CMake 3.18.0+](https://cmake.org)
 - [AMReX *development*](https://amrex-codes.github.io): we automatically download and compile a copy of AMReX
 - [pybind11](https://github.com/pybind/pybind11/) 2.6.2+: we automatically download and compile a copy of pybind11 ([new BSD](https://github.com/pybind/pybind11/blob/master/LICENSE))
   - [Python](https://python.org) 3.6+
@@ -46,7 +46,7 @@ brew update
 brew install ccache cmake fftw libomp mpi4py numpy open-mpi python
 ```
 
-Now, `cmake --version` should be at version 3.15.0 or newer.
+Now, `cmake --version` should be at version 3.18.0 or newer.
 
 Or go:
 ```bash
