@@ -79,30 +79,29 @@ jobs:
             -DAMReX_CUDA_ERROR_CAPTURE_THIS=ON
         cmake --build build -j 2
 
-# TODO: in pybind11
-#   multiple definition of `scalblnl`, `sinhl', `tanhl`, `tanl`, ...
-#  dpcpp:
-#    name: DPCPP GFortran@7.5
-#    runs-on: ubuntu-20.04
-#    env: {CXXFLAGS: "-fno-operator-names"}
-#    steps:
-#    - uses: actions/checkout@v2
-#    - name: Dependencies
-#      run: .github/workflows/dependencies/dependencies_dpcpp.sh
-#    - name: Build & Install
-#      run: |
-#        set +e
-#        source /opt/intel/oneapi/setvars.sh
-#        set -e
-#        cmake -S . -B build                                \
-#            -DCMAKE_VERBOSE_MAKEFILE=ON                    \
-#            -DCMAKE_CXX_COMPILER_ID="Clang"                \
-#            -DCMAKE_CXX_COMPILER_VERSION=12.0              \
-#            -DCMAKE_CXX_STANDARD_COMPUTED_DEFAULT="17"     \
-#            -DAMReX_GPU_BACKEND=SYCL                       \
-#            -DCMAKE_C_COMPILER=$(which clang)              \
-#            -DCMAKE_CXX_COMPILER=$(which dpcpp)
-#        cmake --build build -j 2
+  dpcpp:
+    name: DPCPP w/o MPI
+    runs-on: ubuntu-20.04
+    env: {CXXFLAGS: "-fno-operator-names"}
+    steps:
+    - uses: actions/checkout@v2
+    - name: Dependencies
+      run: .github/workflows/dependencies/dependencies_dpcpp.sh
+    - name: Build & Install
+      run: |
+        set +e
+        source /opt/intel/oneapi/setvars.sh
+        set -e
+        cmake -S . -B build                                \
+            -DCMAKE_VERBOSE_MAKEFILE=ON                    \
+            -DCMAKE_CXX_COMPILER_ID="Clang"                \
+            -DCMAKE_CXX_COMPILER_VERSION=12.0              \
+            -DCMAKE_CXX_STANDARD_COMPUTED_DEFAULT="17"     \
+            -DAMReX_GPU_BACKEND=SYCL                       \
+            -DCMAKE_C_COMPILER=$(which clang)              \
+            -DCMAKE_CXX_COMPILER=$(which dpcpp)            \
+            -DAMReX_MPI=OFF
+        cmake --build build -j 2
     # note: setting the CXX compiler ID is a work-around for
     # the 2021.1 DPC++ release / CMake 3.19.0-3.19.1
     # https://gitlab.kitware.com/cmake/cmake/-/issues/21551#note_869580
