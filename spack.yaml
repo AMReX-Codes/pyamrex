@@ -1,0 +1,31 @@
+# This is a Spack environment file.
+#
+# This environment can be used to install all dependencies potentially needed
+# to build pyAMReX. This environment also sets all dependencies to use MPI.
+#
+# Activating and installing this environment will provide all dependencies
+# that are needed for full-feature development.
+#   https//spack.readthedocs.io/en/latest/environments.html#anonymous-environments
+#
+# Inside pyAMReX' source root directory:
+#   spack env activate -d .
+#   spack install  # only needed the first time
+#
+# If you furthermore want to build for Nvidia GPUs:
+#   spack add cuda
+#   spack install
+#
+spack:
+  specs:
+  - ccache
+  # optional and heavy
+  # - cuda
+  - cmake
+  - mpi
+  - python
+  - py-mpi4py
+  - py-numpy
+  - py-pip
+  - py-pybind11
+  - py-setuptools
+  - py-wheel
