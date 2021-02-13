@@ -222,7 +222,7 @@ setup(
     packages = ['pyamrex'],
 
     # Python sources:
-    package_dir = {'pyamrex': 'src/pyamrex'},
+    package_dir = {'': 'src'},
 
     # pyamrex authors:
     author='Axel Huebl, Shreyas Ananthan, Steven R. Brandt, Andrew Myers, Weiqun Zhang, et al.',

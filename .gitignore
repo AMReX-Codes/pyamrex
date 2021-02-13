@@ -127,3 +127,5 @@ docs/openpmd-api-doxygen-web.tag.xml
 ####################
 docs/build/
 docs/source/_static/doxyhtml/
+
+src/*.egg-info
