@@ -1,6 +1,6 @@
 # Preamble ####################################################################
 #
-cmake_minimum_required(VERSION 3.18.0)
+cmake_minimum_required(VERSION 3.17.3)
 project(pyAMReX VERSION 21.02)
 
 include(${pyAMReX_SOURCE_DIR}/cmake/pyAMReXFunctions.cmake)
@@ -64,7 +64,14 @@ set_default_build_type("RelWithDebInfo")
 include(${pyAMReX_SOURCE_DIR}/cmake/dependencies/AMReX.cmake)
 
 # Python
-find_package(Python COMPONENTS Interpreter Development.Module REQUIRED)
+set(_PY_DEV_MODULE Development.Module)
+if(CMAKE_VERSION VERSION_LESS 3.18.0)
+    # over-specification needed for CMake<3.18
+    #   https://pybind11.readthedocs.io/en/latest/compiling.html#findpython-mode
+    #   https://cmake.org/cmake/help/v3.18/module/FindPython.html
+    set(_PY_DEV_MODULE Development)
+endif()
+find_package(Python COMPONENTS Interpreter ${_PY_DEV_MODULE} REQUIRED)
 
 # pybind11
 #   builds pybind11 from git (default), form local source or
