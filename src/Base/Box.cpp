@@ -22,7 +22,7 @@ void init_Box(py::module &m) {
             [](Box const & b) {
                 std::stringstream s;
                 s << b.size();
-                return "<amrex.Box of size '" + s.str() + "'>";
+                return "<pyamrex.Box of size '" + s.str() + "'>";
             }
         )
 

@@ -21,7 +21,7 @@ void init_IntVect(py::module &m) {
             [](IntVect const & iv) {
                 std::stringstream s;
                 s << iv;
-                return "<amrex.Int_Vect '" + s.str() + "'>";
+                return "<pyamrex.Int_Vect '" + s.str() + "'>";
             }
         )
 
