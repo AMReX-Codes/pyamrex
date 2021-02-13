@@ -88,7 +88,7 @@ class CMakeBuild(build_ext):
 
         cmake_args = [
             '-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=' +
-                os.path.join(extdir, "pyamrex"),
+                os.path.join(extdir, "src", "pyamrex"),
             '-DCMAKE_VERBOSE_MAKEFILE=ON',
             '-DCMAKE_RUNTIME_OUTPUT_DIRECTORY=' + extdir,
             '-DAMReX_SPACEDIM=' + dims,
@@ -131,7 +131,7 @@ class CMakeBuild(build_ext):
             cmake_args += [
                 '-DCMAKE_LIBRARY_OUTPUT_DIRECTORY_{}={}'.format(
                     cfg.upper(),
-                    os.path.join(extdir, "pyamrex")
+                    os.path.join(extdir, "src", "pyamrex")
                 )
             ]
             if sys.maxsize > 2**32:
