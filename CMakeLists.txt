@@ -47,6 +47,8 @@ set_default_install_dirs()
 
 # Options and Variants ########################################################
 #
+set(pyAMReX_VERSION_INFO "" CACHE STRING
+    "PEP-440 conformant version (set by distutils)")
 # change the default build type to RelWithDebInfo (or Release) instead of Debug
 set_default_build_type("RelWithDebInfo")
 
@@ -105,10 +107,14 @@ target_link_libraries(pyAMReX PRIVATE pybind11::module pybind11::lto pybind11::w
 #set_pyAMReX_binary_name()
 
 # set Python module properties
+set_target_properties(pyAMReX PROPERTIES
+    CXX_VISIBILITY_PRESET "hidden"
+    CUDA_VISIBILITY_PRESET "hidden"
+    ARCHIVE_OUTPUT_NAME pyamrex_cxx
+    LIBRARY_OUTPUT_NAME pyamrex_cxx
+)
 pybind11_extension(pyAMReX)
 pybind11_strip(pyAMReX)
-set_target_properties(pyAMReX PROPERTIES CXX_VISIBILITY_PRESET "hidden"
-                                         CUDA_VISIBILITY_PRESET "hidden")
 
 # AMReX helper function: propagate CUDA specific target & source properties
 if(AMReX_GPU_BACKEND STREQUAL CUDA)
@@ -123,7 +129,9 @@ endif()
 
 # Defines #####################################################################
 #
-# TBD
+# for module __version__
+target_compile_definitions(pyAMReX PRIVATE
+    PYAMReX_VERSION_INFO=${pyAMReX_VERSION_INFO})
 
 
 # Warnings ####################################################################

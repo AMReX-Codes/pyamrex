@@ -9,6 +9,9 @@
 #include <AMReX_Config.H>
 #include <AMReX.H>
 
+#define STRINGIFY(x) #x
+#define MACRO_STRINGIFY(x) STRINGIFY(x)
+
 namespace py = pybind11;
 
 
@@ -16,11 +19,11 @@ namespace py = pybind11;
 void init_Box(py::module &);
 void init_IntVect(py::module &);
 
-PYBIND11_MODULE(pyamrex, m) {
+PYBIND11_MODULE(pyamrex_cxx, m) {
     m.doc() = R"pbdoc(
-            pyamrex
+            pyamrex_cxx
             -----------
-            .. currentmodule:: pyamrex
+            .. currentmodule:: pyamrex_cxx
 
             .. autosummary::
                :toctree: _generate
@@ -29,11 +32,21 @@ PYBIND11_MODULE(pyamrex, m) {
     )pbdoc";
 
     // note: order from parent to child classes
-    init_Box(m);
     init_IntVect(m);
+    init_Box(m);
 
     // API runtime version
-    // m.attr("__version__") = amrex::getVersion();
+    //   note PEP-440 syntax: x.y.zaN but x.y.z.devN
+#ifdef PYAMReX_VERSION_INFO
+    m.attr("__version__") = MACRO_STRINGIFY(PYAMReX_VERSION_INFO);
+#else
+    m.attr("__version__") = "dev";
+#endif
+
+    // authors
+    m.attr("__author__") =
+        "Axel Huebl, Shreyas Ananthan, Steven R. Brandt, Andrew Myers, "
+        "Weiqun Zhang, et al.";
 
     // API runtime build-time feature variants
     // m.attr("variants") = amrex::getVariants();

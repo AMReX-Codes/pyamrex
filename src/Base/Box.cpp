@@ -26,6 +26,10 @@ void init_Box(py::module &m) {
             }
         )
 
+        .def(py::init< IntVect const &, IntVect const & >())
+        .def(py::init< IntVect const &, IntVect const &, IntVect const & >())
+        //.def(py::init< IntVect const &, IntVect const &, IndexType >())
+
         /*
         .def_property("small_end",
             &Box::smallEnd,
