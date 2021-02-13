@@ -25,6 +25,10 @@ void init_IntVect(py::module &m) {
             }
         )
 
+        .def(py::init<>())
+        .def(py::init<AMREX_D_DECL(int, int, int)>())
+        .def(py::init<int>())
+
         .def_property_readonly("sum", &IntVect::sum)
         .def_property_readonly("max",
             py::overload_cast<>(&IntVect::max, py::const_))

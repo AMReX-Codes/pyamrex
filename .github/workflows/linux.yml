@@ -14,9 +14,9 @@ jobs:
       run: .github/workflows/dependencies/dependencies.sh
     - name: Build & Install
       run: |
-        cmake -S . -B build             \
-            -DCMAKE_VERBOSE_MAKEFILE=ON
-        cmake --build build -j 2
+        python3 -m pip install -U pip setuptools wheel
+        AMREX_MPI=ON python3 -m pip install -v .
+        python3 -c "import pyamrex; print(pyamrex.__version__)"
 
   gcc10:
     name: GNU@10.1
@@ -30,9 +30,9 @@ jobs:
       run: |
         export CC=$(which gcc-10)
         export CXX=$(which g++-10)
-        cmake -S . -B build             \
-            -DCMAKE_VERBOSE_MAKEFILE=ON
-        cmake --build build -j 2
+        python3 -m pip install -U pip setuptools wheel
+        AMREX_MPI=ON python3 -m pip install -v .
+        python3 -c "import pyamrex; print(pyamrex.__version__)"
 
   clang6:
     name: Clang@6.0 w/o MPI
@@ -46,10 +46,9 @@ jobs:
       run: |
         export CC=$(which clang)
         export CXX=$(which clang++)
-        cmake -S . -B build             \
-            -DCMAKE_VERBOSE_MAKEFILE=ON \
-            -DAMReX_MPI=OFF
-        cmake --build build -j 2
+        python3 -m pip install -U pip
+        python3 -m pip install -v .
+        python3 -c "import pyamrex; print(pyamrex.__version__)"
 
   nvcc11:
     name: CUDA@11.2 GNU@9.3.0

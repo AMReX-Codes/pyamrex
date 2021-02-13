@@ -15,7 +15,39 @@ Due to its **highly experimental** nature, we develop it currently in a separate
 
 We will add further information here once first development versions are ready for testing.
 
-## Dependencies
+## Users
+
+*to do*
+
+- pip/pypa
+- conda-forge
+- spack
+- brew
+- ...
+
+### Usage
+
+*to do*
+
+```python
+import pyamrex
+
+small_end = pyamrex.Int_Vect()
+big_end = pyamrex.Int_Vect(2, 3, 4)
+
+b = pyamrex.Box(small_end, big_end)
+print(b)
+
+# ...
+```
+
+## Developers
+
+If you are new to CMake, [this short tutorial](https://hsf-training.github.io/hsf-training-cmake-webpage/) from the HEP Software foundation is the perfect place to get started with it.
+
+If you just want to use CMake to build the project, jump into sections *1. Introduction*, *2. Building with CMake* and *9. Finding Packages*.
+
+### Dependencies
 
 pyAMReX depends on the following popular third party software.
 
@@ -25,7 +57,6 @@ pyAMReX depends on the following popular third party software.
 - [pybind11](https://github.com/pybind/pybind11/) 2.6.2+: we automatically download and compile a copy of pybind11 ([new BSD](https://github.com/pybind/pybind11/blob/master/LICENSE))
   - [Python](https://python.org) 3.6+
   - [Numpy](https://numpy.org) 1.15+
-
 
 Optional dependencies include:
 - [mpi4py](https://www.openmp.org) 2.1+: for multi-node and/or multi-GPU execution
@@ -72,18 +103,69 @@ export CUDACXX=$(which nvcc)
 export CUDAHOSTCXX=$(which clang++)
 ```
 
-## Build & Test
+
+### Build & Test
 
 From the base of the pyAMReX source directory, execute:
 ```bash
-# TODO: implement
+# optional controls (example):
+#export AMREX_SPACEDIM=3
 #export AMREX_MPI=ON
-#export AMREX_COMPUTE=...
-#export AMREX_SRC=...
+#export AMREX_OMP=ON
+#export AMREX_GPU_BACKEND=CUDA
+#export AMREX_SRC=$PWD/../amrex
+#export CMAKE_BUILD_PARALLEL_LEVEL=8
 
-# optional:                --force-reinstall --user
+# optional:                 --force-reinstall --user
 python3 -m pip install -v .
 ```
+
+If you are iterating on C++ builds, it might be faster to just call CMake:
+```bash
+cmake -S . -B build
+cmake --build build -j 8  # repeat this step to fix compile errors
+```
+
+### Build Options
+
+If you are using the pip-driven install, selected [AMReX CMake options](https://amrex-codes.github.io/amrex/docs_html/BuildingAMReX.html#building-with-cmake) can be controlled with environment variables:
+
+| Environment Variable         | Default & Values                           | Description                                                  |
+|------------------------------|--------------------------------------------|--------------------------------------------------------------|
+| `AMREX_OMP`                  | ON/**OFF**                                 | Enable OpenMP                                                |
+| `AMREX_GPU_BACKEND`          | **NONE**/SYCL/CUDA/HIP                     | On-node, accelerated GPU backend                             |
+| `AMREX_MPI`                  | ON/**OFF**                                 | Enable MPI                                                   |
+| `AMREX_PRECISION`            | SINGLE/**DOUBLE**                          | Precision of AMReX Real type                                 |
+| `AMREX_SPACEDIM`             | 1/2/**3**                                  | Dimension of AMReX                                           |
+| `AMREX_BUILD_SHARED_LIBS`    | ON/**OFF**                                 | Build the core AMReX library as shared library               |
+| `AMREX_SRC`                  | *None*                                     | Absolute path to AMReX source directory (preferred if set)   |
+| `AMREX_REPO`                 | `https://github.com/AMReX-Codes/amrex.git` | Repository URI to pull and build AMReX from                  |
+| `AMREX_BRANCH`               | `development`                              | Repository branch for `AMREX_REPO`                           |
+| `AMREX_INTERNAL`             | **ON**/OFF                                 | Needs a pre-installed AMReX library if set to `OFF`          |
+| `AMREX_LIBDIR`               | *None*         (note: not yet implemented) | If set, search for pre-built AMReX C++ libraries (see below) |
+| `CMAKE_BUILD_PARALLEL_LEVEL` | 2                                          | Number of parallel build threads                             |
+
+For example, one can also build against a local AMReX copy.
+Assuming AMReX' source is located in `$HOME/src/amrex`, then `export AMREX_SRC=$HOME/src/amrex`.
+
+Or as a one-liner, assuming your AMReX source directory is located in `../amrex`:
+```bash
+AMREX_SRC=$PWD/../amrex python3 -m pip install -v --force-reinstall .
+```
+Note that you need to use absolute paths for external source trees, because pip builds in a temporary directory.
+
+Or build against an AMReX feature branch of a colleague.
+Assuming your colleague pushed AMReX to `https://github.com/WeiqunZhang/amrex/` in a branch `new-feature` then
+
+```bash
+unset AMREX_SRC  # preferred if set
+AMREX_REPO=https://github.com/WeiqunZhang/amrex.git AMREX_BRANCH=new-feature python3 -m pip install -v --force-reinstall .
+```
+
+You can speed up the install further if you pre-install AMReX, e.g. with a package manager.
+Set `AMREX_INTERNAL=OFF` and add installation prefix of AMReX to the environment variable [CMAKE_PREFIX_PATH](https://cmake.org/cmake/help/latest/envvar/CMAKE_PREFIX_PATH.html).
+Please see the [short CMake tutorial that we linked above](#Developers) if this sounds new to you.
+
 
 ## License
 

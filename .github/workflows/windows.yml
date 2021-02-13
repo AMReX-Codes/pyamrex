@@ -8,15 +8,14 @@ jobs:
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v2
+    - uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
     - name: Build & Install
       run: |
-        cmake -S . -B build             `
-            -DCMAKE_VERBOSE_MAKEFILE=ON `
-            -DAMReX_MPI=OFF
-        if (-not $?) { throw "CMake configuration failed" }
-
-        cmake --build build -j 2
-        if (-not $?) { throw "CMake build failed" }
+        python -m pip install -U pip
+        python -m pip install -v .
+        python -c "import pyamrex; print(pyamrex.__version__)"
 
   # Build libamrex and all tutorials
   clang:
