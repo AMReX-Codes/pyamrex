@@ -62,7 +62,7 @@ Optional dependencies include:
 - [mpi4py](https://www.openmp.org) 2.1+: for multi-node and/or multi-GPU execution
 - [CCache](https://ccache.dev): to speed up rebuilds (needs 3.7.9+ for CUDA)
 - further [optional dependencies of AMReX](https://github.com/AMReX-Codes/amrex/)
-- [pytest](https://docs.pytest.org/en/stable/): for running unit tests
+- [pytest](https://docs.pytest.org/en/stable/) 6.2+: for running unit tests
 
 ### Install Dependencies
 
@@ -134,7 +134,6 @@ installed)
 # Run all tests 
 python -m pytest tests/
 ```
-
 
 If you are iterating on C++ builds, it might be faster to just call CMake:
 ```bash

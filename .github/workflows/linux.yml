@@ -38,7 +38,7 @@ jobs:
         python3 -c "import pyamrex; print(pyamrex.__version__)"
     - name: Unit tests
       run: |
-        python3 -m pytest tests/
+        mpiexec -np 1 python3 -m pytest tests/
 
   clang6:
     name: Clang@6.0 w/o MPI
@@ -57,7 +57,7 @@ jobs:
         python3 -c "import pyamrex; print(pyamrex.__version__)"
     - name: Unit tests
       run: |
-        python3 -m pytest tests/
+        mpiexec -np 1 python3 -m pytest tests/
 
   nvcc11:
     name: CUDA@11.2 GNU@9.3.0
