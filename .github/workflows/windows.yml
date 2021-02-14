@@ -13,9 +13,12 @@ jobs:
         python-version: '3.x'
     - name: Build & Install
       run: |
-        python -m pip install -U pip
+        python -m pip install -U pip pytest
         python -m pip install -v .
         python -c "import pyamrex; print(pyamrex.__version__)"
+    - name: Unit tests
+      run: |
+        python -m pytest tests/
 
   # Build libamrex and all tutorials
   clang:

@@ -45,4 +45,13 @@ void init_AMReX(py::module& m)
     m.def("finalize", py::overload_cast<AMReX*>(&Finalize));
 
     m.def("space_dim", [](){ return AMREX_SPACEDIM; });
+
+    m.def("have_mpi",
+          [](){
+#ifdef AMREX_USE_MPI
+              return true;
+#else
+              return false;
+#endif
+          });
 }

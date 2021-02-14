@@ -62,6 +62,7 @@ Optional dependencies include:
 - [mpi4py](https://www.openmp.org) 2.1+: for multi-node and/or multi-GPU execution
 - [CCache](https://ccache.dev): to speed up rebuilds (needs 3.7.9+ for CUDA)
 - further [optional dependencies of AMReX](https://github.com/AMReX-Codes/amrex/)
+- [pytest](https://docs.pytest.org/en/stable/) 6.2+: for running unit tests
 
 ### Install Dependencies
 
@@ -87,6 +88,12 @@ Or go:
 # optional:                                    --user
 python3 -m pip install -U pip setuptools wheel
 python3 -m pip install -U cmake
+```
+
+If you wish to run unit tests, then please install `pytest`
+
+```bash
+python3 -m pip install -U pytest
 ```
 
 ### Configure your compiler
@@ -118,6 +125,20 @@ From the base of the pyAMReX source directory, execute:
 
 # optional:                 --force-reinstall --user
 python3 -m pip install -v .
+```
+
+On successful installation, you can run the unit tests (assuming `pytest` is
+installed). If `AMREX_MPI=ON`, then please prepend the following commands with `mpiexec -np <NUM_PROCS>`
+
+```bash
+# Run all tests 
+python -m pytest tests/
+
+# Run tests from a single file
+python -m pytest tests/test_intvect.py
+
+# Run a single test (useful during debugging)
+python -m pytest tests/test_intvect.py::test_iv_conversions
 ```
 
 If you are iterating on C++ builds, it might be faster to just call CMake:
