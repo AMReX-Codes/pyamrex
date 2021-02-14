@@ -21,11 +21,11 @@ void init_Box(py::module &);
 void init_Dim3(py::module&);
 void init_IntVect(py::module &);
 
-PYBIND11_MODULE(pyamrex_cxx, m) {
+PYBIND11_MODULE(amrex_pybind, m) {
     m.doc() = R"pbdoc(
-            pyamrex_cxx
+            amrex_pybind
             -----------
-            .. currentmodule:: pyamrex_cxx
+            .. currentmodule:: amrex_pybind
 
             .. autosummary::
                :toctree: _generate

@@ -44,7 +44,7 @@ class CopyPreBuild(build):
                                "AMREX_libdir='{}'".format(AMREX_libdir))
 
         # copy external libs into collection of files in a temporary build dir
-        dst_path = os.path.join(self.build_lib, "pyamrex")
+        dst_path = os.path.join(self.build_lib, "amrex")
         for lib_path in libs_found:
             shutil.copy(lib_path, dst_path)
 
@@ -88,7 +88,7 @@ class CMakeBuild(build_ext):
 
         cmake_args = [
             '-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=' +
-                os.path.join(extdir, "pyamrex"),
+                os.path.join(extdir, "amrex"),
             '-DCMAKE_VERBOSE_MAKEFILE=ON',
             '-DCMAKE_RUNTIME_OUTPUT_DIRECTORY=' + extdir,
             '-DAMReX_SPACEDIM=' + dims,
@@ -131,7 +131,7 @@ class CMakeBuild(build_ext):
             cmake_args += [
                 '-DCMAKE_LIBRARY_OUTPUT_DIRECTORY_{}={}'.format(
                     cfg.upper(),
-                    os.path.join(extdir, "pyamrex")
+                    os.path.join(extdir, "amrex")
                 )
             ]
             if sys.maxsize > 2**32:
@@ -216,15 +216,15 @@ with open('./requirements.txt') as f:
 # keyword reference:
 #   https://packaging.python.org/guides/distributing-packages-using-setuptools
 setup(
-    name='pyamrex',
+    name='amrex',
     # note PEP-440 syntax: x.y.zaN but x.y.z.devN
     version = '21.02',
-    packages = ['pyamrex'],
+    packages = ['amrex'],
 
     # Python sources:
     package_dir = {'': 'src'},
 
-    # pyamrex authors:
+    # pyAMReX authors:
     author='Axel Huebl, Shreyas Ananthan, Steven R. Brandt, Andrew Myers, Weiqun Zhang, et al.',
     author_email='axelhuebl@lbl.gov, shreyas.ananthan@nrel.gov, sbrandt@cct.lsu.edu, atmyers@lbl.gov, weiqunzhang@lbl.gov',
     # wheel/pypi packages:

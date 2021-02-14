@@ -30,12 +30,12 @@ We will add further information here once first development versions are ready f
 *to do*
 
 ```python
-import pyamrex
+import amrex
 
-small_end = pyamrex.Int_Vect()
-big_end = pyamrex.Int_Vect(2, 3, 4)
+small_end = amrex.Int_Vect()
+big_end = amrex.Int_Vect(2, 3, 4)
 
-b = pyamrex.Box(small_end, big_end)
+b = amrex.Box(small_end, big_end)
 print(b)
 
 # ...

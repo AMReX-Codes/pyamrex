@@ -81,7 +81,7 @@ void init_AMReX(py::module& m)
 
     m.def("initialize",
           [](const py::list args) {
-              Vector<std::string> cargs{"pyamrex"};
+              Vector<std::string> cargs{"amrex"};
               Vector<char*> argv{&cargs.back()[0]};
 
               // Populate the "command line"

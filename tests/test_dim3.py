@@ -2,7 +2,7 @@
 
 import pytest
 import numpy as np
-import pyamrex as amrex
+import amrex
 
 def test_dim3():
     obj = amrex.Dim3(1, 2, 3)

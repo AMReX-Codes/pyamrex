@@ -2,7 +2,7 @@
 
 import pytest
 import numpy as np
-import pyamrex as amrex
+import amrex
 
 @pytest.mark.skipif(amrex.Config.spacedim != 1,
                     reason="Requires AMREX_SPACEDIM = 1")

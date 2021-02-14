@@ -16,7 +16,7 @@ void init_Dim3(py::module& m)
              [](const Dim3& d) {
                  std::stringstream s;
                  s << d;
-                 return "<pyamrex.Dim3 '" + s.str() + "'>";
+                 return "<amrex.Dim3 '" + s.str() + "'>";
              }
         )
         .def("__str__",
