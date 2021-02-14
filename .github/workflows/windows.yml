@@ -18,7 +18,7 @@ jobs:
         python -c "import pyamrex; print(pyamrex.__version__)"
     - name: Unit tests
       run: |
-        pytest tests/
+        python3 -m pytest tests/
 
   # Build libamrex and all tutorials
   clang:
