@@ -56,6 +56,15 @@ void init_AMReX(py::module& m)
 #endif
             })
         .def_property_readonly_static(
+            "have_omp",
+            [](py::object){
+#ifdef AMREX_USE_OMP
+                return true;
+#else
+                return false;
+#endif
+            })
+        .def_property_readonly_static(
             "gpu_backend",
             [](py::object){
 #ifdef AMREX_USE_CUDA
