@@ -57,7 +57,7 @@ void init_IntVect(py::module &m) {
         .def("dim3", &IntVect::dim3)
         .def("__getitem__",
              [](const IntVect& v, const int i) {
-                 const size_t ii = (i >= 0) ? i : AMREX_SPACEDIM + i;
+                 const int ii = (i >= 0) ? i : AMREX_SPACEDIM + i;
                  if ((ii < 0) || (ii >= AMREX_SPACEDIM))
                      throw py::index_error(
                          "Index must be between 0 and " +
@@ -66,7 +66,7 @@ void init_IntVect(py::module &m) {
              })
         .def("__setitem__",
              [](IntVect& v, const int i, const int& val) {
-                 const size_t ii = (i >= 0) ? i : AMREX_SPACEDIM + i;
+                 const int ii = (i >= 0) ? i : AMREX_SPACEDIM + i;
                  if ((ii < 0) || (ii >= AMREX_SPACEDIM))
                      throw py::index_error(
                          "Index must be between 0 and " +
