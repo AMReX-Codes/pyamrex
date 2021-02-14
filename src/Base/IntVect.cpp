@@ -26,7 +26,7 @@ void init_IntVect(py::module &m) {
                  const auto iv = obj.cast<IntVect>();
                  std::stringstream s;
                  s << iv;
-                 return "<" + name + " " + s.str() + ">";
+                 return "<amrex." + name + " " + s.str() + ">";
             }
         )
         .def("__str",

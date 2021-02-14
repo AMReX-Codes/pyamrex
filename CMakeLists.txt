@@ -110,8 +110,8 @@ target_link_libraries(pyAMReX PRIVATE pybind11::module pybind11::lto pybind11::w
 set_target_properties(pyAMReX PROPERTIES
     CXX_VISIBILITY_PRESET "hidden"
     CUDA_VISIBILITY_PRESET "hidden"
-    ARCHIVE_OUTPUT_NAME pyamrex_cxx
-    LIBRARY_OUTPUT_NAME pyamrex_cxx
+    ARCHIVE_OUTPUT_NAME amrex_pybind
+    LIBRARY_OUTPUT_NAME amrex_pybind
 )
 pybind11_extension(pyAMReX)
 pybind11_strip(pyAMReX)
