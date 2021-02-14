@@ -5,6 +5,7 @@
  */
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
+#include <pybind11/numpy.h>
 
 #include <AMReX_Config.H>
 #include <AMReX_Dim3.H>
@@ -56,7 +57,7 @@ void init_IntVect(py::module &m) {
         .def("dim3", &IntVect::dim3)
         .def("__getitem__",
              [](const IntVect& v, const int i) {
-                 const size_t ii = (i > 0) ? i : AMREX_SPACEDIM - i;
+                 const size_t ii = (i >= 0) ? i : AMREX_SPACEDIM + i;
                  if ((ii < 0) || (ii >= AMREX_SPACEDIM))
                      throw py::index_error(
                          "Index must be between 0 and " +
@@ -65,12 +66,77 @@ void init_IntVect(py::module &m) {
              })
         .def("__setitem__",
              [](IntVect& v, const int i, const int& val) {
-                 const size_t ii = (i > 0) ? i : AMREX_SPACEDIM - i;
+                 const size_t ii = (i >= 0) ? i : AMREX_SPACEDIM + i;
                  if ((ii < 0) || (ii >= AMREX_SPACEDIM))
                      throw py::index_error(
                          "Index must be between 0 and " +
                          std::to_string(AMREX_SPACEDIM));
                  return v[ii] = val;
+             })
+
+        .def("__eq__",
+             py::overload_cast<int>(&IntVect::operator==, py::const_))
+        .def("__eq__",
+             py::overload_cast<const IntVect&>(&IntVect::operator==, py::const_))
+        .def("__ne__",
+             py::overload_cast<int>(&IntVect::operator!=, py::const_))
+        .def("__ne__",
+             py::overload_cast<const IntVect&>(&IntVect::operator!=, py::const_))
+        .def("__lt__", &IntVect::operator<)
+        .def("__le__", &IntVect::operator<=)
+        .def("__gt__", &IntVect::operator>)
+        .def("__ge__", &IntVect::operator>=)
+
+        .def("__add__",
+             py::overload_cast<int>(&IntVect::operator+, py::const_))
+        .def("__add__",
+             py::overload_cast<const IntVect&>(&IntVect::operator+, py::const_))
+        .def("__sub__",
+             py::overload_cast<int>(&IntVect::operator-, py::const_))
+        .def("__sub__",
+             py::overload_cast<const IntVect&>(&IntVect::operator-, py::const_))
+        .def("__mul__",
+             py::overload_cast<int>(&IntVect::operator*, py::const_))
+        .def("__mul__",
+             py::overload_cast<const IntVect&>(&IntVect::operator*, py::const_))
+        .def("__truediv__",
+             py::overload_cast<int>(&IntVect::operator/, py::const_))
+        .def("__truediv__",
+             py::overload_cast<const IntVect&>(&IntVect::operator/, py::const_))
+        .def("__iadd__",
+             py::overload_cast<int>(&IntVect::operator+=))
+        .def("__iadd__",
+             py::overload_cast<const IntVect&>(&IntVect::operator+=))
+        .def("__isub__",
+             py::overload_cast<int>(&IntVect::operator-=))
+        .def("__isub__",
+             py::overload_cast<const IntVect&>(&IntVect::operator-=))
+        .def("__imul__",
+             py::overload_cast<int>(&IntVect::operator*=))
+        .def("__imul__",
+             py::overload_cast<const IntVect&>(&IntVect::operator*=))
+        .def("__itruediv__",
+             py::overload_cast<int>(&IntVect::operator/=))
+        .def("__itruediv__",
+             py::overload_cast<const IntVect&>(&IntVect::operator/=))
+
+        .def("numpy",
+             [](const IntVect& iv) {
+                 auto result = py::array(
+                     py::buffer_info(
+                         nullptr,
+                         sizeof(int),
+                         py::format_descriptor<int>::value,
+                         1,
+                         { AMREX_SPACEDIM },
+                         { sizeof(int) }
+                     ));
+                 auto buf = result.request();
+                 double* ptr = static_cast<double*>(buf.ptr);
+                 for (int i=0; i < AMREX_SPACEDIM; ++i)
+                     ptr[i] = iv[0];
+
+                 return result;
              })
     ;
 

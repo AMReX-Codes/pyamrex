@@ -42,4 +42,6 @@ void init_AMReX(py::module& m)
     m.def("finalize",
           py::overload_cast<>(&Finalize));
     m.def("finalize", py::overload_cast<AMReX*>(&Finalize));
+
+    m.def("space_dim", [](){ return AMREX_SPACEDIM; });
 }
