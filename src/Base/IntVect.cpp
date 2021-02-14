@@ -132,7 +132,7 @@ void init_IntVect(py::module &m) {
                          { sizeof(int) }
                      ));
                  auto buf = result.request();
-                 double* ptr = static_cast<double*>(buf.ptr);
+                 int* ptr = static_cast<int*>(buf.ptr);
                  for (int i=0; i < AMREX_SPACEDIM; ++i)
                      ptr[i] = iv[0];
 
