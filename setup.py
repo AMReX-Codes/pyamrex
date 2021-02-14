@@ -249,7 +249,7 @@ setup(
     cmdclass=cmdclass,
     zip_safe=False,
     python_requires='>=3.6, <3.10',
-    # tests_require=['pytest'],
+    tests_require=['pytest'],
     install_requires=install_requires,
     # cmdclass={'test': PyTest},
     # platforms='any',

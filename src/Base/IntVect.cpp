@@ -5,8 +5,10 @@
  */
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
+#include <pybind11/numpy.h>
 
 #include <AMReX_Config.H>
+#include <AMReX_Dim3.H>
 #include <AMReX_IntVect.H>
 
 #include <sstream>
@@ -16,17 +18,28 @@ using namespace amrex;
 
 
 void init_IntVect(py::module &m) {
-    py::class_< IntVect >(m, "Int_Vect")
+    py::class_< IntVect >(m, "IntVect")
         .def("__repr__",
-            [](IntVect const & iv) {
-                std::stringstream s;
-                s << iv;
-                return "<pyamrex.Int_Vect '" + s.str() + "'>";
+             [](py::object& obj) {
+                 py::str py_name = obj.attr("__class__").attr("__name__");
+                 const std::string name = py_name;
+                 const auto iv = obj.cast<IntVect>();
+                 std::stringstream s;
+                 s << iv;
+                 return "<" + name + " " + s.str() + ">";
             }
         )
+        .def("__str",
+             [](const IntVect& iv) {
+                 std::stringstream s;
+                 s << iv;
+                 return s.str();
+             })
 
         .def(py::init<>())
+#if (AMREX_SPACEDIM > 1)
         .def(py::init<AMREX_D_DECL(int, int, int)>())
+#endif
         .def(py::init<int>())
 
         .def_property_readonly("sum", &IntVect::sum)
@@ -34,18 +47,105 @@ void init_IntVect(py::module &m) {
             py::overload_cast<>(&IntVect::max, py::const_))
         .def_property_readonly("min",
             py::overload_cast<>(&IntVect::min, py::const_))
-        .def_property_readonly("the_zero_vector", &IntVect::TheZeroVector)
-        .def_property_readonly("the_unit_vector", &IntVect::TheUnitVector)
-        .def_property_readonly("the_node_vector", &IntVect::TheNodeVector)
-        .def_property_readonly("the_cell_vector", &IntVect::TheCellVector)
-        .def_property_readonly("the_max_vector", &IntVect::TheMaxVector)
-        .def_property_readonly("the_min_vector", &IntVect::TheMinVector)
+        .def_static("zero_vector", &IntVect::TheZeroVector)
+        .def_static("unit_vector", &IntVect::TheUnitVector)
+        .def_static("node_vector", &IntVect::TheNodeVector)
+        .def_static("cell_vector", &IntVect::TheCellVector)
+        .def_static("max_vector", &IntVect::TheMaxVector)
+        .def_static("min_vector", &IntVect::TheMinVector)
 
-        //.def("to_array", &IntVect::toArray)
-        // maxDir
+        .def("dim3", &IntVect::dim3)
+        .def("__getitem__",
+             [](const IntVect& v, const int i) {
+                 const int ii = (i >= 0) ? i : AMREX_SPACEDIM + i;
+                 if ((ii < 0) || (ii >= AMREX_SPACEDIM))
+                     throw py::index_error(
+                         "Index must be between 0 and " +
+                         std::to_string(AMREX_SPACEDIM));
+                 return v[ii];
+             })
+        .def("__setitem__",
+             [](IntVect& v, const int i, const int& val) {
+                 const int ii = (i >= 0) ? i : AMREX_SPACEDIM + i;
+                 if ((ii < 0) || (ii >= AMREX_SPACEDIM))
+                     throw py::index_error(
+                         "Index must be between 0 and " +
+                         std::to_string(AMREX_SPACEDIM));
+                 return v[ii] = val;
+             })
 
-        // __getitem__
-        // __iter__
+        .def("__eq__",
+             py::overload_cast<int>(&IntVect::operator==, py::const_))
+        .def("__eq__",
+             py::overload_cast<const IntVect&>(&IntVect::operator==, py::const_))
+        .def("__ne__",
+             py::overload_cast<int>(&IntVect::operator!=, py::const_))
+        .def("__ne__",
+             py::overload_cast<const IntVect&>(&IntVect::operator!=, py::const_))
+        .def("__lt__", &IntVect::operator<)
+        .def("__le__", &IntVect::operator<=)
+        .def("__gt__", &IntVect::operator>)
+        .def("__ge__", &IntVect::operator>=)
 
+        .def("__add__",
+             py::overload_cast<int>(&IntVect::operator+, py::const_))
+        .def("__add__",
+             py::overload_cast<const IntVect&>(&IntVect::operator+, py::const_))
+        .def("__sub__",
+             py::overload_cast<int>(&IntVect::operator-, py::const_))
+        .def("__sub__",
+             py::overload_cast<const IntVect&>(&IntVect::operator-, py::const_))
+        .def("__mul__",
+             py::overload_cast<int>(&IntVect::operator*, py::const_))
+        .def("__mul__",
+             py::overload_cast<const IntVect&>(&IntVect::operator*, py::const_))
+        .def("__truediv__",
+             py::overload_cast<int>(&IntVect::operator/, py::const_))
+        .def("__truediv__",
+             py::overload_cast<const IntVect&>(&IntVect::operator/, py::const_))
+        .def("__iadd__",
+             py::overload_cast<int>(&IntVect::operator+=))
+        .def("__iadd__",
+             py::overload_cast<const IntVect&>(&IntVect::operator+=))
+        .def("__isub__",
+             py::overload_cast<int>(&IntVect::operator-=))
+        .def("__isub__",
+             py::overload_cast<const IntVect&>(&IntVect::operator-=))
+        .def("__imul__",
+             py::overload_cast<int>(&IntVect::operator*=))
+        .def("__imul__",
+             py::overload_cast<const IntVect&>(&IntVect::operator*=))
+        .def("__itruediv__",
+             py::overload_cast<int>(&IntVect::operator/=))
+        .def("__itruediv__",
+             py::overload_cast<const IntVect&>(&IntVect::operator/=))
+
+        .def("numpy",
+             [](const IntVect& iv) {
+                 auto result = py::array(
+                     py::buffer_info(
+                         nullptr,
+                         sizeof(int),
+                         py::format_descriptor<int>::value,
+                         1,
+                         { AMREX_SPACEDIM },
+                         { sizeof(int) }
+                     ));
+                 auto buf = result.request();
+                 int* ptr = static_cast<int*>(buf.ptr);
+                 for (int i=0; i < AMREX_SPACEDIM; ++i)
+                     ptr[i] = iv[0];
+
+                 return result;
+             })
     ;
+
+    m.def("coarsen",
+         py::overload_cast<const IntVect&, const IntVect&>(&coarsen));
+    m.def("coarsen",
+          py::overload_cast<const Dim3&, const IntVect&>(&coarsen));
+    m.def("coarsen",
+          py::overload_cast<const IntVect&, int>(&coarsen));
+    m.def("refine",
+          py::overload_cast<const Dim3&, const IntVect&>(&refine));
 }
