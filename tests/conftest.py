@@ -3,7 +3,7 @@
 import pytest
 import pyamrex as amrex
 
-if amrex.have_mpi():
+if amrex.Config.have_mpi:
     from mpi4py import MPI
 
 @pytest.fixture(autouse=True, scope='session')
