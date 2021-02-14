@@ -11,6 +11,10 @@
 namespace py = pybind11;
 using namespace amrex;
 
+namespace {
+struct Config {};
+}
+
 void init_AMReX(py::module& m)
 {
     py::class_<AMReX>(m, "AMReX")
@@ -19,6 +23,51 @@ void init_AMReX(py::module& m)
         .def_static("erase", &AMReX::erase)
         .def_static("top", &AMReX::top,
                     py::return_value_policy::reference)
+        ;
+
+    py::class_<Config>(m, "Config")
+        .def_property_readonly_static(
+            "amrex_version",
+            [](py::object) { return Version(); },
+            "AMReX library version")
+        .def_property_readonly_static(
+            "spacedim",
+            [](py::object) { return AMREX_SPACEDIM; })
+        .def_property_static(
+            "verbose",
+            [](py::object) { return Verbose(); },
+            [](py::object, const int v) { SetVerbose(v); })
+        .def_property_readonly_static(
+            "have_mpi",
+            [](py::object){
+#ifdef AMREX_USE_MPI
+                return true;
+#else
+                return false;
+#endif
+            })
+        .def_property_readonly_static(
+            "have_gpu",
+            [](py::object){
+#ifdef AMREX_USE_GPU
+                return true;
+#else
+                return false;
+#endif
+            })
+        .def_property_readonly_static(
+            "gpu_backend",
+            [](py::object){
+#ifdef AMREX_USE_CUDA
+                return "CUDA";
+#elif defined(AMREX_USE_HIP)
+                return "HIP";
+#elif defined(AMREX_USE_DPCPP)
+                return "SYCL";
+#else
+                return py::none();
+#endif
+            })
         ;
 
     m.def("initialize",
@@ -43,15 +92,4 @@ void init_AMReX(py::module& m)
     m.def("finalize",
           py::overload_cast<>(&Finalize));
     m.def("finalize", py::overload_cast<AMReX*>(&Finalize));
-
-    m.def("space_dim", [](){ return AMREX_SPACEDIM; });
-
-    m.def("have_mpi",
-          [](){
-#ifdef AMREX_USE_MPI
-              return true;
-#else
-              return false;
-#endif
-          });
 }
