@@ -128,11 +128,17 @@ python3 -m pip install -v .
 ```
 
 On successful installation, you can run the unit tests (assuming `pytest` is
-installed)
+installed). If `AMREX_MPI=ON`, then please prepend the following commands with `mpiexec -np <NUM_PROCS>`
 
 ```bash
 # Run all tests 
 python -m pytest tests/
+
+# Run tests from a single file
+python -m pytest tests/test_intvect.py
+
+# Run a single test (useful during debugging)
+python -m pytest tests/test_intvect.py::test_iv_conversions
 ```
 
 If you are iterating on C++ builds, it might be faster to just call CMake:
