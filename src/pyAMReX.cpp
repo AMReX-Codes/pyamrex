@@ -16,7 +16,9 @@ namespace py = pybind11;
 
 
 // forward declarations of exposed classes
+void init_AMReX(py::module&);
 void init_Box(py::module &);
+void init_Dim3(py::module&);
 void init_IntVect(py::module &);
 
 PYBIND11_MODULE(pyamrex_cxx, m) {
@@ -32,6 +34,8 @@ PYBIND11_MODULE(pyamrex_cxx, m) {
     )pbdoc";
 
     // note: order from parent to child classes
+    init_AMReX(m);
+    init_Dim3(m);
     init_IntVect(m);
     init_Box(m);
 
