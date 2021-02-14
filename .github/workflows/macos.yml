@@ -15,8 +15,12 @@ jobs:
       run: .github/workflows/dependencies/dependencies_mac.sh
     - name: Build & Install
       run: |
-        python3 -m pip install -U pip
+        python3 -m pip install -U pip pytest
         python3 -m pip install -v .
         python3 -c "import pyamrex; print(pyamrex.__version__)"
+    - name: Unit tests
+      run: |
+        pytest tests/
+
 
 # TODO: AppleClang w/ MPI
