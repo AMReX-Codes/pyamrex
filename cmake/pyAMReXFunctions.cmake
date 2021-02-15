@@ -32,6 +32,12 @@ macro(set_default_build_dirs)
                 CACHE PATH "Build directory for binaries")
         mark_as_advanced(CMAKE_RUNTIME_OUTPUT_DIRECTORY)
     endif()
+    if(NOT CMAKE_PYTHON_OUTPUT_DIRECTORY)
+        set(CMAKE_PYTHON_OUTPUT_DIRECTORY
+            "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/site-packages"
+            CACHE PATH "Build directory for python modules"
+        )
+    endif()
 endmacro()
 
 
@@ -44,14 +50,28 @@ macro(set_default_install_dirs)
         include(GNUInstallDirs)
         if(NOT CMAKE_INSTALL_CMAKEDIR)
             set(CMAKE_INSTALL_CMAKEDIR "${CMAKE_INSTALL_LIBDIR}/cmake/pyAMReX"
-                    CACHE PATH "CMake config package location for installed targets")
+                CACHE PATH "CMake config package location for installed targets")
             if(WIN32)
                 set(CMAKE_INSTALL_LIBDIR Lib
-                        CACHE PATH "Object code libraries")
+                    CACHE PATH "Object code libraries")
                 set_property(CACHE CMAKE_INSTALL_CMAKEDIR PROPERTY VALUE "cmake")
             endif()
             mark_as_advanced(CMAKE_INSTALL_CMAKEDIR)
         endif()
+
+        # Python install and build output dirs
+        if(WIN32)
+            set(CMAKE_INSTALL_PYTHONDIR_DEFAULT
+                "${CMAKE_INSTALL_LIBDIR}/site-packages"
+            )
+        else()
+            set(CMAKE_INSTALL_PYTHONDIR_DEFAULT
+                "${CMAKE_INSTALL_LIBDIR}/python${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}/site-packages"
+            )
+        endif()
+        set(CMAKE_INSTALL_PYTHONDIR "${CMAKE_INSTALL_PYTHONDIR_DEFAULT}"
+            CACHE STRING "Location for installed python package"
+        )
     endif()
 endmacro()
 
@@ -77,6 +97,20 @@ macro(set_default_build_type default_build_type)
         # FIXME: due to the "AMReX inits CUDA first" logic we will first see this with -O2 in output
         list(TRANSFORM CMAKE_CUDA_FLAGS_RELWITHDEBINFO REPLACE "-O2" "-O3")
     endif()
+endmacro()
+
+# Testing logic with possibility to overwrite on a project basis in superbuilds
+#
+macro(set_testing_option project_build_var)
+    include(CTest)
+    mark_as_advanced(BUILD_TESTING) # automatically defined, default: ON
+    if(DEFINED BUILD_TESTING)
+        set(${project_build_var}_DEFAULT ${BUILD_TESTING})
+    else()
+        set(${project_build_var}_DEFAULT ON)
+    endif()
+    option(${project_build_var} "Build the pyAMReX tests"
+           ${${project_build_var}_DEFAULT})
 endmacro()
 
 # Set CXX
@@ -170,8 +204,7 @@ function(pyAMReX_print_summary)
     message("        lib: ${CMAKE_INSTALL_LIBDIR}")
     message("    include: ${CMAKE_INSTALL_INCLUDEDIR}")
     message("      cmake: ${CMAKE_INSTALL_CMAKEDIR}")
-# TODO: gotta set this first
-#    message("     python: ${CMAKE_INSTALL_PYTHONDIR}")
+    message("     python: ${CMAKE_INSTALL_PYTHONDIR}")
     message("")
     message("  Build type: ${CMAKE_BUILD_TYPE}")
     #message("  Build options:")

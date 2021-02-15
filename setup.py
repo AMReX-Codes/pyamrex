@@ -90,7 +90,8 @@ class CMakeBuild(build_ext):
             '-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=' +
                 os.path.join(extdir, "amrex"),
             '-DCMAKE_VERBOSE_MAKEFILE=ON',
-            '-DCMAKE_RUNTIME_OUTPUT_DIRECTORY=' + extdir,
+            '-DCMAKE_PYTHON_OUTPUT_DIRECTORY=' + extdir,
+            '-DPython_EXECUTABLE=' + sys.executable,
             '-DAMReX_SPACEDIM=' + dims,
             ## variants
             '-DAMReX_OMP=' + AMReX_OMP,
