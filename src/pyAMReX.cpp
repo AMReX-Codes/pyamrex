@@ -17,6 +17,7 @@ namespace py = pybind11;
 
 // forward declarations of exposed classes
 void init_AMReX(py::module&);
+void init_Array4(py::module&);
 void init_Box(py::module &);
 void init_BoxArray(py::module &);
 void init_Dim3(py::module&);
@@ -43,6 +44,7 @@ PYBIND11_MODULE(amrex_pybind, m) {
     init_AMReX(m);
     init_Dim3(m);
     init_IntVect(m);
+    init_Array4(m);
     init_Box(m);
     init_BoxArray(m);
     init_MultiFab(m);
