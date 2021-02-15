@@ -36,13 +36,9 @@ endif()
 set_ccache()
 
 
-# Output Directories ##########################################################
+# Output (build) Directories ##################################################
 #
-# temporary build directories
 set_default_build_dirs()
-
-# install directories
-set_default_install_dirs()
 
 
 # Options and Variants ########################################################
@@ -52,8 +48,8 @@ set(pyAMReX_VERSION_INFO "" CACHE STRING
 # change the default build type to RelWithDebInfo (or Release) instead of Debug
 set_default_build_type("RelWithDebInfo")
 
-# this defined the variable BUILD_TESTING which is ON by default
-#include(CTest)
+# Testing logic with possibility to overwrite on a project basis in superbuilds
+set_testing_option(pyAMReX_BUILD_TESTING)  # default: ON (BUILD_TESTING)
 
 
 # Dependencies ################################################################
@@ -108,10 +104,20 @@ target_link_libraries(pyAMReX PRIVATE pybind11::module pybind11::lto pybind11::w
 
 # set Python module properties
 set_target_properties(pyAMReX PROPERTIES
+    # hide symbols for combining multiple pybind11 modules downstream & for
+    # reduced binary size
     CXX_VISIBILITY_PRESET "hidden"
     CUDA_VISIBILITY_PRESET "hidden"
+    # name of the pybind-generated python module, which is wrapped in another
+    # fluffy front-end modules, so we can extend it with pure Python
     ARCHIVE_OUTPUT_NAME amrex_pybind
     LIBRARY_OUTPUT_NAME amrex_pybind
+    # build output directories - mainly set to run tests from CMake & IDEs
+    ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_PYTHON_OUTPUT_DIRECTORY}/amrex
+    LIBRARY_OUTPUT_DIRECTORY ${CMAKE_PYTHON_OUTPUT_DIRECTORY}/amrex
+    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_PYTHON_OUTPUT_DIRECTORY}/amrex
+    PDB_OUTPUT_DIRECTORY ${CMAKE_PYTHON_OUTPUT_DIRECTORY}/amrex
+    COMPILE_PDB_OUTPUT_DIRECTORY ${CMAKE_PYTHON_OUTPUT_DIRECTORY}/amrex
 )
 pybind11_extension(pyAMReX)
 pybind11_strip(pyAMReX)
@@ -153,6 +159,9 @@ set_cxx_warnings()
 
 # Installs ####################################################################
 #
+# default installation directories
+set_default_install_dirs()
+
 # headers, libraries and executables
 set(pyAMReX_INSTALL_TARGET_NAMES pyAMReX)
 
@@ -180,13 +189,21 @@ install(TARGETS ${pyAMReX_INSTALL_TARGET_NAMES}
 
 # Tests #######################################################################
 #
-# TBD
+if(pyAMReX_BUILD_TESTING)
+    # copy Python wrapper library to build directory
+    add_custom_command(TARGET pyAMReX POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+            ${pyAMReX_SOURCE_DIR}/src/amrex
+            $<TARGET_FILE_DIR:pyAMReX>
+    )
 
-#if(BUILD_TESTING)
-#    enable_testing()
-#
-#    add_test(...)
-#endif()
+    add_test(NAME pytest
+        COMMAND ${Python_EXECUTABLE} -m pytest
+            ${pyAMReX_SOURCE_DIR}/tests
+        WORKING_DIRECTORY
+            ${CMAKE_PYTHON_OUTPUT_DIRECTORY}
+    )
+endif()
 
 
 # Status Summary for Build Options ############################################
