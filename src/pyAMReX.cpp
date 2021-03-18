@@ -20,6 +20,7 @@ void init_AMReX(py::module&);
 void init_Box(py::module &);
 void init_Dim3(py::module&);
 void init_IntVect(py::module &);
+void init_MultiFab(py::module &);
 
 PYBIND11_MODULE(amrex_pybind, m) {
     m.doc() = R"pbdoc(
@@ -38,6 +39,7 @@ PYBIND11_MODULE(amrex_pybind, m) {
     init_Dim3(m);
     init_IntVect(m);
     init_Box(m);
+    init_MultiFab(m);
 
     // API runtime version
     //   note PEP-440 syntax: x.y.zaN but x.y.z.devN

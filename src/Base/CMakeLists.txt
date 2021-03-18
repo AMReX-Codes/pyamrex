@@ -4,4 +4,5 @@ target_sources(pyAMReX
     Box.cpp
     Dim3.cpp
     IntVect.cpp
+    MultiFab.cpp
 )
