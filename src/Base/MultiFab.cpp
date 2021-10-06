@@ -9,11 +9,37 @@
 #include <AMReX_Config.H>
 #include <AMReX_MultiFab.H>
 
+#include <memory>
 #include <string>
 
 namespace py = pybind11;
 using namespace amrex;
 
+namespace {
+    /** STL-like iteration over amrex::MFIter
+     *
+     * The amrex::MFIter interface is currently a bit too tricky to implement
+     * std::begin() and std::end() safely with OpenMP threading.
+     */
+    class MFIterWrapper {
+        std::shared_ptr<MFIter> mfi;
+    public:
+        explicit MFIterWrapper(const MultiFab& mf) {
+            // For tiling support (OpenMP/thread pools) later on:
+            // MFIter mfi(mf, TilingIfNotGPU());
+            mfi = std::make_shared<MFIter>(mf);
+        }
+        std::shared_ptr<MFIter> operator*() { return mfi; }
+        std::shared_ptr<MFIter const> operator*() const { return mfi; }
+        MFIterWrapper& operator++() { ++(*mfi); return *this; }
+    };
+
+    class ValidSentinel {};
+
+    bool operator==(MFIterWrapper const& it, ValidSentinel const&) {
+        return (*it)->isValid();
+    }
+}
 
 void init_MultiFab(py::module &m) {
     py::class_< MultiFab >(m, "MultiFab")
@@ -163,9 +189,13 @@ void init_MultiFab(py::module &m) {
         .def_static("finalize", &MultiFab::Finalize )
 
         /* data access in Box index space */
-        //.def("__iter__")
-        //.def("array", [](MultiFab & mf, MFIter mfi) {
-        //    // return Array4Real...
-        //})
+        .def("__iter__",
+            [](const MultiFab& mf) {
+                return py::make_iterator(MFIterWrapper(mf), ValidSentinel{});
+            },
+            /* Essential: keep object alive while iterator exists */
+            py::keep_alive<0, 1>()
+            //py::return_value_policy::reference_internal
+        )
     ;
 }
