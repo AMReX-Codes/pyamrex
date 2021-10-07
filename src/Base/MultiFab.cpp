@@ -7,6 +7,10 @@
 #include <pybind11/stl.h>
 
 #include <AMReX_Config.H>
+#include <AMReX_BoxArray.H>
+#include <AMReX_DistributionMapping.H>
+#include <AMReX_FabArray.H>
+#include <AMReX_FabArrayBase.H>
 #include <AMReX_MultiFab.H>
 
 #include <memory>
@@ -42,7 +46,11 @@ namespace {
 }
 
 void init_MultiFab(py::module &m) {
-    py::class_< MultiFab >(m, "MultiFab")
+    py::class_< FabArrayBase >(m, "FabArrayBase");
+    py::class_< FArrayBox >(m, "FArrayBox");
+    py::class_< FabArray<FArrayBox>, FabArrayBase >(m, "FabArray_FArrayBox");
+
+    py::class_< MultiFab /*, FabArray<FArrayBox>*/ >(m, "MultiFab")
         .def("__repr__",
              [](MultiFab const & mf) {
                  return "<amrex.MultiFab with '" + std::to_string(mf.nComp()) +
@@ -52,11 +60,22 @@ void init_MultiFab(py::module &m) {
 
         /* Constructors */
         .def(py::init< >())
+        //.def(py::init< MultiFab && >())
+        .def(py::init< const BoxArray&, const DistributionMapping&, int, int >())
         .def(py::init< const BoxArray&, const DistributionMapping&, int, int,
-                       MFInfo const &, FabFactory<FArrayBox>const & >())
+                       MFInfo const & >())
+        .def(py::init< const BoxArray&, const DistributionMapping&, int, int,
+                       MFInfo const &, FabFactory<FArrayBox> const & >())
+
+        .def(py::init< const BoxArray&, const DistributionMapping&, int,
+                       IntVect const& >())
+        .def(py::init< const BoxArray&, const DistributionMapping&, int,
+                       IntVect const&,
+                       MFInfo const& >())
         .def(py::init< const BoxArray&, const DistributionMapping&, int,
                        IntVect const&,
                        MFInfo const&, FabFactory<FArrayBox> const & >())
+
         .def(py::init< MultiFab const&, MakeType, int, int >())
 
         /* delayed defines */
@@ -69,15 +88,42 @@ void init_MultiFab(py::module &m) {
                                IntVect const&, MFInfo const &, FabFactory<FArrayBox> const &
         >(&MultiFab::define))
 
+        /* setters */
+        .def("set_val",
+             py::overload_cast< Real >(&MultiFab::setVal))
+        .def("set_val",
+            [](MultiFab & mf, Real val, int comp, int num_comp) {
+                mf.setVal(val, comp, num_comp);
+            }
+        )
+        .def("set_val",
+             py::overload_cast< Real, int, int, int >(&MultiFab::setVal))
+        .def("set_val",
+             py::overload_cast< Real, int, int, IntVect const & >(&MultiFab::setVal))
+
+        .def("is_cell_centered", &MultiFab::is_cell_centered)
+        .def("is_nodal",
+            py::overload_cast< >(&MultiFab::is_nodal, py::const_))
+        .def("is_nodal",
+            py::overload_cast< int >(&MultiFab::is_nodal, py::const_))
+
+        .def_property_readonly("num_comp", &MultiFab::nComp)
+
         /* sizes, etc. */
+        .def("min",
+             [](MultiFab const & mf, int comp) { mf.min(comp); })
         .def("min",
              py::overload_cast< int, int, bool >(&MultiFab::min, py::const_))
         .def("min",
              py::overload_cast< Box const &, int, int, bool >(&MultiFab::min, py::const_))
+
+        .def("max",
+             [](MultiFab const & mf, int comp) { mf.max(comp); })
         .def("max",
              py::overload_cast< int, int, bool >(&MultiFab::max, py::const_))
         .def("max",
              py::overload_cast< Box const &, int, int, bool >(&MultiFab::max, py::const_))
+
         .def("minIndex", &MultiFab::minIndex)
         .def("maxIndex", &MultiFab::maxIndex)
 
@@ -98,6 +144,10 @@ void init_MultiFab(py::module &m) {
 
         /* simple math */
         .def("sum", &MultiFab::sum)
+
+        .def("abs",
+            [](MultiFab & mf, int comp, int num_comp) { mf.abs(comp, num_comp); })
+        .def("abs", py::overload_cast< int, int, int >(&MultiFab::abs))
 
         .def("plus", py::overload_cast< Real, int >(&MultiFab::plus))
         .def("plus", py::overload_cast< Real, int, int, int >(&MultiFab::plus))
@@ -193,7 +243,7 @@ void init_MultiFab(py::module &m) {
             [](const MultiFab& mf) {
                 return py::make_iterator(MFIterWrapper(mf), ValidSentinel{});
             },
-            /* Essential: keep object alive while iterator exists */
+            // Essential: keep object alive while iterator exists
             py::keep_alive<0, 1>()
             //py::return_value_policy::reference_internal
         )
