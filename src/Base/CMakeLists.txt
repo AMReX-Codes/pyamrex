@@ -2,7 +2,9 @@ target_sources(pyAMReX
   PRIVATE
     AMReX.cpp
     Box.cpp
+    BoxArray.cpp
     Dim3.cpp
+    DistributionMapping.cpp
     IntVect.cpp
     MultiFab.cpp
 )
