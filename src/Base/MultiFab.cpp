@@ -41,7 +41,7 @@ namespace {
     class ValidSentinel {};
 
     bool operator==(MFIterWrapper const& it, ValidSentinel const&) {
-        return (*it)->isValid();
+        return !(*it)->isValid();
     }
 }
 
@@ -49,6 +49,49 @@ void init_MultiFab(py::module &m) {
     py::class_< FabArrayBase >(m, "FabArrayBase");
     py::class_< FArrayBox >(m, "FArrayBox");
     py::class_< FabArray<FArrayBox>, FabArrayBase >(m, "FabArray_FArrayBox");
+
+    //py::class_< MFIterWrapper >(m, "MFIterWrapper");
+    py::class_< MFIter >(m, "MFIter")
+        .def("__repr__",
+             [](MFIter const & mfi) {
+                 std::string r = "<amrex.MFIter (";
+                 if( !mfi.isValid() ) { r.append("in"); }
+                 r.append("valid)>");
+                 return r;
+             }
+        )
+        .def(py::init< FabArrayBase const & >())
+        .def(py::init< FabArrayBase const &, MFItInfo const & >())
+
+        .def(py::init< MultiFab const & >())
+        .def(py::init< MultiFab const &, MFItInfo const & >())
+
+        //.def(py::init< iMultiFab const & >())
+        //.def(py::init< iMultiFab const &, MFItInfo const & >())
+
+        .def("tilebox", py::overload_cast< >(&MFIter::tilebox, py::const_))
+        .def("tilebox", py::overload_cast< IntVect const & >(&MFIter::tilebox, py::const_))
+        .def("tilebox", py::overload_cast< IntVect const &, IntVect const & >(&MFIter::tilebox, py::const_))
+
+        /*
+        Box nodaltilebox()
+        Box nodaltilebox(int dir)
+        Box growntilebox()
+        Box growntilebox(const IntVect&)
+        Box grownnodaltilebox()
+        Box grownnodaltilebox(int dir)
+        Box grownnodaltilebox(int dir, int ng)
+        Box grownnodaltilebox(int dir, const IntVect&)
+
+        Box validbox()
+        Box fabbox()
+
+        void operator++()
+        bint isValid()
+        int index()
+        int length()
+        */
+    ;
 
     py::class_< MultiFab /*, FabArray<FArrayBox>*/ >(m, "MultiFab")
         .def("__repr__",
@@ -246,7 +289,7 @@ void init_MultiFab(py::module &m) {
 
         /* data access in Box index space */
         .def("__iter__",
-            [](const MultiFab& mf) {
+            [](MultiFab& mf) {
                 return py::make_iterator(MFIterWrapper(mf), ValidSentinel{});
             },
             // Essential: keep object alive while iterator exists
