@@ -17,6 +17,8 @@ using namespace amrex;
 
 
 void init_Box(py::module &m) {
+    py::class_< Direction >(m, "Direction");
+
     py::class_< Box >(m, "Box")
         .def("__repr__",
             [](Box const & b) {
@@ -57,8 +59,8 @@ void init_Box(py::module &m) {
 
         // loVect3d
         // hiVect3d
-        // loVect
-        // hiVect
+        .def_property_readonly("lo_vect", &Box::loVect)
+        .def_property_readonly("hi_vect", &Box::hiVect)
 
         .def("contains",
             py::overload_cast< IntVect const & >(&Box::contains, py::const_))
@@ -76,8 +78,21 @@ void init_Box(py::module &m) {
         // setRange
         // shift
         // shiftHalf
-        // convert
-        // surroundingNodes
+
+        .def("convert",
+             py::overload_cast< IndexType >(&Box::convert))
+        .def("convert",
+             py::overload_cast< IntVect const & >(&Box::convert))
+
+        //.def("surrounding_nodes",
+        //     py::overload_cast< >(&Box::surroundingNodes))
+        //.def("surrounding_nodes",
+        //     py::overload_cast< int >(&Box::surroundingNodes),
+        //     py::arg("dir"))
+        //.def("surrounding_nodes",
+        //     py::overload_cast< Direction >(&Box::surroundingNodes),
+        //     py::arg("d"))
+
         // enclosedCells
         // minBox
         // chop
