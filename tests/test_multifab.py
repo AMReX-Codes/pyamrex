@@ -9,7 +9,7 @@ import amrex
 def test_mfab_loop(mfab, nghost):
     for mfi in mfab:
         print(mfi)
-        #bx = mfi.tilebox()
+        bx = mfi.tilebox()
         #marr = mfab.array(mfi) # Array4: add __array_interface__ here
 
         #for i, j, k in bx:

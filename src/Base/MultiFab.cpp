@@ -19,31 +19,6 @@
 namespace py = pybind11;
 using namespace amrex;
 
-namespace {
-    /** STL-like iteration over amrex::MFIter
-     *
-     * The amrex::MFIter interface is currently a bit too tricky to implement
-     * std::begin() and std::end() safely with OpenMP threading.
-     */
-    class MFIterWrapper {
-        std::shared_ptr<MFIter> mfi;
-    public:
-        explicit MFIterWrapper(const MultiFab& mf) {
-            // For tiling support (OpenMP/thread pools) later on:
-            // MFIter mfi(mf, TilingIfNotGPU());
-            mfi = std::make_shared<MFIter>(mf);
-        }
-        std::shared_ptr<MFIter> operator*() { return mfi; }
-        std::shared_ptr<MFIter const> operator*() const { return mfi; }
-        MFIterWrapper& operator++() { ++(*mfi); return *this; }
-    };
-
-    class ValidSentinel {};
-
-    bool operator==(MFIterWrapper const& it, ValidSentinel const&) {
-        return !(*it)->isValid();
-    }
-}
 
 void init_MultiFab(py::module &m) {
     py::class_< FabArrayBase >(m, "FabArrayBase");
@@ -68,6 +43,22 @@ void init_MultiFab(py::module &m) {
 
         //.def(py::init< iMultiFab const & >())
         //.def(py::init< iMultiFab const &, MFItInfo const & >())
+
+        //.def("__iter__",
+        //     [](MFIter & mfi) -> MFIter & {
+        //        return mfi;
+        //     },
+        //     py::return_value_policy::reference
+        //)
+        .def("__next__",
+             [](MFIter & mfi) -> MFIter & {
+                ++mfi;
+                if( !mfi.isValid() )
+                    throw py::stop_iteration();
+                return mfi;
+             },
+             py::return_value_policy::reference
+        )
 
         .def("tilebox", py::overload_cast< >(&MFIter::tilebox, py::const_))
         .def("tilebox", py::overload_cast< IntVect const & >(&MFIter::tilebox, py::const_))
@@ -290,7 +281,8 @@ void init_MultiFab(py::module &m) {
         /* data access in Box index space */
         .def("__iter__",
             [](MultiFab& mf) {
-                return py::make_iterator(MFIterWrapper(mf), ValidSentinel{});
+                //return py::make_iterator(MFIterWrapper(mf), ValidSentinel{});
+                return MFIter(mf);
             },
             // Essential: keep object alive while iterator exists
             py::keep_alive<0, 1>()
