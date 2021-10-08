@@ -111,14 +111,14 @@ void init_MultiFab(py::module &m) {
 
         /* sizes, etc. */
         .def("min",
-             [](MultiFab const & mf, int comp) { mf.min(comp); })
+             [](MultiFab const & mf, int comp) { return mf.min(comp); })
         .def("min",
              py::overload_cast< int, int, bool >(&MultiFab::min, py::const_))
         .def("min",
              py::overload_cast< Box const &, int, int, bool >(&MultiFab::min, py::const_))
 
         .def("max",
-             [](MultiFab const & mf, int comp) { mf.max(comp); })
+             [](MultiFab const & mf, int comp) { return mf.max(comp); })
         .def("max",
              py::overload_cast< int, int, bool >(&MultiFab::max, py::const_))
         .def("max",
@@ -150,6 +150,8 @@ void init_MultiFab(py::module &m) {
         .def("abs", py::overload_cast< int, int, int >(&MultiFab::abs))
 
         .def("plus", py::overload_cast< Real, int >(&MultiFab::plus))
+        .def("plus", [](MultiFab & mf, Real val, int comp, int num_comp) {
+             mf.plus(val, comp, num_comp); })
         .def("plus", py::overload_cast< Real, int, int, int >(&MultiFab::plus))
         .def("plus", py::overload_cast< Real, Box const &, int >(&MultiFab::plus))
         .def("plus", py::overload_cast< Real, Box const &, int, int, int >(&MultiFab::plus))
@@ -161,11 +163,15 @@ void init_MultiFab(py::module &m) {
         .def("divi", py::overload_cast< MultiFab const &, int, int, int >(&MultiFab::divide))
 
         .def("mult", py::overload_cast< Real, int >(&MultiFab::mult))
+        .def("mult", [](MultiFab & mf, Real val, int comp, int num_comp) {
+             mf.mult(val, comp, num_comp); })
         .def("mult", py::overload_cast< Real, int, int, int >(&MultiFab::mult))
         .def("mult", py::overload_cast< Real, Box const &, int >(&MultiFab::mult))
         .def("mult", py::overload_cast< Real, Box const &, int, int, int >(&MultiFab::mult))
 
         .def("invert", py::overload_cast< Real, int >(&MultiFab::invert))
+        .def("invert", [](MultiFab & mf, Real val, int comp, int num_comp) {
+             mf.invert(val, comp, num_comp); })
         .def("invert", py::overload_cast< Real, int, int, int >(&MultiFab::invert))
         .def("invert", py::overload_cast< Real, Box const &, int >(&MultiFab::invert))
         .def("invert", py::overload_cast< Real, Box const &, int, int, int >(&MultiFab::invert))

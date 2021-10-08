@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import itertools
 import pytest
 import amrex
 
@@ -26,3 +27,12 @@ def distmap(boxarr):
     """DistributionMapping for MultiFab creation"""
     dm = amrex.DistributionMapping(boxarr)
     return dm
+
+@pytest.fixture(params=list(itertools.product([1,3],[0,1])))
+def mfab(boxarr, distmap, request):
+    """MultiFab for tests"""
+    num_components = request.param[0]
+    num_ghost = request.param[1]
+    mfab = amrex.MultiFab(boxarr, distmap, num_components, num_ghost)
+    mfab.set_val(0.0, 0, num_components)
+    return mfab
