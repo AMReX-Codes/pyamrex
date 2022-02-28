@@ -114,24 +114,3 @@ jobs:
     # note: setting the CXX compiler ID is a work-around for
     # the 2021.1 DPC++ release / CMake 3.19.0-3.19.1
     # https://gitlab.kitware.com/cmake/cmake/-/issues/21551#note_869580
-
-  hip:
-    name: HIP ROCm@3.8 GFortran@9.3
-    runs-on: ubuntu-20.04
-    env: {CXXFLAGS: "-fno-operator-names"}
-    steps:
-    - uses: actions/checkout@v2
-    - name: Dependencies
-      run: .github/workflows/dependencies/dependencies_hip.sh
-    - name: Build & Install
-      run: |
-        source /etc/profile.d/rocm.sh
-        hipcc --version
-
-        cmake -S . -B build                                \
-            -DCMAKE_VERBOSE_MAKEFILE=ON                    \
-            -DAMReX_GPU_BACKEND=HIP                        \
-            -DAMReX_AMD_ARCH=gfx900                        \
-            -DCMAKE_C_COMPILER=$(which hipcc)              \
-            -DCMAKE_CXX_COMPILER=$(which hipcc)
-        cmake --build build -j 2
