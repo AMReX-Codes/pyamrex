@@ -249,7 +249,7 @@ setup(
     ext_modules=cxx_modules,
     cmdclass=cmdclass,
     zip_safe=False,
-    python_requires='>=3.6, <3.10',
+    python_requires='>=3.6',
     tests_require=['pytest'],
     install_requires=install_requires,
     # cmdclass={'test': PyTest},
@@ -273,6 +273,7 @@ setup(
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',
+        'Programming Language :: Python :: 3.10',
         ('License :: OSI Approved :: '
          'BSD License'), # TODO: use real SPDX: BSD-3-Clause-LBNL
     ],
