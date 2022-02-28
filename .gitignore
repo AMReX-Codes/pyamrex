@@ -39,6 +39,8 @@
 ##########
 *.pyc
 __pycache__
+_tmppythonbuild/
+pyamrex.egg-info/
 
 #######
 # IDE #

@@ -29,6 +29,8 @@ jobs:
         export CXX=$(which clang++)
         export CC=$(which clang)
 
+        python3 -m pip install -U pip setuptools wheel
+
         # "mpic++ --showme" forgets open-pal in Ubuntu 20.04 + OpenMPI 4.0.3
         #   https://bugs.launchpad.net/ubuntu/+source/openmpi/+bug/1941786
         #   https://github.com/open-mpi/ompi/issues/9317
@@ -38,4 +40,4 @@ jobs:
             -DCMAKE_VERBOSE_MAKEFILE=ON                    \
             -DAMReX_GPU_BACKEND=HIP                        \
             -DAMReX_AMD_ARCH=gfx900
-        cmake --build build -j 2
+        cmake --build build --target pip_install -j 2

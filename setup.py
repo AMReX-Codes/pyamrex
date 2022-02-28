@@ -30,18 +30,16 @@ class CopyPreBuild(build):
     def run(self):
         build.run(self)
 
-        # matches: libamrex(2d|3d|rz).(so|pyd)
-        #   note: these naming conventions need to be implemented/matched
-        #   with upstream if we want to support external libs in the future
-        re_libprefix = re.compile(r"libamrex..\.(?:so|pyd)")
+        # matches: amrex_pybind.*.(so|pyd)
+        re_libprefix = re.compile(r"amrex_pybind\..*\.(?:so|pyd)")
         libs_found = []
-        for lib_name in os.listdir(AMREX_libdir):
+        for lib_name in os.listdir(PYAMREX_libdir):
             if re_libprefix.match(lib_name):
-                lib_path = os.path.join(AMREX_libdir, lib_name)
+                lib_path = os.path.join(PYAMREX_libdir, lib_name)
                 libs_found.append(lib_path)
         if len(libs_found) == 0:
-            raise RuntimeError("Error: no pre-build AMReX libraries found in "
-                               "AMREX_libdir='{}'".format(AMREX_libdir))
+            raise RuntimeError("Error: no pre-build pyAMReX libraries found in "
+                               "PYAMREX_libdir='{}'".format(PYAMREX_libdir))
 
         # copy external libs into collection of files in a temporary build dir
         dst_path = os.path.join(self.build_lib, "amrex")
@@ -168,7 +166,7 @@ with open('./README.md', encoding='utf-8') as f:
 # Allow to control options via environment vars.
 #   Work-around for https://github.com/pypa/setuptools/issues/1712
 # Pick up existing AMReX libraries or...
-AMREX_libdir = os.environ.get('AMREX_libdir')
+PYAMREX_libdir = os.environ.get('PYAMREX_LIBDIR')
 
 # ... build AMReX libraries with CMake
 #   note: changed default for SHARED, MPI, TESTING and EXAMPLES
@@ -197,10 +195,10 @@ else:
 cxx_modules = []     # values: amrex_1d, amrex_2d, amrex_3d
 cmdclass = {}        # build extensions
 
-# externally pre-built: pick up pre-built AMReX libraries
-if AMREX_libdir:
+# externally pre-built: pick up pre-built pyAMReX libraries
+if PYAMREX_libdir:
     cmdclass=dict(build=CopyPreBuild)
-# CMake: build AMReX libraries ourselves
+# CMake: build pyAMReX ourselves
 else:
     cmdclass = dict(build_ext=CMakeBuild)
     for dim in [x.lower() for x in AMReX_SPACEDIM.split(';')]:

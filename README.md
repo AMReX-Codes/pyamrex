@@ -131,20 +131,20 @@ On successful installation, you can run the unit tests (assuming `pytest` is
 installed). If `AMREX_MPI=ON`, then please prepend the following commands with `mpiexec -np <NUM_PROCS>`
 
 ```bash
-# Run all tests 
-python -m pytest tests/
+# Run all tests
+python3 -m pytest tests/
 
 # Run tests from a single file
-python -m pytest tests/test_intvect.py
+python3 -m pytest tests/test_intvect.py
 
 # Run a single test (useful during debugging)
-python -m pytest tests/test_intvect.py::test_iv_conversions
+python3 -m pytest tests/test_intvect.py::test_iv_conversions
 ```
 
-If you are iterating on C++ builds, it might be faster to just call CMake:
+If you are iterating on builds, it will faster to rely on ``ccache`` and to let CMake call the ``pip`` install logic:
 ```bash
 cmake -S . -B build
-cmake --build build -j 8  # repeat this step to fix compile errors
+cmake --build build --target pip_install -j 8
 ```
 
 ### Build Options
@@ -163,8 +163,9 @@ If you are using the pip-driven install, selected [AMReX CMake options](https://
 | `AMREX_REPO`                 | `https://github.com/AMReX-Codes/amrex.git` | Repository URI to pull and build AMReX from                  |
 | `AMREX_BRANCH`               | `development`                              | Repository branch for `AMREX_REPO`                           |
 | `AMREX_INTERNAL`             | **ON**/OFF                                 | Needs a pre-installed AMReX library if set to `OFF`          |
-| `AMREX_LIBDIR`               | *None*         (note: not yet implemented) | If set, search for pre-built AMReX C++ libraries (see below) |
 | `CMAKE_BUILD_PARALLEL_LEVEL` | 2                                          | Number of parallel build threads                             |
+| `PYAMREX_LIBDIR`             | *None*                                     | If set, search for pre-built a pyAMReX library               |
+| `PYINSTALLOPTIONS`           | *None*                                     | Additional options for ``pip install``, e.g., ``-v --user``  |
 
 For example, one can also build against a local AMReX copy.
 Assuming AMReX' source is located in `$HOME/src/amrex`, then `export AMREX_SRC=$HOME/src/amrex`.
