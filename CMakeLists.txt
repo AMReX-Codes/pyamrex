@@ -94,7 +94,7 @@ target_link_libraries(pyAMReX PRIVATE buildInfo::pyAMReX)
 # add sources
 add_subdirectory(src)
 
-# C++ properties: at least a C++14 capable compiler is needed
+# C++ properties: at least a C++17 capable compiler is needed
 target_compile_features(pyAMReX PUBLIC cxx_std_17)
 set_target_properties(pyAMReX PROPERTIES
     CXX_EXTENSIONS OFF
@@ -126,8 +126,15 @@ set_target_properties(pyAMReX PROPERTIES
     PDB_OUTPUT_DIRECTORY ${CMAKE_PYTHON_OUTPUT_DIRECTORY}/amrex
     COMPILE_PDB_OUTPUT_DIRECTORY ${CMAKE_PYTHON_OUTPUT_DIRECTORY}/amrex
 )
-pybind11_extension(pyAMReX)
-pybind11_strip(pyAMReX)
+if(EMSCRIPTEN)
+    set_target_properties(pyAMReX PROPERTIES
+        PREFIX "")
+else()
+    pybind11_extension(pyAMReX)
+endif()
+if(NOT MSVC AND NOT ${CMAKE_BUILD_TYPE} MATCHES Debug|RelWithDebInfo)
+    pybind11_strip(pyAMReX)
+endif()
 
 # AMReX helper function: propagate CUDA specific target & source properties
 if(AMReX_GPU_BACKEND STREQUAL CUDA)
@@ -192,6 +199,42 @@ install(TARGETS ${pyAMReX_INSTALL_TARGET_NAMES}
 #        ${pyAMReX_BINARY_DIR}/pyAMReXConfigVersion.cmake
 #    DESTINATION ${CMAKE_INSTALL_CMAKEDIR}
 #)
+
+
+# pip helpers for the amrex package ###########################################
+#
+set(PYINSTALLOPTIONS "" CACHE STRING
+    "Additional parameters to pass to `pip install`")
+
+# build the wheel by re-using the shared library we build
+add_custom_target(pip_wheel
+    ${CMAKE_COMMAND} -E rm -f "${pyAMReX_BINARY_DIR}/amrex*whl"
+    COMMAND
+        ${CMAKE_COMMAND} -E env PYAMREX_LIBDIR=$<TARGET_FILE_DIR:pyAMReX>
+            python3 -m pip wheel -v --no-build-isolation --use-feature=in-tree-build ${pyAMReX_SOURCE_DIR}
+    WORKING_DIRECTORY
+        ${pyAMReX_BINARY_DIR}
+    DEPENDS
+        pyAMReX
+)
+
+# this will also upgrade/downgrade dependencies, e.g., when the version of numpy changes
+add_custom_target(pip_install_requirements
+    python3 -m pip install ${PYINSTALLOPTIONS} -r "${pyAMReX_SOURCE_DIR}/requirements.txt"
+    WORKING_DIRECTORY
+        ${pyAMReX_BINARY_DIR}
+)
+
+# We force-install because in development, it is likely that the version of
+# the package does not change, but the code did change. We need --no-deps,
+# because otherwise pip would also force reinstall all dependencies.
+add_custom_target(pip_install
+    python3 -m pip install --force-reinstall --no-deps ${PYINSTALLOPTIONS} "${pyAMReX_BINARY_DIR}/amrex*whl"
+    WORKING_DIRECTORY
+        ${pyAMReX_BINARY_DIR}
+    DEPENDS
+        pyAMReX pip_wheel pip_install_requirements
+)
 
 
 # Tests #######################################################################
