@@ -21,8 +21,18 @@ using namespace amrex;
 
 
 void init_MultiFab(py::module &m) {
-    py::class_< FabArrayBase >(m, "FabArrayBase");
+    py::class_< FabArrayBase >(m, "FabArrayBase")
+        .def_property_readonly("is_all_cell_centered", &FabArrayBase::is_cell_centered)
+        .def_property_readonly("is_all_nodal",
+             py::overload_cast< >(&FabArrayBase::is_nodal, py::const_))
+        .def("is_nodal",
+             py::overload_cast< int >(&FabArrayBase::is_nodal, py::const_))
+
+        .def_property_readonly("num_comp", &FabArrayBase::nComp)
+    ;
+
     py::class_< FArrayBox >(m, "FArrayBox");
+
     py::class_< FabArray<FArrayBox>, FabArrayBase >(m, "FabArray_FArrayBox");
 
     //py::class_< MFIterWrapper >(m, "MFIterWrapper");
@@ -84,7 +94,7 @@ void init_MultiFab(py::module &m) {
         */
     ;
 
-    py::class_< MultiFab /*, FabArray<FArrayBox>*/ >(m, "MultiFab")
+    py::class_< MultiFab, FabArray<FArrayBox> >(m, "MultiFab")
         .def("__repr__",
              [](MultiFab const & mf) {
                  return "<amrex.MultiFab with '" + std::to_string(mf.nComp()) +
@@ -123,25 +133,30 @@ void init_MultiFab(py::module &m) {
         >(&MultiFab::define))
 
         /* setters */
+        //.def("set_val",
+        //     py::overload_cast< Real >(&MultiFab::setVal))
         .def("set_val",
-             py::overload_cast< Real >(&MultiFab::setVal))
+             [](MultiFab & mf, Real val) { mf.setVal(val); }
+        )
         .def("set_val",
             [](MultiFab & mf, Real val, int comp, int num_comp) {
                 mf.setVal(val, comp, num_comp);
             }
         )
+        //.def("set_val",
+        //     py::overload_cast< Real, int, int, int >(&MultiFab::setVal))
         .def("set_val",
-             py::overload_cast< Real, int, int, int >(&MultiFab::setVal))
+             [](MultiFab & mf, Real val, int comp, int ncomp, int nghost) {
+                mf.setVal(val, comp, ncomp, nghost);
+            }
+        )
+        //.def("set_val",
+        //     py::overload_cast< Real, int, int, IntVect const & >(&MultiFab::setVal))
         .def("set_val",
-             py::overload_cast< Real, int, int, IntVect const & >(&MultiFab::setVal))
-
-        .def("is_cell_centered", &MultiFab::is_cell_centered)
-        .def("is_nodal",
-            py::overload_cast< >(&MultiFab::is_nodal, py::const_))
-        .def("is_nodal",
-            py::overload_cast< int >(&MultiFab::is_nodal, py::const_))
-
-        .def_property_readonly("num_comp", &MultiFab::nComp)
+             [](MultiFab & mf, Real val, int comp, int ncomp, IntVect const & nghost) {
+                 mf.setVal(val, comp, ncomp, nghost);
+             }
+        )
 
         /* sizes, etc. */
         .def("min",
@@ -181,7 +196,9 @@ void init_MultiFab(py::module &m) {
 
         .def("abs",
             [](MultiFab & mf, int comp, int num_comp) { mf.abs(comp, num_comp); })
-        .def("abs", py::overload_cast< int, int, int >(&MultiFab::abs))
+        //.def("abs", py::overload_cast< int, int, int >(&MultiFab::abs))
+        .def("abs",
+             [](MultiFab & mf, int comp, int num_comp, int nghost) { mf.abs(comp, num_comp, nghost); })
 
         .def("plus", py::overload_cast< Real, int >(&MultiFab::plus))
         .def("plus", [](MultiFab & mf, Real val, int comp, int num_comp) {

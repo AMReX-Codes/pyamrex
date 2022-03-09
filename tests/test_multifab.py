@@ -20,7 +20,7 @@ def test_mfab_loop(mfab, nghost):
 
 
 def test_mfab_simple(mfab):
-    assert(mfab.is_cell_centered)
+    assert(mfab.is_all_cell_centered)
     assert(all(not mfab.is_nodal(i) for i in [-1, 0, 1, 2]))
 
     for i in range(mfab.num_comp):
