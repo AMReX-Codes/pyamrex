@@ -21,6 +21,7 @@ def test_array4():
     # from numpy (also a non-owning view)
     x = np.ones((2, 3, 4,))
     arr = amrex.Array4_double(x)
+    assert(arr.nComp == 1)
 
     x[1, 1, 1] = 42
     # TypeError: 'amrex.amrex_pybind.Array4_double' object is not subscriptable
@@ -28,18 +29,16 @@ def test_array4():
 
     # copy to numpy
     c_arr2np = np.array(arr, copy=True)
-    assert(c_arr2np.ndim == 3)
-    #assert(c_arr2np.ndim == 4)
+    assert(c_arr2np.ndim == 4)
     assert(c_arr2np.dtype == np.dtype("double"))
-    np.testing.assert_array_equal(x, c_arr2np)
+    np.testing.assert_array_equal(x, c_arr2np[:, :, :, 0])
     assert(c_arr2np[1, 1, 1] == 42)
 
     # view to numpy
     v_arr2np = np.array(arr, copy=False)
-    assert(v_arr2np.ndim == 3)
-    #assert(c_arr2np.ndim == 4)
+    assert(c_arr2np.ndim == 4)
     assert(v_arr2np.dtype == np.dtype("double"))
-    np.testing.assert_array_equal(x, v_arr2np)
+    np.testing.assert_array_equal(x, v_arr2np[:, :, :, 0])
     assert(v_arr2np[1, 1, 1] == 42)
 
     # change original buffer once more

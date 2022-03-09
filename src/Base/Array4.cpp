@@ -37,6 +37,7 @@ void make_Array4(py::module &m, std::string typestr)
 
         .def_property_readonly("size", &Array4<T>::size)
         .def_property_readonly("nComp", &Array4<T>::nComp)
+        .def_property_readonly("num_comp", &Array4<T>::nComp)
 
         .def(py::init< >())
         .def(py::init< Array4<T> const & >())
@@ -44,6 +45,8 @@ void make_Array4(py::module &m, std::string typestr)
         .def(py::init< Array4<T> const &, int, int >())
         //.def(py::init< T*, Dim3 const &, Dim3 const &, int >())
 
+        /* init from a numpy or other buffer protocol array: non-owning view
+         */
         .def(py::init([](py::array_t<T> & arr) {
             py::buffer_info buf = arr.request();
 
@@ -63,24 +66,25 @@ void make_Array4(py::module &m, std::string typestr)
             return a4;
         }))
 
-
         .def_property_readonly("__array_interface__", [](Array4<T> const & a4) {
             auto d = py::dict();
             auto const len = length(a4);
             // TODO: likely F->C index conversion here
             // p[(i-begin.x)+(j-begin.y)*jstride+(k-begin.z)*kstride+n*nstride];
+            py::print("ncomp");
+            py::print(a4.ncomp);
             auto shape = py::make_tuple(  // Buffer dimensions
                     len.x < 0 ? 0 : len.x,
                     len.y < 0 ? 0 : len.y,
-                    len.z < 0 ? 0 : len.z//,  // zero-size shall not have negative dimension
-                    //a4.ncomp
+                    len.z < 0 ? 0 : len.z,  // zero-size shall not have negative dimension
+                    a4.ncomp
             );
             // buffer protocol strides are in bytes, AMReX strides are elements
             auto const strides = py::make_tuple(  // Strides (in bytes) for each index
                     sizeof(T) * a4.jstride,
                     sizeof(T) * a4.kstride,
-                    sizeof(T)//,
-                    //sizeof(T) * a4.nstride
+                    sizeof(T),
+                    sizeof(T) * a4.nstride
             );
             d["data"] = py::make_tuple(long(a4.dataPtr()), false);
             d["typestr"] = py::format_descriptor<T>::format();
@@ -117,7 +121,25 @@ void make_Array4(py::module &m, std::string typestr)
             );
         })
 */
+        .def("contains", &Array4<T>::contains)
+        //.def("__contains__", &Array4<T>::contains)
+
+        //.def("__setitem__", [](Array4<T> & a4, IntVect v, T const value){ a4(v[0], v[1], v[2]) = value; })
+        .def("__setitem__", [](Array4<T> & a4, std::array<int, 4> key, T const value){
+            a4(key[0], key[1], key[2], key[3]) = value;
+        })
+        .def("__setitem__", [](Array4<T> & a4, std::array<int, 3> key, T const value){
+            a4(key[0], key[1], key[2]) = value;
+        })
+
+        // __getitem__
     ;
+
+    // free standing C++ functions:
+    m.def("lbound", &lbound< Array4<T> >);
+    m.def("ubound", &ubound< Array4<T> >);
+    m.def("length", &length< Array4<T> >);
+    m.def("makePolymorphic", &makePolymorphic< Array4<T> >);
 }
 
 void init_Array4(py::module &m) {
@@ -148,13 +170,4 @@ void init_Array4(py::module &m) {
         )
     ;
      */
-
-    // free standing C++ functions:
-    /*
-    contains
-    lbound
-    ubound
-    length
-    makePolymorphic
-    */
 }
