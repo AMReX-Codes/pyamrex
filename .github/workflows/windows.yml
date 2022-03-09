@@ -20,9 +20,7 @@ jobs:
       run: |
         python3 -m pytest tests
 
-  # Build libamrex and all tutorials
   clang:
-    if: ${{ false }}  # disable for now
     name: Clang w/o MPI
     runs-on: windows-latest
     steps:

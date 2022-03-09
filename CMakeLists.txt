@@ -229,7 +229,8 @@ add_custom_target(pip_install_requirements
 # the package does not change, but the code did change. We need --no-deps,
 # because otherwise pip would also force reinstall all dependencies.
 add_custom_target(pip_install
-    python3 -m pip install --force-reinstall --no-deps ${PYINSTALLOPTIONS} "${pyAMReX_BINARY_DIR}/amrex*whl"
+    ${CMAKE_COMMAND} -E env AMREX_MPI=${AMReX_MPI}
+        python3 -m pip install --force-reinstall --no-deps ${PYINSTALLOPTIONS} "${pyAMReX_BINARY_DIR}/amrex*whl"
     WORKING_DIRECTORY
         ${pyAMReX_BINARY_DIR}
     DEPENDS
