@@ -95,7 +95,7 @@ target_link_libraries(pyAMReX PRIVATE buildInfo::pyAMReX)
 add_subdirectory(src)
 
 # C++ properties: at least a C++14 capable compiler is needed
-target_compile_features(pyAMReX PUBLIC cxx_std_14)
+target_compile_features(pyAMReX PUBLIC cxx_std_17)
 set_target_properties(pyAMReX PROPERTIES
     CXX_EXTENSIONS OFF
     CXX_STANDARD_REQUIRED ON
@@ -132,7 +132,7 @@ pybind11_strip(pyAMReX)
 # AMReX helper function: propagate CUDA specific target & source properties
 if(AMReX_GPU_BACKEND STREQUAL CUDA)
     setup_target_for_cuda_compilation(pyAMReX)
-    target_compile_features(pyAMReX PUBLIC cuda_std_14)
+    target_compile_features(pyAMReX PUBLIC cuda_std_17)
     set_target_properties(pyAMReX PROPERTIES
         CUDA_EXTENSIONS OFF
         CUDA_STANDARD_REQUIRED ON
