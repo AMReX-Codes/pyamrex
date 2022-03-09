@@ -28,12 +28,12 @@ void init_MultiFab(py::module &m) {
         .def("is_nodal",
              py::overload_cast< int >(&FabArrayBase::is_nodal, py::const_))
 
+        .def_property_readonly("nComp", &FabArrayBase::nComp)
         .def_property_readonly("num_comp", &FabArrayBase::nComp)
+        .def_property_readonly("size", &FabArrayBase::size)
     ;
 
     py::class_< FArrayBox >(m, "FArrayBox");
-
-    py::class_< FabArray<FArrayBox>, FabArrayBase >(m, "FabArray_FArrayBox");
 
     //py::class_< MFIterWrapper >(m, "MFIterWrapper");
     py::class_< MFIter >(m, "MFIter")
@@ -92,6 +92,13 @@ void init_MultiFab(py::module &m) {
         int index()
         int length()
         */
+    ;
+
+    py::class_< FabArray<FArrayBox>, FabArrayBase >(m, "FabArray_FArrayBox")
+        //.def("array", py::overload_cast< const MFIter& >(&FabArray<FArrayBox>::array))
+        //.def("const_array", &FabArray<FArrayBox>::const_array)
+        .def("array", [](FabArray<FArrayBox> & fa, MFIter const & mfi) {return fa.array(mfi);})
+        .def("const_array", [](FabArray<FArrayBox> & fa, MFIter const & mfi) {return fa.const_array(mfi);})
     ;
 
     py::class_< MultiFab, FabArray<FArrayBox> >(m, "MultiFab")

@@ -10,13 +10,28 @@ def test_mfab_loop(mfab, nghost):
     for mfi in mfab:
         print(mfi)
         bx = mfi.tilebox()
-        #marr = mfab.array(mfi) # Array4: add __array_interface__ here
+        marr = mfab.array(mfi) # Array4: add __array_interface__ here
 
-        #for i, j, k in bx:
-        #   mar[i, j, k, 0] = 10.0 * i
-        #    mar[i, j, k, 1] = 10.0 * j
-        #    mar[i, j, k, 2] = 10.0 * k
-        #    print(i,j,k)
+        print(mfab)
+        print(mfab.num_comp)
+        print(mfab.size)
+        print(marr.size)
+        print(marr.nComp)
+
+        # slow, index by index assignment
+        for i, j, k in bx:
+            #print(i,j,k)
+            marr[i, j, k] = 10.0 * i
+            #marr[i, j, k, 0] = 10.0 * i
+            #marr[i, j, k, 1] = 10.0 * j
+            #marr[i, j, k, 2] = 10.0 * k
+
+        # fast, range based assignment
+        # TODO
+
+        # challenge: offset from our index space for...
+        # extra test: numpy assignment
+        # extra test: cupy assignment
 
 
 def test_mfab_simple(mfab):
