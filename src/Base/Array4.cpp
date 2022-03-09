@@ -124,15 +124,22 @@ void make_Array4(py::module &m, std::string typestr)
         .def("contains", &Array4<T>::contains)
         //.def("__contains__", &Array4<T>::contains)
 
-        //.def("__setitem__", [](Array4<T> & a4, IntVect v, T const value){ a4(v[0], v[1], v[2]) = value; })
-        .def("__setitem__", [](Array4<T> & a4, std::array<int, 4> key, T const value){
+        // setter & getter
+        .def("__setitem__", [](Array4<T> & a4, IntVect const & v, T const value){ a4(v) = value; })
+        .def("__setitem__", [](Array4<T> & a4, std::array<int, 4> const key, T const value){
             a4(key[0], key[1], key[2], key[3]) = value;
         })
-        .def("__setitem__", [](Array4<T> & a4, std::array<int, 3> key, T const value){
+        .def("__setitem__", [](Array4<T> & a4, std::array<int, 3> const key, T const value){
             a4(key[0], key[1], key[2]) = value;
         })
 
-        // __getitem__
+        .def("__getitem__", [](Array4<T> & a4, IntVect const & v){ return a4(v); })
+        .def("__getitem__", [](Array4<T> & a4, std::array<int, 4> const key){
+            return a4(key[0], key[1], key[2], key[3]);
+        })
+        .def("__getitem__", [](Array4<T> & a4, std::array<int, 3> const key){
+            return a4(key[0], key[1], key[2]);
+        })
     ;
 
     // free standing C++ functions:
