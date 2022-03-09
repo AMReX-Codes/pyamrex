@@ -11,13 +11,63 @@
 #include <AMReX_IntVect.H>
 
 #include <sstream>
+#include <optional>
 
 namespace py = pybind11;
 using namespace amrex;
 
+namespace
+{
+    /** A little Wrapper class to iterate an amrex::Box via
+     *  amrex::Box::next().
+     */
+    struct Box3DConstIter {
+        Box m_box;
+        std::optional<IntVect> m_it;
+
+        Box3DConstIter(Box const & bx) : m_box(bx) {
+            m_it = m_box.smallEnd();
+        }
+
+        Box3DConstIter& operator++() {
+            // from FABio_ascii::write
+            if (m_it <= m_box.bigEnd()) {
+                m_box.next(m_it.value());
+                return *this;
+            }
+            else
+            {
+                m_it = std::nullopt;
+                return *this;
+            }
+        }
+
+        bool operator==(Box3DConstIter const & other) const {
+            return other.m_it == m_it;
+        }
+
+        Box3DConstIter begin() const
+        {
+            return Box3DConstIter(m_box);
+        }
+        Box3DConstIter end() const
+        {
+            auto it = Box3DConstIter(m_box);
+            it.m_it = std::nullopt;
+            return it;
+        }
+
+        IntVect operator*() const
+        {
+            return m_it.value();
+        }
+    };
+}
 
 void init_Box(py::module &m) {
     py::class_< Direction >(m, "Direction");
+
+
 
     py::class_< Box >(m, "Box")
         .def("__repr__",
@@ -106,5 +156,28 @@ void init_Box(py::module &m) {
 
         // __getitem__
 
+        /* iterate Box index space */
+        .def("__iter__",
+             [](Box const & bx) {
+                 auto box_iter = Box3DConstIter(bx);
+                 return py::make_iterator(box_iter.begin(), box_iter.end());
+             },
+            // Essential: keep object alive while iterator exists
+             py::keep_alive<0, 1>()
+        )
+
+        .def("lbound", [](Box const &, Box const & other){ return lbound(other); })
+        .def("ubound", [](Box const &, Box const & other){ return ubound(other); })
+        .def("begin", [](Box const &, Box const & other){ return begin(other); })
+        .def("end", [](Box const &, Box const & other){ return end(other); })
+        // already an attribute
+        //.def("length", [](Box const &, Box const & other){ return length(other); })
     ;
+
+    // free standing C++ functions:
+    m.def("lbound", [](Box const & other){ return lbound(other); });
+    m.def("ubound", [](Box const & other){ return ubound(other); });
+    m.def("begin", [](Box const & other){ return begin(other); });
+    m.def("end", [](Box const & other){ return end(other); });
+    m.def("length", [](Box const & other){ return length(other); });
 }
