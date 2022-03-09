@@ -4,6 +4,7 @@
  * License: BSD-3-Clause-LBNL
  */
 #include <pybind11/pybind11.h>
+#include <pybind11/operators.h>
 #include <pybind11/stl.h>
 
 #include <AMReX_Config.H>
@@ -31,7 +32,7 @@ namespace
 
         Box3DConstIter& operator++() {
             // from FABio_ascii::write
-            if (m_it <= m_box.bigEnd()) {
+            if (m_it < m_box.bigEnd()) {
                 m_box.next(m_it.value());
                 return *this;
             }
@@ -82,6 +83,8 @@ void init_Box(py::module &m) {
         .def(py::init< IntVect const &, IntVect const &, IntVect const & >())
         //.def(py::init< IntVect const &, IntVect const &, IndexType >())
 
+        .def_property_readonly("small_end", [](Box const & bx){ return bx.smallEnd(); })
+        .def_property_readonly("big_end", [](Box const & bx){ return bx.bigEnd(); })
         /*
         .def_property("small_end",
             &Box::smallEnd,
@@ -89,7 +92,7 @@ void init_Box(py::module &m) {
         .def_property("big_end",
             &Box::bigEnd,
             &Box::setBig)
-        */
+
         .def_property("type",
             py::overload_cast<>(&Box::type, py::const_),
             &Box::setType)
@@ -126,13 +129,21 @@ void init_Box(py::module &m) {
         // atOffset
         // atOffset3d
         // setRange
-        // shift
         // shiftHalf
+        */
+        .def("shift", [](Box & bx, IntVect const& iv) { return bx.shift(iv); })
+
+        .def(py::self + IntVect())
+        .def(py::self - IntVect())
+        .def(py::self += IntVect())
+        .def(py::self -= IntVect())
 
         .def("convert",
              py::overload_cast< IndexType >(&Box::convert))
         .def("convert",
              py::overload_cast< IntVect const & >(&Box::convert))
+
+        .def("grow", [](Box & bx, IntVect const& iv) { return bx.grow(iv); })
 
         //.def("surrounding_nodes",
         //     py::overload_cast< >(&Box::surroundingNodes))
