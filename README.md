@@ -147,6 +147,9 @@ python3 -m pytest tests/test_intvect.py
 
 # Run a single test (useful during debugging)
 python3 -m pytest tests/test_intvect.py::test_iv_conversions
+
+# Check all print and be maximum verbose
+python3 -m pytest -vvvv -s tests/test_multifab.py::test_mfab_simple
 ```
 
 ### Build Options
