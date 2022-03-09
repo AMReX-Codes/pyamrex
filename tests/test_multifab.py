@@ -7,31 +7,52 @@ import amrex
 
 @pytest.mark.parametrize("nghost", [0, 1])
 def test_mfab_loop(mfab, nghost):
+    ngv = mfab.nGrowVect
+    print(ngv)
+
     for mfi in mfab:
         print(mfi)
-        bx = mfi.tilebox()
-        marr = mfab.array(mfi) # Array4: add __array_interface__ here
+        bx = mfi.tilebox().grow(ngv)
+        marr = mfab.array(mfi)
 
-        print(mfab)
-        print(mfab.num_comp)
-        print(mfab.size)
-        print(marr.size)
-        print(marr.nComp)
+        #print(mfab)
+        #print(mfab.num_comp)
+        #print(mfab.size)
+        #print(marr.size)
+        #print(marr.nComp)
 
         # slow, index by index assignment
-        for i, j, k in bx:
-            #print(i,j,k)
-            marr[i, j, k] = 10.0 * i
-            #marr[i, j, k, 0] = 10.0 * i
-            #marr[i, j, k, 1] = 10.0 * j
-            #marr[i, j, k, 2] = 10.0 * k
+        three_comps = mfab.num_comp == 3
+        if three_comps:
+            for i, j, k in bx:
+                #print(i,j,k)
+                marr[i, j, k, 0] = 10.0 * i
+                marr[i, j, k, 1] = 10.0 * j
+                marr[i, j, k, 2] = 10.0 * k
+        else:
+            for i, j, k in bx:
+                #print(i,j,k)
+                marr[i, j, k] = 10.0 * i
 
         # fast, range based assignment
-        # TODO
+        #   challenge: offset from index space
+        #bx_zeroshift = bx - bx.small_end - mfab.nGrowVect
 
-        # challenge: offset from our index space for...
-        # extra test: numpy assignment
-        # extra test: cupy assignment
+        # numpy assignment: including guard/ghost region
+        marr_np = np.array(marr, copy=False)
+        print(marr_np.shape)
+
+        assert(marr_np[0, 0, 0, 0] == marr[bx.small_end])
+        # assert(marr_np[-1, -1, -1, -1] == marr[bx.big_end])  # FIXME
+
+        #marr_np[24:200, :, :, :] = 42.  # this should fail
+        #marr_np[:, :, :] = 42.
+        marr_np[:, :, :, :] = 42.
+        assert(marr_np[0, 0, 0, 0] == marr[bx.small_end])
+        assert(marr_np[-1, -1, -1, -1] == marr[bx.big_end])
+
+        # separate test: cupy assignment & reading
+        #   TODO
 
 
 def test_mfab_simple(mfab):

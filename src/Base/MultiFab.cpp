@@ -31,6 +31,8 @@ void init_MultiFab(py::module &m) {
         .def_property_readonly("nComp", &FabArrayBase::nComp)
         .def_property_readonly("num_comp", &FabArrayBase::nComp)
         .def_property_readonly("size", &FabArrayBase::size)
+
+        .def_property_readonly("nGrowVect", &FabArrayBase::nGrowVect)
     ;
 
     py::class_< FArrayBox >(m, "FArrayBox");
