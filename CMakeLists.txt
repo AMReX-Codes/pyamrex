@@ -208,7 +208,7 @@ set(PYINSTALLOPTIONS "" CACHE STRING
 
 # build the wheel by re-using the shared library we build
 add_custom_target(pip_wheel
-    ${CMAKE_COMMAND} -E rm -f "${pyAMReX_BINARY_DIR}/amrex*whl"
+    ${CMAKE_COMMAND} -E rm -f "amrex*.whl"
     COMMAND
         ${CMAKE_COMMAND} -E env PYAMREX_LIBDIR=$<TARGET_FILE_DIR:pyAMReX>
             python3 -m pip wheel -v --no-build-isolation --use-feature=in-tree-build ${pyAMReX_SOURCE_DIR}
@@ -230,7 +230,7 @@ add_custom_target(pip_install_requirements
 # because otherwise pip would also force reinstall all dependencies.
 add_custom_target(pip_install
     ${CMAKE_COMMAND} -E env AMREX_MPI=${AMReX_MPI}
-        python3 -m pip install --force-reinstall --no-deps ${PYINSTALLOPTIONS} "${pyAMReX_BINARY_DIR}/amrex-21.2-py3-none-any.whl"
+        python3 -m pip install --force-reinstall --no-deps ${PYINSTALLOPTIONS} "amrex*.whl"
     WORKING_DIRECTORY
         ${pyAMReX_BINARY_DIR}
     DEPENDS
