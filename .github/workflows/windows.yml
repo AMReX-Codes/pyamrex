@@ -19,7 +19,7 @@ jobs:
     - name: Unit tests
       shell: cmd
       run: |
-        python3 -m pytest tests
+        python3 -m pytest -s -vvvv tests
 
   clang:
     name: Clang w/o MPI
