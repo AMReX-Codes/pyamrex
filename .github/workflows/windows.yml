@@ -31,7 +31,8 @@ jobs:
       run: |
         call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\vc\Auxiliary\build\vcvarsall.bat" x64
 
-        python3 -m pip install -U pip setuptools wheel pytest
+        C:\hostedtoolcache\windows\Python\3.10.2\x64\python3.exe ^
+            -m pip install -U pip setuptools wheel pytest
         if errorlevel 1 exit 1
 
         cmake -S . -B build               ^
