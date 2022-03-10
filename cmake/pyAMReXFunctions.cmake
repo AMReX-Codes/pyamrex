@@ -117,13 +117,10 @@ macro(set_default_build_type default_build_type)
             set_property(CACHE CMAKE_BUILD_TYPE
                 PROPERTY STRINGS ${CMAKE_CONFIGURATION_TYPES})
         endif()
-
-        # RelWithDebInfo uses -O2 which is sub-ideal for how it is intended to be used
-        #   https://gitlab.kitware.com/cmake/cmake/-/merge_requests/591
-        list(TRANSFORM CMAKE_C_FLAGS_RELWITHDEBINFO REPLACE "-O2" "-O3")
-        list(TRANSFORM CMAKE_CXX_FLAGS_RELWITHDEBINFO REPLACE "-O2" "-O3")
-        # FIXME: due to the "AMReX inits CUDA first" logic we will first see this with -O2 in output
-        list(TRANSFORM CMAKE_CUDA_FLAGS_RELWITHDEBINFO REPLACE "-O2" "-O3")
+        if(NOT CMAKE_BUILD_TYPE IN_LIST CMAKE_CONFIGURATION_TYPES)
+            message(WARNING "CMAKE_BUILD_TYPE '${CMAKE_BUILD_TYPE}' is not one of "
+                    "${CMAKE_CONFIGURATION_TYPES}. Is this a typo?")
+        endif()
     endif()
 endmacro()
 

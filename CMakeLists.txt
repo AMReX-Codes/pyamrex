@@ -52,8 +52,8 @@ set_default_build_dirs()
 #
 set(pyAMReX_VERSION_INFO "" CACHE STRING
     "PEP-440 conformant version (set by distutils)")
-# change the default build type to RelWithDebInfo (or Release) instead of Debug
-set_default_build_type("RelWithDebInfo")
+# change the default build type to Release (or RelWithDebInfo) instead of Debug
+set_default_build_type("Release")
 
 # Testing logic with possibility to overwrite on a project basis in superbuilds
 set_testing_option(pyAMReX_BUILD_TESTING)  # default: ON (BUILD_TESTING)
