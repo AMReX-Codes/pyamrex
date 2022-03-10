@@ -230,7 +230,7 @@ add_custom_target(pip_install_requirements
 # because otherwise pip would also force reinstall all dependencies.
 add_custom_target(pip_install
     ${CMAKE_COMMAND} -E env AMREX_MPI=${AMReX_MPI}
-        python3 -m pip install --force-reinstall --no-deps ${PYINSTALLOPTIONS} "${pyAMReX_BINARY_DIR}/amrex*whl"
+        python3 -m pip install --force-reinstall --no-deps ${PYINSTALLOPTIONS} "${pyAMReX_BINARY_DIR}/amrex-21.2-py3-none-any.whl"
     WORKING_DIRECTORY
         ${pyAMReX_BINARY_DIR}
     DEPENDS
