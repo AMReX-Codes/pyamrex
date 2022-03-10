@@ -12,40 +12,37 @@ jobs:
       with:
         python-version: '3.x'
     - name: Build & Install
-      shell: cmd
       run: |
-        call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\vc\Auxiliary\build\vcvarsall.bat" x64
-
         python3 -m pip install -U pip pytest
         python3 -m pip install -v .
-        if errorlevel 1 exit 1
-
         python3 -c "import amrex; print(amrex.__version__)"
-        if errorlevel 1 exit 1
     - name: Unit tests
       shell: cmd
       run: |
         python3 -m pytest tests
-        if errorlevel 1 exit 1
 
   clang:
     name: Clang w/o MPI
     runs-on: windows-latest
+    env: {PYAMREX_LIBDIR: build/lib/site-packages/amrex/Release/}
     steps:
     - uses: actions/checkout@v2
     - uses: seanmiddleditch/gha-setup-ninja@master
     - name: Build & Install
       run: |
-        C:\hostedtoolcache\windows\Python\3.10.2\x64\python3.exe `
-            -m pip install -U pip setuptools wheel pytest
+        python3 -m pip install -U pip setuptools wheel pytest
 
         cmake -S . -B build               `
               -T "ClangCl"                `
               -DCMAKE_VERBOSE_MAKEFILE=ON `
-              -DAMReX_MPI=OFF
+              -DAMReX_MPI=OFF             `
+              -DPython_EXECUTABLE=C:\\hostedtoolcache\\windows\\python\\3.9.10\\x64\\python3.exe
 
-        cmake --build build --config RelWithDebInfo --target pip_install -j 2
-
+        cmake --build build --config Release -j 2
+        python3 -m pip install -v .
     - name: Unit tests
       run: |
-        ctest --test-dir build -C RelWithDebInfo --output-on-failure
+        ctest --test-dir build -C Release --output-on-failure
+
+# C:\\hostedtoolcache\\windows\\python\\3.9.10\\x64\\python3.exe
+# C:\\hostedtoolcache\\windows\\Python\\3.10.2\\x64\\python3.exe
