@@ -208,10 +208,10 @@ set(PYINSTALLOPTIONS "" CACHE STRING
 
 # build the wheel by re-using the shared library we build
 add_custom_target(pip_wheel
-    ${CMAKE_COMMAND} -E rm -f "${pyAMReX_BINARY_DIR}/amrex*whl"
+    ${CMAKE_COMMAND} -E rm -f "amrex*.whl"
     COMMAND
         ${CMAKE_COMMAND} -E env PYAMREX_LIBDIR=$<TARGET_FILE_DIR:pyAMReX>
-            python3 -m pip wheel -v --no-build-isolation --use-feature=in-tree-build ${pyAMReX_SOURCE_DIR}
+            ${Python_EXECUTABLE} -m pip wheel -v --no-build-isolation --use-feature=in-tree-build ${pyAMReX_SOURCE_DIR}
     WORKING_DIRECTORY
         ${pyAMReX_BINARY_DIR}
     DEPENDS
@@ -220,7 +220,7 @@ add_custom_target(pip_wheel
 
 # this will also upgrade/downgrade dependencies, e.g., when the version of numpy changes
 add_custom_target(pip_install_requirements
-    python3 -m pip install ${PYINSTALLOPTIONS} -r "${pyAMReX_SOURCE_DIR}/requirements.txt"
+    ${Python_EXECUTABLE} -m pip install ${PYINSTALLOPTIONS} -r "${pyAMReX_SOURCE_DIR}/requirements.txt"
     WORKING_DIRECTORY
         ${pyAMReX_BINARY_DIR}
 )
@@ -229,7 +229,8 @@ add_custom_target(pip_install_requirements
 # the package does not change, but the code did change. We need --no-deps,
 # because otherwise pip would also force reinstall all dependencies.
 add_custom_target(pip_install
-    python3 -m pip install --force-reinstall --no-deps ${PYINSTALLOPTIONS} "${pyAMReX_BINARY_DIR}/amrex*whl"
+    ${CMAKE_COMMAND} -E env AMREX_MPI=${AMReX_MPI}
+        ${Python_EXECUTABLE} -m pip install --force-reinstall --no-deps ${PYINSTALLOPTIONS} "amrex*.whl"
     WORKING_DIRECTORY
         ${pyAMReX_BINARY_DIR}
     DEPENDS
