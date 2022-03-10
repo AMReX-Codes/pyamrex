@@ -43,5 +43,5 @@ jobs:
         cmake --build build --config RelWithDebInfo --target pip_install -j 2
         if errorlevel 1 exit 1
 
-        ctest --test-dir build --config RelWithDebInfo --output-on-failure
+        ctest --test-dir build -C RelWithDebInfo --output-on-failure
         if errorlevel 1 exit 1
