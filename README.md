@@ -111,7 +111,7 @@ export CUDAHOSTCXX=$(which clang++)
 ```
 
 
-### Build & Test
+### Build
 
 From the base of the pyAMReX source directory, execute:
 ```bash
@@ -123,11 +123,19 @@ From the base of the pyAMReX source directory, execute:
 #export AMREX_SRC=$PWD/../amrex
 #export CMAKE_BUILD_PARALLEL_LEVEL=8
 
-# optional:                 --force-reinstall --user
-python3 -m pip install -v .
+python3 -m pip install -U -r requirements.txt
+python3 -m pip install -v --force-reinstall --no-deps .
 ```
 
-On successful installation, you can run the unit tests (assuming `pytest` is
+If you are iterating on builds, it will faster to rely on ``ccache`` and to let CMake call the ``pip`` install logic:
+```bash
+cmake -S . -B build
+cmake --build build --target pip_install -j 8
+```
+
+### Test
+
+After successful installation, you can run the unit tests (assuming `pytest` is
 installed). If `AMREX_MPI=ON`, then please prepend the following commands with `mpiexec -np <NUM_PROCS>`
 
 ```bash
@@ -139,12 +147,6 @@ python3 -m pytest tests/test_intvect.py
 
 # Run a single test (useful during debugging)
 python3 -m pytest tests/test_intvect.py::test_iv_conversions
-```
-
-If you are iterating on builds, it will faster to rely on ``ccache`` and to let CMake call the ``pip`` install logic:
-```bash
-cmake -S . -B build
-cmake --build build --target pip_install -j 8
 ```
 
 ### Build Options
