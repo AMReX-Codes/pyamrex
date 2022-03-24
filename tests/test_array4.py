@@ -20,7 +20,9 @@ def test_array4_empty():
 def test_array4():
     # from numpy (also a non-owning view)
     x = np.ones((2, 3, 4,))
+    print(x.__array_interface__)
     arr = amrex.Array4_double(x)
+    print(arr.__array_interface__)
     assert(arr.nComp == 1)
 
     x[1, 1, 1] = 42
