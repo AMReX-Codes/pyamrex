@@ -28,7 +28,7 @@ def test_array4():
     # assert(arr[1, 1, 1] == 42)
 
     # copy to numpy
-    c_arr2np = np.array(arr, copy=True)
+    c_arr2np = np.array(arr, copy=True)  # segfaults on Windows
     assert(c_arr2np.ndim == 4)
     assert(c_arr2np.dtype == np.dtype("double"))
     np.testing.assert_array_equal(x, c_arr2np[:, :, :, 0])
