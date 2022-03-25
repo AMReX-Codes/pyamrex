@@ -55,25 +55,30 @@ void make_Array4(py::module &m, std::string typestr)
             // TODO:
             //   In 2D, Array4 still needs to be accessed with (i,j,k) or (i,j,k,n), with k = 0.
             //   Likewise in 1D.
+            //   We could also add support for 4D numpy arrays, treating the slowest
+            //   varying index as component "n".
 
             auto a4 = std::make_unique< Array4<T> >();
             a4.get()->p = (T*)buf.ptr;
             a4.get()->begin = Dim3{0, 0, 0};
             // C->F index conversion here
             // p[(i-begin.x)+(j-begin.y)*jstride+(k-begin.z)*kstride+n*nstride];
-            a4.get()->end.x = (int)buf.shape.at(2);
+            a4.get()->end.x = (int)buf.shape.at(2); // fastest varying index
             a4.get()->end.y = (int)buf.shape.at(1);
             a4.get()->end.z = (int)buf.shape.at(0);
             a4.get()->ncomp = 1;
             // buffer protocol strides are in bytes, AMReX strides are elements
-            a4.get()->jstride = (int)buf.strides.at(1) / sizeof(T);
+            a4.get()->jstride = (int)buf.strides.at(1) / sizeof(T); // fastest varying index
             a4.get()->kstride = (int)buf.strides.at(0) / sizeof(T);
-            a4.get()->nstride = (int)buf.strides.at(0) * (int)buf.shape.at(0) / sizeof(T);
+            // 3D == no component: stride here should not matter
+            a4.get()->nstride = a4.get()->kstride * (int)buf.shape.at(0);
 
 
             std::cout << "(int)buf.strides.at(0)=" << (int)buf.strides.at(0) << std::endl;
             std::cout << "(int)buf.strides.at(1)=" << (int)buf.strides.at(1) << std::endl;
             std::cout << "(int)buf.strides.at(2)=" << (int)buf.strides.at(2) << std::endl;
+
+            // todo: we could check and store here if the array buffer we got is read-only
 
             return a4;
         }))
@@ -83,29 +88,49 @@ void make_Array4(py::module &m, std::string typestr)
             auto const len = length(a4);
             // F->C index conversion here
             // p[(i-begin.x)+(j-begin.y)*jstride+(k-begin.z)*kstride+n*nstride];
-            py::print("ncomp");
-            py::print(a4.ncomp);
-            auto shape = py::make_tuple(  // Buffer dimensions
+            //py::print("ncomp");
+            //py::print(a4.ncomp);
+            // Buffer dimensions: zero-size shall not have negative dimension
+            auto shape = py::make_tuple(
                     a4.ncomp,
                     len.z < 0 ? 0 : len.z,
                     len.y < 0 ? 0 : len.y,
-                    len.x < 0 ? 0 : len.x  // zero-size shall not have negative dimension
+                    len.x < 0 ? 0 : len.x  // fastest varying index
             );
             // buffer protocol strides are in bytes, AMReX strides are elements
             auto const strides = py::make_tuple(  // Strides (in bytes) for each index
                     sizeof(T) * a4.nstride,
                     sizeof(T) * a4.kstride,
                     sizeof(T) * a4.jstride,
-                    sizeof(T)
+                    sizeof(T)  // fastest varying index
             );
-            d["data"] = py::make_tuple(long(a4.dataPtr()), false);
-            d["typestr"] = py::format_descriptor<T>::format();
+            bool const read_only = false;
+            d["data"] = py::make_tuple(long(a4.dataPtr()), read_only);
+            //d["offset"] = 0;
+            //d["mask"] = py::none();
+
             d["shape"] = shape;
             d["strides"] = strides;
+            // we could set this after checking the strides are C-style contiguous:
             // d["strides"] = py::none();
+
+            d["typestr"] = py::format_descriptor<T>::format();
             d["version"] = 3;
             return d;
         })
+
+
+        // TODO: __cuda_array_interface__
+        // https://numba.readthedocs.io/en/latest/cuda/cuda_array_interface.html
+
+
+        // TODO: __dlpack__
+        // DLPack protocol (CPU, NVIDIA GPU, AMD GPU, Intel GPU, etc.)
+        // https://dmlc.github.io/dlpack/latest/
+        // https://data-apis.org/array-api/latest/design_topics/data_interchange.html
+        // https://github.com/data-apis/consortium-feedback/issues/1
+        // https://github.com/dmlc/dlpack/blob/master/include/dlpack/dlpack.h
+
 
         // not sure if useful to have this implemented on top
 /*
