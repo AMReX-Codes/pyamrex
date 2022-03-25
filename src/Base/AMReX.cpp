@@ -82,16 +82,21 @@ void init_AMReX(py::module& m)
     m.def("initialize",
           [](const py::list args) {
               Vector<std::string> cargs{"amrex"};
-              Vector<char*> argv{&cargs.back()[0]};
+              Vector<char*> argv;
 
               // Populate the "command line"
-              for (const auto& v: args) {
+              for (const auto& v: args)
                   cargs.push_back(v.cast<std::string>());
-                  argv.push_back(&cargs.back()[0]);
-              }
-
+              for (auto& v: cargs)
+                  argv.push_back(&v[0]);
               int argc = argv.size();
+
+              // note: +1 since there is an extra char-string array element,
+              //       that ANSII C requires to be a simple NULL entry
+              //       https://stackoverflow.com/a/39096006/2719194
+              argv.push_back(NULL);
               char** tmp = argv.data();
+
               const bool build_parm_parse = (cargs.size() > 1);
               // TODO: handle version with MPI
               return Initialize(argc, tmp, build_parm_parse);
