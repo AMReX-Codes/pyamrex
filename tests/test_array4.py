@@ -17,12 +17,14 @@ def test_array4_empty():
     assert(emptyc.size == 0)
     assert(emptyc.nComp == 0)
 
-def test_array4():
+def test_array4(capsys):
     # from numpy (also a non-owning view)
     x = np.ones((2, 3, 4,))
-    print(x.__array_interface__)
+    with capsys.disabled():
+        print(x.__array_interface__)
     arr = amrex.Array4_double(x)
-    print(arr.__array_interface__)
+    with capsys.disabled():
+        print(arr.__array_interface__)
     assert(arr.nComp == 1)
 
     x[1, 1, 1] = 42
