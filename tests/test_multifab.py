@@ -8,10 +8,9 @@ import amrex
 @pytest.mark.parametrize("nghost", [0, 1])
 def test_mfab_loop(mfab, nghost):
     ngv = mfab.nGrowVect
-    print(ngv)
+    print(f"\n  mfab={mfab}, mfab.nGrowVect={ngv}")
 
     for mfi in mfab:
-        print(mfi)
         bx = mfi.tilebox().grow(ngv)
         marr = mfab.array(mfi)
 
@@ -21,7 +20,11 @@ def test_mfab_loop(mfab, nghost):
         #print(marr.size)
         #print(marr.nComp)
 
-        # slow, index by index assignment
+        # index by index assignment
+        # notes:
+        # - this is AMReX Array4, F-order indices
+        # - even though we iterate by fastest varying index,
+        #   such loops are naturally very slow in Python
         three_comps = mfab.num_comp == 3
         if three_comps:
             for i, j, k in bx:
@@ -34,19 +37,30 @@ def test_mfab_loop(mfab, nghost):
                 #print(i,j,k)
                 marr[i, j, k] = 10.0 * i
 
-        # fast, range based assignment
-        #   challenge: offset from index space
-        #bx_zeroshift = bx - bx.small_end - mfab.nGrowVect
+        # note: offset from index space in numpy
+        #   in numpy, we start indices from zero, not small_end
 
-        # numpy assignment: including guard/ghost region
+        # numpy representation: non-copying view, including the
+        # guard/ghost region
+        #   note: in numpy, indices are in C-order!
         marr_np = np.array(marr, copy=False)
-        print(marr_np.shape)
 
+        # check the values at start/end are the same: first component
         assert(marr_np[0, 0, 0, 0] == marr[bx.small_end])
-        # assert(marr_np[-1, -1, -1, -1] == marr[bx.big_end])  # FIXME
+        assert(marr_np[0, -1, -1, -1] == marr[bx.big_end])
+        # same check, but for all components
+        for n in range(mfab.num_comp):
+            small_end_comp = list(bx.small_end) + [n]
+            big_end_comp = list(bx.big_end) + [n]
+            assert(marr_np[n, 0, 0, 0] == marr[small_end_comp])
+            assert(marr_np[n, -1, -1, -1] == marr[big_end_comp])
 
-        #marr_np[24:200, :, :, :] = 42.  # this should fail
-        #marr_np[:, :, :] = 42.
+        # now we do some faster assignments, using range based access
+        #   this should fail as out-of-bounds, but does not
+        #     does Numpy not check array access for non-owned views?
+        #marr_np[24:200, :, :, :] = 42.
+
+        #   all components and all indices set at once to 42
         marr_np[:, :, :, :] = 42.
         assert(marr_np[0, 0, 0, 0] == marr[bx.small_end])
         assert(marr_np[-1, -1, -1, -1] == marr[bx.big_end])
