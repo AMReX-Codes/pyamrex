@@ -31,9 +31,6 @@ def test_array4(capsys):
     x[1, 1, 1] = 42
     # TypeError: 'amrex.amrex_pybind.Array4_double' object is not subscriptable
     # assert(arr[1, 1, 1] == 42)
-    
-    # hack:
-    return
 
     # copy to numpy
     c_arr2np = np.array(arr, copy=True)  # segfaults on Windows
