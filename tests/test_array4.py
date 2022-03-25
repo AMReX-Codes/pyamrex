@@ -26,7 +26,6 @@ def test_array4(capsys):
     with capsys.disabled():
         print(arr.__array_interface__)
     assert(arr.nComp == 1)
-    return
 
     x[1, 1, 1] = 42
     # TypeError: 'amrex.amrex_pybind.Array4_double' object is not subscriptable
@@ -36,25 +35,27 @@ def test_array4(capsys):
     c_arr2np = np.array(arr, copy=True)  # segfaults on Windows
     assert(c_arr2np.ndim == 4)
     assert(c_arr2np.dtype == np.dtype("double"))
-    np.testing.assert_array_equal(x, c_arr2np[:, :, :, 0])
-    assert(c_arr2np[1, 1, 1] == 42)
+    with capsys.disabled():
+        print(c_arr2np.__array_interface__)
+    np.testing.assert_array_equal(x, c_arr2np[0, :, :, :])
+    assert(c_arr2np[0, 1, 1, 1] == 42)
 
     # view to numpy
     v_arr2np = np.array(arr, copy=False)
     assert(c_arr2np.ndim == 4)
     assert(v_arr2np.dtype == np.dtype("double"))
-    np.testing.assert_array_equal(x, v_arr2np[:, :, :, 0])
-    assert(v_arr2np[1, 1, 1] == 42)
+    np.testing.assert_array_equal(x, v_arr2np[0, :, :, :])
+    assert(v_arr2np[0, 1, 1, 1] == 42)
 
     # change original buffer once more
     x[1, 1, 1] = 43
-    assert(v_arr2np[1, 1, 1] == 43)
+    assert(v_arr2np[0, 1, 1, 1] == 43)
 
     # copy array4 (view)
     c_arr = amrex.Array4_double(arr)
     v_carr2np = np.array(c_arr, copy=False)
     x[1, 1, 1] = 44
-    assert(v_carr2np[1, 1, 1] == 44)
+    assert(v_carr2np[0, 1, 1, 1] == 44)
 
     # from cupy
 

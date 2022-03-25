@@ -7,8 +7,8 @@
 #include <pybind11/numpy.h>
 #include <pybind11/stl.h>
 
-#include <AMReX_Config.H>
 #include <AMReX_Array4.H>
+#include <AMReX_BLassert.H>
 #include <AMReX_IntVect.H>
 
 #include <sstream>
@@ -50,41 +50,50 @@ void make_Array4(py::module &m, std::string typestr)
         .def(py::init([](py::array_t<T> & arr) {
             py::buffer_info buf = arr.request();
 
+            AMREX_ALWAYS_ASSERT_WITH_MESSAGE(buf.ndim == 3,
+                "We can only create amrex::Array4 views into 3D Python arrays at the moment.");
+
             auto a4 = std::make_unique< Array4<T> >();
             a4.get()->p = (T*)buf.ptr;
             a4.get()->begin = Dim3{0, 0, 0};
-            // TODO: likely C->F index conversion here
+            // C->F index conversion here
             // p[(i-begin.x)+(j-begin.y)*jstride+(k-begin.z)*kstride+n*nstride];
-            a4.get()->end.x = (int)buf.shape.at(0);
+            a4.get()->end.x = (int)buf.shape.at(2);
             a4.get()->end.y = (int)buf.shape.at(1);
-            a4.get()->end.z = (int)buf.shape.at(2);
+            a4.get()->end.z = (int)buf.shape.at(0);
             a4.get()->ncomp = 1;
             // buffer protocol strides are in bytes, AMReX strides are elements
-            a4.get()->jstride = (int)buf.strides.at(0) / sizeof(T);
-            a4.get()->kstride = (int)buf.strides.at(1) / sizeof(T);
-            a4.get()->nstride = (int)buf.strides.at(2) * (int)buf.shape.at(2) / sizeof(T);
+            a4.get()->jstride = (int)buf.strides.at(1) / sizeof(T);
+            a4.get()->kstride = (int)buf.strides.at(0) / sizeof(T);
+            a4.get()->nstride = (int)buf.strides.at(0) * (int)buf.shape.at(0) / sizeof(T);
+
+
+            std::cout << "(int)buf.strides.at(0)=" << (int)buf.strides.at(0) << std::endl;
+            std::cout << "(int)buf.strides.at(1)=" << (int)buf.strides.at(1) << std::endl;
+            std::cout << "(int)buf.strides.at(2)=" << (int)buf.strides.at(2) << std::endl;
+
             return a4;
         }))
 
         .def_property_readonly("__array_interface__", [](Array4<T> const & a4) {
             auto d = py::dict();
             auto const len = length(a4);
-            // TODO: likely F->C index conversion here
+            // F->C index conversion here
             // p[(i-begin.x)+(j-begin.y)*jstride+(k-begin.z)*kstride+n*nstride];
             py::print("ncomp");
             py::print(a4.ncomp);
             auto shape = py::make_tuple(  // Buffer dimensions
-                    len.x < 0 ? 0 : len.x,
+                    a4.ncomp,
+                    len.z < 0 ? 0 : len.z,
                     len.y < 0 ? 0 : len.y,
-                    len.z < 0 ? 0 : len.z,  // zero-size shall not have negative dimension
-                    a4.ncomp
+                    len.x < 0 ? 0 : len.x  // zero-size shall not have negative dimension
             );
             // buffer protocol strides are in bytes, AMReX strides are elements
             auto const strides = py::make_tuple(  // Strides (in bytes) for each index
-                    sizeof(T) * a4.jstride,
+                    sizeof(T) * a4.nstride,
                     sizeof(T) * a4.kstride,
-                    sizeof(T),
-                    sizeof(T) * a4.nstride
+                    sizeof(T) * a4.jstride,
+                    sizeof(T)
             );
             d["data"] = py::make_tuple(long(a4.dataPtr()), false);
             d["typestr"] = py::format_descriptor<T>::format();
