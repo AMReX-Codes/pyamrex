@@ -52,6 +52,9 @@ void make_Array4(py::module &m, std::string typestr)
 
             AMREX_ALWAYS_ASSERT_WITH_MESSAGE(buf.ndim == 3,
                 "We can only create amrex::Array4 views into 3D Python arrays at the moment.");
+            // TODO:
+            //   In 2D, Array4 still needs to be accessed with (i,j,k) or (i,j,k,n), with k = 0.
+            //   Likewise in 1D.
 
             auto a4 = std::make_unique< Array4<T> >();
             a4.get()->p = (T*)buf.ptr;
