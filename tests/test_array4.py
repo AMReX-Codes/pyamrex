@@ -28,9 +28,14 @@ def test_array4(capsys):
         print(arr.__array_interface__)
     assert(arr.nComp == 1)
 
+    # change original array
     x[1, 1, 1] = 42
-    # TypeError: 'amrex.amrex_pybind.Array4_double' object is not subscriptable
-    # assert(arr[1, 1, 1] == 42)
+    # check values in Array4 view changed
+    assert(arr[1, 1, 1] == 42)
+    assert(arr[1, 1, 1, 0] == 42)  # with component
+    # check existing values stayed
+    assert(arr[0, 0, 0] == 1)
+    assert(arr[3, 2, 1] == 1)
 
     # copy to numpy
     c_arr2np = np.array(arr, copy=True)  # segfaults on Windows

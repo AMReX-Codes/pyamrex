@@ -11,6 +11,7 @@
 #include <AMReX_BLassert.H>
 #include <AMReX_IntVect.H>
 
+#include <cstdint>
 #include <sstream>
 #include <type_traits>
 
@@ -110,7 +111,7 @@ void make_Array4(py::module &m, std::string typestr)
                     sizeof(T)  // fastest varying index
             );
             bool const read_only = false;
-            d["data"] = py::make_tuple(long(a4.dataPtr()), read_only);
+            d["data"] = py::make_tuple(std::intptr_t(a4.dataPtr()), read_only);
             //d["offset"] = 0;
             //d["mask"] = py::none();
 
