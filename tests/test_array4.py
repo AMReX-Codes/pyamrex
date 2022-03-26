@@ -17,15 +17,12 @@ def test_array4_empty():
     assert(emptyc.size == 0)
     assert(emptyc.nComp == 0)
 
-def test_array4(capsys):
+def test_array4():
     # from numpy (also a non-owning view)
     x = np.ones((2, 3, 4,))
-    with capsys.disabled():
-        print(x.__array_interface__)
-        print(x.dtype)
+    print(f"\nx: {x.__array_interface__} {x.dtype}")
     arr = amrex.Array4_double(x)
-    with capsys.disabled():
-        print(arr.__array_interface__)
+    print(f"arr: {arr.__array_interface__}")
     assert(arr.nComp == 1)
 
     # change original array
@@ -41,8 +38,7 @@ def test_array4(capsys):
     c_arr2np = np.array(arr, copy=True)  # segfaults on Windows
     assert(c_arr2np.ndim == 4)
     assert(c_arr2np.dtype == np.dtype("double"))
-    with capsys.disabled():
-        print(c_arr2np.__array_interface__)
+    print(f"c_arr2np: {c_arr2np.__array_interface__}")
     np.testing.assert_array_equal(x, c_arr2np[0, :, :, :])
     assert(c_arr2np[0, 1, 1, 1] == 42)
 

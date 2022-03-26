@@ -79,11 +79,6 @@ void make_Array4(py::module &m, std::string typestr)
             // 3D == no component: stride here should not matter
             a4.get()->nstride = a4.get()->kstride * (int)buf.shape.at(0);
 
-
-            std::cout << "(int)buf.strides.at(0)=" << (int)buf.strides.at(0) << std::endl;
-            std::cout << "(int)buf.strides.at(1)=" << (int)buf.strides.at(1) << std::endl;
-            std::cout << "(int)buf.strides.at(2)=" << (int)buf.strides.at(2) << std::endl;
-
             // todo: we could check and store here if the array buffer we got is read-only
 
             return a4;
@@ -94,8 +89,6 @@ void make_Array4(py::module &m, std::string typestr)
             auto const len = length(a4);
             // F->C index conversion here
             // p[(i-begin.x)+(j-begin.y)*jstride+(k-begin.z)*kstride+n*nstride];
-            //py::print("ncomp");
-            //py::print(a4.ncomp);
             // Buffer dimensions: zero-size shall not have negative dimension
             auto shape = py::make_tuple(
                     a4.ncomp,
@@ -104,7 +97,7 @@ void make_Array4(py::module &m, std::string typestr)
                     len.x < 0 ? 0 : len.x  // fastest varying index
             );
             // buffer protocol strides are in bytes, AMReX strides are elements
-            auto const strides = py::make_tuple(  // Strides (in bytes) for each index
+            auto const strides = py::make_tuple(
                     sizeof(T) * a4.nstride,
                     sizeof(T) * a4.kstride,
                     sizeof(T) * a4.jstride,
@@ -112,13 +105,15 @@ void make_Array4(py::module &m, std::string typestr)
             );
             bool const read_only = false;
             d["data"] = py::make_tuple(std::intptr_t(a4.dataPtr()), read_only);
-            //d["offset"] = 0;
-            //d["mask"] = py::none();
+            //d["offset"] = 0;         // default
+            //d["mask"] = py::none();  // default
 
             d["shape"] = shape;
+            // we could also set this after checking the strides are C-style contiguous:
+            //if (is_contiguous<T>(shape, strides))
+            //    d["strides"] = py::none();  // C-style contiguous
+            //else
             d["strides"] = strides;
-            // we could set this after checking the strides are C-style contiguous:
-            // d["strides"] = py::none();
 
             d["typestr"] = py::format_descriptor<T>::format();
             d["version"] = 3;
