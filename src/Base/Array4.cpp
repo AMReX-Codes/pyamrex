@@ -58,8 +58,13 @@ void make_Array4(py::module &m, std::string typestr)
             //   We could also add support for 4D numpy arrays, treating the slowest
             //   varying index as component "n".
 
+            if (buf.format != py::format_descriptor<T>::format())
+                throw std::runtime_error("Incompatible format: expected '" +
+                    py::format_descriptor<T>::format() +
+                    "' and received '" + buf.format + "'!");
+
             auto a4 = std::make_unique< Array4<T> >();
-            a4.get()->p = (T*)buf.ptr;
+            a4.get()->p = static_cast<T*>(buf.ptr);
             a4.get()->begin = Dim3{0, 0, 0};
             // C->F index conversion here
             // p[(i-begin.x)+(j-begin.y)*jstride+(k-begin.z)*kstride+n*nstride];
