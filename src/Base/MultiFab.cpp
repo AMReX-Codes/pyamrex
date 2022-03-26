@@ -1,6 +1,6 @@
-/* Copyright 2021 The AMReX Community
+/* Copyright 2021-2022 The AMReX Community
  *
- * Authors: Axel Huebl, ...
+ * Authors: Axel Huebl
  * License: BSD-3-Clause-LBNL
  */
 #include <pybind11/pybind11.h>
