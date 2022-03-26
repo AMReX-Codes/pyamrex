@@ -19,6 +19,61 @@ namespace py = pybind11;
 using namespace amrex;
 
 
+namespace
+{
+    /** CPU: __array_interface__ v3
+     *
+     * https://numpy.org/doc/stable/reference/arrays.interface.html
+     */
+    template<typename T>
+    py::dict
+    array_interface(Array4<T> const & a4)
+    {
+        auto d = py::dict();
+        auto const len = length(a4);
+        // F->C index conversion here
+        // p[(i-begin.x)+(j-begin.y)*jstride+(k-begin.z)*kstride+n*nstride];
+        // Buffer dimensions: zero-size shall not skip dimension
+        auto shape = py::make_tuple(
+                a4.ncomp,
+                len.z <= 0 ? 1 : len.z,
+                len.y <= 0 ? 1 : len.y,
+                len.x <= 0 ? 1 : len.x  // fastest varying index
+        );
+        // buffer protocol strides are in bytes, AMReX strides are elements
+        auto const strides = py::make_tuple(
+                sizeof(T) * a4.nstride,
+                sizeof(T) * a4.kstride,
+                sizeof(T) * a4.jstride,
+                sizeof(T)  // fastest varying index
+        );
+        bool const read_only = false;
+        d["data"] = py::make_tuple(std::intptr_t(a4.dataPtr()), read_only);
+        // note: if we want to keep the same global indexing with non-zero
+        //       box small_end as in AMReX, then we can explore playing with
+        //       this offset as well
+        //d["offset"] = 0;         // default
+        //d["mask"] = py::none();  // default
+
+        d["shape"] = shape;
+        // we could also set this after checking the strides are C-style contiguous:
+        //if (is_contiguous<T>(shape, strides))
+        //    d["strides"] = py::none();  // C-style contiguous
+        //else
+        d["strides"] = strides;
+
+        // type description
+        // for more complicated types, e.g., tuples/structs
+        //d["descr"] = ...;
+        // we currently only need this
+        d["typestr"] = py::format_descriptor<T>::format();
+
+        d["version"] = 3;
+        return d;
+    }
+}
+
+
 template< typename T >
 void make_Array4(py::module &m, std::string typestr)
 {
@@ -85,56 +140,44 @@ void make_Array4(py::module &m, std::string typestr)
             return a4;
         }))
 
+
+        // CPU: __array_interface__ v3
+        // https://numpy.org/doc/stable/reference/arrays.interface.html
         .def_property_readonly("__array_interface__", [](Array4<T> const & a4) {
-            auto d = py::dict();
-            auto const len = length(a4);
-            // F->C index conversion here
-            // p[(i-begin.x)+(j-begin.y)*jstride+(k-begin.z)*kstride+n*nstride];
-            // Buffer dimensions: zero-size shall not skip dimension
-            auto shape = py::make_tuple(
-                    a4.ncomp,
-                    len.z <= 0 ? 1 : len.z,
-                    len.y <= 0 ? 1 : len.y,
-                    len.x <= 0 ? 1 : len.x  // fastest varying index
-            );
-            // buffer protocol strides are in bytes, AMReX strides are elements
-            auto const strides = py::make_tuple(
-                    sizeof(T) * a4.nstride,
-                    sizeof(T) * a4.kstride,
-                    sizeof(T) * a4.jstride,
-                    sizeof(T)  // fastest varying index
-            );
-            bool const read_only = false;
-            d["data"] = py::make_tuple(std::intptr_t(a4.dataPtr()), read_only);
-            // note: if we want to keep the same global indexing with non-zero
-            //       box small_end as in AMReX, then we can explore playing with
-            //       this offset as well
-            //d["offset"] = 0;         // default
-            //d["mask"] = py::none();  // default
+            return array_interface(a4);
+        })
 
-            d["shape"] = shape;
-            // we could also set this after checking the strides are C-style contiguous:
-            //if (is_contiguous<T>(shape, strides))
-            //    d["strides"] = py::none();  // C-style contiguous
-            //else
-            d["strides"] = strides;
+        // CPU: __array_function__ interface (TODO)
+        //
+        // NEP 18 — A dispatch mechanism for NumPy's high level array functions.
+        //   https://numpy.org/neps/nep-0018-array-function-protocol.html
+        // This enables code using NumPy to be directly operated on Array4 arrays.
+        // __array_function__ feature requires NumPy 1.16 or later.
 
-            d["typestr"] = py::format_descriptor<T>::format();
-            d["version"] = 3;
+
+        // Nvidia GPUs: __cuda_array_interface__ v2
+        // https://numba.readthedocs.io/en/latest/cuda/cuda_array_interface.html
+        .def_property_readonly("__cuda_array_interface__", [](Array4<T> const & a4) {
+            auto d = array_interface(a4);
+
+            // data:
+            // Because the user of the interface may or may not be in the same context, the most common case is to use cuPointerGetAttribute with CU_POINTER_ATTRIBUTE_DEVICE_POINTER in the CUDA driver API (or the equivalent CUDA Runtime API) to retrieve a device pointer that is usable in the currently active context.
+            // TODO For zero-size arrays, use 0 here.
+
+            // ... TODO: wasn't there some stream or device info?
+
+            d["version"] = 2;
             return d;
         })
 
 
-        // TODO: __cuda_array_interface__
-        // https://numba.readthedocs.io/en/latest/cuda/cuda_array_interface.html
-
-
-        // TODO: __dlpack__
+        // TODO: __dlpack__ __dlpack_device__
         // DLPack protocol (CPU, NVIDIA GPU, AMD GPU, Intel GPU, etc.)
         // https://dmlc.github.io/dlpack/latest/
         // https://data-apis.org/array-api/latest/design_topics/data_interchange.html
         // https://github.com/data-apis/consortium-feedback/issues/1
         // https://github.com/dmlc/dlpack/blob/master/include/dlpack/dlpack.h
+        // https://docs.cupy.dev/en/stable/user_guide/interoperability.html#dlpack-data-exchange-protocol
 
 
         .def("contains", &Array4<T>::contains)

@@ -153,3 +153,56 @@ def test_mfab_mfiter(make_mfab):
         cnt += 1
 
     assert iter(mfab).length == cnt
+
+
+@pytest.mark.skipif(
+    amrex.Config.gpu_backend != "CUDA", reason="Requires AMReX_GPU_BACKEND=CUDA"
+)
+def test_mfab_ops_cuda_numba():
+    # https://numba.pydata.org/numba-doc/dev/cuda/cuda_array_interface.html
+    import numba
+
+    # AMReX -> numba
+    # arr_numba = cuda.as_cuda_array(arr4)
+    # TODO
+
+
+@pytest.mark.skipif(
+    amrex.Config.gpu_backend != "CUDA", reason="Requires AMReX_GPU_BACKEND=CUDA"
+)
+def test_mfab_ops_cuda_cupy():
+    # https://docs.cupy.dev/en/stable/user_guide/interoperability.html
+    import cupy as cp
+
+    # AMReX -> cupy
+    # arr_numba = cuda.as_cuda_array(arr4)
+    # TODO
+
+
+@pytest.mark.skipif(
+    amrex.Config.gpu_backend != "CUDA", reason="Requires AMReX_GPU_BACKEND=CUDA"
+)
+def test_mfab_ops_cuda_pytorch():
+    # https://docs.cupy.dev/en/stable/user_guide/interoperability.html#pytorch
+    import torch
+
+    # AMReX -> pytorch
+    # arr_torch = torch.as_tensor(arr, device='cuda')
+    # assert(arr_torch.__cuda_array_interface__['data'][0] == arr.__cuda_array_interface__['data'][0])
+    # TODO
+
+
+@pytest.mark.skipif(
+    amrex.Config.gpu_backend != "CUDA", reason="Requires AMReX_GPU_BACKEND=CUDA"
+)
+def test_mfab_ops_cuda_cuml():
+    # https://github.com/rapidsai/cuml
+    # https://github.com/rapidsai/cudf
+    #   maybe better for particles as a dataframe test
+    import cudf
+    import cuml
+
+    # AMReX -> RAPIDSAI cuML
+    # arr_cuml = ...
+    # assert(arr_cuml.__cuda_array_interface__['data'][0] == arr.__cuda_array_interface__['data'][0])
+    # TODO
