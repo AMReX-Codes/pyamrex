@@ -23,7 +23,7 @@ void make_Array4(py::module &m, std::string typestr)
 {
     // dispatch simpler via: py::format_descriptor<T>::format() naming
     auto const array_name = std::string("Array4_").append(typestr);
-    py::class_< Array4<T> >(m, array_name.c_str(), py::buffer_protocol())
+    py::class_< Array4<T> >(m, array_name.c_str() /*, py::buffer_protocol() */)
         .def("__repr__",
              [](Array4<T> const & a4) {
                  std::stringstream s;
