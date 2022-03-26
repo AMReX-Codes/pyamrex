@@ -62,8 +62,15 @@ def test_mfab_loop(mfab, nghost):
 
         #   all components and all indices set at once to 42
         marr_np[:, :, :, :] = 42.
+
+        # values in start & end still match?
         assert(marr_np[0, 0, 0, 0] == marr[bx.small_end])
         assert(marr_np[-1, -1, -1, -1] == marr[bx.big_end])
+
+        # all values for all indices match between multifab & numpy view?
+        for n in range(mfab.num_comp):
+            for i, j, k in bx:
+                assert(marr[i, j, k, n] == 42.)
 
         # separate test: cupy assignment & reading
         #   TODO
