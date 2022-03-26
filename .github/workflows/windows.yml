@@ -24,7 +24,7 @@ jobs:
   clang:
     name: Clang w/o MPI
     runs-on: windows-latest
-    env: {PYAMREX_LIBDIR: build/lib/site-packages/amrex/Release/}
+    env: {PYAMREX_LIBDIR: build/lib/site-packages/amrex/Debug/}
     steps:
     - uses: actions/checkout@v2
     - uses: seanmiddleditch/gha-setup-ninja@master
@@ -38,11 +38,11 @@ jobs:
               -DAMReX_MPI=OFF             `
               -DPython_EXECUTABLE=C:\\hostedtoolcache\\windows\\python\\3.9.10\\x64\\python3.exe
 
-        cmake --build build --config Release -j 2
+        cmake --build build --config Debug -j 2
         python3 -m pip install -v .
     - name: Unit tests
       run: |
-        ctest --test-dir build -C Release --output-on-failure
+        ctest --test-dir build -C Debug --output-on-failure
 
 # C:\\hostedtoolcache\\windows\\python\\3.9.10\\x64\\python3.exe
 # C:\\hostedtoolcache\\windows\\Python\\3.10.2\\x64\\python3.exe
