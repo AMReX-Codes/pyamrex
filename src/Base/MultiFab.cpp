@@ -37,7 +37,6 @@ void init_MultiFab(py::module &m) {
 
     py::class_< FArrayBox >(m, "FArrayBox");
 
-    //py::class_< MFIterWrapper >(m, "MFIterWrapper");
     py::class_< MFIter >(m, "MFIter")
         .def("__repr__",
              [](MFIter const & mfi) {
@@ -307,12 +306,10 @@ void init_MultiFab(py::module &m) {
         /* data access in Box index space */
         .def("__iter__",
             [](MultiFab& mf) {
-                //return py::make_iterator(MFIterWrapper(mf), ValidSentinel{});
                 return MFIter(mf);
             },
             // Essential: keep object alive while iterator exists
             py::keep_alive<0, 1>()
-            //py::return_value_policy::reference_internal
         )
     ;
 }
