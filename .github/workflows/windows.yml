@@ -19,7 +19,7 @@ jobs:
     - name: Unit tests
       shell: cmd
       run: |
-        python3 -m pytest -s -vvvv tests/test_array4.py
+        python3 -m pytest tests
 
   clang:
     name: Clang w/o MPI
@@ -42,7 +42,7 @@ jobs:
         python3 -m pip install -v .
     - name: Unit tests
       run: |
-        python3 -m pytest -s -vvvv tests/test_array4.py
+        ctest --test-dir build -C Release --output-on-failure
 
 # C:\\hostedtoolcache\\windows\\python\\3.9.10\\x64\\python3.exe
 # C:\\hostedtoolcache\\windows\\Python\\3.10.2\\x64\\python3.exe
