@@ -23,6 +23,7 @@ def test_array4():
     print(f"\nx: {x.__array_interface__} {x.dtype}")
     arr = amrex.Array4_double(x)
     print(f"arr: {arr.__array_interface__}")
+    print(arr)
     assert(arr.nComp == 1)
 
     # change original array

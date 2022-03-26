@@ -26,10 +26,11 @@ void make_Array4(py::module &m, std::string typestr)
     auto const array_name = std::string("Array4_").append(typestr);
     py::class_< Array4<T> >(m, array_name.c_str())
         .def("__repr__",
-             [](Array4<T> const & a4) {
+             [typestr](Array4<T> const & a4) {
                  std::stringstream s;
                  s << a4.size();
-                 return "<amrex.Array4 of size '" + s.str() + "'>";
+                 return "<amrex.Array4 of type '" + typestr +
+                        "' and size '" + s.str() + "'>";
              }
         )
 #if defined(AMREX_DEBUG) || defined(AMREX_BOUND_CHECK)
