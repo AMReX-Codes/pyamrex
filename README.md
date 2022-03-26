@@ -147,6 +147,9 @@ python3 -m pytest tests/test_intvect.py
 
 # Run a single test (useful during debugging)
 python3 -m pytest tests/test_intvect.py::test_iv_conversions
+
+# Run all tests, do not capture "print" output and be verbose
+python3 -m pytest -s -vvvv tests/
 ```
 
 ### Build Options
