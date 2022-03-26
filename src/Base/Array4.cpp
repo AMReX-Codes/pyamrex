@@ -24,7 +24,7 @@ void make_Array4(py::module &m, std::string typestr)
 {
     // dispatch simpler via: py::format_descriptor<T>::format() naming
     auto const array_name = std::string("Array4_").append(typestr);
-    py::class_< Array4<T> >(m, array_name.c_str() /*, py::buffer_protocol() */)
+    py::class_< Array4<T> >(m, array_name.c_str())
         .def("__repr__",
              [](Array4<T> const & a4) {
                  std::stringstream s;
@@ -89,12 +89,12 @@ void make_Array4(py::module &m, std::string typestr)
             auto const len = length(a4);
             // F->C index conversion here
             // p[(i-begin.x)+(j-begin.y)*jstride+(k-begin.z)*kstride+n*nstride];
-            // Buffer dimensions: zero-size shall not have negative dimension
+            // Buffer dimensions: zero-size shall not skip dimension
             auto shape = py::make_tuple(
                     a4.ncomp,
-                    len.z < 0 ? 0 : len.z,
-                    len.y < 0 ? 0 : len.y,
-                    len.x < 0 ? 0 : len.x  // fastest varying index
+                    len.z <= 0 ? 1 : len.z,
+                    len.y <= 0 ? 1 : len.y,
+                    len.x <= 0 ? 1 : len.x  // fastest varying index
             );
             // buffer protocol strides are in bytes, AMReX strides are elements
             auto const strides = py::make_tuple(
@@ -105,6 +105,9 @@ void make_Array4(py::module &m, std::string typestr)
             );
             bool const read_only = false;
             d["data"] = py::make_tuple(std::intptr_t(a4.dataPtr()), read_only);
+            // note: if we want to keep the same global indexing with non-zero
+            //       box small_end as in AMReX, then we can explore playing with
+            //       this offset as well
             //d["offset"] = 0;         // default
             //d["mask"] = py::none();  // default
 
@@ -133,32 +136,6 @@ void make_Array4(py::module &m, std::string typestr)
         // https://github.com/dmlc/dlpack/blob/master/include/dlpack/dlpack.h
 
 
-        // not sure if useful to have this implemented on top
-/*
-        .def_buffer([](Array4<T> & a4) -> py::buffer_info {
-            auto const len = length(a4);
-            // TODO: likely F->C index conversion here
-            // p[(i-begin.x)+(j-begin.y)*jstride+(k-begin.z)*kstride+n*nstride];
-            auto shape = {  // Buffer dimensions
-                    len.x < 0 ? 0 : len.x,
-                    len.y < 0 ? 0 : len.y,
-                    len.z < 0 ? 0 : len.z//,  // zero-size shall not have negative dimension
-                    //a4.ncomp
-            };
-            // buffer protocol strides are in bytes, AMReX strides are elements
-            auto const strides = {  // Strides (in bytes) for each index
-                    sizeof(T) * a4.jstride,
-                    sizeof(T) * a4.kstride,
-                    sizeof(T)//,
-                    //sizeof(T) * a4.nstride
-            };
-            return py::buffer_info(
-                a4.dataPtr(),
-                shape,
-                strides
-            );
-        })
-*/
         .def("contains", &Array4<T>::contains)
         //.def("__contains__", &Array4<T>::contains)
 
