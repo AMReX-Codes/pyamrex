@@ -41,6 +41,7 @@ void init_IntVect(py::module &m) {
         .def(py::init<AMREX_D_DECL(int, int, int)>())
 #endif
         .def(py::init<int>())
+        .def(py::init<const std::array<int,AMREX_SPACEDIM>&>())
 
         .def_property_readonly("sum", &IntVect::sum)
         .def_property_readonly("max",
