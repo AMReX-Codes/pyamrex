@@ -43,7 +43,7 @@ void init_RealVect(py::module &m) {
         .def(py::init<AMREX_D_DECL(Real, Real, Real)>())
 #endif
           .def(py::init<const IntVect&>())
-          .def(py::init<const std::array<Real,AMREX_SPACEDIM>&>())
+          .def(py::init<const std::vector<Real>&>())
           .def(py::init<Real>())
           .def("__getitem__",
                [](const RealVect& v, const int i) {
