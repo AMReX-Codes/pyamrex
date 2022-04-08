@@ -1,8 +1,10 @@
-include README.md LEGAL.txt LICENSE.txt
+include README.md LICENSE
 include pyproject.toml
 include requirements.txt
 global-include CMakeLists.txt *.cmake *.in
+recursive-include cmake *
 recursive-include src *
+recursive-include tests *
 
 # see .gitignore
 prune cmake-build*
