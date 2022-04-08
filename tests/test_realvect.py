@@ -274,19 +274,3 @@ def test_basis_vector():
                 assert(ei[jj] == 1)
             else:
                 assert(ei[jj] == 0)
-
-
-
-
-
-
-
-
-
-
-    # v3 = zv2 + v1
-    # assert(v3[0]==1.2 and v3[1] == 2.1 and v3[2] == 3.3)
-
-    # v4 = v3 - amrex.RealVect(0.1,-0.2,0.5)
-    # assert(v4[0] == 1.1 and v4[1] == 2.3 and v4[2] == 2.8)
-
