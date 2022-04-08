@@ -8,4 +8,5 @@ target_sources(pyAMReX
     DistributionMapping.cpp
     IntVect.cpp
     MultiFab.cpp
+    Periodicity.cpp
 )
