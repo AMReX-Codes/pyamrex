@@ -16,7 +16,9 @@
 #include <AMReX_Box.H>
 #include <AMReX_RealBox.H>
 
+#include <array>
 #include <sstream>
+#include <string>
 #include <optional>
 
 namespace py = pybind11;

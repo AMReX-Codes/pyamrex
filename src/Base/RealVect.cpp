@@ -12,7 +12,9 @@
 #include <AMReX_IntVect.H>
 
 #include <sstream>
+#include <string>
 #include <optional>
+#include <vector>
 
 namespace py = pybind11;
 using namespace amrex;

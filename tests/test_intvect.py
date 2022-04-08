@@ -121,6 +121,7 @@ def test_iv_conversions():
     assert(isinstance(obj, np.ndarray))
     assert(obj.dtype == np.int32)
 
+    # check that memory is not collected too early
     iv = amrex.IntVect(2)
     obj = iv.numpy()
     del iv
