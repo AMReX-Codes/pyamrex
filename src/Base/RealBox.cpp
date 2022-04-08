@@ -23,37 +23,8 @@ namespace py = pybind11;
 using namespace amrex;
 
 void init_RealBox(py::module &m) {
-    // py::class_< Direction >(m, "Direction");
 
     py::class_< RealBox >(m, "RealBox")
-        // .def("__repr__",
-        //     [](RealBox const & rb) {
-        //         std::stringstream s;
-        //         s << "<";
-        //         if (!rb.ok()) {
-        //             s << "(invalid)";
-        //         }
-        //         s << "amrex.RealBox in '";
-        //         s << AMREX_SPACEDIM;
-        //         s << "' dimensions\nxmin: [";
-        //         for (int ii = 0; ii < AMREX_SPACEDIM; ii++) {
-        //             s <<  rb.lo(ii);
-        //             if (ii < AMREX_SPACEDIM - 1) {
-        //                 s << ", ";
-        //             } 
-        //         }
-        //         s << "], xmax: [";
-        //         for (int ii = 0; ii < AMREX_SPACEDIM; ii++) {
-        //             s <<  rb.hi(ii);
-        //             if (ii < AMREX_SPACEDIM - 1) {
-        //                 s << ", ";
-        //             } 
-        //         }
-        //         s << ">\n";
-        //         return s.str();
-        //     }
-        // )
-    // py::class_< IntVect >(m, "IntVect")
         .def("__repr__",
              [](py::object& obj) {
                  py::str py_name = obj.attr("__class__").attr("__name__");
@@ -161,7 +132,6 @@ void init_RealBox(py::module &m) {
             py::arg("rb"),py::arg("eps") = 0.0
         )
         .def("intersects", &RealBox::intersects, "determine if box intersects with a box")
-        // .def("AlmostEqual")
     ;
     m.def("AlmostEqual", 
             [](const RealBox& rb1, const RealBox& rb2, Real eps) {
