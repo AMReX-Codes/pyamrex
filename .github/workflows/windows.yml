@@ -36,7 +36,7 @@ jobs:
               -T "ClangCl"                `
               -DCMAKE_VERBOSE_MAKEFILE=ON `
               -DAMReX_MPI=OFF             `
-              -DPython_EXECUTABLE=C:\\hostedtoolcache\\windows\\python\\3.9.10\\x64\\python3.exe
+              -DPython_EXECUTABLE=C:\\hostedtoolcache\\windows\\python\\3.9.12\\x64\\python3.exe
 
         cmake --build build --config Debug -j 2
         python3 -m pip install -v .
@@ -44,5 +44,5 @@ jobs:
       run: |
         ctest --test-dir build -C Debug --output-on-failure
 
-# C:\\hostedtoolcache\\windows\\python\\3.9.10\\x64\\python3.exe
+# C:\\hostedtoolcache\\windows\\python\\3.9.12\\x64\\python3.exe
 # C:\\hostedtoolcache\\windows\\Python\\3.10.2\\x64\\python3.exe

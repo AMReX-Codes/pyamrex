@@ -100,6 +100,13 @@ void init_MultiFab(py::module &m) {
         //.def("const_array", &FabArray<FArrayBox>::const_array)
         .def("array", [](FabArray<FArrayBox> & fa, MFIter const & mfi) {return fa.array(mfi);})
         .def("const_array", [](FabArray<FArrayBox> & fa, MFIter const & mfi) {return fa.const_array(mfi);})
+
+        .def("sum_boundary", py::overload_cast< Periodicity const & >(&FabArray<FArrayBox>::SumBoundary))
+        .def("sum_boundary", py::overload_cast< int, int, Periodicity const & >(&FabArray<FArrayBox>::SumBoundary))
+        .def("sum_boundary", py::overload_cast< int, int, IntVect const&, Periodicity const & >(&FabArray<FArrayBox>::SumBoundary))
+
+        /* Syncs */
+        .def("override_sync", py::overload_cast< Periodicity const & >(&FabArray<FArrayBox>::OverrideSync))
     ;
 
     py::class_< MultiFab, FabArray<FArrayBox> >(m, "MultiFab")
@@ -240,10 +247,6 @@ void init_MultiFab(py::module &m) {
         .def("negate", py::overload_cast< Box const &, int >(&MultiFab::negate))
         .def("negate", py::overload_cast< Box const &, int, int, int >(&MultiFab::negate))
 
-        .def("sum_boundary", py::overload_cast< Periodicity const & >(&MultiFab::SumBoundary))
-        .def("sum_boundary", py::overload_cast< int, int, Periodicity const & >(&MultiFab::SumBoundary))
-        .def("sum_boundary", py::overload_cast< int, int, IntVect const&, Periodicity const & >(&MultiFab::SumBoundary))
-
         /* static (standalone) simple math functions */
         .def_static("dot", py::overload_cast< MultiFab const &, int, MultiFab const &, int, int, int, bool >(&MultiFab::Dot))
         .def_static("dot", py::overload_cast< MultiFab const &, int, int, int, bool >(&MultiFab::Dot))
@@ -296,7 +299,6 @@ void init_MultiFab(py::module &m) {
         /* Syncs */
         .def("average_sync", &MultiFab::AverageSync)
         .def("weighted_sync", &MultiFab::WeightedSync)
-        .def("override_sync", py::overload_cast< Periodicity const & >(&MultiFab::OverrideSync))
         //.def("override_sync", py::overload_cast< iMultiFab const &, Periodicity const & >(&MultiFab::OverrideSync))
 
         /* Init & Finalize */

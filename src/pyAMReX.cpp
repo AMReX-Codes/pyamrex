@@ -26,6 +26,7 @@ void init_DistributionMapping(py::module&);
 void init_IntVect(py::module &);
 void init_RealVect(py::module &);
 void init_MultiFab(py::module &);
+void init_Periodicity(py::module &);
 
 PYBIND11_MODULE(amrex_pybind, m) {
     m.doc() = R"pbdoc(
@@ -42,6 +43,7 @@ PYBIND11_MODULE(amrex_pybind, m) {
                IntVect
                RealVect
                MultiFab
+               Periodicity
     )pbdoc";
 
     // note: order from parent to child classes
@@ -49,6 +51,7 @@ PYBIND11_MODULE(amrex_pybind, m) {
     init_Dim3(m);
     init_IntVect(m);
     init_RealVect(m);
+    init_Periodicity(m);
     init_Array4(m);
     init_Box(m);
     init_BoxArray(m);
@@ -67,7 +70,7 @@ PYBIND11_MODULE(amrex_pybind, m) {
     // authors
     m.attr("__author__") =
         "Axel Huebl, Shreyas Ananthan, Steven R. Brandt, Andrew Myers, "
-        "Weiqun Zhang, et al.";
+        "Ryan T. Sandberg, Weiqun Zhang, et al.";
 
     // API runtime build-time feature variants
     // m.attr("variants") = amrex::getVariants();
