@@ -3,10 +3,12 @@ target_sources(pyAMReX
     AMReX.cpp
     Array4.cpp
     Box.cpp
+    RealBox.cpp
     BoxArray.cpp
     Dim3.cpp
     DistributionMapping.cpp
     IntVect.cpp
+    RealVect.cpp
     MultiFab.cpp
     Periodicity.cpp
 )

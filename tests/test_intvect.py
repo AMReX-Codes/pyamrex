@@ -75,6 +75,11 @@ def test_iv_3d2():
     with pytest.raises(IndexError):
         obj[3]
 
+    obj = amrex.IntVect([2,3,4])
+    assert(obj[0] == 2)
+    assert(obj[1] == 3)
+    assert(obj[2] == 4)
+
 def test_iv_static():
     zero = amrex.IntVect.zero_vector()
     for i in range(amrex.Config.spacedim):
@@ -115,3 +120,9 @@ def test_iv_conversions():
     obj = amrex.IntVect.max_vector().numpy()
     assert(isinstance(obj, np.ndarray))
     assert(obj.dtype == np.int32)
+
+    # check that memory is not collected too early
+    iv = amrex.IntVect(2)
+    obj = iv.numpy()
+    del iv
+    assert(obj[0] == 2)
