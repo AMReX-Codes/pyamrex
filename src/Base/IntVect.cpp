@@ -11,7 +11,9 @@
 #include <AMReX_Dim3.H>
 #include <AMReX_IntVect.H>
 
+#include <array>
 #include <sstream>
+#include <string>
 
 namespace py = pybind11;
 using namespace amrex;
