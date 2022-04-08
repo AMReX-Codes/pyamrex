@@ -19,7 +19,6 @@ using namespace amrex;
 
 void init_RealVect(py::module &m) {
 
-
      py::class_< RealVect>(m, "RealVect")
           .def("__repr__",
                [](py::object& obj) {
