@@ -23,7 +23,6 @@ namespace py = pybind11;
 using namespace amrex;
 
 void init_RealBox(py::module &m) {
-    // py::class_< Direction >(m, "Direction");
 
     py::class_< RealBox >(m, "RealBox")
         .def("__repr__",
