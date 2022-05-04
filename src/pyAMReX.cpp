@@ -17,6 +17,7 @@ namespace py = pybind11;
 
 // forward declarations of exposed classes
 void init_AMReX(py::module&);
+void init_AmrCore(py::module&);
 void init_Array4(py::module&);
 void init_Box(py::module &);
 void init_RealBox(py::module &);
@@ -25,6 +26,7 @@ void init_Dim3(py::module&);
 void init_DistributionMapping(py::module&);
 void init_IntVect(py::module &);
 void init_RealVect(py::module &);
+void init_AmrMesh(py::module &);
 void init_MultiFab(py::module &);
 void init_Periodicity(py::module &);
 
@@ -36,6 +38,9 @@ PYBIND11_MODULE(amrex_pybind, m) {
 
             .. autosummary::
                :toctree: _generate
+               AmrCore
+               AmrInfo
+               AmrMesh
                Box
                RealBox
                BoxArray
@@ -58,6 +63,8 @@ PYBIND11_MODULE(amrex_pybind, m) {
     init_MultiFab(m);
     init_DistributionMapping(m);
     init_RealBox(m);
+    init_AmrMesh(m);
+    init_AmrCore(m);
 
     // API runtime version
     //   note PEP-440 syntax: x.y.zaN but x.y.z.devN
