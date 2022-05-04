@@ -5,8 +5,10 @@ target_sources(pyAMReX
     Box.cpp
     RealBox.cpp
     BoxArray.cpp
+    CoordSys.cpp
     Dim3.cpp
     DistributionMapping.cpp
+    Geometry.cpp
     IntVect.cpp
     RealVect.cpp
     MultiFab.cpp
