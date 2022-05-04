@@ -1,5 +1,5 @@
 #add_subdirectory(Amr)
-#add_subdirectory(AmrCore)
+add_subdirectory(AmrCore)
 add_subdirectory(Base)
 #add_subdirectory(Boundary)
 #add_subdirectory(EB)
