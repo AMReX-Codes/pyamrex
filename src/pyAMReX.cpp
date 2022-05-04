@@ -28,6 +28,7 @@ void init_IntVect(py::module &);
 void init_RealVect(py::module &);
 void init_AmrMesh(py::module &);
 void init_MultiFab(py::module &);
+void init_ParallelDescriptor(py::module &);
 void init_Periodicity(py::module &);
 
 PYBIND11_MODULE(amrex_pybind, m) {
@@ -48,6 +49,7 @@ PYBIND11_MODULE(amrex_pybind, m) {
                IntVect
                RealVect
                MultiFab
+               ParallelDescriptor
                Periodicity
     )pbdoc";
 
@@ -63,6 +65,7 @@ PYBIND11_MODULE(amrex_pybind, m) {
     init_MultiFab(m);
     init_DistributionMapping(m);
     init_RealBox(m);
+    init_ParallelDescriptor(m);
     init_AmrMesh(m);
     init_AmrCore(m);
 

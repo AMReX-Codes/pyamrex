@@ -10,5 +10,6 @@ target_sources(pyAMReX
     IntVect.cpp
     RealVect.cpp
     MultiFab.cpp
+    ParallelDescriptor.cpp
     Periodicity.cpp
 )
