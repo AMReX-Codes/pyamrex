@@ -26,6 +26,30 @@ void init_AmrMesh(py::module &m) {
         )
 
         .def(py::init< >())
+
+        .def_readwrite("verbose", &AmrInfo::verbose)
+        .def_readwrite("max_level", &AmrInfo::max_level)
+
+        // note: https://pybind11.readthedocs.io/en/stable/advanced/cast/stl.html#making-opaque-types
+        //.def_readwrite("ref_ratio", &AmrInfo::ref_ratio)
+        //.def_readwrite("blocking_factor", &AmrInfo::blocking_factor)
+        //.def_readwrite("max_grid_size", &AmrInfo::max_grid_size)
+        //.def_readwrite("n_error_buf", &AmrInfo::n_error_buf)
+        .def("ref_ratio", [](AmrInfo const & amr_info, int lev){ return amr_info.ref_ratio.at(lev); })
+        .def("blocking_factor", [](AmrInfo const & amr_info, int lev){ return amr_info.blocking_factor.at(lev); })
+        .def("max_grid_size", [](AmrInfo const & amr_info, int lev){ return amr_info.max_grid_size.at(lev); })
+        .def("n_error_buf", [](AmrInfo const & amr_info, int lev){ return amr_info.n_error_buf.at(lev); })
+
+        .def_readwrite("grid_eff", &AmrInfo::grid_eff)
+        .def_readwrite("n_proper", &AmrInfo::n_proper)
+        .def_readwrite("use_fixed_upto_level", &AmrInfo::use_fixed_upto_level)
+        .def_readwrite("use_fixed_coarse_grids", &AmrInfo::use_fixed_coarse_grids)
+        .def_readwrite("refine_grid_layout", &AmrInfo::refine_grid_layout)
+        .def_readwrite("refine_grid_layout_dims", &AmrInfo::refine_grid_layout_dims)
+        .def_readwrite("check_input", &AmrInfo::check_input)
+        .def_readwrite("use_new_chop", &AmrInfo::use_new_chop)
+        .def_readwrite("iterate_on_new_grids", &AmrInfo::iterate_on_new_grids)
+
     ;
 
     py::class_< AmrMesh /*, AmrInfo*/ >(m, "AmrMesh")
