@@ -31,7 +31,9 @@ void init_RealVect(py::module &);
 void init_AmrMesh(py::module &);
 void init_MultiFab(py::module &);
 void init_ParallelDescriptor(py::module &);
+void init_ParticleContainer(py::module &);
 void init_Periodicity(py::module &);
+
 
 PYBIND11_MODULE(amrex_pybind, m) {
     m.doc() = R"pbdoc(
@@ -52,6 +54,7 @@ PYBIND11_MODULE(amrex_pybind, m) {
                RealVect
                MultiFab
                ParallelDescriptor
+               ParticleContainer
                Periodicity
     )pbdoc";
 
@@ -70,6 +73,7 @@ PYBIND11_MODULE(amrex_pybind, m) {
     init_CoordSys(m);
     init_Geometry(m);
     init_ParallelDescriptor(m);
+    init_ParticleContainer(m);
     init_AmrMesh(m);
     init_AmrCore(m);
 
