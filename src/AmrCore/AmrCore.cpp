@@ -9,6 +9,9 @@
 #include <AMReX_Config.H>
 #include <AMReX_AmrCore.H>
 #include <AMReX_AmrMesh.H>
+#ifdef AMREX_PARTICLES
+#   include <AMReX_AmrParGDB.H>
+#endif
 
 namespace py = pybind11;
 using namespace amrex;
