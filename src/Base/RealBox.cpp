@@ -46,6 +46,8 @@ void init_RealBox(py::module &m) {
 
 
         .def(py::init())
+        .def(py::init<AMREX_D_DECL(Real, Real, Real),
+             AMREX_D_DECL(Real, Real, Real)>())
         .def(py::init<const std::array<Real,AMREX_SPACEDIM>&, 
                       const std::array<Real,AMREX_SPACEDIM>& >())
 
