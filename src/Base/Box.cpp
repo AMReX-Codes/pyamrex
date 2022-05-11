@@ -99,8 +99,14 @@ void init_Box(py::module &m) {
 
         .def_property_readonly("ix_type", &Box::ixType)
         .def_property_readonly("size", &Box::size)
-        .def_property_readonly("length",
-            py::overload_cast<>(&Box::length, py::const_))
+        */
+        .def("length",
+            py::overload_cast<>(&Box::length, py::const_),
+            "Return IntVect of lengths of the Box")
+        .def("length",
+            py::overload_cast<int>(&Box::length, py::const_),
+            "Return the length of the Box in given direction.")
+            /*
         .def_property_readonly("is_empty", &Box::isEmpty)
         .def_property_readonly("ok", &Box::ok)
         .def_property_readonly("cell_centered", &Box::cellCentered)

@@ -9,6 +9,10 @@ def box():
     #return amrex.Box((0, 0, 0), (127, 127, 127))
     return amrex.Box(amrex.IntVect(0, 0, 0), amrex.IntVect(127, 127, 127))
 
+def test_length(box):
+    print(box.length())
+    assert(box.length() == amrex.IntVect(128,128,128))
+
 #def test_num_pts(box):
 #    np.testing.assert_allclose(box.lo_vect, [0, 0, 0])
 #    np.testing.assert_allclose(box.hi_vect, [127, 127, 127])

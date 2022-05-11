@@ -26,7 +26,7 @@ def test_realbox_contains():
     assert(not rb1.contains(point1))
     assert(rb1.contains(point2))
 
-    rb2 = amrex.RealBox([0.1,0.2,0.3],[0.3,1,1.])
+    rb2 = amrex.RealBox(0.1,0.2,0.3, 0.3,1,1.)
     rb3 = amrex.RealBox([4,5.,6.],[5.,5.5, 7.])
     assert(rb1.contains(rb2) )
     assert(not rb1.contains(rb3))
