@@ -30,6 +30,7 @@ jobs:
         export CC=$(which clang)
 
         python3 -m pip install -U pip setuptools wheel
+        python3 -m pip install -U cmake
 
         # "mpic++ --showme" forgets open-pal in Ubuntu 20.04 + OpenMPI 4.0.3
         #   https://bugs.launchpad.net/ubuntu/+source/openmpi/+bug/1941786
