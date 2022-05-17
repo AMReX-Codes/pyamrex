@@ -211,7 +211,7 @@ add_custom_target(pip_wheel
     ${CMAKE_COMMAND} -E rm -f "amrex*.whl"
     COMMAND
         ${CMAKE_COMMAND} -E env PYAMREX_LIBDIR=$<TARGET_FILE_DIR:pyAMReX>
-            ${Python_EXECUTABLE} -m pip wheel -v --no-build-isolation --use-feature=in-tree-build ${pyAMReX_SOURCE_DIR}
+            ${Python_EXECUTABLE} -m pip wheel -v --no-build-isolation ${pyAMReX_SOURCE_DIR}
     WORKING_DIRECTORY
         ${pyAMReX_BINARY_DIR}
     DEPENDS
