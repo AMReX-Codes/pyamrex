@@ -34,6 +34,7 @@ jobs:
         export CC=$(which gcc-10)
         export CXX=$(which g++-10)
         python3 -m pip install -U pip setuptools wheel
+        python3 -m pip install -U cmake
         python3 -m pip install -U pytest mpi4py
 
         cmake -S . -B build               \
@@ -84,6 +85,7 @@ jobs:
         export CUDAHOSTCXX=$(which g++)
 
         python3 -m pip install -U pip setuptools wheel
+        python3 -m pip install -U cmake
 
         cmake -S . -B build             \
             -DCMAKE_VERBOSE_MAKEFILE=ON \
