@@ -206,8 +206,17 @@ install(TARGETS ${pyAMReX_INSTALL_TARGET_NAMES}
 set(PYINSTALLOPTIONS "" CACHE STRING
     "Additional parameters to pass to `pip install`")
 
+# add a prefix to custom targets so we do not collide if used as a subproject
+if(CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
+    set(_pyAMReX_CUSTOM_TARGET_PREFIX_DEFAULT "")
+else()
+    set(_pyAMReX_CUSTOM_TARGET_PREFIX_DEFAULT "pyamrex_")
+endif()
+set(pyAMReX_CUSTOM_TARGET_PREFIX "${_pyAMReX_CUSTOM_TARGET_PREFIX_DEFAULT}"
+    CACHE STRING "Prefix for custom targets")
+
 # build the wheel by re-using the shared library we build
-add_custom_target(pip_wheel
+add_custom_target(${pyAMReX_CUSTOM_TARGET_PREFIX}pip_wheel
     ${CMAKE_COMMAND} -E rm -f "amrex*.whl"
     COMMAND
         ${CMAKE_COMMAND} -E env PYAMREX_LIBDIR=$<TARGET_FILE_DIR:pyAMReX>
@@ -219,7 +228,7 @@ add_custom_target(pip_wheel
 )
 
 # this will also upgrade/downgrade dependencies, e.g., when the version of numpy changes
-add_custom_target(pip_install_requirements
+add_custom_target(${pyAMReX_CUSTOM_TARGET_PREFIX}pip_install_requirements
     ${Python_EXECUTABLE} -m pip install ${PYINSTALLOPTIONS} -r "${pyAMReX_SOURCE_DIR}/requirements.txt"
     WORKING_DIRECTORY
         ${pyAMReX_BINARY_DIR}
@@ -228,13 +237,13 @@ add_custom_target(pip_install_requirements
 # We force-install because in development, it is likely that the version of
 # the package does not change, but the code did change. We need --no-deps,
 # because otherwise pip would also force reinstall all dependencies.
-add_custom_target(pip_install
+add_custom_target(${pyAMReX_CUSTOM_TARGET_PREFIX}pip_install
     ${CMAKE_COMMAND} -E env AMREX_MPI=${AMReX_MPI}
         ${Python_EXECUTABLE} -m pip install --force-reinstall --no-deps ${PYINSTALLOPTIONS} "amrex*.whl"
     WORKING_DIRECTORY
         ${pyAMReX_BINARY_DIR}
     DEPENDS
-        pyAMReX pip_wheel pip_install_requirements
+        pyAMReX ${pyAMReX_CUSTOM_TARGET_PREFIX}pip_wheel ${pyAMReX_CUSTOM_TARGET_PREFIX}pip_install_requirements
 )
 
 
