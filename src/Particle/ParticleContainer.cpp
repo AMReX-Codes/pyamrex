@@ -45,9 +45,9 @@ void make_ParticleContainer(py::module &m)
     ;
 
     using ParticleTileType = ParticleTile<T_NStructReal, T_NStructInt, T_NArrayReal, T_NArrayInt, Allocator>;
-    # using ParticleLevel = std::map<std::pair<int, int>, ParticleTileType>;
+    // using ParticleLevel = std::map<std::pair<int, int>, ParticleTileType>;
     using AoS = typename ParticleTileType::AoS;
-    # using SoA = typename ParticleTileType::SoA;
+    // using SoA = typename ParticleTileType::SoA;
     using ParticleContainerType = ParticleContainer<T_NStructReal,T_NStructInt,T_NArrayReal,T_NArrayInt,Allocator>;
     auto const particle_container_type = std::string("ParticleContainer_").append(std::to_string(T_NStructReal) + "_" + std::to_string(T_NStructInt) + "_" + std::to_string(T_NArrayReal) + "_" + std::to_string(T_NArrayInt));
     py::class_<ParticleContainerType>(m, particle_container_type.c_str())
