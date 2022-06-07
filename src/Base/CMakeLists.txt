@@ -14,4 +14,6 @@ target_sources(pyAMReX
     MultiFab.cpp
     ParallelDescriptor.cpp
     Periodicity.cpp
+    PODVector.cpp
+    Vector.cpp
 )

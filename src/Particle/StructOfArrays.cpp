@@ -28,6 +28,9 @@ void make_StructOfArrays(py::module &m)
         .def("NumRealComps", &SOAType::NumRealComps)
         .def("NumIntComps", &SOAType::NumIntComps)
         .def("GetRealData", [](SOAType& soa){ return soa.GetRealData();})
+        .def("GetRealData", [](SOAType& soa, const int index){ return soa.GetRealData(index);})
+        .def("GetIntData", [](SOAType& soa){ return soa.GetIntData();})
+        .def("GetIntData", [](SOAType& soa, const int index){ return soa.GetIntData(index);})
         // .def("GetRealData", py::overload_cast<>(&SOAType::GetRealData))
         // .def("GetRealData", py::overload_cast<>(&SOAType::GetRealData, py::const_))
         // .def("GetRealData", py::overload_cast<int>(&SOAType::GetRealData))
@@ -41,6 +44,7 @@ void make_StructOfArrays(py::module &m)
         .def("setNumNeighbors", &SOAType::setNumNeighbors)
         .def("getNumNeighbors", &SOAType::getNumNeighbors)
         .def("resize", &SOAType::resize)
+        // .def("__array_interface__", )
     ;
 }
 

@@ -30,27 +30,61 @@ void make_ParticleTile(py::module &m)
     using ParticleTileDataType = ParticleTileData<NStructReal, NStructInt, NArrayReal, NArrayInt>;
     using ParticleTileType=ParticleTile<NStructReal, NStructInt, NArrayReal, NArrayInt, DefaultAllocator>;
     using ParticleType = Particle<NStructReal, NStructInt>;
-    static constexpr int NAR = NArrayReal;
-    static constexpr int NAI = NArrayInt;
 
     using SuperParticleType = Particle<NStructReal + NArrayReal, NStructInt + NArrayInt>;
 
-    py::class_<ParticleTileDataType>(m, "ParticleTileData")
+    auto const particle_tile_data_type = std::string("ParticleTileData_").append(std::to_string(NStructReal) + "_" + std::to_string(NStructInt) + "_" + std::to_string(NArrayReal) + "_" + std::to_string(NArrayInt));
+    py::class_<ParticleTileDataType>(m, particle_tile_data_type.c_str())
         .def(py::init())
         .def_readonly("m_size", &ParticleTileDataType::m_size)
         .def_readonly("m_num_runtime_real", &ParticleTileDataType::m_num_runtime_real)
         .def_readonly("m_num_runtime_int", &ParticleTileDataType::m_num_runtime_int)
         .def("getSuperParticle", &ParticleTileDataType::getSuperParticle)
         .def("setSuperParticle", &ParticleTileDataType::setSuperParticle)
+        // setter & getter
+        .def("__setitem__", [](ParticleTileDataType & pdt, int const v, SuperParticleType const value){ pdt.setSuperParticle( value, v); })
+        .def("__getitem__", [](ParticleTileDataType & pdt, int const v){ return pdt.getSuperParticle(v); })
+//         .def_property_readonly("__array_interface__", , [](ParticleTileDataType<T> const & ptd) {
+//                 auto d = py::dict();
+//                 bool const read_only = false;
+//                 d["data"] = py::make_tuple(std::intptr_t(ptd.dataPtr()), read_only);
+//             d["shape"] = py::make_tuple(aos.size());
+//             d["strides"] = py::none();
+//             d["typestr"] = "|V" + std::to_string(sizeof(SuperParticleType));
+//             // d["typestr"] = "|V" + std::to_string(8+sizeof(RealType)*(AMREX_SPACEDIM+NReal)+sizeof(int)*NInt);//py::format_descriptor<ParticleType>::format();
+//             std::string descr = "[(cpuid, <i8), (x, <f" + std::to_string(sizeof(RealType)) + ")";
+// #if (AMREX_SPACEDIM >= 2)
+//             // descr += "(y, " + py::format_descriptor<RealType>::format() + ")";
+//             descr += ", (y, <f" + std::to_string(sizeof(RealType)) + ")";
+// #endif
+// #if (AMREX_SPACEDIM == 3)
+//             // descr += "(z, " + py::format_descriptor<RealType>::format() + ")";
+//             descr += ", (z, <f" + std::to_string(sizeof(RealType)) + ")";
+// #endif
+//             if (NReal > 0) {
+//                 descr += ", (rdata, <f" + std::to_string(sizeof(RealType)*(NReal)) + ")";
+//             }
+//             if (NInt > 0) {
+//                 descr += ", (rdata, <i" + std::to_string(sizeof(int)*(NInt)) + ")]";
+//             }
+//             d["descr"] = descr;
+//             // d["descr"] = "[(f1, i4), ()]"
+//             d["version"] = 3;
+//             return d;
+//             }
+//         )
     ;
 
-    py::class_<ParticleTileType>(m, "ParticleTile")
+    auto const particle_tile_type = std::string("ParticleTile_").append(std::to_string(NStructReal) + "_" + std::to_string(NStructInt) + "_" + std::to_string(NArrayReal) + "_" + std::to_string(NArrayInt));
+    py::class_<ParticleTileType>(m, particle_tile_type.c_str())
         .def(py::init())
         .def_readonly_static("NAR", &ParticleTileType::NAR)
         .def_readonly_static("NAI", &ParticleTileType::NAI)
         .def("define", &ParticleTileType::define)
-        // .def("GetArrayOfStructs")
-        // .def("GetStructOfArrays")
+        .def("GetArrayOfStructs", py::overload_cast<>(&ParticleTileType::GetArrayOfStructs))
+        .def("GetArrayOfStructs", py::overload_cast<>(&ParticleTileType::GetArrayOfStructs, py::const_))
+        .def("GetStructOfArrays", py::overload_cast<>(&ParticleTileType::GetStructOfArrays))
+        .def("GetStructOfArrays", py::overload_cast<>(&ParticleTileType::GetStructOfArrays, py::const_))
         .def("empty", &ParticleTileType::empty)
         .def("size", &ParticleTileType::size)
         .def("numParticles", &ParticleTileType::numParticles)
@@ -88,6 +122,8 @@ void make_ParticleTile(py::module &m)
         .def("capacity", &ParticleTileType::capacity)
         .def("swap",&ParticleTileType::swap)
         .def("getParticleTileData", &ParticleTileType::getParticleTileData)
+        .def("__setitem__", [](ParticleTileType & pt, int const v, SuperParticleType const value){ pt.getParticleTileData().setSuperParticle( value, v); })
+        .def("__getitem__", [](ParticleTileType & pt, int const v){ return pt.getParticleTileData().getSuperParticle(v); })
     ;
 }
 

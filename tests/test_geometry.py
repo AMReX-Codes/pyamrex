@@ -224,5 +224,5 @@ def test_roundoff_domain():
         #         (&Geometry::insideRoundoffDomain, py::const_),
         #     "Returns true if a point is inside the roundoff domain. All particles with positions inside the roundoff domain are sure to be mapped to cells inside the Domain() box. Note that the same need not be true for all points inside ProbDomain()")
 
-def test_volume():
-    assert(False)
+# def test_volume():
+#     assert(False)

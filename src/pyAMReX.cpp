@@ -33,9 +33,12 @@ void init_MultiFab(py::module &);
 void init_ParallelDescriptor(py::module &);
 void init_Particle(py::module &);
 void init_StructOfArrays(py::module &);
+void init_ArrayOfStructs(py::module &);
 void init_ParticleTile(py::module &);
 void init_ParticleContainer(py::module &);
 void init_Periodicity(py::module &);
+void init_PODVector(py::module &);
+void init_Vector(py::module &);
 
 
 PYBIND11_MODULE(amrex_pybind, m) {
@@ -58,9 +61,12 @@ PYBIND11_MODULE(amrex_pybind, m) {
                ParallelDescriptor
                Particle
                StructOfArrays
+               ArrayOfStructs
                ParticleTile
                ParticleContainer
                Periodicity
+               PODVector
+               Vector
     )pbdoc";
 
     // note: order from parent to child classes
@@ -80,8 +86,11 @@ PYBIND11_MODULE(amrex_pybind, m) {
     init_ParallelDescriptor(m);
     init_Particle(m);
     init_StructOfArrays(m);
+    init_ArrayOfStructs(m);
     init_ParticleTile(m);
     init_ParticleContainer(m);
+    init_PODVector(m);
+    init_Vector(m);
     init_AmrMesh(m);
     // init_AmrCore(m); # not supported right now
 
