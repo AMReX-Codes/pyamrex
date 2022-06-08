@@ -103,6 +103,8 @@ void make_Particle(py::module &m)
                         throw std::range_error("index not in range. Valid range : [0, " + std::to_string(T_NReal) + ")");
                     }
                     p.m_rdata[index] = val; 
+                } else {
+                    amrex::ignore_unused(index, val);
                 }
             }
         )
@@ -111,6 +113,8 @@ void make_Particle(py::module &m)
                     for (int ii=0; ii < T_NReal; ii++) { 
                         p.m_rdata[ii] = vals[ii];  
                     }
+                } else {
+                    amrex::ignore_unused(vals);
                 }
             } 
         )
@@ -119,6 +123,8 @@ void make_Particle(py::module &m)
                     for (int ii=0; ii < T_NReal; ii++) { 
                         p.m_rdata[ii] = vals[ii]; 
                     } 
+                } else {
+                    amrex::ignore_unused(val);
                 }
             }
         )
@@ -131,6 +137,7 @@ void make_Particle(py::module &m)
                     }
                     return p.m_idata[index];
                 } else {
+                    amrex::ignore_unused(index);
                     return;
                 }
             }
@@ -152,6 +159,8 @@ void make_Particle(py::module &m)
                         throw std::range_error("index not in range. Valid range : [0, " + std::to_string(T_NInt) + ")");
                     }
                     p.m_idata[index] = val; 
+                } else {
+                    amrex::ignore_unused(index, val);
                 }
             }
         )
@@ -160,6 +169,8 @@ void make_Particle(py::module &m)
                     for (int ii=0; ii < T_NInt; ii++) { 
                         p.m_idata[ii] = vals[ii];  
                     } 
+                } else {
+                    amrex::ignore_unused(vals);
                 }
             } 
         )
@@ -168,6 +179,8 @@ void make_Particle(py::module &m)
                     for (int ii=0; ii < T_NInt; ii++) { 
                         p.m_idata[ii] = vals[ii]; 
                     }
+                } else {
+                    amrex::ignore_unused(vals);
                 }
             } 
         )
