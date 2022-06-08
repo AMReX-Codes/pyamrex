@@ -124,7 +124,7 @@ void make_Particle(py::module &m)
                         p.m_rdata[ii] = vals[ii]; 
                     } 
                 } else {
-                    amrex::ignore_unused(val);
+                    amrex::ignore_unused(vals);
                 }
             }
         )
