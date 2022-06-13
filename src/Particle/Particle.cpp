@@ -18,6 +18,7 @@
 #include <string>
 #include <sstream>
 #include <stdexcept>
+#include <utility>
 #include <cmath>
 
 
@@ -38,6 +39,17 @@ struct PIdx
     };
 
 };
+
+namespace
+{
+    /** Build a std::array from a fixed-size C array at compile-time */
+    template<typename T, std::size_t... I>
+    constexpr auto
+    build_array (T a[], std::index_sequence<I...> s)
+    {
+        return std::array<T, s.size()>{a[I]...};
+    }
+}
 
 template <int T_NReal, int T_NInt=0>
 void make_Particle(py::module &m)
@@ -91,13 +103,15 @@ void make_Particle(py::module &m)
             }
         )
         .def("get_rdata", [](ParticleType &p) {
-                std::vector<Real> rdata = {};
-                if constexpr (T_NReal > 0) { 
-                    for (int ii=0; ii < T_NReal; ii++) { 
-                        rdata.push_back(p.m_rdata[ii]);  
-                    }
+                if constexpr (T_NReal > 0) {
+                    return build_array(
+                        p.m_rdata,
+                        std::make_index_sequence<T_NReal>{}
+                    );
+                } else {
+                    amrex::ignore_unused(p);
+                    return py::none();
                 }
-                return rdata;
             } 
         )
         // .def("rvec")
@@ -149,11 +163,10 @@ void make_Particle(py::module &m)
         )
         .def("get_idata", [](ParticleType &p) {
                 if constexpr (T_NInt > 0) {
-                    std::array<int, T_NInt> idata; 
-                    for (int ii=0; ii < T_NInt; ii++) { 
-                        idata[ii] = p.m_idata[ii];  
-                    }
-                    return idata;
+                    return build_array(
+                        p.m_idata,
+                        std::make_index_sequence<T_NInt>{}
+                    );
                 }
                 else {
                     amrex::ignore_unused(p);
