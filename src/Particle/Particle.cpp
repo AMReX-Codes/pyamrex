@@ -76,6 +76,7 @@ void make_Particle(py::module &m)
         .def("setPos", [](ParticleType &p, int index, Real val) { AMREX_ASSERT(index > 0 && index < AMREX_SPACEDIM); p.m_pos[index] = val; })
         .def("setPos", [](ParticleType &p, const RealVect & vals) { for (int ii=0; ii < AMREX_SPACEDIM; ii++) { p.m_pos[ii] = vals[ii]; } })
         .def("setPos", [](ParticleType &p, const std::array<Real, AMREX_SPACEDIM>& vals) { for (int ii=0; ii < AMREX_SPACEDIM; ii++) { p.m_pos[ii] = vals[ii]; } })
+
         .def("get_rdata", [](ParticleType &p, int index) { 
                 if constexpr (T_NReal > 0) {
                     if(index < 0 || index >= T_NReal) {
@@ -84,7 +85,8 @@ void make_Particle(py::module &m)
                     }
                     return p.m_rdata[index];
                 } else {
-                    return nan("");
+                    amrex::ignore_unused(p, index);
+                    return py::none();
                 }
             }
         )
@@ -127,7 +129,7 @@ void make_Particle(py::module &m)
                         p.m_rdata[ii] = vals[ii]; 
                     } 
                 } else {
-                    amrex::ignore_unused(vals);
+                    amrex::ignore_unused(p, vals);
                 }
             }
         )
@@ -140,8 +142,8 @@ void make_Particle(py::module &m)
                     }
                     return p.m_idata[index];
                 } else {
-                    amrex::ignore_unused(index);
-                    return;
+                    amrex::ignore_unused(p, index);
+                    return py::none();
                 }
             }
         )
@@ -152,6 +154,10 @@ void make_Particle(py::module &m)
                         idata[ii] = p.m_idata[ii];  
                     }
                     return idata;
+                }
+                else {
+                    amrex::ignore_unused(p);
+                    return py::none();
                 }
             } 
         )
