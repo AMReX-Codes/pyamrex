@@ -13,6 +13,9 @@
 #include <AMReX_RealVect.H>
 #include <AMReX_Particle.H>
 
+#include <array>
+#include <stdexcept>
+#include <string>
 #include <sstream>
 #include <stdexcept>
 #include <cmath>
