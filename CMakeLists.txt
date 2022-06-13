@@ -191,13 +191,13 @@ install(TARGETS ${pyAMReX_INSTALL_TARGET_NAMES}
 #install(EXPORT pyAMReXTargets
 #    FILE pyAMReXTargets.cmake
 #    NAMESPACE pyAMReX::
-#    DESTINATION ${CMAKE_INSTALL_CMAKEDIR}
+#    DESTINATION ${pyAMReX_INSTALL_CMAKEDIR}
 #)
 #install(
 #    FILES
 #        ${pyAMReX_BINARY_DIR}/pyAMReXConfig.cmake
 #        ${pyAMReX_BINARY_DIR}/pyAMReXConfigVersion.cmake
-#    DESTINATION ${CMAKE_INSTALL_CMAKEDIR}
+#    DESTINATION ${pyAMReX_INSTALL_CMAKEDIR}
 #)
 
 
