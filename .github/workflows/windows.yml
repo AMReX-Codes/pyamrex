@@ -33,6 +33,9 @@ jobs:
     if: github.event.pull_request.draft == false
     steps:
     - uses: actions/checkout@v2
+    - uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
     - uses: seanmiddleditch/gha-setup-ninja@master
     - name: Build & Install
       run: |
@@ -42,14 +45,10 @@ jobs:
         cmake -S . -B build               `
               -T "ClangCl"                `
               -DCMAKE_VERBOSE_MAKEFILE=ON `
-              -DAMReX_MPI=OFF             `
-              -DPython_EXECUTABLE=C:\\hostedtoolcache\\windows\\python\\3.9.12\\x64\\python3.exe
+              -DAMReX_MPI=OFF
 
         cmake --build build --config Debug -j 2
         python3 -m pip install -v .
     - name: Unit tests
       run: |
         ctest --test-dir build -C Debug --output-on-failure
-
-# C:\\hostedtoolcache\\windows\\python\\3.9.12\\x64\\python3.exe
-# C:\\hostedtoolcache\\windows\\Python\\3.10.2\\x64\\python3.exe
