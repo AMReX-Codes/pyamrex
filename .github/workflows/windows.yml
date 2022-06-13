@@ -2,10 +2,15 @@ name: windows
 
 on: [push, pull_request]
 
+concurrency:
+  group: ${{ github.ref }}-${{ github.head_ref }}-windows
+  cancel-in-progress: true
+
 jobs:
   msvc:
     name: MSVC w/o MPI
     runs-on: windows-latest
+    if: github.event.pull_request.draft == false
     steps:
     - uses: actions/checkout@v2
     - uses: actions/setup-python@v2
@@ -25,6 +30,7 @@ jobs:
     name: Clang w/o MPI
     runs-on: windows-latest
     env: {PYAMREX_LIBDIR: build/lib/site-packages/amrex/Debug/}
+    if: github.event.pull_request.draft == false
     steps:
     - uses: actions/checkout@v2
     - uses: seanmiddleditch/gha-setup-ninja@master
