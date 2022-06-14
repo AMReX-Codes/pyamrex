@@ -6,12 +6,14 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 
-#include <AMReX_Config.H>
 #include <AMReX_BoxArray.H>
 #include <AMReX_IntVect.H>
 #include <AMReX_Particles.H>
+#include <AMReX_ParticleContainer.H>
+#include <AMReX_ParticleTile.H>
 #include <AMReX_ArrayOfStructs.H>
 
+#include <string>
 #include <sstream>
 
 namespace py = pybind11;
@@ -34,7 +36,16 @@ template <int T_NStructReal, int T_NStructInt=0, int T_NArrayReal=0, int T_NArra
           template<class> class Allocator=DefaultAllocator>
 void make_ParticleContainer(py::module &m)
 {
-    using ParticleInitData = ParticleInitType<T_NStructReal,T_NStructInt,T_NArrayReal,T_NArrayInt>;
+    using ParticleContainerType = ParticleContainer<
+        T_NStructReal, T_NStructInt, T_NArrayReal, T_NArrayInt,
+        Allocator
+    >;
+
+    using ParticleTileType = typename ParticleContainerType::ParticleTileType;
+    using AoS = typename ParticleTileType::AoS;
+    // using SoA = typename ParticleTileType::SoA;
+    using ParticleInitData = typename ParticleContainerType::ParticleInitData;
+
     auto const particle_init_data_type = std::string("ParticleInitType_").append(std::to_string(T_NStructReal) + "_" + std::to_string(T_NStructInt) + "_" + std::to_string(T_NArrayReal) + "_" + std::to_string(T_NArrayInt));
     py::class_<ParticleInitData>(m, particle_init_data_type.c_str())
         .def(py::init<>())
@@ -44,11 +55,6 @@ void make_ParticleContainer(py::module &m)
         .def_readwrite("int_array_data", &ParticleInitData::int_array_data)
     ;
 
-    using ParticleTileType = ParticleTile<T_NStructReal, T_NStructInt, T_NArrayReal, T_NArrayInt, Allocator>;
-    // using ParticleLevel = std::map<std::pair<int, int>, ParticleTileType>;
-    using AoS = typename ParticleTileType::AoS;
-    // using SoA = typename ParticleTileType::SoA;
-    using ParticleContainerType = ParticleContainer<T_NStructReal,T_NStructInt,T_NArrayReal,T_NArrayInt,Allocator>;
     auto const particle_container_type = std::string("ParticleContainer_").append(std::to_string(T_NStructReal) + "_" + std::to_string(T_NStructInt) + "_" + std::to_string(T_NArrayReal) + "_" + std::to_string(T_NArrayInt));
     py::class_<ParticleContainerType>(m, particle_container_type.c_str())
         .def(py::init())
