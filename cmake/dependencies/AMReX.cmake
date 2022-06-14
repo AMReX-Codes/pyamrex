@@ -1,5 +1,7 @@
 macro(find_amrex)
-    if(pyAMReX_amrex_src)
+    if(TARGET AMReX::amrex)
+        message(STATUS "AMReX::amrex target already imported")
+    elseif(pyAMReX_amrex_src)
         message(STATUS "Compiling local AMReX ...")
         message(STATUS "AMReX source path: ${pyAMReX_amrex_src}")
     elseif(pyAMReX_amrex_internal)
@@ -7,7 +9,9 @@ macro(find_amrex)
         message(STATUS "AMReX repository: ${pyAMReX_amrex_repo} (${pyAMReX_amrex_branch})")
         include(FetchContent)
     endif()
-    if(pyAMReX_amrex_internal OR pyAMReX_amrex_src)
+    if(TARGET AMReX::amrex)
+        # nothing to do, target already exists in the superbuild
+    elseif(pyAMReX_amrex_internal OR pyAMReX_amrex_src)
         set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
 
         # see https://amrex-codes.github.io/amrex/docs_html/BuildingAMReX.html#customization-options
@@ -62,7 +66,7 @@ macro(find_amrex)
         endif()
 
         message(STATUS "AMReX: Using version '${AMREX_PKG_VERSION}' (${AMREX_GIT_VERSION})")
-    else()
+    elseif(NOT pyAMReX_amrex_internal)
         message(STATUS "Searching for pre-installed AMReX ...")
         # https://amrex-codes.github.io/amrex/docs_html/BuildingAMReX.html#importing-amrex-into-your-cmake-project
         find_package(AMReX 21.02 CONFIG REQUIRED COMPONENTS PARTICLES PIC)
