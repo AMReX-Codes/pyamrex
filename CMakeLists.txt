@@ -45,7 +45,11 @@ set_ccache()
 
 # Output (build) Directories ##################################################
 #
-set_default_build_dirs()
+# temporary build directories
+pyamrex_set_default_build_dirs()
+
+# default installation directories (w/o Python)
+pyamrex_set_default_install_dirs()
 
 
 # Options and Variants ########################################################
@@ -68,6 +72,9 @@ include(${pyAMReX_SOURCE_DIR}/cmake/dependencies/AMReX.cmake)
 
 # Python
 find_package(Python COMPONENTS Interpreter Development.Module REQUIRED)
+
+# default installation directories: Python
+pyamrex_set_default_install_dirs_python()
 
 # pybind11
 #   builds pybind11 from git (default), form local source or
@@ -173,8 +180,6 @@ set_cxx_warnings()
 
 # Installs ####################################################################
 #
-# default installation directories
-set_default_install_dirs()
 
 # headers, libraries and executables
 set(pyAMReX_INSTALL_TARGET_NAMES pyAMReX)

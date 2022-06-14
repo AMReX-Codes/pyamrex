@@ -44,7 +44,7 @@ endmacro()
 # the defaults in CMake are sub-ideal for historic reasons, lets make them more
 # Unix-ish and portable.
 #
-macro(set_default_build_dirs)
+macro(pyamrex_set_default_build_dirs)
     if(NOT CMAKE_ARCHIVE_OUTPUT_DIRECTORY)
         set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
                 CACHE PATH "Build directory for archives")
@@ -73,7 +73,7 @@ endmacro()
 # the defaults in CMake are sub-ideal for historic reasons, lets make them more
 # Unix-ish and portable.
 #
-macro(set_default_install_dirs)
+macro(pyamrex_set_default_install_dirs)
     if(CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
         include(GNUInstallDirs)
         if(NOT CMAKE_INSTALL_CMAKEDIR)
@@ -86,26 +86,37 @@ macro(set_default_install_dirs)
             endif()
             mark_as_advanced(CMAKE_INSTALL_CMAKEDIR)
         endif()
-
-        # Python install and build output dirs
-        if(WIN32)
-            set(CMAKE_INSTALL_PYTHONDIR_DEFAULT
-                "${CMAKE_INSTALL_LIBDIR}/site-packages"
-            )
-        else()
-            set(CMAKE_INSTALL_PYTHONDIR_DEFAULT
-                "${CMAKE_INSTALL_LIBDIR}/python${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}/site-packages"
-            )
-        endif()
-        set(CMAKE_INSTALL_PYTHONDIR "${CMAKE_INSTALL_PYTHONDIR_DEFAULT}"
-            CACHE STRING "Location for installed python package"
-        )
     endif()
 
     if(WIN32)
         set(pyAMReX_INSTALL_CMAKEDIR "${CMAKE_INSTALL_CMAKEDIR}")
     else()
         set(pyAMReX_INSTALL_CMAKEDIR "${CMAKE_INSTALL_CMAKEDIR}/pyAMReX")
+    endif()
+endmacro()
+
+
+# set names and paths for Python modules
+# this needs to be slightly delayed until we found Python and know its
+# major and minor version number
+#
+macro(pyamrex_set_default_install_dirs_python)
+    if(CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
+        # Python install and build output dirs
+        if(NOT CMAKE_INSTALL_PYTHONDIR)
+            if(WIN32)
+                set(CMAKE_INSTALL_PYTHONDIR_DEFAULT
+                    "${CMAKE_INSTALL_LIBDIR}/site-packages"
+                )
+            else()
+                set(CMAKE_INSTALL_PYTHONDIR_DEFAULT
+                    "${CMAKE_INSTALL_LIBDIR}/python${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}/site-packages"
+                )
+            endif()
+            set(CMAKE_INSTALL_PYTHONDIR "${CMAKE_INSTALL_PYTHONDIR_DEFAULT}"
+                CACHE STRING "Location for installed python package"
+            )
+        endif()
     endif()
 endmacro()
 
