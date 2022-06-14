@@ -29,7 +29,8 @@ macro(find_amrex)
         set(AMReX_FORTRAN OFF CACHE INTERNAL "")
         set(AMReX_FORTRAN_INTERFACES OFF CACHE INTERNAL "")
         set(AMReX_BUILD_TUTORIALS OFF CACHE INTERNAL "")
-        set(AMReX_PARTICLES ON CACHE INTERNAL "")  # default: OFF
+        # potentially worth changing default:
+        set(AMReX_PARTICLES ON CACHE INTERNAL "")
 
         if(pyAMReX_amrex_src)
             list(APPEND CMAKE_MODULE_PATH "${pyAMReX_amrex_src}/Tools/CMake")

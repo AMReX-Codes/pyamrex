@@ -41,6 +41,7 @@ void init_PODVector(py::module &);
 void init_Vector(py::module &);
 
 
+
 PYBIND11_MODULE(amrex_pybind, m) {
     m.doc() = R"pbdoc(
             amrex_pybind
@@ -91,6 +92,7 @@ PYBIND11_MODULE(amrex_pybind, m) {
     init_ParticleContainer(m);
     init_PODVector(m);
     init_Vector(m);
+    init_ParticleContainer(m);
     init_AmrMesh(m);
     // init_AmrCore(m); # not supported right now
 
