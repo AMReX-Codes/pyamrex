@@ -43,29 +43,31 @@ def test_geometry_define(box,real_box):
     assert(gm.isPeriodic() == is_periodic)
 
 
-@pytest.mark.skipif(amrex.Config.spacedim != 3,
-                    reason="Requires AMREX_SPACEDIM = 3")
-def test_Resets():
-    rb = amrex.RealBox(0,0,0,1,2,6)
-    amrex.Geometry.ResetDefaultProbDomain(rb)
-    Gm.ResetDefaultProbDomain(rb)
-    is_periodic = [1,0,1]
-    Gm.ResetDefaultPeriodicity(is_periodic)
-    Gm.ResetDefaultCoord(1)
-    
+
+def test_ok():
     gm = Gm()
-    assert(gm.ProbLength(0) == 1 and
-            gm.ProbLength(1) == 2 and
-            gm.ProbLength(2) == 6)
-    assert(gm.isPeriodic() == is_periodic)
-    # assert(gm.coord == 1)
+    gm.Domain()
 
 @pytest.mark.skipif(amrex.Config.spacedim != 3,
                     reason="Requires AMREX_SPACEDIM = 3")
-def test_probDomain(real_box):
+def test_probDomain(box,real_box):
+    # pass
     gm = Gm()
-    gm.ProbDomain(real_box)
-    assert(amrex.AlmostEqual(gm.ProbDomain(), real_box))
+    print(gm.ok())
+    # assert(not gm.ok())
+    # test_passed = False
+    # try:
+    #     gm.ProbDomain(rb)
+    # except RuntimeError:
+    #     test_passed = True
+    # assert(test_passed)
+
+    coord = 1
+    is_periodic = [0,0,1]
+    gm.define(box, real_box, coord, is_periodic)
+    assert(gm.ok())
+
+
 
     lo = [0,-1,1]
     hi = [1,0,2]
@@ -81,9 +83,8 @@ def test_probDomain(real_box):
 
 @pytest.mark.skipif(amrex.Config.spacedim != 3,
                     reason="Requires AMREX_SPACEDIM = 3")
-def test_size(real_box):
-    gm = Gm()
-    gm.ProbDomain(real_box)
+def test_size(geometry):
+    gm = geometry
 
     assert(gm.ProbSize() == 10)
     assert(gm.ProbLength(0) == 1)
@@ -92,11 +93,22 @@ def test_size(real_box):
 
 @pytest.mark.skipif(amrex.Config.spacedim != 3,
                     reason="Requires AMREX_SPACEDIM = 3")
-def test_domain():
+def test_domain(box,real_box):
     bx = amrex.Box(amrex.IntVect(0, 0, 0), amrex.IntVect(127, 127, 127))
     gm = Gm()
-    gm.Domain(bx)
-    
+    # test_passed = False
+    # try:
+    #     gm.Domain(bx)
+    # except RuntimeError:
+    #     test_passed = True
+    # assert(test_passed)
+
+    coord = 1
+    is_periodic = [0,0,1]
+    gm.define(box, real_box, coord, is_periodic)
+    assert(gm.ok())
+
+    gm.Domain(bx)    
     assert(gm.Domain().small_end == bx.small_end and 
             gm.Domain().big_end == bx.big_end)
 
@@ -123,8 +135,15 @@ def test_periodic_queries(box, real_box):
 def test_periodicity(geometry):
     gm = geometry
     bx = gm.Domain()
-    assert(gm.period(0) == bx.length(0))
-    assert(gm.period(1) == bx.length(1))
+
+    for non_periodic_coord in [0,1]:
+        error_thrown = False
+        try:
+            gm.period(0)
+        except RuntimeError:
+            error_thrown = True
+        assert(error_thrown)
+    
     assert(gm.period(2) == bx.length(2))
     pdcity = amrex.Periodicity(bx.length() * amrex.IntVect(gm.isPeriodic()))
     assert(gm.periodicity() == pdcity)
@@ -226,3 +245,21 @@ def test_roundoff_domain():
 
 # def test_volume():
 #     assert(False)
+
+
+@pytest.mark.skipif(amrex.Config.spacedim != 3,
+                    reason="Requires AMREX_SPACEDIM = 3")
+def test_Resets():
+    rb = amrex.RealBox(0,0,0,1,2,6)
+    amrex.Geometry.ResetDefaultProbDomain(rb)
+    Gm.ResetDefaultProbDomain(rb)
+    is_periodic = [1,0,1]
+    Gm.ResetDefaultPeriodicity(is_periodic)
+    Gm.ResetDefaultCoord(1)
+    
+    gm = Gm()
+    assert(gm.ProbLength(0) == 1 and
+            gm.ProbLength(1) == 2 and
+            gm.ProbLength(2) == 6)
+    assert(gm.isPeriodic() == is_periodic)
+    # assert(gm.coord == 1)

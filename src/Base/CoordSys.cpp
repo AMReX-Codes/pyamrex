@@ -20,6 +20,8 @@ void init_CoordSys(py::module& m)
         .def(py::init<>())
         .def(py::init<const CoordSys&>())
 
+        .def("ok", &CoordSys::Ok)
+
         // ...
     ;
 

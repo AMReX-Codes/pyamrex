@@ -9,7 +9,7 @@
 #include <AMReX_BoxArray.H>
 #include <AMReX_IntVect.H>
 #include <AMReX_Particles.H>
-#include <AMReX_ParticleContainer.H>
+// #include <AMReX_ParticleContainer.H>
 #include <AMReX_ParticleTile.H>
 #include <AMReX_ArrayOfStructs.H>
 
@@ -18,19 +18,6 @@
 
 namespace py = pybind11;
 using namespace amrex;
-
-// impactx particle container uses:
-// SetParticleSize (protected)
-// reserveData
-// reesizeData
-// DefineAndReturnParticleTile
-// copyParticles
-
-
-// template<int NStructReal, int NStructInt, int NArrayReal, int NArrayInt>
-// void make_ParticleInitType(py::module &m)
-// {
-// }
 
 template <int T_NStructReal, int T_NStructInt=0, int T_NArrayReal=0, int T_NArrayInt=0,
           template<class> class Allocator=DefaultAllocator>

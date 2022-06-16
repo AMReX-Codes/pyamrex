@@ -89,7 +89,6 @@ PYBIND11_MODULE(amrex_pybind, m) {
     init_StructOfArrays(m);
     init_ArrayOfStructs(m);
     init_ParticleTile(m);
-    init_ParticleContainer(m);
     init_PODVector(m);
     init_Vector(m);
     init_ParticleContainer(m);

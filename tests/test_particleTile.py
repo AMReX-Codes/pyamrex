@@ -44,13 +44,16 @@ def test_ptile_funs():
     pt.resize(5)
     print('tile is empty?', pt.empty())
     print('tile size', pt.size())
-    # assert(False)
 
-def test_ptile_pushback():
+def test_ptile_pushback_ptiledata():
 
     pt = amrex.ParticleTile_1_1_2_1()
-    p = amrex.Particle_1_1()
-    sp = amrex.Particle_3_2()
+    p = amrex.Particle_1_1(1.,2.,3,4.,5)
+    # p.set_rdata([4.])
+    # p.set_idata([5])
+    sp = amrex.Particle_3_2(5.,6.,7.,8.,9.,10.,11,12)
+    # sp.set_rdata([8.,9.,10.])
+    # sp.set_idata([11,12])
     pt.push_back(p)
     pt.push_back(sp)
 
@@ -63,22 +66,14 @@ def test_ptile_pushback():
     print('tile is empty?', pt.empty())
     print('tile size', pt.size())
 
-    pt.push_back_real(1, 2.1)
-    pt.push_back_real([1.1,1.3])
-    pt.push_back_real(1,3,3.14)
-
-
-    pt.push_back_int(0, 10)
-    pt.push_back_int([12])
-    pt.push_back_int(0,3,31)
-
     td = pt.getParticleTileData()
     print('particle tile data size', td.m_size)
-    # for ii in range(pt.size()):
-    for ii in range(7):
+
+    # # for ii in range(pt.size()):
+    for ii in range(td.m_size):
         print('particle',ii)
         print(td[ii])
-    assert(td[2].get_rdata(1)==1.1 and td[2].get_rdata(2)==2.1 and td[2].get_idata(1)==10)
+    assert(td[0].get_rdata(1)==0 and td[1].get_rdata(2)==10. and td[1].get_idata(1)==12)
 
 @pytest.mark.skipif(amrex.Config.spacedim != 3,
                     reason="Requires AMREX_SPACEDIM = 3")

@@ -9,6 +9,7 @@
 #include <AMReX_Periodicity.H>
 
 #include <sstream>
+#include <stdexcept>
 
 namespace py = pybind11;
 using namespace amrex;
@@ -72,8 +73,12 @@ void init_Geometry(py::module& m)
             "Return problem domain")
         .def("RoundoffDomain", py::overload_cast<>(&Geometry::RoundoffDomain, py::const_),
             "Return the roundoff domain")
-        .def("ProbDomain", py::overload_cast<const RealBox&>(&Geometry::ProbDomain), 
-            "Set problem domain")
+        // .def("ProbDomain", py::overload_cast<const RealBox&>(&Geometry::ProbDomain), 
+        //     "Set problem domain")
+        .def("ProbDomain", [](Geometry& gm, const RealBox& rb) { 
+            if(gm.Ok()) { gm.ProbDomain(rb);}
+            else { throw std::runtime_error("Can't call ProbDomain on undefined Geometry; use Define");}
+        })
         .def("ProbLo", py::overload_cast<int>(&Geometry::ProbLo, py::const_), 
             "Get the lo end of the problem domain in specified direction")
         .def("ProbLo", 
@@ -95,7 +100,10 @@ void init_Geometry(py::module& m)
         .def("ProbSize", &Geometry::ProbSize, "the overall size of the domain")
         .def("ProbLength", &Geometry::ProbLength, "length of problem domain in specified dimension")
         .def("Domain", py::overload_cast<>(&Geometry::Domain, py::const_), "Return rectangular domain")
-        .def("Domain", py::overload_cast<const Box&>(&Geometry::Domain), "Set rectangular domain")
+        // .def("Domain", py::overload_cast<const Box&>(&Geometry::Domain), "Set rectangular domain")
+        .def("Domain", [](Geometry& gm, const Box& bx) {
+            if(gm.Ok()) { gm.Domain(bx);}
+            else { throw std::runtime_error("Can't call Domain on undefined Geometry; use Define");}})
 
         // GetVolume
         // .def("GetVolume", py::overload_cast<MultiFab&>(&Geometry::GetVolume, py::const_))
@@ -112,8 +120,12 @@ void init_Geometry(py::module& m)
             "Is domain periodic in all directions?")
         .def("isPeriodic", py::overload_cast<>(&Geometry::isPeriodic, py::const_),
             "Return list indicating whether domain is periodic in each direction")
-        .def("period", py::overload_cast<int>(&Geometry::period, py::const_),
-            "Return the period in the specified direction")
+        // .def("period", py::overload_cast<int>(&Geometry::period, py::const_),
+        //     "Return the period in the specified direction")
+        .def("period", [](const Geometry& gm, const int dir) { 
+            if(gm.isPeriodic(dir)){ return gm.period(dir); }
+            else { throw std::runtime_error("Geometry is not periodic in this direction."); }
+        }, "Return the period in the specified direction")
         .def("periodicity", py::overload_cast<>(&Geometry::periodicity, py::const_)
             )
         .def("periodicity", py::overload_cast<const Box&>(&Geometry::periodicity, py::const_),

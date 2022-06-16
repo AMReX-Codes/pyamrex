@@ -70,7 +70,8 @@ def test_particle_init(particle_container, std_real_box):
     myt.int_array_data = [1]
 
     Npart = 21
-    pc.InitRandom(Npart,0,myt,False,std_real_box)
+    iseed = 1
+    pc.InitRandom(Npart,iseed,myt,False,std_real_box)
     print(pc.PrintCapacity())
     print(pc.NumberOfParticlesAtLevel(0))
     print(np.sum(pc.NumberOfParticlesInGrid(0)))

@@ -14,6 +14,20 @@ def test_particle_init():
     assert(p1.NReal == nreal)
     assert(p1.NInt == nint)
 
+    p2 = amrex.Particle_7_0(1.,2.,3.)
+    assert(p2.x == 1. and p2.y == 2. and p2.z == 3.)
+
+    p3 = amrex.Particle_7_0(1.,2.,3.,4.,5.,6.,7.,8.,9.,10.)
+    assert(p3.x==1. and p3.get_rdata(0)==4. and p3.get_rdata(6)==10.)
+
+    p4 = amrex.Particle_7_0(1.,2.,3.,rdata_0=4.)
+    print(p4)
+    assert(p4.x == 1. and p4.z == 3. and p4.get_rdata(0) == 4. and p4.get_rdata(1) == 0 == p4.get_rdata(2)==p4.get_rdata(3))
+
+    p5 = amrex.Particle_7_0(x=1.,rdata_1=1.,rdata_3=3.)
+    print(p5)
+    assert(p5.x == 1. and p5.get_rdata(1) == 1. and p5.get_rdata(3) == 3. and p5.get_rdata(4) == 0)
+
 @pytest.mark.skipif(amrex.Config.spacedim != 3,
                     reason="Requires AMREX_SPACEDIM = 3")
 def test_particle_set():
