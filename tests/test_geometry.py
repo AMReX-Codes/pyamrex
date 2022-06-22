@@ -73,12 +73,12 @@ def test_probDomain(box,real_box):
     hi = [1,0,2]
     rb = amrex.RealBox(lo,hi)
     gm.ProbDomain(rb)
-    assert(gm.ProbLo(0) == lo[0] and
-            gm.ProbLo(1) == lo[1] and
-            gm.ProbLo(2) == lo[2] and
-            gm.ProbHi(0) == hi[0] and
-            gm.ProbHi(1) == hi[1] and
-            gm.ProbHi(2) == hi[2])
+    assert(np.isclose(gm.ProbLo(0), lo[0]) and
+            np.isclose(gm.ProbLo(1), lo[1]) and
+            np.isclose(gm.ProbLo(2), lo[2]) and
+            np.isclose(gm.ProbHi(0), hi[0]) and
+            np.isclose(gm.ProbHi(1), hi[1]) and
+            np.isclose(gm.ProbHi(2), hi[2]))
 
 
 @pytest.mark.skipif(amrex.Config.spacedim != 3,
@@ -86,10 +86,10 @@ def test_probDomain(box,real_box):
 def test_size(geometry):
     gm = geometry
 
-    assert(gm.ProbSize() == 10)
-    assert(gm.ProbLength(0) == 1)
-    assert(gm.ProbLength(1) == 2)
-    assert(gm.ProbLength(2) == 5)
+    assert(np.isclose(gm.ProbSize(), 10))
+    assert(np.isclose(gm.ProbLength(0), 1))
+    assert(np.isclose(gm.ProbLength(1), 2))
+    assert(np.isclose(gm.ProbLength(2), 5))
 
 @pytest.mark.skipif(amrex.Config.spacedim != 3,
                     reason="Requires AMREX_SPACEDIM = 3")
@@ -258,8 +258,8 @@ def test_Resets():
     Gm.ResetDefaultCoord(1)
     
     gm = Gm()
-    assert(gm.ProbLength(0) == 1 and
-            gm.ProbLength(1) == 2 and
-            gm.ProbLength(2) == 6)
+    assert(np.isclose(gm.ProbLength(0), 1) and
+            np.isclose(gm.ProbLength(1), 2) and
+            np.isclose(gm.ProbLength(2), 6))
     assert(gm.isPeriodic() == is_periodic)
     # assert(gm.coord == 1)

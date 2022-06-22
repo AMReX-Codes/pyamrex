@@ -114,4 +114,4 @@ def test_particle_init(particle_container, std_real_box):
             # print(aos[1].x)
         # print(len(real_arr))
             # print(aos.__array_interface__)
-            assert(real_arr[0][0]==0.5 and real_arr[1][0]==0.2 and aos[0][3] == 0.5 and aos[0][5] == 5)
+            assert(np.isclose(real_arr[0][0], 0.5) and np.isclose(real_arr[1][0],0.2) and np.isclose(aos[0][3], 0.5) and np.isclose(aos[0][5], 5))

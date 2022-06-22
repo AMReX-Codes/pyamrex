@@ -77,10 +77,10 @@ def test_rdata():
     rvec = [1.5,2.0]
     p1.set_rdata(rvec)
     print(p1)
-    assert(p1.get_rdata() == rvec)
+    assert(np.allclose(p1.get_rdata(), rvec))
     p1.set_rdata(1, 2.5)
     print(p1.get_rdata())
-    assert(p1.get_rdata(1)==2.5)
+    assert(np.allclose(p1.get_rdata(1), 2.5))
     test_passed = False
     try:
         p1.set_rdata(100,5.2)

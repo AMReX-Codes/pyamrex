@@ -73,7 +73,7 @@ def test_ptile_pushback_ptiledata():
     for ii in range(td.m_size):
         print('particle',ii)
         print(td[ii])
-    assert(td[0].get_rdata(1)==0 and td[1].get_rdata(2)==10. and td[1].get_idata(1)==12)
+    assert(np.isclose(td[0].get_rdata(1),0) and np.isclose(td[1].get_rdata(2), 10.) and td[1].get_idata(1) ==  12)
 
 @pytest.mark.skipif(amrex.Config.spacedim != 3,
                     reason="Requires AMREX_SPACEDIM = 3")
@@ -93,8 +93,8 @@ def test_ptile_access():
     print('------')
     print(pt[0])
     print(pt[1])
-    assert(pt[0].x==2 and pt[0].y==0 and pt[0].z==3)
-    assert(pt[1].x==5 and pt[1].y==4.5 and pt[1].z==0)
+    assert(np.isclose(pt[0].x, 2) and np.isclose(pt[0].y, 0) and np.isclose(pt[0].z, 3))
+    assert(np.isclose(pt[1].x, 5) and np.isclose(pt[1].y, 4.5) and np.isclose(pt[1].z, 0))
 
 def test_ptile_soa():
     pt = amrex.ParticleTile_1_1_2_1()
@@ -117,7 +117,7 @@ def test_ptile_soa():
     ar0 = np.array(rdata[0])
     ar1 = np.array(rdata[1])
     ir0 = np.array(idata[0])
-    assert(ar0 == np.array([1.1]))
+    assert(np.allclose(ar0, np.array([1.1])))
     assert(np.allclose(ar1, np.array([2.1,1.3,3.14,3.14,3.14])))
     assert(np.allclose(ir0, np.array([10,12,31,31,31])))
     print(pt.GetStructOfArrays().GetIntData())
@@ -140,8 +140,8 @@ def test_ptile_aos():
     pt.resize(3)
     aos = np.array(pt.GetArrayOfStructs())
     print(aos)
-    assert(aos[0]['x']==3.0 and aos[0]['y']==0)
-    assert(aos[2][0]==0.0 and aos[2][2] == 20)
+    assert(np.isclose(aos[0]['x'], 3.0) and np.isclose(aos[0]['y'],0))
+    assert(np.isclose(aos[2][0], 0.0) and np.isclose(aos[2][2], 20))
 
 
     #To test

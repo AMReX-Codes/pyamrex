@@ -85,5 +85,5 @@ def test_array_interface():
     print('array interface\n', aos.__array_interface__)
     arr = np.array(aos)
     print('numpy array of aos\n', arr)
-    assert(arr[0][0]==1.0 and arr[0][4]==5.2 and arr[0][6]==6)
-    assert(arr[1][2]==10 and arr[1][3]==11.1 and arr[1][6]==13)
+    assert(np.isclose(arr[0][0],1.0) and np.isclose(arr[0][4],5.2) and np.isclose(arr[0][6], 6))
+    assert(np.isclose(arr[1][2],10) and np.isclose(arr[1][3],11.1) and np.isclose(arr[1][6], 13))
