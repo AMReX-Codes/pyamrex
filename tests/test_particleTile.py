@@ -73,7 +73,7 @@ def test_ptile_pushback_ptiledata():
     for ii in range(td.m_size):
         print('particle',ii)
         print(td[ii])
-    assert(np.isclose(td[0].get_rdata(1),0) and np.isclose(td[1].get_rdata(2), 10.) and td[1].get_idata(1) ==  12)
+    assert(np.isclose(td[0].get_rdata(0),4.) and np.isclose(td[1].get_rdata(2), 10.) and td[1].get_idata(1) ==  12)
 
 @pytest.mark.skipif(amrex.Config.spacedim != 3,
                     reason="Requires AMREX_SPACEDIM = 3")
