@@ -9,7 +9,7 @@
 #include <AMReX_BoxArray.H>
 #include <AMReX_IntVect.H>
 #include <AMReX_Particles.H>
-// #include <AMReX_ParticleContainer.H>
+#include <AMReX_ParticleContainer.H>
 #include <AMReX_ParticleTile.H>
 #include <AMReX_ArrayOfStructs.H>
 
@@ -264,5 +264,7 @@ void make_ParticleContainer(py::module &m)
 
 
 void init_ParticleContainer(py::module& m) {
+    // TODO: we might need to move all or most of the defines in here into a
+    //       test/example submodule, so they do not collide with downstream projects
     make_ParticleContainer< 1, 1, 2, 1> (m);
 }

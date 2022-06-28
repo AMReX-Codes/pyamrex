@@ -17,7 +17,6 @@ namespace py = pybind11;
 
 // forward declarations of exposed classes
 void init_AMReX(py::module&);
-// void init_AmrCore(py::module&);
 void init_Array4(py::module&);
 void init_Box(py::module &);
 void init_RealBox(py::module &);
@@ -93,7 +92,6 @@ PYBIND11_MODULE(amrex_pybind, m) {
     init_Vector(m);
     init_ParticleContainer(m);
     init_AmrMesh(m);
-    // init_AmrCore(m); # not supported right now
 
     // API runtime version
     //   note PEP-440 syntax: x.y.zaN but x.y.z.devN

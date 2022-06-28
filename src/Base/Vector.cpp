@@ -13,6 +13,7 @@
 
 #include <sstream>
 #include <string>
+#include <type_traits>
 #include <optional>
 #include <vector>
 
@@ -77,8 +78,13 @@ void make_Vector(py::module &m, std::string typestr)
 }
 
 void init_Vector(py::module& m) {
-    make_Vector<ParticleReal> (m, "real");
+    make_Vector<Real> (m, "Real");
+    if constexpr(!std::is_same_v<Real, ParticleReal>)
+        make_Vector<ParticleReal> (m, "ParticleReal");
+
     make_Vector<int> (m, "int");
-    make_Vector<Long> (m, "Long");
+    if constexpr(!std::is_same_v<int, Long>)
+        make_Vector<Long> (m, "Long");
+
     // make_Vector<std::string> (m, "string");
 }

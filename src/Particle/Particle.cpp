@@ -327,9 +327,6 @@ void make_Particle(py::module &m)
 #if (AMREX_SPACEDIM == 3)
         .def_property("z", [](ParticleType &p){ return p.pos(2);}, [](ParticleType &p, Real val){ p.m_pos[2] = val; })
 #endif
-        // .def("NextID", py::overload_cast<>(&ParticleType::NextID))
-        // .def("NextID", py::overload_cast<Long>(&ParticleType::NextID))
-        // .def_property("rdata", [](ParticleType &p){ return p.rdata})
     ;
 }
 
@@ -337,6 +334,8 @@ void make_Particle(py::module &m)
 
 void init_Particle(py::module& m) {
 
+    // TODO: we might need to move all or most of the defines in here into a
+    //       test/example submodule, so they do not collide with downstream projects
     py::class_<PIdx> pidx(m, "PIdx");
     py::enum_<PIdx::RealValues>(pidx, "RealValues")
         .value("w", PIdx::RealValues::w)
