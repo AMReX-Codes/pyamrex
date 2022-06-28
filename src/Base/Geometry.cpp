@@ -71,8 +71,6 @@ void init_Geometry(py::module& m)
 
         .def("ProbDomain", py::overload_cast<>(&Geometry::ProbDomain, py::const_),
             "Return problem domain")
-        .def("RoundoffDomain", py::overload_cast<>(&Geometry::RoundoffDomain, py::const_),
-            "Return the roundoff domain")
         // .def("ProbDomain", py::overload_cast<const RealBox&>(&Geometry::ProbDomain), 
         //     "Set problem domain")
         .def("ProbDomain", [](Geometry& gm, const RealBox& rb) { 

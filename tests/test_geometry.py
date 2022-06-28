@@ -213,39 +213,6 @@ def test_coarsen_refine(geometry):
     assert(gmr.Domain().small_end == amrex.IntVect(-2,-4,-9))
     assert(gmr.Domain().big_end == amrex.IntVect(9,11,20))
 
-@pytest.mark.skipif(amrex.Config.spacedim != 3,
-                    reason="Requires AMREX_SPACEDIM = 3")
-def test_roundoff_domain():
-    iv1 = amrex.IntVect(-1,-2,-3)
-    iv2 = amrex.IntVect(4,5,6)
-    bx = amrex.Box(iv1,iv2)
-    rb = amrex.RealBox(0,1.0002,0.00105,2,4.2,5)
-
-    gm = Gm(bx,rb, 1, [0,0,1])
-
-    print(gm.ProbDomain())
-    print(gm.RoundoffDomain())
-
-    print(gm.outsideRoundOffDomain(-1.0,1,2))
-    print(gm.outsideRoundOffDomain(1.00,2.,2))
-    print(gm.insideRoundOffDomain(-1.0,1,2))
-    print(gm.insideRoundOffDomain(1.00,2.,2))
-    # assert(gm.ProbLo(0) == lo[0] and
-    #         gm.ProbLo(1) == lo[1] and
-    #         gm.ProbLo(2) == lo[2] and
-    #         gm.ProbHi(0) == hi[0] and
-    #         gm.ProbHi(1) == hi[1] and
-    #         gm.ProbHi(2) == hi[2])
-        # .def("outsideRoundOffDomain", py::overload_cast<AMREX_D_DECL(Real, Real, Real)>
-        #         (&Geometry::outsideRoundoffDomain, py::const_),
-        #     "Returns true if a point is outside the roundoff domain. All particles with positions inside the roundoff domain are sure to be mapped to cells inside the Domain() box. Note that the same need not be true for all points inside ProbDomain()")
-        # .def("insideRoundOffDomain", py::overload_cast<AMREX_D_DECL(Real, Real, Real)>
-        #         (&Geometry::insideRoundoffDomain, py::const_),
-        #     "Returns true if a point is inside the roundoff domain. All particles with positions inside the roundoff domain are sure to be mapped to cells inside the Domain() box. Note that the same need not be true for all points inside ProbDomain()")
-
-# def test_volume():
-#     assert(False)
-
 
 @pytest.mark.skipif(amrex.Config.spacedim != 3,
                     reason="Requires AMREX_SPACEDIM = 3")
