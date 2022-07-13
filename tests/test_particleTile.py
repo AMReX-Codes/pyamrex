@@ -4,46 +4,6 @@ import pytest
 import numpy as np
 import amrex
 
-def test_ptile_data():
-    
-    ptd = amrex.ParticleTileData_1_1_2_1()
-    sp = amrex.Particle_3_2()
-    # sp.setPos([1,2,3])
-    sp.x = 1
-    # ptd.setSuperParticle(sp,0)
-    # ptd.getSuperParticle(0)
-    print(ptd.m_size)
-    print(ptd.m_num_runtime_real)
-    print(ptd.m_num_runtime_int)
-    
-    # assert(False)
-
-
-def test_init_ptile():
-    pt = amrex.ParticleTile_1_1_2_1()
-
-    print(pt.empty())
-    print(pt.size())
-
-    pt.define(4,3)
-
-    print(pt.empty())
-    print(pt.size())
-    # assert(False)
-
-def test_ptile_funs():
-
-    pt = amrex.ParticleTile_1_1_2_1()
-    print('num particles', pt.numParticles())
-    print('num real particles', pt.numRealParticles())
-    print('num neighbor particles', pt.numNeighborParticles())
-    print('num totalparticles', pt.numTotalParticles())
-    print('num Neighbors', pt.getNumNeighbors())
-    pt.setNumNeighbors(3)
-    print('num Neighbors', pt.getNumNeighbors())
-    pt.resize(5)
-    print('tile is empty?', pt.empty())
-    print('tile size', pt.size())
 
 def test_ptile_pushback_ptiledata():
 
@@ -57,22 +17,8 @@ def test_ptile_pushback_ptiledata():
     pt.push_back(p)
     pt.push_back(sp)
 
-    print('num particles', pt.numParticles())
-    print('num real particles', pt.numRealParticles())
-    print('num neighbor particles', pt.numNeighborParticles())
-    print('num totalparticles', pt.numTotalParticles())
-    print('num Neighbors', pt.getNumNeighbors())
-    print('num Neighbors', pt.getNumNeighbors())
-    print('tile is empty?', pt.empty())
-    print('tile size', pt.size())
-
     td = pt.getParticleTileData()
-    print('particle tile data size', td.m_size)
 
-    # # for ii in range(pt.size()):
-    for ii in range(td.m_size):
-        print('particle',ii)
-        print(td[ii])
     assert(np.isclose(td[0].get_rdata(0),4.) and np.isclose(td[1].get_rdata(2), 10.) and td[1].get_idata(1) ==  12)
 
 @pytest.mark.skipif(amrex.Config.spacedim != 3,
@@ -90,9 +36,6 @@ def test_ptile_access():
     sp2.x = 5.
     sp2.y = 4.5
     pt[1] = sp2
-    print('------')
-    print(pt[0])
-    print(pt[1])
     assert(np.isclose(pt[0].x, 2) and np.isclose(pt[0].y, 0) and np.isclose(pt[0].z, 3))
     assert(np.isclose(pt[1].x, 5) and np.isclose(pt[1].y, 4.5) and np.isclose(pt[1].z, 0))
 
@@ -110,9 +53,6 @@ def test_ptile_soa():
 
     rdata = pt.GetStructOfArrays().GetRealData()
     idata = pt.GetStructOfArrays().GetIntData()
-    print(rdata)
-    print(rdata[0])
-    print(rdata[0].__array_interface__)
     # print(rd[0].dtype)
     ar0 = np.array(rdata[0])
     ar1 = np.array(rdata[1])

@@ -44,7 +44,6 @@ void make_StructOfArrays(py::module &m)
         .def("setNumNeighbors", &SOAType::setNumNeighbors)
         .def("getNumNeighbors", &SOAType::getNumNeighbors)
         .def("resize", &SOAType::resize)
-        // .def("__array_interface__", )
     ;
 }
 
