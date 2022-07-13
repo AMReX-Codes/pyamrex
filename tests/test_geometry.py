@@ -53,7 +53,7 @@ def test_ok():
 def test_probDomain(box,real_box):
     # pass
     gm = Gm()
-    print(gm.ok())
+    # print(gm.ok())
     # assert(not gm.ok())
     # test_passed = False
     # try:
@@ -175,15 +175,10 @@ def test_periodicity(geometry):
                     reason="Requires AMREX_SPACEDIM = 3")
 def test_grow(geometry):
     gm = geometry
-    print(gm)
     gm_grow_pd = gm.growPeriodicDomain(2)
-    print(gm_grow_pd)
-    print(gm_grow_pd.small_end, gm_grow_pd.big_end)
     assert(gm_grow_pd.small_end == amrex.IntVect(0,0,-2))
     assert(gm_grow_pd.big_end == amrex.IntVect(127,127,129))
     gm_grow_npd = gm.growNonPeriodicDomain(3)
-    print(gm_grow_npd)
-    print(gm_grow_npd.small_end, gm_grow_npd.big_end)
     assert(gm_grow_npd.small_end == amrex.IntVect(-3,-3,0))
     assert(gm_grow_npd.big_end == amrex.IntVect(130,130,127))
     
@@ -197,21 +192,30 @@ def test_coarsen_refine(geometry):
     rb = amrex.RealBox(-1,-2,-3,2,4,6)
     gmc = amrex.Geometry(bx,rb,1,[0,0,1])
     cv = amrex.IntVect(2,2,1)
-    print(gmc)
     gmc.coarsen(cv)
-    print(gmc)
-    print(gmc.Domain().small_end, gmc.Domain().big_end)
     assert(gmc.Domain().small_end == amrex.IntVect(-1,-1,-3))
     assert(gmc.Domain().big_end == amrex.IntVect(2,2,6))
 
     gmr = amrex.Geometry(bx,rb,1,[0,0,1])
     rv = amrex.IntVect(2,2,3)
     gmr.refine(rv)
-    print('after refining')
-    print(gmr)
-    print(gmr.Domain().small_end, gmr.Domain().big_end)
     assert(gmr.Domain().small_end == amrex.IntVect(-2,-4,-9))
     assert(gmr.Domain().big_end == amrex.IntVect(9,11,20))
+
+@pytest.mark.skipif(amrex.Config.spacedim != 3,
+                    reason="Requires AMREX_SPACEDIM = 3")
+def test_roundoff_domain():
+    iv1 = amrex.IntVect(-1,-2,-3)
+    iv2 = amrex.IntVect(4,5,6)
+    bx = amrex.Box(iv1,iv2)
+    rb = amrex.RealBox(0,1.0002,0.00105,2,4.2,5)
+
+    gm = Gm(bx,rb, 1, [0,0,1])
+
+    assert(gm.outsideRoundOffDomain(-1.0,1,2))
+    assert(not gm.outsideRoundOffDomain(1.00,2.,2))
+    assert(not gm.insideRoundOffDomain(-1.0,1,2))
+    assert(gm.insideRoundOffDomain(1.00,2.,2))
 
 
 @pytest.mark.skipif(amrex.Config.spacedim != 3,

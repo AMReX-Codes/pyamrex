@@ -71,8 +71,6 @@ void init_Geometry(py::module& m)
 
         .def("ProbDomain", py::overload_cast<>(&Geometry::ProbDomain, py::const_),
             "Return problem domain")
-        // .def("ProbDomain", py::overload_cast<const RealBox&>(&Geometry::ProbDomain), 
-        //     "Set problem domain")
         .def("ProbDomain", [](Geometry& gm, const RealBox& rb) { 
             if(gm.Ok()) { gm.ProbDomain(rb);}
             else { throw std::runtime_error("Can't call ProbDomain on undefined Geometry; use Define");}
