@@ -8,7 +8,6 @@ def test_particle_init():
     p1 = amrex.Particle_7_0()
     nreal = len(amrex.PIdx.RealValues.__members__)
     nint = len(amrex.PIdx.IntValues.__members__)
-    print('particle',p1)
     assert(amrex.Particle_7_0.NReal == nreal)
     assert(amrex.Particle_7_0.NInt == nint)
     assert(p1.NReal == nreal)
@@ -21,11 +20,9 @@ def test_particle_init():
     assert(p3.x==1. and p3.get_rdata(0)==4. and p3.get_rdata(6)==10.)
 
     p4 = amrex.Particle_7_0(1.,2.,3.,rdata_0=4.)
-    print(p4)
     assert(p4.x == 1. and p4.z == 3. and p4.get_rdata(0) == 4. and p4.get_rdata(1) == 0 == p4.get_rdata(2)==p4.get_rdata(3))
 
     p5 = amrex.Particle_7_0(x=1.,rdata_1=1.,rdata_3=3.)
-    print(p5)
     assert(p5.x == 1. and p5.get_rdata(1) == 1. and p5.get_rdata(3) == 3. and p5.get_rdata(4) == 0)
 
 @pytest.mark.skipif(amrex.Config.spacedim != 3,
@@ -49,37 +46,18 @@ def test_particle_set():
 
 def test_id_cpu():
     p1 = amrex.Particle_2_1()
-    print(p1.cpu() )
-    print(p1.id() )
     p2 = amrex.Particle_2_1()
-    print(p1.cpu() )
-    print(p1.id() )
-    # assert(False)
+    pass
 
 def test_nextid():
-    p1 = amrex.Particle_2_1()
-    print(p1.id())
-    # print(amrex.Particle.the_next_id)
-    print(p1.NextID())
-
-    p2 = amrex.Particle_2_1()
-    print(p1.id())
-    print(p2.id())
-    print(p1.NextID())
-
-    p1.NextID(12)
-    print(p1.NextID())
-    # print(amrex.Particle.the_next_id)
-    # assert(False)
+    pass
 
 def test_rdata():
     p1 = amrex.Particle_2_1()
     rvec = [1.5,2.0]
     p1.set_rdata(rvec)
-    print(p1)
     assert(np.allclose(p1.get_rdata(), rvec))
     p1.set_rdata(1, 2.5)
-    print(p1.get_rdata())
     assert(np.allclose(p1.get_rdata(1), 2.5))
     test_passed = False
     try:
@@ -99,10 +77,8 @@ def test_idata():
     p1 = amrex.Particle_2_1()
     ivec = [-1]
     p1.set_idata(ivec)
-    print(p1)
     assert(p1.get_idata() == ivec)
     p1.set_idata(0, 3)
-    print(p1.get_idata())
     assert(p1.get_idata(0)==3)
     test_passed = False
     try:

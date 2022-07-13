@@ -25,30 +25,12 @@ def test_aos_push_pop():
     p2.set_idata([5])
     aos.push_back(p2)
 
-    print(aos[0])
-    print('size',aos.size())
-    print('numPart', aos.numParticles())
-    print('numRealPart', aos.numRealParticles())
-    print('numNeighborPart', aos.numNeighborParticles())
-    print('numTotalPart', aos.numTotalParticles())
     assert(aos.numParticles() == aos.numTotalParticles() == aos.numRealParticles()==2)
-    print('getNumNeighbors',aos.getNumNeighbors())
     assert(aos.getNumNeighbors() == 0)
     aos.setNumNeighbors(5)
     assert(aos.getNumNeighbors() == 5)
-    print('aos.getNumNeighbors()', aos.getNumNeighbors())
     assert(not aos.empty())
-    print('empty', aos.empty())
-        # //data, dataPtr
-        # .def("push_back", &AOSType::push_back)
-        # .def("pop_back", &AOSType::pop_back)
-        # .def("back", py::overload_cast<>(&AOSType::back))
-        # .def("back", py::overload_cast<>(&AOSType::back, py::const_))
-        # // setter & getter
-        # .def("__setitem__", [](AOSType &aos, int const v,  const ParticleType& p){ aos[v] = p; })
-        # .def("__getitem__", [](AOSType &aos, int const v){ return aos[v]; })
     assert(aos.size()==7)
-    print(aos[0].get_rdata())
     assert(aos[0].get_rdata() == p1.get_rdata())
     p3 = amrex.Particle_2_1()
     p3.set_rdata([3.14, -3.14])
@@ -56,13 +38,8 @@ def test_aos_push_pop():
     aos[0] = p3
     assert(aos[0].get_idata() == p3.get_idata())
     
-    print(aos.back())
 
     aos.pop_back()
-    print(aos.size())
-    print('numPart', aos.numParticles())
-    print('numRealPart', aos.numRealParticles())
-    print('numTotalPart', aos.numTotalParticles())
     assert(aos.numParticles() == aos.numRealParticles() == 1)
     assert(aos.numTotalParticles() == 6)
 
@@ -80,10 +57,34 @@ def test_array_interface():
     aos.push_back(p2)
 
 
-    print('particle 1 from aos:\n',aos[0])
-    print('particle 2 from aos:\n',aos[1])
-    print('array interface\n', aos.__array_interface__)
-    arr = np.array(aos)
-    print('numpy array of aos\n', arr)
+    # print('particle 1 from aos:\n',aos[0])
+    # print('particle 2 from aos:\n',aos[1])
+    # print('array interface\n', aos.__array_interface__)
+    arr = np.array(aos, copy=False)
     assert(np.isclose(arr[0][0],1.0) and np.isclose(arr[0][4],5.2) and np.isclose(arr[0][6], 6))
     assert(np.isclose(arr[1][2],10) and np.isclose(arr[1][3],11.1) and np.isclose(arr[1][6], 13))
+
+    p3 = amrex.Particle_2_1(x=-3)
+    p4 = amrex.Particle_2_1(y=-5)
+    print(arr)
+    print(aos[0],aos[1])
+    print('-------')
+    aos[0] = p3
+    print('array:',arr)
+    print('aos[0]:',aos[0],'aos[1]:',aos[1])
+    assert(aos[0].x==arr[0][0]==-3)
+    assert(aos[0].y==arr[0][1]==0)
+    assert(aos[0].z==arr[0][2]==0)
+    print(arr[1].shape)
+    for ii in range(arr[1].shape[0]):
+        print(ii)
+        arr[1][ii] = 0
+    arr[1][1] = -5# np.array([0, -5, 0,0,0,0,0])
+    print('array:',arr)
+    print('aos[0]:',aos[0],'aos[1]:',aos[1])
+    assert(aos[1].y==arr[1][1]==-5)
+    assert(aos[1].x==arr[1][0]==0)
+    assert(aos[1].z==arr[1][2]==0)
+
+    
+    assert(False)
