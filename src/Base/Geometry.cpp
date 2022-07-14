@@ -9,6 +9,7 @@
 #include <AMReX_Periodicity.H>
 
 #include <sstream>
+#include <string>
 #include <stdexcept>
 
 namespace py = pybind11;
