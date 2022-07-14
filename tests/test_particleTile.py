@@ -53,14 +53,26 @@ def test_ptile_soa():
 
     rdata = pt.GetStructOfArrays().GetRealData()
     idata = pt.GetStructOfArrays().GetIntData()
+    print('rdata: ', rdata)
     # print(rd[0].dtype)
-    ar0 = np.array(rdata[0])
-    ar1 = np.array(rdata[1])
-    ir0 = np.array(idata[0])
+    ar0 = np.array(rdata[0],copy=False)
+    ar1 = np.array(rdata[1],copy=False)
+    ir0 = np.array(idata[0],copy=False)
+    print('---------')
+    ir0[0] = -55
+    print(ir0)
+    print(idata)
+    assert(ir0[0] == idata[0][0] == -55)
+    print('-------')
+    idata[0][0] = -66
+    print(ir0)
+    print(idata)
+    assert(ir0[0] == idata[0][0] == -66)
+    print('-------')
+    # np.array(rdata[0])
     assert(np.allclose(ar0, np.array([1.1])))
     assert(np.allclose(ar1, np.array([2.1,1.3,3.14,3.14,3.14])))
-    assert(np.allclose(ir0, np.array([10,12,31,31,31])))
-    print(pt.GetStructOfArrays().GetIntData())
+    assert(np.allclose(ir0, np.array([-66,12,31,31,31])))
 
 @pytest.mark.skipif(amrex.Config.spacedim != 3,
                     reason="Requires AMREX_SPACEDIM = 3")

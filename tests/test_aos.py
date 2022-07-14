@@ -56,6 +56,8 @@ def test_array_interface():
     p2.set_idata([13])
     aos.push_back(p2)
 
+    print(aos[0])
+    print(dir(aos[0]))
 
     # print('particle 1 from aos:\n',aos[0])
     # print('particle 2 from aos:\n',aos[1])
@@ -75,9 +77,9 @@ def test_array_interface():
     assert(aos[0].x==arr[0][0]==-3)
     assert(aos[0].y==arr[0][1]==0)
     assert(aos[0].z==arr[0][2]==0)
-    print(arr[1].shape)
-    for ii in range(arr[1].shape[0]):
-        print(ii)
+    
+    shape = amrex.Config.spacedim + amrex.Particle_2_1.NReal + amrex.Particle_2_1.NInt + 1
+    for ii in range(shape):
         arr[1][ii] = 0
     arr[1][1] = -5# np.array([0, -5, 0,0,0,0,0])
     print('array:',arr)
@@ -85,6 +87,3 @@ def test_array_interface():
     assert(aos[1].y==arr[1][1]==-5)
     assert(aos[1].x==arr[1][0]==0)
     assert(aos[1].z==arr[1][2]==0)
-
-    
-    assert(False)

@@ -47,6 +47,7 @@ void make_ArrayOfStructs(py::module &m)
             auto d = py::dict();
             bool const read_only = false;
             d["data"] = py::make_tuple(std::intptr_t(aos.dataPtr()), read_only);
+            auto particle_size = amrex::SpaceDim + NReal + NInt + 1;
             d["shape"] = py::make_tuple(aos.size());
             d["strides"] = py::make_tuple(sizeof(ParticleType));
             d["typestr"] = "|V" + std::to_string(sizeof(ParticleType));
