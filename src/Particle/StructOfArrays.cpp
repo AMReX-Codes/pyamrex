@@ -50,4 +50,5 @@ void make_StructOfArrays(py::module &m)
 
 void init_StructOfArrays(py::module& m) {
     make_StructOfArrays< 2, 1> (m);
+    make_StructOfArrays<7,0> (m);
 }
