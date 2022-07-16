@@ -28,7 +28,7 @@ void init_Geometry(py::module& m)
                  return "<amrex." + name + " " + s.str() + ">";
             }
         )
-        .def("__str",
+        .def("__str__",
              [](const Geometry& gm) {
                  std::stringstream s;
                  s << gm;

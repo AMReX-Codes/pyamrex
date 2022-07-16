@@ -41,3 +41,4 @@ def test_array_interface():
 
     podv[1] = 5
     assert(arr[1]==podv[1]==5)
+    
