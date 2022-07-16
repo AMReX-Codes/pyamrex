@@ -9,11 +9,7 @@ def test_ptile_pushback_ptiledata():
 
     pt = amrex.ParticleTile_1_1_2_1()
     p = amrex.Particle_1_1(1.,2.,3,4.,5)
-    # p.set_rdata([4.])
-    # p.set_idata([5])
     sp = amrex.Particle_3_2(5.,6.,7.,8.,9.,10.,11,12)
-    # sp.set_rdata([8.,9.,10.])
-    # sp.set_idata([11,12])
     pt.push_back(p)
     pt.push_back(sp)
 
@@ -54,10 +50,13 @@ def test_ptile_soa():
     rdata = pt.GetStructOfArrays().GetRealData()
     idata = pt.GetStructOfArrays().GetIntData()
     print('rdata: ', rdata)
-    # print(rd[0].dtype)
+
     ar0 = np.array(rdata[0],copy=False)
     ar1 = np.array(rdata[1],copy=False)
     ir0 = np.array(idata[0],copy=False)
+    print(ar0.dtype)
+    assert(ar0.dtype == 'float')
+    assert(ir0.dtype == 'int32')
     print('---------')
     ir0[0] = -55
     print(ir0)

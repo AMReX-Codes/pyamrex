@@ -99,7 +99,7 @@ void make_ArrayOfStructs(py::module &m)
         })
         .def("test_sizes", [](){ })
         .def("__setitem__", [](AOSType &aos, int const v,  const ParticleType& p){ aos[v] = p; })
-        .def("__getitem__", [](AOSType &aos, int const v){ return aos[v]; })
+        .def("__getitem__", [](AOSType &aos, int const v){ return aos[v]; }, py::return_value_policy::reference)
     ;
 }
 

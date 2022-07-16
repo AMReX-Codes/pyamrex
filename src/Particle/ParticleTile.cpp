@@ -30,6 +30,7 @@ void make_ParticleTile(py::module &m)
     using ParticleTileDataType = ParticleTileData<NStructReal, NStructInt, NArrayReal, NArrayInt>;
     using ParticleTileType=ParticleTile<NStructReal, NStructInt, NArrayReal, NArrayInt, DefaultAllocator>;
     using ParticleType = Particle<NStructReal, NStructInt>;
+    using AoS = typename ParticleTileType::AoS;
 
     using SuperParticleType = Particle<NStructReal + NArrayReal, NStructInt + NArrayInt>;
 
@@ -81,10 +82,11 @@ void make_ParticleTile(py::module &m)
         .def_readonly_static("NAR", &ParticleTileType::NAR)
         .def_readonly_static("NAI", &ParticleTileType::NAI)
         .def("define", &ParticleTileType::define)
-        .def("GetArrayOfStructs", py::overload_cast<>(&ParticleTileType::GetArrayOfStructs))
-        .def("GetArrayOfStructs", py::overload_cast<>(&ParticleTileType::GetArrayOfStructs, py::const_))
-        .def("GetStructOfArrays", py::overload_cast<>(&ParticleTileType::GetStructOfArrays))
-        .def("GetStructOfArrays", py::overload_cast<>(&ParticleTileType::GetStructOfArrays, py::const_))
+        .def("GetArrayOfStructs",
+            py::overload_cast<>(&ParticleTileType::GetArrayOfStructs),
+            py::return_value_policy::reference_internal)
+        .def("GetStructOfArrays", py::overload_cast<>(&ParticleTileType::GetStructOfArrays),
+            py::return_value_policy::reference_internal)
         .def("empty", &ParticleTileType::empty)
         .def("size", &ParticleTileType::size)
         .def("numParticles", &ParticleTileType::numParticles)

@@ -4,8 +4,6 @@ import pytest
 import numpy as np
 import amrex
 
-#TODO : Tests struct of arrays
-
 @pytest.fixture()
 def particle_container(std_geometry, distmap, boxarr):
     pc = amrex.ParticleContainer_1_1_2_1(std_geometry, distmap, boxarr)
@@ -52,24 +50,57 @@ def test_particle_init(particle_container, std_real_box):
     pc.InitRandom(Npart,iseed,myt,False,std_real_box)
     assert(pc.NumberOfParticlesAtLevel(0) == np.sum(pc.NumberOfParticlesInGrid(0))==Npart)
 
-    pc.resizeData()
-
-    pt = pc.DefineAndReturnParticleTile(0,0,0)
-
-
-    aos = np.array(pt.GetArrayOfStructs())
-    rdata = pt.GetStructOfArrays().GetRealData()
-    idata = pt.GetStructOfArrays().GetIntData()
-
+    # pc.resizeData()
+  
     lev = pc.GetParticles(0)
-    for key in lev.keys():
-        pt = lev[key]
-        real_arr = pt.GetStructOfArrays().GetRealData()
-        int_arr = pt.GetStructOfArrays().GetIntData()
-        aos = np.array(pt.GetArrayOfStructs())
-        # print(real_arr.size)
-        if len(real_arr) > 0:
-            # print(aos[1].x)
-            # print(len(real_arr))
-            # print(aos.__array_interface__)
-            assert(np.isclose(real_arr[0][0], 0.5) and np.isclose(real_arr[1][0],0.2) and np.isclose(aos[0][3], 0.5) and np.isclose(aos[0][5], 5))
+    for tile_ind, pt in lev.items():
+        print('tile', tile_ind)
+        real_arrays = pt.GetStructOfArrays().GetRealData()
+        int_arrays = pt.GetStructOfArrays().GetIntData()
+        aos = pt.GetArrayOfStructs()
+        aos_arr = np.array(aos,copy=False)
+        if len(real_arrays) > 0:
+            assert(np.isclose(real_arrays[0][0], 0.5) and np.isclose(real_arrays[1][0],0.2))
+            assert(isinstance(int_arrays[0][0], int))
+            assert(int_arrays[0][0] == 1)
+            assert(isinstance(aos_arr[0]['rdata_0'],np.floating))
+            assert(isinstance(aos_arr[0]['idata_0'], np.integer))
+            assert(np.isclose(aos_arr[0]['rdata_0'], 0.5) and aos_arr[0]['idata_0'] == 5)
+
+            aos_arr[0]['idata_0'] = 2
+            aos1 = pt.GetArrayOfStructs()
+            print(aos1[0])
+            print(aos[0])
+            print(aos_arr[0])
+            assert(aos_arr[0]['idata_0'] == aos[0].get_idata(0) == aos1[0].get_idata(0) == 2)
+
+            print('soa test')
+            real_arrays[1][0] = -1.2
+
+            ra1 = pt.GetStructOfArrays().GetRealData()
+            print(real_arrays)
+            print(ra1)
+            for ii, arr in enumerate(real_arrays):
+                assert(np.allclose(np.array(arr), np.array(ra1[ii])))
+
+            print('soa int test')
+            iarr_np = np.array(int_arrays[0], copy=False)
+            iarr_np[0] = -3
+            ia1 = pt.GetStructOfArrays().GetIntData()
+            ia1_np = np.array(ia1[0], copy = False)
+            print(iarr_np)
+            print(ia1_np)
+            assert(np.allclose(iarr_np, ia1_np))
+
+
+    print('---- is the particle tile recording changes or passed by reference? --------')
+    lev1 = pc.GetParticles(0)
+    for tile_ind, pt in lev1.items():
+        print('tile', tile_ind)
+        real_arrays = pt.GetStructOfArrays().GetRealData()
+        int_arrays = pt.GetStructOfArrays().GetIntData()
+        aos = pt.GetArrayOfStructs()
+        print(aos[0])
+        assert(aos[0].get_idata(0) == 2)
+        assert(real_arrays[1][0] == -1.2)
+        assert(int_arrays[0][0] == -3)
