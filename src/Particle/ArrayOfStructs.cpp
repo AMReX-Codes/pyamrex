@@ -37,7 +37,6 @@ void make_ArrayOfStructs(py::module &m)
         .def("getNumNeighbors", &AOSType::getNumNeighbors)
         .def("empty", py::overload_cast<>(&AOSType::empty))
         .def("empty", py::overload_cast<>(&AOSType::empty, py::const_))
-        //data, dataPtr
         .def("push_back", &AOSType::push_back)
         .def("pop_back", &AOSType::pop_back)
         .def("back", py::overload_cast<>(&AOSType::back),"get back member.  Problem!!!!! this is performing incorrectly")
@@ -50,7 +49,6 @@ void make_ArrayOfStructs(py::module &m)
             d["shape"] = py::make_tuple(aos.size());
             d["strides"] = py::make_tuple(sizeof(ParticleType));
             d["typestr"] = "|V" + std::to_string(sizeof(ParticleType));
-            // d["typestr"] = "|V" + std::to_string(8+sizeof(RealType)*(AMREX_SPACEDIM+NReal)+sizeof(int)*NInt);//py::format_descriptor<ParticleType>::format();
             py::list descr;
             descr.append(py::make_tuple("x", py::format_descriptor<RealType>::format()));
 #if (AMREX_SPACEDIM >= 2)
@@ -60,7 +58,6 @@ void make_ArrayOfStructs(py::module &m)
             descr.append(py::make_tuple("z", py::format_descriptor<RealType>::format()));
 #endif
             if (NReal > 0) {
-                // descr += ", (rdata, <f" + std::to_string(sizeof(RealType)*(NReal)) + ")";
                 for(int ii=0; ii < NReal; ii++) {
                         descr.append(py::make_tuple("rdata_"+std::to_string(ii),py::format_descriptor<RealType>::format()));
                 }
@@ -72,28 +69,7 @@ void make_ArrayOfStructs(py::module &m)
                 }
             } 
 
-//             auto descr = py::dict();
-//             descr["cpuid"] = "<i8";
-//             descr["x"] = "<f" + std::to_string(sizeof(RealType));
-// #if (AMREX_SPACEDIM >= 2)
-//             // descr += "(y, " + py::format_descriptor<RealType>::format() + ")";
-//             // descr += ", (y, <f" + std::to_string(sizeof(RealType)) + ")";
-//             descr["y"] = "<f" + std::to_string(sizeof(RealType));
-// #endif
-// #if (AMREX_SPACEDIM == 3)
-//             // descr += "(z, " + py::format_descriptor<RealType>::format() + ")";
-//             // descr += ", (z, <f" + std::to_string(sizeof(RealType)) + ")";
-//             descr["z"] = "<f" + std::to_string(sizeof(RealType));
-// #endif
-//             if (NReal > 0) {
-//                 // descr += ", (rdata, <f" + std::to_string(sizeof(RealType)*(NReal)) + ")";
-//                 descr["rdata"] = "<f" + std::to_string(sizeof(RealType)*(NReal));
-//             }
-//             if (NInt > 0) {
-//                 descr["rdata"] = "<i" + std::to_string(sizeof(int)*(NInt));
-//             }
             d["descr"] = descr;
-            // d["descr"] = "[(f1, i4), ()]"
             d["version"] = 3;
             return d;
         })

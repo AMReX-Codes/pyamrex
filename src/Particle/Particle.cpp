@@ -63,7 +63,6 @@ void make_Particle(py::module &m)
         .def(py::init<>())
         .def(py::init([](AMREX_D_DECL(ParticleReal x, ParticleReal y, ParticleReal z)) { 
                     std::unique_ptr<ParticleType> part(new ParticleType());
-                    // AMREX_D_DECL(part->m_pos[0] = x;, part->m_pos[1] = y;, part->m_pos[2] = z;)
                     part->m_pos[0] = x;
     #if (AMREX_SPACEDIM >= 2)
                     part->m_pos[1] = y;
@@ -77,7 +76,6 @@ void make_Particle(py::module &m)
         )
         .def(py::init([](AMREX_D_DECL(ParticleReal x, ParticleReal y, ParticleReal z), py::args& args) { 
                     std::unique_ptr<ParticleType> part(new ParticleType());
-                    // AMREX_D_DECL(part->m_pos[0] = x;, part->m_pos[1] = y;, part->m_pos[2] = z;)
                     part->m_pos[0] = x;
     #if (AMREX_SPACEDIM >= 2)
                     part->m_pos[1] = y;
@@ -189,7 +187,6 @@ void make_Particle(py::module &m)
         // .def_property_readonly("id", [](const ParticleType &p) { return p.id(); })
         // .def("pos", py::overload_cast<int>(&ParticleType::pos, py::const_)) //, "Return specified component of particle position")
         // .def_property("pos", [](const ParticleType &p) { return p.pos(); }, [](ParticleType &p, const RealVect &rv) { p.pos = rv; })
-        // .def_
         .def("pos", [](const ParticleType &p, int index) { return p.pos(index); })
         // .def("pos", py::overload_cast<>(&ParticleType::pos, py::const_))
         .def("pos", [](const ParticleType &p) { return p.pos(); })
@@ -255,11 +252,9 @@ void make_Particle(py::module &m)
                 }
             }
         )
-        // template <int U = T_NInt, typename std::enable_if<U != 0, int>::type = 0>
         .def("get_idata", [](ParticleType &p, int index) { 
                 if constexpr (T_NInt > 0) {
                     if(index < 0 || index >= T_NInt) {
-                        // std::string error_msg = "" 
                         throw std::range_error("index not in range. Valid range : [0, " + std::to_string(T_NInt));
                     }
                     return p.m_idata[index];
@@ -285,7 +280,6 @@ void make_Particle(py::module &m)
         .def("set_idata", [](ParticleType &p, int index, int val) { 
                 if constexpr (T_NInt > 0) {
                     if(index < 0 || index >= T_NInt) {
-                        // std::string error_msg = "" 
                         throw std::range_error("index not in range. Valid range : [0, " + std::to_string(T_NInt) + ")");
                     }
                     p.m_idata[index] = val; 
@@ -314,13 +308,11 @@ void make_Particle(py::module &m)
                 }
             } 
         )
-        // .def_property_readonly_static("the_next_id", [](py::object const&) {return ParticleType::the_next_id;} )
         .def("cpu", [](const ParticleType &p) { const int m_cpu = p.cpu(); return m_cpu; })
         .def("id", [](const ParticleType &p) { const int m_id = p.id(); return m_id; })
         .def("NextID", [](const ParticleType &p) {return p.NextID();})
         .def("NextID", [](const ParticleType &p, Long nextid) { p.NextID(nextid); })
         .def_property("x", [](ParticleType &p){ return p.pos(0);}, [](ParticleType &p, Real val){ p.m_pos[0] = val; })
-        // if (AMREX_SPACEDIM > 1) {
 #if (AMREX_SPACEDIM >= 2)
         .def_property("y", [](ParticleType &p){ return p.pos(1);}, [](ParticleType &p, Real val){ p.m_pos[1] = val; })
 #endif
@@ -352,5 +344,4 @@ void init_Particle(py::module& m) {
     make_Particle<1, 1> (m);
     make_Particle<2, 1> (m);
     make_Particle<3, 2> (m);
-    // make_Particle<2,2> (m);
 }

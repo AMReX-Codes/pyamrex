@@ -24,9 +24,6 @@ template <int NStructReal, int NStructInt, int NArrayReal, int NArrayInt,
           template<class> class Allocator=DefaultAllocator>
 void make_ParticleTile(py::module &m)
 {
-
-    // make_Particle<NArrayReal, NArrayInt> (m);
-
     using ParticleTileDataType = ParticleTileData<NStructReal, NStructInt, NArrayReal, NArrayInt>;
     using ParticleTileType=ParticleTile<NStructReal, NStructInt, NArrayReal, NArrayInt, DefaultAllocator>;
     using ParticleType = Particle<NStructReal, NStructInt>;
@@ -45,35 +42,6 @@ void make_ParticleTile(py::module &m)
         // setter & getter
         .def("__setitem__", [](ParticleTileDataType & pdt, int const v, SuperParticleType const value){ pdt.setSuperParticle( value, v); })
         .def("__getitem__", [](ParticleTileDataType & pdt, int const v){ return pdt.getSuperParticle(v); })
-//         .def_property_readonly("__array_interface__", , [](ParticleTileDataType<T> const & ptd) {
-//                 auto d = py::dict();
-//                 bool const read_only = false;
-//                 d["data"] = py::make_tuple(std::intptr_t(ptd.dataPtr()), read_only);
-//             d["shape"] = py::make_tuple(aos.size());
-//             d["strides"] = py::none();
-//             d["typestr"] = "|V" + std::to_string(sizeof(SuperParticleType));
-//             // d["typestr"] = "|V" + std::to_string(8+sizeof(RealType)*(AMREX_SPACEDIM+NReal)+sizeof(int)*NInt);//py::format_descriptor<ParticleType>::format();
-//             std::string descr = "[(cpuid, <i8), (x, <f" + std::to_string(sizeof(RealType)) + ")";
-// #if (AMREX_SPACEDIM >= 2)
-//             // descr += "(y, " + py::format_descriptor<RealType>::format() + ")";
-//             descr += ", (y, <f" + std::to_string(sizeof(RealType)) + ")";
-// #endif
-// #if (AMREX_SPACEDIM == 3)
-//             // descr += "(z, " + py::format_descriptor<RealType>::format() + ")";
-//             descr += ", (z, <f" + std::to_string(sizeof(RealType)) + ")";
-// #endif
-//             if (NReal > 0) {
-//                 descr += ", (rdata, <f" + std::to_string(sizeof(RealType)*(NReal)) + ")";
-//             }
-//             if (NInt > 0) {
-//                 descr += ", (rdata, <i" + std::to_string(sizeof(int)*(NInt)) + ")]";
-//             }
-//             d["descr"] = descr;
-//             // d["descr"] = "[(f1, i4), ()]"
-//             d["version"] = 3;
-//             return d;
-//             }
-//         )
     ;
 
     auto const particle_tile_type = std::string("ParticleTile_").append(std::to_string(NStructReal) + "_" + std::to_string(NStructInt) + "_" + std::to_string(NArrayReal) + "_" + std::to_string(NArrayInt));

@@ -87,7 +87,6 @@ void make_ParticleContainer(py::module &m)
                                     const Vector<IntVect>&>
                 (&ParticleContainerType::Define))
 
-        // int numLocalTilesAtLevel (int lev) const { return m_particles[lev].size(); }
         .def("numLocalTilesAtLevel", &ParticleContainerType::numLocalTilesAtLevel)
 
         .def("reserveData", &ParticleContainerType::reserveData)
@@ -188,16 +187,8 @@ void make_ParticleContainer(py::module &m)
         // void WritePlotFilePre ();
 
         // void WritePlotFilePost ();
-        // const Vector<ParticleLevel>& GetParticles () const { return m_particles; }
-        // Vector      <ParticleLevel>& GetParticles ()       { return m_particles; }
         .def("GetParticles", py::overload_cast<>(&ParticleContainerType::GetParticles), py::return_value_policy::reference_internal)
         .def("GetParticles", py::overload_cast<int>(&ParticleContainerType::GetParticles), py::return_value_policy::reference_internal)
-        // .def("GetParticles", [](ParticleContainerType& pc) {return pc.GetParticles(); },
-        //     py::return_value_policy::reference_internal)
-        // const ParticleLevel& GetParticles (int lev) const { return m_particles[lev]; }
-        // ParticleLevel      & GetParticles (int lev)       { return m_particles[lev]; }
-        // .def("GetParticles", [](ParticleContainerType& pc, int lev) { return pc.GetParticles(lev);},
-        //     py::return_value_policy::reference_internal)
         // .def("ParticlesAt", py::overload_cast<int,int,int>(&ParticleContainerType::ParticlesAt),
         //     py::return_value_policy::reference_internal)
         // .def("ParticlesAt", py::overload_cast<int,int,int>(&ParticleContainerType::ParticlesAt,py::const_))
