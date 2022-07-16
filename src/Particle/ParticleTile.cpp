@@ -27,7 +27,6 @@ void make_ParticleTile(py::module &m)
     using ParticleTileDataType = ParticleTileData<NStructReal, NStructInt, NArrayReal, NArrayInt>;
     using ParticleTileType=ParticleTile<NStructReal, NStructInt, NArrayReal, NArrayInt, DefaultAllocator>;
     using ParticleType = Particle<NStructReal, NStructInt>;
-    using AoS = typename ParticleTileType::AoS;
 
     using SuperParticleType = Particle<NStructReal + NArrayReal, NStructInt + NArrayInt>;
 
