@@ -59,7 +59,7 @@ void make_ArrayOfStructs(py::module &m)
 #endif
             if (NReal > 0) {
                 for(int ii=0; ii < NReal; ii++) {
-                        descr.append(py::make_tuple("rdata_"+std::to_string(ii),py::format_descriptor<RealType>::format()));
+                    descr.append(py::make_tuple("rdata_"+std::to_string(ii),py::format_descriptor<RealType>::format()));
                 }
             }
             descr.append(py::make_tuple("cpuid", py::format_descriptor<uint64_t>::format()) );
