@@ -44,21 +44,6 @@ void make_Vector(py::module &m, std::string typestr)
         )
         .def(py::init<>())
 
-        /* init from a numpy or other buffer protocol array: non-owning view
-         */
-        // .def(py::init([](py::array_t<T> & arr) {
-        //     py::buffer_info buf = arr.request();
-
-        //     if (buf.format != py::format_descriptor<T>::format())
-        //         throw std::runtime_error("Incompatible format: expected '" +
-        //             py::format_descriptor<T>::format() +
-        //             "' and received '" + buf.format + "'!");
-
-        //     auto v = std::make_unique< Vector<T> >();
-        //     v.get()->data() = static_cast<T*>(buf.ptr);
-        //     return v;
-        // }))
-        // .def(py::init<std::size_t>())
         .def("size", &Vector_type::size)
 
         .def_property_readonly("__array_interface__", [](Vector_type const & vector) {
@@ -85,6 +70,4 @@ void init_Vector(py::module& m) {
     make_Vector<int> (m, "int");
     if constexpr(!std::is_same_v<int, Long>)
         make_Vector<Long> (m, "Long");
-
-    // make_Vector<std::string> (m, "string");
 }

@@ -51,7 +51,7 @@ void make_PODVector(py::module &m, std::string typestr)
         .def("resize", py::overload_cast<std::size_t, const T&>(&PODVector_type::resize))
         .def("reserve", &PODVector_type::reserve)
         .def("shrink_to_fit", &PODVector_type::shrink_to_fit)
-        // TODO:
+        
         // front
         // back
         // data
