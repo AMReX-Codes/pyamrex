@@ -21,6 +21,12 @@ void init_CoordSys(py::module& m)
         .def(py::init<const CoordSys&>())
 
         .def("ok", &CoordSys::Ok)
+        .def("Coord", &CoordSys::Coord)
+        .def("SetCoord", &CoordSys::SetCoord)
+        .def("CoordInt", &CoordSys::CoordInt)
+        .def("IsSPHERICAL", &CoordSys::IsSPHERICAL)
+        .def("IsRZ",&CoordSys::IsRZ )
+        .def("IsCartesian", &CoordSys::IsCartesian)
 
         // ...
     ;
