@@ -55,6 +55,7 @@ void init_MultiFab(py::module &m) {
         //.def(py::init< iMultiFab const & >())
         //.def(py::init< iMultiFab const &, MFItInfo const & >())
 
+        // eq. to void operator++()
         .def("__next__",
              [](MFIter & mfi) -> MFIter & {
                 py::object self = py::cast(mfi);
@@ -82,24 +83,27 @@ void init_MultiFab(py::module &m) {
         .def("tilebox", py::overload_cast< IntVect const & >(&MFIter::tilebox, py::const_))
         .def("tilebox", py::overload_cast< IntVect const &, IntVect const & >(&MFIter::tilebox, py::const_))
 
-        /*
-        Box nodaltilebox()
-        Box nodaltilebox(int dir)
-        Box growntilebox()
-        Box growntilebox(const IntVect&)
-        Box grownnodaltilebox()
-        Box grownnodaltilebox(int dir)
-        Box grownnodaltilebox(int dir, int ng)
-        Box grownnodaltilebox(int dir, const IntVect&)
+        .def("validbox", &MFIter::validbox)
+        .def("fabbox", &MFIter::fabbox)
 
-        Box validbox()
-        Box fabbox()
+        .def("nodaltilebox",
+            py::overload_cast< int >(&MFIter::nodaltilebox, py::const_),
+            py::arg("dir") = -1)
 
-        void operator++()
-        bint isValid()
-        int index()
-        int length()
-        */
+        .def("growntilebox",
+            py::overload_cast< const IntVect& >(&MFIter::growntilebox, py::const_),
+            py::arg("ng") = -1000000)
+
+        .def("grownnodaltilebox",
+            py::overload_cast< int, int >(&MFIter::grownnodaltilebox, py::const_),
+            py::arg("int") = -1, py::arg("ng") = -1000000)
+        .def("grownnodaltilebox",
+            py::overload_cast< int, const IntVect& >(&MFIter::grownnodaltilebox, py::const_),
+            py::arg("int"), py::arg("ng"))
+
+        .def_property_readonly("is_valid", &MFIter::isValid)
+        .def_property_readonly("index", &MFIter::index)
+        .def_property_readonly("length", &MFIter::length)
     ;
 
     py::class_< FabArray<FArrayBox>, FabArrayBase >(m, "FabArray_FArrayBox")

@@ -142,3 +142,13 @@ def test_mfab_ops(boxarr, distmap, nghost):
     np.testing.assert_allclose(dst.min(0), 150.0)
     np.testing.assert_allclose(dst.max(0), 150.0)
 
+@pytest.mark.parametrize("nghost", [0, 1])
+def test_mfab_mfiter(mfab, nghost):
+    assert(iter(mfab).is_valid)
+    assert(iter(mfab).length == 8)
+
+    cnt = 0
+    for mfi in mfab:
+        cnt +=1
+
+    assert(iter(mfab).length == cnt)
