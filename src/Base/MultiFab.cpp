@@ -37,7 +37,7 @@ void init_MultiFab(py::module &m) {
 
     py::class_< FArrayBox >(m, "FArrayBox");
 
-    py::class_< MFIter >(m, "MFIter")
+    py::class_< MFIter >(m, "MFIter", py::dynamic_attr())
         .def("__repr__",
              [](MFIter const & mfi) {
                  std::string r = "<amrex.MFIter (";
@@ -55,17 +55,17 @@ void init_MultiFab(py::module &m) {
         //.def(py::init< iMultiFab const & >())
         //.def(py::init< iMultiFab const &, MFItInfo const & >())
 
-        //.def("__iter__",
-        //     [](MFIter & mfi) -> MFIter & {
-        //        return mfi;
-        //     },
-        //     py::return_value_policy::reference_internal
-        //)
         .def("__next__",
              [](MFIter & mfi) -> MFIter & {
-                static bool first_or_done = true;
-                if (first_or_done)
+                py::object self = py::cast(mfi);
+                if (!py::hasattr(self, "first_or_done"))
+                    self.attr("first_or_done") = true;
+
+                bool first_or_done = self.attr("first_or_done").cast<bool>();
+                if (first_or_done) {
                     first_or_done = false;
+                    self.attr("first_or_done") = first_or_done;
+                }
                 else
                     ++mfi;
                 if( !mfi.isValid() )
