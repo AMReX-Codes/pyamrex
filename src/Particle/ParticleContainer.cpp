@@ -30,7 +30,6 @@ void make_ParticleContainer(py::module &m)
 
     using ParticleTileType = typename ParticleContainerType::ParticleTileType;
     using AoS = typename ParticleTileType::AoS;
-    // using SoA = typename ParticleTileType::SoA;
     using ParticleInitData = typename ParticleContainerType::ParticleInitData;
 
     auto const particle_init_data_type = std::string("ParticleInitType_").append(std::to_string(T_NStructReal) + "_" + std::to_string(T_NStructInt) + "_" + std::to_string(T_NArrayReal) + "_" + std::to_string(T_NArrayInt));

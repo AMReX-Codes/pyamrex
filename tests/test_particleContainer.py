@@ -9,6 +9,23 @@ def particle_container(std_geometry, distmap, boxarr):
     pc = amrex.ParticleContainer_1_1_2_1(std_geometry, distmap, boxarr)
     return pc
 
+def test_particleInitType():
+    myt = amrex.ParticleInitType_1_1_2_1()
+    print(myt.real_struct_data)
+    print(myt.int_struct_data)
+    print(myt.real_array_data)
+    print(myt.int_array_data)
+
+    myt.real_struct_data = [0.5]
+    myt.int_struct_data = [5]
+    myt.real_array_data = [0.5, 0.2]
+    myt.int_array_data = [1]
+
+    assert(np.allclose(myt.real_struct_data, [0.5]))
+    assert(np.allclose(myt.int_struct_data, [5]))
+    assert(np.allclose(myt.real_array_data, [0.5,0.2]))
+    assert(np.allclose(myt.int_array_data, [1]))
+
 def test_n_particles(particle_container):
     pc = particle_container
     assert(pc.OK())
@@ -16,6 +33,7 @@ def test_n_particles(particle_container):
     assert(pc.NStructInt == amrex.ParticleContainer_1_1_2_1.NStructInt == 1)
     assert(pc.NArrayReal == amrex.ParticleContainer_1_1_2_1.NArrayReal == 2)
     assert(pc.NArrayInt == amrex.ParticleContainer_1_1_2_1.NArrayInt == 1)
+
 
 
 def test_pc_init():
