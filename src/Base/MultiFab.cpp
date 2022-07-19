@@ -37,7 +37,7 @@ void init_MultiFab(py::module &m) {
 
     py::class_< FArrayBox >(m, "FArrayBox");
 
-    py::class_< MFIter >(m, "MFIter")
+    py::class_< MFIter >(m, "MFIter", py::dynamic_attr())
         .def("__repr__",
              [](MFIter const & mfi) {
                  std::string r = "<amrex.MFIter (";
@@ -55,44 +55,55 @@ void init_MultiFab(py::module &m) {
         //.def(py::init< iMultiFab const & >())
         //.def(py::init< iMultiFab const &, MFItInfo const & >())
 
-        //.def("__iter__",
-        //     [](MFIter & mfi) -> MFIter & {
-        //        return mfi;
-        //     },
-        //     py::return_value_policy::reference
-        //)
+        // eq. to void operator++()
         .def("__next__",
              [](MFIter & mfi) -> MFIter & {
-                ++mfi;
+                py::object self = py::cast(mfi);
+                if (!py::hasattr(self, "first_or_done"))
+                    self.attr("first_or_done") = true;
+
+                bool first_or_done = self.attr("first_or_done").cast<bool>();
+                if (first_or_done) {
+                    first_or_done = false;
+                    self.attr("first_or_done") = first_or_done;
+                }
+                else
+                    ++mfi;
                 if( !mfi.isValid() )
+                {
+                    first_or_done = true;
                     throw py::stop_iteration();
+                }
                 return mfi;
              },
-             py::return_value_policy::reference
+             py::return_value_policy::reference_internal
         )
 
         .def("tilebox", py::overload_cast< >(&MFIter::tilebox, py::const_))
         .def("tilebox", py::overload_cast< IntVect const & >(&MFIter::tilebox, py::const_))
         .def("tilebox", py::overload_cast< IntVect const &, IntVect const & >(&MFIter::tilebox, py::const_))
 
-        /*
-        Box nodaltilebox()
-        Box nodaltilebox(int dir)
-        Box growntilebox()
-        Box growntilebox(const IntVect&)
-        Box grownnodaltilebox()
-        Box grownnodaltilebox(int dir)
-        Box grownnodaltilebox(int dir, int ng)
-        Box grownnodaltilebox(int dir, const IntVect&)
+        .def("validbox", &MFIter::validbox)
+        .def("fabbox", &MFIter::fabbox)
 
-        Box validbox()
-        Box fabbox()
+        .def("nodaltilebox",
+            py::overload_cast< int >(&MFIter::nodaltilebox, py::const_),
+            py::arg("dir") = -1)
 
-        void operator++()
-        bint isValid()
-        int index()
-        int length()
-        */
+        .def("growntilebox",
+            py::overload_cast< const IntVect& >(&MFIter::growntilebox, py::const_),
+            py::arg("ng") = -1000000)
+
+        .def("grownnodaltilebox",
+            py::overload_cast< int, int >(&MFIter::grownnodaltilebox, py::const_),
+            py::arg("int") = -1, py::arg("ng") = -1000000)
+        .def("grownnodaltilebox",
+            py::overload_cast< int, const IntVect& >(&MFIter::grownnodaltilebox, py::const_),
+            py::arg("int"), py::arg("ng"))
+
+        .def_property_readonly("is_valid", &MFIter::isValid)
+        .def_property_readonly("index", &MFIter::index)
+        .def_property_readonly("length", &MFIter::length)
     ;
 
     py::class_< FabArray<FArrayBox>, FabArrayBase >(m, "FabArray_FArrayBox")
@@ -207,7 +218,8 @@ void init_MultiFab(py::module &m) {
         .def("norm2", py::overload_cast< Vector<int> const & >(&MultiFab::norm2, py::const_))
 
         /* simple math */
-        .def("sum", &MultiFab::sum)
+        .def("sum", &MultiFab::sum,
+            py::arg("comp"), py::arg("local")=false)
 
         .def("abs",
             [](MultiFab & mf, int comp, int num_comp) { mf.abs(comp, num_comp); })
