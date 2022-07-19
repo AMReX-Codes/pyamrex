@@ -4,14 +4,12 @@ import pytest
 import numpy as np
 import amrex
 
-# TODO: test numNeighborParticles
 
 def test_aos_init():
     aos = amrex.ArrayOfStructs_2_1()
-    # print(aos())
 
     assert(aos.numParticles() == 0)
-    assert(aos.numParticles() == aos.numTotalParticles() == aos.numRealParticles()==0)
+    assert(aos.numTotalParticles() == aos.numRealParticles()==0)
     assert(aos.empty())
 
 def test_aos_push_pop():
@@ -24,6 +22,12 @@ def test_aos_push_pop():
     p2.set_rdata([2.1, 25.2])
     p2.set_idata([5])
     aos.push_back(p2)
+
+    ## test aos.back()
+    pback = aos.back()
+    assert(np.allclose(pback.get_rdata(), p2.get_rdata()))
+    assert(np.allclose(pback.get_idata(), p2.get_idata()))
+    assert(pback.x == p2.x and pback.y == p2.y and pback.z == p2.z)
 
     assert(aos.numParticles() == aos.numTotalParticles() == aos.numRealParticles()==2)
     assert(aos.getNumNeighbors() == 0)
@@ -87,3 +91,4 @@ def test_array_interface():
     assert(aos[1].y==arr[1][1]==-5)
     assert(aos[1].x==arr[1][0]==0)
     assert(aos[1].z==arr[1][2]==0)
+    

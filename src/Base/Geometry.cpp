@@ -35,8 +35,6 @@ void init_Geometry(py::module& m)
                  return s.str();
              })
         .def(py::init<>())
-        // .def(py::init<const Box&, const RealBox*, 
-                // int, int const*>())
         .def(py::init<
             const Box&,
             const RealBox&,
@@ -45,13 +43,10 @@ void init_Geometry(py::module& m)
           >(),
           py::arg("dom"), py::arg("rb"), py::arg("coord"), py::arg("is_per"))
 
-        // copy operators
-
         // data()
         // .def_property_readonly("dx",&Geometry::dx)
-
-        // -------- using parmParse -------------
         // .def("setup")
+
         .def("ResetDefaultProbDomain", 
             py::overload_cast<const RealBox&>
             (&Geometry::ResetDefaultProbDomain),
@@ -117,8 +112,6 @@ void init_Geometry(py::module& m)
             "Is domain periodic in all directions?")
         .def("isPeriodic", py::overload_cast<>(&Geometry::isPeriodic, py::const_),
             "Return list indicating whether domain is periodic in each direction")
-        // .def("period", py::overload_cast<int>(&Geometry::period, py::const_),
-        //     "Return the period in the specified direction")
         .def("period", [](const Geometry& gm, const int dir) { 
             if(gm.isPeriodic(dir)){ return gm.period(dir); }
             else { throw std::runtime_error("Geometry is not periodic in this direction."); }
@@ -142,6 +135,7 @@ void init_Geometry(py::module& m)
         .def("insideRoundOffDomain", py::overload_cast<AMREX_D_DECL(Real, Real, Real)>
                 (&Geometry::insideRoundoffDomain, py::const_),
             "Returns true if a point is inside the roundoff domain. All particles with positions inside the roundoff domain are sure to be mapped to cells inside the Domain() box. Note that the same need not be true for all points inside ProbDomain()")
+        
         // .def("computeRoundoffDomain")
     ;
 

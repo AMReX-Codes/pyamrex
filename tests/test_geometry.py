@@ -21,15 +21,6 @@ def geometry(box, real_box):
     is_periodic = [0,0,1]
     return amrex.Geometry(box, real_box, coord, is_periodic)
 
-
-@pytest.mark.skipif(amrex.Config.spacedim != 3,
-                    reason="Requires AMREX_SPACEDIM = 3")
-def test_gm_init(box,real_box):
-    Gm()
-    coord = 1
-    is_periodic = [0,0,1]
-    Gm(box, real_box, coord, is_periodic)
-
 @pytest.mark.skipif(amrex.Config.spacedim != 3,
                     reason="Requires AMREX_SPACEDIM = 3")
 def test_geometry_define(box,real_box):
@@ -42,32 +33,14 @@ def test_geometry_define(box,real_box):
             gm.ProbLength(2) == 5)
     assert(gm.isPeriodic() == is_periodic)
 
-
-
-def test_ok():
-    gm = Gm()
-    gm.Domain()
-
 @pytest.mark.skipif(amrex.Config.spacedim != 3,
                     reason="Requires AMREX_SPACEDIM = 3")
 def test_probDomain(box,real_box):
-    # pass
     gm = Gm()
-    # print(gm.ok())
-    # assert(not gm.ok())
-    # test_passed = False
-    # try:
-    #     gm.ProbDomain(rb)
-    # except RuntimeError:
-    #     test_passed = True
-    # assert(test_passed)
-
     coord = 1
     is_periodic = [0,0,1]
     gm.define(box, real_box, coord, is_periodic)
     assert(gm.ok())
-
-
 
     lo = [0,-1,1]
     hi = [1,0,2]
@@ -96,13 +69,6 @@ def test_size(geometry):
 def test_domain(box,real_box):
     bx = amrex.Box(amrex.IntVect(0, 0, 0), amrex.IntVect(127, 127, 127))
     gm = Gm()
-    # test_passed = False
-    # try:
-    #     gm.Domain(bx)
-    # except RuntimeError:
-    #     test_passed = True
-    # assert(test_passed)
-
     coord = 1
     is_periodic = [0,0,1]
     gm.define(box, real_box, coord, is_periodic)
@@ -153,23 +119,6 @@ def test_periodicity(geometry):
     pdcity = amrex.Periodicity(amrex.IntVect(0,0,30))
     bx = amrex.Box(iv1,iv2)
     assert(gm.periodicity(bx) == pdcity)
-
-
-
-# def test_shift(box, geometry):
-#     gm = geometry
-
-#     pdcity = amrex.Periodicity(amrex.IntVect(0,0,10))
-#     print(pdcity.shift_IntVect)
-#     print(pdcity.domain)
-#     iv1 = amrex.IntVect(0,0,0)
-#     iv2 = amrex.IntVect(9,9,9)
-#     iv3 = amrex.IntVect(15,15,15)
-#     iv4 = amrex.IntVect(19,19,19)
-#     bx1 = amrex.Box(iv1,iv2)
-#     bx2 = amrex.Box(iv3, iv4)
-#     ans = []
-#     amrex.Geometry.periodicShift(bx1, bx2,ans)
 
 @pytest.mark.skipif(amrex.Config.spacedim != 3,
                     reason="Requires AMREX_SPACEDIM = 3")
@@ -233,4 +182,6 @@ def test_Resets():
             np.isclose(gm.ProbLength(1), 2) and
             np.isclose(gm.ProbLength(2), 6))
     assert(gm.isPeriodic() == is_periodic)
-    # assert(gm.coord == 1)
+    print(gm.Coord())
+    CType = amrex.CoordSys.CoordType
+    assert(gm.Coord() == CType.RZ)

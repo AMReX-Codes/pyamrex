@@ -73,53 +73,73 @@ void make_Particle(py::module &m)
                 }
             )
         )
-        .def(py::init([](AMREX_D_DECL(ParticleReal x, ParticleReal y, ParticleReal z), py::args& args) { 
-                    std::unique_ptr<ParticleType> part(new ParticleType());
-                    part->m_pos[0] = x;
-    #if (AMREX_SPACEDIM >= 2)
-                    part->m_pos[1] = y;
-    #endif
-    #if (AMREX_SPACEDIM >= 3)
-                    part->m_pos[2] = z;
-    #endif
-                    int T_NTotal = T_NReal + T_NInt;
-                    int argn = args.size();
-                    if(argn != T_NTotal) {
-                        throw std::runtime_error("Must supply all " + std::to_string(T_NTotal) + " rdata, idata elements");
+        .def(py::init(
+            [](AMREX_D_DECL(ParticleReal x, ParticleReal y, ParticleReal z), py::args& args) 
+            { 
+                std::unique_ptr<ParticleType> part(new ParticleType());
+                AMREX_D_TERM(part->m_pos[0] = x;, part->m_pos[1] = y;, part->m_pos[2] = z;)
+                int T_NTotal = T_NReal + T_NInt;
+                int argn = args.size();
+                if(argn != T_NTotal) {
+                    throw std::runtime_error("Must supply all " + std::to_string(T_NTotal) + " rdata, idata elements");
+                }
+                if constexpr (T_NReal > 0) {
+                    for (int ii = 0; ii < T_NReal; ii++) {
+                        part->m_rdata[ii] = py::cast<ParticleReal>(args[ii]);
                     }
+                }
+                if constexpr (T_NInt > 0) {
+                    for (int ii = 0; ii < T_NInt; ii++) {
+                        part->m_idata[ii] = py::cast<int>(args[ii+T_NReal]);
+                    }
+                }
+                return part;
+            })
+        )
+
+        .def(py::init(
+            [](AMREX_D_DECL(ParticleReal x, ParticleReal y, ParticleReal z), py::kwargs& kwargs) 
+            { 
+                std::unique_ptr<ParticleType> part(new ParticleType());
+                AMREX_D_TERM(part->m_pos[0] = x;, part->m_pos[1] = y;, part->m_pos[2] = z;)
+
+                for (auto const& item : kwargs) {
+                    std::regex component_separator("(.*)_([0-9]*)");
+                    std::smatch sm;
+                    std::string varname = item.first.cast<std::string>();
+                    std::regex_match(varname, sm, component_separator, std::regex_constants::match_default);
+                    int comp = std::stoi(sm[2]);
                     if constexpr (T_NReal > 0) {
-                        for (int ii = 0; ii < T_NReal; ii++) {
-                            part->m_rdata[ii] = py::cast<ParticleReal>(args[ii]);
+                        if (comp >= 0 && comp < T_NReal && sm[1] == "rdata") { 
+                            part->m_rdata[comp] = item.second.cast<ParticleReal>();
                         }
                     }
                     if constexpr (T_NInt > 0) {
-                        for (int ii = 0; ii < T_NInt; ii++) {
-                            part->m_idata[ii] = py::cast<int>(args[ii+T_NReal]);
+                        if (comp >= 0 && comp < T_NInt && sm[1] == "idata") { 
+                            part->m_idata[comp] = item.second.cast<int>();
                         }
                     }
-                    return part;
                 }
-            )
+                return part;
+            })
         )
 
-        .def(py::init([](AMREX_D_DECL(ParticleReal x, ParticleReal y, ParticleReal z), py::kwargs& kwargs) { 
-                    std::unique_ptr<ParticleType> part(new ParticleType());
-                    part->m_pos[0] = x;
-    #if (AMREX_SPACEDIM >= 2)
-                    part->m_pos[1] = y;
-    #endif
-    #if (AMREX_SPACEDIM >= 3)
-                    part->m_pos[2] = z;
-    #endif
-
-                    for (auto const & item : kwargs) {
-                        std::regex component_separator("(.*)_([0-9]*)");
-                        std::smatch sm;
-                        std::string varname = item.first.cast<std::string>();
-                        std::regex_match(varname, sm, component_separator, std::regex_constants::match_default);
-                        int comp = std::stoi(sm[2]);
+        .def(py::init(
+            [](py::kwargs& kwargs) { 
+                std::unique_ptr<ParticleType> part(new ParticleType());
+                for (auto const& item : kwargs) {
+                    std::regex component_separator("(.*)_([0-9]*)");
+                    std::smatch sm;
+                    std::string varname = item.first.cast<std::string>();
+                    std::regex_match(varname, sm, component_separator, std::regex_constants::match_default);
+                    int comp = -1;
+                    if (varname == "x") { part->m_pos[0] = item.second.cast<ParticleReal>(); }
+                    if (varname == "y") { part->m_pos[1] = item.second.cast<ParticleReal>(); }
+                    if (varname == "z") { part->m_pos[2] = item.second.cast<ParticleReal>(); }
+                    if (sm.size() > 2) {
+                        comp = std::stoi(sm[2]);
                         if constexpr (T_NReal > 0) {
-                            if (comp >= 0 && comp < T_NReal && sm[1] == "rdata") { 
+                            if(comp >= 0 && comp < T_NReal && sm[1] == "rdata") { 
                                 part->m_rdata[comp] = item.second.cast<ParticleReal>();
                             }
                         }
@@ -129,39 +149,9 @@ void make_Particle(py::module &m)
                             }
                         }
                     }
-                    return part;
                 }
-            )
-        )
-
-        .def(py::init([](py::kwargs& kwargs) { 
-                    std::unique_ptr<ParticleType> part(new ParticleType());
-                    for (auto const & item : kwargs) {
-                        std::regex component_separator("(.*)_([0-9]*)");
-                        std::smatch sm;
-                        std::string varname = item.first.cast<std::string>();
-                        std::regex_match(varname, sm, component_separator, std::regex_constants::match_default);
-                        int comp = -1;
-                        if (varname == "x") { part->m_pos[0] = item.second.cast<ParticleReal>(); }
-                        if (varname == "y") { part->m_pos[1] = item.second.cast<ParticleReal>(); }
-                        if (varname == "z") { part->m_pos[2] = item.second.cast<ParticleReal>(); }
-                        if (sm.size() > 2) {
-                            comp = std::stoi(sm[2]);
-                            if constexpr (T_NReal > 0) {
-                                if(comp >= 0 && comp < T_NReal && sm[1] == "rdata") { 
-                                    part->m_rdata[comp] = item.second.cast<ParticleReal>();
-                                }
-                            }
-                            if constexpr (T_NInt > 0) {
-                                if (comp >= 0 && comp < T_NInt && sm[1] == "idata") { 
-                                    part->m_idata[comp] = item.second.cast<int>();
-                                }
-                            }
-                        }
-                    }
-                    return part;
-                }
-            )
+                return part;
+            })
         )
         .def("__repr__",
              [](py::object& obj) {
@@ -181,13 +171,7 @@ void make_Particle(py::module &m)
              })
         .def_readonly_static("NReal", &ParticleType::NReal)
         .def_readonly_static("NInt", &ParticleType::NInt)
-        // .def("cpu", py::overload_cast<>(&ParticleType::cpu))
-        // .def_property_readonly("cpu", [](const ParticleType &p) { return p.cpu(); })
-        // .def_property_readonly("id", [](const ParticleType &p) { return p.id(); })
-        // .def("pos", py::overload_cast<int>(&ParticleType::pos, py::const_)) //, "Return specified component of particle position")
-        // .def_property("pos", [](const ParticleType &p) { return p.pos(); }, [](ParticleType &p, const RealVect &rv) { p.pos = rv; })
         .def("pos", [](const ParticleType &p, int index) { return p.pos(index); })
-        // .def("pos", py::overload_cast<>(&ParticleType::pos, py::const_))
         .def("pos", [](const ParticleType &p) { return p.pos(); })
         .def("setPos", [](ParticleType &p, int index, Real val) { AMREX_ASSERT(index > 0 && index < AMREX_SPACEDIM); p.m_pos[index] = val; })
         .def("setPos", [](ParticleType &p, const RealVect & vals) { for (int ii=0; ii < AMREX_SPACEDIM; ii++) { p.m_pos[ii] = vals[ii]; } })
@@ -196,7 +180,6 @@ void make_Particle(py::module &m)
         .def("get_rdata", [](ParticleType &p, int index) { 
                 if constexpr (T_NReal > 0) {
                     if(index < 0 || index >= T_NReal) {
-                        // std::string error_msg = "" 
                         throw std::range_error("index not in range. Valid range : [0, " + std::to_string(T_NReal));
                     }
                     return p.m_rdata[index];
@@ -218,7 +201,6 @@ void make_Particle(py::module &m)
                 }
             } 
         )
-        // .def("rvec")
         .def("set_rdata", [](ParticleType &p, int index, Real val) { 
                 if constexpr (T_NReal > 0) {
                     if(index < 0 || index >= T_NReal) {

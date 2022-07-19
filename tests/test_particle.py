@@ -44,14 +44,6 @@ def test_particle_set():
     p1.z = 5.1
     assert(p1.z == 5.1)
 
-def test_id_cpu():
-    p1 = amrex.Particle_2_1()
-    p2 = amrex.Particle_2_1()
-    pass
-
-def test_nextid():
-    pass
-
 def test_rdata():
     p1 = amrex.Particle_2_1()
     rvec = [1.5,2.0]
@@ -59,19 +51,12 @@ def test_rdata():
     assert(np.allclose(p1.get_rdata(), rvec))
     p1.set_rdata(1, 2.5)
     assert(np.allclose(p1.get_rdata(1), 2.5))
-    test_passed = False
-    try:
-        p1.set_rdata(100,5.2)
-    except ValueError:
-        test_passed = True
-    assert(test_passed)
 
-    test_passed = False
-    try:
+    with pytest.raises(ValueError):
+        p1.set_rdata(100,5.2)
+
+    with pytest.raises(ValueError):
         p1.get_rdata(100)
-    except ValueError:
-        test_passed = True
-    assert(test_passed)
 
 def test_idata():
     p1 = amrex.Particle_2_1()
@@ -80,16 +65,8 @@ def test_idata():
     assert(p1.get_idata() == ivec)
     p1.set_idata(0, 3)
     assert(p1.get_idata(0)==3)
-    test_passed = False
-    try:
+    with pytest.raises(ValueError):
         p1.set_idata(100,5)
-    except ValueError:
-        test_passed = True
-    assert(test_passed)
 
-    test_passed = False
-    try:
+    with pytest.raises(ValueError):
         p1.get_idata(100)
-    except ValueError:
-        test_passed = True
-    assert(test_passed)

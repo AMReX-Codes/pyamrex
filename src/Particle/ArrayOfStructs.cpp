@@ -26,6 +26,7 @@ void make_ArrayOfStructs(py::module &m)
     auto const aos_name = std::string("ArrayOfStructs_").append(std::to_string(NReal) + "_" + std::to_string(NInt));
     py::class_<AOSType>(m, aos_name.c_str())
         .def(py::init())
+        // TODO:
         //operator()
         // .def("__call__", [](AOSType const & pv){ return pv();})
         .def("size", &AOSType::size)
@@ -39,8 +40,7 @@ void make_ArrayOfStructs(py::module &m)
         .def("empty", py::overload_cast<>(&AOSType::empty, py::const_))
         .def("push_back", &AOSType::push_back)
         .def("pop_back", &AOSType::pop_back)
-        .def("back", py::overload_cast<>(&AOSType::back),"get back member.  Problem!!!!! this is performing incorrectly")
-        .def("back", py::overload_cast<>(&AOSType::back, py::const_),"get back member.  Problem!!!!! this is performing incorrectly")
+        .def("back", py::overload_cast<>(&AOSType::back),"get back member.  Problem!!!!! this is perfo")
         // setter & getter
         .def_property_readonly("__array_interface__", [](AOSType const & aos) {
             auto d = py::dict();

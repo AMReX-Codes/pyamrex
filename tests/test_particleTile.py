@@ -5,6 +5,36 @@ import numpy as np
 import amrex
 
 
+##########
+def test_ptile_data():
+    
+    ptd = amrex.ParticleTileData_1_1_2_1()
+    assert(ptd.m_size == 0)
+    assert(ptd.m_num_runtime_real == 0)
+    assert(ptd.m_num_runtime_int == 0)
+
+def test_ptile_funs():
+
+    pt = amrex.ParticleTile_1_1_2_1()
+
+    assert(pt.empty() and pt.size() == 0)
+    assert(pt.numParticles() == pt.numRealParticles() ==  pt.numNeighborParticles() == 0)
+    assert(pt.numTotalParticles() == pt.getNumNeighbors() == 0)
+
+    pt.setNumNeighbors(3)
+    assert(pt.numParticles() == 0 == pt.numRealParticles())
+    assert(pt.numNeighborParticles() == pt.getNumNeighbors() == 3)
+    assert(pt.numTotalParticles() == 3)
+
+    pt.resize(5)
+    assert(not pt.empty() and pt.size() == 5)
+    assert(pt.numParticles() == 2 == pt.numRealParticles())
+    assert(pt.numNeighborParticles() == pt.getNumNeighbors() == 3)
+    assert(pt.numTotalParticles() == 5)
+
+
+
+################
 def test_ptile_pushback_ptiledata():
 
     pt = amrex.ParticleTile_1_1_2_1()
@@ -13,8 +43,19 @@ def test_ptile_pushback_ptiledata():
     pt.push_back(p)
     pt.push_back(sp)
 
-    td = pt.getParticleTileData()
+    print('num particles', pt.numParticles())
+    print('num real particles', pt.numRealParticles())
+    print('num neighbor particles', pt.numNeighborParticles())
+    print('num totalparticles', pt.numTotalParticles())
+    print('num Neighbors', pt.getNumNeighbors())
+    print('tile is empty?', pt.empty())
+    print('tile size', pt.size())
+    assert(not pt.empty())
+    assert(pt.numParticles() == pt.numRealParticles() == pt.numTotalParticles() == 2)
+    assert(pt.numNeighborParticles() == pt.getNumNeighbors() == 0)
+  
 
+    td = pt.getParticleTileData()
     assert(np.isclose(td[0].get_rdata(0),4.) and np.isclose(td[1].get_rdata(2), 10.) and td[1].get_idata(1) ==  12)
 
 @pytest.mark.skipif(amrex.Config.spacedim != 3,
@@ -93,12 +134,3 @@ def test_ptile_aos():
     print(aos)
     assert(np.isclose(aos[0]['x'], 3.0) and np.isclose(aos[0]['y'],0))
     assert(np.isclose(aos[2][0], 0.0) and np.isclose(aos[2][2], 20))
-
-
-    #To test
-    # push_back superParticle
-    # push_back_real
-    # shrink_to_fit
-    # capacity
-    # Num...Comps
-    # swap
