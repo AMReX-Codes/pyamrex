@@ -23,7 +23,6 @@
 #include <regex>
 
 
-
 namespace py = pybind11;
 using namespace amrex;
 using pReal = amrex_particle_real;
@@ -113,7 +112,7 @@ void make_Particle(py::module &m)
                     part->m_pos[2] = z;
     #endif
 
-                    for (auto item : kwargs) {
+                    for (auto const & item : kwargs) {
                         std::regex component_separator("(.*)_([0-9]*)");
                         std::smatch sm;
                         std::string varname = item.first.cast<std::string>();
@@ -137,7 +136,7 @@ void make_Particle(py::module &m)
 
         .def(py::init([](py::kwargs& kwargs) { 
                     std::unique_ptr<ParticleType> part(new ParticleType());
-                    for (auto item : kwargs) {
+                    for (auto const & item : kwargs) {
                         std::regex component_separator("(.*)_([0-9]*)");
                         std::smatch sm;
                         std::string varname = item.first.cast<std::string>();
