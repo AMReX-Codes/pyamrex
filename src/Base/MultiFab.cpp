@@ -59,16 +59,23 @@ void init_MultiFab(py::module &m) {
         //     [](MFIter & mfi) -> MFIter & {
         //        return mfi;
         //     },
-        //     py::return_value_policy::reference
+        //     py::return_value_policy::reference_internal
         //)
         .def("__next__",
              [](MFIter & mfi) -> MFIter & {
-                ++mfi;
+                static bool first_or_done = true;
+                if (first_or_done)
+                    first_or_done = false;
+                else
+                    ++mfi;
                 if( !mfi.isValid() )
+                {
+                    first_or_done = true;
                     throw py::stop_iteration();
+                }
                 return mfi;
              },
-             py::return_value_policy::reference
+             py::return_value_policy::reference_internal
         )
 
         .def("tilebox", py::overload_cast< >(&MFIter::tilebox, py::const_))
@@ -207,7 +214,8 @@ void init_MultiFab(py::module &m) {
         .def("norm2", py::overload_cast< Vector<int> const & >(&MultiFab::norm2, py::const_))
 
         /* simple math */
-        .def("sum", &MultiFab::sum)
+        .def("sum", &MultiFab::sum,
+            py::arg("comp"), py::arg("local")=false)
 
         .def("abs",
             [](MultiFab & mf, int comp, int num_comp) { mf.abs(comp, num_comp); })
