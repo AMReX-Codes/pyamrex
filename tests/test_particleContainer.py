@@ -5,8 +5,34 @@ import numpy as np
 import amrex
 
 @pytest.fixture()
-def particle_container(std_geometry, distmap, boxarr):
+def Npart():
+    return 21
+
+@pytest.fixture()
+def empty_particle_container(std_geometry, distmap, boxarr):
     pc = amrex.ParticleContainer_1_1_2_1(std_geometry, distmap, boxarr)
+    return pc
+
+@pytest.fixture()
+def std_particle():
+    myt = amrex.ParticleInitType_1_1_2_1()
+    myt.real_struct_data = [0.5]
+    myt.int_struct_data = [5]
+    myt.real_array_data = [0.5, 0.2]
+    myt.int_array_data = [1]
+    return myt
+    
+@pytest.fixture()
+def particle_container(Npart, std_geometry, distmap, boxarr, std_real_box):
+    pc = amrex.ParticleContainer_1_1_2_1(std_geometry, distmap, boxarr)
+    myt = amrex.ParticleInitType_1_1_2_1()
+    myt.real_struct_data = [0.5]
+    myt.int_struct_data = [5]
+    myt.real_array_data = [0.5, 0.2]
+    myt.int_array_data = [1]
+
+    iseed = 1
+    pc.InitRandom(Npart,iseed,myt,False,std_real_box)
     return pc
 
 def test_particleInitType():
@@ -26,19 +52,22 @@ def test_particleInitType():
     assert(np.allclose(myt.real_array_data, [0.5,0.2]))
     assert(np.allclose(myt.int_array_data, [1]))
 
-def test_n_particles(particle_container):
+def test_n_particles(particle_container, Npart):
     pc = particle_container
     assert(pc.OK())
     assert(pc.NStructReal == amrex.ParticleContainer_1_1_2_1.NStructReal == 1)
     assert(pc.NStructInt == amrex.ParticleContainer_1_1_2_1.NStructInt == 1)
     assert(pc.NArrayReal == amrex.ParticleContainer_1_1_2_1.NArrayReal == 2)
     assert(pc.NArrayInt == amrex.ParticleContainer_1_1_2_1.NArrayInt == 1)
-
-
+    assert(pc.NumberOfParticlesAtLevel(0) == np.sum(pc.NumberOfParticlesInGrid(0))==Npart)
 
 def test_pc_init():
     pc = amrex.ParticleContainer_1_1_2_1()
 
+    print('bytespread', pc.ByteSpread())
+    print('capacity', pc.PrintCapacity())
+    print('NumberOfParticles', pc.NumberOfParticlesAtLevel(0))
+    assert(pc.NumberOfParticlesAtLevel(0) == 0)
 
     bx = amrex.Box(amrex.IntVect(0, 0, 0), amrex.IntVect(63, 63, 63))
     rb = amrex.RealBox(0,0,0,1,1,1)
@@ -50,27 +79,48 @@ def test_pc_init():
     ba.max_size(32)
     dm = amrex.DistributionMapping(ba)
 
+    print('-------------------------')
+    print('define particle container')
     pc.Define(gm,dm,ba)
+    assert(pc.OK())
+    assert(pc.NStructReal == amrex.ParticleContainer_1_1_2_1.NStructReal == 1)
+    assert(pc.NStructInt == amrex.ParticleContainer_1_1_2_1.NStructInt == 1)
+    assert(pc.NArrayReal == amrex.ParticleContainer_1_1_2_1.NArrayReal == 2)
+    assert(pc.NArrayInt == amrex.ParticleContainer_1_1_2_1.NArrayInt == 1)
 
-    amrex.ParticleContainer_1_1_2_1(gm,dm,ba)
+    print('bytespread', pc.ByteSpread())
+    print('capacity', pc.PrintCapacity())
+    print('NumberOfParticles', pc.NumberOfParticlesAtLevel(0))
+    assert(pc.TotalNumberOfParticles() == pc.NumberOfParticlesAtLevel(0) == 0)
+    assert(pc.OK())
 
-def test_particle_init(particle_container, std_real_box):
-    pc = particle_container
-
+    print('---------------------------')
+    print('add a particle to each grid')
+    Npart_grid = 1
+    iseed = 1    
     myt = amrex.ParticleInitType_1_1_2_1()
     myt.real_struct_data = [0.5]
     myt.int_struct_data = [5]
     myt.real_array_data = [0.5, 0.2]
     myt.int_array_data = [1]
+    pc.InitRandomPerBox(Npart_grid, iseed, myt)
+    ngrid = ba.size
+    npart = Npart_grid * ngrid
 
-    Npart = 21
-    iseed = 1
-    pc.InitRandom(Npart,iseed,myt,False,std_real_box)
+    print('NumberOfParticles', pc.NumberOfParticlesAtLevel(0))
+    assert(pc.TotalNumberOfParticles() == pc.NumberOfParticlesAtLevel(0) == npart )
+    assert(pc.OK())
+
+
+def test_particle_init(Npart, particle_container):
+    pc = particle_container
     assert(pc.NumberOfParticlesAtLevel(0) == np.sum(pc.NumberOfParticlesInGrid(0))==Npart)
 
     # pc.resizeData()
-  
+    print(pc.numLocalTilesAtLevel(0))
     lev = pc.GetParticles(0)
+    print(len(lev.items()))
+    assert(pc.numLocalTilesAtLevel(0) == len(lev.items()))
     for tile_ind, pt in lev.items():
         print('tile', tile_ind)
         real_arrays = pt.GetStructOfArrays().GetRealData()
@@ -122,3 +172,24 @@ def test_particle_init(particle_container, std_real_box):
         assert(aos[0].get_idata(0) == 2)
         assert(real_arrays[1][0] == -1.2)
         assert(int_arrays[0][0] == -3)
+
+
+def test_per_cell(empty_particle_container,std_geometry, std_particle):
+    pc = empty_particle_container
+    pc.InitOnePerCell(0.5,0.5,0.5, std_particle)
+    assert(pc.OK())
+
+    lev = pc.GetParticles(0)
+    assert(pc.numLocalTilesAtLevel(0) == len(lev.items()))
+
+    sum_1 = 0
+    for tile_ind, pt in lev.items():
+        real_arrays = pt.GetStructOfArrays().GetRealData()
+        sum_1 += np.sum(real_arrays[1])
+    print(sum_1)
+    ncells = std_geometry.Domain().numPts()
+    print('ncells from box', ncells)
+    print('NumberOfParticles', pc.NumberOfParticlesAtLevel(0))
+    assert(pc.TotalNumberOfParticles() == pc.NumberOfParticlesAtLevel(0) == ncells )
+    print('npts * real_1', ncells * std_particle.real_array_data[1])
+    assert(ncells * std_particle.real_array_data[1] == sum_1)

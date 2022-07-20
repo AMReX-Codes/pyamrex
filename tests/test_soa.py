@@ -89,6 +89,4 @@ def test_soa_from_tile():
     print(iarr_np)
     print(ia1_np)
     assert(np.allclose(iarr_np, ia1_np))
-
-    assert(False)
     
