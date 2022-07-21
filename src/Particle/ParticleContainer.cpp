@@ -127,7 +127,7 @@ void make_ParticleContainer(py::module &m)
             //     (&ParticleContainerType::DefineAndReturnParticleTile))
                 // Long TotalNumberOfParticles (bool only_valid=true, bool only_local=false) const;
         .def("TotalNumberOfParticles", &ParticleContainerType::TotalNumberOfParticles,
-            py::arg("onnly_valid")=true, py::arg("only_local")=false)
+            py::arg("only_valid")=true, py::arg("only_local")=false)
         .def("RemoveParticlesAtLevel", &ParticleContainerType::RemoveParticlesAtLevel)
         .def("RemoveParticlesNotAtFinestLevel", &ParticleContainerType::RemoveParticlesNotAtFinestLevel)
         // void CreateVirtualParticles (int level, AoS& virts) const;
