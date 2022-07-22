@@ -262,7 +262,7 @@ if(pyAMReX_BUILD_TESTING)
             $<TARGET_FILE_DIR:pyAMReX>
     )
 
-    add_test(NAME pytest
+    add_test(NAME pytest.AMReX
         COMMAND ${Python_EXECUTABLE} -m pytest -s -vvvv
             ${pyAMReX_SOURCE_DIR}/tests
         WORKING_DIRECTORY
