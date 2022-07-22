@@ -107,7 +107,7 @@ void init_Box(py::module &m) {
             py::overload_cast<int>(&Box::length, py::const_),
             "Return the length of the Box in given direction.")
         .def("numPts", &Box::numPts,
-            "Return the number of points in the Box.")
+             "Return the number of points in the Box.")
             /*
         .def_property_readonly("is_empty", &Box::isEmpty)
         .def_property_readonly("ok", &Box::ok)

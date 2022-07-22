@@ -76,7 +76,7 @@ def test_domain(box,real_box):
 
     gm.Domain(bx)    
     assert(gm.Domain().small_end == bx.small_end and 
-            gm.Domain().big_end == bx.big_end)
+           gm.Domain().big_end == bx.big_end)
 
 @pytest.mark.skipif(amrex.Config.spacedim != 3,
                     reason="Requires AMREX_SPACEDIM = 3")
