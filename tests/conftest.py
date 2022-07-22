@@ -24,11 +24,29 @@ def amrex_init():
     amrex.finalize()
 
 @pytest.fixture(scope='module')
-def boxarr():
-    """BoxArray for MultiFab creation"""
-    #bx = amrex.Box.new((0, 0, 0), (63, 63, 63))
+def std_real_box():
+    """Standard RealBox for common problem domains"""
+    rb = amrex.RealBox(0,0,0, 1.0, 1.0, 1.0)
+    return rb
+
+@pytest.fixture(scope='module')
+def std_box():
+    """Standard Box for tests"""
     bx = amrex.Box(amrex.IntVect(0, 0, 0), amrex.IntVect(63, 63, 63))
-    ba = amrex.BoxArray(bx)
+    return bx
+
+@pytest.fixture(scope='module')
+def std_geometry(std_box, std_real_box):
+    """Standard Geometry"""
+    coord = 1 # RZ
+    periodicity = [0,0,1]
+    gm = amrex.Geometry(std_box, std_real_box, coord, periodicity)
+    return gm
+
+@pytest.fixture(scope='module')
+def boxarr(std_box):
+    """BoxArray for MultiFab creation"""
+    ba = amrex.BoxArray(std_box)
     ba.max_size(32)
     return ba
 

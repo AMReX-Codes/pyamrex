@@ -11,7 +11,7 @@ jobs:
   gcc7:
     name: GNU@7.5
     runs-on: ubuntu-18.04
-    env: {CXXFLAGS: "-Werror -Wshadow -Woverloaded-virtual -Wunreachable-code -fno-operator-names"}
+    env: {CXXFLAGS: "-Werror -Wshadow -Woverloaded-virtual -Wunreachable-code -fno-operator-names -Wno-array-bounds"}
     if: github.event.pull_request.draft == false
     steps:
     - uses: actions/checkout@v2

@@ -13,6 +13,15 @@ def test_length(box):
     print(box.length())
     assert(box.length() == amrex.IntVect(128,128,128))
 
+
+    domain = box.length()
+    ncells = 1
+    for ii in range(amrex.Config.spacedim):
+        ncells *= domain[ii]
+    print('ncells by hand', ncells)
+    print('ncells from box', box.numPts())
+    assert(ncells == box.numPts())
+
 #def test_num_pts(box):
 #    np.testing.assert_allclose(box.lo_vect, [0, 0, 0])
 #    np.testing.assert_allclose(box.hi_vect, [127, 127, 127])

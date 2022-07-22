@@ -263,7 +263,7 @@ if(pyAMReX_BUILD_TESTING)
     )
 
     add_test(NAME pytest
-        COMMAND ${Python_EXECUTABLE} -m pytest
+        COMMAND ${Python_EXECUTABLE} -m pytest -s -vvvv
             ${pyAMReX_SOURCE_DIR}/tests
         WORKING_DIRECTORY
             ${CMAKE_PYTHON_OUTPUT_DIRECTORY}

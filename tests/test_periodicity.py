@@ -14,7 +14,6 @@ def test_periodicity():
     #    obj[3]
 
     non_periodic = amrex.Periodicity.non_periodic()
-    print(non_periodic)
     assert(obj == non_periodic)
 
 @pytest.mark.skipif(amrex.Config.spacedim == 3,
