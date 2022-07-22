@@ -80,7 +80,8 @@ void make_ArrayOfStructs(py::module &m)
 }
 
 void init_ArrayOfStructs(py::module& m) {
-    make_ArrayOfStructs<7,0> (m);
+    make_ArrayOfStructs< 0, 0> (m);
+    make_ArrayOfStructs< 7, 0> (m);
     make_ArrayOfStructs< 1, 1> (m);
     make_ArrayOfStructs< 2, 1> (m);
 }
