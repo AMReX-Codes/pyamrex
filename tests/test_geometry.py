@@ -21,6 +21,59 @@ def geometry(box, real_box):
     is_periodic = [0,0,1]
     return amrex.Geometry(box, real_box, coord, is_periodic)
 
+def test_geometry_data(box, real_box):
+    gd = amrex.GeometryData()
+    print(gd.coord)
+    assert(gd.coord == 0)
+    print(gd.domain)
+    print(gd.domain.small_end)
+    assert(gd.domain.small_end == amrex.IntVect(1,1,1))
+    print(gd.domain.big_end)
+    assert(gd.domain.big_end == amrex.IntVect(0,0,0))
+    print(gd.prob_domain)
+    assert(amrex.AlmostEqual(gd.prob_domain, amrex.RealBox(0,0,0,-1,-1,-1)))
+
+    gd.coord = 1
+    print(gd.coord)
+    print(gd.Coord())
+    assert(gd.coord == gd.Coord() == 1)
+
+    print('test domain')
+    gd.domain = box
+    print(gd.domain.small_end)
+    print(box.small_end)
+    print(gd.Domain().small_end)
+    print(gd.domain.big_end)
+    print(box.big_end)
+    print(gd.Domain().big_end)
+    assert(gd.domain.small_end == box.small_end == gd.Domain().small_end)
+    assert(gd.domain.big_end == box.big_end == gd.Domain().big_end)
+
+    print('test problem domain')
+    gd.prob_domain = real_box
+    print(real_box.lo())
+    print(gd.ProbLo())
+    print(real_box.hi())
+    print(gd.ProbHi())
+    assert(amrex.AlmostEqual(real_box, gd.prob_domain))
+    assert(np.allclose(real_box.lo(), gd.ProbLo()))
+    assert(np.allclose(real_box.hi(), gd.ProbHi()))
+    assert(np.isclose(real_box.lo(0), gd.ProbLo(0)) and 
+           np.isclose(real_box.lo(1), gd.ProbLo(1)) and 
+           np.isclose(real_box.lo(2), gd.ProbLo(2)) )
+    assert(np.isclose(real_box.hi(0), gd.ProbHi(0)) and 
+           np.isclose(real_box.hi(1), gd.ProbHi(1)) and 
+           np.isclose(real_box.hi(2), gd.ProbHi(2)) )
+
+    print('is periodic')
+    print(gd.isPeriodic())
+    print(gd.is_periodic)
+    assert(gd.is_periodic == gd.isPeriodic() == [0,0,0])
+    gd.is_periodic = [1, 0, 1]
+    assert(gd.is_periodic[0] == gd.isPeriodic(0) == 1)
+    assert(gd.is_periodic[1] == gd.isPeriodic(1) == 0)
+    assert(gd.is_periodic[2] == gd.isPeriodic(2) == 1)
+
 @pytest.mark.skipif(amrex.Config.spacedim != 3,
                     reason="Requires AMREX_SPACEDIM = 3")
 def test_geometry_define(box,real_box):
@@ -130,6 +183,21 @@ def test_grow(geometry):
     gm_grow_npd = gm.growNonPeriodicDomain(3)
     assert(gm_grow_npd.small_end == amrex.IntVect(-3,-3,0))
     assert(gm_grow_npd.big_end == amrex.IntVect(130,130,127))
+
+def test_data(geometry, box, real_box):
+    geometry_data = geometry.data()
+    gd = geometry_data
+    assert(gd.domain.small_end == box.small_end == gd.Domain().small_end)
+    assert(gd.domain.big_end == box.big_end == gd.Domain().big_end)
+    assert(amrex.AlmostEqual(gd.prob_domain, real_box))
+    assert(gd.coord == 1)
+    assert(gd.is_periodic == [0,0,1])
+
+    print(gd.CellSize())
+    assert(np.allclose(gd.CellSize(), [0.0078125, 0.015625, 0.0390625]) )
+    assert(np.isclose(gd.CellSize(0), 0.0078125))
+    assert(np.isclose(gd.CellSize(1), 0.015625))
+    assert(np.isclose(gd.CellSize(2), 0.0390625))
     
 
 @pytest.mark.skipif(amrex.Config.spacedim != 3,

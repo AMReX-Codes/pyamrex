@@ -17,6 +17,72 @@ using namespace amrex;
 
 void init_Geometry(py::module& m)
 {
+    py::class_<GeometryData>(m, "GeometryData")
+        .def("__repr__",
+            [](const GeometryData&) {
+                return "<amrex.GeometryData>";
+            }
+        )
+        .def(py::init<>())
+        .def_readwrite("prob_domain", &GeometryData::prob_domain)
+        .def_readwrite("domain", &GeometryData::domain)
+        .def_readwrite("coord", &GeometryData::coord)
+        .def_property_readonly("dx", 
+            [](const GeometryData& gd){
+                std::array<Real,AMREX_SPACEDIM> dx {AMREX_D_DECL(
+                    gd.dx[0], gd.dx[1], gd.dx[2]
+                )};
+                return dx;
+            })
+        .def_property("is_periodic", 
+            [](const GeometryData& gd){
+                std::array<int,AMREX_SPACEDIM> per {AMREX_D_DECL(
+                    gd.is_periodic[0], gd.is_periodic[1], gd.is_periodic[2]
+                )};
+                return per;},
+            [](GeometryData& gd, std::vector<Real> per_in) {
+                AMREX_D_TERM(gd.is_periodic[0] = per_in[0];,
+                             gd.is_periodic[1] = per_in[1];,
+                             gd.is_periodic[2] = per_in[2];)
+            })
+
+        .def("CellSize", [](const GeometryData& gd) { 
+                std::array<Real,AMREX_SPACEDIM> cell_size {AMREX_D_DECL(
+                    gd.CellSize(0), gd.CellSize(1), gd.CellSize(2)
+                )};
+                return cell_size;},
+            "Returns the cellsize for each coordinate direction.")
+        .def("CellSize", [](const GeometryData& gd, int comp) { return gd.CellSize(comp);},
+            "Returns the cellsize for specified coordinate direction.")
+        .def("ProbLo", [](const GeometryData& gd) { 
+                std::array<Real,AMREX_SPACEDIM> lo {AMREX_D_DECL(
+                    gd.ProbLo(0), gd.ProbLo(1), gd.ProbLo(2)
+                )};
+                return lo;},
+            "Returns the lo end for each coordinate direction.")
+        .def("ProbLo", [](const GeometryData& gd, int comp) { return gd.ProbLo(comp);},
+            "Returns the lo end of the problem domain in specified dimension.")
+        .def("ProbHi", [](const GeometryData& gd) { 
+                std::array<Real,AMREX_SPACEDIM> hi {AMREX_D_DECL(
+                    gd.ProbHi(0), gd.ProbHi(1), gd.ProbHi(2)
+                )};
+                return hi;},
+            "Returns the hi end for each coordinate direction.")
+        .def("ProbHi", [](const GeometryData& gd, int comp) { return gd.ProbHi(comp);},
+            "Returns the hi end of the problem domain in specified dimension.")
+        .def("Domain", &GeometryData::Domain,
+            "Returns our rectangular domain")
+        .def("isPeriodic", [](const GeometryData& gd) { 
+                std::array<int,AMREX_SPACEDIM> per {AMREX_D_DECL(
+                    gd.isPeriodic(0), gd.isPeriodic(1), gd.isPeriodic(2)
+                )};
+                return per;},
+            "Returns whether the domain is periodic in each direction.")
+        .def("isPeriodic", &GeometryData::isPeriodic,
+            "Returns whether the domain is periodic in the given direction.")
+        .def("Coord", &GeometryData::Coord,"return integer coordinate type")
+    ;
+
     py::class_<Geometry, CoordSys>(m, "Geometry")
         .def("__repr__",
              [](py::object& obj) {
@@ -43,8 +109,7 @@ void init_Geometry(py::module& m)
           >(),
           py::arg("dom"), py::arg("rb"), py::arg("coord"), py::arg("is_per"))
 
-        // data()
-        // .def_property_readonly("dx",&Geometry::dx)
+        .def("data", &Geometry::data, "Returns non-static copy of geometry's stored data")
         // .def("setup")
 
         .def("ResetDefaultProbDomain", 
