@@ -24,9 +24,9 @@ void init_Geometry(py::module& m)
             }
         )
         .def(py::init<>())
-        .def_readwrite("prob_domain", &GeometryData::prob_domain)
-        .def_readwrite("domain", &GeometryData::domain)
-        .def_readwrite("coord", &GeometryData::coord)
+        .def_readonly("prob_domain", &GeometryData::prob_domain)
+        .def_readonly("domain", &GeometryData::domain)
+        .def_readonly("coord", &GeometryData::coord)
         .def_property_readonly("dx", 
             [](const GeometryData& gd){
                 std::array<Real,AMREX_SPACEDIM> dx {AMREX_D_DECL(
@@ -34,17 +34,18 @@ void init_Geometry(py::module& m)
                 )};
                 return dx;
             })
-        .def_property("is_periodic", 
+        .def_property_readonly("is_periodic", 
             [](const GeometryData& gd){
                 std::array<int,AMREX_SPACEDIM> per {AMREX_D_DECL(
                     gd.is_periodic[0], gd.is_periodic[1], gd.is_periodic[2]
                 )};
-                return per;},
-            [](GeometryData& gd, std::vector<Real> per_in) {
-                AMREX_D_TERM(gd.is_periodic[0] = per_in[0];,
-                             gd.is_periodic[1] = per_in[1];,
-                             gd.is_periodic[2] = per_in[2];)
-            })
+                return per;})
+            //     ,
+            // [](GeometryData& gd, std::vector<Real> per_in) {
+            //     AMREX_D_TERM(gd.is_periodic[0] = per_in[0];,
+            //                  gd.is_periodic[1] = per_in[1];,
+            //                  gd.is_periodic[2] = per_in[2];)
+            // })
 
         .def("CellSize", [](const GeometryData& gd) { 
                 std::array<Real,AMREX_SPACEDIM> cell_size {AMREX_D_DECL(
