@@ -11,8 +11,8 @@
 namespace py = pybind11;
 using namespace amrex;
 
-namespace {
-struct Config {};
+namespace amrex {
+   struct Config {};
 }
 
 void init_AMReX(py::module& m)
