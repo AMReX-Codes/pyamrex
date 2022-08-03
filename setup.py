@@ -112,6 +112,7 @@ class CMakeBuild(build_ext):
             '-DpyAMReX_amrex_internal=' + AMReX_internal,
             '-DpyAMReX_amrex_repo=' + AMReX_repo,
             '-DpyAMReX_amrex_branch=' + AMReX_branch,
+            '-DpyAMReX_pybind11_internal=' + pybind11_internal,
             # PEP-440 conformant version from package
             "-DpyAMReX_VERSION_INFO=" + self.distribution.get_version(),
             #        see PICSAR and openPMD below
@@ -195,6 +196,7 @@ AMReX_internal = os.environ.get('AMREX_INTERNAL', 'ON')
 AMReX_repo = os.environ.get('AMREX_REPO',
     'https://github.com/AMReX-Codes/amrex.git')
 AMReX_branch = os.environ.get('AMREX_BRANCH', 'development')
+pybind11_internal = os.environ.get('PYBIND11_INTERNAL', 'ON')
 
 # https://cmake.org/cmake/help/v3.0/command/if.html
 if AMReX_MPI.upper() in ['1', 'ON', 'TRUE', 'YES']:
