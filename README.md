@@ -195,6 +195,11 @@ Set `AMREX_INTERNAL=OFF` and add installation prefix of AMReX to the environment
 Please see the [short CMake tutorial that we linked above](#Developers) if this sounds new to you.
 
 
+## Acknowledgements
+
+This work was supported by the Laboratory Directed Research and Development Program of Lawrence Berkeley National Laboratory under U.S. Department of Energy Contract No. DE-AC02-05CH11231.
+
+
 ## License
 
 pyAMReX Copyright (c) 2021, The Regents of the University of California,
