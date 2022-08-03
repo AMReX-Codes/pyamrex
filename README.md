@@ -168,6 +168,7 @@ If you are using the pip-driven install, selected [AMReX CMake options](https://
 | `AMREX_REPO`                 | `https://github.com/AMReX-Codes/amrex.git` | Repository URI to pull and build AMReX from                  |
 | `AMREX_BRANCH`               | `development`                              | Repository branch for `AMREX_REPO`                           |
 | `AMREX_INTERNAL`             | **ON**/OFF                                 | Needs a pre-installed AMReX library if set to `OFF`          |
+| `PYBIND11_INTERNAL`          | **ON**/OFF                                 | Needs a pre-installed pybind11 library if set to `OFF`       |
 | `CMAKE_BUILD_PARALLEL_LEVEL` | 2                                          | Number of parallel build threads                             |
 | `PYAMREX_LIBDIR`             | *None*                                     | If set, search for pre-built a pyAMReX library               |
 | `PYINSTALLOPTIONS`           | *None*                                     | Additional options for ``pip install``, e.g., ``-v --user``  |
