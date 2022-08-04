@@ -15,6 +15,10 @@ jobs:
     if: github.event.pull_request.draft == false
     steps:
     - uses: actions/checkout@v2
+    - uses: actions/setup-python@v2
+      name: Install Python
+      with:
+        python-version: '3.7'
     - name: Dependencies
       run: .github/workflows/dependencies/dependencies.sh
     - name: Build & Install
@@ -28,7 +32,7 @@ jobs:
 
   gcc10:
     name: GNU@10.1
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     env: {CXXFLAGS: "-Werror -Wno-error=deprecated-declarations -Wshadow -Woverloaded-virtual -Wunreachable-code -fno-operator-names"}
     if: github.event.pull_request.draft == false
     steps:
@@ -55,7 +59,7 @@ jobs:
 
   clang6:
     name: Clang@6.0 w/o MPI
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     env: {CXXFLAGS: "-Werror -Wshadow -Woverloaded-virtual -Wextra-semi -Wunreachable-code -fno-operator-names -Wno-pass-failed"}
     if: github.event.pull_request.draft == false
     steps:
@@ -64,8 +68,8 @@ jobs:
       run: .github/workflows/dependencies/dependencies_clang6.sh
     - name: Build & Install
       run: |
-        export CC=$(which clang)
-        export CXX=$(which clang++)
+        export CC=$(which clang-6.0)
+        export CXX=$(which clang++-6.0)
         python3 -m pip install -U pip pytest
         python3 -m pip install -v .
         python3 -c "import amrex; print(amrex.__version__)"
