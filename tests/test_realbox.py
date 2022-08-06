@@ -6,6 +6,7 @@ import amrex
 from amrex import RealVect as RV
 from amrex import XDim3
 
+
 def test_realbox_empty():
     rb = amrex.RealBox()
     assert(not rb.ok() )
@@ -18,6 +19,21 @@ def test_realbox_empty():
     assert(rb.volume() == 6)
     rb.setHi(0, 1.2)
     assert(rb.hi(0) == 1.2)
+
+
+def test_realbox_frombox(std_box):
+    dx = [1., 2., 3.]
+    base = [100., 200., 300.]  # offset
+    rb1 = amrex.RealBox(std_box, dx, base)
+
+    rb2 = amrex.RealBox(
+        [100., 200., 300.],
+        [
+            100. + dx[0] * 64,
+            200. + dx[1] * 64,
+            300. + dx[2] * 64
+        ])
+    assert(amrex.AlmostEqual(rb1, rb2))
 
 def test_realbox_contains():
     rb1 = amrex.RealBox([0,0,0], [1,2,1.5])
@@ -48,6 +64,7 @@ def test_realbox_contains():
     assert(not rb1.contains(d1))
     assert(rb1.contains(d2))
 
+
 def test_realbox_intersects():
     rb1 = amrex.RealBox([0,0,0], [1,2,1.5])
     rb2 = amrex.RealBox([0.1,0.2,0.3],[0.3,1,1.])
@@ -57,7 +74,6 @@ def test_realbox_intersects():
 
 
 def test_almost_equal():
-
     rb1 = amrex.RealBox([0,0,0], [1,2,1.5])
     rb2 = amrex.RealBox([0,0,0], [1,2,1.5])
     rb3 = amrex.RealBox([0,0.1,-0.1], [1,2,1.4])
