@@ -47,9 +47,20 @@ void init_RealBox(py::module &m) {
 
         .def(py::init())
         .def(py::init<AMREX_D_DECL(Real, Real, Real),
-             AMREX_D_DECL(Real, Real, Real)>())
-        .def(py::init<const std::array<Real,AMREX_SPACEDIM>&, 
-                      const std::array<Real,AMREX_SPACEDIM>& >())
+                      AMREX_D_DECL(Real, Real, Real)>(),
+             AMREX_D_DECL(py::arg("x_lo"), py::arg("y_lo"), py::arg("z_lo")),
+             AMREX_D_DECL(py::arg("x_hi"), py::arg("y_hi"), py::arg("z_hi"))
+        )
+        .def(py::init<const std::array<Real, AMREX_SPACEDIM>&, 
+                      const std::array<Real, AMREX_SPACEDIM>& >(),
+             py::arg("a_lo"), py::arg("a_hi")
+        )
+        .def(py::init(
+            [](const Box bx, Array<Real, AMREX_SPACEDIM> dx, Array<Real, AMREX_SPACEDIM> base) {
+                return RealBox(bx, dx.data(), base.data());
+            }),
+            py::arg("bx"), py::arg("dx"), py::arg("base")
+        )
 
         .def_property_readonly(  
             "xlo", 
