@@ -88,6 +88,23 @@ void init_Box(py::module &m) {
         .def(py::init< IntVect const &, IntVect const &, IndexType >(),
              py::arg("small"), py::arg("big"), py::arg("t")
         )
+        .def(py::init(
+                [](const std::array<int, AMREX_SPACEDIM>& small,
+                   const std::array<int, AMREX_SPACEDIM>& big){
+                    return Box(IntVect{small}, IntVect{big});
+                }
+             ),
+             py::arg("small"), py::arg("big")
+        )
+        .def(py::init(
+                [](const std::array<int, AMREX_SPACEDIM>& small,
+                   const std::array<int, AMREX_SPACEDIM>& big,
+                   IndexType t){
+                    return Box(IntVect{small}, IntVect{big}, t);
+                }
+             ),
+             py::arg("small"), py::arg("big"), py::arg("t")
+        )
 
         .def_property_readonly("lo_vect", [](Box const & bx){ return bx.smallEnd(); })
         .def_property_readonly("hi_vect", [](Box const & bx){ return bx.bigEnd(); })

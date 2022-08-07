@@ -6,8 +6,7 @@ import amrex
 
 @pytest.fixture
 def box():
-    #return amrex.Box((0, 0, 0), (127, 127, 127))
-    return amrex.Box(amrex.IntVect(0, 0, 0), amrex.IntVect(127, 127, 127))
+    return amrex.Box((0, 0, 0), (127, 127, 127))
 
 def test_length(box):
     print(box.length())
@@ -23,7 +22,6 @@ def test_length(box):
     assert(ncells == box.numPts())
 
 def test_num_pts(box):
-    print("box.lo_vect=", box.lo_vect)
     np.testing.assert_allclose(box.lo_vect, [0, 0, 0])
     np.testing.assert_allclose(box.hi_vect, [127, 127, 127])
     assert(box.num_pts == 2**21)
@@ -48,20 +46,19 @@ def test_grow(box):
 #    assert(bx.volume == 128**3)
 
 
-@pytest.mark.parametrize("dir", [-1, 0, 1, 2])
+@pytest.mark.parametrize("dir", [None, 0, 1, 2])
 def test_surrounding_nodes(box, dir):
     """Surrounding nodes"""
     nx = np.array(box.hi_vect)
-    print('nx=', nx)
-    bx = box.surrounding_nodes(dir=dir)
-    print('bx=', bx)
 
-    if dir < 0:
+    if dir is None:
+        bx = box.surrounding_nodes()
         assert(bx.num_pts == 129**3)
         assert(bx.volume == 128**3)
         nx += 1
         np.testing.assert_allclose(bx.hi_vect, nx)
     else:
+        bx = box.surrounding_nodes(dir=dir)
         assert(bx.num_pts == 129 * 128 * 128)
         assert(bx.volume == 128**3)
         nx[dir] += 1
