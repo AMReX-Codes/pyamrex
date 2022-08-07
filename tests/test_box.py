@@ -22,18 +22,18 @@ def test_length(box):
     print('ncells from box', box.numPts())
     assert(ncells == box.numPts())
 
-#def test_num_pts(box):
-#    np.testing.assert_allclose(box.lo_vect, [0, 0, 0])
-#    np.testing.assert_allclose(box.hi_vect, [127, 127, 127])
-#    assert(box.num_pts == 2**21)
-#    assert(box.volume == 2**21)
+def test_num_pts(box):
+    np.testing.assert_allclose(box.lo_vect, [0, 0, 0])
+    np.testing.assert_allclose(box.hi_vect, [127, 127, 127])
+    assert(box.num_pts == 2**21)
+    assert(box.volume == 2**21)
 
-#def test_grow(box):
-#    """box.grow"""
-#    bx = box.grow(3)
-#    np.testing.assert_allclose(bx.lo_vect, [-3, -3, -3])
-#    np.testing.assert_allclose(bx.hi_vect, [130, 130, 130])
-#    assert(bx.num_pts == (134**3))
+def test_grow(box):
+    """box.grow"""
+    bx = box.grow(3)
+    np.testing.assert_allclose(bx.lo_vect, [-3, -3, -3])
+    np.testing.assert_allclose(bx.hi_vect, [130, 130, 130])
+    assert(bx.num_pts == (134**3))
 
 #def test_convert(box):
 #    """Conversion to node"""

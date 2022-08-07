@@ -79,27 +79,33 @@ void init_Box(py::module &m) {
             }
         )
 
-        .def(py::init< IntVect const &, IntVect const & >())
-        .def(py::init< IntVect const &, IntVect const &, IntVect const & >())
-        //.def(py::init< IntVect const &, IntVect const &, IndexType >())
+        .def(py::init< IntVect const &, IntVect const & >(),
+             py::arg("small"), py::arg("big")
+        )
+        .def(py::init< IntVect const &, IntVect const &, IntVect const & >(),
+             py::arg("small"), py::arg("big"), py::arg("typ")
+        )
+        .def(py::init< IntVect const &, IntVect const &, IndexType >(),
+             py::arg("small"), py::arg("big"), py::arg("t")
+        )
 
         .def_property_readonly("small_end", [](Box const & bx){ return bx.smallEnd(); })
         .def_property_readonly("big_end", [](Box const & bx){ return bx.bigEnd(); })
         /*
         .def_property("small_end",
-            &Box::smallEnd,
+            py::overload_cast<>(&Box::smallEnd, py::const_),
             py::overload_cast< IntVect const & >(&Box::setSmall))
         .def_property("big_end",
             &Box::bigEnd,
             &Box::setBig)
-
+        */
         .def_property("type",
             py::overload_cast<>(&Box::type, py::const_),
             &Box::setType)
 
         .def_property_readonly("ix_type", &Box::ixType)
         .def_property_readonly("size", &Box::size)
-        */
+
         .def("length",
             py::overload_cast<>(&Box::length, py::const_),
             "Return IntVect of lengths of the Box")
@@ -108,7 +114,7 @@ void init_Box(py::module &m) {
             "Return the length of the Box in given direction.")
         .def("numPts", &Box::numPts,
              "Return the number of points in the Box.")
-            /*
+
         .def_property_readonly("is_empty", &Box::isEmpty)
         .def_property_readonly("ok", &Box::ok)
         .def_property_readonly("cell_centered", &Box::cellCentered)
@@ -127,10 +133,10 @@ void init_Box(py::module &m) {
             py::overload_cast< IntVect const & >(&Box::contains, py::const_))
         .def("strictly_contains",
             py::overload_cast< IntVect const & >(&Box::strictly_contains, py::const_))
-        //.def("intersects", &Box::intersects)
-        //.def("same_size", &Box::sameSize)
-        //.def("same_type", &Box::sameType)
-        //.def("normalize", &Box::normalize)
+        .def("intersects", &Box::intersects)
+        .def("same_size", &Box::sameSize)
+        .def("same_type", &Box::sameType)
+        .def("normalize", &Box::normalize)
         // longside
         // shortside
         // index
@@ -138,7 +144,6 @@ void init_Box(py::module &m) {
         // atOffset3d
         // setRange
         // shiftHalf
-        */
         .def("shift", [](Box & bx, IntVect const& iv) { return bx.shift(iv); })
 
         .def(py::self + IntVect())
@@ -151,21 +156,43 @@ void init_Box(py::module &m) {
         .def("convert",
              py::overload_cast< IntVect const & >(&Box::convert))
 
-        .def("grow", [](Box & bx, IntVect const& iv) { return bx.grow(iv); })
+        .def("grow",
+             py::overload_cast< int >(&Box::grow),
+             py::arg("n_cell")
+        )
+        .def("grow",
+             py::overload_cast< IntVect const & >(&Box::grow),
+             py::arg("n_cells")
+        )
+        .def("grow",
+             py::overload_cast< int, int >(&Box::grow),
+             py::arg("idir"), py::arg("n_cell")
+        )
+        .def("grow",
+             py::overload_cast< Direction, int >(&Box::grow),
+             py::arg("d"), py::arg("n_cell")
+        )
 
-        //.def("surrounding_nodes",
-        //     py::overload_cast< >(&Box::surroundingNodes))
-        //.def("surrounding_nodes",
-        //     py::overload_cast< int >(&Box::surroundingNodes),
-        //     py::arg("dir"))
-        //.def("surrounding_nodes",
-        //     py::overload_cast< Direction >(&Box::surroundingNodes),
-        //     py::arg("d"))
+        .def("surrounding_nodes",
+             py::overload_cast< >(&Box::surroundingNodes))
+        .def("surrounding_nodes",
+             py::overload_cast< int >(&Box::surroundingNodes),
+             py::arg("dir"))
+        .def("surrounding_nodes",
+             py::overload_cast< Direction >(&Box::surroundingNodes),
+             py::arg("d"))
 
-        // enclosedCells
+        .def("enclosed_cells",
+             py::overload_cast< >(&Box::enclosedCells))
+        .def("enclosed_cells",
+             py::overload_cast< int >(&Box::enclosedCells),
+             py::arg("dir"))
+        .def("enclosed_cells",
+             py::overload_cast< Direction >(&Box::enclosedCells),
+             py::arg("d"))
+
         // minBox
         // chop
-        // grow
         // growLo
         // growHi
         // refine
