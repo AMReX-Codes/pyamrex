@@ -89,6 +89,8 @@ void init_Box(py::module &m) {
              py::arg("small"), py::arg("big"), py::arg("t")
         )
 
+        .def_property_readonly("lo_vect", [](Box const & bx){ return bx.smallEnd(); })
+        .def_property_readonly("hi_vect", [](Box const & bx){ return bx.bigEnd(); })
         .def_property_readonly("small_end", [](Box const & bx){ return bx.smallEnd(); })
         .def_property_readonly("big_end", [](Box const & bx){ return bx.bigEnd(); })
         /*
@@ -123,11 +125,6 @@ void init_Box(py::module &m) {
         .def_property_readonly("volume", &Box::volume)
         .def_property_readonly("the_unit_box", &Box::TheUnitBox)
         .def_property_readonly("is_square", &Box::isSquare)
-
-        // loVect3d
-        // hiVect3d
-        .def_property_readonly("lo_vect", &Box::loVect)
-        .def_property_readonly("hi_vect", &Box::hiVect)
 
         .def("contains",
             py::overload_cast< IntVect const & >(&Box::contains, py::const_))

@@ -77,6 +77,11 @@ void init_IntVect(py::module &m) {
                  return v[ii] = val;
              })
 
+        .def("__len__", [](IntVect const &) { return AMREX_SPACEDIM; })
+        .def("__iter__", [](IntVect const & v) {
+            return py::make_iterator(v.begin(), v.end());
+        }, py::keep_alive<0, 1>()) /* Keep vector alive while iterator is used */
+
         .def("__eq__",
              py::overload_cast<int>(&IntVect::operator==, py::const_))
         .def("__eq__",

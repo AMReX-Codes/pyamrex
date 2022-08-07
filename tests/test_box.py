@@ -23,6 +23,7 @@ def test_length(box):
     assert(ncells == box.numPts())
 
 def test_num_pts(box):
+    print("box.lo_vect=", box.lo_vect)
     np.testing.assert_allclose(box.lo_vect, [0, 0, 0])
     np.testing.assert_allclose(box.hi_vect, [127, 127, 127])
     assert(box.num_pts == 2**21)
@@ -46,12 +47,14 @@ def test_grow(box):
 #    assert(bx.num_pts == 129 * 128 * 128)
 #    assert(bx.volume == 128**3)
 
-'''
+
 @pytest.mark.parametrize("dir", [-1, 0, 1, 2])
 def test_surrounding_nodes(box, dir):
     """Surrounding nodes"""
     nx = np.array(box.hi_vect)
+    print('nx=', nx)
     bx = box.surrounding_nodes(dir=dir)
+    print('bx=', bx)
 
     if dir < 0:
         assert(bx.num_pts == 129**3)
@@ -63,7 +66,7 @@ def test_surrounding_nodes(box, dir):
         assert(bx.volume == 128**3)
         nx[dir] += 1
         np.testing.assert_allclose(bx.hi_vect, nx)
-
+'''
 @pytest.mark.parametrize("dir", [-1, 0, 1, 2])
 def test_enclosed_cells(box, dir):
     """Enclosed cells"""

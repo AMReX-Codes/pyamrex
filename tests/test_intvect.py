@@ -126,3 +126,12 @@ def test_iv_conversions():
     obj = iv.numpy()
     del iv
     assert(obj[0] == 2)
+
+def test_iv_iter():
+    a0 = amrex.IntVect(4)
+    b0 = amrex.IntVect(2)
+
+    a1 = [x//2 for x in a0]
+    b1 = [x for x in b0]
+
+    np.testing.assert_allclose(a1, b1)
