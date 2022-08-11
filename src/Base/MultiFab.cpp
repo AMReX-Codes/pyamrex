@@ -219,7 +219,14 @@ void init_MultiFab(py::module &m) {
 
         /* simple math */
         .def("sum", &MultiFab::sum,
-            py::arg("comp"), py::arg("local")=false)
+             py::arg("comp") = 0, py::arg("local") = false,
+             "Returns the sum of component 'comp' over the MultiFab -- no ghost cells are included."
+        )
+        .def("sum_unique", &MultiFab::sum_unique,
+             py::arg("comp") = 0, py::arg("local") = false, py::arg("period") = Periodicity::NonPeriodic(),
+             "Same as sum with local=false, but for non-cell-centered data, this"
+             "skips non-unique points that are owned by multiple boxes."
+        )
 
         .def("abs",
             [](MultiFab & mf, int comp, int num_comp) { mf.abs(comp, num_comp); })
