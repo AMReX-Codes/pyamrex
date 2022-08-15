@@ -222,10 +222,10 @@ set(pyAMReX_CUSTOM_TARGET_PREFIX "${_pyAMReX_CUSTOM_TARGET_PREFIX_DEFAULT}"
 
 # build the wheel by re-using the shared library we build
 add_custom_target(${pyAMReX_CUSTOM_TARGET_PREFIX}pip_wheel
-    ${CMAKE_COMMAND} -E rm -f "amrex*.whl"
+    ${CMAKE_COMMAND} -E rm -f -r amrex-whl
     COMMAND
         ${CMAKE_COMMAND} -E env PYAMREX_LIBDIR=$<TARGET_FILE_DIR:pyAMReX>
-            ${Python_EXECUTABLE} -m pip wheel -v --no-build-isolation ${pyAMReX_SOURCE_DIR}
+            ${Python_EXECUTABLE} -m pip wheel -v --no-build-isolation --no-deps --wheel-dir=amrex-whl ${pyAMReX_SOURCE_DIR}
     WORKING_DIRECTORY
         ${pyAMReX_BINARY_DIR}
     DEPENDS
@@ -244,7 +244,7 @@ add_custom_target(${pyAMReX_CUSTOM_TARGET_PREFIX}pip_install_requirements
 # because otherwise pip would also force reinstall all dependencies.
 add_custom_target(${pyAMReX_CUSTOM_TARGET_PREFIX}pip_install
     ${CMAKE_COMMAND} -E env AMREX_MPI=${AMReX_MPI}
-        ${Python_EXECUTABLE} -m pip install --force-reinstall --no-deps ${PYINSTALLOPTIONS} "amrex*.whl"
+        ${Python_EXECUTABLE} -m pip install --force-reinstall --no-index --no-deps ${PYINSTALLOPTIONS} --find-links=amrex-whl amrex
     WORKING_DIRECTORY
         ${pyAMReX_BINARY_DIR}
     DEPENDS

@@ -51,7 +51,6 @@ jobs:
         python3 -m pip install -U cmake
 
         cmake -S . -B build               `
-              -G "Ninja"                  `
               -T "ClangCl"                `
               -DCMAKE_VERBOSE_MAKEFILE=ON `
               -DAMReX_MPI=OFF
