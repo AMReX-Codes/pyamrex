@@ -18,8 +18,16 @@ jobs:
         python-version: '3.x'
     - name: Build & Install
       run: |
-        python3 -m pip install -U pip pytest
-        python3 -m pip install -v .
+        python3 -m pip install -U pip setuptools wheel pytest
+        python3 -m pip install -U cmake
+
+        cmake -S . -B build               `
+              -DCMAKE_VERBOSE_MAKEFILE=ON `
+              -DAMReX_MPI=OFF
+
+        cmake --build build --config Debug -j 2
+        cmake --build build --config Debug --target pip_install -j 2
+
         python3 -c "import amrex; print(amrex.__version__)"
     - name: Unit tests
       shell: cmd
@@ -43,12 +51,13 @@ jobs:
         python3 -m pip install -U cmake
 
         cmake -S . -B build               `
+              -G "Ninja"                  `
               -T "ClangCl"                `
               -DCMAKE_VERBOSE_MAKEFILE=ON `
               -DAMReX_MPI=OFF
 
         cmake --build build --config Debug -j 2
-        python3 -m pip install -v .
+        cmake --build build --config Debug --target pip_install -j 2
     - name: Unit tests
       run: |
         ctest --test-dir build -C Debug --output-on-failure
