@@ -60,7 +60,7 @@ void make_Particle(py::module &m)
     auto const particle_name = std::string("Particle_").append(std::to_string(T_NReal) + "_" + std::to_string(T_NInt));
     py::class_<ParticleType> (m, particle_name.c_str())
         .def(py::init<>())
-        .def(py::init([](AMREX_D_DECL(ParticleReal x, ParticleReal y, ParticleReal z)) { 
+        .def(py::init([](AMREX_D_DECL(ParticleReal x, ParticleReal y, ParticleReal z)) {
                     std::unique_ptr<ParticleType> part(new ParticleType());
                     part->m_pos[0] = x;
     #if (AMREX_SPACEDIM >= 2)
@@ -74,8 +74,8 @@ void make_Particle(py::module &m)
             )
         )
         .def(py::init(
-            [](AMREX_D_DECL(ParticleReal x, ParticleReal y, ParticleReal z), py::args& args) 
-            { 
+            [](AMREX_D_DECL(ParticleReal x, ParticleReal y, ParticleReal z), py::args& args)
+            {
                 std::unique_ptr<ParticleType> part(new ParticleType());
                 AMREX_D_TERM(part->m_pos[0] = x;, part->m_pos[1] = y;, part->m_pos[2] = z;)
                 int T_NTotal = T_NReal + T_NInt;
@@ -98,8 +98,8 @@ void make_Particle(py::module &m)
         )
 
         .def(py::init(
-            [](AMREX_D_DECL(ParticleReal x, ParticleReal y, ParticleReal z), py::kwargs& kwargs) 
-            { 
+            [](AMREX_D_DECL(ParticleReal x, ParticleReal y, ParticleReal z), py::kwargs& kwargs)
+            {
                 std::unique_ptr<ParticleType> part(new ParticleType());
                 AMREX_D_TERM(part->m_pos[0] = x;, part->m_pos[1] = y;, part->m_pos[2] = z;)
 
@@ -110,12 +110,12 @@ void make_Particle(py::module &m)
                     std::regex_match(varname, sm, component_separator, std::regex_constants::match_default);
                     int comp = std::stoi(sm[2]);
                     if constexpr (T_NReal > 0) {
-                        if (comp >= 0 && comp < T_NReal && sm[1] == "rdata") { 
+                        if (comp >= 0 && comp < T_NReal && sm[1] == "rdata") {
                             part->m_rdata[comp] = item.second.cast<ParticleReal>();
                         }
                     }
                     if constexpr (T_NInt > 0) {
-                        if (comp >= 0 && comp < T_NInt && sm[1] == "idata") { 
+                        if (comp >= 0 && comp < T_NInt && sm[1] == "idata") {
                             part->m_idata[comp] = item.second.cast<int>();
                         }
                     }
@@ -125,7 +125,7 @@ void make_Particle(py::module &m)
         )
 
         .def(py::init(
-            [](py::kwargs& kwargs) { 
+            [](py::kwargs& kwargs) {
                 std::unique_ptr<ParticleType> part(new ParticleType());
                 for (auto const& item : kwargs) {
                     std::regex component_separator("(.*)_([0-9]*)");
@@ -139,12 +139,12 @@ void make_Particle(py::module &m)
                     if (sm.size() > 2) {
                         comp = std::stoi(sm[2]);
                         if constexpr (T_NReal > 0) {
-                            if(comp >= 0 && comp < T_NReal && sm[1] == "rdata") { 
+                            if(comp >= 0 && comp < T_NReal && sm[1] == "rdata") {
                                 part->m_rdata[comp] = item.second.cast<ParticleReal>();
                             }
                         }
                         if constexpr (T_NInt > 0) {
-                            if (comp >= 0 && comp < T_NInt && sm[1] == "idata") { 
+                            if (comp >= 0 && comp < T_NInt && sm[1] == "idata") {
                                 part->m_idata[comp] = item.second.cast<int>();
                             }
                         }
@@ -177,7 +177,7 @@ void make_Particle(py::module &m)
         .def("setPos", [](ParticleType &p, const RealVect & vals) { for (int ii=0; ii < AMREX_SPACEDIM; ii++) { p.m_pos[ii] = vals[ii]; } })
         .def("setPos", [](ParticleType &p, const std::array<Real, AMREX_SPACEDIM>& vals) { for (int ii=0; ii < AMREX_SPACEDIM; ii++) { p.m_pos[ii] = vals[ii]; } })
 
-        .def("get_rdata", [](ParticleType &p, int index) { 
+        .def("get_rdata", [](ParticleType &p, int index) {
                 if constexpr (T_NReal > 0) {
                     if(index < 0 || index >= T_NReal) {
                         throw std::range_error("index not in range. Valid range : [0, " + std::to_string(T_NReal));
@@ -199,41 +199,41 @@ void make_Particle(py::module &m)
                     amrex::ignore_unused(p);
                     return py::none();
                 }
-            } 
+            }
         )
-        .def("set_rdata", [](ParticleType &p, int index, Real val) { 
+        .def("set_rdata", [](ParticleType &p, int index, Real val) {
                 if constexpr (T_NReal > 0) {
                     if(index < 0 || index >= T_NReal) {
-                        // std::string error_msg = "" 
+                        // std::string error_msg = ""
                         throw std::range_error("index not in range. Valid range : [0, " + std::to_string(T_NReal) + ")");
                     }
-                    p.m_rdata[index] = val; 
+                    p.m_rdata[index] = val;
                 } else {
                     amrex::ignore_unused(index, val);
                 }
             }
         )
-        .def("set_rdata", [](ParticleType &p, const RealVect & vals) { 
+        .def("set_rdata", [](ParticleType &p, const RealVect & vals) {
                 if constexpr (T_NReal > 0) {
-                    for (int ii=0; ii < T_NReal; ii++) { 
-                        p.m_rdata[ii] = vals[ii];  
+                    for (int ii=0; ii < T_NReal; ii++) {
+                        p.m_rdata[ii] = vals[ii];
                     }
                 } else {
                     amrex::ignore_unused(vals);
                 }
-            } 
+            }
         )
-        .def("set_rdata", [](ParticleType &p, const std::array<Real, T_NReal>& vals) { 
+        .def("set_rdata", [](ParticleType &p, const std::array<Real, T_NReal>& vals) {
                 if constexpr (T_NReal > 0) {
-                    for (int ii=0; ii < T_NReal; ii++) { 
-                        p.m_rdata[ii] = vals[ii]; 
-                    } 
+                    for (int ii=0; ii < T_NReal; ii++) {
+                        p.m_rdata[ii] = vals[ii];
+                    }
                 } else {
                     amrex::ignore_unused(p, vals);
                 }
             }
         )
-        .def("get_idata", [](ParticleType &p, int index) { 
+        .def("get_idata", [](ParticleType &p, int index) {
                 if constexpr (T_NInt > 0) {
                     if(index < 0 || index >= T_NInt) {
                         throw std::range_error("index not in range. Valid range : [0, " + std::to_string(T_NInt));
@@ -256,38 +256,38 @@ void make_Particle(py::module &m)
                     amrex::ignore_unused(p);
                     return py::none();
                 }
-            } 
+            }
         )
-        .def("set_idata", [](ParticleType &p, int index, int val) { 
+        .def("set_idata", [](ParticleType &p, int index, int val) {
                 if constexpr (T_NInt > 0) {
                     if(index < 0 || index >= T_NInt) {
                         throw std::range_error("index not in range. Valid range : [0, " + std::to_string(T_NInt) + ")");
                     }
-                    p.m_idata[index] = val; 
+                    p.m_idata[index] = val;
                 } else {
                     amrex::ignore_unused(index, val);
                 }
             }
         )
-        .def("set_idata", [](ParticleType &p, const IntVect & vals) { 
+        .def("set_idata", [](ParticleType &p, const IntVect & vals) {
                 if constexpr (T_NInt > 0) {
-                    for (int ii=0; ii < T_NInt; ii++) { 
-                        p.m_idata[ii] = vals[ii];  
-                    } 
-                } else {
-                    amrex::ignore_unused(vals);
-                }
-            } 
-        )
-        .def("set_idata", [](ParticleType &p, const std::array<int, T_NInt>& vals) { 
-                if constexpr (T_NInt > 0) {
-                    for (int ii=0; ii < T_NInt; ii++) { 
-                        p.m_idata[ii] = vals[ii]; 
+                    for (int ii=0; ii < T_NInt; ii++) {
+                        p.m_idata[ii] = vals[ii];
                     }
                 } else {
                     amrex::ignore_unused(vals);
                 }
-            } 
+            }
+        )
+        .def("set_idata", [](ParticleType &p, const std::array<int, T_NInt>& vals) {
+                if constexpr (T_NInt > 0) {
+                    for (int ii=0; ii < T_NInt; ii++) {
+                        p.m_idata[ii] = vals[ii];
+                    }
+                } else {
+                    amrex::ignore_unused(vals);
+                }
+            }
         )
         .def("cpu", [](const ParticleType &p) { const int m_cpu = p.cpu(); return m_cpu; })
         .def("id", [](const ParticleType &p) { const int m_id = p.id(); return m_id; })

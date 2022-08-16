@@ -75,6 +75,6 @@ void init_AmrMesh(py::module &m) {
         .def("finest_level", &AmrMesh::finestLevel)
         .def("ref_ratio", py::overload_cast< >(&AmrMesh::refRatio, py::const_))
         .def("ref_ratio", py::overload_cast< int >(&AmrMesh::refRatio, py::const_))
-        
+
     ;
 }

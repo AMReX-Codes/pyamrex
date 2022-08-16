@@ -118,4 +118,3 @@ PYBIND11_MODULE(amrex_pybind, m) {
     // auto npversion = numpy.attr("__version__");
     // std::cout << "numpy version: " << py::str(npversion) << std::endl;
 }
-

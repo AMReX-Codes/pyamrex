@@ -26,7 +26,7 @@ void make_Vector(py::module &m, std::string typestr)
 {
     using Vector_type=Vector<T, Allocator>;
     auto const v_name = std::string("Vector_").append(typestr);
-    
+
     py::class_<Vector_type>(m, v_name.c_str())
         .def("__repr__",
              [typestr](Vector_type const & v) {

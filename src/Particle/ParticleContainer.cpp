@@ -45,12 +45,12 @@ void make_ParticleContainer(py::module &m)
     py::class_<ParticleContainerType>(m, particle_container_type.c_str())
         .def(py::init())
         .def(py::init<const Geometry&, const DistributionMapping&, const BoxArray&>())
-        .def(py::init<const Vector<Geometry>&, 
-                        const Vector<DistributionMapping>&, 
+        .def(py::init<const Vector<Geometry>&,
+                        const Vector<DistributionMapping>&,
                         const Vector<BoxArray>&,
                         const Vector<int>&>())
-        .def(py::init<const Vector<Geometry>&, 
-                        const Vector<DistributionMapping>&, 
+        .def(py::init<const Vector<Geometry>&,
+                        const Vector<DistributionMapping>&,
                         const Vector<BoxArray>&,
                         const Vector<IntVect>&>())
 
@@ -105,10 +105,10 @@ void make_ParticleContainer(py::module &m)
 
         .def("InitRandomPerBox", py::overload_cast<Long, ULong, const ParticleInitData&>(&ParticleContainerType::InitRandomPerBox))
         .def("InitOnePerCell", &ParticleContainerType::InitOnePerCell)
-        
+
         .def("Increment", &ParticleContainerType::Increment)
         .def("IncrementWithTotal", &ParticleContainerType::IncrementWithTotal, py::arg("mf"), py::arg("level"), py::arg("local")=false)
-        .def("Redistribute", &ParticleContainerType::Redistribute, py::arg("lev_min")=0, py::arg("lev_max")=-1, 
+        .def("Redistribute", &ParticleContainerType::Redistribute, py::arg("lev_min")=0, py::arg("lev_max")=-1,
                                             py::arg("nGrow")=0, py::arg("local")=0, py::arg("remove_negative")=true)
         .def("SortParticlesByCell", &ParticleContainerType::SortParticlesByCell)
         .def("SortParticlesByBin", &ParticleContainerType::SortParticlesByBin)
@@ -117,10 +117,10 @@ void make_ParticleContainer(py::module &m)
         .def("PrintCapacity", &ParticleContainerType::PrintCapacity)
         .def("ShrinkToFit", &ParticleContainerType::ShrinkToFit)
         // Long NumberOfParticlesAtLevel (int level, bool only_valid = true, bool only_local = false) const;
-        .def("NumberOfParticlesAtLevel", &ParticleContainerType::NumberOfParticlesAtLevel, 
+        .def("NumberOfParticlesAtLevel", &ParticleContainerType::NumberOfParticlesAtLevel,
             py::arg("level"), py::arg("only_valid")=true, py::arg("only_local")=false)
         // Vector<Long> NumberOfParticlesInGrid  (int level, bool only_valid = true, bool only_local = false) const;
-        .def("NumberOfParticlesInGrid", &ParticleContainerType::NumberOfParticlesInGrid, 
+        .def("NumberOfParticlesInGrid", &ParticleContainerType::NumberOfParticlesInGrid,
             py::arg("level"), py::arg("only_valid")=true, py::arg("only_local")=false)
             // .def("DefineAndReturnParticleTile",
             //     py::overload_cast<int, int, int>
@@ -135,7 +135,7 @@ void make_ParticleContainer(py::module &m)
         .def("CreateVirtualParticles", [](ParticleContainerType& pc, int level, AoS& virts){ return pc.CreateVirtualParticles(level, virts);})
         // void CreateGhostParticles (int level, int ngrow, AoS& ghosts) const;
         // .def("CreateGhostParticles", &ParticleContainerType::CreateGhostParticles)
-        .def("CreateGhostParticles", [](ParticleContainerType& pc, int level, int ngrow, AoS& ghosts) { 
+        .def("CreateGhostParticles", [](ParticleContainerType& pc, int level, int ngrow, AoS& ghosts) {
             return pc.CreateGhostParticles(level, ngrow, ghosts); })
         .def("AddParticlesAtLevel", [](ParticleContainerType& pc, AoS& particles, int level, int nGrow=0) {
             pc.AddParticlesAtLevel(particles, level, nGrow);
@@ -237,7 +237,7 @@ void make_ParticleContainer(py::module &m)
         //     m_particles[lev][index].define(NumRuntimeRealComps(), NumRuntimeIntComps());
         //     return ParticlesAt(lev, iter);
         // }
-    
+
     ;
 }
 
