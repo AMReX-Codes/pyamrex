@@ -20,7 +20,8 @@ jobs:
       run: .github/workflows/dependencies/dependencies_mac.sh
     - name: Build & Install
       run: |
-        python3 -m pip install -U pip pytest
+        python3 -m pip install -U pip setuptools wheel pytest
+        python3 -m pip install -U cmake
         python3 -m pip install -v .
         python3 -c "import amrex; print(amrex.__version__)"
     - name: Unit tests
