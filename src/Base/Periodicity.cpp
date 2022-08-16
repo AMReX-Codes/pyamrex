@@ -49,7 +49,7 @@ void init_Periodicity(py::module &m) {
         .def(pybind11::self == pybind11::self)
         //.def(pybind11::self != pybind11::self)
 
-        .def_static("non_periodic", &Periodicity::NonPeriodic, 
+        .def_static("non_periodic", &Periodicity::NonPeriodic,
             "Return the Periodicity object that is not periodic in any direction")
     ;
 }

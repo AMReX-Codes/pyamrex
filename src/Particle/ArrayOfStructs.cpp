@@ -67,7 +67,7 @@ void make_ArrayOfStructs(py::module &m)
                 for(int ii=0; ii < NInt; ++ii) {
                     descr.append(py::make_tuple("idata_"+std::to_string(ii),py::format_descriptor<int>::format()));
                 }
-            } 
+            }
 
             d["descr"] = descr;
             d["version"] = 3;

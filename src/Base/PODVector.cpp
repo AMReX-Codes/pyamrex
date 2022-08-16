@@ -21,7 +21,7 @@ void make_PODVector(py::module &m, std::string typestr)
 {
     using PODVector_type=PODVector<T, Allocator>;
     auto const podv_name = std::string("PODVector_").append(typestr);
-    
+
     py::class_<PODVector_type>(m, podv_name.c_str())
         .def("__repr__",
              [typestr](PODVector_type const & pv) {
@@ -51,12 +51,12 @@ void make_PODVector(py::module &m, std::string typestr)
         .def("resize", py::overload_cast<std::size_t, const T&>(&PODVector_type::resize))
         .def("reserve", &PODVector_type::reserve)
         .def("shrink_to_fit", &PODVector_type::shrink_to_fit)
-        
+
         // front
         // back
         // data
         // begin
-        // 
+        //
         // swap
 
         .def_property_readonly("__array_interface__", [](PODVector_type const & podvector) {

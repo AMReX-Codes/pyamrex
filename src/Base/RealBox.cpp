@@ -51,7 +51,7 @@ void init_RealBox(py::module &m) {
              AMREX_D_DECL(py::arg("x_lo"), py::arg("y_lo"), py::arg("z_lo")),
              AMREX_D_DECL(py::arg("x_hi"), py::arg("y_hi"), py::arg("z_hi"))
         )
-        .def(py::init<const std::array<Real, AMREX_SPACEDIM>&, 
+        .def(py::init<const std::array<Real, AMREX_SPACEDIM>&,
                       const std::array<Real, AMREX_SPACEDIM>& >(),
              py::arg("a_lo"), py::arg("a_hi")
         )
@@ -62,55 +62,55 @@ void init_RealBox(py::module &m) {
             py::arg("bx"), py::arg("dx"), py::arg("base")
         )
 
-        .def_property_readonly(  
-            "xlo", 
-            [](RealBox const & rb){ 
+        .def_property_readonly(
+            "xlo",
+            [](RealBox const & rb){
                 std::array<Real,AMREX_SPACEDIM> xlo {AMREX_D_DECL(
                     rb.lo(0), rb.lo(1), rb.lo(2)
                 )};
                 return xlo;
-            } 
+            }
         )
-        .def_property_readonly(  
-            "xhi", 
-            [](RealBox const & rb){ 
+        .def_property_readonly(
+            "xhi",
+            [](RealBox const & rb){
                 std::array<Real,AMREX_SPACEDIM> xhi {AMREX_D_DECL(
                     rb.hi(0), rb.hi(1), rb.hi(2)
                 )};
                 return xhi;
-            } 
+            }
         )
 
         .def("lo", py::overload_cast<int>(&RealBox::lo, py::const_), "Get ith component of ``xlo``")
-        .def("lo", 
-            [](RealBox const & rb){ 
+        .def("lo",
+            [](RealBox const & rb){
                 std::array<Real,AMREX_SPACEDIM> xlo {AMREX_D_DECL(
                     rb.lo(0), rb.lo(1), rb.lo(2)
                 )};
                 return xlo;
             },
             "Get all components of ``xlo``"
-        ) 
+        )
         .def("hi", py::overload_cast<int>(&RealBox::hi, py::const_), "Get ith component of ``xhi``")
-        .def("hi", 
-            [](RealBox const & rb){ 
+        .def("hi",
+            [](RealBox const & rb){
                 std::array<Real,AMREX_SPACEDIM> xhi {AMREX_D_DECL(
                     rb.hi(0), rb.hi(1), rb.hi(2)
                 )};
                 return xhi;
             },
             "Get all components of ``xhi``"
-        ) 
-        .def("setLo", 
-            [](RealBox & rb, const std::vector<Real>& a_lo){ 
-                rb.setLo(a_lo.data() ); 
+        )
+        .def("setLo",
+            [](RealBox & rb, const std::vector<Real>& a_lo){
+                rb.setLo(a_lo.data() );
             },
             "Get ith component of ``xlo``"
         )
         .def("setLo", py::overload_cast<int,Real>(&RealBox::setLo), "Get all components of ``xlo``")
-        .def("setHi", 
-            [](RealBox & rb, const std::vector<Real>& a_hi){ 
-                rb.setHi(a_hi.data() ); 
+        .def("setHi",
+            [](RealBox & rb, const std::vector<Real>& a_hi){
+                rb.setHi(a_hi.data() );
             },
             "Get all components of ``xlo``"
         )
@@ -118,37 +118,37 @@ void init_RealBox(py::module &m) {
         .def("length", &RealBox::length)
         .def("ok", &RealBox::ok, "Determine if RealBox satisfies ``xlo[i]<xhi[i]`` for ``i=0,1,...,AMREX_SPACEDIM``.")
         .def("volume", &RealBox::volume)
-        .def("contains", 
+        .def("contains",
             [](RealBox& rb, XDim3 point, Real eps) {
                 return rb.contains(point, eps );
-            }, 
+            },
             "Determine if RealBox contains ``pt``, within tolerance ``eps``",
             py::arg("rb"),py::arg("eps") = 0.0
         )
-        .def("contains", 
+        .def("contains",
             [](RealBox& rb, const RealVect& pt, Real eps) {
                 return rb.contains(pt, eps );
-            }, 
+            },
             "Determine if RealBox contains ``pt``, within tolerance ``eps``",
             py::arg("rb"),py::arg("eps") = 0.0
         )
-        .def("contains", 
+        .def("contains",
             [](RealBox& rb, const RealBox& rb2, Real eps) {
                 return rb.contains(rb2, eps );
-            }, 
+            },
             "Determine if RealBox contains another RealBox, within tolerance ``eps``",
             py::arg("rb"),py::arg("eps") = 0.0
         )
-        .def("contains", 
+        .def("contains",
             [](RealBox& rb, const std::vector<Real>& pt, Real eps) {
                 return rb.contains(pt.data(), eps );
-            }, 
+            },
             "Determine if RealBox contains ``pt``, within tolerance ``eps``",
             py::arg("rb"),py::arg("eps") = 0.0
         )
         .def("intersects", &RealBox::intersects, "determine if box intersects with a box")
     ;
-    m.def("AlmostEqual", 
+    m.def("AlmostEqual",
             [](const RealBox& rb1, const RealBox& rb2, Real eps) {
                 return AlmostEqual(rb1,rb2,eps);
             },

@@ -116,4 +116,3 @@ repos:
     # This is a slow hook, so only run this if --hook-stage manual is passed
     stages: [manual]
     additional_dependencies: [cmake, ninja]
-

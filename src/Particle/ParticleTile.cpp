@@ -68,19 +68,19 @@ void make_ParticleTile(py::module &m)
         // .def("push_back", py::overload_cast<const SuperParticleType&>(&ParticleTileType::push_back), "Add one particle to this tile.")
         .def("push_back", [](ParticleTileType& ptile, const SuperParticleType &p) {ptile.push_back(p);})
         .def("push_back_real", [](ParticleTileType& ptile, int comp, ParticleReal v) {ptile.push_back_real(comp, v);})
-        .def("push_back_real", [](ParticleTileType& ptile, 
+        .def("push_back_real", [](ParticleTileType& ptile,
                             const std::array<ParticleReal, NArrayReal>& v) {ptile.push_back_real(v);})
-        .def("push_back_real", [](ParticleTileType&ptile, 
-                                int comp, 
-                                std::size_t npar, 
+        .def("push_back_real", [](ParticleTileType&ptile,
+                                int comp,
+                                std::size_t npar,
                                 ParticleReal v)
                                 {ptile.push_back_real(comp, npar, v);})
         .def("push_back_int", [](ParticleTileType& ptile, int comp, int v) {ptile.push_back_int(comp, v);})
-        .def("push_back_int", [](ParticleTileType& ptile, 
+        .def("push_back_int", [](ParticleTileType& ptile,
                                 const std::array<int, NArrayInt>& v) {ptile.push_back_int(v);})
-        .def("push_back_int", [](ParticleTileType&ptile, 
-                                int comp, 
-                                std::size_t npar, 
+        .def("push_back_int", [](ParticleTileType&ptile,
+                                int comp,
+                                std::size_t npar,
                                 int v)
                                 {ptile.push_back_int(comp, npar, v);})
         .def("NumRealComps", &ParticleTileType::NumRealComps)

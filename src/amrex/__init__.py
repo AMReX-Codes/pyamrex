@@ -1,7 +1,6 @@
 from . import amrex_pybind
 from .amrex_pybind import *  # noqa
 
-
 __version__ = amrex_pybind.__version__
 __doc__ = amrex_pybind.__doc__
 __license__ = amrex_pybind.__license__
