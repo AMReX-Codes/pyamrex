@@ -20,6 +20,7 @@ jobs:
       run: |
         python3 -m pip install -U pip pytest
         python3 -m pip install -v .
+        if(!$?) { Exit $LASTEXITCODE }
 
         python3 -c "import amrex; print(amrex.__version__)"
     - name: Unit tests
@@ -46,9 +47,12 @@ jobs:
               -T "ClangCl"                `
               -DCMAKE_VERBOSE_MAKEFILE=ON `
               -DAMReX_MPI=OFF
+        if(!$?) { Exit $LASTEXITCODE }
 
         cmake --build build --config Debug -j 2
+        if(!$?) { Exit $LASTEXITCODE }
         cmake --build build --config Debug --target pip_install -j 2
+        if(!$?) { Exit $LASTEXITCODE }
     - name: Unit tests
       run: |
         ctest --test-dir build -C Debug --output-on-failure
