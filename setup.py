@@ -141,7 +141,7 @@ class CMakeBuild(build_ext):
             cmake_args += [
                 "-DCMAKE_LIBRARY_OUTPUT_DIRECTORY_{}={}".format(
                     cfg.upper(), os.path.join(extdir, "amrex")
-                )
+                ),
             ]
             if sys.maxsize > 2**32:
                 cmake_args += ["-A", "x64"]

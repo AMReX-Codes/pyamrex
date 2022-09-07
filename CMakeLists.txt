@@ -133,6 +133,21 @@ set_target_properties(pyAMReX PROPERTIES
     PDB_OUTPUT_DIRECTORY ${CMAKE_PYTHON_OUTPUT_DIRECTORY}/amrex
     COMPILE_PDB_OUTPUT_DIRECTORY ${CMAKE_PYTHON_OUTPUT_DIRECTORY}/amrex
 )
+get_property(isMultiConfig GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
+if(isMultiConfig)
+    foreach(CFG IN LISTS CMAKE_CONFIGURATION_TYPES)
+        string(TOUPPER "${CFG}" CFG_UPPER)
+        set_target_properties(pyAMReX PROPERTIES
+            # build output directories - mainly set to run tests from CMake & IDEs
+            # note: same as above, but for Multi-Config generators
+            ARCHIVE_OUTPUT_DIRECTORY_${CFG_UPPER} ${CMAKE_PYTHON_OUTPUT_DIRECTORY}/amrex
+            LIBRARY_OUTPUT_DIRECTORY_${CFG_UPPER} ${CMAKE_PYTHON_OUTPUT_DIRECTORY}/amrex
+            RUNTIME_OUTPUT_DIRECTORY_${CFG_UPPER} ${CMAKE_PYTHON_OUTPUT_DIRECTORY}/amrex
+            PDB_OUTPUT_DIRECTORY_${CFG_UPPER} ${CMAKE_PYTHON_OUTPUT_DIRECTORY}/amrex
+            COMPILE_PDB_OUTPUT_DIRECTORY_${CFG_UPPER} ${CMAKE_PYTHON_OUTPUT_DIRECTORY}/amrex
+        )
+    endforeach()
+endif()
 if(EMSCRIPTEN)
     set_target_properties(pyAMReX PROPERTIES
         PREFIX "")
