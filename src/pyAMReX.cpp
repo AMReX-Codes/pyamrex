@@ -30,6 +30,7 @@ void init_RealVect(py::module &);
 void init_AmrMesh(py::module &);
 void init_MultiFab(py::module &);
 void init_ParallelDescriptor(py::module &);
+void init_ParmParse(py::module &);
 void init_Particle(py::module &);
 void init_StructOfArrays(py::module &);
 void init_ArrayOfStructs(py::module &);
@@ -51,6 +52,7 @@ PYBIND11_MODULE(amrex_pybind, m) {
                :toctree: _generate
                AmrInfo
                AmrMesh
+               ArrayOfStructs
                Box
                RealBox
                BoxArray
@@ -60,12 +62,12 @@ PYBIND11_MODULE(amrex_pybind, m) {
                MultiFab
                ParallelDescriptor
                Particle
-               StructOfArrays
-               ArrayOfStructs
+               ParmParse
                ParticleTile
                ParticleContainer
                Periodicity
                PODVector
+               StructOfArrays
                Vector
     )pbdoc";
 
@@ -78,6 +80,7 @@ PYBIND11_MODULE(amrex_pybind, m) {
     init_Array4(m);
     init_Box(m);
     init_BoxArray(m);
+    init_ParmParse(m);
     init_MultiFab(m);
     init_DistributionMapping(m);
     init_RealBox(m);

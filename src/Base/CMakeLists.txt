@@ -13,6 +13,7 @@ target_sources(pyAMReX
     RealVect.cpp
     MultiFab.cpp
     ParallelDescriptor.cpp
+    ParmParse.cpp
     Periodicity.cpp
     PODVector.cpp
     Vector.cpp
