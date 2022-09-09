@@ -39,6 +39,14 @@ def test_grow(box):
     assert bx.num_pts == (134**3)
 
 
+def test_slab(box):
+    """box.make_slab"""
+    box.make_slab(direction=3, slab_index=60)
+    np.testing.assert_allclose(box.lo_vect, [0, 0, 0])
+    np.testing.assert_allclose(box.hi_vect, [60, 127, 127])
+    assert box.num_pts == (128 * 128 * 61)
+
+
 # def test_convert(box):
 #    """Conversion to node"""
 #    bx = box.convert(amrex.CellIndex.NODE, amrex.CellIndex.NODE, amrex.CellIndex.NODE)
