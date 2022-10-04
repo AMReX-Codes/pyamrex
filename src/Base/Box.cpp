@@ -205,6 +205,10 @@ void init_Box(py::module &m) {
              py::overload_cast< Direction >(&Box::enclosedCells),
              py::arg("d"))
 
+        .def("make_slab",
+             &Box::makeSlab,
+             py::arg("direction"), py::arg("slab_index"))
+
         // minBox
         // chop
         // growLo
