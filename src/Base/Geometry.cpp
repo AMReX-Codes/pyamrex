@@ -189,8 +189,10 @@ void init_Geometry(py::module& m)
             )
 
         // .def("periodicShift", &Geometry::periodicShift)
-        .def("growNonPeriodicDomain", &Geometry::growNonPeriodicDomain)
-        .def("growPeriodicDomain", &Geometry::growPeriodicDomain)
+        .def("growNonPeriodicDomain", py::overload_cast<IntVect const&>(&Geometry::growNonPeriodicDomain, py::const_))
+        .def("growNonPeriodicDomain", py::overload_cast<int>(&Geometry::growNonPeriodicDomain, py::const_))
+        .def("growPeriodicDomain", py::overload_cast<IntVect const&>(&Geometry::growPeriodicDomain, py::const_))
+        .def("growPeriodicDomain", py::overload_cast<int>(&Geometry::growPeriodicDomain, py::const_))
 
         .def("setPeriodicity", &Geometry::setPeriodicity)
         .def("coarsen", &Geometry::coarsen)
