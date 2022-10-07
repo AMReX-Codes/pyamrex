@@ -6,7 +6,7 @@ import pytest
 import amrex
 
 
-@pytest.fixture
+@pytest.fixture(scope="function")
 def box():
     return amrex.Box((0, 0, 0), (127, 127, 127))
 
