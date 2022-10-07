@@ -10,7 +10,7 @@ if amrex.Config.have_mpi:
     from mpi4py import MPI
 
 
-@pytest.fixture(autouse=True, scope="session")
+@pytest.fixture(autouse=True, scope="function")
 def amrex_init():
     amrex.initialize(
         [
@@ -29,21 +29,21 @@ def amrex_init():
     amrex.finalize()
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="function")
 def std_real_box():
     """Standard RealBox for common problem domains"""
     rb = amrex.RealBox(0, 0, 0, 1.0, 1.0, 1.0)
     return rb
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="function")
 def std_box():
     """Standard Box for tests"""
     bx = amrex.Box(amrex.IntVect(0, 0, 0), amrex.IntVect(63, 63, 63))
     return bx
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="function")
 def std_geometry(std_box, std_real_box):
     """Standard Geometry"""
     coord = 1  # RZ
@@ -52,7 +52,7 @@ def std_geometry(std_box, std_real_box):
     return gm
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="function")
 def boxarr(std_box):
     """BoxArray for MultiFab creation"""
     ba = amrex.BoxArray(std_box)
@@ -60,14 +60,14 @@ def boxarr(std_box):
     return ba
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="function")
 def distmap(boxarr):
     """DistributionMapping for MultiFab creation"""
     dm = amrex.DistributionMapping(boxarr)
     return dm
 
 
-@pytest.fixture(params=list(itertools.product([1, 3], [0, 1])))
+@pytest.fixture(scope="function", params=list(itertools.product([1, 3], [0, 1])))
 def mfab(boxarr, distmap, request):
     """MultiFab for tests"""
     num_components = request.param[0]

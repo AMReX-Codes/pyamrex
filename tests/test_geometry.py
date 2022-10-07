@@ -9,17 +9,17 @@ from amrex import Geometry as Gm
 # TODO: return coord?
 
 
-@pytest.fixture
+@pytest.fixture(scope="function")
 def box():
     return amrex.Box(amrex.IntVect(0, 0, 0), amrex.IntVect(127, 127, 127))
 
 
-@pytest.fixture
+@pytest.fixture(scope="function")
 def real_box():
     return amrex.RealBox([0, 0, 0], [1, 2, 5])
 
 
-@pytest.fixture
+@pytest.fixture(scope="function")
 def geometry(box, real_box):
     coord = 1
     is_periodic = [0, 0, 1]

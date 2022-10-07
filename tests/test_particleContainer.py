@@ -11,13 +11,13 @@ def Npart():
     return 21
 
 
-@pytest.fixture()
+@pytest.fixture(scope="function")
 def empty_particle_container(std_geometry, distmap, boxarr):
     pc = amrex.ParticleContainer_1_1_2_1(std_geometry, distmap, boxarr)
     return pc
 
 
-@pytest.fixture()
+@pytest.fixture(scope="function")
 def std_particle():
     myt = amrex.ParticleInitType_1_1_2_1()
     myt.real_struct_data = [0.5]
@@ -27,7 +27,7 @@ def std_particle():
     return myt
 
 
-@pytest.fixture()
+@pytest.fixture(scope="function")
 def particle_container(Npart, std_geometry, distmap, boxarr, std_real_box):
     pc = amrex.ParticleContainer_1_1_2_1(std_geometry, distmap, boxarr)
     myt = amrex.ParticleInitType_1_1_2_1()
