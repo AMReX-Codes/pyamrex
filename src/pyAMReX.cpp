@@ -17,6 +17,7 @@ namespace py = pybind11;
 
 // forward declarations of exposed classes
 void init_AMReX(py::module&);
+void init_Arena(py::module&);
 void init_Array4(py::module&);
 void init_BaseFab(py::module&);
 void init_Box(py::module &);
@@ -54,6 +55,7 @@ PYBIND11_MODULE(amrex_pybind, m) {
                :toctree: _generate
                AmrInfo
                AmrMesh
+               Arena
                ArrayOfStructs
                Box
                RealBox
@@ -76,6 +78,7 @@ PYBIND11_MODULE(amrex_pybind, m) {
 
     // note: order from parent to child classes
     init_AMReX(m);
+    init_Arena(m);
     init_Dim3(m);
     init_IntVect(m);
     init_RealVect(m);
