@@ -84,3 +84,29 @@ def make_mfab(boxarr, distmap, request):
         return mfab
 
     return create
+
+@pytest.mark.skipif(
+    amrex.Config.gpu_backend != "CUDA", reason="Requires AMReX_GPU_BACKEND=CUDA"
+)
+@pytest.fixture(scope="function", params=list(itertools.product([1, 3], [0, 1])))
+def make_mfab_device(boxarr, distmap, request):
+    """MultiFab that resides purely on the device:
+    The MultiFab object itself is not a fixture because we want to avoid caching
+    it between amrex.initialize/finalize calls of various tests.
+    https://github.com/pytest-dev/pytest/discussions/10387
+    https://github.com/pytest-dev/pytest/issues/5642#issuecomment-1279612764
+    """
+
+    def create():
+        num_components = request.param[0]
+        num_ghost = request.param[1]
+        mfab = amrex.MultiFab(
+            boxarr,
+            distmap,
+            num_components,
+            num_ghost,
+            amrex.MFInfo().set_arena(amrex.The_Device_Arena()),
+        )
+        mfab.set_val(0.0, 0, num_components)
+
+    return create
