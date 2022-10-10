@@ -26,6 +26,5 @@ spack:
   - py-mpi4py
   - py-numpy
   - py-pip
-  - py-pybind11
   - py-setuptools
   - py-wheel
