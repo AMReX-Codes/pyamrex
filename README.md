@@ -202,7 +202,7 @@ This work was supported by the Laboratory Directed Research and Development Prog
 
 ## License
 
-pyAMReX Copyright (c) 2021, The Regents of the University of California,
+pyAMReX Copyright (c) 2021-2022, The Regents of the University of California,
 through Lawrence Berkeley National Laboratory (subject to receipt of any
 required approvals from the U.S. Dept. of Energy).  All rights reserved.
 
