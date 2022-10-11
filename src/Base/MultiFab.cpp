@@ -94,6 +94,7 @@ void init_MultiFab(py::module &m) {
                 if( !mfi.isValid() )
                 {
                     first_or_done = true;
+                    mfi.Finalize();
                     throw py::stop_iteration();
                 }
                 return mfi;
