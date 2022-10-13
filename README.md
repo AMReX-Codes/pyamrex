@@ -51,7 +51,7 @@ If you just want to use CMake to build the project, jump into sections *1. Intro
 
 pyAMReX depends on the following popular third party software.
 
-- a mature [C++17](https://en.wikipedia.org/wiki/C%2B%2B17) compiler, e.g., GCC 7, Clang 7, NVCCC 11.0, MSVC 19.15 or newer
+- a mature [C++17](https://en.wikipedia.org/wiki/C%2B%2B17) compiler, e.g., GCC 7, Clang 7, NVCC 11.0, MSVC 19.15 or newer
 - [CMake 3.20.0+](https://cmake.org)
 - [AMReX *development*](https://amrex-codes.github.io): we automatically download and compile a copy of AMReX
 - [pybind11](https://github.com/pybind/pybind11/) 2.9.1+: we automatically download and compile a copy of pybind11 ([new BSD](https://github.com/pybind/pybind11/blob/master/LICENSE))
