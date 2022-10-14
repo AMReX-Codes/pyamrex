@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import math
+
 import numpy as np
 import pytest
 
@@ -158,13 +160,37 @@ def test_mfab_mfiter(make_mfab):
 @pytest.mark.skipif(
     amrex.Config.gpu_backend != "CUDA", reason="Requires AMReX_GPU_BACKEND=CUDA"
 )
-def test_mfab_ops_cuda_numba():
+def test_mfab_ops_cuda_numba(make_mfab_device):
+    mfab_device = make_mfab_device()
     # https://numba.pydata.org/numba-doc/dev/cuda/cuda_array_interface.html
-    import numba
+    from numba import cuda
 
-    # AMReX -> numba
-    # arr_numba = cuda.as_cuda_array(arr4)
-    # TODO
+    ngv = mfab_device.nGrowVect
+
+    # assign 3: define kernel
+    @cuda.jit
+    def set_to_three(array):
+        i, j, k = cuda.grid(3)
+        if i < array.shape[0] and j < array.shape[1] and k < array.shape[2]:
+            array[i, j, k] = 3.0
+
+    # assign 3: loop through boxes and launch kernels
+    for mfi in mfab_device:
+        bx = mfi.tilebox().grow(ngv)
+        marr = mfab_device.array(mfi)
+        marr_numba = cuda.as_cuda_array(marr)
+
+        # kernel launch
+        threadsperblock = (4, 4, 4)
+        blockspergrid = tuple(
+            [math.ceil(s / b) for s, b in zip(marr_numba.shape, threadsperblock)]
+        )
+        set_to_three[blockspergrid, threadsperblock](marr_numba)
+
+    # Check results
+    shape = 32**3 * 8
+    sum_threes = mfab_device.sum_unique(comp=0, local=False)
+    assert sum_threes == shape * 3
 
 
 @pytest.mark.skipif(
