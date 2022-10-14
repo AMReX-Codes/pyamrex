@@ -33,6 +33,16 @@ void init_MultiFab(py::module &m) {
         .def_property_readonly("size", &FabArrayBase::size)
 
         .def_property_readonly("nGrowVect", &FabArrayBase::nGrowVect)
+
+        /* data access in Box index space */
+        .def("__iter__",
+             [](FabArrayBase& fab) {
+                 return MFIter(fab);
+             },
+             // while the returned iterator (argument 0) exists,
+             // keep the FabArrayBase (argument 1; usually a MultiFab) alive
+             py::keep_alive<0, 1>()
+        )
     ;
 
     py::class_< FArrayBox >(m, "FArrayBox");
@@ -109,8 +119,20 @@ void init_MultiFab(py::module &m) {
     py::class_< FabArray<FArrayBox>, FabArrayBase >(m, "FabArray_FArrayBox")
         //.def("array", py::overload_cast< const MFIter& >(&FabArray<FArrayBox>::array))
         //.def("const_array", &FabArray<FArrayBox>::const_array)
-        .def("array", [](FabArray<FArrayBox> & fa, MFIter const & mfi) {return fa.array(mfi);})
-        .def("const_array", [](FabArray<FArrayBox> & fa, MFIter const & mfi) {return fa.const_array(mfi);})
+        .def("array", [](FabArray<FArrayBox> & fa, MFIter const & mfi)
+            { return fa.array(mfi); },
+            // as long as the fa (argument 1) exists, keep the mfi (argument 2) alive
+            py::keep_alive<1, 2>(),
+            // as long as the return value (argument 0) exists, keep the fa (argument 1) alive
+            py::keep_alive<0, 1>()
+        )
+        .def("const_array", [](FabArray<FArrayBox> & fa, MFIter const & mfi)
+            { return fa.const_array(mfi); },
+            // as long as the fa (argument 1) exists, keep the mfi (argument 2) alive
+             py::keep_alive<1, 2>(),
+            // as long as the return value (argument 0) exists, keep the fa (argument 1) alive
+             py::keep_alive<0, 1>()
+        )
 
         .def("sum_boundary", py::overload_cast< Periodicity const & >(&FabArray<FArrayBox>::SumBoundary))
         .def("sum_boundary", py::overload_cast< int, int, Periodicity const & >(&FabArray<FArrayBox>::SumBoundary))
@@ -323,14 +345,5 @@ void init_MultiFab(py::module &m) {
         /* Init & Finalize */
         .def_static("initialize", &MultiFab::Initialize )
         .def_static("finalize", &MultiFab::Finalize )
-
-        /* data access in Box index space */
-        .def("__iter__",
-            [](MultiFab& mf) {
-                return MFIter(mf);
-            },
-            // Essential: keep object alive while iterator exists
-            py::keep_alive<0, 1>()
-        )
     ;
 }
