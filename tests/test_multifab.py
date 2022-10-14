@@ -290,10 +290,16 @@ def test_mfab_ops_cuda_pytorch(make_mfab_device):
     # https://docs.cupy.dev/en/stable/user_guide/interoperability.html#pytorch
     import torch
 
-    # AMReX -> pytorch
-    # arr_torch = torch.as_tensor(arr, device='cuda')
-    # assert(arr_torch.__cuda_array_interface__['data'][0] == arr.__cuda_array_interface__['data'][0])
-    # TODO
+    # assign 3: loop through boxes and launch kernel
+    for mfi in mfab_device:
+        marr = mfab_device.array(mfi)
+        marr_torch = torch.as_tensor(marr, device="cuda")
+        marr_torch[:, :, :] = 3
+
+    # Check results
+    shape = 32**3 * 8
+    sum_threes = mfab_device.sum_unique(comp=0, local=False)
+    assert sum_threes == shape * 3
 
 
 @pytest.mark.skipif(
