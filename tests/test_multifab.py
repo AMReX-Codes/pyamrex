@@ -263,7 +263,7 @@ def test_mfab_ops_cuda_cupy(make_mfab_device, nghost):
 
         @cp.fuse(kernel_name="set_to_seven")
         def set_to_seven(x):
-            x += 7.0
+            x[...] = 7.0
 
         for mfi in mfab_device:
             bx = mfi.tilebox().grow(ngv)
@@ -271,7 +271,6 @@ def test_mfab_ops_cuda_cupy(make_mfab_device, nghost):
             marr_cupy = cp.array(marr, copy=False)
 
             # write and read into the marr_cupy
-            marr_cupy[()] = 0.0
             set_to_seven(marr_cupy)
 
     # verify
