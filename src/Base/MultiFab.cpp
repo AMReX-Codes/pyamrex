@@ -9,6 +9,7 @@
 #include <AMReX_Config.H>
 #include <AMReX_BoxArray.H>
 #include <AMReX_DistributionMapping.H>
+#include <AMReX_FArrayBox.H>
 #include <AMReX_FabArray.H>
 #include <AMReX_FabArrayBase.H>
 #include <AMReX_MultiFab.H>
@@ -44,8 +45,6 @@ void init_MultiFab(py::module &m) {
              py::keep_alive<0, 1>()
         )
     ;
-
-    py::class_< FArrayBox >(m, "FArrayBox");
 
     py::class_< MFIter >(m, "MFIter", py::dynamic_attr())
         .def("__repr__",

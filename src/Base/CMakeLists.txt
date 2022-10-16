@@ -2,12 +2,14 @@ target_sources(pyAMReX
   PRIVATE
     AMReX.cpp
     Array4.cpp
+    BaseFab.cpp
     Box.cpp
     RealBox.cpp
     BoxArray.cpp
     CoordSys.cpp
     Dim3.cpp
     DistributionMapping.cpp
+    FArrayBox.cpp
     Geometry.cpp
     IntVect.cpp
     RealVect.cpp
