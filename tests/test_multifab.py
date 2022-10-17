@@ -6,8 +6,8 @@ import pytest
 import amrex
 
 
-@pytest.mark.parametrize("nghost", [0, 1])
-def test_mfab_loop(mfab, nghost):
+def test_mfab_loop(make_mfab):
+    mfab = make_mfab()
     ngv = mfab.nGrowVect
     print(f"\n  mfab={mfab}, mfab.nGrowVect={ngv}")
 
@@ -77,7 +77,8 @@ def test_mfab_loop(mfab, nghost):
         #   TODO
 
 
-def test_mfab_simple(mfab):
+def test_mfab_simple(make_mfab):
+    mfab = make_mfab()
     assert mfab.is_all_cell_centered
     # assert(all(not mfab.is_nodal(i) for i in [-1, 0, 1, 2]))  # -1??
     assert all(not mfab.is_nodal(i) for i in [0, 1, 2])
@@ -142,8 +143,8 @@ def test_mfab_ops(boxarr, distmap, nghost):
     np.testing.assert_allclose(dst.max(0), 150.0)
 
 
-@pytest.mark.parametrize("nghost", [0, 1])
-def test_mfab_mfiter(mfab, nghost):
+def test_mfab_mfiter(make_mfab):
+    mfab = make_mfab()
     assert iter(mfab).is_valid
     assert iter(mfab).length == 8
 
