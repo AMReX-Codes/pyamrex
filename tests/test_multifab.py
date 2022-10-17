@@ -308,8 +308,8 @@ def test_mfab_ops_cuda_cuml(make_mfab_device):
     # https://github.com/rapidsai/cuml
     # https://github.com/rapidsai/cudf
     #   maybe better for particles as a dataframe test
-    import cudf
-    import cuml
+    # import cudf
+    # import cuml
 
     # AMReX -> RAPIDSAI cuML
     # arr_cuml = ...
