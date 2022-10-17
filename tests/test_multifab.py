@@ -196,8 +196,7 @@ def test_mfab_ops_cuda_numba(make_mfab_device):
 @pytest.mark.skipif(
     amrex.Config.gpu_backend != "CUDA", reason="Requires AMReX_GPU_BACKEND=CUDA"
 )
-@pytest.mark.parametrize("nghost", [0, 1])
-def test_mfab_ops_cuda_cupy(make_mfab_device, nghost):
+def test_mfab_ops_cuda_cupy(make_mfab_device):
     mfab_device = make_mfab_device()
     # https://docs.cupy.dev/en/stable/user_guide/interoperability.html
     import cupy as cp

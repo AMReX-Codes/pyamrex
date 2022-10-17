@@ -85,6 +85,7 @@ def make_mfab(boxarr, distmap, request):
 
     return create
 
+
 @pytest.mark.skipif(
     amrex.Config.gpu_backend != "CUDA", reason="Requires AMReX_GPU_BACKEND=CUDA"
 )
@@ -108,5 +109,6 @@ def make_mfab_device(boxarr, distmap, request):
             amrex.MFInfo().set_arena(amrex.The_Device_Arena()),
         )
         mfab.set_val(0.0, 0, num_components)
+        return mfab
 
     return create
