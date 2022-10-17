@@ -69,36 +69,81 @@ def test_array4():
     x[1, 1, 1] = 44
     assert v_carr2np[0, 1, 1, 1] == 44
 
-    # from cupy
 
-    # to numpy
+@pytest.mark.skipif(
+    amrex.Config.gpu_backend != "CUDA", reason="Requires AMReX_GPU_BACKEND=CUDA"
+)
+def test_array4_numba():
+    # https://numba.pydata.org/numba-doc/dev/cuda/cuda_array_interface.html
+    from numba import cuda
 
-    # to cupy
+    # numba -> AMReX Array4
+    x = np.ones(
+        (
+            2,
+            3,
+            4,
+        )
+    )  # type: numpy.ndarray
 
-    return
+    # host-to-device copy
+    x_numba = cuda.to_device(x)  # type: numba.cuda.cudadrv.devicearray.DeviceNDArray
+    # x_cupy = cupy.asarray(x_numba)      # type: cupy.ndarray
+    x_arr = amrex.Array4_double(x_numba)  # type: amrex.Array4_double
 
-    # Check indexing
-    assert obj[0] == 1
-    assert obj[1] == 2
-    assert obj[2] == 3
-    assert obj[-1] == 3
-    assert obj[-2] == 2
-    assert obj[-3] == 1
-    with pytest.raises(IndexError):
-        obj[-4]
-    with pytest.raises(IndexError):
-        obj[3]
+    assert (
+        x_arr.__cuda_array_interface__["data"][0]
+        == x_numba.__cuda_array_interface__["data"][0]
+    )
 
-    # Check assignment
-    obj[0] = 2
-    obj[1] = 3
-    obj[2] = 4
-    assert obj[0] == 2
-    assert obj[1] == 3
-    assert obj[2] == 4
+    # AMReX -> numba
+    # arr_numba = cuda.as_cuda_array(arr4)
+    # ... or as MultiFab test
+    # TODO
 
 
-# def test_iv_conversions():
-#    obj = amrex.IntVect.max_vector().numpy()
-#    assert(isinstance(obj, np.ndarray))
-#    assert(obj.dtype == np.int32)
+@pytest.mark.skipif(
+    amrex.Config.gpu_backend != "CUDA", reason="Requires AMReX_GPU_BACKEND=CUDA"
+)
+def test_array4_cupy():
+    # https://docs.cupy.dev/en/stable/user_guide/interoperability.html
+    import cupy as cp
+
+    # cupy -> AMReX Array4
+    x = np.ones(
+        (
+            2,
+            3,
+            4,
+        )
+    )  # TODO: merge into next line and create on device?
+    x_cupy = cp.asarray(x)  # type: cupy.ndarray
+    print(f"x_cupy={x_cupy}")
+    print(x_cupy.__cuda_array_interface__)
+
+    # cupy -> AMReX array4
+    x_arr = amrex.Array4_double(x_cupy)  # type: amrex.Array4_double
+    print(f"x_arr={x_arr}")
+    print(x_arr.__cuda_array_interface__)
+
+    assert (
+        x_arr.__cuda_array_interface__["data"][0]
+        == x_cupy.__cuda_array_interface__["data"][0]
+    )
+
+    # AMReX -> cupy
+    # arr_numba = cuda.as_cuda_array(arr4)
+    # ... or as MultiFab test
+    # TODO
+
+
+@pytest.mark.skipif(
+    amrex.Config.gpu_backend != "CUDA", reason="Requires AMReX_GPU_BACKEND=CUDA"
+)
+def test_array4_pytorch():
+    # https://docs.cupy.dev/en/stable/user_guide/interoperability.html#pytorch
+    # arr_torch = torch.as_tensor(arr, device='cuda')
+    # assert(arr_torch.__cuda_array_interface__['data'][0] == arr.__cuda_array_interface__['data'][0])
+    # TODO
+
+    pass
