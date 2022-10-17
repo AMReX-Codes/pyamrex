@@ -164,9 +164,16 @@ void make_Array4(py::module &m, std::string typestr)
             // Because the user of the interface may or may not be in the same context, the most common case is to use cuPointerGetAttribute with CU_POINTER_ATTRIBUTE_DEVICE_POINTER in the CUDA driver API (or the equivalent CUDA Runtime API) to retrieve a device pointer that is usable in the currently active context.
             // TODO For zero-size arrays, use 0 here.
 
-            // ... TODO: wasn't there some stream or device info?
+            // None or integer
+            // An optional stream upon which synchronization must take place at the point of consumption, either by synchronizing on the stream or enqueuing operations on the data on the given stream. Integer values in this entry are as follows:
+            //   0: This is disallowed as it would be ambiguous between None and the default stream, and also between the legacy and per-thread default streams. Any use case where 0 might be given should either use None, 1, or 2 instead for clarity.
+            //   1: The legacy default stream.
+            //   2: The per-thread default stream.
+            //   Any other integer: a cudaStream_t represented as a Python integer.
+            //   When None, no synchronization is required.
+            d["stream"] = py::none();
 
-            d["version"] = 2;
+            d["version"] = 3;
             return d;
         })
 
