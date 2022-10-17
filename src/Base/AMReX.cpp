@@ -103,7 +103,25 @@ void init_AMReX(py::module& m)
           }, py::return_value_policy::reference,
           "Initialize AMReX library");
 
+    constexpr auto run_gc = []() {
+        // explicitly run the garbage collector, so deleted objects
+        // get freed.
+        // This is a convenience helper/bandage for making work with Python
+        // garbage collectors in various implementations more easy.
+        // https://github.com/AMReX-Codes/pyamrex/issues/81
+        auto m_gc = py::module::import("gc");
+        auto collect = m_gc.attr("collect");
+        collect();
+    };
+
     m.def("finalize",
-          py::overload_cast<>(&Finalize));
-    m.def("finalize", py::overload_cast<AMReX*>(&Finalize));
+          [run_gc]() {
+              run_gc();
+              amrex::Finalize();
+          });
+    m.def("finalize",
+          [run_gc](AMReX* pamrex) {
+              run_gc();
+              amrex::Finalize(pamrex);
+          });
 }
