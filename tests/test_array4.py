@@ -75,7 +75,7 @@ def test_array4():
 )
 def test_array4_numba():
     # https://numba.pydata.org/numba-doc/dev/cuda/cuda_array_interface.html
-    import numba
+    from numba import cuda
 
     # numba -> AMReX Array4
     x = np.ones(
@@ -87,9 +87,7 @@ def test_array4_numba():
     )  # type: numpy.ndarray
 
     # host-to-device copy
-    x_numba = numba.cuda.to_device(
-        x
-    )  # type: numba.cuda.cudadrv.devicearray.DeviceNDArray
+    x_numba = cuda.to_device(x)  # type: numba.cuda.cudadrv.devicearray.DeviceNDArray
     # x_cupy = cupy.asarray(x_numba)      # type: cupy.ndarray
     x_arr = amrex.Array4_double(x_numba)  # type: amrex.Array4_double
 

@@ -140,6 +140,10 @@ void make_Array4(py::module &m, std::string typestr)
             return a4;
         }))
 
+        /* init from __cuda_array_interface__: non-owning view
+         * TODO
+         */
+
 
         // CPU: __array_interface__ v3
         // https://numpy.org/doc/stable/reference/arrays.interface.html
