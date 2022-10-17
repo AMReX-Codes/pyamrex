@@ -18,12 +18,14 @@ namespace py = pybind11;
 // forward declarations of exposed classes
 void init_AMReX(py::module&);
 void init_Array4(py::module&);
+void init_BaseFab(py::module&);
 void init_Box(py::module &);
 void init_RealBox(py::module &);
 void init_BoxArray(py::module &);
 void init_CoordSys(py::module&);
 void init_Dim3(py::module&);
 void init_DistributionMapping(py::module&);
+void init_FArrayBox(py::module&);
 void init_Geometry(py::module&);
 void init_IntVect(py::module &);
 void init_RealVect(py::module &);
@@ -57,6 +59,7 @@ PYBIND11_MODULE(amrex_pybind, m) {
                RealBox
                BoxArray
                Dim3
+               FArrayBox
                IntVect
                RealVect
                MultiFab
@@ -81,6 +84,8 @@ PYBIND11_MODULE(amrex_pybind, m) {
     init_Box(m);
     init_BoxArray(m);
     init_ParmParse(m);
+    init_BaseFab(m);
+    init_FArrayBox(m);
     init_MultiFab(m);
     init_DistributionMapping(m);
     init_RealBox(m);
