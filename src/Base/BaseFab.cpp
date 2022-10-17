@@ -29,9 +29,9 @@ namespace
             )
 
             .def(py::init< >())
-            //.def(py::init< Arena* >())
-            //.def(py::init< const Box&, int, Arena* >())
-            //.def(py::init< >( const Box&, int, bool, bool, Arena* ))
+            .def(py::init< Arena* >())
+            .def(py::init< Box const &, int, Arena* >())
+            //.def(py::init< >( Box const &, int, bool, bool, Arena* ))
             //.def(py::init< const BaseFab<T>&, MakeType, int, int >())
             // non-owning
             .def(py::init< const Box&, int, T* >())
