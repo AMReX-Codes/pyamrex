@@ -22,6 +22,19 @@ using namespace amrex;
 
 
 void init_MultiFab(py::module &m) {
+    py::class_< MFInfo >(m, "MFInfo")
+        .def_readwrite("alloc", &MFInfo::alloc)
+        .def_readwrite("arena", &MFInfo::arena)
+        .def_readwrite("tags", &MFInfo::tags)
+
+        .def(py::init< >())
+
+        .def("set_alloc", &MFInfo::SetAlloc)
+        .def("set_arena", &MFInfo::SetArena)
+        //.def("set_tag", py::overload_cast< std::string >(&MFInfo::SetTag))
+        .def("set_tag", [](MFInfo & info, std::string tag) { info.SetTag(std::move(tag)); })
+    ;
+
     py::class_< FabArrayBase >(m, "FabArrayBase")
         .def_property_readonly("is_all_cell_centered", &FabArrayBase::is_cell_centered)
         .def_property_readonly("is_all_nodal",

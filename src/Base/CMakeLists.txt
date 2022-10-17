@@ -1,6 +1,7 @@
 target_sources(pyAMReX
   PRIVATE
     AMReX.cpp
+    Arena.cpp
     Array4.cpp
     BaseFab.cpp
     Box.cpp
