@@ -64,6 +64,11 @@ Optional dependencies include:
 - further [optional dependencies of AMReX](https://github.com/AMReX-Codes/amrex/)
 - [pytest](https://docs.pytest.org/en/stable/) 6.2+: for running unit tests
 
+Optional CUDA-capable dependencies for tests include:
+- [cupy](https://github.com/cupy/cupy#installation) 11.2+
+- [numba](https://numba.readthedocs.io/en/stable/user/installing.html) 0.56+
+- [torch](https://pytorch.org/get-started/locally/) 1.12+
+
 ### Install Dependencies
 
 macOS/Linux:
