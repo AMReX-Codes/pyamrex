@@ -20,6 +20,8 @@ spack:
   - ccache
   # optional and heavy
   # - cuda
+  # - py-cupy ^nccl cuda_arch=70
+  # - py-numba ^llvm+cuda cuda_arch=70
   - cmake
   - mpi
   - python
