@@ -6,6 +6,8 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 
+#include "Base/Iterator.H"
+
 #include <AMReX_Config.H>
 #include <AMReX_BoxArray.H>
 #include <AMReX_DistributionMapping.H>
@@ -79,26 +81,7 @@ void init_MultiFab(py::module &m) {
 
         // eq. to void operator++()
         .def("__next__",
-             [](MFIter & mfi) -> MFIter & {
-                py::object self = py::cast(mfi);
-                if (!py::hasattr(self, "first_or_done"))
-                    self.attr("first_or_done") = true;
-
-                bool first_or_done = self.attr("first_or_done").cast<bool>();
-                if (first_or_done) {
-                    first_or_done = false;
-                    self.attr("first_or_done") = first_or_done;
-                }
-                else
-                    ++mfi;
-                if( !mfi.isValid() )
-                {
-                    first_or_done = true;
-                    mfi.Finalize();
-                    throw py::stop_iteration();
-                }
-                return mfi;
-             },
+             &pyAMReX::iterator_next<MFIter>,
              py::return_value_policy::reference_internal
         )
 
