@@ -121,6 +121,58 @@ def test_pc_init():
     assert pc.TotalNumberOfParticles() == pc.NumberOfParticlesAtLevel(0) == npart
     assert pc.OK()
 
+    print("Iterate particle boxes & set values")
+    lvl = 0
+    for pti in amrex.ParIter_1_1_2_1(pc, level=lvl):
+        print("...")
+        assert pti.num_particles == 1
+        assert pti.num_real_particles == 1
+        assert pti.num_neighbor_particles == 0
+        assert pti.level == lvl
+        print(pti.pair_index)
+        print(pti.geom(level=lvl))
+
+        aos = pti.aos()
+        aos_arr = np.array(aos, copy=False)
+        aos_arr[0]["x"] = 0.30
+        aos_arr[0]["y"] = 0.35
+        aos_arr[0]["z"] = 0.40
+
+        # TODO: this seems to write into a copy of the data
+        soa = pti.soa()
+        real_arrays = soa.GetRealData()
+        int_arrays = soa.GetIntData()
+        real_arrays[0] = [0.55]
+        real_arrays[1] = [0.22]
+        int_arrays[0] = [2]
+
+        assert np.allclose(real_arrays[0], np.array([0.55]))
+        assert np.allclose(real_arrays[1], np.array([0.22]))
+        assert np.allclose(int_arrays[0], np.array([2]))
+
+    # read-only
+    for pti in amrex.ParConstIter_1_1_2_1(pc, level=lvl):
+        assert pti.num_particles == 1
+        assert pti.num_real_particles == 1
+        assert pti.num_neighbor_particles == 0
+        assert pti.level == lvl
+
+        aos = pti.aos()
+        aos_arr = np.array(aos, copy=False)
+        assert aos[0].x == 0.30
+        assert aos[0].y == 0.35
+        assert aos[0].z == 0.40
+        assert aos_arr[0]["z"] == 0.40
+
+        soa = pti.soa()
+        real_arrays = soa.GetRealData()
+        int_arrays = soa.GetIntData()
+        print(real_arrays[0])
+        # TODO: this does not work yet and is still the original data
+        # assert np.allclose(real_arrays[0], np.array([0.55]))
+        # assert np.allclose(real_arrays[1], np.array([0.22]))
+        # assert np.allclose(int_arrays[0], np.array([2]))
+
 
 def test_particle_init(Npart, particle_container):
     pc = particle_container
