@@ -6,8 +6,11 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 
+#include "Base/Iterator.H"
+
 #include <AMReX_BoxArray.H>
 #include <AMReX_IntVect.H>
+#include <AMReX_ParIter.H>
 #include <AMReX_Particles.H>
 #include <AMReX_ParticleContainer.H>
 #include <AMReX_ParticleTile.H>
@@ -19,9 +22,88 @@
 namespace py = pybind11;
 using namespace amrex;
 
+
+template <bool is_const, typename T_ParIterBase>
+void make_Base_Iterators (py::module &m)
+{
+    using iterator_base = T_ParIterBase;
+    using container = typename iterator_base::ContainerType;
+    constexpr int NStructReal = container::NStructReal;
+    constexpr int NStructInt = container::NStructInt;
+    constexpr int NArrayReal = container::NArrayReal;
+    constexpr int NArrayInt = container::NArrayInt;
+
+    std::string particle_it_base_name = std::string("ParIterBase_").append(std::to_string(NStructReal) + "_" + std::to_string(NStructInt) + "_" + std::to_string(NArrayReal) + "_" + std::to_string(NArrayInt));
+    if (is_const) particle_it_base_name = "Const" + particle_it_base_name;
+    py::class_<iterator_base, MFIter>(m, particle_it_base_name.c_str())
+        .def(py::init<container&, int>(),
+            py::arg("particle_container"), py::arg("level"))
+        .def(py::init<container&, int, MFItInfo&>(),
+             py::arg("particle_container"), py::arg("level"), py::arg("info"))
+
+        .def("particle_tile", &iterator_base::GetParticleTile,
+                               py::return_value_policy::reference_internal)
+        .def("aos", &iterator_base::GetArrayOfStructs,
+                               py::return_value_policy::reference_internal)
+        .def("soa", &iterator_base::GetStructOfArrays,
+                               py::return_value_policy::reference_internal)
+
+        .def_property_readonly("num_particles", &iterator_base::numParticles)
+        .def_property_readonly("num_real_particles", &iterator_base::numRealParticles)
+        .def_property_readonly("num_neighbor_particles", &iterator_base::numNeighborParticles)
+        .def_property_readonly("level", &iterator_base::GetLevel)
+        .def_property_readonly("pair_index", &iterator_base::GetPairIndex)
+        .def("geom", &iterator_base::Geom, py::arg("level"))
+
+        // eq. to void operator++()
+        .def("__next__",
+             &pyAMReX::iterator_next<iterator_base>,
+             py::return_value_policy::reference_internal
+        )
+        .def("__iter__",
+             [](iterator_base & it) -> iterator_base & {
+                 return it;
+             },
+             py::return_value_policy::reference_internal
+        )
+    ;
+}
+
+template <bool is_const, typename T_ParIter, template<class> class Allocator=DefaultAllocator>
+void make_Iterators (py::module &m)
+{
+    using iterator = T_ParIter;
+    using container = typename iterator::ContainerType;
+    constexpr int NStructReal = container::NStructReal;
+    constexpr int NStructInt = container::NStructInt;
+    constexpr int NArrayReal = container::NArrayReal;
+    constexpr int NArrayInt = container::NArrayInt;
+
+    using iterator_base = amrex::ParIterBase<is_const, NStructReal, NStructInt, NArrayReal, NArrayInt, Allocator>;
+    make_Base_Iterators< is_const, iterator_base >(m);
+
+    auto particle_it_name = std::string("Par");
+    if (is_const) particle_it_name += "Const";
+    particle_it_name += std::string("Iter_").append(std::to_string(NStructReal) + "_" + std::to_string(NStructInt) + "_" + std::to_string(NArrayReal) + "_" + std::to_string(NArrayInt));
+    py::class_<iterator, iterator_base>(m, particle_it_name.c_str())
+        .def("__repr__",
+             [particle_it_name](iterator const & pti) {
+                 std::string r = "<amrex." + particle_it_name + " (";
+                 if( !pti.isValid() ) { r.append("in"); }
+                 r.append("valid)>");
+                 return r;
+             }
+        )
+        .def(py::init<container&, int>(),
+             py::arg("particle_container"), py::arg("level"))
+        .def(py::init<container&, int, MFItInfo&>(),
+             py::arg("particle_container"), py::arg("level"), py::arg("info"))
+    ;
+}
+
 template <int T_NStructReal, int T_NStructInt=0, int T_NArrayReal=0, int T_NArrayInt=0,
           template<class> class Allocator=DefaultAllocator>
-void make_ParticleContainer(py::module &m)
+void make_ParticleContainer_and_Iterators (py::module &m)
 {
     using ParticleContainerType = ParticleContainer<
         T_NStructReal, T_NStructInt, T_NArrayReal, T_NArrayInt,
@@ -237,17 +319,21 @@ void make_ParticleContainer(py::module &m)
         //     m_particles[lev][index].define(NumRuntimeRealComps(), NumRuntimeIntComps());
         //     return ParticlesAt(lev, iter);
         // }
-
     ;
+
+    using iterator = amrex::ParIter<T_NStructReal, T_NStructInt, T_NArrayReal, T_NArrayInt, Allocator>;
+    make_Iterators< false, iterator, Allocator >(m);
+    using const_iterator = amrex::ParConstIter<T_NStructReal, T_NStructInt, T_NArrayReal, T_NArrayInt, Allocator>;
+    make_Iterators< true, const_iterator, Allocator >(m);
 }
 
 
 void init_ParticleContainer(py::module& m) {
     // TODO: we might need to move all or most of the defines in here into a
     //       test/example submodule, so they do not collide with downstream projects
-    make_ParticleContainer< 1, 1, 2, 1> (m);
-    make_ParticleContainer< 0, 0, 4, 0> (m);   // HiPACE++ 22.07
-    make_ParticleContainer< 0, 0, 5, 0> (m);   // ImpactX 22.07
-    make_ParticleContainer< 0, 0, 7, 0> (m);
-    make_ParticleContainer< 0, 0, 37, 1> (m);  // HiPACE++ 22.07
+    make_ParticleContainer_and_Iterators< 1, 1, 2, 1> (m);
+    make_ParticleContainer_and_Iterators< 0, 0, 4, 0> (m);   // HiPACE++ 22.07
+    make_ParticleContainer_and_Iterators< 0, 0, 5, 0> (m);   // ImpactX 22.07
+    make_ParticleContainer_and_Iterators< 0, 0, 7, 0> (m);
+    make_ParticleContainer_and_Iterators< 0, 0, 37, 1> (m);  // HiPACE++ 22.07
 }
