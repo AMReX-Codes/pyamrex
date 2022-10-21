@@ -135,6 +135,18 @@ void make_ArrayOfStructs(py::module &m, std::string allocstr)
         .def("test_sizes", [](){ })
         .def("__setitem__", [](AOSType &aos, int const v,  const ParticleType& p){ aos[v] = p; })
         .def("__getitem__", [](AOSType &aos, int const v){ return aos[v]; }, py::return_value_policy::reference)
+
+        .def("to_host", [](AOSType const & aos) {
+            ArrayOfStructs<T_ParticleType, std::allocator> h_data;
+            h_data.resize(aos.size());
+            //py::array_t<T_ParticleType> h_data(aos.size());
+            amrex::Gpu::copy(amrex::Gpu::deviceToHost,
+               aos.begin(), aos.end(),
+               h_data.begin()
+               //h_data.ptr()
+            );
+            return h_data;
+        })
     ;
 }
 

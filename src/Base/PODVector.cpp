@@ -6,6 +6,7 @@
 #include "pyAMReX.H"
 
 #include <AMReX_PODVector.H>
+#include <AMReX_GpuContainers.H>
 
 #include <sstream>
 
@@ -72,6 +73,16 @@ void make_PODVector(py::module &m, std::string typestr, std::string allocstr)
         .def("resize", py::overload_cast<std::size_t, const T&>(&PODVector_type::resize))
         .def("reserve", &PODVector_type::reserve)
         .def("shrink_to_fit", &PODVector_type::shrink_to_fit)
+        .def("to_host", [](PODVector_type const & pv) {
+            PODVector<T, std::allocator<T>> h_data(pv.size());
+            //py::array_t<T> h_data(pv.size());
+            amrex::Gpu::copy(amrex::Gpu::deviceToHost,
+               pv.begin(), pv.end(),
+               h_data.begin()
+               //h_data.ptr()
+            );
+            return h_data;
+        })
 
         // front
         // back

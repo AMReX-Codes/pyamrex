@@ -82,13 +82,13 @@ def test_soa_from_tile():
     print(real_arrays)
     print(ra1)
     for ii, arr in enumerate(real_arrays):
-        assert np.allclose(np.array(arr), np.array(ra1[ii]))
+        assert np.allclose(arr.to_numpy(), ra1[ii].to_numpy())
 
     print("soa int test")
-    iarr_np = np.array(int_arrays[0], copy=False)
+    iarr_np = int_arrays[0].to_numpy()
     iarr_np[0] = -3
     ia1 = soa.GetIntData()
-    ia1_np = np.array(ia1[0], copy=False)
+    ia1_np = ia1[0].to_numpy()
     print(iarr_np)
     print(ia1_np)
     assert np.allclose(iarr_np, ia1_np)

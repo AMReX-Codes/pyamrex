@@ -31,6 +31,7 @@ __author__ = amrex_1d_pybind.__author__
 # in pure Python or add some other Python logic
 #
 def d_decl(x, y, z):
+    """Return a tuple of the first passed element"""
     return (x,)
 
 
@@ -41,3 +42,14 @@ def Print(*args, **kwargs):
         print(*args, **kwargs)
     elif ParallelDescriptor.IOProcessor():
         print(*args, **kwargs)
+
+
+from ..Array4 import register_Array4_extension
+from ..ArrayOfStructs import register_AoS_extension
+from ..PODVector import register_PODVector_extension
+from ..StructOfArrays import register_SoA_extension
+
+register_Array4_extension(amrex_1d_pybind)
+register_PODVector_extension(amrex_1d_pybind)
+register_SoA_extension(amrex_1d_pybind)
+register_AoS_extension(amrex_1d_pybind)

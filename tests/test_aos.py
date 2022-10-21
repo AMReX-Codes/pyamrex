@@ -68,7 +68,7 @@ def test_array_interface():
     # print('particle 1 from aos:\n',aos[0])
     # print('particle 2 from aos:\n',aos[1])
     # print('array interface\n', aos.__array_interface__)
-    arr = np.array(aos, copy=False)
+    arr = aos.to_numpy()
     assert (
         np.isclose(arr[0][0], 1.0)
         and np.isclose(arr[0][4], 5.2)

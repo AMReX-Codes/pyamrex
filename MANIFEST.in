@@ -6,6 +6,10 @@ recursive-include cmake *
 recursive-include src *
 recursive-include tests *
 
+# avoid accidentially copying compiled Python files
+global-exclude */__pycache__/*
+global-exclude *.pyc
+
 # see .gitignore
 prune cmake-build*
 prune .spack-env*
