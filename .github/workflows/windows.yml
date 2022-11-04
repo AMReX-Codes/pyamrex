@@ -46,12 +46,15 @@ jobs:
         cmake -S . -B build               `
               -T "ClangCl"                `
               -DCMAKE_VERBOSE_MAKEFILE=ON `
+              -DBUILD_SHARED_LIBS=ON      `
               -DAMReX_MPI=OFF
         if(!$?) { Exit $LASTEXITCODE }
 
         cmake --build build --config Debug -j 2
         if(!$?) { Exit $LASTEXITCODE }
-        cmake --build build --config Debug --target pip_install -j 2
+        cmake --build build --config Debug --target install
+        if(!$?) { Exit $LASTEXITCODE }
+        cmake --build build --config Debug --target pip_install
         if(!$?) { Exit $LASTEXITCODE }
     - name: Unit tests
       run: |

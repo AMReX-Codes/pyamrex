@@ -50,6 +50,7 @@ jobs:
         cmake -S . -B build               \
               -DCMAKE_BUILD_TYPE=Debug    \
               -DCMAKE_VERBOSE_MAKEFILE=ON \
+              -DBUILD_SHARED_LIBS=ON      \
               -DAMReX_MPI=ON
         cmake --build build --target pip_install -j 2
 
