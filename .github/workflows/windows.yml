@@ -52,10 +52,14 @@ jobs:
 
         cmake --build build --config Debug -j 2
         if(!$?) { Exit $LASTEXITCODE }
+
+        dumpbin /dependents build\lib\site-packages\amrex\amrex_pybind.cp311-win_amd64.pyd
+
         cmake --build build --config Debug --target install
         if(!$?) { Exit $LASTEXITCODE }
         cmake --build build --config Debug --target pip_install
         if(!$?) { Exit $LASTEXITCODE }
     - name: Unit tests
       run: |
+        set PATH="C:/Program Files (x86)/pyAMReX/bin/;%PATH%"
         ctest --test-dir build -C Debug --output-on-failure
