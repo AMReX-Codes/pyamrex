@@ -53,12 +53,17 @@ jobs:
         cmake --build build --config Debug -j 2
         if(!$?) { Exit $LASTEXITCODE }
 
-        dumpbin /dependents build\lib\site-packages\amrex\amrex_pybind.cp311-win_amd64.pyd
+        llvm-objdump -p build\lib\site-packages\amrex\amrex_pybind.cp311-win_amd64.pyd
 
         cmake --build build --config Debug --target install
         if(!$?) { Exit $LASTEXITCODE }
         cmake --build build --config Debug --target pip_install
         if(!$?) { Exit $LASTEXITCODE }
+
+        llvm-objdump -p  C:/Program Files (x86)/pyAMReX/bin/amrex.dll
+
+        Get-Childitem -Path C:\* -Recurse -Filter *python311.dll, *amrex.dll, *MSVCP140D.dll, KERNEL32.dll, VCRUNTIME140D.dll, VCRUNTIME140_1D.dll, ucrtbased.dll
+
     - name: Unit tests
       run: |
         set PATH="C:/Program Files (x86)/pyAMReX/bin/;%PATH%"
