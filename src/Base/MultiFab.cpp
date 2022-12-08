@@ -126,6 +126,12 @@ void init_MultiFab(py::module &m) {
              py::keep_alive<0, 1>()
         )
 
+        .def_static("saxpy", py::overload_cast< FabArray<FArrayBox> &, Real, FabArray<FArrayBox> const &, int, int, int, IntVect const & >(&FabArray<FArrayBox>::template Saxpy<FArrayBox>)
+        )
+        .def_static("xpay", py::overload_cast< FabArray<FArrayBox> &, Real, FabArray<FArrayBox> const &, int, int, int, IntVect const & >(&FabArray<FArrayBox>::template Xpay<FArrayBox>))
+        .def_static("lin_comb", py::overload_cast< FabArray<FArrayBox> &, Real, FabArray<FArrayBox> const &, int, Real, FabArray<FArrayBox> const &, int, int, int, IntVect const & >(&FabArray<FArrayBox>::template LinComb<FArrayBox>))
+
+        .def("sum", py::overload_cast< int, IntVect const&, bool >(&FabArray<FArrayBox>::template sum<FArrayBox>, py::const_))
         .def("sum_boundary", py::overload_cast< Periodicity const & >(&FabArray<FArrayBox>::SumBoundary))
         .def("sum_boundary", py::overload_cast< int, int, Periodicity const & >(&FabArray<FArrayBox>::SumBoundary))
         .def("sum_boundary", py::overload_cast< int, int, IntVect const&, Periodicity const & >(&FabArray<FArrayBox>::SumBoundary))
@@ -220,7 +226,12 @@ void init_MultiFab(py::module &m) {
         .def("norm0", py::overload_cast< int, int, bool, bool >(&MultiFab::norm0, py::const_))
         //.def("norm0", py::overload_cast< iMultiFab const &, int, int, bool >(&MultiFab::norm0, py::const_))
 
-        .def("norminf", py::overload_cast< int, int, bool, bool >(&MultiFab::norminf, py::const_))
+        .def("norminf",
+             //py::overload_cast< int, int, bool, bool >(&MultiFab::norminf, py::const_)
+             [](MultiFab const & mf, int comp, int nghost, bool local, bool ignore_covered) {
+                 return mf.norminf(comp, nghost, local, ignore_covered);
+             }
+        )
         //.def("norminf", py::overload_cast< iMultiFab const &, int, int, bool >(&MultiFab::norminf, py::const_))
 
         .def("norm1", py::overload_cast< int, Periodicity const&, bool >(&MultiFab::norm1, py::const_))
@@ -232,7 +243,9 @@ void init_MultiFab(py::module &m) {
         .def("norm2", py::overload_cast< Vector<int> const & >(&MultiFab::norm2, py::const_))
 
         /* simple math */
-        .def("sum", &MultiFab::sum,
+        .def("sum",
+             //py::overload_cast< int, bool >(&MultiFab::sum, py::const_),
+             [](MultiFab const & mf, int comp , bool local) { return mf.sum(comp, local); },
              py::arg("comp") = 0, py::arg("local") = false,
              "Returns the sum of component 'comp' over the MultiFab -- no ghost cells are included."
         )
@@ -303,14 +316,20 @@ void init_MultiFab(py::module &m) {
         .def_static("swap", py::overload_cast< MultiFab &, MultiFab &, int, int, int, int >(&MultiFab::Swap))
         .def_static("swap", py::overload_cast< MultiFab &, MultiFab &, int, int, int, IntVect const & >(&MultiFab::Swap))
 
-        .def_static("saxpy", py::overload_cast< MultiFab &, Real, MultiFab const &, int, int, int, int >(&MultiFab::Saxpy))
-        .def_static("saxpy", py::overload_cast< MultiFab &, Real, MultiFab const &, int, int, int, IntVect const & >(&MultiFab::Saxpy))
+        .def_static("saxpy",
+                    // py::overload_cast< MultiFab &, Real, MultiFab const &, int, int, int, int >(&MultiFab::Saxpy)
+                    static_cast<void (*)(MultiFab &, Real, MultiFab const &, int, int, int, int)>(&MultiFab::Saxpy)
+        )
 
-        .def_static("xpay", py::overload_cast< MultiFab &, Real, MultiFab const &, int, int, int, int >(&MultiFab::Xpay))
-        .def_static("xpay", py::overload_cast< MultiFab &, Real, MultiFab const &, int, int, int, IntVect const & >(&MultiFab::Xpay))
+        .def_static("xpay",
+                    // py::overload_cast< MultiFab &, Real, MultiFab const &, int, int, int, int >(&MultiFab::Xpay)
+                    static_cast<void (*)(MultiFab &, Real, MultiFab const &, int, int, int, int)>(&MultiFab::Xpay)
+        )
 
-        .def_static("lin_comb", py::overload_cast< MultiFab &, Real, MultiFab const &, int, Real, MultiFab const &, int, int, int, int >(&MultiFab::LinComb))
-        .def_static("lin_comb", py::overload_cast< MultiFab &, Real, MultiFab const &, int, Real, MultiFab const &, int, int, int, IntVect const & >(&MultiFab::LinComb))
+        .def_static("lin_comb",
+                    // py::overload_cast< MultiFab &, Real, MultiFab const &, int, Real, MultiFab const &, int, int, int, int >(&MultiFab::LinComb)
+                    static_cast<void (*)(MultiFab &, Real, MultiFab const &, int, Real, MultiFab const &, int, int, int, int)>(&MultiFab::LinComb)
+        )
 
         .def_static("add_product", py::overload_cast< MultiFab &, MultiFab const &, int, MultiFab const &, int, int, int, int >(&MultiFab::AddProduct))
         .def_static("add_product", py::overload_cast< MultiFab &, MultiFab const &, int, MultiFab const &, int, int, int, IntVect const & >(&MultiFab::AddProduct))
