@@ -32,7 +32,7 @@ jobs:
 
   gcc10:
     name: GNU@10.1
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     env: {CXXFLAGS: "-Werror -Wno-error=deprecated-declarations -Wshadow -Woverloaded-virtual -Wunreachable-code -fno-operator-names"}
     if: github.event.pull_request.draft == false
     steps:
