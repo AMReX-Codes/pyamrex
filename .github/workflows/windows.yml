@@ -60,11 +60,13 @@ jobs:
         cmake --build build --config Debug --target pip_install
         if(!$?) { Exit $LASTEXITCODE }
 
-        llvm-objdump -p  C:/Program Files (x86)/pyAMReX/bin/amrex.dll
+        llvm-objdump -p  "C:\Program Files (x86)\pyAMReX\bin\amrex.dll"
 
-        Get-Childitem -Path C:\* -Recurse -Filter *python311.dll, *amrex.dll, *MSVCP140D.dll, KERNEL32.dll, VCRUNTIME140D.dll, VCRUNTIME140_1D.dll, ucrtbased.dll
+        Get-Childitem -Path C:\* -Recurse -Filter "*python311.dll, *amrex.dll, *MSVCP140D.dll, KERNEL32.dll, VCRUNTIME140D.dll, VCRUNTIME140_1D.dll, ucrtbased.dll"
 
     - name: Unit tests
       run: |
         set PATH="C:/Program Files (x86)/pyAMReX/bin/;%PATH%"
-        ctest --test-dir build -C Debug --output-on-failure
+        (Get-Command ctest).Path
+        gflags /i C:\hostedtoolcache\windows\Python\3.11.1\x64\Scripts\ctest.exe +sls
+        cdb -c "g;q" ctest --test-dir build -C Debug --output-on-failure
