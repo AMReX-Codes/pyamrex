@@ -3,13 +3,13 @@
  * Authors: Ryan Sandberg
  * License: BSD-3-Clause-LBNL
  */
-#include <pybind11/pybind11.h>
-#include <pybind11/stl.h>
-
 #include <AMReX_Config.H>
 #include <AMReX_BoxArray.H>
 #include <AMReX_IntVect.H>
 #include <AMReX_ParticleTile.H>
+
+#include <pybind11/pybind11.h>
+#include <pybind11/stl.h>
 
 #include <sstream>
 

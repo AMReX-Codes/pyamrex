@@ -3,10 +3,10 @@
  * Authors: Axel Huebl
  * License: BSD-3-Clause-LBNL
  */
+#include <AMReX_FArrayBox.H>
+
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
-
-#include <AMReX_FArrayBox.H>
 
 #include <istream>
 

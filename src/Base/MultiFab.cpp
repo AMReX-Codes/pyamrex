@@ -3,9 +3,6 @@
  * Authors: Axel Huebl
  * License: BSD-3-Clause-LBNL
  */
-#include <pybind11/pybind11.h>
-#include <pybind11/stl.h>
-
 #include "Base/Iterator.H"
 
 #include <AMReX_Config.H>
@@ -15,6 +12,9 @@
 #include <AMReX_FabArray.H>
 #include <AMReX_FabArrayBase.H>
 #include <AMReX_MultiFab.H>
+
+#include <pybind11/pybind11.h>
+#include <pybind11/stl.h>
 
 #include <memory>
 #include <string>

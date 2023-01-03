@@ -3,11 +3,11 @@
  * Authors: Axel Huebl
  * License: BSD-3-Clause-LBNL
  */
-#include <pybind11/pybind11.h>
-#include <pybind11/stl.h>
-
 #include <AMReX_Config.H>
 #include <AMReX.H>
+
+#include <pybind11/pybind11.h>
+#include <pybind11/stl.h>
 
 #define STRINGIFY(x) #x
 #define MACRO_STRINGIFY(x) STRINGIFY(x)
@@ -114,8 +114,8 @@ PYBIND11_MODULE(amrex_pybind, m) {
 
     // authors
     m.attr("__author__") =
-        "Axel Huebl, Shreyas Ananthan, Steven R. Brandt, Andrew Myers, "
-        "Ryan T. Sandberg, Weiqun Zhang, et al.";
+        "Axel Huebl, Ryan Sandberg, Shreyas Ananthan, Remi Lehe, "
+        "Weiqun Zhang, et al.";
 
     // API runtime build-time feature variants
     // m.attr("variants") = amrex::getVariants();

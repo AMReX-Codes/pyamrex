@@ -3,13 +3,13 @@
  * Authors: Ryan Sandberg
  * License: BSD-3-Clause-LBNL
  */
+#include <AMReX_Config.H>
+#include <AMReX_PODVector.H>
+
 #include <pybind11/pybind11.h>
 #include <pybind11/operators.h>
 #include <pybind11/numpy.h>
 #include <pybind11/stl.h>
-
-#include <AMReX_Config.H>
-#include <AMReX_PODVector.H>
 
 #include <sstream>
 #include <string>

@@ -3,9 +3,6 @@
  * Authors: Ryan Sandberg
  * License: BSD-3-Clause-LBNL
  */
-#include <pybind11/pybind11.h>
-#include <pybind11/stl.h>
-
 #include "Base/Iterator.H"
 
 #include <AMReX_BoxArray.H>
@@ -15,6 +12,9 @@
 #include <AMReX_ParticleContainer.H>
 #include <AMReX_ParticleTile.H>
 #include <AMReX_ArrayOfStructs.H>
+
+#include <pybind11/pybind11.h>
+#include <pybind11/stl.h>
 
 #include <string>
 #include <sstream>

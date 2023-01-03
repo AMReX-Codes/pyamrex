@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 #
-# Copyright 2021-2022 The AMReX Community
+# Copyright 2021-2023 The AMReX Community
 #
 # Authors: Axel Huebl
 # License: BSD-3-Clause-LBNL
@@ -185,7 +185,7 @@ BUILD_SHARED_LIBS = os.environ.get("AMREX_BUILD_SHARED_LIBS", "OFF")
 AMReX_src = os.environ.get("AMREX_SRC")
 AMReX_internal = os.environ.get("AMREX_INTERNAL", "ON")
 AMReX_repo = os.environ.get("AMREX_REPO", "https://github.com/AMReX-Codes/amrex.git")
-AMReX_branch = os.environ.get("AMREX_BRANCH", "22.12")
+AMReX_branch = os.environ.get("AMREX_BRANCH", "23.01")
 pybind11_internal = os.environ.get("PYBIND11_INTERNAL", "ON")
 
 # https://cmake.org/cmake/help/v3.0/command/if.html
@@ -220,16 +220,16 @@ with open("./requirements.txt") as f:
 setup(
     name="amrex",
     # note PEP-440 syntax: x.y.zaN but x.y.z.devN
-    version="22.12",
+    version="23.01",
     packages=["amrex"],
     # Python sources:
     package_dir={"": "src"},
     # pyAMReX authors:
-    author="Axel Huebl, Shreyas Ananthan, Steven R. Brandt, Andrew Myers, Weiqun Zhang, et al.",
-    author_email="axelhuebl@lbl.gov, shreyas.ananthan@nrel.gov, sbrandt@cct.lsu.edu, atmyers@lbl.gov, weiqunzhang@lbl.gov",
+    author="Axel Huebl, Ryan Sandberg, Shreyas Ananthan, Remi Lehe, Weiqun Zhang, et al.",
+    author_email="axelhuebl@lbl.gov, rsandberg@lbl.gov, shreyas.ananthan@nrel.gov, rlehe@lbl.gov, weiqunzhang@lbl.gov",
     # wheel/pypi packages:
-    maintainer="Axel Huebl, Shreyas Ananthan, Steven R. Brandt, Andrew Myers",
-    maintainer_email="axelhuebl@lbl.gov, shreyas.ananthan@nrel.gov, sbrandt@cct.lsu.edu, atmyers@lbl.gov",
+    maintainer="Axel Huebl",
+    maintainer_email="axelhuebl@lbl.gov",
     description="AMReX: Software Framework for Block Structured AMR",
     long_description=long_description,
     long_description_content_type="text/markdown",

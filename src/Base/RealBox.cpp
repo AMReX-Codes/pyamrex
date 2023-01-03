@@ -3,10 +3,6 @@
  * Authors: Ryan Sandberg
  * License: BSD-3-Clause-LBNL
  */
-#include <pybind11/pybind11.h>
-#include <pybind11/operators.h>
-#include <pybind11/stl.h>
-
 #include <AMReX_Config.H>
 #include <AMReX_Array.H>
 #include <AMReX_Vector.H>
@@ -15,6 +11,10 @@
 #include <AMReX_RealVect.H>
 #include <AMReX_Box.H>
 #include <AMReX_RealBox.H>
+
+#include <pybind11/pybind11.h>
+#include <pybind11/operators.h>
+#include <pybind11/stl.h>
 
 #include <array>
 #include <sstream>
