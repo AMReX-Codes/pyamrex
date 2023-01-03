@@ -12,11 +12,8 @@ if os.name == "nt":
     # add anything in PATH
     paths = os.environ.get("PATH", "")
     for p in paths.split(";"):
-        print(f"p={p}")
         if os.path.exists(p):
             os.add_dll_directory(p)
-        else:
-            print("  ... does NOT exist")
 
 # import core bindings to C++
 from . import amrex_pybind
