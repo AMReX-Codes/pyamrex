@@ -8,7 +8,7 @@ concurrency:
 
 jobs:
   msvc:
-    name: MSVC w/o MPI
+    name: MSVC w/o MPI (static)
     runs-on: windows-latest
     if: github.event.pull_request.draft == false
     steps:
@@ -28,7 +28,7 @@ jobs:
       run: python3 -m pytest tests
 
   clang:
-    name: Clang w/o MPI
+    name: Clang w/o MPI (shared)
     runs-on: windows-latest
     if: github.event.pull_request.draft == false
     steps:
