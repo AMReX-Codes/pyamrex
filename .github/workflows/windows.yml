@@ -65,6 +65,7 @@ jobs:
     - name: Unit tests
       run: |
         $env:Path += "C:\Program Files (x86)\pyAMReX\bin"
+        $env:Path += "C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\"
         (Get-Command ctest).Path
         gflags /i C:\hostedtoolcache\windows\Python\3.11.1\x64\Scripts\ctest.exe +sls
         cdb -c "g;q" ctest --test-dir build -C Debug --output-on-failure
