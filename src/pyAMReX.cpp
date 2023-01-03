@@ -114,8 +114,8 @@ PYBIND11_MODULE(amrex_pybind, m) {
 
     // authors
     m.attr("__author__") =
-        "Axel Huebl, Shreyas Ananthan, Steven R. Brandt, Andrew Myers, "
-        "Ryan T. Sandberg, Weiqun Zhang, et al.";
+        "Axel Huebl, Ryan Sandberg, Shreyas Ananthan, Remi Lehe, "
+        "Weiqun Zhang, et al.";
 
     // API runtime build-time feature variants
     // m.attr("variants") = amrex::getVariants();

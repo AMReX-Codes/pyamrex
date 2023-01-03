@@ -225,11 +225,11 @@ setup(
     # Python sources:
     package_dir={"": "src"},
     # pyAMReX authors:
-    author="Axel Huebl, Shreyas Ananthan, Steven R. Brandt, Andrew Myers, Weiqun Zhang, et al.",
-    author_email="axelhuebl@lbl.gov, shreyas.ananthan@nrel.gov, sbrandt@cct.lsu.edu, atmyers@lbl.gov, weiqunzhang@lbl.gov",
+    author="Axel Huebl, Ryan Sandberg, Shreyas Ananthan, Remi Lehe, Weiqun Zhang, et al.",
+    author_email="axelhuebl@lbl.gov, rsandberg@lbl.gov, shreyas.ananthan@nrel.gov, rlehe@lbl.gov, weiqunzhang@lbl.gov",
     # wheel/pypi packages:
-    maintainer="Axel Huebl, Shreyas Ananthan, Steven R. Brandt, Andrew Myers",
-    maintainer_email="axelhuebl@lbl.gov, shreyas.ananthan@nrel.gov, sbrandt@cct.lsu.edu, atmyers@lbl.gov",
+    maintainer="Axel Huebl",
+    maintainer_email="axelhuebl@lbl.gov",
     description="AMReX: Software Framework for Block Structured AMR",
     long_description=long_description,
     long_description_content_type="text/markdown",
