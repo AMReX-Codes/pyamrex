@@ -8,7 +8,7 @@ concurrency:
 
 jobs:
   msvc:
-    name: MSVC w/o MPI
+    name: MSVC w/o MPI (static)
     runs-on: windows-latest
     if: github.event.pull_request.draft == false
     steps:
@@ -25,11 +25,10 @@ jobs:
         python3 -c "import amrex; print(amrex.__version__)"
     - name: Unit tests
       shell: cmd
-      run: |
-        python3 -m pytest tests
+      run: python3 -m pytest tests
 
   clang:
-    name: Clang w/o MPI
+    name: Clang w/o MPI (shared)
     runs-on: windows-latest
     if: github.event.pull_request.draft == false
     steps:
@@ -46,13 +45,21 @@ jobs:
         cmake -S . -B build               `
               -T "ClangCl"                `
               -DCMAKE_VERBOSE_MAKEFILE=ON `
+              -DBUILD_SHARED_LIBS=ON      `
               -DAMReX_MPI=OFF
         if(!$?) { Exit $LASTEXITCODE }
 
         cmake --build build --config Debug -j 2
         if(!$?) { Exit $LASTEXITCODE }
-        cmake --build build --config Debug --target pip_install -j 2
+        cmake --build build --config Debug --target install
         if(!$?) { Exit $LASTEXITCODE }
+        cmake --build build --config Debug --target pip_install
+        if(!$?) { Exit $LASTEXITCODE }
+
+    - name: Add install .dll location to the PATH
+      shell: bash
+      run: echo "C:\\Program Files (x86)\\pyAMReX\\bin" >> $GITHUB_PATH
+
     - name: Unit tests
       run: |
         ctest --test-dir build -C Debug --output-on-failure
