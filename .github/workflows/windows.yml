@@ -38,6 +38,7 @@ jobs:
       with:
         python-version: '3.x'
     - uses: seanmiddleditch/gha-setup-ninja@master
+
     - name: Build & Install
       run: |
         python3 -m pip install -U pip setuptools wheel pytest
@@ -62,13 +63,20 @@ jobs:
 
         llvm-objdump -p  "C:\Program Files (x86)\pyAMReX\bin\amrex.dll"
 
+    - name: Add debugger to the PATH
+      shell: bash
+      run: |
+        echo "C:\\Program Files (x86)\\Windows Kits\\10\\Debuggers\\x64" >> $GITHUB_PATH
+
+    - name: Add install .dll location to the PATH
+      shell: bash
+      run: |
+        echo "C:\\Program Files (x86)\\pyAMReX\\bin" >> $GITHUB_PATH
+
     - name: Unit tests
       run: |
-        $env:Path += "C:\Program Files (x86)\pyAMReX\bin"
-        $env:Path += "C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\"
         (Get-Command ctest).Path
+        gflags /i C:\hostedtoolcache\windows\Python\3.11.1\x64\Scripts\ctest.exe +sls
         cdb -c "g;q" ctest --test-dir build -C Debug --output-on-failure
 
-        Get-Childitem -Path C:\Program Files (x86)\* -Recurse -Filter "*python311.dll, *amrex.dll, *MSVCP140D.dll, KERNEL32.dll, VCRUNTIME140D.dll, VCRUNTIME140_1D.dll, ucrtbased.dll"
-
-#        gflags /i C:\hostedtoolcache\windows\Python\3.11.1\x64\Scripts\ctest.exe +sls
+#        Get-Childitem -Path C:\Program Files (x86)\* -Recurse -Filter "*python311.dll, *amrex.dll, *MSVCP140D.dll, KERNEL32.dll, VCRUNTIME140D.dll, VCRUNTIME140_1D.dll, ucrtbased.dll"
