@@ -283,6 +283,9 @@ if(pyAMReX_BUILD_TESTING)
         WORKING_DIRECTORY
             ${CMAKE_PYTHON_OUTPUT_DIRECTORY}
     )
+
+    # set PYTHONPATH and PATH (for .dll files)
+    pyamrex_test_set_pythonpath(pytest.AMReX)
 endif()
 
 

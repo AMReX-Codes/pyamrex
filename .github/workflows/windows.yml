@@ -8,7 +8,7 @@ concurrency:
 
 jobs:
   msvc:
-    name: MSVC w/o MPI (static)
+    name: MSVC w/o MPI static release
     runs-on: windows-latest
     if: github.event.pull_request.draft == false
     steps:
@@ -28,7 +28,7 @@ jobs:
       run: python3 -m pytest tests
 
   clang:
-    name: Clang w/o MPI (shared)
+    name: Clang w/o MPI shared debug
     runs-on: windows-latest
     if: github.event.pull_request.draft == false
     steps:
@@ -37,10 +37,11 @@ jobs:
       with:
         python-version: '3.x'
     - uses: seanmiddleditch/gha-setup-ninja@master
-    - name: Build & Install
+    - name: Build
       run: |
         python3 -m pip install -U pip setuptools wheel pytest
         python3 -m pip install -U cmake
+        python3 -m pip install -r requirements.txt
 
         cmake -S . -B build               `
               -T "ClangCl"                `
@@ -51,15 +52,12 @@ jobs:
 
         cmake --build build --config Debug -j 2
         if(!$?) { Exit $LASTEXITCODE }
+    - name: Unit tests
+      run: |
+        ctest --test-dir build -C Debug --output-on-failure
+    - name: Install
+      run: |
         cmake --build build --config Debug --target install
         if(!$?) { Exit $LASTEXITCODE }
         cmake --build build --config Debug --target pip_install
         if(!$?) { Exit $LASTEXITCODE }
-
-    - name: Add install .dll location to the PATH
-      shell: bash
-      run: echo "C:\\Program Files (x86)\\pyAMReX\\bin" >> $GITHUB_PATH
-
-    - name: Unit tests
-      run: |
-        ctest --test-dir build -C Debug --output-on-failure
