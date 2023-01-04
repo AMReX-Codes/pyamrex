@@ -121,6 +121,32 @@ macro(pyamrex_set_default_install_dirs_python)
 endmacro()
 
 
+# function to set the PYTHONPATH and PATH (for .dll files) on a test
+# this avoids that we need to install our python packages to run ctest
+#
+function(pyamrex_test_set_pythonpath test_name)
+    if(WIN32)
+        string(REPLACE ";" "\\;" WIN_PYTHONPATH "$ENV{PYTHONPATH}")
+        string(REPLACE ";" "\\;" WIN_PATH "$ENV{PATH}")  # DLLs
+        string(REGEX REPLACE "/" "\\\\" WIN_PYTHON_OUTPUT_DIRECTORY ${CMAKE_PYTHON_OUTPUT_DIRECTORY})
+        # shared library note:
+        #   For Windows Python 3.8+, this also needs to be injected via
+        #   os.add_dll_directory.
+        #   https://github.com/python/cpython/issues/80266
+        #   https://docs.python.org/3.8/library/os.html#os.add_dll_directory
+        set_property(TEST ${test_name}
+            APPEND PROPERTY ENVIRONMENT
+                "PYTHONPATH=${WIN_PYTHON_OUTPUT_DIRECTORY}\;${WIN_PYTHONPATH}"
+                "PATH=$<TARGET_FILE_DIR:pyAMReX>\;${WIN_PATH}"
+        )
+    else()
+        set_property(TEST ${test_name}
+            APPEND PROPERTY ENVIRONMENT "PYTHONPATH=${CMAKE_PYTHON_OUTPUT_DIRECTORY}:$ENV{PYTHONPATH}"
+        )
+    endif()
+endfunction()
+
+
 # change the default CMAKE_BUILD_TYPE
 # the default in CMake is Debug for historic reasons
 #
