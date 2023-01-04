@@ -137,7 +137,7 @@ function(pyamrex_test_set_pythonpath test_name)
         set_property(TEST ${test_name}
             APPEND PROPERTY ENVIRONMENT
                 "PYTHONPATH=${WIN_PYTHON_OUTPUT_DIRECTORY}\;${WIN_PYTHONPATH}"
-                "PATH=$<TARGET_FILE_DIR:pyAMReX>\;${WIN_PATH}"
+                "PATH=$<TARGET_FILE_DIR:pyAMReX>\;$<TARGET_FILE_DIR:AMReX::amrex>\;${WIN_PATH}"
         )
     else()
         set_property(TEST ${test_name}
