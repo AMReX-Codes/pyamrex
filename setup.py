@@ -185,7 +185,9 @@ BUILD_SHARED_LIBS = os.environ.get("AMREX_BUILD_SHARED_LIBS", "OFF")
 AMReX_src = os.environ.get("AMREX_SRC")
 AMReX_internal = os.environ.get("AMREX_INTERNAL", "ON")
 AMReX_repo = os.environ.get("AMREX_REPO", "https://github.com/AMReX-Codes/amrex.git")
-AMReX_branch = os.environ.get("AMREX_BRANCH", "23.01")
+AMReX_branch = os.environ.get(
+    "AMREX_BRANCH", "d5ddf3b22e949e7cc346a2f8660d1c73edfa391a"
+)
 pybind11_internal = os.environ.get("PYBIND11_INTERNAL", "ON")
 
 # https://cmake.org/cmake/help/v3.0/command/if.html
