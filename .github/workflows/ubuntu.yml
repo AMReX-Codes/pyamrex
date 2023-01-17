@@ -14,7 +14,7 @@ jobs:
     env: {CXXFLAGS: "-Werror -Wshadow -Woverloaded-virtual -Wunreachable-code -fno-operator-names -Wno-array-bounds"}
     if: github.event.pull_request.draft == false
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - uses: actions/setup-python@v2
       name: Install Python
       with:
@@ -36,7 +36,7 @@ jobs:
     env: {CXXFLAGS: "-Werror -Wno-error=deprecated-declarations -Wshadow -Woverloaded-virtual -Wunreachable-code -fno-operator-names"}
     if: github.event.pull_request.draft == false
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Dependencies
       run: .github/workflows/dependencies/dependencies_gcc10.sh
     - name: Build & Install
@@ -64,7 +64,7 @@ jobs:
     env: {CXXFLAGS: "-Werror -Wshadow -Woverloaded-virtual -Wextra-semi -Wunreachable-code -fno-operator-names -Wno-pass-failed"}
     if: github.event.pull_request.draft == false
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Dependencies
       run: .github/workflows/dependencies/dependencies_clang6.sh
     - name: Build & Install
@@ -84,7 +84,7 @@ jobs:
     env: {CXXFLAGS: "-fno-operator-names"}
     if: github.event.pull_request.draft == false
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Dependencies
       run: .github/workflows/dependencies/dependencies_nvcc11.sh
     - name: Build & Install
@@ -117,7 +117,7 @@ jobs:
 #    runs-on: ubuntu-20.04
 #    env: {CXXFLAGS: "-fno-operator-names"}
 #    steps:
-#    - uses: actions/checkout@v2
+#    - uses: actions/checkout@v3
 #    - name: Dependencies
 #      run: .github/workflows/dependencies/dependencies_dpcpp.sh
 #    - name: Build & Install
