@@ -110,7 +110,6 @@ class CMakeBuild(build_ext):
             ## dependency control (developers & package managers)
             "-DpyAMReX_amrex_internal=" + AMReX_internal,
             "-DpyAMReX_amrex_repo=" + AMReX_repo,
-            "-DpyAMReX_amrex_branch=" + AMReX_branch,
             "-DpyAMReX_pybind11_internal=" + pybind11_internal,
             # PEP-440 conformant version from package
             "-DpyAMReX_VERSION_INFO=" + self.distribution.get_version(),
@@ -124,6 +123,8 @@ class CMakeBuild(build_ext):
             #          or same dir as calling executable
         ]
         # further dependency control (developers & package managers)
+        if AMReX_branch:
+            cmake_args.append("-DpyAMReX_amrex_branch=" + AMReX_branch)
         if AMReX_src:
             cmake_args.append("-DpyAMReX_amrex_src=" + AMReX_src)
 
@@ -185,9 +186,7 @@ BUILD_SHARED_LIBS = os.environ.get("AMREX_BUILD_SHARED_LIBS", "OFF")
 AMReX_src = os.environ.get("AMREX_SRC")
 AMReX_internal = os.environ.get("AMREX_INTERNAL", "ON")
 AMReX_repo = os.environ.get("AMREX_REPO", "https://github.com/AMReX-Codes/amrex.git")
-AMReX_branch = os.environ.get(
-    "AMREX_BRANCH", "d5ddf3b22e949e7cc346a2f8660d1c73edfa391a"
-)
+AMReX_branch = os.environ.get("AMREX_BRANCH")
 pybind11_internal = os.environ.get("PYBIND11_INTERNAL", "ON")
 
 # https://cmake.org/cmake/help/v3.0/command/if.html
@@ -222,7 +221,7 @@ with open("./requirements.txt") as f:
 setup(
     name="amrex",
     # note PEP-440 syntax: x.y.zaN but x.y.z.devN
-    version="23.01",
+    version="23.02",
     packages=["amrex"],
     # Python sources:
     package_dir={"": "src"},
