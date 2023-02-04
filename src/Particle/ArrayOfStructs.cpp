@@ -23,10 +23,10 @@ namespace
     template <int NReal, int NInt,
               template<class> class Allocator=DefaultAllocator>
     py::dict
-    array_interface(ArrayOfStructs<NReal, NInt> const & aos)
+    array_interface(ArrayOfStructs<NReal, NInt, Allocator> const & aos)
     {
         using ParticleType = Particle<NReal, NInt>;
-        using RealType      = typename ParticleType::RealType;
+        using RealType     = typename ParticleType::RealType;
 
         auto d = py::dict();
         bool const read_only = false;
@@ -62,12 +62,15 @@ namespace
 
 template <int NReal, int NInt,
           template<class> class Allocator=DefaultAllocator>
-void make_ArrayOfStructs(py::module &m)
+void make_ArrayOfStructs(py::module &m, std::string allocstr)
 {
-    using AOSType = ArrayOfStructs<NReal, NInt>;
+    using AOSType = ArrayOfStructs<NReal, NInt, Allocator>;
     using ParticleType  = Particle<NReal, NInt>;
 
-    auto const aos_name = std::string("ArrayOfStructs_").append(std::to_string(NReal) + "_" + std::to_string(NInt));
+    auto const aos_name = std::string("ArrayOfStructs_")
+                          .append(std::to_string(NReal)).append("_")
+                          .append(std::to_string(NInt)).append("_")
+                          .append(allocstr);
     py::class_<AOSType>(m, aos_name.c_str())
         .def(py::init())
         // TODO:
@@ -117,9 +120,20 @@ void make_ArrayOfStructs(py::module &m)
     ;
 }
 
+template <int NReal, int NInt>
+void make_ArrayOfStructs(py::module &m)
+{
+    // see Src/Base/AMReX_GpuContainers.H
+    make_ArrayOfStructs<NReal, NInt, std::allocator> (m, "std");
+    make_ArrayOfStructs<NReal, NInt, amrex::ArenaAllocator> (m, "arena");
+    make_ArrayOfStructs<NReal, NInt, amrex::DeviceArenaAllocator> (m, "device");
+    make_ArrayOfStructs<NReal, NInt, amrex::ManagedArenaAllocator> (m, "managed");
+    make_ArrayOfStructs<NReal, NInt, amrex::PinnedArenaAllocator> (m, "pinned");
+    make_ArrayOfStructs<NReal, NInt, amrex::AsyncArenaAllocator> (m, "async");
+}
+
 void init_ArrayOfStructs(py::module& m) {
-    make_ArrayOfStructs< 0, 0> (m);
-    make_ArrayOfStructs< 7, 0> (m);
-    make_ArrayOfStructs< 1, 1> (m);
-    make_ArrayOfStructs< 2, 1> (m);
+    make_ArrayOfStructs<0, 0> (m);  // WarpX 22.07, ImpactX 22.07, HiPACE++ 22.07
+    make_ArrayOfStructs<1, 1> (m);  // test in ParticleContainer
+    make_ArrayOfStructs<2, 1> (m);  // test
 }

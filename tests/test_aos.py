@@ -7,7 +7,7 @@ import amrex
 
 
 def test_aos_init():
-    aos = amrex.ArrayOfStructs_2_1()
+    aos = amrex.ArrayOfStructs_2_1_std()
 
     assert aos.numParticles() == 0
     assert aos.numTotalParticles() == aos.numRealParticles() == 0
@@ -15,7 +15,7 @@ def test_aos_init():
 
 
 def test_aos_push_pop():
-    aos = amrex.ArrayOfStructs_2_1()
+    aos = amrex.ArrayOfStructs_2_1_std()
     p1 = amrex.Particle_2_1()
     p1.set_rdata([1.5, 2.2])
     p1.set_idata([3])
@@ -50,7 +50,7 @@ def test_aos_push_pop():
 
 
 def test_array_interface():
-    aos = amrex.ArrayOfStructs_2_1()
+    aos = amrex.ArrayOfStructs_2_1_std()
     p1 = amrex.Particle_2_1()
     p1.setPos([1, 2, 3])
     p1.set_rdata([4.5, 5.2])

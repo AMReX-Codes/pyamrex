@@ -38,10 +38,11 @@ namespace
 }
 
 template <class T, class Allocator = std::allocator<T> >
-void make_PODVector(py::module &m, std::string typestr)
+void make_PODVector(py::module &m, std::string typestr, std::string allocstr)
 {
     using PODVector_type = PODVector<T, Allocator>;
-    auto const podv_name = std::string("PODVector_").append(typestr);
+    auto const podv_name = std::string("PODVector_").append(typestr)
+                           .append("_").append(allocstr);
 
     py::class_<PODVector_type>(m, podv_name.c_str())
         .def("__repr__",
@@ -108,6 +109,18 @@ void make_PODVector(py::module &m, std::string typestr)
         .def("__setitem__", [](PODVector_type & podvector, int const v, T const value){ podvector[v] = value; })
         .def("__getitem__", [](PODVector_type & pv, int const v){ return pv[v]; })
     ;
+}
+
+template <class T>
+void make_PODVector(py::module &m, std::string typestr)
+{
+    // see Src/Base/AMReX_GpuContainers.H
+    make_PODVector<T, std::allocator<T>> (m, typestr, "std");
+    make_PODVector<T, amrex::ArenaAllocator<T>> (m, typestr, "arena");
+    make_PODVector<T, amrex::DeviceArenaAllocator<T>> (m, typestr, "device");
+    make_PODVector<T, amrex::ManagedArenaAllocator<T>> (m, typestr, "managed");
+    make_PODVector<T, amrex::PinnedArenaAllocator<T>> (m, typestr, "pinned");
+    make_PODVector<T, amrex::AsyncArenaAllocator<T>> (m, typestr, "async");
 }
 
 void init_PODVector(py::module& m) {
