@@ -7,7 +7,6 @@ import amrex
 
 
 def test_soa_init():
-
     soa = amrex.StructOfArrays_2_1()
     print("--test init --")
     print("num real components", soa.NumRealComps())
@@ -52,7 +51,6 @@ def test_soa_init():
 
 
 def test_soa_from_tile():
-
     pt = amrex.ParticleTile_1_1_2_1()
     p = amrex.Particle_1_1(1.0, 2.0, 3, rdata_0=4.0, idata_1=5)
     sp = amrex.Particle_3_2(
