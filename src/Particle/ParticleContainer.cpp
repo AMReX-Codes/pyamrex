@@ -24,7 +24,7 @@ using namespace amrex;
 
 
 template <bool is_const, typename T_ParIterBase>
-void make_Base_Iterators (py::module &m)
+void make_Base_Iterators (py::module &m, std::string allocstr)
 {
     using iterator_base = T_ParIterBase;
     using container = typename iterator_base::ContainerType;
@@ -33,7 +33,10 @@ void make_Base_Iterators (py::module &m)
     constexpr int NArrayReal = container::NArrayReal;
     constexpr int NArrayInt = container::NArrayInt;
 
-    std::string particle_it_base_name = std::string("ParIterBase_").append(std::to_string(NStructReal) + "_" + std::to_string(NStructInt) + "_" + std::to_string(NArrayReal) + "_" + std::to_string(NArrayInt));
+    std::string particle_it_base_name = std::string("ParIterBase_") +
+            std::to_string(NStructReal) + "_" + std::to_string(NStructInt) + "_" +
+            std::to_string(NArrayReal) + "_" + std::to_string(NArrayInt) + "_" +
+            allocstr;
     if (is_const) particle_it_base_name = "Const" + particle_it_base_name;
     py::class_<iterator_base, MFIter>(m, particle_it_base_name.c_str())
         .def(py::init<container&, int>(),
@@ -70,7 +73,7 @@ void make_Base_Iterators (py::module &m)
 }
 
 template <bool is_const, typename T_ParIter, template<class> class Allocator=DefaultAllocator>
-void make_Iterators (py::module &m)
+void make_Iterators (py::module &m, std::string allocstr)
 {
     using iterator = T_ParIter;
     using container = typename iterator::ContainerType;
@@ -80,11 +83,13 @@ void make_Iterators (py::module &m)
     constexpr int NArrayInt = container::NArrayInt;
 
     using iterator_base = amrex::ParIterBase<is_const, NStructReal, NStructInt, NArrayReal, NArrayInt, Allocator>;
-    make_Base_Iterators< is_const, iterator_base >(m);
+    make_Base_Iterators< is_const, iterator_base >(m, allocstr);
 
     auto particle_it_name = std::string("Par");
     if (is_const) particle_it_name += "Const";
-    particle_it_name += std::string("Iter_").append(std::to_string(NStructReal) + "_" + std::to_string(NStructInt) + "_" + std::to_string(NArrayReal) + "_" + std::to_string(NArrayInt));
+    particle_it_name += std::string("Iter_") + std::to_string(NStructReal) + "_" +
+                        std::to_string(NStructInt) + "_" + std::to_string(NArrayReal) + "_" +
+                        std::to_string(NArrayInt) + "_" + allocstr;
     py::class_<iterator, iterator_base>(m, particle_it_name.c_str())
         .def("__repr__",
              [particle_it_name](iterator const & pti) {
@@ -101,20 +106,14 @@ void make_Iterators (py::module &m)
     ;
 }
 
-template <int T_NStructReal, int T_NStructInt=0, int T_NArrayReal=0, int T_NArrayInt=0,
-          template<class> class Allocator=DefaultAllocator>
-void make_ParticleContainer_and_Iterators (py::module &m)
-{
-    using ParticleContainerType = ParticleContainer<
-        T_NStructReal, T_NStructInt, T_NArrayReal, T_NArrayInt,
-        Allocator
-    >;
+template <int T_NStructReal, int T_NStructInt=0, int T_NArrayReal=0, int T_NArrayInt=0>
+void make_ParticleInitData (py::module &m) {
+    using ParticleInitData = ParticleInitType<T_NStructReal, T_NStructInt, T_NArrayReal, T_NArrayInt>;
 
-    using ParticleTileType = typename ParticleContainerType::ParticleTileType;
-    using AoS = typename ParticleTileType::AoS;
-    using ParticleInitData = typename ParticleContainerType::ParticleInitData;
-
-    auto const particle_init_data_type = std::string("ParticleInitType_").append(std::to_string(T_NStructReal) + "_" + std::to_string(T_NStructInt) + "_" + std::to_string(T_NArrayReal) + "_" + std::to_string(T_NArrayInt));
+    auto const particle_init_data_type =
+        std::string("ParticleInitType_") + std::to_string(T_NStructReal) + "_" +
+        std::to_string(T_NStructInt) + "_" + std::to_string(T_NArrayReal) + "_" +
+        std::to_string(T_NArrayInt);
     py::class_<ParticleInitData>(m, particle_init_data_type.c_str())
         .def(py::init<>())
         .def_readwrite("real_struct_data", &ParticleInitData::real_struct_data)
@@ -122,8 +121,23 @@ void make_ParticleContainer_and_Iterators (py::module &m)
         .def_readwrite("real_array_data", &ParticleInitData::real_array_data)
         .def_readwrite("int_array_data", &ParticleInitData::int_array_data)
     ;
+}
 
-    auto const particle_container_type = std::string("ParticleContainer_").append(std::to_string(T_NStructReal) + "_" + std::to_string(T_NStructInt) + "_" + std::to_string(T_NArrayReal) + "_" + std::to_string(T_NArrayInt));
+template <int T_NStructReal, int T_NStructInt=0, int T_NArrayReal=0, int T_NArrayInt=0,
+          template<class> class Allocator=DefaultAllocator>
+void make_ParticleContainer_and_Iterators (py::module &m, std::string allocstr)
+{
+    using ParticleContainerType = ParticleContainer<
+        T_NStructReal, T_NStructInt, T_NArrayReal, T_NArrayInt,
+        Allocator
+    >;
+    using ParticleInitData = typename ParticleContainerType::ParticleInitData;
+    using ParticleTileType = typename ParticleContainerType::ParticleTileType;
+    //using AoS = typename ParticleContainerType::AoS;
+
+    auto const particle_container_type = std::string("ParticleContainer_") + std::to_string(T_NStructReal) + "_" +
+                                         std::to_string(T_NStructInt) + "_" + std::to_string(T_NArrayReal) + "_" +
+                                         std::to_string(T_NArrayInt) + "_" + allocstr;
     py::class_<ParticleContainerType>(m, particle_container_type.c_str())
         .def(py::init())
         .def(py::init<const Geometry&, const DistributionMapping&, const BoxArray&>())
@@ -213,18 +227,19 @@ void make_ParticleContainer_and_Iterators (py::module &m)
         .def("RemoveParticlesAtLevel", &ParticleContainerType::RemoveParticlesAtLevel)
         .def("RemoveParticlesNotAtFinestLevel", &ParticleContainerType::RemoveParticlesNotAtFinestLevel)
         // void CreateVirtualParticles (int level, AoS& virts) const;
-        // .def("CreateVirtualParticles", py::overload_cast<int, AoS&>(&ParticleContainerType::CreateVirtualParticles), py::const_)
-        .def("CreateVirtualParticles", [](ParticleContainerType& pc, int level, AoS& virts){ return pc.CreateVirtualParticles(level, virts);})
-        // void CreateGhostParticles (int level, int ngrow, AoS& ghosts) const;
-        // .def("CreateGhostParticles", &ParticleContainerType::CreateGhostParticles)
-        .def("CreateGhostParticles", [](ParticleContainerType& pc, int level, int ngrow, AoS& ghosts) {
-            return pc.CreateGhostParticles(level, ngrow, ghosts); })
-        .def("AddParticlesAtLevel", [](ParticleContainerType& pc, AoS& particles, int level, int nGrow=0) {
-            pc.AddParticlesAtLevel(particles, level, nGrow);
-        })
+        //.def("CreateVirtualParticles", py::overload_cast<int, AoS&>(&ParticleContainerType::CreateVirtualParticles, py::const_),
+        //    py::arg("level"), py::arg("virts"))
+        .def("CreateVirtualParticles", py::overload_cast<int, ParticleTileType&>(&ParticleContainerType::CreateVirtualParticles, py::const_),
+             py::arg("level"), py::arg("virts"))
+        //.def("CreateGhostParticles", py::overload_cast<int, int, AoS&>(&ParticleContainerType::CreateGhostParticles, py::const_),
+        //     py::arg("level"), py::arg("ngrow"), py::arg("ghosts"))
+        .def("CreateGhostParticles", py::overload_cast<int, int, ParticleTileType&>(&ParticleContainerType::CreateGhostParticles, py::const_),
+             py::arg("level"), py::arg("ngrow"), py::arg("ghosts"))
+        //.def("AddParticlesAtLevel", py::overload_cast<AoS&, int, int>(&ParticleContainerType::AddParticlesAtLevel),
+        //    py::arg("particles"), py::arg("level"), py::arg("ngrow")=0)
+        .def("AddParticlesAtLevel", py::overload_cast<ParticleTileType&, int, int>(&ParticleContainerType::AddParticlesAtLevel),
+            py::arg("particles"), py::arg("level"), py::arg("ngrow")=0)
 
-        // void CreateGhostParticles (int level, int ngrow, ParticleTileType& ghosts) const;
-        // void AddParticlesAtLevel (ParticleTileType& particles, int level, int nGrow=0);
         .def("clearParticles", &ParticleContainerType::clearParticles)
         // template <class PCType,
         //           std::enable_if_t<IsParticleContainer<PCType>::value, int> foo = 0>
@@ -322,11 +337,30 @@ void make_ParticleContainer_and_Iterators (py::module &m)
     ;
 
     using iterator = amrex::ParIter<T_NStructReal, T_NStructInt, T_NArrayReal, T_NArrayInt, Allocator>;
-    make_Iterators< false, iterator, Allocator >(m);
+    make_Iterators< false, iterator, Allocator >(m, allocstr);
     using const_iterator = amrex::ParConstIter<T_NStructReal, T_NStructInt, T_NArrayReal, T_NArrayInt, Allocator>;
-    make_Iterators< true, const_iterator, Allocator >(m);
+    make_Iterators< true, const_iterator, Allocator >(m, allocstr);
 }
 
+template <int T_NStructReal, int T_NStructInt=0, int T_NArrayReal=0, int T_NArrayInt=0>
+void make_ParticleContainer_and_Iterators (py::module &m)
+{
+    make_ParticleInitData<T_NStructReal, T_NStructInt, T_NArrayReal, T_NArrayInt>(m);
+
+    // see Src/Base/AMReX_GpuContainers.H
+    make_ParticleContainer_and_Iterators<T_NStructReal, T_NStructInt, T_NArrayReal, T_NArrayInt,
+                                         std::allocator>(m, "std");
+    make_ParticleContainer_and_Iterators<T_NStructReal, T_NStructInt, T_NArrayReal, T_NArrayInt,
+                                         amrex::ArenaAllocator>(m, "arena");
+    make_ParticleContainer_and_Iterators<T_NStructReal, T_NStructInt, T_NArrayReal, T_NArrayInt,
+                                         amrex::DeviceArenaAllocator>(m, "device");
+    make_ParticleContainer_and_Iterators<T_NStructReal, T_NStructInt, T_NArrayReal, T_NArrayInt,
+                                         amrex::ManagedArenaAllocator>(m, "managed");
+    make_ParticleContainer_and_Iterators<T_NStructReal, T_NStructInt, T_NArrayReal, T_NArrayInt,
+                                         amrex::PinnedArenaAllocator>(m, "pinned");
+    make_ParticleContainer_and_Iterators<T_NStructReal, T_NStructInt, T_NArrayReal, T_NArrayInt,
+                                         amrex::AsyncArenaAllocator>(m, "async");
+}
 
 void init_ParticleContainer(py::module& m) {
     // TODO: we might need to move all or most of the defines in here into a

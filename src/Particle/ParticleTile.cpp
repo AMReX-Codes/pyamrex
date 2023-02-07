@@ -20,30 +20,40 @@ using namespace amrex;
 template <int T_NReal, int T_NInt=0>
 void make_Particle(py::module &m);
 
-template <int NStructReal, int NStructInt, int NArrayReal, int NArrayInt,
-          template<class> class Allocator=DefaultAllocator>
-void make_ParticleTile(py::module &m)
-{
+template <int NStructReal, int NStructInt, int NArrayReal, int NArrayInt>
+void make_ParticleTileData(py::module &m) {
     using ParticleTileDataType = ParticleTileData<NStructReal, NStructInt, NArrayReal, NArrayInt>;
-    using ParticleTileType=ParticleTile<NStructReal, NStructInt, NArrayReal, NArrayInt, DefaultAllocator>;
-    using ParticleType = Particle<NStructReal, NStructInt>;
-
     using SuperParticleType = Particle<NStructReal + NArrayReal, NStructInt + NArrayInt>;
 
-    auto const particle_tile_data_type = std::string("ParticleTileData_").append(std::to_string(NStructReal) + "_" + std::to_string(NStructInt) + "_" + std::to_string(NArrayReal) + "_" + std::to_string(NArrayInt));
+    auto const particle_tile_data_type =
+        std::string("ParticleTileData_") + std::to_string(NStructReal) + "_" +
+        std::to_string(NStructInt) + "_" + std::to_string(NArrayReal) + "_" +
+        std::to_string(NArrayInt);
     py::class_<ParticleTileDataType>(m, particle_tile_data_type.c_str())
-        .def(py::init())
-        .def_readonly("m_size", &ParticleTileDataType::m_size)
-        .def_readonly("m_num_runtime_real", &ParticleTileDataType::m_num_runtime_real)
-        .def_readonly("m_num_runtime_int", &ParticleTileDataType::m_num_runtime_int)
-        .def("getSuperParticle", &ParticleTileDataType::getSuperParticle)
-        .def("setSuperParticle", &ParticleTileDataType::setSuperParticle)
-        // setter & getter
-        .def("__setitem__", [](ParticleTileDataType & pdt, int const v, SuperParticleType const value){ pdt.setSuperParticle( value, v); })
-        .def("__getitem__", [](ParticleTileDataType & pdt, int const v){ return pdt.getSuperParticle(v); })
-    ;
+            .def(py::init())
+            .def_readonly("m_size", &ParticleTileDataType::m_size)
+            .def_readonly("m_num_runtime_real", &ParticleTileDataType::m_num_runtime_real)
+            .def_readonly("m_num_runtime_int", &ParticleTileDataType::m_num_runtime_int)
+            .def("getSuperParticle", &ParticleTileDataType::getSuperParticle)
+            .def("setSuperParticle", &ParticleTileDataType::setSuperParticle)
+                    // setter & getter
+            .def("__setitem__", [](ParticleTileDataType &pdt, int const v,
+                                   SuperParticleType const value) { pdt.setSuperParticle(value, v); })
+            .def("__getitem__",
+                 [](ParticleTileDataType &pdt, int const v) { return pdt.getSuperParticle(v); });
+}
 
-    auto const particle_tile_type = std::string("ParticleTile_").append(std::to_string(NStructReal) + "_" + std::to_string(NStructInt) + "_" + std::to_string(NArrayReal) + "_" + std::to_string(NArrayInt));
+template <int NStructReal, int NStructInt, int NArrayReal, int NArrayInt,
+          template<class> class Allocator=DefaultAllocator>
+void make_ParticleTile(py::module &m, std::string allocstr)
+{
+    using ParticleTileType = ParticleTile<NStructReal, NStructInt, NArrayReal, NArrayInt, Allocator>;
+    using ParticleType = Particle<NStructReal, NStructInt>;
+    using SuperParticleType = Particle<NStructReal + NArrayReal, NStructInt + NArrayInt>;
+
+    auto const particle_tile_type = std::string("ParticleTile_") + std::to_string(NStructReal) + "_" +
+                                    std::to_string(NStructInt) + "_" + std::to_string(NArrayReal) + "_" +
+                                    std::to_string(NArrayInt) + "_" + allocstr;
     py::class_<ParticleTileType>(m, particle_tile_type.c_str())
         .def(py::init())
         .def_readonly_static("NAR", &ParticleTileType::NAR)
@@ -94,6 +104,26 @@ void make_ParticleTile(py::module &m)
         .def("__setitem__", [](ParticleTileType & pt, int const v, SuperParticleType const value){ pt.getParticleTileData().setSuperParticle( value, v); })
         .def("__getitem__", [](ParticleTileType & pt, int const v){ return pt.getParticleTileData().getSuperParticle(v); })
     ;
+}
+
+template <int NStructReal, int NStructInt, int NArrayReal, int NArrayInt>
+void make_ParticleTile(py::module &m)
+{
+    make_ParticleTileData<NStructReal, NStructInt, NArrayReal, NArrayInt>(m);
+
+    // see Src/Base/AMReX_GpuContainers.H
+    make_ParticleTile<NStructReal, NStructInt, NArrayReal, NArrayInt,
+                      std::allocator>(m, "std");
+    make_ParticleTile<NStructReal, NStructInt, NArrayReal, NArrayInt,
+                      amrex::ArenaAllocator>(m, "arena");
+    make_ParticleTile<NStructReal, NStructInt, NArrayReal, NArrayInt,
+                      amrex::DeviceArenaAllocator>(m, "device");
+    make_ParticleTile<NStructReal, NStructInt, NArrayReal, NArrayInt,
+                      amrex::ManagedArenaAllocator>(m, "managed");
+    make_ParticleTile<NStructReal, NStructInt, NArrayReal, NArrayInt,
+                      amrex::PinnedArenaAllocator>(m, "pinned");
+    make_ParticleTile<NStructReal, NStructInt, NArrayReal, NArrayInt,
+                      amrex::AsyncArenaAllocator>(m, "async");
 }
 
 void init_ParticleTile(py::module& m) {
