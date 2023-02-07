@@ -117,10 +117,12 @@ void make_PODVector(py::module &m, std::string typestr)
     // see Src/Base/AMReX_GpuContainers.H
     make_PODVector<T, std::allocator<T>> (m, typestr, "std");
     make_PODVector<T, amrex::ArenaAllocator<T>> (m, typestr, "arena");
+    make_PODVector<T, amrex::PinnedArenaAllocator<T>> (m, typestr, "pinned");
+#ifdef AMREX_USE_GPU
     make_PODVector<T, amrex::DeviceArenaAllocator<T>> (m, typestr, "device");
     make_PODVector<T, amrex::ManagedArenaAllocator<T>> (m, typestr, "managed");
-    make_PODVector<T, amrex::PinnedArenaAllocator<T>> (m, typestr, "pinned");
     make_PODVector<T, amrex::AsyncArenaAllocator<T>> (m, typestr, "async");
+#endif
 }
 
 void init_PODVector(py::module& m) {

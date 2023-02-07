@@ -126,10 +126,12 @@ void make_ArrayOfStructs(py::module &m)
     // see Src/Base/AMReX_GpuContainers.H
     make_ArrayOfStructs<NReal, NInt, std::allocator> (m, "std");
     make_ArrayOfStructs<NReal, NInt, amrex::ArenaAllocator> (m, "arena");
+    make_ArrayOfStructs<NReal, NInt, amrex::PinnedArenaAllocator> (m, "pinned");
+#ifdef AMREX_USE_GPU
     make_ArrayOfStructs<NReal, NInt, amrex::DeviceArenaAllocator> (m, "device");
     make_ArrayOfStructs<NReal, NInt, amrex::ManagedArenaAllocator> (m, "managed");
-    make_ArrayOfStructs<NReal, NInt, amrex::PinnedArenaAllocator> (m, "pinned");
     make_ArrayOfStructs<NReal, NInt, amrex::AsyncArenaAllocator> (m, "async");
+#endif
 }
 
 void init_ArrayOfStructs(py::module& m) {

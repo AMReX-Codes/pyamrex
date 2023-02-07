@@ -353,13 +353,15 @@ void make_ParticleContainer_and_Iterators (py::module &m)
     make_ParticleContainer_and_Iterators<T_NStructReal, T_NStructInt, T_NArrayReal, T_NArrayInt,
                                          amrex::ArenaAllocator>(m, "arena");
     make_ParticleContainer_and_Iterators<T_NStructReal, T_NStructInt, T_NArrayReal, T_NArrayInt,
+                                         amrex::PinnedArenaAllocator>(m, "pinned");
+#ifdef AMREX_USE_GPU
+    make_ParticleContainer_and_Iterators<T_NStructReal, T_NStructInt, T_NArrayReal, T_NArrayInt,
                                          amrex::DeviceArenaAllocator>(m, "device");
     make_ParticleContainer_and_Iterators<T_NStructReal, T_NStructInt, T_NArrayReal, T_NArrayInt,
                                          amrex::ManagedArenaAllocator>(m, "managed");
     make_ParticleContainer_and_Iterators<T_NStructReal, T_NStructInt, T_NArrayReal, T_NArrayInt,
-                                         amrex::PinnedArenaAllocator>(m, "pinned");
-    make_ParticleContainer_and_Iterators<T_NStructReal, T_NStructInt, T_NArrayReal, T_NArrayInt,
                                          amrex::AsyncArenaAllocator>(m, "async");
+#endif
 }
 
 void init_ParticleContainer(py::module& m) {

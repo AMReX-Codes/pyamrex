@@ -117,13 +117,15 @@ void make_ParticleTile(py::module &m)
     make_ParticleTile<NStructReal, NStructInt, NArrayReal, NArrayInt,
                       amrex::ArenaAllocator>(m, "arena");
     make_ParticleTile<NStructReal, NStructInt, NArrayReal, NArrayInt,
+                      amrex::PinnedArenaAllocator>(m, "pinned");
+#ifdef AMREX_USE_GPU
+    make_ParticleTile<NStructReal, NStructInt, NArrayReal, NArrayInt,
                       amrex::DeviceArenaAllocator>(m, "device");
     make_ParticleTile<NStructReal, NStructInt, NArrayReal, NArrayInt,
                       amrex::ManagedArenaAllocator>(m, "managed");
     make_ParticleTile<NStructReal, NStructInt, NArrayReal, NArrayInt,
-                      amrex::PinnedArenaAllocator>(m, "pinned");
-    make_ParticleTile<NStructReal, NStructInt, NArrayReal, NArrayInt,
                       amrex::AsyncArenaAllocator>(m, "async");
+#endif
 }
 
 void init_ParticleTile(py::module& m) {
