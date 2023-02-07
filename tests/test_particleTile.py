@@ -8,7 +8,6 @@ import amrex
 
 ##########
 def test_ptile_data():
-
     ptd = amrex.ParticleTileData_1_1_2_1()
     assert ptd.m_size == 0
     assert ptd.m_num_runtime_real == 0
@@ -16,7 +15,6 @@ def test_ptile_data():
 
 
 def test_ptile_funs():
-
     pt = amrex.ParticleTile_1_1_2_1()
 
     assert pt.empty() and pt.size() == 0
@@ -37,7 +35,6 @@ def test_ptile_funs():
 
 ################
 def test_ptile_pushback_ptiledata():
-
     pt = amrex.ParticleTile_1_1_2_1()
     p = amrex.Particle_1_1(1.0, 2.0, 3, 4.0, 5)
     sp = amrex.Particle_3_2(5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11, 12)
