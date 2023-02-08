@@ -17,11 +17,12 @@ using namespace amrex;
 
 template <int NReal, int NInt,
           template<class> class Allocator=DefaultAllocator>
-void make_StructOfArrays(py::module &m)
+void make_StructOfArrays(py::module &m, std::string allocstr)
 {
-    using SOAType = StructOfArrays<NReal, NInt>;
+    using SOAType = StructOfArrays<NReal, NInt, Allocator>;
 
-    auto const soa_name = std::string("StructOfArrays_").append(std::to_string(NReal) + "_" + std::to_string(NInt));
+    auto const soa_name = std::string("StructOfArrays_") + std::to_string(NReal) + "_" +
+                          std::to_string(NInt) + "_" + allocstr;
     py::class_<SOAType>(m, soa_name.c_str())
         .def(py::init())
         .def("define", &SOAType::define)
@@ -41,11 +42,23 @@ void make_StructOfArrays(py::module &m)
     ;
 }
 
+template <int NReal, int NInt>
+void make_StructOfArrays(py::module &m)
+{
+    // see Src/Base/AMReX_GpuContainers.H
+    make_StructOfArrays<NReal, NInt, std::allocator>(m, "std");
+    make_StructOfArrays<NReal, NInt, amrex::ArenaAllocator>(m, "arena");
+    make_StructOfArrays<NReal, NInt, amrex::PinnedArenaAllocator>(m, "pinned");
+#ifdef AMREX_USE_GPU
+    make_StructOfArrays<NReal, NInt, amrex::DeviceArenaAllocator>(m, "device");
+    make_StructOfArrays<NReal, NInt, amrex::ManagedArenaAllocator>(m, "managed");
+    make_StructOfArrays<NReal, NInt, amrex::AsyncArenaAllocator>(m, "async");
+#endif
+}
 
 void init_StructOfArrays(py::module& m) {
-    make_StructOfArrays< 2, 1 > (m);
-    make_StructOfArrays< 4, 0 > (m);  // HiPACE++ 22.07
-    make_StructOfArrays< 5, 0 > (m);  // ImpactX 22.07
-    make_StructOfArrays< 7, 0 > (m);
-    make_StructOfArrays< 37, 1> (m);  // HiPACE++ 22.07
+    make_StructOfArrays< 2, 1>(m);
+    make_StructOfArrays< 4, 0>(m);  // HiPACE++ 22.07
+    make_StructOfArrays< 5, 0>(m);  // ImpactX 22.07
+    make_StructOfArrays<37, 1>(m);  // HiPACE++ 22.07
 }

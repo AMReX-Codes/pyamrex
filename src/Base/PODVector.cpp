@@ -16,11 +16,33 @@
 namespace py = pybind11;
 using namespace amrex;
 
-template <class T, class Allocator = std::allocator<T> >
-void make_PODVector(py::module &m, std::string typestr)
+namespace
 {
-    using PODVector_type=PODVector<T, Allocator>;
-    auto const podv_name = std::string("PODVector_").append(typestr);
+    /** CPU: __array_interface__ v3
+     *
+     * https://numpy.org/doc/stable/reference/arrays.interface.html
+     */
+    template <class T, class Allocator = std::allocator<T> >
+    py::dict
+    array_interface(PODVector<T, Allocator> const & podvector)
+    {
+        auto d = py::dict();
+        bool const read_only = false;
+        d["data"] = py::make_tuple(std::intptr_t(podvector.dataPtr()), read_only);
+        d["shape"] = py::make_tuple(podvector.size());
+        d["strides"] = py::none();
+        d["typestr"] = py::format_descriptor<T>::format();
+        d["version"] = 3;
+        return d;
+    }
+}
+
+template <class T, class Allocator = std::allocator<T> >
+void make_PODVector(py::module &m, std::string typestr, std::string allocstr)
+{
+    using PODVector_type = PODVector<T, Allocator>;
+    auto const podv_name = std::string("PODVector_").append(typestr)
+                           .append("_").append(allocstr);
 
     py::class_<PODVector_type>(m, podv_name.c_str())
         .def("__repr__",
@@ -60,12 +82,26 @@ void make_PODVector(py::module &m, std::string typestr)
         // swap
 
         .def_property_readonly("__array_interface__", [](PODVector_type const & podvector) {
-            auto d = py::dict();
-            bool const read_only = false;
-            d["data"] = py::make_tuple(std::intptr_t(podvector.dataPtr()), read_only);
-            d["shape"] = py::make_tuple(podvector.size());
-            d["strides"] = py::none();
-            d["typestr"] = py::format_descriptor<T>::format();
+            return array_interface(podvector);
+        })
+        .def_property_readonly("__cuda_array_interface__", [](PODVector_type const & podvector) {
+            // Nvidia GPUs: __cuda_array_interface__ v3
+            // https://numba.readthedocs.io/en/latest/cuda/cuda_array_interface.html
+            auto d = array_interface(podvector);
+
+            // data:
+            // Because the user of the interface may or may not be in the same context, the most common case is to use cuPointerGetAttribute with CU_POINTER_ATTRIBUTE_DEVICE_POINTER in the CUDA driver API (or the equivalent CUDA Runtime API) to retrieve a device pointer that is usable in the currently active context.
+            // TODO For zero-size arrays, use 0 here.
+
+            // None or integer
+            // An optional stream upon which synchronization must take place at the point of consumption, either by synchronizing on the stream or enqueuing operations on the data on the given stream. Integer values in this entry are as follows:
+            //   0: This is disallowed as it would be ambiguous between None and the default stream, and also between the legacy and per-thread default streams. Any use case where 0 might be given should either use None, 1, or 2 instead for clarity.
+            //   1: The legacy default stream.
+            //   2: The per-thread default stream.
+            //   Any other integer: a cudaStream_t represented as a Python integer.
+            //   When None, no synchronization is required.
+            d["stream"] = py::none();
+
             d["version"] = 3;
             return d;
         })
@@ -73,6 +109,20 @@ void make_PODVector(py::module &m, std::string typestr)
         .def("__setitem__", [](PODVector_type & podvector, int const v, T const value){ podvector[v] = value; })
         .def("__getitem__", [](PODVector_type & pv, int const v){ return pv[v]; })
     ;
+}
+
+template <class T>
+void make_PODVector(py::module &m, std::string typestr)
+{
+    // see Src/Base/AMReX_GpuContainers.H
+    make_PODVector<T, std::allocator<T>> (m, typestr, "std");
+    make_PODVector<T, amrex::ArenaAllocator<T>> (m, typestr, "arena");
+    make_PODVector<T, amrex::PinnedArenaAllocator<T>> (m, typestr, "pinned");
+#ifdef AMREX_USE_GPU
+    make_PODVector<T, amrex::DeviceArenaAllocator<T>> (m, typestr, "device");
+    make_PODVector<T, amrex::ManagedArenaAllocator<T>> (m, typestr, "managed");
+    make_PODVector<T, amrex::AsyncArenaAllocator<T>> (m, typestr, "async");
+#endif
 }
 
 void init_PODVector(py::module& m) {

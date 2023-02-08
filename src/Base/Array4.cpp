@@ -159,7 +159,7 @@ void make_Array4(py::module &m, std::string typestr)
         // __array_function__ feature requires NumPy 1.16 or later.
 
 
-        // Nvidia GPUs: __cuda_array_interface__ v2
+        // Nvidia GPUs: __cuda_array_interface__ v3
         // https://numba.readthedocs.io/en/latest/cuda/cuda_array_interface.html
         .def_property_readonly("__cuda_array_interface__", [](Array4<T> const & a4) {
             auto d = array_interface(a4);

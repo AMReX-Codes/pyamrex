@@ -15,7 +15,7 @@ def test_ptile_data():
 
 
 def test_ptile_funs():
-    pt = amrex.ParticleTile_1_1_2_1()
+    pt = amrex.ParticleTile_1_1_2_1_std()
 
     assert pt.empty() and pt.size() == 0
     assert pt.numParticles() == pt.numRealParticles() == pt.numNeighborParticles() == 0
@@ -35,7 +35,7 @@ def test_ptile_funs():
 
 ################
 def test_ptile_pushback_ptiledata():
-    pt = amrex.ParticleTile_1_1_2_1()
+    pt = amrex.ParticleTile_1_1_2_1_std()
     p = amrex.Particle_1_1(1.0, 2.0, 3, 4.0, 5)
     sp = amrex.Particle_3_2(5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11, 12)
     pt.push_back(p)
@@ -62,7 +62,7 @@ def test_ptile_pushback_ptiledata():
 
 @pytest.mark.skipif(amrex.Config.spacedim != 3, reason="Requires AMREX_SPACEDIM = 3")
 def test_ptile_access():
-    pt = amrex.ParticleTile_1_1_2_1()
+    pt = amrex.ParticleTile_1_1_2_1_std()
     sp1 = amrex.Particle_3_2()
     pt.push_back(sp1)
     pt.push_back(sp1)
@@ -81,7 +81,7 @@ def test_ptile_access():
 
 
 def test_ptile_soa():
-    pt = amrex.ParticleTile_1_1_2_1()
+    pt = amrex.ParticleTile_1_1_2_1_std()
 
     pt.push_back_real(1, 2.1)
     pt.push_back_real([1.1, 1.3])
@@ -120,7 +120,7 @@ def test_ptile_soa():
 
 @pytest.mark.skipif(amrex.Config.spacedim != 3, reason="Requires AMREX_SPACEDIM = 3")
 def test_ptile_aos():
-    pt = amrex.ParticleTile_1_1_2_1()
+    pt = amrex.ParticleTile_1_1_2_1_std()
     p1 = amrex.Particle_1_1()
     p2 = amrex.Particle_1_1()
     p1.x = 3.0

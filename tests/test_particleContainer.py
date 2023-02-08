@@ -13,7 +13,7 @@ def Npart():
 
 @pytest.fixture(scope="function")
 def empty_particle_container(std_geometry, distmap, boxarr):
-    pc = amrex.ParticleContainer_1_1_2_1(std_geometry, distmap, boxarr)
+    pc = amrex.ParticleContainer_1_1_2_1_std(std_geometry, distmap, boxarr)
     return pc
 
 
@@ -29,7 +29,7 @@ def std_particle():
 
 @pytest.fixture(scope="function")
 def particle_container(Npart, std_geometry, distmap, boxarr, std_real_box):
-    pc = amrex.ParticleContainer_1_1_2_1(std_geometry, distmap, boxarr)
+    pc = amrex.ParticleContainer_1_1_2_1_std(std_geometry, distmap, boxarr)
     myt = amrex.ParticleInitType_1_1_2_1()
     myt.real_struct_data = [0.5]
     myt.int_struct_data = [5]
@@ -62,17 +62,17 @@ def test_particleInitType():
 def test_n_particles(particle_container, Npart):
     pc = particle_container
     assert pc.OK()
-    assert pc.NStructReal == amrex.ParticleContainer_1_1_2_1.NStructReal == 1
-    assert pc.NStructInt == amrex.ParticleContainer_1_1_2_1.NStructInt == 1
-    assert pc.NArrayReal == amrex.ParticleContainer_1_1_2_1.NArrayReal == 2
-    assert pc.NArrayInt == amrex.ParticleContainer_1_1_2_1.NArrayInt == 1
+    assert pc.NStructReal == amrex.ParticleContainer_1_1_2_1_std.NStructReal == 1
+    assert pc.NStructInt == amrex.ParticleContainer_1_1_2_1_std.NStructInt == 1
+    assert pc.NArrayReal == amrex.ParticleContainer_1_1_2_1_std.NArrayReal == 2
+    assert pc.NArrayInt == amrex.ParticleContainer_1_1_2_1_std.NArrayInt == 1
     assert (
         pc.NumberOfParticlesAtLevel(0) == np.sum(pc.NumberOfParticlesInGrid(0)) == Npart
     )
 
 
 def test_pc_init():
-    pc = amrex.ParticleContainer_1_1_2_1()
+    pc = amrex.ParticleContainer_1_1_2_1_std()
 
     print("bytespread", pc.ByteSpread())
     print("capacity", pc.PrintCapacity())
@@ -93,10 +93,10 @@ def test_pc_init():
     print("define particle container")
     pc.Define(gm, dm, ba)
     assert pc.OK()
-    assert pc.NStructReal == amrex.ParticleContainer_1_1_2_1.NStructReal == 1
-    assert pc.NStructInt == amrex.ParticleContainer_1_1_2_1.NStructInt == 1
-    assert pc.NArrayReal == amrex.ParticleContainer_1_1_2_1.NArrayReal == 2
-    assert pc.NArrayInt == amrex.ParticleContainer_1_1_2_1.NArrayInt == 1
+    assert pc.NStructReal == amrex.ParticleContainer_1_1_2_1_std.NStructReal == 1
+    assert pc.NStructInt == amrex.ParticleContainer_1_1_2_1_std.NStructInt == 1
+    assert pc.NArrayReal == amrex.ParticleContainer_1_1_2_1_std.NArrayReal == 2
+    assert pc.NArrayInt == amrex.ParticleContainer_1_1_2_1_std.NArrayInt == 1
 
     print("bytespread", pc.ByteSpread())
     print("capacity", pc.PrintCapacity())
@@ -123,7 +123,7 @@ def test_pc_init():
 
     print("Iterate particle boxes & set values")
     lvl = 0
-    for pti in amrex.ParIter_1_1_2_1(pc, level=lvl):
+    for pti in amrex.ParIter_1_1_2_1_std(pc, level=lvl):
         print("...")
         assert pti.num_particles == 1
         assert pti.num_real_particles == 1
@@ -151,7 +151,7 @@ def test_pc_init():
         assert np.allclose(int_arrays[0], np.array([2]))
 
     # read-only
-    for pti in amrex.ParConstIter_1_1_2_1(pc, level=lvl):
+    for pti in amrex.ParConstIter_1_1_2_1_std(pc, level=lvl):
         assert pti.num_particles == 1
         assert pti.num_real_particles == 1
         assert pti.num_neighbor_particles == 0
