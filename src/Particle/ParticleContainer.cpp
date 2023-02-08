@@ -370,6 +370,5 @@ void init_ParticleContainer(py::module& m) {
     make_ParticleContainer_and_Iterators< 1, 1, 2, 1> (m);
     make_ParticleContainer_and_Iterators< 0, 0, 4, 0> (m);   // HiPACE++ 22.07
     make_ParticleContainer_and_Iterators< 0, 0, 5, 0> (m);   // ImpactX 22.07
-    make_ParticleContainer_and_Iterators< 0, 0, 7, 0> (m);
     make_ParticleContainer_and_Iterators< 0, 0, 37, 1> (m);  // HiPACE++ 22.07
 }
