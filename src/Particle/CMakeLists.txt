@@ -5,4 +5,7 @@ target_sources(pyAMReX
     ArrayOfStructs.cpp
     ParticleTile.cpp
     ParticleContainer.cpp
+    ParticleContainer_HiPACE.cpp
+    ParticleContainer_ImpactX.cpp
+    ParticleContainer_WarpX.cpp
 )

@@ -3,6 +3,8 @@
  * Authors: Axel Huebl
  * License: BSD-3-Clause-LBNL
  */
+#pragma once
+
 #include <AMReX_Config.H>
 #include <AMReX_BoxArray.H>
 #include <AMReX_DistributionMapping.H>
