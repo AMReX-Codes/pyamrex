@@ -1,6 +1,6 @@
 /* Copyright 2022 The AMReX Community
  *
- * Authors: Ryan Sandberg
+ * Authors: Ryan Sandberg, Axel Huebl
  * License: BSD-3-Clause-LBNL
  */
 #include "ParticleContainer.H"
