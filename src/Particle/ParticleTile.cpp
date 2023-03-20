@@ -126,6 +126,11 @@ void make_ParticleTile(py::module &m)
     make_ParticleTile<NStructReal, NStructInt, NArrayReal, NArrayInt,
                       amrex::AsyncArenaAllocator>(m, "async");
 #endif
+#ifdef _WIN32
+    // work-around for https://github.com/pybind/pybind11/pull/4319
+    make_ParticleTile<NStructReal, NStructInt, NArrayReal, NArrayInt,
+                      amrex::DefaultAllocator>(m, "default");
+#endif
 }
 
 void init_ParticleTile(py::module& m) {

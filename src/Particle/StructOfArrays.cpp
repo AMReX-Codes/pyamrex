@@ -54,6 +54,10 @@ void make_StructOfArrays(py::module &m)
     make_StructOfArrays<NReal, NInt, amrex::ManagedArenaAllocator>(m, "managed");
     make_StructOfArrays<NReal, NInt, amrex::AsyncArenaAllocator>(m, "async");
 #endif
+#ifdef _WIN32
+    // work-around for https://github.com/pybind/pybind11/pull/4319
+    make_StructOfArrays<NReal, NInt, amrex::DefaultAllocator>(m, "default");
+#endif
 }
 
 void init_StructOfArrays(py::module& m) {
