@@ -125,10 +125,15 @@ endmacro()
 # this avoids that we need to install our python packages to run ctest
 #
 function(pyamrex_test_set_pythonpath test_name)
+    get_property(isMultiConfig GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
     if(WIN32)
         string(REPLACE ";" "\\;" WIN_PYTHONPATH "$ENV{PYTHONPATH}")
         string(REPLACE ";" "\\;" WIN_PATH "$ENV{PATH}")  # DLLs
-        string(REGEX REPLACE "/" "\\\\" WIN_PYTHON_OUTPUT_DIRECTORY ${CMAKE_PYTHON_OUTPUT_DIRECTORY})
+        if(isMultiConfig)
+            string(REGEX REPLACE "/" "\\\\" WIN_PYTHON_OUTPUT_DIRECTORY ${CMAKE_PYTHON_OUTPUT_DIRECTORY}/$<CONFIG>)
+        else()
+            string(REGEX REPLACE "/" "\\\\" WIN_PYTHON_OUTPUT_DIRECTORY ${CMAKE_PYTHON_OUTPUT_DIRECTORY})
+        endif()
         # shared library note:
         #   For Windows Python 3.8+, this also needs to be injected via
         #   os.add_dll_directory.
@@ -140,9 +145,15 @@ function(pyamrex_test_set_pythonpath test_name)
                 "PATH=$<TARGET_FILE_DIR:pyAMReX>\;$<TARGET_FILE_DIR:AMReX::amrex>\;${WIN_PATH}"
         )
     else()
-        set_property(TEST ${test_name}
-            APPEND PROPERTY ENVIRONMENT "PYTHONPATH=${CMAKE_PYTHON_OUTPUT_DIRECTORY}:$ENV{PYTHONPATH}"
-        )
+        if(isMultiConfig)
+            set_property(TEST ${test_name}
+                APPEND PROPERTY ENVIRONMENT "PYTHONPATH=${CMAKE_PYTHON_OUTPUT_DIRECTORY}/$<CONFIG>:$ENV{PYTHONPATH}"
+            )
+        else()
+            set_property(TEST ${test_name}
+                APPEND PROPERTY ENVIRONMENT "PYTHONPATH=${CMAKE_PYTHON_OUTPUT_DIRECTORY}:$ENV{PYTHONPATH}"
+            )
+        endif()
     endif()
 endfunction()
 

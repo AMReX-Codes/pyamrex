@@ -126,6 +126,7 @@ set_target_properties(pyAMReX PROPERTIES
     # fluffy front-end modules, so we can extend it with pure Python
     ARCHIVE_OUTPUT_NAME amrex_pybind
     LIBRARY_OUTPUT_NAME amrex_pybind
+    COMPILE_PDB_NAME amrex_pybind
     # build output directories - mainly set to run tests from CMake & IDEs
     ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_PYTHON_OUTPUT_DIRECTORY}/amrex
     LIBRARY_OUTPUT_DIRECTORY ${CMAKE_PYTHON_OUTPUT_DIRECTORY}/amrex
@@ -140,11 +141,12 @@ if(isMultiConfig)
         set_target_properties(pyAMReX PROPERTIES
             # build output directories - mainly set to run tests from CMake & IDEs
             # note: same as above, but for Multi-Config generators
-            ARCHIVE_OUTPUT_DIRECTORY_${CFG_UPPER} ${CMAKE_PYTHON_OUTPUT_DIRECTORY}/amrex
-            LIBRARY_OUTPUT_DIRECTORY_${CFG_UPPER} ${CMAKE_PYTHON_OUTPUT_DIRECTORY}/amrex
-            RUNTIME_OUTPUT_DIRECTORY_${CFG_UPPER} ${CMAKE_PYTHON_OUTPUT_DIRECTORY}/amrex
-            PDB_OUTPUT_DIRECTORY_${CFG_UPPER} ${CMAKE_PYTHON_OUTPUT_DIRECTORY}/amrex
-            COMPILE_PDB_OUTPUT_DIRECTORY_${CFG_UPPER} ${CMAKE_PYTHON_OUTPUT_DIRECTORY}/amrex
+            COMPILE_PDB_NAME_${CFG_UPPER} amrex_pybind
+            ARCHIVE_OUTPUT_DIRECTORY_${CFG_UPPER} ${CMAKE_PYTHON_OUTPUT_DIRECTORY}/${CFG}/amrex
+            LIBRARY_OUTPUT_DIRECTORY_${CFG_UPPER} ${CMAKE_PYTHON_OUTPUT_DIRECTORY}/${CFG}/amrex
+            RUNTIME_OUTPUT_DIRECTORY_${CFG_UPPER} ${CMAKE_PYTHON_OUTPUT_DIRECTORY}/${CFG}/amrex
+            PDB_OUTPUT_DIRECTORY_${CFG_UPPER} ${CMAKE_PYTHON_OUTPUT_DIRECTORY}/${CFG}/amrex
+            COMPILE_PDB_OUTPUT_DIRECTORY_${CFG_UPPER} ${CMAKE_PYTHON_OUTPUT_DIRECTORY}/${CFG}/amrex
         )
     endforeach()
 endif()
