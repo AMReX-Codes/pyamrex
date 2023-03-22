@@ -5,6 +5,7 @@
  */
 #include <AMReX_Config.H>
 #include <AMReX_BoxArray.H>
+#include <AMReX_GpuAllocators.H>
 #include <AMReX_IntVect.H>
 #include <AMReX_ParticleTile.H>
 
@@ -112,10 +113,26 @@ void make_ParticleTile(py::module &m)
     make_ParticleTileData<NStructReal, NStructInt, NArrayReal, NArrayInt>(m);
 
     // see Src/Base/AMReX_GpuContainers.H
+    //   !AMREX_USE_GPU: DefaultAllocator = std::allocator
+    //    AMREX_USE_GPU: DefaultAllocator = amrex::ArenaAllocator
+
+    //   work-around for https://github.com/pybind/pybind11/pull/4581
+    //make_ParticleTile<NStructReal, NStructInt, NArrayReal, NArrayInt,
+    //                  std::allocator>(m, "std");
+    //make_ParticleTile<NStructReal, NStructInt, NArrayReal, NArrayInt,
+    //                  amrex::ArenaAllocator>(m, "arena");
+#ifdef AMREX_USE_GPU
     make_ParticleTile<NStructReal, NStructInt, NArrayReal, NArrayInt,
                       std::allocator>(m, "std");
     make_ParticleTile<NStructReal, NStructInt, NArrayReal, NArrayInt,
+                      amrex::DefaultAllocator>(m, "default");  // amrex::ArenaAllocator
+#else
+    make_ParticleTile<NStructReal, NStructInt, NArrayReal, NArrayInt,
+                      amrex::DefaultAllocator>(m, "default");  // std::allocator
+    make_ParticleTile<NStructReal, NStructInt, NArrayReal, NArrayInt,
                       amrex::ArenaAllocator>(m, "arena");
+#endif
+    //   end work-around
     make_ParticleTile<NStructReal, NStructInt, NArrayReal, NArrayInt,
                       amrex::PinnedArenaAllocator>(m, "pinned");
 #ifdef AMREX_USE_GPU
