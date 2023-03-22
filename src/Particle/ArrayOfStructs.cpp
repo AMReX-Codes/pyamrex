@@ -5,6 +5,7 @@
  */
 #include <AMReX_Config.H>
 #include <AMReX_ArrayOfStructs.H>
+#include <AMReX_GpuAllocators.H>
 
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
@@ -124,17 +125,25 @@ template <int NReal, int NInt>
 void make_ArrayOfStructs(py::module &m)
 {
     // see Src/Base/AMReX_GpuContainers.H
+    //   !AMREX_USE_GPU: DefaultAllocator = std::allocator
+    //    AMREX_USE_GPU: DefaultAllocator = amrex::ArenaAllocator
+
+    //   work-around for https://github.com/pybind/pybind11/pull/4581
+    //make_ArrayOfStructs<NReal, NInt, std::allocator> (m, "std");
+    //make_ArrayOfStructs<NReal, NInt, amrex::ArenaAllocator> (m, "arena");
+#ifdef AMREX_USE_GPU
     make_ArrayOfStructs<NReal, NInt, std::allocator> (m, "std");
+    make_ArrayOfStructs<NReal, NInt, amrex::DefaultAllocator> (m, "default");  // amrex::ArenaAllocator
+#else
+    make_ArrayOfStructs<NReal, NInt, amrex::DefaultAllocator> (m, "default");  // std::allocator
     make_ArrayOfStructs<NReal, NInt, amrex::ArenaAllocator> (m, "arena");
+#endif
+    //   end work-around
     make_ArrayOfStructs<NReal, NInt, amrex::PinnedArenaAllocator> (m, "pinned");
 #ifdef AMREX_USE_GPU
     make_ArrayOfStructs<NReal, NInt, amrex::DeviceArenaAllocator> (m, "device");
     make_ArrayOfStructs<NReal, NInt, amrex::ManagedArenaAllocator> (m, "managed");
     make_ArrayOfStructs<NReal, NInt, amrex::AsyncArenaAllocator> (m, "async");
-#endif
-#ifdef _WIN32
-    // work-around for https://github.com/pybind/pybind11/pull/4319
-    make_ArrayOfStructs<NReal, NInt, amrex::DefaultAllocator> (m, "default");
 #endif
 }
 

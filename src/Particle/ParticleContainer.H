@@ -354,10 +354,24 @@ void make_ParticleContainer_and_Iterators (py::module &m)
     // see Src/Base/AMReX_GpuContainers.H
     //   !AMREX_USE_GPU: DefaultAllocator = std::allocator
     //    AMREX_USE_GPU: DefaultAllocator = amrex::ArenaAllocator
+
+    //   work-around for https://github.com/pybind/pybind11/pull/4581
+    //make_ParticleContainer_and_Iterators<T_NStructReal, T_NStructInt, T_NArrayReal, T_NArrayInt,
+    //                                     std::allocator>(m, "std");            // CPU DefaultAllocator
+    //make_ParticleContainer_and_Iterators<T_NStructReal, T_NStructInt, T_NArrayReal, T_NArrayInt,
+    //                                     amrex::ArenaAllocator>(m, "arena");   // GPU DefaultAllocator
+#ifdef AMREX_USE_GPU
     make_ParticleContainer_and_Iterators<T_NStructReal, T_NStructInt, T_NArrayReal, T_NArrayInt,
-                                         std::allocator>(m, "std");            // CPU DefaultAllocator
+                                         std::allocator>(m, "std");
     make_ParticleContainer_and_Iterators<T_NStructReal, T_NStructInt, T_NArrayReal, T_NArrayInt,
-                                         amrex::ArenaAllocator>(m, "arena");   // GPU DefaultAllocator
+                                         amrex::DefaultAllocator>(m, "default");   // amrex::ArenaAllocator
+#else
+    make_ParticleContainer_and_Iterators<T_NStructReal, T_NStructInt, T_NArrayReal, T_NArrayInt,
+                                         amrex::DefaultAllocator>(m, "default");   // std::allocator
+    make_ParticleContainer_and_Iterators<T_NStructReal, T_NStructInt, T_NArrayReal, T_NArrayInt,
+                                         amrex::ArenaAllocator>(m, "arena");
+#endif
+    //   end work-around
     make_ParticleContainer_and_Iterators<T_NStructReal, T_NStructInt, T_NArrayReal, T_NArrayInt,
                                          amrex::PinnedArenaAllocator>(m, "pinned");
 #ifdef AMREX_USE_GPU
@@ -367,11 +381,5 @@ void make_ParticleContainer_and_Iterators (py::module &m)
                                          amrex::ManagedArenaAllocator>(m, "managed");
     make_ParticleContainer_and_Iterators<T_NStructReal, T_NStructInt, T_NArrayReal, T_NArrayInt,
                                          amrex::AsyncArenaAllocator>(m, "async");
-#endif
-
-#ifdef _WIN32
-    // work-around for https://github.com/pybind/pybind11/pull/4319
-    make_ParticleContainer_and_Iterators<T_NStructReal, T_NStructInt, T_NArrayReal, T_NArrayInt,
-                                         amrex::DefaultAllocator>(m, "default");
 #endif
 }
