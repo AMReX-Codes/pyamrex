@@ -11,6 +11,6 @@ sudo apt-get update
 
 sudo apt-get install -y --no-install-recommends\
     build-essential \
-    g++             \
+    g++-7           \
     libopenmpi-dev  \
     openmpi-bin

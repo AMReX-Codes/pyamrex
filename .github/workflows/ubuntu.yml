@@ -10,8 +10,11 @@ jobs:
   # Build and install libamrex as AMReX CMake project
   gcc7:
     name: GNU@7.5
-    runs-on: ubuntu-18.04
-    env: {CXXFLAGS: "-Werror -Wshadow -Woverloaded-virtual -Wunreachable-code -fno-operator-names -Wno-array-bounds"}
+    runs-on: ubuntu-20.04
+    env:
+      CC: gcc-7
+      CXX: g++-7
+      CXXFLAGS: "-Werror -Wshadow -Woverloaded-virtual -Wunreachable-code -fno-operator-names -Wno-array-bounds"
     if: github.event.pull_request.draft == false
     steps:
     - uses: actions/checkout@v3
@@ -20,7 +23,7 @@ jobs:
       with:
         python-version: '3.7'
     - name: Dependencies
-      run: .github/workflows/dependencies/dependencies.sh
+      run: .github/workflows/dependencies/gcc7.sh
     - name: Build & Install
       run: |
         python3 -m pip install -U pip setuptools wheel pytest
