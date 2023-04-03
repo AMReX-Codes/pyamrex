@@ -125,8 +125,8 @@ def test_pc_init():
 
     print("Iterate particle boxes & set values")
     # lvl = 0
-    for lvl in range(pc.finest_level+1):
-        print(f'at level {lvl}:')
+    for lvl in range(pc.finest_level + 1):
+        print(f"at level {lvl}:")
         for pti in amrex.ParIter_1_1_2_1_default(pc, level=lvl):
             print("...")
             assert pti.num_particles == 1
@@ -155,7 +155,7 @@ def test_pc_init():
             assert np.allclose(int_arrays[0], np.array([2]))
 
     # read-only
-    for lvl in range(pc.finest_level+1):
+    for lvl in range(pc.finest_level + 1):
         for pti in amrex.ParConstIter_1_1_2_1_default(pc, level=lvl):
             assert pti.num_particles == 1
             assert pti.num_real_particles == 1
