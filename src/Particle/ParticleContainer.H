@@ -160,7 +160,7 @@ void make_ParticleContainer_and_Iterators (py::module &m, std::string allocstr)
         .def_property_readonly_static("NArrayReal", [](const py::object&){return ParticleContainerType::NArrayReal; })
         .def_property_readonly_static("NArrayInt", [](const py::object&){return ParticleContainerType::NArrayInt; })
 
-        .def_property_readonly("finestLevel", &ParticleContainerBase::finestLevel)
+        .def_property_readonly("finest_level", &ParticleContainerBase::finestLevel)
 
         // ParticleContainer ( const ParticleContainer &) = delete;
         // ParticleContainer& operator= ( const ParticleContainer & ) = delete;
