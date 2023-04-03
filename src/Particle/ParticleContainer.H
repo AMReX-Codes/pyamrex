@@ -12,6 +12,7 @@
 #include <AMReX_IntVect.H>
 #include <AMReX_ParIter.H>
 #include <AMReX_Particles.H>
+#include <AMReX_ParticleContainerBase.H>
 #include <AMReX_ParticleContainer.H>
 #include <AMReX_ParticleTile.H>
 #include <AMReX_ArrayOfStructs.H>
@@ -159,6 +160,7 @@ void make_ParticleContainer_and_Iterators (py::module &m, std::string allocstr)
         .def_property_readonly_static("NArrayReal", [](const py::object&){return ParticleContainerType::NArrayReal; })
         .def_property_readonly_static("NArrayInt", [](const py::object&){return ParticleContainerType::NArrayInt; })
 
+        .def_property_readonly("finestLevel", &ParticleContainerBase::finestLevel)
 
         // ParticleContainer ( const ParticleContainer &) = delete;
         // ParticleContainer& operator= ( const ParticleContainer & ) = delete;
