@@ -49,7 +49,7 @@ repos:
 
 # Changes tabs to spaces
 - repo: https://github.com/Lucas-C/pre-commit-hooks
-  rev: v1.4.2
+  rev: v1.5.1
   hooks:
   - id: remove-tabs
 #    exclude: 'Make.WarpX|Make.package|Makefile|GNUmake'
@@ -98,7 +98,7 @@ repos:
 
 # Python Formatting
 - repo: https://github.com/psf/black
-  rev: 23.1.0 # Keep in sync with blacken-docs
+  rev: 23.3.0 # Keep in sync with blacken-docs
   hooks:
   - id: black
 - repo: https://github.com/asottile/blacken-docs
