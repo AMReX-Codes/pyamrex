@@ -173,6 +173,7 @@ def test_pc_init():
             real_arrays = soa.GetRealData()
             int_arrays = soa.GetIntData()
             print(real_arrays[0])
+            print(int_arrays[0])
             # TODO: this does not work yet and is still the original data
             # assert np.allclose(real_arrays[0], np.array([0.55]))
             # assert np.allclose(real_arrays[1], np.array([0.22]))
