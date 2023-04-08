@@ -21,12 +21,12 @@ namespace
      *
      * https://numpy.org/doc/stable/reference/arrays.interface.html
      */
-    template <int NReal, int NInt,
+    template <typename T_ParticleType,
               template<class> class Allocator=DefaultAllocator>
     py::dict
-    array_interface(ArrayOfStructs<NReal, NInt, Allocator> const & aos)
+    array_interface(ArrayOfStructs<T_ParticleType, Allocator> const & aos)
     {
-        using ParticleType = Particle<NReal, NInt>;
+        using ParticleType = T_ParticleType;
         using RealType     = typename ParticleType::RealType;
 
         auto d = py::dict();
@@ -43,14 +43,14 @@ namespace
 #if (AMREX_SPACEDIM >= 3)
         descr.append(py::make_tuple("z", py::format_descriptor<RealType>::format()));
 #endif
-        if (NReal > 0) {
-            for(int ii=0; ii < NReal; ii++) {
+        if constexpr (ParticleType::NReal > 0) {
+            for(int ii=0; ii < ParticleType::NReal; ii++) {
                 descr.append(py::make_tuple("rdata_"+std::to_string(ii),py::format_descriptor<RealType>::format()));
             }
         }
         descr.append(py::make_tuple("cpuid", py::format_descriptor<uint64_t>::format()) );
-        if (NInt > 0) {
-            for(int ii=0; ii < NInt; ++ii) {
+        if constexpr (ParticleType::NInt > 0) {
+            for(int ii=0; ii < ParticleType::NInt; ++ii) {
                 descr.append(py::make_tuple("idata_"+std::to_string(ii),py::format_descriptor<int>::format()));
             }
         }
@@ -61,16 +61,16 @@ namespace
     }
 }
 
-template <int NReal, int NInt,
+template <typename T_ParticleType,
           template<class> class Allocator=DefaultAllocator>
 void make_ArrayOfStructs(py::module &m, std::string allocstr)
 {
-    using AOSType = ArrayOfStructs<NReal, NInt, Allocator>;
-    using ParticleType  = Particle<NReal, NInt>;
+    using AOSType = ArrayOfStructs<T_ParticleType, Allocator>;
+    using ParticleType  = T_ParticleType;
 
     auto const aos_name = std::string("ArrayOfStructs_")
-                          .append(std::to_string(NReal)).append("_")
-                          .append(std::to_string(NInt)).append("_")
+                          .append(std::to_string(ParticleType::NReal)).append("_")
+                          .append(std::to_string(ParticleType::NInt)).append("_")
                           .append(allocstr);
     py::class_<AOSType>(m, aos_name.c_str())
         .def(py::init())
@@ -124,26 +124,29 @@ void make_ArrayOfStructs(py::module &m, std::string allocstr)
 template <int NReal, int NInt>
 void make_ArrayOfStructs(py::module &m)
 {
+    // AMReX legacy AoS position + id/cpu particle ype
+    using ParticleType = Particle<NReal, NInt>;
+
     // see Src/Base/AMReX_GpuContainers.H
     //   !AMREX_USE_GPU: DefaultAllocator = std::allocator
     //    AMREX_USE_GPU: DefaultAllocator = amrex::ArenaAllocator
 
     //   work-around for https://github.com/pybind/pybind11/pull/4581
-    //make_ArrayOfStructs<NReal, NInt, std::allocator> (m, "std");
-    //make_ArrayOfStructs<NReal, NInt, amrex::ArenaAllocator> (m, "arena");
+    //make_ArrayOfStructs<ParticleType, std::allocator> (m, "std");
+    //make_ArrayOfStructs<ParticleType, amrex::ArenaAllocator> (m, "arena");
 #ifdef AMREX_USE_GPU
-    make_ArrayOfStructs<NReal, NInt, std::allocator> (m, "std");
-    make_ArrayOfStructs<NReal, NInt, amrex::DefaultAllocator> (m, "default");  // amrex::ArenaAllocator
+    make_ArrayOfStructs<ParticleType, std::allocator> (m, "std");
+    make_ArrayOfStructs<ParticleType, amrex::DefaultAllocator> (m, "default");  // amrex::ArenaAllocator
 #else
-    make_ArrayOfStructs<NReal, NInt, amrex::DefaultAllocator> (m, "default");  // std::allocator
-    make_ArrayOfStructs<NReal, NInt, amrex::ArenaAllocator> (m, "arena");
+    make_ArrayOfStructs<ParticleType, amrex::DefaultAllocator> (m, "default");  // std::allocator
+    make_ArrayOfStructs<ParticleType, amrex::ArenaAllocator> (m, "arena");
 #endif
     //   end work-around
-    make_ArrayOfStructs<NReal, NInt, amrex::PinnedArenaAllocator> (m, "pinned");
+    make_ArrayOfStructs<ParticleType, amrex::PinnedArenaAllocator> (m, "pinned");
 #ifdef AMREX_USE_GPU
-    make_ArrayOfStructs<NReal, NInt, amrex::DeviceArenaAllocator> (m, "device");
-    make_ArrayOfStructs<NReal, NInt, amrex::ManagedArenaAllocator> (m, "managed");
-    make_ArrayOfStructs<NReal, NInt, amrex::AsyncArenaAllocator> (m, "async");
+    make_ArrayOfStructs<ParticleType, amrex::DeviceArenaAllocator> (m, "device");
+    make_ArrayOfStructs<ParticleType, amrex::ManagedArenaAllocator> (m, "managed");
+    make_ArrayOfStructs<ParticleType, amrex::AsyncArenaAllocator> (m, "async");
 #endif
 }
 
