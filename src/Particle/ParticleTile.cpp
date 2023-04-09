@@ -40,7 +40,7 @@ void make_ParticleTileData(py::module &m) {
             .def_readonly("m_size", &ParticleTileDataType::m_size)
             .def_readonly("m_num_runtime_real", &ParticleTileDataType::m_num_runtime_real)
             .def_readonly("m_num_runtime_int", &ParticleTileDataType::m_num_runtime_int)
-            //.def("getSuperParticle", &ParticleTileDataType::getSuperParticle) // TODO
+            .def("getSuperParticle", &ParticleTileDataType::template getSuperParticle<ParticleType>)
             .def("setSuperParticle", &ParticleTileDataType::setSuperParticle)
             // setter & getter
             .def("__setitem__", [](ParticleTileDataType &pdt, int const v,
@@ -76,11 +76,11 @@ void make_ParticleTile(py::module &m, std::string allocstr)
         .def("GetStructOfArrays", py::overload_cast<>(&ParticleTileType::GetStructOfArrays),
             py::return_value_policy::reference_internal)
         .def("empty", &ParticleTileType::empty)
-        //.def("size", &ParticleTileType::size) // TODO
-        //.def("numParticles", &ParticleTileType::numParticles) // TODO
-        //.def("numRealParticles", &ParticleTileType::numRealParticles) // TODO
-        //.def("numNeighborParticles", &ParticleTileType::numNeighborParticles) // TODO
-        //.def("numTotalParticles", &ParticleTileType::numTotalParticles) // TODO
+        .def("size", &ParticleTileType::template size<ParticleType>)
+        .def("numParticles", &ParticleTileType::template numParticles<ParticleType>)
+        .def("numRealParticles", &ParticleTileType::template numRealParticles<ParticleType>)
+        .def("numNeighborParticles", &ParticleTileType::template numNeighborParticles<ParticleType>)
+        .def("numTotalParticles", &ParticleTileType::template numTotalParticles<ParticleType>)
         .def("setNumNeighbors", &ParticleTileType::setNumNeighbors)
         .def("getNumNeighbors", &ParticleTileType::getNumNeighbors)
         .def("resize", &ParticleTileType::resize)
