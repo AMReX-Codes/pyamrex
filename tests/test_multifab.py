@@ -315,3 +315,36 @@ def test_mfab_ops_cuda_cuml(make_mfab_device):
     # arr_cuml = ...
     # assert(arr_cuml.__cuda_array_interface__['data'][0] == arr.__cuda_array_interface__['data'][0])
     # TODO
+
+
+@pytest.mark.skipif(
+    amrex.Config.gpu_backend != "CUDA", reason="Requires AMReX_GPU_BACKEND=CUDA"
+)
+def test_mfab_dtoh_copy(make_mfab_device):
+    mfab_device = make_mfab_device()
+
+    mfab_host = amrex.MultiFab(
+        mfab_device.box_array(),
+        mfab_device.dm(),
+        mfab_device.n_comp(),
+        mfab_device.n_grow_vect(),
+        amrex.MFInfo().set_arena(amrex.The_Pinned_Arena()),
+    )
+    mfab_host.set_val(42.0, 0, mfab_host.n_comp())
+
+    amrex.dtoh_memcpy(mfab_host, mfab_device)
+
+    # assert all are 0.0 on host
+    host_min = mfab_host.min(0)
+    host_max = mfab_host.max(0)
+    assert host_min == host_max
+    assert host_max == 0.0
+
+    mfab_host.set_val(11.0, 0, mfab_host.n_comp())
+    amrex.dtoh_memcpy(mfab_device, mfab_host)
+
+    # assert all are 11.0 on device
+    device_min = mfab_device.min(0)
+    device_max = mfab_device.max(0)
+    assert device_min == device_max
+    assert device_max == 11.0

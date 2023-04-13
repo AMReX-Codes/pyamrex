@@ -140,6 +140,24 @@ void init_MultiFab(py::module &m) {
         .def("override_sync", py::overload_cast< Periodicity const & >(&FabArray<FArrayBox>::OverrideSync))
     ;
 
+    m.def("htod_memcpy",
+          py::overload_cast< FabArray<FArrayBox> &, FabArray<FArrayBox> const & >(&htod_memcpy<FArrayBox>),
+          py::arg("dest"), py::arg("src")
+    );
+    m.def("htod_memcpy",
+          py::overload_cast< FabArray<FArrayBox> &, FabArray<FArrayBox> const &, int, int, int >(&htod_memcpy<FArrayBox>),
+          py::arg("dest"), py::arg("src"), py::arg("scomp"), py::arg("dcomp"), py::arg("ncomp")
+    );
+
+    m.def("dtoh_memcpy",
+          py::overload_cast< FabArray<FArrayBox> &, FabArray<FArrayBox> const & >(&dtoh_memcpy<FArrayBox>),
+          py::arg("dest"), py::arg("src")
+    );
+    m.def("dtoh_memcpy",
+          py::overload_cast< FabArray<FArrayBox> &, FabArray<FArrayBox> const &, int, int, int >(&dtoh_memcpy<FArrayBox>),
+          py::arg("dest"), py::arg("src"), py::arg("scomp"), py::arg("dcomp"), py::arg("ncomp")
+    );
+
     py::class_< MultiFab, FabArray<FArrayBox> >(m, "MultiFab")
         .def("__repr__",
              [](MultiFab const & mf) {
@@ -342,6 +360,11 @@ void init_MultiFab(py::module &m) {
         .def("contains_inf", py::overload_cast< bool >(&MultiFab::contains_inf, py::const_))
         .def("contains_inf", py::overload_cast< int, int, int, bool >(&MultiFab::contains_inf, py::const_))
         .def("contains_inf", py::overload_cast< int, int, IntVect const &, bool >(&MultiFab::contains_inf, py::const_))
+
+        .def("box_array", &MultiFab::boxArray)
+        .def("dm", &MultiFab::DistributionMap)
+        .def("n_comp", &MultiFab::nComp)
+        .def("n_grow_vect", &MultiFab::nGrowVect)
 
         /* masks & ownership */
         // TODO:
