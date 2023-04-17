@@ -14,6 +14,7 @@
 
 #include <sstream>
 
+
 namespace py = pybind11;
 using namespace amrex;
 
@@ -21,9 +22,13 @@ using namespace amrex;
 template <int T_NReal, int T_NInt=0>
 void make_Particle(py::module &m);
 
-template <int NStructReal, int NStructInt, int NArrayReal, int NArrayInt>
+template <typename T_ParticleType, int NArrayReal, int NArrayInt>
 void make_ParticleTileData(py::module &m) {
-    using ParticleTileDataType = ParticleTileData<NStructReal, NStructInt, NArrayReal, NArrayInt>;
+    using ParticleType = T_ParticleType;
+    constexpr int NStructReal = ParticleType::NReal;
+    constexpr int NStructInt = ParticleType::NInt;
+
+    using ParticleTileDataType = ParticleTileData<T_ParticleType, NArrayReal, NArrayInt>;
     using SuperParticleType = Particle<NStructReal + NArrayReal, NStructInt + NArrayInt>;
 
     auto const particle_tile_data_type =
@@ -35,21 +40,26 @@ void make_ParticleTileData(py::module &m) {
             .def_readonly("m_size", &ParticleTileDataType::m_size)
             .def_readonly("m_num_runtime_real", &ParticleTileDataType::m_num_runtime_real)
             .def_readonly("m_num_runtime_int", &ParticleTileDataType::m_num_runtime_int)
-            .def("getSuperParticle", &ParticleTileDataType::getSuperParticle)
+            .def("getSuperParticle", &ParticleTileDataType::template getSuperParticle<ParticleType>)
             .def("setSuperParticle", &ParticleTileDataType::setSuperParticle)
-                    // setter & getter
+            // setter & getter
             .def("__setitem__", [](ParticleTileDataType &pdt, int const v,
                                    SuperParticleType const value) { pdt.setSuperParticle(value, v); })
             .def("__getitem__",
-                 [](ParticleTileDataType &pdt, int const v) { return pdt.getSuperParticle(v); });
+                 [](ParticleTileDataType &pdt, int const v) { return pdt.getSuperParticle(v); })
+
+    ;
 }
 
-template <int NStructReal, int NStructInt, int NArrayReal, int NArrayInt,
+template <typename T_ParticleType, int NArrayReal, int NArrayInt,
           template<class> class Allocator=DefaultAllocator>
 void make_ParticleTile(py::module &m, std::string allocstr)
 {
-    using ParticleTileType = ParticleTile<NStructReal, NStructInt, NArrayReal, NArrayInt, Allocator>;
-    using ParticleType = Particle<NStructReal, NStructInt>;
+    using ParticleType = T_ParticleType;
+    constexpr int NStructReal = ParticleType::NReal;
+    constexpr int NStructInt = ParticleType::NInt;
+
+    using ParticleTileType = ParticleTile<T_ParticleType, NArrayReal, NArrayInt, Allocator>;
     using SuperParticleType = Particle<NStructReal + NArrayReal, NStructInt + NArrayInt>;
 
     auto const particle_tile_type = std::string("ParticleTile_") + std::to_string(NStructReal) + "_" +
@@ -66,17 +76,19 @@ void make_ParticleTile(py::module &m, std::string allocstr)
         .def("GetStructOfArrays", py::overload_cast<>(&ParticleTileType::GetStructOfArrays),
             py::return_value_policy::reference_internal)
         .def("empty", &ParticleTileType::empty)
-        .def("size", &ParticleTileType::size)
-        .def("numParticles", &ParticleTileType::numParticles)
-        .def("numRealParticles", &ParticleTileType::numRealParticles)
-        .def("numNeighborParticles", &ParticleTileType::numNeighborParticles)
-        .def("numTotalParticles", &ParticleTileType::numTotalParticles)
+        .def("size", &ParticleTileType::template size<ParticleType>)
+        .def("numParticles", &ParticleTileType::template numParticles<ParticleType>)
+        .def("numRealParticles", &ParticleTileType::template numRealParticles<ParticleType>)
+        .def("numNeighborParticles", &ParticleTileType::template numNeighborParticles<ParticleType>)
+        .def("numTotalParticles", &ParticleTileType::template numTotalParticles<ParticleType>)
         .def("setNumNeighbors", &ParticleTileType::setNumNeighbors)
         .def("getNumNeighbors", &ParticleTileType::getNumNeighbors)
         .def("resize", &ParticleTileType::resize)
+
         .def("push_back", [](ParticleTileType& ptile, const ParticleType &p){ ptile.push_back(p);})
         // .def("push_back", py::overload_cast<const ParticleType&>(&ParticleTileType::push_back), "Add one particle to this tile.")
         // .def("push_back", py::overload_cast<const SuperParticleType&>(&ParticleTileType::push_back), "Add one particle to this tile.")
+
         .def("push_back", [](ParticleTileType& ptile, const SuperParticleType &p) {ptile.push_back(p);})
         .def("push_back_real", [](ParticleTileType& ptile, int comp, ParticleReal v) {ptile.push_back_real(comp, v);})
         .def("push_back_real", [](ParticleTileType& ptile,
@@ -107,50 +119,54 @@ void make_ParticleTile(py::module &m, std::string allocstr)
     ;
 }
 
-template <int NStructReal, int NStructInt, int NArrayReal, int NArrayInt>
+template <typename T_ParticleType, int NArrayReal, int NArrayInt>
 void make_ParticleTile(py::module &m)
 {
-    make_ParticleTileData<NStructReal, NStructInt, NArrayReal, NArrayInt>(m);
+    make_ParticleTileData<T_ParticleType, NArrayReal, NArrayInt>(m);
 
     // see Src/Base/AMReX_GpuContainers.H
     //   !AMREX_USE_GPU: DefaultAllocator = std::allocator
     //    AMREX_USE_GPU: DefaultAllocator = amrex::ArenaAllocator
 
     //   work-around for https://github.com/pybind/pybind11/pull/4581
-    //make_ParticleTile<NStructReal, NStructInt, NArrayReal, NArrayInt,
+    //make_ParticleTile<T_ParticleType, NArrayReal, NArrayInt,
     //                  std::allocator>(m, "std");
-    //make_ParticleTile<NStructReal, NStructInt, NArrayReal, NArrayInt,
+    //make_ParticleTile<T_ParticleType, NArrayReal, NArrayInt,
     //                  amrex::ArenaAllocator>(m, "arena");
 #ifdef AMREX_USE_GPU
-    make_ParticleTile<NStructReal, NStructInt, NArrayReal, NArrayInt,
+    make_ParticleTile<T_ParticleType, NArrayReal, NArrayInt,
                       std::allocator>(m, "std");
-    make_ParticleTile<NStructReal, NStructInt, NArrayReal, NArrayInt,
+    make_ParticleTile<T_ParticleType, NArrayReal, NArrayInt,
                       amrex::DefaultAllocator>(m, "default");  // amrex::ArenaAllocator
 #else
-    make_ParticleTile<NStructReal, NStructInt, NArrayReal, NArrayInt,
+    make_ParticleTile<T_ParticleType, NArrayReal, NArrayInt,
                       amrex::DefaultAllocator>(m, "default");  // std::allocator
-    make_ParticleTile<NStructReal, NStructInt, NArrayReal, NArrayInt,
+    make_ParticleTile<T_ParticleType, NArrayReal, NArrayInt,
                       amrex::ArenaAllocator>(m, "arena");
 #endif
     //   end work-around
-    make_ParticleTile<NStructReal, NStructInt, NArrayReal, NArrayInt,
+    make_ParticleTile<T_ParticleType, NArrayReal, NArrayInt,
                       amrex::PinnedArenaAllocator>(m, "pinned");
 #ifdef AMREX_USE_GPU
-    make_ParticleTile<NStructReal, NStructInt, NArrayReal, NArrayInt,
+    make_ParticleTile<T_ParticleType, NArrayReal, NArrayInt,
                       amrex::DeviceArenaAllocator>(m, "device");
-    make_ParticleTile<NStructReal, NStructInt, NArrayReal, NArrayInt,
+    make_ParticleTile<T_ParticleType, NArrayReal, NArrayInt,
                       amrex::ManagedArenaAllocator>(m, "managed");
-    make_ParticleTile<NStructReal, NStructInt, NArrayReal, NArrayInt,
+    make_ParticleTile<T_ParticleType, NArrayReal, NArrayInt,
                       amrex::AsyncArenaAllocator>(m, "async");
 #endif
 }
 
 void init_ParticleTile(py::module& m) {
+    // AMReX legacy AoS position + id/cpu particle ype
+    using ParticleType_0_0 = Particle<0, 0>;
+    using ParticleType_1_1 = Particle<1, 1>;
+
     // TODO: we might need to move all or most of the defines in here into a
     //       test/example submodule, so they do not collide with downstream projects
-    make_ParticleTile< 1, 1, 2, 1> (m);
-    make_ParticleTile< 0, 0, 4, 0> (m);   // HiPACE++ 22.07
-    make_ParticleTile< 0, 0, 5, 0> (m);   // ImpactX 22.07
-    make_ParticleTile< 0, 0, 7, 0> (m);
-    make_ParticleTile< 0, 0, 37, 1> (m);  // HiPACE++ 22.07
+    make_ParticleTile<ParticleType_1_1, 2, 1> (m);
+    make_ParticleTile<ParticleType_0_0, 4, 0> (m);   // HiPACE++ 22.07
+    make_ParticleTile<ParticleType_0_0, 5, 0> (m);   // ImpactX 22.07
+    make_ParticleTile<ParticleType_0_0, 7, 0> (m);
+    make_ParticleTile<ParticleType_0_0, 37, 1> (m);  // HiPACE++ 22.07
 }
