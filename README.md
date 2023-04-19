@@ -9,7 +9,7 @@
 [api-py3]: https://img.shields.io/badge/language-Python3-yellowgreen "Python3 API"
 [dev-pre-alpha]: https://img.shields.io/badge/phase-pre--alpha-yellowgreen "Status: Pre-Alpha"
 
-The Python binding pyAMReX bridges the worlds between block-structured codes and data science: it provides zero-copy application GPU data access for AI/ML, in situ analysis, application coupling and enables rapid, massively parallel prototyping.
+The Python binding pyAMReX bridges the worlds of block-structured codes and data science: it provides zero-copy application GPU data access for AI/ML, in situ analysis, application coupling and enables rapid, massively parallel prototyping.
 
 pyAMReX is part of AMReX.
 Due to its **highly experimental** nature, we develop it currently in a separate respository.
