@@ -5,14 +5,19 @@
  */
 #include "ParticleContainer.H"
 
+#include <AMReX_Particle.H>
+
+
 void init_ParticleContainer_HiPACE(py::module& m);
 void init_ParticleContainer_ImpactX(py::module& m);
 void init_ParticleContainer_WarpX(py::module& m);
 
 void init_ParticleContainer(py::module& m) {
+    using namespace amrex;
+
     // TODO: we might need to move all or most of the defines in here into a
     //       test/example submodule, so they do not collide with downstream projects
-    make_ParticleContainer_and_Iterators< 1, 1, 2, 1> (m);  // tests
+    make_ParticleContainer_and_Iterators<Particle<1, 1>, 2, 1>(m);  // tests
 
     init_ParticleContainer_HiPACE(m);
     init_ParticleContainer_ImpactX(m);
