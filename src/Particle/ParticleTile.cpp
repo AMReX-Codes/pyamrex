@@ -37,9 +37,9 @@ void make_ParticleTileData(py::module &m) {
         std::to_string(NArrayInt);
     py::class_<ParticleTileDataType>(m, particle_tile_data_type.c_str())
             .def(py::init())
-            .def_readonly("m_size", &ParticleTileDataType::m_size)
-            .def_readonly("m_num_runtime_real", &ParticleTileDataType::m_num_runtime_real)
-            .def_readonly("m_num_runtime_int", &ParticleTileDataType::m_num_runtime_int)
+            .def_readonly("size", &ParticleTileDataType::m_size)
+            .def_readonly("num_runtime_real", &ParticleTileDataType::m_num_runtime_real)
+            .def_readonly("num_runtime_int", &ParticleTileDataType::m_num_runtime_int)
             .def("getSuperParticle", &ParticleTileDataType::template getSuperParticle<ParticleType>)
             .def("setSuperParticle", &ParticleTileDataType::template setSuperParticle<ParticleType>)
             // setter & getter
