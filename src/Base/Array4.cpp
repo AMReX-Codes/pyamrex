@@ -7,15 +7,23 @@
 #include <AMReX_BLassert.H>
 #include <AMReX_IntVect.H>
 
-#include <pybind11/pybind11.h>
-#include <pybind11/numpy.h>
-#include <pybind11/stl.h>
+#include <nanobind/nanobind.h>
+#include <nanobind/numpy.h>
+#include <nanobind/operators.h>
+#include <nanobind/stl/function.h>
+#include <nanobind/stl/list.h>
+#include <nanobind/stl/optional.h>
+#include <nanobind/stl/pair.h>
+#include <nanobind/stl/string.h>
+#include <nanobind/stl/tuple.h>
+#include <nanobind/stl/variant.h>
+#include <nanobind/stl/vector.h>
 
 #include <cstdint>
 #include <sstream>
 #include <type_traits>
 
-namespace py = pybind11;
+namespace py = nanobind;
 using namespace amrex;
 
 
@@ -75,7 +83,7 @@ namespace
 
 
 template< typename T >
-void make_Array4(py::module &m, std::string typestr)
+void make_Array4(py::module_ &m, std::string typestr)
 {
     // dispatch simpler via: py::format_descriptor<T>::format() naming
     auto const array_name = std::string("Array4_").append(typestr);
@@ -92,9 +100,9 @@ void make_Array4(py::module &m, std::string typestr)
         .def("index_assert", &Array4<T>::index_assert)
 #endif
 
-        .def_property_readonly("size", &Array4<T>::size)
-        .def_property_readonly("nComp", &Array4<T>::nComp)
-        .def_property_readonly("num_comp", &Array4<T>::nComp)
+        .def_prop_rw_readonly("size", &Array4<T>::size)
+        .def_prop_rw_readonly("nComp", &Array4<T>::nComp)
+        .def_prop_rw_readonly("num_comp", &Array4<T>::nComp)
 
         .def(py::init< >())
         .def(py::init< Array4<T> const & >())
@@ -147,7 +155,7 @@ void make_Array4(py::module &m, std::string typestr)
 
         // CPU: __array_interface__ v3
         // https://numpy.org/doc/stable/reference/arrays.interface.html
-        .def_property_readonly("__array_interface__", [](Array4<T> const & a4) {
+        .def_prop_rw_readonly("__array_interface__", [](Array4<T> const & a4) {
             return array_interface(a4);
         })
 
@@ -161,7 +169,7 @@ void make_Array4(py::module &m, std::string typestr)
 
         // Nvidia GPUs: __cuda_array_interface__ v3
         // https://numba.readthedocs.io/en/latest/cuda/cuda_array_interface.html
-        .def_property_readonly("__cuda_array_interface__", [](Array4<T> const & a4) {
+        .def_prop_rw_readonly("__cuda_array_interface__", [](Array4<T> const & a4) {
             auto d = array_interface(a4);
 
             // data:
@@ -219,7 +227,7 @@ void make_Array4(py::module &m, std::string typestr)
     m.def("makePolymorphic", &makePolymorphic< Array4<T> >);
 }
 
-void init_Array4(py::module &m) {
+void init_Array4(py::module_ &m) {
     make_Array4< float >(m, "float");
     make_Array4< double >(m, "double");
     make_Array4< long double >(m, "longdouble");

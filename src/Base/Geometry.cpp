@@ -4,18 +4,26 @@
 #include <AMReX_MultiFab.H>
 #include <AMReX_Periodicity.H>
 
-#include <pybind11/pybind11.h>
-// #include <pybind11/operators.h>
-#include <pybind11/stl.h>
+#include <nanobind/nanobind.h>
+// #include <nanobind/operators.h>
+#include <nanobind/operators.h>
+#include <nanobind/stl/function.h>
+#include <nanobind/stl/list.h>
+#include <nanobind/stl/optional.h>
+#include <nanobind/stl/pair.h>
+#include <nanobind/stl/string.h>
+#include <nanobind/stl/tuple.h>
+#include <nanobind/stl/variant.h>
+#include <nanobind/stl/vector.h>
 
 #include <sstream>
 #include <string>
 #include <stdexcept>
 
-namespace py = pybind11;
+namespace py = nanobind;
 using namespace amrex;
 
-void init_Geometry(py::module& m)
+void init_Geometry(py::module_& m)
 {
     py::class_<GeometryData>(m, "GeometryData")
         .def("__repr__",
@@ -24,17 +32,17 @@ void init_Geometry(py::module& m)
             }
         )
         .def(py::init<>())
-        .def_readonly("prob_domain", &GeometryData::prob_domain)
-        .def_readonly("domain", &GeometryData::domain)
-        .def_readonly("coord", &GeometryData::coord)
-        .def_property_readonly("dx",
+        .def_ro("prob_domain", &GeometryData::prob_domain)
+        .def_ro("domain", &GeometryData::domain)
+        .def_ro("coord", &GeometryData::coord)
+        .def_prop_rw_readonly("dx",
             [](const GeometryData& gd){
                 std::array<Real,AMREX_SPACEDIM> dx {AMREX_D_DECL(
                     gd.dx[0], gd.dx[1], gd.dx[2]
                 )};
                 return dx;
             })
-        .def_property_readonly("is_periodic",
+        .def_prop_rw_readonly("is_periodic",
             [](const GeometryData& gd){
                 std::array<int,AMREX_SPACEDIM> per {AMREX_D_DECL(
                     gd.is_periodic[0], gd.is_periodic[1], gd.is_periodic[2]

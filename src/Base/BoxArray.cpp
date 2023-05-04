@@ -7,16 +7,24 @@
 #include <AMReX_BoxArray.H>
 #include <AMReX_IntVect.H>
 
-#include <pybind11/pybind11.h>
-#include <pybind11/stl.h>
+#include <nanobind/nanobind.h>
+#include <nanobind/operators.h>
+#include <nanobind/stl/function.h>
+#include <nanobind/stl/list.h>
+#include <nanobind/stl/optional.h>
+#include <nanobind/stl/pair.h>
+#include <nanobind/stl/string.h>
+#include <nanobind/stl/tuple.h>
+#include <nanobind/stl/variant.h>
+#include <nanobind/stl/vector.h>
 
 #include <sstream>
 
-namespace py = pybind11;
+namespace py = nanobind;
 using namespace amrex;
 
 
-void init_BoxArray(py::module &m) {
+void init_BoxArray(py::module_ &m) {
     /* A collection of Boxes stored in an Array.  It is a
      * reference-counted concrete class, not a polymorphic one; i.e. you
      * cannot use any of the List member functions with a BoxList
@@ -50,19 +58,19 @@ void init_BoxArray(py::module &m) {
         BoxArray (BoxList&& bl, IntVect const& max_grid_size);
         */
 
-        .def_property_readonly("size", &BoxArray::size)
-        .def_property_readonly("capacity", &BoxArray::capacity)
-        .def_property_readonly("empty", &BoxArray::empty)
-        .def_property_readonly("numPts", &BoxArray::numPts)
-        .def_property_readonly("d_numPts", &BoxArray::d_numPts)
+        .def_prop_rw_readonly("size", &BoxArray::size)
+        .def_prop_rw_readonly("capacity", &BoxArray::capacity)
+        .def_prop_rw_readonly("empty", &BoxArray::empty)
+        .def_prop_rw_readonly("numPts", &BoxArray::numPts)
+        .def_prop_rw_readonly("d_numPts", &BoxArray::d_numPts)
 /*
-        .def_property("type",
+        .def_prop_rw("type",
             py::overload_cast<>(&BoxArray::type, py::const_),
             &Box::setType)
 
-        .def_property_readonly("length",
+        .def_prop_rw_readonly("length",
             py::overload_cast<>(&Box::length, py::const_))
-        .def_property_readonly("is_empty", &Box::isEmpty)
+        .def_prop_rw_readonly("is_empty", &Box::isEmpty)
 */
 
         .def("define",

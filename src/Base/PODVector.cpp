@@ -6,14 +6,22 @@
 #include <AMReX_Config.H>
 #include <AMReX_PODVector.H>
 
-#include <pybind11/pybind11.h>
-#include <pybind11/numpy.h>
-#include <pybind11/stl.h>
+#include <nanobind/nanobind.h>
+#include <nanobind/numpy.h>
+#include <nanobind/operators.h>
+#include <nanobind/stl/function.h>
+#include <nanobind/stl/list.h>
+#include <nanobind/stl/optional.h>
+#include <nanobind/stl/pair.h>
+#include <nanobind/stl/string.h>
+#include <nanobind/stl/tuple.h>
+#include <nanobind/stl/variant.h>
+#include <nanobind/stl/vector.h>
 
 #include <sstream>
 
 
-namespace py = pybind11;
+namespace py = nanobind;
 using namespace amrex;
 
 namespace
@@ -38,7 +46,7 @@ namespace
 }
 
 template <class T, class Allocator = std::allocator<T> >
-void make_PODVector(py::module &m, std::string typestr, std::string allocstr)
+void make_PODVector(py::module_ &m, std::string typestr, std::string allocstr)
 {
     using PODVector_type = PODVector<T, Allocator>;
     auto const podv_name = std::string("PODVector_").append(typestr)
@@ -81,10 +89,10 @@ void make_PODVector(py::module &m, std::string typestr, std::string allocstr)
         //
         // swap
 
-        .def_property_readonly("__array_interface__", [](PODVector_type const & podvector) {
+        .def_prop_rw_readonly("__array_interface__", [](PODVector_type const & podvector) {
             return array_interface(podvector);
         })
-        .def_property_readonly("__cuda_array_interface__", [](PODVector_type const & podvector) {
+        .def_prop_rw_readonly("__cuda_array_interface__", [](PODVector_type const & podvector) {
             // Nvidia GPUs: __cuda_array_interface__ v3
             // https://numba.readthedocs.io/en/latest/cuda/cuda_array_interface.html
             auto d = array_interface(podvector);
@@ -112,7 +120,7 @@ void make_PODVector(py::module &m, std::string typestr, std::string allocstr)
 }
 
 template <class T>
-void make_PODVector(py::module &m, std::string typestr)
+void make_PODVector(py::module_ &m, std::string typestr)
 {
     // see Src/Base/AMReX_GpuContainers.H
     make_PODVector<T, std::allocator<T>> (m, typestr, "std");
@@ -125,7 +133,7 @@ void make_PODVector(py::module &m, std::string typestr)
 #endif
 }
 
-void init_PODVector(py::module& m) {
+void init_PODVector(py::module_& m) {
     make_PODVector<ParticleReal> (m, "real");
     make_PODVector<int> (m, "int");
 }

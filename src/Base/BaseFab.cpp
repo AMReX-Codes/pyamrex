@@ -5,18 +5,26 @@
  */
 #include <AMReX_FArrayBox.H>
 
-#include <pybind11/pybind11.h>
-#include <pybind11/stl.h>
+#include <nanobind/nanobind.h>
+#include <nanobind/operators.h>
+#include <nanobind/stl/function.h>
+#include <nanobind/stl/list.h>
+#include <nanobind/stl/optional.h>
+#include <nanobind/stl/pair.h>
+#include <nanobind/stl/string.h>
+#include <nanobind/stl/tuple.h>
+#include <nanobind/stl/variant.h>
+#include <nanobind/stl/vector.h>
 
 #include <istream>
 
-namespace py = pybind11;
+namespace py = nanobind;
 using namespace amrex;
 
 namespace
 {
     template< typename T >
-    void init_bf(py::module &m, std::string typestr) {
+    void init_bf(py::module_ &m, std::string typestr) {
         auto const bf_name = std::string("BaseFab_").append(typestr);
         py::class_< BaseFab<T> >(m, bf_name.c_str())
             .def("__repr__",
@@ -121,6 +129,6 @@ namespace
     }
 }
 
-void init_BaseFab(py::module &m) {
+void init_BaseFab(py::module_ &m) {
     init_bf<Real>(m, "Real");
 }

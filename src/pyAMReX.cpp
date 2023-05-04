@@ -6,46 +6,54 @@
 #include <AMReX_Config.H>
 #include <AMReX.H>
 
-#include <pybind11/pybind11.h>
-#include <pybind11/stl.h>
+#include <nanobind/nanobind.h>
+#include <nanobind/operators.h>
+#include <nanobind/stl/function.h>
+#include <nanobind/stl/list.h>
+#include <nanobind/stl/optional.h>
+#include <nanobind/stl/pair.h>
+#include <nanobind/stl/string.h>
+#include <nanobind/stl/tuple.h>
+#include <nanobind/stl/variant.h>
+#include <nanobind/stl/vector.h>
 
 #define STRINGIFY(x) #x
 #define MACRO_STRINGIFY(x) STRINGIFY(x)
 
-namespace py = pybind11;
+namespace py = nanobind;
 
 
 // forward declarations of exposed classes
-void init_AMReX(py::module&);
-void init_Arena(py::module&);
-void init_Array4(py::module&);
-void init_BaseFab(py::module&);
-void init_Box(py::module &);
-void init_RealBox(py::module &);
-void init_BoxArray(py::module &);
-void init_CoordSys(py::module&);
-void init_Dim3(py::module&);
-void init_DistributionMapping(py::module&);
-void init_FArrayBox(py::module&);
-void init_Geometry(py::module&);
-void init_IntVect(py::module &);
-void init_RealVect(py::module &);
-void init_AmrMesh(py::module &);
-void init_MultiFab(py::module &);
-void init_ParallelDescriptor(py::module &);
-void init_ParmParse(py::module &);
-void init_Particle(py::module &);
-void init_StructOfArrays(py::module &);
-void init_ArrayOfStructs(py::module &);
-void init_ParticleTile(py::module &);
-void init_ParticleContainer(py::module &);
-void init_Periodicity(py::module &);
-void init_PODVector(py::module &);
-void init_Vector(py::module &);
+void init_AMReX(py::module_&);
+void init_Arena(py::module_&);
+void init_Array4(py::module_&);
+void init_BaseFab(py::module_&);
+void init_Box(py::module_ &);
+void init_RealBox(py::module_ &);
+void init_BoxArray(py::module_ &);
+void init_CoordSys(py::module_&);
+void init_Dim3(py::module_&);
+void init_DistributionMapping(py::module_&);
+void init_FArrayBox(py::module_&);
+void init_Geometry(py::module_&);
+void init_IntVect(py::module_ &);
+void init_RealVect(py::module_ &);
+void init_AmrMesh(py::module_ &);
+void init_MultiFab(py::module_ &);
+void init_ParallelDescriptor(py::module_ &);
+void init_ParmParse(py::module_ &);
+void init_Particle(py::module_ &);
+void init_StructOfArrays(py::module_ &);
+void init_ArrayOfStructs(py::module_ &);
+void init_ParticleTile(py::module_ &);
+void init_ParticleContainer(py::module_ &);
+void init_Periodicity(py::module_ &);
+void init_PODVector(py::module_ &);
+void init_Vector(py::module_ &);
 
 
 
-PYBIND11_MODULE(amrex_pybind, m) {
+NB_MODULE(amrex_pybind, m) {
     m.doc() = R"pbdoc(
             amrex_pybind
             -----------
@@ -125,7 +133,7 @@ PYBIND11_MODULE(amrex_pybind, m) {
     m.attr("__license__") = "BSD-3-Clause-LBNL";
 
     // TODO broken numpy if not at least v1.15.0: raise warning
-    // auto numpy = py::module::import("numpy");
+    // auto numpy = py::module_::import("numpy");
     // auto npversion = numpy.attr("__version__");
     // std::cout << "numpy version: " << py::str(npversion) << std::endl;
 }

@@ -7,14 +7,21 @@
 #include <AMReX_Box.H>
 #include <AMReX_IntVect.H>
 
-#include <pybind11/pybind11.h>
-#include <pybind11/operators.h>
-#include <pybind11/stl.h>
+#include <nanobind/nanobind.h>
+#include <nanobind/operators.h>
+#include <nanobind/stl/function.h>
+#include <nanobind/stl/list.h>
+#include <nanobind/stl/optional.h>
+#include <nanobind/stl/pair.h>
+#include <nanobind/stl/string.h>
+#include <nanobind/stl/tuple.h>
+#include <nanobind/stl/variant.h>
+#include <nanobind/stl/vector.h>
 
 #include <sstream>
 #include <optional>
 
-namespace py = pybind11;
+namespace py = nanobind;
 using namespace amrex;
 
 namespace
@@ -65,7 +72,7 @@ namespace
     };
 }
 
-void init_Box(py::module &m) {
+void init_Box(py::module_ &m) {
     py::class_< Direction >(m, "Direction");
 
 
@@ -106,24 +113,24 @@ void init_Box(py::module &m) {
              py::arg("small"), py::arg("big"), py::arg("t")
         )
 
-        .def_property_readonly("lo_vect", [](Box const & bx){ return bx.smallEnd(); })
-        .def_property_readonly("hi_vect", [](Box const & bx){ return bx.bigEnd(); })
-        .def_property_readonly("small_end", [](Box const & bx){ return bx.smallEnd(); })
-        .def_property_readonly("big_end", [](Box const & bx){ return bx.bigEnd(); })
+        .def_prop_rw_readonly("lo_vect", [](Box const & bx){ return bx.smallEnd(); })
+        .def_prop_rw_readonly("hi_vect", [](Box const & bx){ return bx.bigEnd(); })
+        .def_prop_rw_readonly("small_end", [](Box const & bx){ return bx.smallEnd(); })
+        .def_prop_rw_readonly("big_end", [](Box const & bx){ return bx.bigEnd(); })
         /*
-        .def_property("small_end",
+        .def_prop_rw("small_end",
             py::overload_cast<>(&Box::smallEnd, py::const_),
             py::overload_cast< IntVect const & >(&Box::setSmall))
-        .def_property("big_end",
+        .def_prop_rw("big_end",
             &Box::bigEnd,
             &Box::setBig)
         */
-        .def_property("type",
+        .def_prop_rw("type",
             py::overload_cast<>(&Box::type, py::const_),
             &Box::setType)
 
-        .def_property_readonly("ix_type", &Box::ixType)
-        .def_property_readonly("size", &Box::size)
+        .def_prop_rw_readonly("ix_type", &Box::ixType)
+        .def_prop_rw_readonly("size", &Box::size)
 
         .def("length",
             py::overload_cast<>(&Box::length, py::const_),
@@ -134,14 +141,14 @@ void init_Box(py::module &m) {
         .def("numPts", &Box::numPts,
              "Return the number of points in the Box.")
 
-        .def_property_readonly("is_empty", &Box::isEmpty)
-        .def_property_readonly("ok", &Box::ok)
-        .def_property_readonly("cell_centered", &Box::cellCentered)
-        .def_property_readonly("num_pts", &Box::numPts)
-        .def_property_readonly("d_num_pts", &Box::d_numPts)
-        .def_property_readonly("volume", &Box::volume)
-        .def_property_readonly("the_unit_box", &Box::TheUnitBox)
-        .def_property_readonly("is_square", &Box::isSquare)
+        .def_prop_rw_readonly("is_empty", &Box::isEmpty)
+        .def_prop_rw_readonly("ok", &Box::ok)
+        .def_prop_rw_readonly("cell_centered", &Box::cellCentered)
+        .def_prop_rw_readonly("num_pts", &Box::numPts)
+        .def_prop_rw_readonly("d_num_pts", &Box::d_numPts)
+        .def_prop_rw_readonly("volume", &Box::volume)
+        .def_prop_rw_readonly("the_unit_box", &Box::TheUnitBox)
+        .def_prop_rw_readonly("is_square", &Box::isSquare)
 
         .def("contains",
             py::overload_cast< IntVect const & >(&Box::contains, py::const_))

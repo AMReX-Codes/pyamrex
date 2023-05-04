@@ -7,19 +7,27 @@
 #include <AMReX_Dim3.H>
 #include <AMReX_IntVect.H>
 
-#include <pybind11/pybind11.h>
-#include <pybind11/stl.h>
-#include <pybind11/numpy.h>
+#include <nanobind/nanobind.h>
+#include <nanobind/operators.h>
+#include <nanobind/stl/function.h>
+#include <nanobind/stl/list.h>
+#include <nanobind/stl/optional.h>
+#include <nanobind/stl/pair.h>
+#include <nanobind/stl/string.h>
+#include <nanobind/stl/tuple.h>
+#include <nanobind/stl/variant.h>
+#include <nanobind/stl/vector.h>
+#include <nanobind/numpy.h>
 
 #include <array>
 #include <sstream>
 #include <string>
 
-namespace py = pybind11;
+namespace py = nanobind;
 using namespace amrex;
 
 
-void init_IntVect(py::module &m) {
+void init_IntVect(py::module_ &m) {
     py::class_< IntVect >(m, "IntVect")
         .def("__repr__",
              [](py::object& obj) {
@@ -45,10 +53,10 @@ void init_IntVect(py::module &m) {
         .def(py::init<int>())
         .def(py::init<const std::array<int, AMREX_SPACEDIM>&>())
 
-        .def_property_readonly("sum", &IntVect::sum)
-        .def_property_readonly("max",
+        .def_prop_rw_readonly("sum", &IntVect::sum)
+        .def_prop_rw_readonly("max",
             py::overload_cast<>(&IntVect::max, py::const_))
-        .def_property_readonly("min",
+        .def_prop_rw_readonly("min",
             py::overload_cast<>(&IntVect::min, py::const_))
         .def_static("zero_vector", &IntVect::TheZeroVector)
         .def_static("unit_vector", &IntVect::TheUnitVector)

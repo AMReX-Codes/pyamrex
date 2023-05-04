@@ -9,21 +9,29 @@
 #include <AMReX_IntVect.H>
 #include <AMReX_ParticleTile.H>
 
-#include <pybind11/pybind11.h>
-#include <pybind11/stl.h>
+#include <nanobind/nanobind.h>
+#include <nanobind/operators.h>
+#include <nanobind/stl/function.h>
+#include <nanobind/stl/list.h>
+#include <nanobind/stl/optional.h>
+#include <nanobind/stl/pair.h>
+#include <nanobind/stl/string.h>
+#include <nanobind/stl/tuple.h>
+#include <nanobind/stl/variant.h>
+#include <nanobind/stl/vector.h>
 
 #include <sstream>
 
 
-namespace py = pybind11;
+namespace py = nanobind;
 using namespace amrex;
 
 //Forward declaration
 template <int T_NReal, int T_NInt=0>
-void make_Particle(py::module &m);
+void make_Particle(py::module_ &m);
 
 template <typename T_ParticleType, int NArrayReal, int NArrayInt>
-void make_ParticleTileData(py::module &m) {
+void make_ParticleTileData(py::module_ &m) {
     using ParticleType = T_ParticleType;
     constexpr int NStructReal = ParticleType::NReal;
     constexpr int NStructInt = ParticleType::NInt;
@@ -37,9 +45,9 @@ void make_ParticleTileData(py::module &m) {
         std::to_string(NArrayInt);
     py::class_<ParticleTileDataType>(m, particle_tile_data_type.c_str())
             .def(py::init())
-            .def_readonly("m_size", &ParticleTileDataType::m_size)
-            .def_readonly("m_num_runtime_real", &ParticleTileDataType::m_num_runtime_real)
-            .def_readonly("m_num_runtime_int", &ParticleTileDataType::m_num_runtime_int)
+            .def_ro("m_size", &ParticleTileDataType::m_size)
+            .def_ro("m_num_runtime_real", &ParticleTileDataType::m_num_runtime_real)
+            .def_ro("m_num_runtime_int", &ParticleTileDataType::m_num_runtime_int)
             .def("getSuperParticle", &ParticleTileDataType::template getSuperParticle<ParticleType>)
             .def("setSuperParticle", &ParticleTileDataType::setSuperParticle)
             // setter & getter
@@ -53,7 +61,7 @@ void make_ParticleTileData(py::module &m) {
 
 template <typename T_ParticleType, int NArrayReal, int NArrayInt,
           template<class> class Allocator=DefaultAllocator>
-void make_ParticleTile(py::module &m, std::string allocstr)
+void make_ParticleTile(py::module_ &m, std::string allocstr)
 {
     using ParticleType = T_ParticleType;
     constexpr int NStructReal = ParticleType::NReal;
@@ -67,8 +75,8 @@ void make_ParticleTile(py::module &m, std::string allocstr)
                                     std::to_string(NArrayInt) + "_" + allocstr;
     py::class_<ParticleTileType>(m, particle_tile_type.c_str())
         .def(py::init())
-        .def_readonly_static("NAR", &ParticleTileType::NAR)
-        .def_readonly_static("NAI", &ParticleTileType::NAI)
+        .def_ro_static("NAR", &ParticleTileType::NAR)
+        .def_ro_static("NAI", &ParticleTileType::NAI)
         .def("define", &ParticleTileType::define)
         .def("GetArrayOfStructs",
             py::overload_cast<>(&ParticleTileType::GetArrayOfStructs),
@@ -120,7 +128,7 @@ void make_ParticleTile(py::module &m, std::string allocstr)
 }
 
 template <typename T_ParticleType, int NArrayReal, int NArrayInt>
-void make_ParticleTile(py::module &m)
+void make_ParticleTile(py::module_ &m)
 {
     make_ParticleTileData<T_ParticleType, NArrayReal, NArrayInt>(m);
 
@@ -128,7 +136,7 @@ void make_ParticleTile(py::module &m)
     //   !AMREX_USE_GPU: DefaultAllocator = std::allocator
     //    AMREX_USE_GPU: DefaultAllocator = amrex::ArenaAllocator
 
-    //   work-around for https://github.com/pybind/pybind11/pull/4581
+    //   work-around for https://github.com/pybind/nanobind/pull/4581
     //make_ParticleTile<T_ParticleType, NArrayReal, NArrayInt,
     //                  std::allocator>(m, "std");
     //make_ParticleTile<T_ParticleType, NArrayReal, NArrayInt,
@@ -157,7 +165,7 @@ void make_ParticleTile(py::module &m)
 #endif
 }
 
-void init_ParticleTile(py::module& m) {
+void init_ParticleTile(py::module_& m) {
     // AMReX legacy AoS position + id/cpu particle ype
     using ParticleType_0_0 = Particle<0, 0>;
     using ParticleType_1_1 = Particle<1, 1>;

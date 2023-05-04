@@ -7,19 +7,27 @@
 #include <AMReX_RealBox.H>
 #include <AMReX_IntVect.H>
 
-#include <pybind11/pybind11.h>
-#include <pybind11/operators.h>
-#include <pybind11/stl.h>
+#include <nanobind/nanobind.h>
+#include <nanobind/operators.h>
+#include <nanobind/operators.h>
+#include <nanobind/stl/function.h>
+#include <nanobind/stl/list.h>
+#include <nanobind/stl/optional.h>
+#include <nanobind/stl/pair.h>
+#include <nanobind/stl/string.h>
+#include <nanobind/stl/tuple.h>
+#include <nanobind/stl/variant.h>
+#include <nanobind/stl/vector.h>
 
 #include <sstream>
 #include <string>
 #include <optional>
 #include <vector>
 
-namespace py = pybind11;
+namespace py = nanobind;
 using namespace amrex;
 
-void init_RealVect(py::module &m) {
+void init_RealVect(py::module_ &m) {
 
      py::class_< RealVect>(m, "RealVect")
           .def("__repr__",
@@ -116,10 +124,10 @@ void init_RealVect(py::module &m) {
           .def(+py::self)
           .def(-py::self)
 
-          .def_property_readonly("sum", &RealVect::sum, "Sum of the components of this vector")
-          .def_property_readonly("vectorLength", &RealVect::vectorLength, "Length or 2-Norm of this vector")
-          .def_property_readonly("radSquared", &RealVect::radSquared, "Length squared of this vector")
-          .def_property_readonly("product", &RealVect::product, "Product of entries of this vector")
+          .def_prop_rw_readonly("sum", &RealVect::sum, "Sum of the components of this vector")
+          .def_prop_rw_readonly("vectorLength", &RealVect::vectorLength, "Length or 2-Norm of this vector")
+          .def_prop_rw_readonly("radSquared", &RealVect::radSquared, "Length squared of this vector")
+          .def_prop_rw_readonly("product", &RealVect::product, "Product of entries of this vector")
           .def("minDir", &RealVect::minDir, "direction or index of minimum value of this vector")
           .def("maxDir", &RealVect::maxDir, "direction or index of maximum value of this vector")
 

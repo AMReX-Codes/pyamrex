@@ -13,13 +13,21 @@
 #include <AMReX_FabArrayBase.H>
 #include <AMReX_MultiFab.H>
 
-#include <pybind11/pybind11.h>
-#include <pybind11/stl.h>
+#include <nanobind/nanobind.h>
+#include <nanobind/operators.h>
+#include <nanobind/stl/function.h>
+#include <nanobind/stl/list.h>
+#include <nanobind/stl/optional.h>
+#include <nanobind/stl/pair.h>
+#include <nanobind/stl/string.h>
+#include <nanobind/stl/tuple.h>
+#include <nanobind/stl/variant.h>
+#include <nanobind/stl/vector.h>
 
 #include <memory>
 #include <string>
 
-namespace py = pybind11;
+namespace py = nanobind;
 using namespace amrex;
 
 namespace pyAMReX
@@ -31,7 +39,7 @@ namespace pyAMReX
      * explicitly, otherwise we will jump directly to the 2nd element. We do
      * this the same way as pybind11 does this, via a little state:
      *   https://github.com/AMReX-Codes/pyamrex/pull/50
-     *   https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+     *   https://github.com/pybind/nanobind/blob/v2.10.0/include/nanobind/nanobind.h#L2269-L2282
      *
      * To avoid unnecessary (and expensive) copies, remember to only call this
      * helper always with py::return_value_policy::reference_internal!

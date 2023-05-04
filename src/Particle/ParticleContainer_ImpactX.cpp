@@ -9,7 +9,7 @@
 #include <AMReX_ParticleTile.H>
 
 
-void init_ParticleContainer_ImpactX(py::module& m) {
+void init_ParticleContainer_ImpactX(py::module_& m) {
     using namespace amrex;
 
     // TODO: we might need to move all or most of the defines in here into a

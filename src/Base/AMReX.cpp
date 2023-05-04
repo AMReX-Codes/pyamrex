@@ -3,19 +3,27 @@
 #include <AMReX_Vector.H>
 #include <AMReX_ParmParse.H>
 
-#include <pybind11/pybind11.h>
-#include <pybind11/stl.h>
+#include <nanobind/nanobind.h>
+#include <nanobind/operators.h>
+#include <nanobind/stl/function.h>
+#include <nanobind/stl/list.h>
+#include <nanobind/stl/optional.h>
+#include <nanobind/stl/pair.h>
+#include <nanobind/stl/string.h>
+#include <nanobind/stl/tuple.h>
+#include <nanobind/stl/variant.h>
+#include <nanobind/stl/vector.h>
 
 #include <string>
 
-namespace py = pybind11;
+namespace py = nanobind;
 using namespace amrex;
 
 namespace amrex {
    struct Config {};
 }
 
-void init_AMReX(py::module& m)
+void init_AMReX(py::module_& m)
 {
     py::class_<AMReX>(m, "AMReX")
         .def_static("empty", &AMReX::empty)
@@ -26,18 +34,18 @@ void init_AMReX(py::module& m)
         ;
 
     py::class_<Config>(m, "Config")
-        .def_property_readonly_static(
+        .def_prop_rw_static(
             "amrex_version",
             [](py::object) { return Version(); },
             "AMReX library version")
-        .def_property_readonly_static(
+        .def_prop_rw_static(
             "spacedim",
             [](py::object) { return AMREX_SPACEDIM; })
-        .def_property_static(
+        .def_prop_rw_static(
             "verbose",
             [](py::object) { return Verbose(); },
             [](py::object, const int v) { SetVerbose(v); })
-        .def_property_readonly_static(
+        .def_prop_rw_static(
             "have_mpi",
             [](py::object){
 #ifdef AMREX_USE_MPI
@@ -46,7 +54,7 @@ void init_AMReX(py::module& m)
                 return false;
 #endif
             })
-        .def_property_readonly_static(
+        .def_prop_rw_static(
             "have_gpu",
             [](py::object){
 #ifdef AMREX_USE_GPU
@@ -55,7 +63,7 @@ void init_AMReX(py::module& m)
                 return false;
 #endif
             })
-        .def_property_readonly_static(
+        .def_prop_rw_static(
             "have_omp",
             [](py::object){
 #ifdef AMREX_USE_OMP
@@ -64,7 +72,7 @@ void init_AMReX(py::module& m)
                 return false;
 #endif
             })
-        .def_property_readonly_static(
+        .def_prop_rw_static(
             "gpu_backend",
             [](py::object){
 #ifdef AMREX_USE_CUDA
@@ -109,7 +117,7 @@ void init_AMReX(py::module& m)
         // This is a convenience helper/bandage for making work with Python
         // garbage collectors in various implementations more easy.
         // https://github.com/AMReX-Codes/pyamrex/issues/81
-        auto m_gc = py::module::import("gc");
+        auto m_gc = py::module_::import_("gc");
         auto collect = m_gc.attr("collect");
         collect();
     };

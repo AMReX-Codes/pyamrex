@@ -5,15 +5,23 @@
  */
 #include <AMReX_Arena.H>
 
-#include <pybind11/pybind11.h>
-#include <pybind11/numpy.h>
-#include <pybind11/stl.h>
+#include <nanobind/nanobind.h>
+#include <nanobind/numpy.h>
+#include <nanobind/operators.h>
+#include <nanobind/stl/function.h>
+#include <nanobind/stl/list.h>
+#include <nanobind/stl/optional.h>
+#include <nanobind/stl/pair.h>
+#include <nanobind/stl/string.h>
+#include <nanobind/stl/tuple.h>
+#include <nanobind/stl/variant.h>
+#include <nanobind/stl/vector.h>
 
-namespace py = pybind11;
+namespace py = nanobind;
 using namespace amrex;
 
 
-void init_Arena(py::module &m) {
+void init_Arena(py::module_ &m) {
     py::class_< Arena >(m, "Arena");
 
     m.def("The_Arena", &The_Arena, py::return_value_policy::reference)

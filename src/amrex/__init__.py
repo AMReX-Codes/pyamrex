@@ -16,13 +16,13 @@ if os.name == "nt":
             os.add_dll_directory(p)
 
 # import core bindings to C++
-from . import amrex_pybind
-from .amrex_pybind import *  # noqa
+from . import amrex_nanobind
+from .amrex_nanobind import *  # noqa
 
-__version__ = amrex_pybind.__version__
-__doc__ = amrex_pybind.__doc__
-__license__ = amrex_pybind.__license__
-__author__ = amrex_pybind.__author__
+__version__ = amrex_nanobind.__version__
+__doc__ = amrex_nanobind.__doc__
+__license__ = amrex_nanobind.__license__
+__author__ = amrex_nanobind.__author__
 
 # at this place we can enhance Python classes with additional methods written
 # in pure Python or add some other Python logic
