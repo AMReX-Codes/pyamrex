@@ -65,17 +65,14 @@ void make_ParticleTile(py::module &m, std::string allocstr)
     auto const particle_tile_type = std::string("ParticleTile_") + std::to_string(NStructReal) + "_" +
                                     std::to_string(NStructInt) + "_" + std::to_string(NArrayReal) + "_" +
                                     std::to_string(NArrayInt) + "_" + allocstr;
-    py::class_<ParticleTileType>(m, particle_tile_type.c_str())
+    auto py_particle_tile = py::class_<ParticleTileType>(m, particle_tile_type.c_str())
         .def(py::init())
         .def_readonly_static("NAR", &ParticleTileType::NAR)
         .def_readonly_static("NAI", &ParticleTileType::NAI)
         .def("define", &ParticleTileType::define)
-        .def("GetArrayOfStructs",
-            py::overload_cast<>(&ParticleTileType::GetArrayOfStructs),
-            py::return_value_policy::reference_internal)
         .def("GetStructOfArrays", py::overload_cast<>(&ParticleTileType::GetStructOfArrays),
             py::return_value_policy::reference_internal)
-        .def("empty", &ParticleTileType::empty)
+        .def("empty", &ParticleTileType::template empty<ParticleType>)
         .def("size", &ParticleTileType::template size<ParticleType>)
         .def("numParticles", &ParticleTileType::template numParticles<ParticleType>)
         .def("numRealParticles", &ParticleTileType::template numRealParticles<ParticleType>)
@@ -117,6 +114,14 @@ void make_ParticleTile(py::module &m, std::string allocstr)
         .def("__setitem__", [](ParticleTileType & pt, int const v, SuperParticleType const value){ pt.getParticleTileData().setSuperParticle( value, v); })
         .def("__getitem__", [](ParticleTileType & pt, int const v){ return pt.getParticleTileData().getSuperParticle(v); })
     ;
+
+    if constexpr (!T_ParticleType::is_soa_particle) {
+        py_particle_tile
+            .def("GetArrayOfStructs",
+                 py::overload_cast<>(&ParticleTileType::GetArrayOfStructs),
+                 py::return_value_policy::reference_internal)
+        ;
+    }
 }
 
 template <typename T_ParticleType, int NArrayReal, int NArrayInt>
