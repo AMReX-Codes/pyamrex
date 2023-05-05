@@ -8,18 +8,26 @@
 #include <AMReX_IntVect.H>
 #include <AMReX_ParmParse.H>
 
-#include <pybind11/pybind11.h>
-#include <pybind11/operators.h>
-#include <pybind11/stl.h>
+#include <nanobind/nanobind.h>
+#include <nanobind/operators.h>
+#include <nanobind/operators.h>
+#include <nanobind/stl/function.h>
+#include <nanobind/stl/list.h>
+#include <nanobind/stl/optional.h>
+#include <nanobind/stl/pair.h>
+#include <nanobind/stl/string.h>
+#include <nanobind/stl/tuple.h>
+#include <nanobind/stl/variant.h>
+#include <nanobind/stl/vector.h>
 
 #include <string>
 #include <vector>
 
-namespace py = pybind11;
+namespace py = nanobind;
 using namespace amrex;
 
 
-void init_ParmParse(py::module &m) {
+void init_ParmParse(py::module_ &m) {
     py::class_<ParmParse>(m, "ParmParse")
         .def("__repr__",
              [](ParmParse const &) {

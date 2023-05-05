@@ -18,13 +18,21 @@
 #include <AMReX_ParticleTile.H>
 #include <AMReX_ArrayOfStructs.H>
 
-#include <pybind11/pybind11.h>
-#include <pybind11/stl.h>
+#include <nanobind/nanobind.h>
+#include <nanobind/operators.h>
+#include <nanobind/stl/function.h>
+#include <nanobind/stl/list.h>
+#include <nanobind/stl/optional.h>
+#include <nanobind/stl/pair.h>
+#include <nanobind/stl/string.h>
+#include <nanobind/stl/tuple.h>
+#include <nanobind/stl/variant.h>
+#include <nanobind/stl/vector.h>
 
 #include <string>
 #include <sstream>
 
-namespace py = pybind11;
+namespace py = nanobind;
 
 template <typename T_ParticleType, int T_NArrayReal=0, int T_NArrayInt=0>
 std::string particle_type_suffix ()
@@ -44,7 +52,7 @@ std::string particle_type_suffix ()
 }
 
 template <bool is_const, typename T_ParIterBase>
-void make_Base_Iterators (py::module &m, std::string allocstr)
+void make_Base_Iterators (py::module_ &m, std::string allocstr)
 {
     using iterator_base = T_ParIterBase;
     using container = typename iterator_base::ContainerType;
@@ -67,12 +75,12 @@ void make_Base_Iterators (py::module &m, std::string allocstr)
         .def("soa", &iterator_base::GetStructOfArrays,
                                py::return_value_policy::reference_internal)
 
-        .def_property_readonly_static("is_soa_particle", [](const py::object&){ return ParticleType::is_soa_particle;})
-        .def_property_readonly("num_particles", &iterator_base::numParticles)
-        .def_property_readonly("num_real_particles", &iterator_base::numRealParticles)
-        .def_property_readonly("num_neighbor_particles", &iterator_base::numNeighborParticles)
-        .def_property_readonly("level", &iterator_base::GetLevel)
-        .def_property_readonly("pair_index", &iterator_base::GetPairIndex)
+        .def_prop_rw_static("is_soa_particle", [](const py::object&){ return ParticleType::is_soa_particle;})
+        .def_prop_rw_readonly("num_particles", &iterator_base::numParticles)
+        .def_prop_rw_readonly("num_real_particles", &iterator_base::numRealParticles)
+        .def_prop_rw_readonly("num_neighbor_particles", &iterator_base::numNeighborParticles)
+        .def_prop_rw_readonly("level", &iterator_base::GetLevel)
+        .def_prop_rw_readonly("pair_index", &iterator_base::GetPairIndex)
         .def("geom", &iterator_base::Geom, py::arg("level"))
 
         // eq. to void operator++()
@@ -96,7 +104,7 @@ void make_Base_Iterators (py::module &m, std::string allocstr)
 }
 
 template <bool is_const, typename T_ParIter, template<class> class Allocator=DefaultAllocator>
-void make_Iterators (py::module &m, std::string allocstr)
+void make_Iterators (py::module_ &m, std::string allocstr)
 {
     using iterator = T_ParIter;
     using container = typename iterator::ContainerType;
@@ -124,12 +132,12 @@ void make_Iterators (py::module &m, std::string allocstr)
              py::arg("particle_container"), py::arg("level"))
         .def(py::init<container&, int, MFItInfo&>(),
              py::arg("particle_container"), py::arg("level"), py::arg("info"))
-        .def_property_readonly_static("is_soa_particle", [](const py::object&){ return ParticleType::is_soa_particle;})
+        .def_prop_rw_static("is_soa_particle", [](const py::object&){ return ParticleType::is_soa_particle;})
     ;
 }
 
 template <typename T_ParticleType, int T_NArrayReal=0, int T_NArrayInt=0>
-void make_ParticleInitData (py::module &m) {
+void make_ParticleInitData (py::module_ &m) {
     using ParticleType = T_ParticleType;
     using ParticleInitData = ParticleInitType<ParticleType::NReal, ParticleType::NInt, T_NArrayReal, T_NArrayInt>;
     // depends on https://github.com/AMReX-Codes/amrex/pull/3280
@@ -140,21 +148,21 @@ void make_ParticleInitData (py::module &m) {
         std::string("ParticleInitType_") + suffix;
     auto py_particle_init_data = py::class_<ParticleInitData>(m, particle_init_data_type.c_str())
         .def(py::init<>())
-        .def_property_readonly_static("is_soa_particle", [](const py::object&){return ParticleType::is_soa_particle;})
-        .def_readwrite("real_array_data", &ParticleInitData::real_array_data)
-        .def_readwrite("int_array_data", &ParticleInitData::int_array_data)
+        .def_prop_rw_static("is_soa_particle", [](const py::object&){return ParticleType::is_soa_particle;})
+        .def_rw("real_array_data", &ParticleInitData::real_array_data)
+        .def_rw("int_array_data", &ParticleInitData::int_array_data)
     ;
 
     // only legacy particle has an AoS data structure for positions and id+cpu
     if constexpr (!ParticleType::is_soa_particle)
         py_particle_init_data
-            .def_readwrite("real_struct_data", &ParticleInitData::real_struct_data)
-            .def_readwrite("int_struct_data", &ParticleInitData::int_struct_data);
+            .def_rw("real_struct_data", &ParticleInitData::real_struct_data)
+            .def_rw("int_struct_data", &ParticleInitData::int_struct_data);
 }
 
 template <typename T_ParticleType, int T_NArrayReal=0, int T_NArrayInt=0,
           template<class> class Allocator=DefaultAllocator>
-void make_ParticleContainer_and_Iterators (py::module &m, std::string allocstr)
+void make_ParticleContainer_and_Iterators (py::module_ &m, std::string allocstr)
 {
     using ParticleType = T_ParticleType;
     using ParticleContainerType = ParticleContainer_impl<
@@ -178,13 +186,13 @@ void make_ParticleContainer_and_Iterators (py::module &m, std::string allocstr)
                       const Vector<BoxArray>&,
                       const Vector<IntVect>&>())
 
-        .def_property_readonly_static("is_soa_particle", [](const py::object&){return ParticleType::is_soa_particle;})
-        .def_property_readonly_static("NStructReal", [](const py::object&){return ParticleContainerType::NStructReal; })
-        .def_property_readonly_static("NStructInt", [](const py::object&){return ParticleContainerType::NStructInt; })
-        .def_property_readonly_static("NArrayReal", [](const py::object&){return ParticleContainerType::NArrayReal; })
-        .def_property_readonly_static("NArrayInt", [](const py::object&){return ParticleContainerType::NArrayInt; })
+        .def_prop_rw_static("is_soa_particle", [](const py::object&){return ParticleType::is_soa_particle;})
+        .def_prop_rw_static("NStructReal", [](const py::object&){return ParticleContainerType::NStructReal; })
+        .def_prop_rw_static("NStructInt", [](const py::object&){return ParticleContainerType::NStructInt; })
+        .def_prop_rw_static("NArrayReal", [](const py::object&){return ParticleContainerType::NArrayReal; })
+        .def_prop_rw_static("NArrayInt", [](const py::object&){return ParticleContainerType::NArrayInt; })
 
-        .def_property_readonly("finest_level", &ParticleContainerBase::finestLevel)
+        .def_prop_rw_readonly("finest_level", &ParticleContainerBase::finestLevel)
 
         // ParticleContainer ( const ParticleContainer &) = delete;
         // ParticleContainer& operator= ( const ParticleContainer & ) = delete;
@@ -379,7 +387,7 @@ void make_ParticleContainer_and_Iterators (py::module &m, std::string allocstr)
 /** Create ParticleContainers and Iterators
  */
 template <typename T_ParticleType, int T_NArrayReal=0, int T_NArrayInt=0>
-void make_ParticleContainer_and_Iterators (py::module &m)
+void make_ParticleContainer_and_Iterators (py::module_ &m)
 {
     // TODO for pure SoA
     // depends on https://github.com/AMReX-Codes/amrex/pull/3280
@@ -390,7 +398,7 @@ void make_ParticleContainer_and_Iterators (py::module &m)
     //   !AMREX_USE_GPU: DefaultAllocator = std::allocator
     //    AMREX_USE_GPU: DefaultAllocator = amrex::ArenaAllocator
 
-    //   work-around for https://github.com/pybind/pybind11/pull/4581
+    //   work-around for https://github.com/pybind/nanobind/pull/4581
     //make_ParticleContainer_and_Iterators<T_ParticleType, T_NArrayReal, T_NArrayInt,
     //                                     std::allocator>(m, "std");            // CPU DefaultAllocator
     //make_ParticleContainer_and_Iterators<T_ParticleType, T_NArrayReal, T_NArrayInt,

@@ -7,12 +7,20 @@
 #include <AMReX_ArrayOfStructs.H>
 #include <AMReX_GpuAllocators.H>
 
-#include <pybind11/pybind11.h>
-#include <pybind11/stl.h>
+#include <nanobind/nanobind.h>
+#include <nanobind/operators.h>
+#include <nanobind/stl/function.h>
+#include <nanobind/stl/list.h>
+#include <nanobind/stl/optional.h>
+#include <nanobind/stl/pair.h>
+#include <nanobind/stl/string.h>
+#include <nanobind/stl/tuple.h>
+#include <nanobind/stl/variant.h>
+#include <nanobind/stl/vector.h>
 
 #include <sstream>
 
-namespace py = pybind11;
+namespace py = nanobind;
 using namespace amrex;
 
 namespace
@@ -63,7 +71,7 @@ namespace
 
 template <typename T_ParticleType,
           template<class> class Allocator=DefaultAllocator>
-void make_ArrayOfStructs(py::module &m, std::string allocstr)
+void make_ArrayOfStructs(py::module_ &m, std::string allocstr)
 {
     using AOSType = ArrayOfStructs<T_ParticleType, Allocator>;
     using ParticleType  = T_ParticleType;
@@ -91,10 +99,10 @@ void make_ArrayOfStructs(py::module &m, std::string allocstr)
         .def("back", py::overload_cast<>(&AOSType::back),"get back member.  Problem!!!!! this is perfo")
 
         // setter & getter
-        .def_property_readonly("__array_interface__", [](AOSType const & aos) {
+        .def_prop_rw_readonly("__array_interface__", [](AOSType const & aos) {
             return array_interface(aos);
         })
-        .def_property_readonly("__cuda_array_interface__", [](AOSType const & aos) {
+        .def_prop_rw_readonly("__cuda_array_interface__", [](AOSType const & aos) {
             // Nvidia GPUs: __cuda_array_interface__ v3
             // https://numba.readthedocs.io/en/latest/cuda/cuda_array_interface.html
             auto d = array_interface(aos);
@@ -122,7 +130,7 @@ void make_ArrayOfStructs(py::module &m, std::string allocstr)
 }
 
 template <int NReal, int NInt>
-void make_ArrayOfStructs(py::module &m)
+void make_ArrayOfStructs(py::module_ &m)
 {
     // AMReX legacy AoS position + id/cpu particle ype
     using ParticleType = Particle<NReal, NInt>;
@@ -131,7 +139,7 @@ void make_ArrayOfStructs(py::module &m)
     //   !AMREX_USE_GPU: DefaultAllocator = std::allocator
     //    AMREX_USE_GPU: DefaultAllocator = amrex::ArenaAllocator
 
-    //   work-around for https://github.com/pybind/pybind11/pull/4581
+    //   work-around for https://github.com/pybind/nanobind/pull/4581
     //make_ArrayOfStructs<ParticleType, std::allocator> (m, "std");
     //make_ArrayOfStructs<ParticleType, amrex::ArenaAllocator> (m, "arena");
 #ifdef AMREX_USE_GPU
@@ -150,7 +158,7 @@ void make_ArrayOfStructs(py::module &m)
 #endif
 }
 
-void init_ArrayOfStructs(py::module& m) {
+void init_ArrayOfStructs(py::module_& m) {
     make_ArrayOfStructs<0, 0> (m);  // WarpX 22.07, ImpactX 22.07, HiPACE++ 22.07
     make_ArrayOfStructs<1, 1> (m);  // test in ParticleContainer
     make_ArrayOfStructs<2, 1> (m);  // test

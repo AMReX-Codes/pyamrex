@@ -76,16 +76,23 @@ find_package(Python COMPONENTS Interpreter Development.Module REQUIRED)
 # default installation directories: Python
 pyamrex_set_default_install_dirs_python()
 
-# pybind11
-#   builds pybind11 from git (default), form local source or
+# nanobind
+#   builds nanobind from git (default), form local source or
 #   finds an existing install
-include(${pyAMReX_SOURCE_DIR}/cmake/dependencies/pybind11.cmake)
+include(${pyAMReX_SOURCE_DIR}/cmake/dependencies/nanobind.cmake)
 
 
 # Targets #####################################################################
 #
 # collect all objects for compilation
-add_library(pyAMReX MODULE src/pyAMReX.cpp)
+nanobind_build_library(
+        nanobind                 # Target name
+        NB_STATIC STABLE_API LTO # Optional flags (see below)
+)
+
+nanobind_add_module(pyAMReX
+    src/pyAMReX.cpp
+)
 add_library(pyAMReX::pyAMReX ALIAS pyAMReX)
 
 # own headers
@@ -110,7 +117,7 @@ set_target_properties(pyAMReX PROPERTIES
 
 # link dependencies
 target_link_libraries(pyAMReX PUBLIC AMReX::amrex)
-target_link_libraries(pyAMReX PRIVATE pybind11::module pybind11::lto pybind11::windows_extras)
+#target_link_libraries(pyAMReX PRIVATE nanobind)  #::module nanobind::lto nanobind::windows_extras)
 
 # binary name: we will encoded 1D, 2D and 3D in here so we can provide a
 # wrapper library that pre-compiled all three geometry variants of AMReX
@@ -118,14 +125,14 @@ target_link_libraries(pyAMReX PRIVATE pybind11::module pybind11::lto pybind11::w
 
 # set Python module properties
 set_target_properties(pyAMReX PROPERTIES
-    # hide symbols for combining multiple pybind11 modules downstream & for
+    # hide symbols for combining multiple nanobind modules downstream & for
     # reduced binary size
     CXX_VISIBILITY_PRESET "hidden"
     CUDA_VISIBILITY_PRESET "hidden"
-    # name of the pybind-generated python module, which is wrapped in another
+    # name of the nanobind-generated python module, which is wrapped in another
     # fluffy front-end modules, so we can extend it with pure Python
-    ARCHIVE_OUTPUT_NAME amrex_pybind
-    LIBRARY_OUTPUT_NAME amrex_pybind
+    ARCHIVE_OUTPUT_NAME amrex_nanobind
+    LIBRARY_OUTPUT_NAME amrex_nanobind
     # build output directories - mainly set to run tests from CMake & IDEs
     ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_PYTHON_OUTPUT_DIRECTORY}/amrex
     LIBRARY_OUTPUT_DIRECTORY ${CMAKE_PYTHON_OUTPUT_DIRECTORY}/amrex
@@ -152,10 +159,10 @@ if(EMSCRIPTEN)
     set_target_properties(pyAMReX PROPERTIES
         PREFIX "")
 else()
-    pybind11_extension(pyAMReX)
+    nanobind_extension(pyAMReX)
 endif()
 if(NOT MSVC AND NOT ${CMAKE_BUILD_TYPE} MATCHES Debug|RelWithDebInfo)
-    pybind11_strip(pyAMReX)
+    nanobind_strip(pyAMReX)
 endif()
 
 # AMReX helper function: propagate CUDA specific target & source properties

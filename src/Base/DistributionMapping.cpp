@@ -8,16 +8,24 @@
 #include <AMReX_DistributionMapping.H>
 #include <AMReX_Vector.H>
 
-#include <pybind11/pybind11.h>
-#include <pybind11/stl.h>
+#include <nanobind/nanobind.h>
+#include <nanobind/operators.h>
+#include <nanobind/stl/function.h>
+#include <nanobind/stl/list.h>
+#include <nanobind/stl/optional.h>
+#include <nanobind/stl/pair.h>
+#include <nanobind/stl/string.h>
+#include <nanobind/stl/tuple.h>
+#include <nanobind/stl/variant.h>
+#include <nanobind/stl/vector.h>
 
 #include <sstream>
 
-namespace py = pybind11;
+namespace py = nanobind;
 using namespace amrex;
 
 
-void init_DistributionMapping(py::module &m) {
+void init_DistributionMapping(py::module_ &m) {
     py::class_< DistributionMapping >(m, "DistributionMapping")
         .def("__repr__",
             [](DistributionMapping const & dm) {
@@ -55,12 +63,12 @@ void init_DistributionMapping(py::module &m) {
         //.def("define",
         //    py::overload_cast< Vector< int > && >(&DistributionMapping::define))
         //! Length of the underlying processor map.
-        .def_property_readonly("size", &DistributionMapping::size)
-        .def_property_readonly("capacity", &DistributionMapping::capacity)
-        .def_property_readonly("empty", &DistributionMapping::empty)
+        .def_prop_rw_readonly("size", &DistributionMapping::size)
+        .def_prop_rw_readonly("capacity", &DistributionMapping::capacity)
+        .def_prop_rw_readonly("empty", &DistributionMapping::empty)
 
         //! Number of references to this DistributionMapping
-        .def_property_readonly("link_count", &DistributionMapping::linkCount)
+        .def_prop_rw_readonly("link_count", &DistributionMapping::linkCount)
 
         /**
          * \brief Returns a constant reference to the mapping of boxes in the

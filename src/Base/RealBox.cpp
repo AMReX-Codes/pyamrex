@@ -12,19 +12,27 @@
 #include <AMReX_Box.H>
 #include <AMReX_RealBox.H>
 
-#include <pybind11/pybind11.h>
-#include <pybind11/operators.h>
-#include <pybind11/stl.h>
+#include <nanobind/nanobind.h>
+#include <nanobind/operators.h>
+#include <nanobind/operators.h>
+#include <nanobind/stl/function.h>
+#include <nanobind/stl/list.h>
+#include <nanobind/stl/optional.h>
+#include <nanobind/stl/pair.h>
+#include <nanobind/stl/string.h>
+#include <nanobind/stl/tuple.h>
+#include <nanobind/stl/variant.h>
+#include <nanobind/stl/vector.h>
 
 #include <array>
 #include <sstream>
 #include <string>
 #include <optional>
 
-namespace py = pybind11;
+namespace py = nanobind;
 using namespace amrex;
 
-void init_RealBox(py::module &m) {
+void init_RealBox(py::module_ &m) {
 
     py::class_< RealBox >(m, "RealBox")
         .def("__repr__",
@@ -62,7 +70,7 @@ void init_RealBox(py::module &m) {
             py::arg("bx"), py::arg("dx"), py::arg("base")
         )
 
-        .def_property_readonly(
+        .def_prop_rw_readonly(
             "xlo",
             [](RealBox const & rb){
                 std::array<Real,AMREX_SPACEDIM> xlo {AMREX_D_DECL(
@@ -71,7 +79,7 @@ void init_RealBox(py::module &m) {
                 return xlo;
             }
         )
-        .def_property_readonly(
+        .def_prop_rw_readonly(
             "xhi",
             [](RealBox const & rb){
                 std::array<Real,AMREX_SPACEDIM> xhi {AMREX_D_DECL(

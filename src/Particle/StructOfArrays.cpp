@@ -7,18 +7,26 @@
 #include <AMReX_GpuAllocators.H>
 #include <AMReX_StructOfArrays.H>
 
-#include <pybind11/pybind11.h>
-#include <pybind11/stl.h>
+#include <nanobind/nanobind.h>
+#include <nanobind/operators.h>
+#include <nanobind/stl/function.h>
+#include <nanobind/stl/list.h>
+#include <nanobind/stl/optional.h>
+#include <nanobind/stl/pair.h>
+#include <nanobind/stl/string.h>
+#include <nanobind/stl/tuple.h>
+#include <nanobind/stl/variant.h>
+#include <nanobind/stl/vector.h>
 
 #include <sstream>
 
-namespace py = pybind11;
+namespace py = nanobind;
 using namespace amrex;
 
 
 template <int NReal, int NInt,
           template<class> class Allocator=DefaultAllocator>
-void make_StructOfArrays(py::module &m, std::string allocstr)
+void make_StructOfArrays(py::module_ &m, std::string allocstr)
 {
     using SOAType = StructOfArrays<NReal, NInt, Allocator>;
 
@@ -44,13 +52,13 @@ void make_StructOfArrays(py::module &m, std::string allocstr)
 }
 
 template <int NReal, int NInt>
-void make_StructOfArrays(py::module &m)
+void make_StructOfArrays(py::module_ &m)
 {
     // see Src/Base/AMReX_GpuContainers.H
     //   !AMREX_USE_GPU: DefaultAllocator = std::allocator
     //    AMREX_USE_GPU: DefaultAllocator = amrex::ArenaAllocator
 
-    //   work-around for https://github.com/pybind/pybind11/pull/4581
+    //   work-around for https://github.com/pybind/nanobind/pull/4581
     //make_StructOfArrays<NReal, NInt, std::allocator>(m, "std");
     //make_StructOfArrays<NReal, NInt, amrex::ArenaAllocator>(m, "arena");
 #ifdef AMREX_USE_GPU
@@ -69,7 +77,7 @@ void make_StructOfArrays(py::module &m)
 #endif
 }
 
-void init_StructOfArrays(py::module& m) {
+void init_StructOfArrays(py::module_& m) {
     make_StructOfArrays< 2, 1>(m);
     make_StructOfArrays< 4, 0>(m);  // HiPACE++ 22.07
     make_StructOfArrays< 5, 0>(m);  // ImpactX 22.07 - 23.06

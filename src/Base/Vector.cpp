@@ -6,10 +6,18 @@
 #include <AMReX_Config.H>
 #include <AMReX_PODVector.H>
 
-#include <pybind11/pybind11.h>
-#include <pybind11/operators.h>
-#include <pybind11/numpy.h>
-#include <pybind11/stl.h>
+#include <nanobind/nanobind.h>
+#include <nanobind/operators.h>
+#include <nanobind/numpy.h>
+#include <nanobind/operators.h>
+#include <nanobind/stl/function.h>
+#include <nanobind/stl/list.h>
+#include <nanobind/stl/optional.h>
+#include <nanobind/stl/pair.h>
+#include <nanobind/stl/string.h>
+#include <nanobind/stl/tuple.h>
+#include <nanobind/stl/variant.h>
+#include <nanobind/stl/vector.h>
 
 #include <sstream>
 #include <string>
@@ -17,7 +25,7 @@
 #include <optional>
 #include <vector>
 
-namespace py = pybind11;
+namespace py = nanobind;
 using namespace amrex;
 
 namespace
@@ -42,7 +50,7 @@ namespace
 }
 
 template <class T, class Allocator = std::allocator<T> >
-void make_Vector(py::module &m, std::string typestr)
+void make_Vector(py::module_ &m, std::string typestr)
 {
     using Vector_type = Vector<T, Allocator>;
     auto const v_name = std::string("Vector_").append(typestr);
@@ -66,10 +74,10 @@ void make_Vector(py::module &m, std::string typestr)
 
         .def("size", &Vector_type::size)
 
-        .def_property_readonly("__array_interface__", [](Vector_type const & vector) {
+        .def_prop_rw_readonly("__array_interface__", [](Vector_type const & vector) {
             return array_interface(vector);
         })
-        .def_property_readonly("__cuda_array_interface__", [](Vector_type const & vector) {
+        .def_prop_rw_readonly("__cuda_array_interface__", [](Vector_type const & vector) {
             // Nvidia GPUs: __cuda_array_interface__ v3
             // https://numba.readthedocs.io/en/latest/cuda/cuda_array_interface.html
             auto d = array_interface(vector);
@@ -97,7 +105,7 @@ void make_Vector(py::module &m, std::string typestr)
     ;
 }
 
-void init_Vector(py::module& m) {
+void init_Vector(py::module_& m) {
     make_Vector<Real> (m, "Real");
     if constexpr(!std::is_same_v<Real, ParticleReal>)
         make_Vector<ParticleReal> (m, "ParticleReal");

@@ -13,21 +13,29 @@
 #include <AMReX_FabArrayBase.H>
 #include <AMReX_MultiFab.H>
 
-#include <pybind11/pybind11.h>
-#include <pybind11/stl.h>
+#include <nanobind/nanobind.h>
+#include <nanobind/operators.h>
+#include <nanobind/stl/function.h>
+#include <nanobind/stl/list.h>
+#include <nanobind/stl/optional.h>
+#include <nanobind/stl/pair.h>
+#include <nanobind/stl/string.h>
+#include <nanobind/stl/tuple.h>
+#include <nanobind/stl/variant.h>
+#include <nanobind/stl/vector.h>
 
 #include <memory>
 #include <string>
 
-namespace py = pybind11;
+namespace py = nanobind;
 using namespace amrex;
 
 
-void init_MultiFab(py::module &m) {
+void init_MultiFab(py::module_ &m) {
     py::class_< MFInfo >(m, "MFInfo")
-        .def_readwrite("alloc", &MFInfo::alloc)
-        .def_readwrite("arena", &MFInfo::arena)
-        .def_readwrite("tags", &MFInfo::tags)
+        .def_rw("alloc", &MFInfo::alloc)
+        .def_rw("arena", &MFInfo::arena)
+        .def_rw("tags", &MFInfo::tags)
 
         .def(py::init< >())
 
@@ -38,17 +46,17 @@ void init_MultiFab(py::module &m) {
     ;
 
     py::class_< FabArrayBase >(m, "FabArrayBase")
-        .def_property_readonly("is_all_cell_centered", &FabArrayBase::is_cell_centered)
-        .def_property_readonly("is_all_nodal",
+        .def_prop_rw_readonly("is_all_cell_centered", &FabArrayBase::is_cell_centered)
+        .def_prop_rw_readonly("is_all_nodal",
              py::overload_cast< >(&FabArrayBase::is_nodal, py::const_))
         .def("is_nodal",
              py::overload_cast< int >(&FabArrayBase::is_nodal, py::const_))
 
-        .def_property_readonly("nComp", &FabArrayBase::nComp)
-        .def_property_readonly("num_comp", &FabArrayBase::nComp)
-        .def_property_readonly("size", &FabArrayBase::size)
+        .def_prop_rw_readonly("nComp", &FabArrayBase::nComp)
+        .def_prop_rw_readonly("num_comp", &FabArrayBase::nComp)
+        .def_prop_rw_readonly("size", &FabArrayBase::size)
 
-        .def_property_readonly("nGrowVect", &FabArrayBase::nGrowVect)
+        .def_prop_rw_readonly("nGrowVect", &FabArrayBase::nGrowVect)
 
         /* data access in Box index space */
         .def("__iter__",
@@ -107,9 +115,9 @@ void init_MultiFab(py::module &m) {
             py::overload_cast< int, const IntVect& >(&MFIter::grownnodaltilebox, py::const_),
             py::arg("int"), py::arg("ng"))
 
-        .def_property_readonly("is_valid", &MFIter::isValid)
-        .def_property_readonly("index", &MFIter::index)
-        .def_property_readonly("length", &MFIter::length)
+        .def_prop_rw_readonly("is_valid", &MFIter::isValid)
+        .def_prop_rw_readonly("index", &MFIter::index)
+        .def_prop_rw_readonly("length", &MFIter::length)
     ;
 
     py::class_< FabArray<FArrayBox>, FabArrayBase >(m, "FabArray_FArrayBox")

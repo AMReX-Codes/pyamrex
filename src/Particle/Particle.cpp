@@ -9,9 +9,17 @@
 #include <AMReX_RealVect.H>
 #include <AMReX_Particle.H>
 
-#include <pybind11/pybind11.h>
-#include <pybind11/operators.h>
-#include <pybind11/stl.h>
+#include <nanobind/nanobind.h>
+#include <nanobind/operators.h>
+#include <nanobind/operators.h>
+#include <nanobind/stl/function.h>
+#include <nanobind/stl/list.h>
+#include <nanobind/stl/optional.h>
+#include <nanobind/stl/pair.h>
+#include <nanobind/stl/string.h>
+#include <nanobind/stl/tuple.h>
+#include <nanobind/stl/variant.h>
+#include <nanobind/stl/vector.h>
 
 #include <array>
 #include <stdexcept>
@@ -23,7 +31,7 @@
 #include <regex>
 
 
-namespace py = pybind11;
+namespace py = nanobind;
 using namespace amrex;
 using pReal = amrex_particle_real;
 
@@ -54,7 +62,7 @@ namespace
 }
 
 template <int T_NReal, int T_NInt=0>
-void make_Particle(py::module &m)
+void make_Particle(py::module_ &m)
 {
     using ParticleType = Particle<T_NReal, T_NInt>;
     auto const particle_name = std::string("Particle_").append(std::to_string(T_NReal) + "_" + std::to_string(T_NInt));
@@ -169,8 +177,8 @@ void make_Particle(py::module &m)
                  s << p;
                  return s.str();
              })
-        .def_readonly_static("NReal", &ParticleType::NReal)
-        .def_readonly_static("NInt", &ParticleType::NInt)
+        .def_ro_static("NReal", &ParticleType::NReal)
+        .def_ro_static("NInt", &ParticleType::NInt)
         .def("pos", [](const ParticleType &p, int index) { return p.pos(index); })
         .def("pos", [](const ParticleType &p) { return p.pos(); })
         .def("setPos", [](ParticleType &p, int index, Real val) { AMREX_ASSERT(index > 0 && index < AMREX_SPACEDIM); p.m_pos[index] = val; })
@@ -293,19 +301,19 @@ void make_Particle(py::module &m)
         .def("id", [](const ParticleType &p) { const int m_id = p.id(); return m_id; })
         .def("NextID", [](const ParticleType &p) {return p.NextID();})
         .def("NextID", [](const ParticleType &p, Long nextid) { p.NextID(nextid); })
-        .def_property("x", [](ParticleType &p){ return p.pos(0);}, [](ParticleType &p, Real val){ p.m_pos[0] = val; })
+        .def_prop_rw("x", [](ParticleType &p){ return p.pos(0);}, [](ParticleType &p, Real val){ p.m_pos[0] = val; })
 #if (AMREX_SPACEDIM >= 2)
-        .def_property("y", [](ParticleType &p){ return p.pos(1);}, [](ParticleType &p, Real val){ p.m_pos[1] = val; })
+        .def_prop_rw("y", [](ParticleType &p){ return p.pos(1);}, [](ParticleType &p, Real val){ p.m_pos[1] = val; })
 #endif
 #if (AMREX_SPACEDIM == 3)
-        .def_property("z", [](ParticleType &p){ return p.pos(2);}, [](ParticleType &p, Real val){ p.m_pos[2] = val; })
+        .def_prop_rw("z", [](ParticleType &p){ return p.pos(2);}, [](ParticleType &p, Real val){ p.m_pos[2] = val; })
 #endif
     ;
 }
 
 
 
-void init_Particle(py::module& m) {
+void init_Particle(py::module_& m) {
 
     // TODO: we might need to move all or most of the defines in here into a
     //       test/example submodule, so they do not collide with downstream projects

@@ -8,11 +8,11 @@
 #include <AMReX_Particle.H>
 
 
-void init_ParticleContainer_HiPACE(py::module& m);
-void init_ParticleContainer_ImpactX(py::module& m);
-void init_ParticleContainer_WarpX(py::module& m);
+void init_ParticleContainer_HiPACE(py::module_& m);
+void init_ParticleContainer_ImpactX(py::module_& m);
+void init_ParticleContainer_WarpX(py::module_& m);
 
-void init_ParticleContainer(py::module& m) {
+void init_ParticleContainer(py::module_& m) {
     using namespace amrex;
 
     // TODO: we might need to move all or most of the defines in here into a
