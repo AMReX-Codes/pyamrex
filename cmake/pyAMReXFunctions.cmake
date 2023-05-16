@@ -137,8 +137,13 @@ function(pyamrex_test_set_pythonpath test_name)
         set_property(TEST ${test_name}
             APPEND PROPERTY ENVIRONMENT
                 "PYTHONPATH=${WIN_PYTHON_OUTPUT_DIRECTORY}\;${WIN_PYTHONPATH}"
-                "PATH=$<TARGET_FILE_DIR:pyAMReX>\;$<TARGET_FILE_DIR:AMReX::amrex>\;${WIN_PATH}"
         )
+        foreach(D IN LISTS AMReX_SPACEDIM)
+            set_property(TEST ${test_name}
+                APPEND PROPERTY ENVIRONMENT
+                    "PATH=$<TARGET_FILE_DIR:pyAMReX_${D}d>\;$<TARGET_FILE_DIR:AMReX::amrex_${D}d>\;${WIN_PATH}"
+            )
+        endforeach()
     else()
         set_property(TEST ${test_name}
             APPEND PROPERTY ENVIRONMENT "PYTHONPATH=${CMAKE_PYTHON_OUTPUT_DIRECTORY}:$ENV{PYTHONPATH}"
@@ -214,21 +219,6 @@ macro(set_cxx_warnings)
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -wd4251")
     endif ()
 endmacro()
-
-
-# Set a feature-based binary name for the pyAMReX executable and create a generic
-# pyAMReX symlink to it. Only sets options relevant for users (see summary).
-#
-function(set_pyAMReX_binary_name)
-    #set_target_properties(pyAMReX PROPERTIES OUTPUT_NAME "amrex")
-    if(AMReX_SPACEDIM STREQUAL 3)
-        set_property(TARGET pyAMReX APPEND_STRING PROPERTY OUTPUT_NAME ".3d")
-    elseif(AMReX_SPACEDIM STREQUAL 2)
-        set_property(TARGET pyAMReX APPEND_STRING PROPERTY OUTPUT_NAME ".2d")
-    elseif(AMReX_SPACEDIM STREQUAL 1)
-        set_property(TARGET pyAMReX APPEND_STRING PROPERTY OUTPUT_NAME ".1d")
-    endif()
-endfunction()
 
 
 # Set an MPI_TEST_EXE variable for test runs which runs num_ranks

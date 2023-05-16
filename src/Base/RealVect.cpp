@@ -21,7 +21,7 @@ using namespace amrex;
 
 void init_RealVect(py::module &m) {
 
-     py::class_< RealVect>(m, "RealVect")
+     auto py_realvect = py::class_< RealVect>(m, "RealVect")
           .def("__repr__",
                [](py::object& obj) {
                     py::str py_name = obj.attr("__class__").attr("__name__");
@@ -96,7 +96,9 @@ void init_RealVect(py::module &m) {
           .def(float() * py::self)
           .def(py::self * py::self)
           .def("dotProduct", &RealVect::dotProduct, "Return dot product of this vector with another")
+#if (AMREX_SPACEDIM == 3)
           .def("crossProduct", &RealVect::crossProduct, "Return cross product of this vector with another")
+#endif
           .def("__mul__",
                py::overload_cast<Real>(&RealVect::operator*, py::const_))
 
@@ -129,10 +131,11 @@ void init_RealVect(py::module &m) {
 
           .def("BASISREALV", &BASISREALV, "return basis vector in given coordinate direction")
      ;
+
      m.def("min", [](const RealVect& a, const RealVect& b) {
-               return min(a,b);
-          });
+         return min(a,b);
+     });
      m.def("max", [](const RealVect& a, const RealVect& b) {
-               return max(a,b);
-          });
+         return max(a,b);
+     });
 }

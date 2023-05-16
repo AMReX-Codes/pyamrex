@@ -44,12 +44,19 @@ void init_PODVector(py::module &);
 void init_Vector(py::module &);
 
 
-
-PYBIND11_MODULE(amrex_pybind, m) {
+#if AMREX_SPACEDIM == 1
+PYBIND11_MODULE(amrex_1d_pybind, m) {
+#elif AMREX_SPACEDIM == 2
+PYBIND11_MODULE(amrex_2d_pybind, m) {
+#elif AMREX_SPACEDIM == 3
+PYBIND11_MODULE(amrex_3d_pybind, m) {
+#else
+#  error "AMREX_SPACEDIM must be 1, 2 or 3"
+#endif
     m.doc() = R"pbdoc(
-            amrex_pybind
-            -----------
-            .. currentmodule:: amrex_pybind
+            amrex
+            -----
+            .. currentmodule:: amrex
 
             .. autosummary::
                :toctree: _generate

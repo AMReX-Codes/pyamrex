@@ -3,11 +3,11 @@
 import numpy as np
 import pytest
 
-import amrex
+import amrex.space3d as amr
 
 
 def test_aos_init():
-    aos = amrex.ArrayOfStructs_2_1_default()
+    aos = amr.ArrayOfStructs_2_1_default()
 
     assert aos.numParticles() == 0
     assert aos.numTotalParticles() == aos.numRealParticles() == 0
@@ -15,12 +15,12 @@ def test_aos_init():
 
 
 def test_aos_push_pop():
-    aos = amrex.ArrayOfStructs_2_1_default()
-    p1 = amrex.Particle_2_1()
+    aos = amr.ArrayOfStructs_2_1_default()
+    p1 = amr.Particle_2_1()
     p1.set_rdata([1.5, 2.2])
     p1.set_idata([3])
     aos.push_back(p1)
-    p2 = amrex.Particle_2_1()
+    p2 = amr.Particle_2_1()
     p2.set_rdata([2.1, 25.2])
     p2.set_idata([5])
     aos.push_back(p2)
@@ -38,7 +38,7 @@ def test_aos_push_pop():
     assert not aos.empty()
     assert aos.size() == 7
     assert aos[0].get_rdata() == p1.get_rdata()
-    p3 = amrex.Particle_2_1()
+    p3 = amr.Particle_2_1()
     p3.set_rdata([3.14, -3.14])
     p3.set_idata([10])
     aos[0] = p3
@@ -50,13 +50,13 @@ def test_aos_push_pop():
 
 
 def test_array_interface():
-    aos = amrex.ArrayOfStructs_2_1_default()
-    p1 = amrex.Particle_2_1()
+    aos = amr.ArrayOfStructs_2_1_default()
+    p1 = amr.Particle_2_1()
     p1.setPos([1, 2, 3])
     p1.set_rdata([4.5, 5.2])
     p1.set_idata([6])
     aos.push_back(p1)
-    p2 = amrex.Particle_2_1()
+    p2 = amr.Particle_2_1()
     p2.setPos([8, 9, 10])
     p2.set_rdata([11.1, 12.2])
     p2.set_idata([13])
@@ -80,8 +80,8 @@ def test_array_interface():
         and np.isclose(arr[1][6], 13)
     )
 
-    p3 = amrex.Particle_2_1(x=-3)
-    p4 = amrex.Particle_2_1(y=-5)
+    p3 = amr.Particle_2_1(x=-3)
+    p4 = amr.Particle_2_1(y=-5)
     print(arr)
     print(aos[0], aos[1])
     print("-------")
@@ -92,9 +92,7 @@ def test_array_interface():
     assert aos[0].y == arr[0][1] == 0
     assert aos[0].z == arr[0][2] == 0
 
-    shape = (
-        amrex.Config.spacedim + amrex.Particle_2_1.NReal + amrex.Particle_2_1.NInt + 1
-    )
+    shape = amr.Config.spacedim + amr.Particle_2_1.NReal + amr.Particle_2_1.NInt + 1
     for ii in range(shape):
         arr[1][ii] = 0
     arr[1][1] = -5  # np.array([0, -5, 0,0,0,0,0])

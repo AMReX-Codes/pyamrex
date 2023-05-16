@@ -3,21 +3,21 @@
 import numpy as np
 import pytest
 
-import amrex
+import amrex.space3d as amr
 
 
 @pytest.fixture(scope="function")
 def box():
-    return amrex.Box((0, 0, 0), (127, 127, 127))
+    return amr.Box((0, 0, 0), (127, 127, 127))
 
 
 def test_length(box):
     print(box.length())
-    assert box.length() == amrex.IntVect(128, 128, 128)
+    assert box.length() == amr.IntVect(128, 128, 128)
 
     domain = box.length()
     ncells = 1
-    for ii in range(amrex.Config.spacedim):
+    for ii in range(amr.Config.spacedim):
         ncells *= domain[ii]
     print("ncells by hand", ncells)
     print("ncells from box", box.numPts())
@@ -49,11 +49,11 @@ def test_slab(box):
 
 # def test_convert(box):
 #    """Conversion to node"""
-#    bx = box.convert(amrex.CellIndex.NODE, amrex.CellIndex.NODE, amrex.CellIndex.NODE)
+#    bx = box.convert(amr.CellIndex.NODE, amr.CellIndex.NODE, amr.CellIndex.NODE)
 #    assert(bx.num_pts == 129**3)
 #    assert(bx.volume == 128**3)
 
-#    bx = box.convert(amrex.CellIndex.NODE, amrex.CellIndex.CELL, amrex.CellIndex.CELL)
+#    bx = box.convert(amr.CellIndex.NODE, amr.CellIndex.CELL, amr.CellIndex.CELL)
 #    np.testing.assert_allclose(bx.hi_vect, [128, 127, 127])
 #    assert(bx.num_pts == 129 * 128 * 128)
 #    assert(bx.volume == 128**3)
@@ -82,7 +82,7 @@ def test_surrounding_nodes(box, dir):
 @pytest.mark.parametrize("dir", [-1, 0, 1, 2])
 def test_enclosed_cells(box, dir):
     """Enclosed cells"""
-    bxn = box.convert(amrex.CellIndex.NODE, amrex.CellIndex.NODE, amrex.CellIndex.NODE)
+    bxn = box.convert(amr.CellIndex.NODE, amr.CellIndex.NODE, amr.CellIndex.NODE)
     nx = np.array(bxn.hi_vect)
     bx = bxn.enclosed_cells(dir)
 

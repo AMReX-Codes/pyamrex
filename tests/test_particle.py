@@ -3,25 +3,25 @@
 import numpy as np
 import pytest
 
-import amrex
+import amrex.space3d as amr
 
 
 def test_particle_init():
-    p1 = amrex.Particle_7_0()
-    nreal = len(amrex.PIdx.RealValues.__members__)
-    nint = len(amrex.PIdx.IntValues.__members__)
-    assert amrex.Particle_7_0.NReal == nreal
-    assert amrex.Particle_7_0.NInt == nint
+    p1 = amr.Particle_7_0()
+    nreal = len(amr.PIdx.RealValues.__members__)
+    nint = len(amr.PIdx.IntValues.__members__)
+    assert amr.Particle_7_0.NReal == nreal
+    assert amr.Particle_7_0.NInt == nint
     assert p1.NReal == nreal
     assert p1.NInt == nint
 
-    p2 = amrex.Particle_7_0(1.0, 2.0, 3.0)
+    p2 = amr.Particle_7_0(1.0, 2.0, 3.0)
     assert p2.x == 1.0 and p2.y == 2.0 and p2.z == 3.0
 
-    p3 = amrex.Particle_7_0(1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0)
+    p3 = amr.Particle_7_0(1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0)
     assert p3.x == 1.0 and p3.get_rdata(0) == 4.0 and p3.get_rdata(6) == 10.0
 
-    p4 = amrex.Particle_7_0(1.0, 2.0, 3.0, rdata_0=4.0)
+    p4 = amr.Particle_7_0(1.0, 2.0, 3.0, rdata_0=4.0)
     assert (
         p4.x == 1.0
         and p4.z == 3.0
@@ -29,7 +29,7 @@ def test_particle_init():
         and p4.get_rdata(1) == 0 == p4.get_rdata(2) == p4.get_rdata(3)
     )
 
-    p5 = amrex.Particle_7_0(x=1.0, rdata_1=1.0, rdata_3=3.0)
+    p5 = amr.Particle_7_0(x=1.0, rdata_1=1.0, rdata_3=3.0)
     assert (
         p5.x == 1.0
         and p5.get_rdata(1) == 1.0
@@ -38,14 +38,14 @@ def test_particle_init():
     )
 
 
-@pytest.mark.skipif(amrex.Config.spacedim != 3, reason="Requires AMREX_SPACEDIM = 3")
+@pytest.mark.skipif(amr.Config.spacedim != 3, reason="Requires AMREX_SPACEDIM = 3")
 def test_particle_set():
-    p1 = amrex.Particle_7_0()
+    p1 = amr.Particle_7_0()
     p1.setPos(1, 1.5)
     assert p1.pos(0) == 0 and p1.pos(1) == 1.5 and p1.pos(2) == 0
     p1.setPos([1.0, 1, 2])
     assert p1.pos(0) == 1 and p1.pos(1) == 1 and p1.pos(2) == 2
-    p1.setPos(amrex.RealVect(2, 3.3, 4.2))
+    p1.setPos(amr.RealVect(2, 3.3, 4.2))
     assert p1.pos(0) == 2 and p1.pos(1) == 3.3 and p1.pos(2) == 4.2
 
     print(p1.x, p1.y, p1.z)
@@ -58,7 +58,7 @@ def test_particle_set():
 
 
 def test_rdata():
-    p1 = amrex.Particle_2_1()
+    p1 = amr.Particle_2_1()
     rvec = [1.5, 2.0]
     p1.set_rdata(rvec)
     assert np.allclose(p1.get_rdata(), rvec)
@@ -73,7 +73,7 @@ def test_rdata():
 
 
 def test_idata():
-    p1 = amrex.Particle_2_1()
+    p1 = amr.Particle_2_1()
     ivec = [-1]
     p1.set_idata(ivec)
     assert p1.get_idata() == ivec

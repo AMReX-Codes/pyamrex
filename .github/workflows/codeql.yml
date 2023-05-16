@@ -47,7 +47,7 @@ jobs:
       - name: Configure (C++)
         if: ${{ matrix.language == 'cpp' }}
         run: |
-          $CMAKE -S . -B build
+          $CMAKE -S . -B build -DAMReX_SPACEDIM="1;2;3"
 
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v2

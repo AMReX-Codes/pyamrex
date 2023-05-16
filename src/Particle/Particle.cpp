@@ -134,8 +134,11 @@ void make_Particle(py::module &m)
                     std::regex_match(varname, sm, component_separator, std::regex_constants::match_default);
                     int comp = -1;
                     if (varname == "x") { part->m_pos[0] = item.second.cast<ParticleReal>(); }
+#if AMREX_SPACEDIM >= 2
                     if (varname == "y") { part->m_pos[1] = item.second.cast<ParticleReal>(); }
+#elif AMREX_SPACEDIM == 3
                     if (varname == "z") { part->m_pos[2] = item.second.cast<ParticleReal>(); }
+#endif
                     if (sm.size() > 2) {
                         comp = std::stoi(sm[2]);
                         if constexpr (T_NReal > 0) {
@@ -294,10 +297,10 @@ void make_Particle(py::module &m)
         .def("NextID", [](const ParticleType &p) {return p.NextID();})
         .def("NextID", [](const ParticleType &p, Long nextid) { p.NextID(nextid); })
         .def_property("x", [](ParticleType &p){ return p.pos(0);}, [](ParticleType &p, Real val){ p.m_pos[0] = val; })
-#if (AMREX_SPACEDIM >= 2)
+#if AMREX_SPACEDIM >= 2
         .def_property("y", [](ParticleType &p){ return p.pos(1);}, [](ParticleType &p, Real val){ p.m_pos[1] = val; })
 #endif
-#if (AMREX_SPACEDIM == 3)
+#if AMREX_SPACEDIM == 3
         .def_property("z", [](ParticleType &p){ return p.pos(2);}, [](ParticleType &p, Real val){ p.m_pos[2] = val; })
 #endif
     ;

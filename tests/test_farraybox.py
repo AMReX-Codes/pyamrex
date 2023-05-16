@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 
-import amrex
+import amrex.space3d as amr
 
 
 def test_farraybox():
-    fab = amrex.FArrayBox()
+    fab = amr.FArrayBox()
 
 
 def test_farraybox_io():
-    fab = amrex.FArrayBox()
+    fab = amr.FArrayBox()
 
     # https://docs.python.org/3/library/io.html
     # https://gist.github.com/asford/544323a5da7dddad2c9174490eb5ed06#file-test_ostream_example-py
