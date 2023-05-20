@@ -3,11 +3,11 @@
 import numpy as np
 import pytest
 
-import amrex
+import amrex.space3d as amr
 
 
 def test_periodicity():
-    obj = amrex.Periodicity()
+    obj = amr.Periodicity()
     assert obj.is_any_periodic == False
     assert obj.is_all_periodic == False
     assert obj.is_periodic(0) == False
@@ -15,14 +15,14 @@ def test_periodicity():
     # with pytest.raises(IndexError):
     #    obj[3]
 
-    non_periodic = amrex.Periodicity.non_periodic()
+    non_periodic = amr.Periodicity.non_periodic()
     assert obj == non_periodic
 
 
-@pytest.mark.skipif(amrex.Config.spacedim == 3, reason="Requires AMREX_SPACEDIM = 3")
+@pytest.mark.skipif(amr.Config.spacedim == 3, reason="Requires AMREX_SPACEDIM = 3")
 def test_periodicity_3d():
-    iv = amrex.IntVect(1, 0, 1)
-    obj = amrex.Periodicity(iv)
+    iv = amr.IntVect(1, 0, 1)
+    obj = amr.Periodicity(iv)
     assert obj.is_any_periodic
     assert obj.is_all_periodic == False
     assert obj.is_periodic(0)

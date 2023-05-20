@@ -3,11 +3,11 @@
 import numpy as np
 import pytest
 
-import amrex
+import amrex.space3d as amr
 
 
 def test_podvector_init():
-    podv = amrex.PODVector_real_std()
+    podv = amr.PODVector_real_std()
     print(podv.__array_interface__)
     # podv[0] = 1
     # podv[2] = 3
@@ -28,7 +28,7 @@ def test_podvector_init():
 
 
 def test_array_interface():
-    podv = amrex.PODVector_int_std()
+    podv = amr.PODVector_int_std()
     podv.push_back(1)
     podv.push_back(2)
     podv.push_back(1)

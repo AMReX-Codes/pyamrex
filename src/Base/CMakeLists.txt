@@ -1,23 +1,25 @@
-target_sources(pyAMReX
-  PRIVATE
-    AMReX.cpp
-    Arena.cpp
-    Array4.cpp
-    BaseFab.cpp
-    Box.cpp
-    RealBox.cpp
-    BoxArray.cpp
-    CoordSys.cpp
-    Dim3.cpp
-    DistributionMapping.cpp
-    FArrayBox.cpp
-    Geometry.cpp
-    IntVect.cpp
-    RealVect.cpp
-    MultiFab.cpp
-    ParallelDescriptor.cpp
-    ParmParse.cpp
-    Periodicity.cpp
-    PODVector.cpp
-    Vector.cpp
-)
+foreach(D IN LISTS AMReX_SPACEDIM)
+    target_sources(pyAMReX_${D}d
+      PRIVATE
+        AMReX.cpp
+        Arena.cpp
+        Array4.cpp
+        BaseFab.cpp
+        Box.cpp
+        RealBox.cpp
+        BoxArray.cpp
+        CoordSys.cpp
+        Dim3.cpp
+        DistributionMapping.cpp
+        FArrayBox.cpp
+        Geometry.cpp
+        IntVect.cpp
+        RealVect.cpp
+        MultiFab.cpp
+        ParallelDescriptor.cpp
+        ParmParse.cpp
+        Periodicity.cpp
+        PODVector.cpp
+        Vector.cpp
+    )
+endforeach()

@@ -3,14 +3,14 @@
 import numpy as np
 import pytest
 
-import amrex
+import amrex.space3d as amr
 
-# import amrex.CoordSys.CoordType as CoordType
+# import amrex.space3d as amr.CoordSys.CoordType as CoordType
 
 
 def test_coordSys_coordType():
-    CType = amrex.CoordSys.CoordType
-    cs = amrex.CoordSys()
+    CType = amr.CoordSys.CoordType
+    cs = amr.CoordSys()
 
     print(cs.ok())
     assert not cs.ok()

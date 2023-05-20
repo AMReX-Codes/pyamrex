@@ -3,7 +3,7 @@
 import numpy as np
 import pytest
 
-import amrex
+import amrex.space3d as amr
 
 
 @pytest.fixture()
@@ -13,13 +13,13 @@ def Npart():
 
 @pytest.fixture(scope="function")
 def empty_particle_container(std_geometry, distmap, boxarr):
-    pc = amrex.ParticleContainer_1_1_2_1_default(std_geometry, distmap, boxarr)
+    pc = amr.ParticleContainer_1_1_2_1_default(std_geometry, distmap, boxarr)
     return pc
 
 
 @pytest.fixture(scope="function")
 def std_particle():
-    myt = amrex.ParticleInitType_1_1_2_1()
+    myt = amr.ParticleInitType_1_1_2_1()
     myt.real_struct_data = [0.5]
     myt.int_struct_data = [5]
     myt.real_array_data = [0.5, 0.2]
@@ -29,8 +29,8 @@ def std_particle():
 
 @pytest.fixture(scope="function")
 def particle_container(Npart, std_geometry, distmap, boxarr, std_real_box):
-    pc = amrex.ParticleContainer_1_1_2_1_default(std_geometry, distmap, boxarr)
-    myt = amrex.ParticleInitType_1_1_2_1()
+    pc = amr.ParticleContainer_1_1_2_1_default(std_geometry, distmap, boxarr)
+    myt = amr.ParticleInitType_1_1_2_1()
     myt.real_struct_data = [0.5]
     myt.int_struct_data = [5]
     myt.real_array_data = [0.5, 0.2]
@@ -42,7 +42,7 @@ def particle_container(Npart, std_geometry, distmap, boxarr, std_real_box):
 
 
 def test_particleInitType():
-    myt = amrex.ParticleInitType_1_1_2_1()
+    myt = amr.ParticleInitType_1_1_2_1()
     print(myt.real_struct_data)
     print(myt.int_struct_data)
     print(myt.real_array_data)
@@ -62,41 +62,41 @@ def test_particleInitType():
 def test_n_particles(particle_container, Npart):
     pc = particle_container
     assert pc.OK()
-    assert pc.NStructReal == amrex.ParticleContainer_1_1_2_1_default.NStructReal == 1
-    assert pc.NStructInt == amrex.ParticleContainer_1_1_2_1_default.NStructInt == 1
-    assert pc.NArrayReal == amrex.ParticleContainer_1_1_2_1_default.NArrayReal == 2
-    assert pc.NArrayInt == amrex.ParticleContainer_1_1_2_1_default.NArrayInt == 1
+    assert pc.NStructReal == amr.ParticleContainer_1_1_2_1_default.NStructReal == 1
+    assert pc.NStructInt == amr.ParticleContainer_1_1_2_1_default.NStructInt == 1
+    assert pc.NArrayReal == amr.ParticleContainer_1_1_2_1_default.NArrayReal == 2
+    assert pc.NArrayInt == amr.ParticleContainer_1_1_2_1_default.NArrayInt == 1
     assert (
         pc.NumberOfParticlesAtLevel(0) == np.sum(pc.NumberOfParticlesInGrid(0)) == Npart
     )
 
 
 def test_pc_init():
-    pc = amrex.ParticleContainer_1_1_2_1_default()
+    pc = amr.ParticleContainer_1_1_2_1_default()
 
     print("bytespread", pc.ByteSpread())
     print("capacity", pc.PrintCapacity())
     print("NumberOfParticles", pc.NumberOfParticlesAtLevel(0))
     assert pc.NumberOfParticlesAtLevel(0) == 0
 
-    bx = amrex.Box(amrex.IntVect(0, 0, 0), amrex.IntVect(63, 63, 63))
-    rb = amrex.RealBox(0, 0, 0, 1, 1, 1)
+    bx = amr.Box(amr.IntVect(0, 0, 0), amr.IntVect(63, 63, 63))
+    rb = amr.RealBox(0, 0, 0, 1, 1, 1)
     coord_int = 1  # RZ
     periodicity = [0, 0, 1]
-    gm = amrex.Geometry(bx, rb, coord_int, periodicity)
+    gm = amr.Geometry(bx, rb, coord_int, periodicity)
 
-    ba = amrex.BoxArray(bx)
+    ba = amr.BoxArray(bx)
     ba.max_size(32)
-    dm = amrex.DistributionMapping(ba)
+    dm = amr.DistributionMapping(ba)
 
     print("-------------------------")
     print("define particle container")
     pc.Define(gm, dm, ba)
     assert pc.OK()
-    assert pc.NStructReal == amrex.ParticleContainer_1_1_2_1_default.NStructReal == 1
-    assert pc.NStructInt == amrex.ParticleContainer_1_1_2_1_default.NStructInt == 1
-    assert pc.NArrayReal == amrex.ParticleContainer_1_1_2_1_default.NArrayReal == 2
-    assert pc.NArrayInt == amrex.ParticleContainer_1_1_2_1_default.NArrayInt == 1
+    assert pc.NStructReal == amr.ParticleContainer_1_1_2_1_default.NStructReal == 1
+    assert pc.NStructInt == amr.ParticleContainer_1_1_2_1_default.NStructInt == 1
+    assert pc.NArrayReal == amr.ParticleContainer_1_1_2_1_default.NArrayReal == 2
+    assert pc.NArrayInt == amr.ParticleContainer_1_1_2_1_default.NArrayInt == 1
 
     print("bytespread", pc.ByteSpread())
     print("capacity", pc.PrintCapacity())
@@ -108,7 +108,7 @@ def test_pc_init():
     print("add a particle to each grid")
     Npart_grid = 1
     iseed = 1
-    myt = amrex.ParticleInitType_1_1_2_1()
+    myt = amr.ParticleInitType_1_1_2_1()
     myt.real_struct_data = [0.5]
     myt.int_struct_data = [5]
     myt.real_array_data = [0.5, 0.2]
@@ -127,7 +127,7 @@ def test_pc_init():
     # lvl = 0
     for lvl in range(pc.finest_level + 1):
         print(f"at level {lvl}:")
-        for pti in amrex.ParIter_1_1_2_1_default(pc, level=lvl):
+        for pti in amr.ParIter_1_1_2_1_default(pc, level=lvl):
             print("...")
             assert pti.num_particles == 1
             assert pti.num_real_particles == 1
@@ -156,7 +156,7 @@ def test_pc_init():
 
     # read-only
     for lvl in range(pc.finest_level + 1):
-        for pti in amrex.ParConstIter_1_1_2_1_default(pc, level=lvl):
+        for pti in amr.ParConstIter_1_1_2_1_default(pc, level=lvl):
             assert pti.num_particles == 1
             assert pti.num_real_particles == 1
             assert pti.num_neighbor_particles == 0

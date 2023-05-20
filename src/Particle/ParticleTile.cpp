@@ -72,7 +72,7 @@ void make_ParticleTile(py::module &m, std::string allocstr)
         .def("define", &ParticleTileType::define)
         .def("GetStructOfArrays", py::overload_cast<>(&ParticleTileType::GetStructOfArrays),
             py::return_value_policy::reference_internal)
-        .def("empty", &ParticleTileType::template empty<ParticleType>)
+        .def("empty", &ParticleTileType::empty)
         .def("size", &ParticleTileType::template size<ParticleType>)
         .def("numParticles", &ParticleTileType::template numParticles<ParticleType>)
         .def("numRealParticles", &ParticleTileType::template numRealParticles<ParticleType>)

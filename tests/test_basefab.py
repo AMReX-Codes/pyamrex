@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-import amrex
+import amrex.space3d as amr
 
 
 def test_basefab():
-    bf = amrex.BaseFab_Real()
+    bf = amr.BaseFab_Real()

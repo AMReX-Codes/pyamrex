@@ -69,6 +69,12 @@ set_testing_option(pyAMReX_BUILD_TESTING)  # default: ON (BUILD_TESTING)
 # AMReX
 #   builds AMReX from source (default) or finds an existing install
 include(${pyAMReX_SOURCE_DIR}/cmake/dependencies/AMReX.cmake)
+include(AMReXBuildInfo)  # <AMReX_buildInfo.H>
+
+# for some targets need to be triggered once, so any dim dependency will do
+list(LENGTH AMReX_SPACEDIM list_len)
+math(EXPR list_last "${list_len} - 1")
+list(GET AMReX_SPACEDIM ${list_last} AMReX_SPACEDIM_LAST)
 
 # Python
 find_package(Python COMPONENTS Interpreter Development.Module REQUIRED)
@@ -84,96 +90,98 @@ include(${pyAMReX_SOURCE_DIR}/cmake/dependencies/pybind11.cmake)
 
 # Targets #####################################################################
 #
-# collect all objects for compilation
-add_library(pyAMReX MODULE src/pyAMReX.cpp)
-add_library(pyAMReX::pyAMReX ALIAS pyAMReX)
+foreach(D IN LISTS AMReX_SPACEDIM)
+    # collect all objects for compilation
+    add_library(pyAMReX_${D}d MODULE src/pyAMReX.cpp)
+    add_library(pyAMReX::pyAMReX_${D}d ALIAS pyAMReX_${D}d)
 
-# own headers
-target_include_directories(pyAMReX PUBLIC
-    $<BUILD_INTERFACE:${pyAMReX_SOURCE_DIR}/src>
-)
+    # own headers
+    target_include_directories(pyAMReX_${D}d PUBLIC
+        $<BUILD_INTERFACE:${pyAMReX_SOURCE_DIR}/src>
+    )
 
-# if we include <AMReX_buildInfo.H> we will need to call:
-include(AMReXBuildInfo)
-generate_buildinfo(pyAMReX "${pyAMReX_SOURCE_DIR}")
-target_link_libraries(pyAMReX PRIVATE buildInfo::pyAMReX)
+    # if we include <AMReX_buildInfo.H> we will need to call:
+    generate_buildinfo(pyAMReX_${D}d "${pyAMReX_SOURCE_DIR}")
+    target_link_libraries(pyAMReX_${D}d PRIVATE buildInfo::pyAMReX_${D}d)
+endforeach()
 
 # add sources
 add_subdirectory(src)
 
-# C++ properties: at least a C++17 capable compiler is needed
-target_compile_features(pyAMReX PUBLIC cxx_std_17)
-set_target_properties(pyAMReX PROPERTIES
-    CXX_EXTENSIONS OFF
-    CXX_STANDARD_REQUIRED ON
-)
-
-# link dependencies
-target_link_libraries(pyAMReX PUBLIC AMReX::amrex)
-target_link_libraries(pyAMReX PRIVATE pybind11::module pybind11::lto pybind11::windows_extras)
-
-# binary name: we will encoded 1D, 2D and 3D in here so we can provide a
-# wrapper library that pre-compiled all three geometry variants of AMReX
-#set_pyAMReX_binary_name()
-
-# set Python module properties
-set_target_properties(pyAMReX PROPERTIES
-    # hide symbols for combining multiple pybind11 modules downstream & for
-    # reduced binary size
-    CXX_VISIBILITY_PRESET "hidden"
-    CUDA_VISIBILITY_PRESET "hidden"
-    # name of the pybind-generated python module, which is wrapped in another
-    # fluffy front-end modules, so we can extend it with pure Python
-    ARCHIVE_OUTPUT_NAME amrex_pybind
-    LIBRARY_OUTPUT_NAME amrex_pybind
-    # build output directories - mainly set to run tests from CMake & IDEs
-    ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_PYTHON_OUTPUT_DIRECTORY}/amrex
-    LIBRARY_OUTPUT_DIRECTORY ${CMAKE_PYTHON_OUTPUT_DIRECTORY}/amrex
-    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_PYTHON_OUTPUT_DIRECTORY}/amrex
-    PDB_OUTPUT_DIRECTORY ${CMAKE_PYTHON_OUTPUT_DIRECTORY}/amrex
-    COMPILE_PDB_OUTPUT_DIRECTORY ${CMAKE_PYTHON_OUTPUT_DIRECTORY}/amrex
-)
-get_property(isMultiConfig GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
-if(isMultiConfig)
-    foreach(CFG IN LISTS CMAKE_CONFIGURATION_TYPES)
-        string(TOUPPER "${CFG}" CFG_UPPER)
-        set_target_properties(pyAMReX PROPERTIES
-            # build output directories - mainly set to run tests from CMake & IDEs
-            # note: same as above, but for Multi-Config generators
-            ARCHIVE_OUTPUT_DIRECTORY_${CFG_UPPER} ${CMAKE_PYTHON_OUTPUT_DIRECTORY}/amrex
-            LIBRARY_OUTPUT_DIRECTORY_${CFG_UPPER} ${CMAKE_PYTHON_OUTPUT_DIRECTORY}/amrex
-            RUNTIME_OUTPUT_DIRECTORY_${CFG_UPPER} ${CMAKE_PYTHON_OUTPUT_DIRECTORY}/amrex
-            PDB_OUTPUT_DIRECTORY_${CFG_UPPER} ${CMAKE_PYTHON_OUTPUT_DIRECTORY}/amrex
-            COMPILE_PDB_OUTPUT_DIRECTORY_${CFG_UPPER} ${CMAKE_PYTHON_OUTPUT_DIRECTORY}/amrex
-        )
-    endforeach()
-endif()
-if(EMSCRIPTEN)
-    set_target_properties(pyAMReX PROPERTIES
-        PREFIX "")
-else()
-    pybind11_extension(pyAMReX)
-endif()
-if(NOT MSVC AND NOT ${CMAKE_BUILD_TYPE} MATCHES Debug|RelWithDebInfo)
-    pybind11_strip(pyAMReX)
-endif()
-
-# AMReX helper function: propagate CUDA specific target & source properties
-if(AMReX_GPU_BACKEND STREQUAL CUDA)
-    setup_target_for_cuda_compilation(pyAMReX)
-    target_compile_features(pyAMReX PUBLIC cuda_std_17)
-    set_target_properties(pyAMReX PROPERTIES
-        CUDA_EXTENSIONS OFF
-        CUDA_STANDARD_REQUIRED ON
+# set source language, properties, etc.
+foreach(D IN LISTS AMReX_SPACEDIM)
+    # C++ properties: at least a C++17 capable compiler is needed
+    target_compile_features(pyAMReX_${D}d PUBLIC cxx_std_17)
+    set_target_properties(pyAMReX_${D}d PROPERTIES
+        CXX_EXTENSIONS OFF
+        CXX_STANDARD_REQUIRED ON
     )
-endif()
+
+    # link dependencies
+    target_link_libraries(pyAMReX_${D}d PUBLIC AMReX::amrex_${D}d)
+    target_link_libraries(pyAMReX_${D}d PRIVATE pybind11::module pybind11::lto pybind11::windows_extras)
+
+    # set Python module properties
+    set_target_properties(pyAMReX_${D}d PROPERTIES
+        # hide symbols for combining multiple pybind11 modules downstream & for
+        # reduced binary size
+        CXX_VISIBILITY_PRESET "hidden"
+        CUDA_VISIBILITY_PRESET "hidden"
+        # name of the pybind-generated python module, which is wrapped in another
+        # fluffy front-end modules, so we can extend it with pure Python
+        ARCHIVE_OUTPUT_NAME amrex_${D}d_pybind
+        LIBRARY_OUTPUT_NAME amrex_${D}d_pybind
+        # build output directories - mainly set to run tests from CMake & IDEs
+        ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_PYTHON_OUTPUT_DIRECTORY}/amrex/space${D}d
+        LIBRARY_OUTPUT_DIRECTORY ${CMAKE_PYTHON_OUTPUT_DIRECTORY}/amrex/space${D}d
+        RUNTIME_OUTPUT_DIRECTORY ${CMAKE_PYTHON_OUTPUT_DIRECTORY}/amrex/space${D}d
+        PDB_OUTPUT_DIRECTORY ${CMAKE_PYTHON_OUTPUT_DIRECTORY}/amrex/space${D}d
+        COMPILE_PDB_OUTPUT_DIRECTORY ${CMAKE_PYTHON_OUTPUT_DIRECTORY}/amrex/space${D}d
+    )
+    get_property(isMultiConfig GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
+    if(isMultiConfig)
+        foreach(CFG IN LISTS CMAKE_CONFIGURATION_TYPES)
+            string(TOUPPER "${CFG}" CFG_UPPER)
+            set_target_properties(pyAMReX_${D}d PROPERTIES
+                # build output directories - mainly set to run tests from CMake & IDEs
+                # note: same as above, but for Multi-Config generators
+                ARCHIVE_OUTPUT_DIRECTORY_${CFG_UPPER} ${CMAKE_PYTHON_OUTPUT_DIRECTORY}/amrex/space${D}d
+                LIBRARY_OUTPUT_DIRECTORY_${CFG_UPPER} ${CMAKE_PYTHON_OUTPUT_DIRECTORY}/amrex/space${D}d
+                RUNTIME_OUTPUT_DIRECTORY_${CFG_UPPER} ${CMAKE_PYTHON_OUTPUT_DIRECTORY}/amrex/space${D}d
+                PDB_OUTPUT_DIRECTORY_${CFG_UPPER} ${CMAKE_PYTHON_OUTPUT_DIRECTORY}/amrex/space${D}d
+                COMPILE_PDB_OUTPUT_DIRECTORY_${CFG_UPPER} ${CMAKE_PYTHON_OUTPUT_DIRECTORY}/amrex/space${D}d
+            )
+        endforeach()
+    endif()
+    if(EMSCRIPTEN)
+        set_target_properties(pyAMReX_${D}d PROPERTIES
+            PREFIX "")
+    else()
+        pybind11_extension(pyAMReX_${D}d)
+    endif()
+    if(NOT MSVC AND NOT ${CMAKE_BUILD_TYPE} MATCHES Debug|RelWithDebInfo)
+        pybind11_strip(pyAMReX_${D}d)
+    endif()
+
+    # AMReX helper function: propagate CUDA specific target & source properties
+    if(AMReX_GPU_BACKEND STREQUAL CUDA)
+        setup_target_for_cuda_compilation(pyAMReX_${D}d)
+        target_compile_features(pyAMReX_${D}d PUBLIC cuda_std_17)
+        set_target_properties(pyAMReX_${D}d PROPERTIES
+            CUDA_EXTENSIONS OFF
+            CUDA_STANDARD_REQUIRED ON
+        )
+    endif()
+endforeach()
 
 
 # Defines #####################################################################
 #
 # for module __version__
-target_compile_definitions(pyAMReX PRIVATE
-    PYAMReX_VERSION_INFO=${pyAMReX_VERSION_INFO})
+foreach(D IN LISTS AMReX_SPACEDIM)
+    target_compile_definitions(pyAMReX_${D}d PRIVATE
+        PYAMReX_VERSION_INFO=${pyAMReX_VERSION_INFO})
+endforeach()
 
 
 # Warnings ####################################################################
@@ -197,7 +205,9 @@ set_cxx_warnings()
 #
 
 # headers, libraries and executables
-set(pyAMReX_INSTALL_TARGET_NAMES pyAMReX)
+foreach(D IN LISTS AMReX_SPACEDIM)
+    set(pyAMReX_INSTALL_TARGET_NAMES ${pyAMReX_INSTALL_TARGET_NAMES} pyAMReX_${D}d)
+endforeach()
 
 install(TARGETS ${pyAMReX_INSTALL_TARGET_NAMES}
     EXPORT pyAMReXTargets
@@ -207,7 +217,7 @@ install(TARGETS ${pyAMReX_INSTALL_TARGET_NAMES}
     INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 )
 
-# CMake package file for find_package(pyAMReX::pyAMReX) in depending projects
+# CMake package file for find_package(pyAMReX) in depending projects
 #install(EXPORT pyAMReXTargets
 #    FILE pyAMReXTargets.cmake
 #    NAMESPACE pyAMReX::
@@ -239,12 +249,12 @@ set(pyAMReX_CUSTOM_TARGET_PREFIX "${_pyAMReX_CUSTOM_TARGET_PREFIX_DEFAULT}"
 add_custom_target(${pyAMReX_CUSTOM_TARGET_PREFIX}pip_wheel
     ${CMAKE_COMMAND} -E rm -f -r amrex-whl
     COMMAND
-        ${CMAKE_COMMAND} -E env PYAMREX_LIBDIR=$<TARGET_FILE_DIR:pyAMReX>
+        ${CMAKE_COMMAND} -E env PYAMREX_LIBDIR=$<TARGET_FILE_DIR:pyAMReX_${AMReX_SPACEDIM_LAST}d>
             ${Python_EXECUTABLE} -m pip wheel -v --no-build-isolation --no-deps --wheel-dir=amrex-whl ${pyAMReX_SOURCE_DIR}
     WORKING_DIRECTORY
         ${pyAMReX_BINARY_DIR}
     DEPENDS
-        pyAMReX
+        ${pyAMReX_INSTALL_TARGET_NAMES}
 )
 
 # this will also upgrade/downgrade dependencies, e.g., when the version of numpy changes
@@ -263,7 +273,9 @@ add_custom_target(${pyAMReX_CUSTOM_TARGET_PREFIX}pip_install
     WORKING_DIRECTORY
         ${pyAMReX_BINARY_DIR}
     DEPENDS
-        pyAMReX ${pyAMReX_CUSTOM_TARGET_PREFIX}pip_wheel ${pyAMReX_CUSTOM_TARGET_PREFIX}pip_install_requirements
+        ${pyAMReX_INSTALL_TARGET_NAMES}
+        ${pyAMReX_CUSTOM_TARGET_PREFIX}pip_wheel
+        ${pyAMReX_CUSTOM_TARGET_PREFIX}pip_install_requirements
 )
 
 
@@ -271,10 +283,10 @@ add_custom_target(${pyAMReX_CUSTOM_TARGET_PREFIX}pip_install
 #
 if(pyAMReX_BUILD_TESTING)
     # copy Python wrapper library to build directory
-    add_custom_command(TARGET pyAMReX POST_BUILD
+    add_custom_command(TARGET pyAMReX_${AMReX_SPACEDIM_LAST}d POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_directory
             ${pyAMReX_SOURCE_DIR}/src/amrex
-            $<TARGET_FILE_DIR:pyAMReX>
+            $<TARGET_FILE_DIR:pyAMReX_${AMReX_SPACEDIM_LAST}d>/..
     )
 
     add_test(NAME pytest.AMReX

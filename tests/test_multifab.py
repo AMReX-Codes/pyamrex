@@ -5,7 +5,7 @@ import math
 import numpy as np
 import pytest
 
-import amrex
+import amrex.space3d as amr
 
 
 def test_mfab_loop(make_mfab):
@@ -109,8 +109,8 @@ def test_mfab_simple(make_mfab):
 
 @pytest.mark.parametrize("nghost", [0, 1])
 def test_mfab_ops(boxarr, distmap, nghost):
-    src = amrex.MultiFab(boxarr, distmap, 3, nghost)
-    dst = amrex.MultiFab(boxarr, distmap, 1, nghost)
+    src = amr.MultiFab(boxarr, distmap, 3, nghost)
+    dst = amr.MultiFab(boxarr, distmap, 1, nghost)
 
     src.set_val(10.0, 0, 1)
     src.set_val(20.0, 1, 1)
@@ -158,7 +158,7 @@ def test_mfab_mfiter(make_mfab):
 
 
 @pytest.mark.skipif(
-    amrex.Config.gpu_backend != "CUDA", reason="Requires AMReX_GPU_BACKEND=CUDA"
+    amr.Config.gpu_backend != "CUDA", reason="Requires AMReX_GPU_BACKEND=CUDA"
 )
 def test_mfab_ops_cuda_numba(make_mfab_device):
     mfab_device = make_mfab_device()
@@ -194,7 +194,7 @@ def test_mfab_ops_cuda_numba(make_mfab_device):
 
 
 @pytest.mark.skipif(
-    amrex.Config.gpu_backend != "CUDA", reason="Requires AMReX_GPU_BACKEND=CUDA"
+    amr.Config.gpu_backend != "CUDA", reason="Requires AMReX_GPU_BACKEND=CUDA"
 )
 def test_mfab_ops_cuda_cupy(make_mfab_device):
     mfab_device = make_mfab_device()
@@ -281,7 +281,7 @@ def test_mfab_ops_cuda_cupy(make_mfab_device):
 
 
 @pytest.mark.skipif(
-    amrex.Config.gpu_backend != "CUDA", reason="Requires AMReX_GPU_BACKEND=CUDA"
+    amr.Config.gpu_backend != "CUDA", reason="Requires AMReX_GPU_BACKEND=CUDA"
 )
 def test_mfab_ops_cuda_pytorch(make_mfab_device):
     mfab_device = make_mfab_device()
@@ -301,7 +301,7 @@ def test_mfab_ops_cuda_pytorch(make_mfab_device):
 
 
 @pytest.mark.skipif(
-    amrex.Config.gpu_backend != "CUDA", reason="Requires AMReX_GPU_BACKEND=CUDA"
+    amr.Config.gpu_backend != "CUDA", reason="Requires AMReX_GPU_BACKEND=CUDA"
 )
 def test_mfab_ops_cuda_cuml(make_mfab_device):
     mfab_device = make_mfab_device()
@@ -318,21 +318,21 @@ def test_mfab_ops_cuda_cuml(make_mfab_device):
 
 
 @pytest.mark.skipif(
-    amrex.Config.gpu_backend != "CUDA", reason="Requires AMReX_GPU_BACKEND=CUDA"
+    amr.Config.gpu_backend != "CUDA", reason="Requires AMReX_GPU_BACKEND=CUDA"
 )
 def test_mfab_dtoh_copy(make_mfab_device):
     mfab_device = make_mfab_device()
 
-    mfab_host = amrex.MultiFab(
+    mfab_host = amr.MultiFab(
         mfab_device.box_array(),
         mfab_device.dm(),
         mfab_device.n_comp(),
         mfab_device.n_grow_vect(),
-        amrex.MFInfo().set_arena(amrex.The_Pinned_Arena()),
+        amr.MFInfo().set_arena(amr.The_Pinned_Arena()),
     )
     mfab_host.set_val(42.0, 0, mfab_host.n_comp())
 
-    amrex.dtoh_memcpy(mfab_host, mfab_device)
+    amr.dtoh_memcpy(mfab_host, mfab_device)
 
     # assert all are 0.0 on host
     host_min = mfab_host.min(0)
@@ -341,7 +341,7 @@ def test_mfab_dtoh_copy(make_mfab_device):
     assert host_max == 0.0
 
     mfab_host.set_val(11.0, 0, mfab_host.n_comp())
-    amrex.dtoh_memcpy(mfab_device, mfab_host)
+    amr.dtoh_memcpy(mfab_device, mfab_host)
 
     # assert all are 11.0 on device
     device_min = mfab_device.min(0)

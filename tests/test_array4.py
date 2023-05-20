@@ -3,18 +3,18 @@
 import numpy as np
 import pytest
 
-import amrex
+import amrex.space3d as amr
 
 
 def test_array4_empty():
-    empty = amrex.Array4_double()
+    empty = amr.Array4_double()
 
     # Check properties
     assert empty.size == 0
     assert empty.nComp == 0
 
     # assign empty
-    emptyc = amrex.Array4_double(empty)
+    emptyc = amr.Array4_double(empty)
     # Check properties
     assert emptyc.size == 0
     assert emptyc.nComp == 0
@@ -30,7 +30,7 @@ def test_array4():
         )
     )
     print(f"\nx: {x.__array_interface__} {x.dtype}")
-    arr = amrex.Array4_double(x)
+    arr = amr.Array4_double(x)
     print(f"arr: {arr.__array_interface__}")
     print(arr)
     assert arr.nComp == 1
@@ -64,14 +64,14 @@ def test_array4():
     assert v_arr2np[0, 1, 1, 1] == 43
 
     # copy array4 (view)
-    c_arr = amrex.Array4_double(arr)
+    c_arr = amr.Array4_double(arr)
     v_carr2np = np.array(c_arr, copy=False)
     x[1, 1, 1] = 44
     assert v_carr2np[0, 1, 1, 1] == 44
 
 
 @pytest.mark.skipif(
-    amrex.Config.gpu_backend != "CUDA", reason="Requires AMReX_GPU_BACKEND=CUDA"
+    amr.Config.gpu_backend != "CUDA", reason="Requires AMReX_GPU_BACKEND=CUDA"
 )
 def test_array4_numba():
     # https://numba.pydata.org/numba-doc/dev/cuda/cuda_array_interface.html
@@ -89,7 +89,7 @@ def test_array4_numba():
     # host-to-device copy
     x_numba = cuda.to_device(x)  # type: numba.cuda.cudadrv.devicearray.DeviceNDArray
     # x_cupy = cupy.asarray(x_numba)      # type: cupy.ndarray
-    x_arr = amrex.Array4_double(x_numba)  # type: amrex.Array4_double
+    x_arr = amr.Array4_double(x_numba)  # type: amr.Array4_double
 
     assert (
         x_arr.__cuda_array_interface__["data"][0]
@@ -103,7 +103,7 @@ def test_array4_numba():
 
 
 @pytest.mark.skipif(
-    amrex.Config.gpu_backend != "CUDA", reason="Requires AMReX_GPU_BACKEND=CUDA"
+    amr.Config.gpu_backend != "CUDA", reason="Requires AMReX_GPU_BACKEND=CUDA"
 )
 def test_array4_cupy():
     # https://docs.cupy.dev/en/stable/user_guide/interoperability.html
@@ -122,7 +122,7 @@ def test_array4_cupy():
     print(x_cupy.__cuda_array_interface__)
 
     # cupy -> AMReX array4
-    x_arr = amrex.Array4_double(x_cupy)  # type: amrex.Array4_double
+    x_arr = amr.Array4_double(x_cupy)  # type: amr.Array4_double
     print(f"x_arr={x_arr}")
     print(x_arr.__cuda_array_interface__)
 
@@ -138,7 +138,7 @@ def test_array4_cupy():
 
 
 @pytest.mark.skipif(
-    amrex.Config.gpu_backend != "CUDA", reason="Requires AMReX_GPU_BACKEND=CUDA"
+    amr.Config.gpu_backend != "CUDA", reason="Requires AMReX_GPU_BACKEND=CUDA"
 )
 def test_array4_pytorch():
     # https://docs.cupy.dev/en/stable/user_guide/interoperability.html#pytorch

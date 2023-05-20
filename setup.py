@@ -30,8 +30,8 @@ class CopyPreBuild(build):
 
     def run(self):
         # remove existing build directory
-        #   by default, this stays around. we want to make sure generated
-        #   files like libwarpx.(2d|3d|rz).(so|pyd) are always only the
+        #   by default, this stays around. We want to make sure generated
+        #   files like amrex_*d_pybind.*.(so|pyd) are always only the
         #   ones we want to package and not ones from an earlier wheel's stage
         c = clean(self.distribution)
         c.all = True
@@ -41,8 +41,8 @@ class CopyPreBuild(build):
         # call superclass
         build.run(self)
 
-        # matches: amrex_pybind.*.(so|pyd)
-        re_libprefix = re.compile(r"amrex_pybind\..*\.(?:so|pyd)")
+        # matches: amrex_*d_pybind.*.(so|pyd)
+        re_libprefix = re.compile(r"amrex_.d_pybind\..*\.(?:so|pyd)")
         libs_found = []
         for lib_name in os.listdir(PYAMREX_libdir):
             if re_libprefix.match(lib_name):
@@ -175,13 +175,13 @@ with open("./README.md", encoding="utf-8") as f:
 PYAMREX_libdir = os.environ.get("PYAMREX_LIBDIR")
 
 # ... build AMReX libraries with CMake
-#   note: changed default for SHARED, MPI, TESTING and EXAMPLES
+#   note: changed default for SHARED, SPACEDIM, MPI, TESTING and EXAMPLES
 AMReX_OMP = os.environ.get("AMREX_OMP", "OFF")
 AMReX_GPU_BACKEND = os.environ.get("AMREX_GPU_BACKEND", "NONE")
 AMReX_MPI = os.environ.get("AMREX_MPI", "OFF")
 AMReX_PRECISION = os.environ.get("AMREX_PRECISION", "DOUBLE")
-#   already prepared as a list 1;2;3
-AMReX_SPACEDIM = os.environ.get("AMREX_SPACEDIM", "3")
+#   single value or as a list 1;2;3
+AMReX_SPACEDIM = os.environ.get("AMREX_SPACEDIM", "1;2;3")
 BUILD_SHARED_LIBS = os.environ.get("AMREX_BUILD_SHARED_LIBS", "OFF")
 # CMake dependency control (developers & package managers)
 AMReX_src = os.environ.get("AMREX_SRC")
