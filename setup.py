@@ -8,7 +8,6 @@
 from distutils.command.build import build
 from distutils.command.clean import clean
 from distutils.version import LooseVersion
-from operator import countOf
 import os
 import platform
 import re
@@ -42,28 +41,9 @@ class CopyPreBuild(build):
         # call superclass
         build.run(self)
 
-        # matches: amrex_*d_pybind.*.(so|pyd)
-        re_libprefix = re.compile(r"amrex_.d_pybind\..*\.(?:so|pyd)")
-        libs_found = {"1d": None, "2d": None, "3d": None}
-        for Nd in libs_found.copy():
-            from_path = os.path.join(PYAMREX_libdir, f"space{Nd}")
-            for lib_name in os.listdir(from_path):
-                if re_libprefix.match(lib_name):
-                    lib_path = os.path.join(from_path, lib_name)
-                    libs_found[Nd] = lib_path  # FIXME: always picks 3d lib_name
-        if countOf(libs_found.values(), None) == 3:
-            raise RuntimeError(
-                "Error: no pre-build pyAMReX libraries found in "
-                "PYAMREX_libdir='{}'".format(PYAMREX_libdir)
-            )
-
-        # copy external libs into collection of files in a temporary build dir
-        for Nd in libs_found:
-            dst_path = os.path.join(self.build_lib, "amrex")
-            dst_path = os.path.join(dst_path, f"space{Nd}")
-            if libs_found[Nd] is not None:
-                os.makedirs(dst_path, exist_ok=True)
-                shutil.copy(libs_found[Nd], dst_path)
+        # copy Python module artifacts and sources
+        dst_path = os.path.join(self.build_lib, "amrex")
+        shutil.copytree(PYAMREX_libdir, dst_path, dirs_exist_ok=True)
 
 
 class CMakeExtension(Extension):
