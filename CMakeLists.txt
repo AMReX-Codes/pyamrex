@@ -249,7 +249,7 @@ set(pyAMReX_CUSTOM_TARGET_PREFIX "${_pyAMReX_CUSTOM_TARGET_PREFIX_DEFAULT}"
 add_custom_target(${pyAMReX_CUSTOM_TARGET_PREFIX}pip_wheel
     ${CMAKE_COMMAND} -E rm -f -r amrex-whl
     COMMAND
-        ${CMAKE_COMMAND} -E env PYAMREX_LIBDIR=$<TARGET_FILE_DIR:pyAMReX_${AMReX_SPACEDIM_LAST}d>
+        ${CMAKE_COMMAND} -E env PYAMREX_LIBDIR=${CMAKE_PYTHON_OUTPUT_DIRECTORY}/amrex/
             ${Python_EXECUTABLE} -m pip wheel -v --no-build-isolation --no-deps --wheel-dir=amrex-whl ${pyAMReX_SOURCE_DIR}
     WORKING_DIRECTORY
         ${pyAMReX_BINARY_DIR}
