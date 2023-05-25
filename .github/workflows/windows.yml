@@ -66,5 +66,6 @@ jobs:
         if(!$?) { Exit $LASTEXITCODE }
     - name: Unit tests as Installed
       run: |
+        $env:PATH += ';C:/Program Files (x86)/pyAMReX/bin/'
         rm -r -fo build
         python3 -m pytest tests
