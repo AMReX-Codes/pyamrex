@@ -64,6 +64,12 @@ jobs:
       run: |
         ctest --test-dir build --output-on-failure
 
+    - name: Unit tests as installed
+      run: |
+        sudo cp build/lib/libamrex_*.so /usr/lib/
+        rm -rf build
+        python3 -m pytest tests
+
   clang6:
     name: Clang@6.0 w/o MPI
     runs-on: ubuntu-20.04

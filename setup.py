@@ -41,23 +41,9 @@ class CopyPreBuild(build):
         # call superclass
         build.run(self)
 
-        # matches: amrex_*d_pybind.*.(so|pyd)
-        re_libprefix = re.compile(r"amrex_.d_pybind\..*\.(?:so|pyd)")
-        libs_found = []
-        for lib_name in os.listdir(PYAMREX_libdir):
-            if re_libprefix.match(lib_name):
-                lib_path = os.path.join(PYAMREX_libdir, lib_name)
-                libs_found.append(lib_path)
-        if len(libs_found) == 0:
-            raise RuntimeError(
-                "Error: no pre-build pyAMReX libraries found in "
-                "PYAMREX_libdir='{}'".format(PYAMREX_libdir)
-            )
-
-        # copy external libs into collection of files in a temporary build dir
+        # copy Python module artifacts and sources
         dst_path = os.path.join(self.build_lib, "amrex")
-        for lib_path in libs_found:
-            shutil.copy(lib_path, dst_path)
+        shutil.copytree(PYAMREX_libdir, dst_path, dirs_exist_ok=True)
 
 
 class CMakeExtension(Extension):
