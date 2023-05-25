@@ -64,3 +64,7 @@ jobs:
         if(!$?) { Exit $LASTEXITCODE }
         cmake --build build --config Debug --target pip_install
         if(!$?) { Exit $LASTEXITCODE }
+    - name: Unit tests as Installed
+      run: |
+        rm -rf build
+        python3 -m pytest tests
