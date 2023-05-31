@@ -82,7 +82,7 @@ option(pyAMReX_amrex_internal "Download & build AMReX" ON)
 set(pyAMReX_amrex_repo "https://github.com/AMReX-Codes/amrex.git"
     CACHE STRING
     "Repository URI to pull and build AMReX from if(pyAMReX_amrex_internal)")
-set(pyAMReX_amrex_branch "d65dd906bd53c83eab8c88ea0e9205aa6dc6410b"
+set(pyAMReX_amrex_branch "07f87b0a9047a4306a056f60d71d6d49388a3497"
     CACHE STRING
     "Repository branch for pyAMReX_amrex_repo if(pyAMReX_amrex_internal)")
 
