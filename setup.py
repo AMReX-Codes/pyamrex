@@ -93,6 +93,7 @@ class CMakeBuild(build_ext):
             "-DAMReX_MPI:BOOL=" + AMReX_MPI,
             "-DAMReX_PRECISION=" + AMReX_PRECISION,
             #'-DAMReX_PARTICLES_PRECISION=' + AMReX_PARTICLES_PRECISION,
+            "-DpyAMReX_IPO=" + PYAMREX_IPO,
             ## dependency control (developers & package managers)
             "-DpyAMReX_amrex_internal=" + AMReX_internal,
             "-DpyAMReX_pybind11_internal=" + pybind11_internal,
@@ -159,6 +160,8 @@ with open("./README.md", encoding="utf-8") as f:
 #   Work-around for https://github.com/pypa/setuptools/issues/1712
 # Pick up existing AMReX libraries or...
 PYAMREX_libdir = os.environ.get("PYAMREX_LIBDIR")
+
+PYAMREX_IPO = os.environ.get("PYAMREX_IPO", "ON")
 
 # ... build AMReX libraries with CMake
 #   note: changed default for SHARED, SPACEDIM, MPI, TESTING and EXAMPLES

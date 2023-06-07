@@ -54,6 +54,11 @@ pyamrex_set_default_install_dirs()
 
 # Options and Variants ########################################################
 #
+option(pyAMReX_IPO
+    "Compile with interprocedural optimization (IPO) / link-time optimization (LTO)"
+    ON
+)
+
 set(pyAMReX_VERSION_INFO "" CACHE STRING
     "PEP-440 conformant version (set by distutils)")
 # change the default build type to Release (or RelWithDebInfo) instead of Debug
@@ -119,7 +124,10 @@ foreach(D IN LISTS AMReX_SPACEDIM)
 
     # link dependencies
     target_link_libraries(pyAMReX_${D}d PUBLIC AMReX::amrex_${D}d)
-    target_link_libraries(pyAMReX_${D}d PRIVATE pybind11::module pybind11::lto pybind11::windows_extras)
+    target_link_libraries(pyAMReX_${D}d PRIVATE pybind11::module pybind11::windows_extras)
+    if(pyAMReX_IPO)
+        target_link_libraries(pyAMReX_${D}d PRIVATE pybind11::lto)
+    endif()
 
     # set Python module properties
     set_target_properties(pyAMReX_${D}d PROPERTIES

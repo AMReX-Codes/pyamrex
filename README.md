@@ -177,9 +177,24 @@ If you are using the pip-driven install, selected [AMReX CMake options](https://
 | `PYBIND11_INTERNAL`          | **ON**/OFF                                 | Needs a pre-installed pybind11 library if set to `OFF`       |
 | `CMAKE_BUILD_PARALLEL_LEVEL` | 2                                          | Number of parallel build threads                             |
 | `PYAMREX_LIBDIR`             | *None*                                     | If set, search for pre-built a pyAMReX library               |
+| `PYAMREX_IPO`                | **ON**/OFF                                 | Compile with interprocedural/link optimization (IPO/LTO)     |
 | `PYINSTALLOPTIONS`           | *None*                                     | Additional options for ``pip install``, e.g., ``-v --user``  |
 
-For example, one can also build against a local AMReX copy.
+Furthermore, pyAMReX adds a few selected CMake build options:
+
+| CMake Option                 | Default & Values                           | Description                                                   |
+|------------------------------|--------------------------------------------|---------------------------------------------------------------|
+| `pyAMReX_IPO`                | **ON**/OFF                                 | Compile with interprocedural/link optimization (IPO/LTO)      |
+| `pyAMReX_amrex_src`          | *None*                                     | Absolute path to AMReX source directory (preferred if set)    |
+| `pyAMReX_amrex_internal`     | **ON**/OFF                                 | Needs a pre-installed AMReX library if set to `OFF`           |
+| `pyAMReX_amrex_repo`         | `https://github.com/AMReX-Codes/amrex.git` | Repository URI to pull and build AMReX from                   |
+| `pyAMReX_amrex_branch`       | `development`                              | Repository branch for `pyAMReX_amrex_repo`                    |
+| `pyAMReX_pybind11_src`       | *None*                                     | Absolute path to pybind11 source directory (preferred if set) |
+| `pyAMReX_pybind11_internal`  | **ON**/OFF                                 | Needs a pre-installed pybind11 library if set to `OFF`        |
+| `pyAMReX_pybind11_repo`      | `https://github.com/pybind/pybind11.git`   | Repository URI to pull and build pybind11 from                |
+| `pyAMReX_pybind11_branch`    | `v2.10.1`                                  | Repository branch for `pyAMReX_pybind11_repo`                 |
+
+As one example, one can also build against a local AMReX copy.
 Assuming AMReX' source is located in `$HOME/src/amrex`, then `export AMREX_SRC=$HOME/src/amrex`.
 
 Or as a one-liner, assuming your AMReX source directory is located in `../amrex`:
