@@ -20,12 +20,6 @@ jobs:
       # mkl/rng/device/detail/mrg32k3a_impl.hpp has missing braces in array-array initalization
       env: {CXXFLAGS: "-fno-operator-names -Werror -Wall -Wextra -Wpedantic -Wnull-dereference -Wfloat-conversion -Wshadow -Woverloaded-virtual -Wextra-semi -Wunreachable-code -Wnon-virtual-dtor -Wno-sign-compare -Wno-missing-braces"}
       run: |
-        export CCACHE_COMPRESS=1
-        export CCACHE_COMPRESSLEVEL=10
-        export CCACHE_MAXSIZE=45M
-        export CCACHE_DEPEND=1
-        ccache -z
-
         set +e
         source /opt/intel/oneapi/setvars.sh
         set -e
@@ -38,16 +32,12 @@ jobs:
 
         cmake -S . -B build               \
               -DCMAKE_BUILD_TYPE=Debug    \
-              -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
               -DCMAKE_VERBOSE_MAKEFILE=ON \
               -DBUILD_SHARED_LIBS=ON      \
               -DAMReX_GPU_BACKEND=SYCL    \
               -DAMReX_MPI=ON              \
               -DAMReX_SPACEDIM="3"
         cmake --build build --target pip_install -j 2
-
-        ccache -s
-        du -hs ~/.cache/ccache
 
 # "Classic" EDG Intel Compiler
 # Ref.: https://github.com/rscohn2/oneapi-ci
@@ -70,11 +60,6 @@ jobs:
     - name: build
       env: {CXXFLAGS: "-Werror"}
       run: |
-        export CCACHE_COMPRESS=1
-        export CCACHE_COMPRESSLEVEL=10
-        export CCACHE_MAXSIZE=40M
-        ccache -z
-
         set +e
         source /opt/intel/oneapi/setvars.sh
         set -e
@@ -87,15 +72,11 @@ jobs:
 
         cmake -S . -B build               \
               -DCMAKE_BUILD_TYPE=Debug    \
-              -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
               -DCMAKE_VERBOSE_MAKEFILE=ON \
               -DBUILD_SHARED_LIBS=ON      \
               -DAMReX_MPI=ON              \
               -DAMReX_SPACEDIM="1;2;3"
         cmake --build build --target pip_install -j 2
-
-        ccache -s
-        du -hs ~/.cache/ccache
 
     - name: Run tests
       run: |
