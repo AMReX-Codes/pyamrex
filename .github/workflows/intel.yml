@@ -36,8 +36,10 @@ jobs:
               -DBUILD_SHARED_LIBS=ON      \
               -DAMReX_GPU_BACKEND=SYCL    \
               -DAMReX_MPI=ON              \
-              -DAMReX_SPACEDIM="3"
-        cmake --build build --target pip_install -j 2
+              -DAMReX_SPACEDIM="3"        \
+              -DpyAMReX_IPO=OFF
+        cmake --build build --target amrex_3d -j 2
+        cmake --build build --target pip_install
 
 # "Classic" EDG Intel Compiler
 # Ref.: https://github.com/rscohn2/oneapi-ci
