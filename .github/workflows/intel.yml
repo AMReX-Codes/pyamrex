@@ -38,7 +38,7 @@ jobs:
               -DAMReX_MPI=ON              \
               -DAMReX_SPACEDIM="3"        \
               -DpyAMReX_IPO=OFF
-        cmake --build build --target amrex_3d -j 2
+        cmake --build build --target amrex_3d
         cmake --build build --target pip_install
 
 # "Classic" EDG Intel Compiler
