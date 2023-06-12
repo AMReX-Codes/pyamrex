@@ -39,6 +39,44 @@ jobs:
               -DAMReX_SPACEDIM="3"
         cmake --build build --target pip_install -j 2
 
+  tests-icpx:
+    name: ICPX
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/checkout@v3
+    - name: Dependencies
+      run: |
+        .github/workflows/dependencies/dpcpp.sh
+    - name: Build & Install
+      # mkl/rng/device/detail/mrg32k3a_impl.hpp has a number of sign-compare error
+      # mkl/rng/device/detail/mrg32k3a_impl.hpp has missing braces in array-array initalization
+      env: {CXXFLAGS: "-fno-operator-names -Werror -Wall -Wextra -Wpedantic -Wnull-dereference -Wfloat-conversion -Wshadow -Woverloaded-virtual -Wextra-semi -Wunreachable-code -Wnon-virtual-dtor -Wno-sign-compare -Wno-missing-braces -Wno-error=pass-failed -Wno-tautological-constant-compare"}
+      run: |
+        set +e
+        source /opt/intel/oneapi/setvars.sh
+        set -e
+
+        export CC=$(which icx)
+        export CXX=$(which icpx)
+        python3 -m pip install -U pip setuptools wheel
+        python3 -m pip install -U cmake
+        python3 -m pip install -U pytest mpi4py
+
+        cmake -S . -B build               \
+              -DCMAKE_BUILD_TYPE=Release  \
+              -DCMAKE_VERBOSE_MAKEFILE=ON \
+              -DAMReX_MPI=ON              \
+              -DAMReX_SPACEDIM="1;2;3"
+        cmake --build build --target pip_install -j 2
+
+    - name: Run tests
+      run: |
+        set +e
+        source /opt/intel/oneapi/setvars.sh
+        set -e
+        cd build
+        ctest --output-on-failure
+
 # "Classic" EDG Intel Compiler
 # Ref.: https://github.com/rscohn2/oneapi-ci
 # intel-basekit intel-hpckit are too large in size
