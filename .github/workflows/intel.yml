@@ -1,4 +1,4 @@
-name: intel
+name: 🐧 Intel
 
 on: [push, pull_request]
 
