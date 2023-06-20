@@ -92,4 +92,3 @@ void init_IndexType(py::module &m) {
         .export_values();
 
 }
-
