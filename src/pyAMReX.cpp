@@ -28,6 +28,7 @@ void init_Dim3(py::module&);
 void init_DistributionMapping(py::module&);
 void init_FArrayBox(py::module&);
 void init_Geometry(py::module&);
+void init_IndexType(py::module &);
 void init_IntVect(py::module &);
 void init_RealVect(py::module &);
 void init_AmrMesh(py::module &);
@@ -70,6 +71,7 @@ PYBIND11_MODULE(amrex_3d_pybind, m) {
                Dim3
                FArrayBox
                IntVect
+               IndexType
                RealVect
                MultiFab
                ParallelDescriptor
@@ -88,6 +90,7 @@ PYBIND11_MODULE(amrex_3d_pybind, m) {
     init_Arena(m);
     init_Dim3(m);
     init_IntVect(m);
+    init_IndexType(m);
     init_RealVect(m);
     init_Periodicity(m);
     init_Array4(m);
