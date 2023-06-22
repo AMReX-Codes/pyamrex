@@ -161,10 +161,22 @@ void init_BoxArray(py::module &m) {
 
     //! Return element index of this BoxArray.
     Box operator[] (const MFIter& mfi) const noexcept;
+*/
+        .def("__getitem__",
+             [](const BoxArray& ba, const int i) {
+                 const int ii = (i >= 0) ? i : AMREX_SPACEDIM + i;
+                 if ((ii < 0) || (ii >= AMREX_SPACEDIM))
+                     throw py::index_error(
+                         "Index must be between 0 and " +
+                         std::to_string(AMREX_SPACEDIM));
+                 return ba[ii];
+             })
 
-    //! Return element index of this BoxArray.
-    Box get (int index) const noexcept { return operator[](index); }
 
+        //! Return element index of this BoxArray.
+        .def("get", &BoxArray::get)
+
+/*
     //! Return cell-centered box at element index of this BoxArray.
     Box getCellCenteredBox (int index) const noexcept {
         return m_bat.coarsen(m_ref->m_abox[index]);
@@ -192,8 +204,12 @@ void init_BoxArray(py::module &m) {
     bool contains (const BoxArray& ba, bool assume_disjoint_ba = false,
                    const IntVect& ng = IntVect(0)) const;
 
-    //! Return smallest Box that contains all Boxes in this BoxArray.
-    Box minimalBox () const;
+*/
+        //! Return smallest Box that contains all Boxes in this BoxArray.
+        .def("minimal_box",
+            py::overload_cast<>(&BoxArray::minimalBox, py::const_))
+
+/*
     Box minimalBox (Long& npts_avg_box) const;
 
     //! \brief True if the Box intersects with this BoxArray(+ghostcells).
@@ -247,9 +263,11 @@ void init_BoxArray(py::module &m) {
     //! Return a unique ID of the reference
     RefID getRefID () const noexcept { return RefID { m_ref.get() }; }
 
-    //! Return index type of this BoxArray
-    IndexType ixType () const noexcept { return m_bat.index_type(); }
+*/
+        //! Return index type of this BoxArray
+        .def("ix_type", &BoxArray::ixType)
 
+/*
     //! Return crse ratio of this BoxArray
     IntVect crseRatio () const noexcept { return m_bat.coarsen_ratio(); }
 
