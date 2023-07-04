@@ -19,6 +19,15 @@
 namespace py = pybind11;
 using namespace amrex;
 
+namespace {
+    const int check_index(const int i)
+    {
+        const int ii = (i >= 0) ? i : AMREX_SPACEDIM + i;
+        if ((ii < 0) || (ii >= AMREX_SPACEDIM))
+             throw py::index_error( "IndexType index " + std::to_string(i) + " out of bounds");
+        return ii;
+    }
+}
 
 void init_IndexType(py::module &m) {
     py::class_< IndexType > index_type(m, "IndexType");
@@ -47,11 +56,7 @@ void init_IndexType(py::module &m) {
 
         .def("__getitem__",
              [](const IndexType& v, const int i) {
-                 const int ii = (i >= 0) ? i : AMREX_SPACEDIM + i;
-                 if ((ii < 0) || (ii >= AMREX_SPACEDIM))
-                     throw py::index_error(
-                         "Index must be between 0 and " +
-                         std::to_string(AMREX_SPACEDIM));
+                 const int ii = check_index(i);
                  return v[ii];
              })
 
@@ -62,23 +67,47 @@ void init_IndexType(py::module &m) {
              py::overload_cast<const IndexType&>(&IndexType::operator!=, py::const_))
         .def("__lt__", &IndexType::operator<)
 
-        .def("set", &IndexType::set)
-        .def("unset", &IndexType::unset)
-        .def("test", &IndexType::test)
+        .def("set", [](IndexType& v, int i) {
+                 const int ii = check_index(i);
+                 v.set(ii);
+             })
+        .def("unset", [](IndexType& v, int i) {
+                 const int ii = check_index(i);
+                 v.unset(ii);
+             })
+        .def("test", [](const IndexType& v, int i) {
+                 const int ii = check_index(i);
+                 return v.test(ii);
+             })
         .def("setall", &IndexType::setall)
         .def("clear", &IndexType::clear)
         .def("any", &IndexType::any)
         .def("ok", &IndexType::ok)
-        .def("flip", &IndexType::flip)
+        .def("flip", [](const IndexType& v, int i) {
+                 const int ii = check_index(i);
+                 v.flip(ii);
+             })
 
-        .def("cellCentered", py::overload_cast<>(&IndexType::cellCentered, py::const_))
-        .def("cellCentered", py::overload_cast<int>(&IndexType::cellCentered, py::const_))
-        .def("nodeCentered", py::overload_cast<>(&IndexType::nodeCentered, py::const_))
-        .def("nodeCentered", py::overload_cast<int>(&IndexType::nodeCentered, py::const_))
+        .def("cell_centered", py::overload_cast<>(&IndexType::cellCentered, py::const_))
+        .def("cell_centered", [](const IndexType& v, int i) {
+                 const int ii = check_index(i);
+                 return v.cellCentered(ii);
+             })
+        .def("node_centered", py::overload_cast<>(&IndexType::nodeCentered, py::const_))
+        .def("node_centered", [](const IndexType& v, int i) {
+                 const int ii = check_index(i);
+                 return v.nodeCentered(ii);
+             })
 
-        .def("set_type", &IndexType::setType)
-        .def("ix_type", py::overload_cast<int>(&IndexType::ixType, py::const_))
+        .def("set_type", [](IndexType& v, int i, IndexType::CellIndex t) {
+                 const int ii = check_index(i);
+                 v.setType(ii, t);
+             })
         .def("ix_type", py::overload_cast<>(&IndexType::ixType, py::const_))
+        .def("ix_type", [](const IndexType& v, int i) {
+                 const int ii = check_index(i);
+                 return v.ixType(ii);
+             })
         .def("to_IntVect", &IndexType::toIntVect)
 
         .def_static("cell_type", &IndexType::TheCellType)
