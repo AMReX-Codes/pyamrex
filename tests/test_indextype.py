@@ -33,7 +33,11 @@ def test_indextype_2d():
 
 @pytest.mark.skipif(amr.Config.spacedim != 3, reason="Requires AMREX_SPACEDIM = 3")
 def test_indextype_3d():
-    obj = amr.IndexType(amr.IndexType.CellIndex.NODE, amr.IndexType.CellIndex.CELL, amr.IndexType.CellIndex.NODE)
+    obj = amr.IndexType(
+        amr.IndexType.CellIndex.NODE,
+        amr.IndexType.CellIndex.CELL,
+        amr.IndexType.CellIndex.NODE,
+    )
 
     # Check indexing
     assert obj.node_centered(0)
@@ -55,11 +59,11 @@ def test_indextype_3d():
 
 
 def test_indextype_static():
-    cell = amr.IndexType.cell_type();
+    cell = amr.IndexType.cell_type()
     for i in range(amr.Config.spacedim):
         assert not cell[i]
 
-    node = amr.IndexType.node_type();
+    node = amr.IndexType.node_type()
     for i in range(amr.Config.spacedim):
         assert node[i]
 
@@ -69,6 +73,6 @@ def test_indextype_static():
 
 
 def test_indextype_conversions():
-    node = amr.IndexType.node_type();
+    node = amr.IndexType.node_type()
     assert node.ix_type() == amr.IntVect(1)
     assert node.to_IntVect() == amr.IntVect(1)
