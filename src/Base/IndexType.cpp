@@ -83,7 +83,7 @@ void init_IndexType(py::module &m) {
         .def("clear", &IndexType::clear)
         .def("any", &IndexType::any)
         .def("ok", &IndexType::ok)
-        .def("flip", [](const IndexType& v, int i) {
+        .def("flip", [](IndexType& v, int i) {
                  const int ii = check_index(i);
                  v.flip(ii);
              })
