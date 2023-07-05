@@ -11,9 +11,9 @@ def test_indextype_1d():
     assert obj.node_centered()
     assert not obj.cell_centered()
     with pytest.raises(IndexError):
-        ix = obj[-2]
+        obj[-2]
     with pytest.raises(IndexError):
-        ix = obj[1]
+        obj[1]
 
 
 @pytest.mark.skipif(amr.Config.spacedim != 2, reason="Requires AMREX_SPACEDIM = 2")
@@ -25,9 +25,9 @@ def test_indextype_2d():
     assert obj.cell_centered(-1)
 
     with pytest.raises(IndexError):
-        ix = obj[-3]
+        obj[-3]
     with pytest.raises(IndexError):
-        ix = obj[2]
+        obj[2]
 
 
 @pytest.mark.skipif(amr.Config.spacedim != 3, reason="Requires AMREX_SPACEDIM = 3")
@@ -46,9 +46,9 @@ def test_indextype_3d():
     assert obj.cell_centered(-2)
     assert obj.node_centered(-1)
     with pytest.raises(IndexError):
-        ix = obj[-4]
+        obj[-4]
     with pytest.raises(IndexError):
-        ix = obj[3]
+        obj[3]
 
     # Check methods
     obj.set(1)
