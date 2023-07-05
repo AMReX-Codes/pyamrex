@@ -13,6 +13,7 @@ foreach(D IN LISTS AMReX_SPACEDIM)
         DistributionMapping.cpp
         FArrayBox.cpp
         Geometry.cpp
+        IndexType.cpp
         IntVect.cpp
         RealVect.cpp
         MultiFab.cpp
