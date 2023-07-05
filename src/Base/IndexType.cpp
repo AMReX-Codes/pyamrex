@@ -20,7 +20,7 @@ namespace py = pybind11;
 using namespace amrex;
 
 namespace {
-    const int check_index(const int i)
+    int check_index(const int i)
     {
         const int ii = (i >= 0) ? i : AMREX_SPACEDIM + i;
         if ((ii < 0) || (ii >= AMREX_SPACEDIM))
