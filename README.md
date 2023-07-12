@@ -33,8 +33,8 @@ We will add further information here once first development versions are ready f
 ```python
 import amrex.space3d as amr
 
-small_end = amr.Int_Vect()
-big_end = amr.Int_Vect(2, 3, 4)
+small_end = amr.IntVect()
+big_end = amr.IntVect(2, 3, 4)
 
 b = amr.Box(small_end, big_end)
 print(b)
