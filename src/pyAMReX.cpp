@@ -43,7 +43,7 @@ void init_ParticleContainer(py::module &);
 void init_Periodicity(py::module &);
 void init_PODVector(py::module &);
 void init_Vector(py::module &);
-
+void init_Utility(py::module &);
 
 #if AMREX_SPACEDIM == 1
 PYBIND11_MODULE(amrex_1d_pybind, m) {
@@ -83,6 +83,7 @@ PYBIND11_MODULE(amrex_3d_pybind, m) {
                PODVector
                StructOfArrays
                Vector
+               Utility
     )pbdoc";
 
     // note: order from parent to child classes
@@ -113,6 +114,9 @@ PYBIND11_MODULE(amrex_3d_pybind, m) {
     init_Vector(m);
     init_ParticleContainer(m);
     init_AmrMesh(m);
+
+    // Wrappers around functions, independent of parent to child order
+    init_Utility(m);
 
     // API runtime version
     //   note PEP-440 syntax: x.y.zaN but x.y.z.devN
