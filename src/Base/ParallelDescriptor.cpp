@@ -20,6 +20,10 @@ using namespace amrex;
 void init_ParallelDescriptor(py::module &m) {
     auto mpd = m.def_submodule("ParallelDescriptor");
 
-    mpd.def("NProcs", py::overload_cast<>(&ParallelDescriptor::NProcs));
+    mpd.def("NProcs", py::overload_cast<>(&ParallelDescriptor::NProcs))
+       .def("MyProc", py::overload_cast<>(&ParallelDescriptor::MyProc))
+       .def("IOProcessor", py::overload_cast<>(&ParallelDescriptor::IOProcessor))
+       .def("IOProcessorNumber", py::overload_cast<>(&ParallelDescriptor::IOProcessorNumber))
+       ;
     // ...
 }
