@@ -42,8 +42,8 @@ void init_ParticleTile(py::module &);
 void init_ParticleContainer(py::module &);
 void init_Periodicity(py::module &);
 void init_PODVector(py::module &);
-void init_Vector(py::module &);
 void init_Utility(py::module &);
+void init_Vector(py::module &);
 
 #if AMREX_SPACEDIM == 1
 PYBIND11_MODULE(amrex_1d_pybind, m) {
