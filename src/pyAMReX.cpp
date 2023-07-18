@@ -82,8 +82,8 @@ PYBIND11_MODULE(amrex_3d_pybind, m) {
                Periodicity
                PODVector
                StructOfArrays
-               Vector
                Utility
+               Vector
     )pbdoc";
 
     // note: order from parent to child classes
