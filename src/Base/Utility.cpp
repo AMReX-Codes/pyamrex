@@ -12,10 +12,8 @@ using namespace amrex;
 void init_Utility(py::module& m)
 {
     m.def("concatenate",
-          [] (const std::string& root,
-                     int                num,
-                     int                mindigits) {
-          return amrex::Concatenate(root, num, mindigits);
-          }, py::return_value_policy::move,
-          "Builds plotfile name");
+          &amrex::Concatenate,
+          "Builds plotfile name",
+          py::arg("root"), py::arg("num"), py::arg("mindigits")=5
+    );
 }
