@@ -134,6 +134,13 @@ void init_MultiFab(py::module &m)
         .def("sum_boundary", py::overload_cast< int, int, Periodicity const & >(&FabArray<FArrayBox>::SumBoundary))
         .def("sum_boundary", py::overload_cast< int, int, IntVect const&, Periodicity const & >(&FabArray<FArrayBox>::SumBoundary))
 
+        .def("fill_boundary", py::overload_cast< bool >(&FabArray<FArrayBox>::template FillBoundary<Real>))
+        .def("fill_boundary", py::overload_cast< Periodicity const &, bool >(&FabArray<FArrayBox>::template FillBoundary<Real>))
+        .def("fill_boundary", py::overload_cast< IntVect const &, Periodicity const &, bool >(&FabArray<FArrayBox>::template FillBoundary<Real>))
+        .def("fill_boundary", py::overload_cast< int, int, bool >(&FabArray<FArrayBox>::template FillBoundary<Real>))
+        .def("fill_boundary", py::overload_cast< int, int, Periodicity const &, bool >(&FabArray<FArrayBox>::template FillBoundary<Real>))
+        .def("fill_boundary", py::overload_cast< int, int, IntVect const &, Periodicity const &, bool >(&FabArray<FArrayBox>::template FillBoundary<Real>))
+
         /* Syncs */
         .def("override_sync", py::overload_cast< Periodicity const & >(&FabArray<FArrayBox>::OverrideSync))
     ;
