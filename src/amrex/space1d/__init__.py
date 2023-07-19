@@ -29,3 +29,5 @@ __author__ = amrex_1d_pybind.__author__
 # at this place we can enhance Python classes with additional methods written
 # in pure Python or add some other Python logic
 #
+def d_decl(x,y,z):
+    return (x,)
