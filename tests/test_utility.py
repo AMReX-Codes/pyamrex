@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-
 import amrex.space3d as amr
 
 
