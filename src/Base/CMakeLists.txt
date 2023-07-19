@@ -21,6 +21,7 @@ foreach(D IN LISTS AMReX_SPACEDIM)
         ParmParse.cpp
         Periodicity.cpp
         PODVector.cpp
+        Utility.cpp
         Vector.cpp
     )
 endforeach()

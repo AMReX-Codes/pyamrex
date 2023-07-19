@@ -42,6 +42,7 @@ void init_ParticleTile(py::module &);
 void init_ParticleContainer(py::module &);
 void init_Periodicity(py::module &);
 void init_PODVector(py::module &);
+void init_Utility(py::module &);
 void init_Vector(py::module &);
 
 
@@ -82,6 +83,7 @@ PYBIND11_MODULE(amrex_3d_pybind, m) {
                Periodicity
                PODVector
                StructOfArrays
+               Utility
                Vector
     )pbdoc";
 
@@ -113,6 +115,9 @@ PYBIND11_MODULE(amrex_3d_pybind, m) {
     init_Vector(m);
     init_ParticleContainer(m);
     init_AmrMesh(m);
+
+    // Wrappers around standalone functions
+    init_Utility(m);
 
     // API runtime version
     //   note PEP-440 syntax: x.y.zaN but x.y.z.devN
