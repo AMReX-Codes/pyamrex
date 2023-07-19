@@ -3,20 +3,17 @@
  * Authors: Axel Huebl
  * License: BSD-3-Clause-LBNL
  */
-#include <AMReX_Config.H>
+#include "pyAMReX.H"
+
 #include <AMReX_BoxArray.H>
 #include <AMReX_IntVect.H>
 
-#include <pybind11/pybind11.h>
-#include <pybind11/stl.h>
-
 #include <sstream>
-
-namespace py = pybind11;
-using namespace amrex;
 
 
 void init_BoxArray(py::module &m) {
+    using namespace amrex;
+
     /* A collection of Boxes stored in an Array.  It is a
      * reference-counted concrete class, not a polymorphic one; i.e. you
      * cannot use any of the List member functions with a BoxList

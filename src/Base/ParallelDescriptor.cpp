@@ -3,27 +3,21 @@
  * Authors: Axel Huebl
  * License: BSD-3-Clause-LBNL
  */
-#include <AMReX_Config.H>
+#include "pyAMReX.H"
+
 #include <AMReX_ParallelDescriptor.H>
 
-#include <pybind11/pybind11.h>
-#include <pybind11/operators.h>
-#include <pybind11/stl.h>
 
-#include <sstream>
-#include <optional>
+void init_ParallelDescriptor(py::module &m)
+{
+    using namespace amrex;
 
-namespace py = pybind11;
-using namespace amrex;
-
-
-void init_ParallelDescriptor(py::module &m) {
     auto mpd = m.def_submodule("ParallelDescriptor");
 
     mpd.def("NProcs", py::overload_cast<>(&ParallelDescriptor::NProcs))
        .def("MyProc", py::overload_cast<>(&ParallelDescriptor::MyProc))
        .def("IOProcessor", py::overload_cast<>(&ParallelDescriptor::IOProcessor))
        .def("IOProcessorNumber", py::overload_cast<>(&ParallelDescriptor::IOProcessorNumber))
-       ;
+   ;
     // ...
 }

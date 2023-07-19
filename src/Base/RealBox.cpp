@@ -3,7 +3,8 @@
  * Authors: Ryan Sandberg
  * License: BSD-3-Clause-LBNL
  */
-#include <AMReX_Config.H>
+#include "pyAMReX.H"
+
 #include <AMReX_Array.H>
 #include <AMReX_Vector.H>
 #include <AMReX_REAL.H>
@@ -12,19 +13,14 @@
 #include <AMReX_Box.H>
 #include <AMReX_RealBox.H>
 
-#include <pybind11/pybind11.h>
-#include <pybind11/operators.h>
-#include <pybind11/stl.h>
-
 #include <array>
 #include <sstream>
 #include <string>
 #include <optional>
 
-namespace py = pybind11;
-using namespace amrex;
 
 void init_RealBox(py::module &m) {
+    using namespace amrex;
 
     py::class_< RealBox >(m, "RealBox")
         .def("__repr__",

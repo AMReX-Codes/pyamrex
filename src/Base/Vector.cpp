@@ -3,13 +3,9 @@
  * Authors: Ryan Sandberg
  * License: BSD-3-Clause-LBNL
  */
-#include <AMReX_Config.H>
-#include <AMReX_PODVector.H>
+#include "pyAMReX.H"
 
-#include <pybind11/pybind11.h>
-#include <pybind11/operators.h>
-#include <pybind11/numpy.h>
-#include <pybind11/stl.h>
+#include <AMReX_PODVector.H>
 
 #include <sstream>
 #include <string>
@@ -17,11 +13,11 @@
 #include <optional>
 #include <vector>
 
-namespace py = pybind11;
-using namespace amrex;
 
 namespace
 {
+    using namespace amrex;
+
     /** CPU: __array_interface__ v3
      *
      * https://numpy.org/doc/stable/reference/arrays.interface.html
@@ -44,6 +40,8 @@ namespace
 template <class T, class Allocator = std::allocator<T> >
 void make_Vector(py::module &m, std::string typestr)
 {
+    using namespace amrex;
+
     using Vector_type = Vector<T, Allocator>;
     auto const v_name = std::string("Vector_").append(typestr);
 
@@ -97,7 +95,10 @@ void make_Vector(py::module &m, std::string typestr)
     ;
 }
 
-void init_Vector(py::module& m) {
+void init_Vector(py::module& m)
+{
+    using namespace amrex;
+
     make_Vector<Real> (m, "Real");
     if constexpr(!std::is_same_v<Real, ParticleReal>)
         make_Vector<ParticleReal> (m, "ParticleReal");

@@ -3,20 +3,18 @@
  * Authors: Axel Huebl
  * License: BSD-3-Clause-LBNL
  */
-#include <AMReX_FArrayBox.H>
+#include "pyAMReX.H"
 
-#include <pybind11/pybind11.h>
-#include <pybind11/stl.h>
+#include <AMReX_FArrayBox.H>
 
 #include <istream>
 #include <ostream>
 #include <string>
 
-namespace py = pybind11;
-using namespace amrex;
-
 
 void init_FArrayBox(py::module &m) {
+    using namespace amrex;
+
     py::class_< FArrayBox, BaseFab<Real> >(m, "FArrayBox")
         .def("__repr__",
              [](FArrayBox const & /* fab */) {

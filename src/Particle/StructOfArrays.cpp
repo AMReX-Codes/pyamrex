@@ -3,23 +3,20 @@
  * Authors: Ryan Sandberg
  * License: BSD-3-Clause-LBNL
  */
-#include <AMReX_Config.H>
+#include "pyAMReX.H"
+
 #include <AMReX_GpuAllocators.H>
 #include <AMReX_StructOfArrays.H>
 
-#include <pybind11/pybind11.h>
-#include <pybind11/stl.h>
-
 #include <sstream>
-
-namespace py = pybind11;
-using namespace amrex;
 
 
 template <int NReal, int NInt,
-          template<class> class Allocator=DefaultAllocator>
+          template<class> class Allocator=amrex::DefaultAllocator>
 void make_StructOfArrays(py::module &m, std::string allocstr)
 {
+    using namespace amrex;
+
     using SOAType = StructOfArrays<NReal, NInt, Allocator>;
 
     auto const soa_name = std::string("StructOfArrays_") + std::to_string(NReal) + "_" +

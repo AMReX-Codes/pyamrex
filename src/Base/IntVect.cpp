@@ -3,23 +3,20 @@
  * Authors: Axel Huebl
  * License: BSD-3-Clause-LBNL
  */
-#include <AMReX_Config.H>
+#include "pyAMReX.H"
+
 #include <AMReX_Dim3.H>
 #include <AMReX_IntVect.H>
-
-#include <pybind11/pybind11.h>
-#include <pybind11/stl.h>
-#include <pybind11/numpy.h>
 
 #include <array>
 #include <sstream>
 #include <string>
 
-namespace py = pybind11;
-using namespace amrex;
 
+void init_IntVect(py::module &m)
+{
+    using namespace amrex;
 
-void init_IntVect(py::module &m) {
     py::class_< IntVect >(m, "IntVect")
         .def("__repr__",
              [](py::object& obj) {

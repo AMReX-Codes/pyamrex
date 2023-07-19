@@ -3,15 +3,13 @@
  * Authors: Ryan Sandberg
  * License: BSD-3-Clause-LBNL
  */
+#include "pyAMReX.H"
+
 #include <AMReX_Config.H>
 #include <AMReX_BoxArray.H>
 #include <AMReX_IntVect.H>
 #include <AMReX_RealVect.H>
 #include <AMReX_Particle.H>
-
-#include <pybind11/pybind11.h>
-#include <pybind11/operators.h>
-#include <pybind11/stl.h>
 
 #include <array>
 #include <stdexcept>
@@ -22,10 +20,6 @@
 #include <cmath>
 #include <regex>
 
-
-namespace py = pybind11;
-using namespace amrex;
-using pReal = amrex_particle_real;
 
 struct PIdx
 {
@@ -56,6 +50,8 @@ namespace
 template <int T_NReal, int T_NInt=0>
 void make_Particle(py::module &m)
 {
+    using namespace amrex;
+
     using ParticleType = Particle<T_NReal, T_NInt>;
     auto const particle_name = std::string("Particle_").append(std::to_string(T_NReal) + "_" + std::to_string(T_NInt));
     py::class_<ParticleType> (m, particle_name.c_str())

@@ -5,7 +5,8 @@
  */
 #pragma once
 
-#include <AMReX_Config.H>
+#include "pyAMReX.H"
+
 #include <AMReX_BoxArray.H>
 #include <AMReX_DistributionMapping.H>
 #include <AMReX_FArrayBox.H>
@@ -13,14 +14,9 @@
 #include <AMReX_FabArrayBase.H>
 #include <AMReX_MultiFab.H>
 
-#include <pybind11/pybind11.h>
-#include <pybind11/stl.h>
-
 #include <memory>
 #include <string>
 
-namespace py = pybind11;
-using namespace amrex;
 
 namespace pyAMReX
 {

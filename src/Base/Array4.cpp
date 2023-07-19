@@ -3,24 +3,21 @@
  * Authors: Axel Huebl
  * License: BSD-3-Clause-LBNL
  */
+#include "pyAMReX.H"
+
 #include <AMReX_Array4.H>
 #include <AMReX_BLassert.H>
 #include <AMReX_IntVect.H>
-
-#include <pybind11/pybind11.h>
-#include <pybind11/numpy.h>
-#include <pybind11/stl.h>
 
 #include <cstdint>
 #include <sstream>
 #include <type_traits>
 
-namespace py = pybind11;
-using namespace amrex;
-
 
 namespace
 {
+    using namespace amrex;
+
     /** CPU: __array_interface__ v3
      *
      * https://numpy.org/doc/stable/reference/arrays.interface.html
@@ -77,6 +74,8 @@ namespace
 template< typename T >
 void make_Array4(py::module &m, std::string typestr)
 {
+    using namespace amrex;
+
     // dispatch simpler via: py::format_descriptor<T>::format() naming
     auto const array_name = std::string("Array4_").append(typestr);
     py::class_< Array4<T> >(m, array_name.c_str())

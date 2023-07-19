@@ -3,23 +3,20 @@
  * Authors: Axel Huebl
  * License: BSD-3-Clause-LBNL
  */
-#include <AMReX_Config.H>
+#include "pyAMReX.H"
+
 #include <AMReX_Box.H>
 #include <AMReX_IntVect.H>
 #include <AMReX_ParmParse.H>
 
-#include <pybind11/pybind11.h>
-#include <pybind11/operators.h>
-#include <pybind11/stl.h>
-
 #include <string>
 #include <vector>
 
-namespace py = pybind11;
-using namespace amrex;
 
+void init_ParmParse(py::module &m)
+{
+    using namespace amrex;
 
-void init_ParmParse(py::module &m) {
     py::class_<ParmParse>(m, "ParmParse")
         .def("__repr__",
              [](ParmParse const &) {

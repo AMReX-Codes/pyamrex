@@ -3,21 +3,17 @@
  * Authors: Ryan Sandberg
  * License: BSD-3-Clause-LBNL
  */
-#include <AMReX_Config.H>
-#include <AMReX_PODVector.H>
+#include "pyAMReX.H"
 
-#include <pybind11/pybind11.h>
-#include <pybind11/numpy.h>
-#include <pybind11/stl.h>
+#include <AMReX_PODVector.H>
 
 #include <sstream>
 
 
-namespace py = pybind11;
-using namespace amrex;
-
 namespace
 {
+    using namespace amrex;
+
     /** CPU: __array_interface__ v3
      *
      * https://numpy.org/doc/stable/reference/arrays.interface.html
@@ -40,6 +36,8 @@ namespace
 template <class T, class Allocator = std::allocator<T> >
 void make_PODVector(py::module &m, std::string typestr, std::string allocstr)
 {
+    using namespace amrex;
+
     using PODVector_type = PODVector<T, Allocator>;
     auto const podv_name = std::string("PODVector_").append(typestr)
                            .append("_").append(allocstr);

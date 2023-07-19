@@ -3,27 +3,25 @@
  * Authors: Ryan Sandberg
  * License: BSD-3-Clause-LBNL
  */
-#include <AMReX_Config.H>
+#include "pyAMReX.H"
+
 #include <AMReX_BoxArray.H>
 #include <AMReX_GpuAllocators.H>
 #include <AMReX_IntVect.H>
 #include <AMReX_ParticleTile.H>
 
-#include <pybind11/pybind11.h>
-#include <pybind11/stl.h>
-
 #include <sstream>
 
-
-namespace py = pybind11;
-using namespace amrex;
 
 //Forward declaration
 template <int T_NReal, int T_NInt=0>
 void make_Particle(py::module &m);
 
 template <typename T_ParticleType, int NArrayReal, int NArrayInt>
-void make_ParticleTileData(py::module &m) {
+void make_ParticleTileData(py::module &m)
+{
+    using namespace amrex;
+
     using ParticleType = T_ParticleType;
     constexpr int NStructReal = ParticleType::NReal;
     constexpr int NStructInt = ParticleType::NInt;
@@ -52,9 +50,11 @@ void make_ParticleTileData(py::module &m) {
 }
 
 template <typename T_ParticleType, int NArrayReal, int NArrayInt,
-          template<class> class Allocator=DefaultAllocator>
+          template<class> class Allocator=amrex::DefaultAllocator>
 void make_ParticleTile(py::module &m, std::string allocstr)
 {
+    using namespace amrex;
+
     using ParticleType = T_ParticleType;
     constexpr int NStructReal = ParticleType::NReal;
     constexpr int NStructInt = ParticleType::NInt;
@@ -163,6 +163,8 @@ void make_ParticleTile(py::module &m)
 }
 
 void init_ParticleTile(py::module& m) {
+    using namespace amrex;
+
     // AMReX legacy AoS position + id/cpu particle ype
     using ParticleType_0_0 = Particle<0, 0>;
     using ParticleType_1_1 = Particle<1, 1>;

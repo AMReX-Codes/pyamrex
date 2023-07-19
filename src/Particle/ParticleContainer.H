@@ -5,6 +5,8 @@
  */
 #pragma once
 
+#include "pyAMReX.H"
+
 #include "Base/Iterator.H"
 
 #include <AMReX_BoxArray.H>
@@ -18,13 +20,9 @@
 #include <AMReX_ParticleTile.H>
 #include <AMReX_ArrayOfStructs.H>
 
-#include <pybind11/pybind11.h>
-#include <pybind11/stl.h>
-
 #include <string>
 #include <sstream>
 
-namespace py = pybind11;
 
 template <typename T_ParticleType, int T_NArrayReal=0, int T_NArrayInt=0>
 std::string particle_type_suffix ()
@@ -46,6 +44,8 @@ std::string particle_type_suffix ()
 template <bool is_const, typename T_ParIterBase>
 void make_Base_Iterators (py::module &m, std::string allocstr)
 {
+    using namespace amrex;
+
     using iterator_base = T_ParIterBase;
     using container = typename iterator_base::ContainerType;
     using ParticleType = typename container::ParticleType;
@@ -95,9 +95,11 @@ void make_Base_Iterators (py::module &m, std::string allocstr)
                        py::return_value_policy::reference_internal);
 }
 
-template <bool is_const, typename T_ParIter, template<class> class Allocator=DefaultAllocator>
+template <bool is_const, typename T_ParIter, template<class> class Allocator=amrex::DefaultAllocator>
 void make_Iterators (py::module &m, std::string allocstr)
 {
+    using namespace amrex;
+
     using iterator = T_ParIter;
     using container = typename iterator::ContainerType;
     using ParticleType = typename container::ParticleType;
@@ -130,6 +132,8 @@ void make_Iterators (py::module &m, std::string allocstr)
 
 template <typename T_ParticleType, int T_NArrayReal=0, int T_NArrayInt=0>
 void make_ParticleInitData (py::module &m) {
+    using namespace amrex;
+
     using ParticleType = T_ParticleType;
     using ParticleInitData = ParticleInitType<ParticleType::NReal, ParticleType::NInt, T_NArrayReal, T_NArrayInt>;
     // depends on https://github.com/AMReX-Codes/amrex/pull/3280
@@ -153,9 +157,11 @@ void make_ParticleInitData (py::module &m) {
 }
 
 template <typename T_ParticleType, int T_NArrayReal=0, int T_NArrayInt=0,
-          template<class> class Allocator=DefaultAllocator>
+          template<class> class Allocator=amrex::DefaultAllocator>
 void make_ParticleContainer_and_Iterators (py::module &m, std::string allocstr)
 {
+    using namespace amrex;
+
     using ParticleType = T_ParticleType;
     using ParticleContainerType = ParticleContainer_impl<
         ParticleType, T_NArrayReal, T_NArrayInt,

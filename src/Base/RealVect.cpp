@@ -3,25 +3,21 @@
  * Authors: Ryan Sandberg
  * License: BSD-3-Clause-LBNL
  */
-#include <AMReX_Config.H>
+#include "pyAMReX.H"
+
 #include <AMReX_RealBox.H>
 #include <AMReX_IntVect.H>
-
-#include <pybind11/pybind11.h>
-#include <pybind11/operators.h>
-#include <pybind11/stl.h>
 
 #include <sstream>
 #include <string>
 #include <optional>
 #include <vector>
 
-namespace py = pybind11;
-using namespace amrex;
 
 void init_RealVect(py::module &m) {
+    using namespace amrex;
 
-     auto py_realvect = py::class_< RealVect>(m, "RealVect")
+    auto py_realvect = py::class_< RealVect>(m, "RealVect")
           .def("__repr__",
                [](py::object& obj) {
                     py::str py_name = obj.attr("__class__").attr("__name__");
