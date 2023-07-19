@@ -1,16 +1,14 @@
-#include <AMReX_Config.H>
-#include <AMReX_Dim3.H>
+#include "pyAMReX.H"
 
-#include <pybind11/pybind11.h>
-#include <pybind11/stl.h>
+#include <AMReX_Dim3.H>
 
 #include <sstream>
 
-namespace py = pybind11;
-using namespace amrex;
 
 void init_Dim3(py::module& m)
 {
+    using namespace amrex;
+
     py::class_<Dim3>(m, "Dim3")
         .def("__repr__",
              [](const Dim3& d) {

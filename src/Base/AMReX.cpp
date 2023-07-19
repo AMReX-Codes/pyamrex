@@ -1,15 +1,11 @@
-#include <AMReX_Config.H>
+#include "pyAMReX.H"
+
 #include <AMReX.H>
 #include <AMReX_Vector.H>
 #include <AMReX_ParmParse.H>
 
-#include <pybind11/pybind11.h>
-#include <pybind11/stl.h>
-
 #include <string>
 
-namespace py = pybind11;
-using namespace amrex;
 
 namespace amrex {
    struct Config {};
@@ -17,13 +13,15 @@ namespace amrex {
 
 void init_AMReX(py::module& m)
 {
+    using namespace amrex;
+
     py::class_<AMReX>(m, "AMReX")
         .def_static("empty", &AMReX::empty)
         .def_static("size", &AMReX::size)
         .def_static("erase", &AMReX::erase)
         .def_static("top", &AMReX::top,
                     py::return_value_policy::reference)
-        ;
+    ;
 
     py::class_<Config>(m, "Config")
         .def_property_readonly_static(

@@ -3,19 +3,17 @@
  * Authors: Axel Huebl
  * License: BSD-3-Clause-LBNL
  */
-#include <AMReX_Config.H>
-#include <AMReX_AmrMesh.H>
+#include "pyAMReX.H"
 
-#include <pybind11/pybind11.h>
-#include <pybind11/stl.h>
+#include <AMReX_AmrMesh.H>
 
 #include <sstream>
 
-namespace py = pybind11;
-using namespace amrex;
 
+void init_AmrMesh(py::module &m)
+{
+    using namespace amrex;
 
-void init_AmrMesh(py::module &m) {
     py::class_< AmrInfo >(m, "AmrInfo")
         .def("__repr__",
             [](AmrInfo const & amr_info) {
@@ -75,6 +73,5 @@ void init_AmrMesh(py::module &m) {
         .def("finest_level", &AmrMesh::finestLevel)
         .def("ref_ratio", py::overload_cast< >(&AmrMesh::refRatio, py::const_))
         .def("ref_ratio", py::overload_cast< int >(&AmrMesh::refRatio, py::const_))
-
     ;
 }

@@ -3,17 +3,14 @@
  * Authors: Axel Huebl
  * License: BSD-3-Clause-LBNL
  */
+#include "pyAMReX.H"
+
 #include <AMReX_Arena.H>
-
-#include <pybind11/pybind11.h>
-#include <pybind11/numpy.h>
-#include <pybind11/stl.h>
-
-namespace py = pybind11;
-using namespace amrex;
 
 
 void init_Arena(py::module &m) {
+    using namespace amrex;
+
     py::class_< Arena >(m, "Arena");
 
     m.def("The_Arena", &The_Arena, py::return_value_policy::reference)

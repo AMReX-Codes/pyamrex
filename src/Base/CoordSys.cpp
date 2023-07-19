@@ -1,16 +1,12 @@
-#include <AMReX_Config.H>
+#include "pyAMReX.H"
+
 #include <AMReX_CoordSys.H>
 
-#include <pybind11/pybind11.h>
-#include <pybind11/stl.h>
-
-#include <sstream>
-
-namespace py = pybind11;
-using namespace amrex;
 
 void init_CoordSys(py::module& m)
 {
+    using namespace amrex;
+
     py::class_<CoordSys> coord_sys(m, "CoordSys");
     coord_sys.def("__repr__",
              [](const CoordSys&) {

@@ -3,20 +3,18 @@
  * Authors: Ryan Sandberg
  * License: BSD-3-Clause-LBNL
  */
-#include <AMReX_Config.H>
+#include "pyAMReX.H"
+
 #include <AMReX_ArrayOfStructs.H>
 #include <AMReX_GpuAllocators.H>
 
-#include <pybind11/pybind11.h>
-#include <pybind11/stl.h>
-
 #include <sstream>
 
-namespace py = pybind11;
-using namespace amrex;
 
 namespace
 {
+    using namespace amrex;
+
     /** CPU: __array_interface__ v3
      *
      * https://numpy.org/doc/stable/reference/arrays.interface.html
@@ -65,6 +63,8 @@ template <typename T_ParticleType,
           template<class> class Allocator=DefaultAllocator>
 void make_ArrayOfStructs(py::module &m, std::string allocstr)
 {
+    using namespace amrex;
+
     using AOSType = ArrayOfStructs<T_ParticleType, Allocator>;
     using ParticleType  = T_ParticleType;
 
@@ -124,6 +124,8 @@ void make_ArrayOfStructs(py::module &m, std::string allocstr)
 template <int NReal, int NInt>
 void make_ArrayOfStructs(py::module &m)
 {
+    using namespace amrex;
+
     // AMReX legacy AoS position + id/cpu particle ype
     using ParticleType = Particle<NReal, NInt>;
 

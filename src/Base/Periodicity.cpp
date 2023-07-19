@@ -3,22 +3,21 @@
  * Authors: Axel Huebl
  * License: BSD-3-Clause-LBNL
  */
+#include "pyAMReX.H"
+
 #include <AMReX_Periodicity.H>
 #include <AMReX_Box.H>
 #include <AMReX_IntVect.H>
 #include <AMReX_SPACE.H>
 
-#include <pybind11/pybind11.h>
-#include <pybind11/operators.h>
-#include <pybind11/stl.h>
-
 #include <ios>
 #include <sstream>
 
-namespace py = pybind11;
-using namespace amrex;
 
-void init_Periodicity(py::module &m) {
+void init_Periodicity(py::module &m)
+{
+    using namespace amrex;
+
     py::class_< Periodicity >(m, "Periodicity")
         .def("__repr__",
             [](Periodicity const & p) {

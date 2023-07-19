@@ -1,22 +1,19 @@
-#include <AMReX_Config.H>
+#include "pyAMReX.H"
+
 #include <AMReX_Geometry.H>
 #include <AMReX_CoordSys.H>
 #include <AMReX_MultiFab.H>
 #include <AMReX_Periodicity.H>
 
-#include <pybind11/pybind11.h>
-// #include <pybind11/operators.h>
-#include <pybind11/stl.h>
-
 #include <sstream>
 #include <string>
 #include <stdexcept>
 
-namespace py = pybind11;
-using namespace amrex;
 
 void init_Geometry(py::module& m)
 {
+    using namespace amrex;
+
     py::class_<GeometryData>(m, "GeometryData")
         .def("__repr__",
             [](const GeometryData&) {

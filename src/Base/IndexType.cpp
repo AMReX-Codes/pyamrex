@@ -3,21 +3,16 @@
  * Authors: David Grote
  * License: BSD-3-Clause-LBNL
  */
-#include <AMReX_Config.H>
+#include "pyAMReX.H"
+
 #include <AMReX_Dim3.H>
 #include <AMReX_IntVect.H>
 #include <AMReX_IndexType.H>
-
-#include <pybind11/pybind11.h>
-#include <pybind11/stl.h>
-#include <pybind11/numpy.h>
 
 #include <array>
 #include <sstream>
 #include <string>
 
-namespace py = pybind11;
-using namespace amrex;
 
 namespace {
     int check_index(const int i)
@@ -30,6 +25,8 @@ namespace {
 }
 
 void init_IndexType(py::module &m) {
+    using namespace amrex;
+
     py::class_< IndexType > index_type(m, "IndexType");
     index_type.def("__repr__",
              [](py::object& obj) {

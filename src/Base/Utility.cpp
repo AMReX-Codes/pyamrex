@@ -3,12 +3,12 @@
  * License: BSD-3-Clause-LBNL
  * Authors: Revathi Jambunathan, Axel Huebl
  */
-#include <AMReX_Utility.H>
-#include <pybind11/pybind11.h>
-#include <sstream>
+#include "pyAMReX.H"
 
-namespace py = pybind11;
-using namespace amrex;
+#include <AMReX_Utility.H>
+
+#include <string>
+
 
 void init_Utility(py::module& m)
 {

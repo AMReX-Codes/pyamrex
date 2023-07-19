@@ -3,22 +3,19 @@
  * Authors: Axel Huebl
  * License: BSD-3-Clause-LBNL
  */
-#include <AMReX_Config.H>
+#include "pyAMReX.H"
+
 #include <AMReX_Box.H>
 #include <AMReX_IntVect.H>
-
-#include <pybind11/pybind11.h>
-#include <pybind11/operators.h>
-#include <pybind11/stl.h>
 
 #include <sstream>
 #include <optional>
 
-namespace py = pybind11;
-using namespace amrex;
 
 namespace
 {
+    using namespace amrex;
+
     /** A little Wrapper class to iterate an amrex::Box via
      *  amrex::Box::next().
      */
@@ -66,8 +63,9 @@ namespace
 }
 
 void init_Box(py::module &m) {
-    py::class_< Direction >(m, "Direction");
+    using namespace amrex;
 
+    py::class_< Direction >(m, "Direction");
 
 
     py::class_< Box >(m, "Box")

@@ -3,16 +3,12 @@
  * Authors: Axel Huebl
  * License: BSD-3-Clause-LBNL
  */
-#include <AMReX_Config.H>
-#include <AMReX.H>
+#include "pyAMReX.H"
 
-#include <pybind11/pybind11.h>
-#include <pybind11/stl.h>
+#include <AMReX.H>
 
 #define STRINGIFY(x) #x
 #define MACRO_STRINGIFY(x) STRINGIFY(x)
-
-namespace py = pybind11;
 
 
 // forward declarations of exposed classes

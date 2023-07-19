@@ -3,18 +3,17 @@
  * Authors: Axel Huebl
  * License: BSD-3-Clause-LBNL
  */
-#include <AMReX_FArrayBox.H>
+#include "pyAMReX.H"
 
-#include <pybind11/pybind11.h>
-#include <pybind11/stl.h>
+#include <AMReX_FArrayBox.H>
 
 #include <istream>
 
-namespace py = pybind11;
-using namespace amrex;
 
 namespace
 {
+    using namespace amrex;
+
     template< typename T >
     void init_bf(py::module &m, std::string typestr) {
         auto const bf_name = std::string("BaseFab_").append(typestr);
@@ -122,5 +121,7 @@ namespace
 }
 
 void init_BaseFab(py::module &m) {
+    using namespace amrex;
+
     init_bf<Real>(m, "Real");
 }
