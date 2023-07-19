@@ -45,6 +45,7 @@ void init_PODVector(py::module &);
 void init_Utility(py::module &);
 void init_Vector(py::module &);
 
+
 #if AMREX_SPACEDIM == 1
 PYBIND11_MODULE(amrex_1d_pybind, m) {
 #elif AMREX_SPACEDIM == 2
@@ -115,7 +116,7 @@ PYBIND11_MODULE(amrex_3d_pybind, m) {
     init_ParticleContainer(m);
     init_AmrMesh(m);
 
-    // Wrappers around functions, independent of parent to child order
+    // Wrappers around standalone functions
     init_Utility(m);
 
     // API runtime version
