@@ -135,7 +135,7 @@ python3 -m pip install -v --force-reinstall --no-deps .
 
 If you are iterating on builds, it will faster to rely on ``ccache`` and to let CMake call the ``pip`` install logic:
 ```bash
-cmake -S . -B build
+cmake -S . -B build -DAMReX_SPACEDIM="1;2;3"
 cmake --build build --target pip_install -j 8
 ```
 
@@ -168,7 +168,7 @@ If you are using the pip-driven install, selected [AMReX CMake options](https://
 | `AMREX_GPU_BACKEND`          | **NONE**/SYCL/CUDA/HIP                     | On-node, accelerated GPU backend                             |
 | `AMREX_MPI`                  | ON/**OFF**                                 | Enable MPI                                                   |
 | `AMREX_PRECISION`            | SINGLE/**DOUBLE**                          | Precision of AMReX Real type                                 |
-| `AMREX_SPACEDIM`             | 1/2/**3**                                  | Dimension of AMReX                                           |
+| `AMREX_SPACEDIM`             | "1;2;3"                                    | Dimension(s) of AMReX as a ``;``-separated list              |
 | `AMREX_BUILD_SHARED_LIBS`    | ON/**OFF**                                 | Build the core AMReX library as shared library               |
 | `AMREX_SRC`                  | *None*                                     | Absolute path to AMReX source directory (preferred if set)   |
 | `AMREX_REPO`                 | `https://github.com/AMReX-Codes/amrex.git` | Repository URI to pull and build AMReX from                  |
@@ -184,6 +184,7 @@ Furthermore, pyAMReX adds a few selected CMake build options:
 
 | CMake Option                 | Default & Values                           | Description                                                   |
 |------------------------------|--------------------------------------------|---------------------------------------------------------------|
+| `AMReX_SPACEDIM`             | **3**, use `"1;2;3"` for all               | Dimension(s) of AMReX as a ``;``-separated list              |
 | `pyAMReX_IPO`                | **ON**/OFF                                 | Compile with interprocedural/link optimization (IPO/LTO)      |
 | `pyAMReX_amrex_src`          | *None*                                     | Absolute path to AMReX source directory (preferred if set)    |
 | `pyAMReX_amrex_internal`     | **ON**/OFF                                 | Needs a pre-installed AMReX library if set to `OFF`           |
@@ -193,6 +194,7 @@ Furthermore, pyAMReX adds a few selected CMake build options:
 | `pyAMReX_pybind11_internal`  | **ON**/OFF                                 | Needs a pre-installed pybind11 library if set to `OFF`        |
 | `pyAMReX_pybind11_repo`      | `https://github.com/pybind/pybind11.git`   | Repository URI to pull and build pybind11 from                |
 | `pyAMReX_pybind11_branch`    | `v2.10.1`                                  | Repository branch for `pyAMReX_pybind11_repo`                 |
+| `Python_EXECUTABLE`          | (newest found)                             | Path to Python executable                                     |
 
 As one example, one can also build against a local AMReX copy.
 Assuming AMReX' source is located in `$HOME/src/amrex`, then `export AMREX_SRC=$HOME/src/amrex`.
