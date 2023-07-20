@@ -140,3 +140,8 @@ def test_iv_iter():
     b1 = [x for x in b0]
 
     np.testing.assert_allclose(a1, b1)
+
+
+def test_iv_d_decl():
+    iv = amr.IntVect(*amr.d_decl(1, 2, 3))
+    assert iv == amr.IntVect(1, 2, 3)
