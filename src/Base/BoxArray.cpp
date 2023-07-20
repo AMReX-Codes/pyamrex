@@ -161,11 +161,11 @@ void init_BoxArray(py::module &m) {
 */
         .def("__getitem__",
              [](const BoxArray& ba, const int i) {
-                 const int ii = (i >= 0) ? i : AMREX_SPACEDIM + i;
-                 if ((ii < 0) || (ii >= AMREX_SPACEDIM))
+                 const int ii = (i >= 0) ? i : ba.size() + i;
+                 if ((ii < 0) || (ii >= ba.size()))
                      throw py::index_error(
                          "Index must be between 0 and " +
-                         std::to_string(AMREX_SPACEDIM));
+                         std::to_string(ba.size()));
                  return ba[ii];
              })
 
