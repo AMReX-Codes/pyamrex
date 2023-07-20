@@ -37,6 +37,7 @@ void init_ArrayOfStructs(py::module &);
 void init_ParticleTile(py::module &);
 void init_ParticleContainer(py::module &);
 void init_Periodicity(py::module &);
+void init_PlotFileUtil(py::module &);
 void init_PODVector(py::module &);
 void init_Utility(py::module &);
 void init_Vector(py::module &);
@@ -77,6 +78,7 @@ PYBIND11_MODULE(amrex_3d_pybind, m) {
                ParticleTile
                ParticleContainer
                Periodicity
+               PlotFileUtil
                PODVector
                StructOfArrays
                Utility
@@ -113,6 +115,7 @@ PYBIND11_MODULE(amrex_3d_pybind, m) {
     init_AmrMesh(m);
 
     // Wrappers around standalone functions
+    init_PlotFileUtil(m);
     init_Utility(m);
 
     // API runtime version
