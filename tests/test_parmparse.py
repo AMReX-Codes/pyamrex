@@ -10,7 +10,7 @@ def test_parmparse():
     dt = 0.0
     pp = amr.ParmParse("")
     dir_name = os.path.dirname(__file__)
-    pp.addfile(dir_name+"/parmparse_inputs")
+    pp.addfile(dir_name + "/parmparse_inputs")
     pp_param = amr.ParmParse("param")
     (_, ncell) = pp_param.query_int("ncell")
     dt = pp_param.get_real("dt")
