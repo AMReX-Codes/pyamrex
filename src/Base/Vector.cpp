@@ -45,7 +45,8 @@ void make_Vector(py::module &m, std::string typestr)
     using Vector_type = Vector<T, Allocator>;
     auto const v_name = std::string("Vector_").append(typestr);
 
-    py::class_<Vector_type>(m, v_name.c_str())
+    auto py_vect = py::bind_vector<Vector_type>(m, v_name.c_str());
+    py_vect
         .def("__repr__",
              [typestr](Vector_type const & v) {
                  std::stringstream s, rs;
@@ -61,9 +62,14 @@ void make_Vector(py::module &m, std::string typestr)
              }
         )
         .def(py::init<>())
+        .def(py::init<Vector_type const &>())
 
         .def("size", &Vector_type::size)
+    ;
 
+    if constexpr(!std::is_same_v<T, std::string>)
+    {
+      py_vect
         .def_property_readonly("__array_interface__", [](Vector_type const & vector) {
             return array_interface(vector);
         })
@@ -87,8 +93,10 @@ void make_Vector(py::module &m, std::string typestr)
 
             d["version"] = 3;
             return d;
-        })
+        });
+    }
 
+    py_vect
         // setter & getter
         .def("__setitem__", [](Vector_type & vector, int const idx, T const value){ vector[idx] = value; })
         .def("__getitem__", [](Vector_type & v, int const idx){ return v[idx]; })
@@ -106,4 +114,6 @@ void init_Vector(py::module& m)
     make_Vector<int> (m, "int");
     if constexpr(!std::is_same_v<int, Long>)
         make_Vector<Long> (m, "Long");
+
+    make_Vector<std::string> (m, "string");
 }

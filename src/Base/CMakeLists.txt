@@ -20,6 +20,7 @@ foreach(D IN LISTS AMReX_SPACEDIM)
         ParallelDescriptor.cpp
         ParmParse.cpp
         Periodicity.cpp
+        PlotFileUtil.cpp
         PODVector.cpp
         Utility.cpp
         Vector.cpp
