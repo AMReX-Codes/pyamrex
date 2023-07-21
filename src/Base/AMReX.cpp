@@ -101,6 +101,9 @@ void init_AMReX(py::module& m)
           }, py::return_value_policy::reference,
           "Initialize AMReX library");
 
+    m.def("initialized", &Initialized);
+    m.def("size", &AMReX::size);
+
     constexpr auto run_gc = []() {
         // explicitly run the garbage collector, so deleted objects
         // get freed.
