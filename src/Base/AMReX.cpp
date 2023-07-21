@@ -101,8 +101,12 @@ void init_AMReX(py::module& m)
           }, py::return_value_policy::reference,
           "Initialize AMReX library");
 
-    m.def("initialized", &Initialized);
-    m.def("size", &AMReX::size);
+    m.def("initialized", &Initialized,
+          "Returns true if there are any currently-active and initialized "
+          "AMReX instances (i.e. one for which amrex::Initialize has been called, "
+          "and amrex::Finalize has not). Otherwise false.");
+    m.def("size", &AMReX::size,
+          "The amr stack size, the number of amr instances pushed.");
 
     constexpr auto run_gc = []() {
         // explicitly run the garbage collector, so deleted objects
