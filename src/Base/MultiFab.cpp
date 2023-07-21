@@ -17,6 +17,18 @@
 #include <memory>
 #include <string>
 
+namespace {
+    void check_comp(amrex::MultiFab const & mf, const int comp, std::string const name)
+    {
+        if (comp < 0 || comp >= mf.nComp())
+            throw py::index_error("MultiFab::" + name + " comp out of bounds");
+    }
+    void check_nghost(amrex::MultiFab const & mf, const int nghost, std::string const name)
+    {
+        if (nghost < 0 || nghost > mf.nGrowVect().min())
+            throw py::index_error("MultiFab::" + name + " nghost out of bounds");
+    }
+}
 
 void init_MultiFab(py::module &m)
 {
@@ -229,18 +241,38 @@ void init_MultiFab(py::module &m)
 
         /* sizes, etc. */
         .def("min",
-             [](MultiFab const & mf, int comp) { return mf.min(comp); })
+             [](MultiFab const & mf, int comp, int nghost, bool local) {
+                 check_comp(mf, comp, "min");
+                 check_nghost(mf, nghost, "min");
+                 return mf.min(comp, nghost, local); },
+             py::arg("comp") = 0, py::arg("nghost") = 0, py::arg("local") = false,
+             "Returns the minimum value of the specfied component of the MultiFab."
+             )
         .def("min",
-             py::overload_cast< int, int, bool >(&MultiFab::min, py::const_))
-        .def("min",
-             py::overload_cast< Box const &, int, int, bool >(&MultiFab::min, py::const_))
+             [](MultiFab const & mf, Box const & region, int comp, int nghost, bool local) {
+                 check_comp(mf, comp, "min");
+                 check_nghost(mf, nghost, "min");
+                 return mf.min(region, comp, nghost, local); },
+             py::arg("region"), py::arg("comp") = 0, py::arg("nghost") = 0, py::arg("local") = false,
+             "Returns the minimum value of the specfied component of the MultiFab over the region."
+             )
 
         .def("max",
-             [](MultiFab const & mf, int comp) { return mf.max(comp); })
+             [](MultiFab const & mf, int comp, int nghost, bool local) {
+                 check_comp(mf, comp, "max");
+                 check_nghost(mf, nghost, "max");
+                 return mf.max(comp, nghost, local); },
+             py::arg("comp") = 0, py::arg("nghost") = 0, py::arg("local") = false,
+             "Returns the maximum value of the specfied component of the MultiFab."
+             )
         .def("max",
-             py::overload_cast< int, int, bool >(&MultiFab::max, py::const_))
-        .def("max",
-             py::overload_cast< Box const &, int, int, bool >(&MultiFab::max, py::const_))
+             [](MultiFab const & mf, Box const & region, int comp, int nghost, bool local) {
+                 check_comp(mf, comp, "max");
+                 check_nghost(mf, nghost, "max");
+                 return mf.max(region, comp, nghost, local); },
+             py::arg("region"), py::arg("comp") = 0, py::arg("nghost") = 0, py::arg("local") = false,
+             "Returns the maximum value of the specfied component of the MultiFab over the region."
+             )
 
         .def("minIndex", &MultiFab::minIndex)
         .def("maxIndex", &MultiFab::maxIndex)
