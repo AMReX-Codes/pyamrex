@@ -24,13 +24,32 @@ void make_StructOfArrays(py::module &m, std::string allocstr)
     py::class_<SOAType>(m, soa_name.c_str())
         .def(py::init())
         .def("define", &SOAType::define)
-        .def("NumRealComps", &SOAType::NumRealComps)
-        .def("NumIntComps", &SOAType::NumIntComps)
+        .def("NumRealComps", &SOAType::NumRealComps,
+             "Get the number of compile-time + runtime Real components")
+        .def("NumIntComps", &SOAType::NumIntComps,
+             "Get the number of compile-time + runtime Int components")
+
+        // compile-time components
         .def("GetRealData", py::overload_cast<>(&SOAType::GetRealData),
-            py::return_value_policy::reference_internal)
+            py::return_value_policy::reference_internal,
+            "Get access to the particle Real Arrays (only compile-time components)")
         .def("GetIntData", py::overload_cast<>(&SOAType::GetIntData),
-            py::return_value_policy::reference_internal)
-        .def("size", &SOAType::size)
+            py::return_value_policy::reference_internal,
+            "Get access to the particle Int Arrays (only compile-time components)")
+        // compile-time and runtime components
+        .def("GetRealData", py::overload_cast<const int>(&SOAType::GetRealData),
+             py::return_value_policy::reference_internal,
+             py::arg("index"),
+             "Get access to a particle Real component Array (compile-time and runtime component)")
+        .def("GetIntData", py::overload_cast<const int>(&SOAType::GetIntData),
+             py::return_value_policy::reference_internal,
+             py::arg("index"),
+             "Get access to a particle Real component Array (compile-time and runtime component)")
+
+        .def("size", &SOAType::size,
+             "Get the number of particles")
+        .def("__len__", &SOAType::size,
+             "Get the number of particles")
         .def("numParticles", &SOAType::numParticles)
         .def("numRealParticles", &SOAType::numRealParticles)
         .def("numTotalParticles", &SOAType::numTotalParticles)
