@@ -9,7 +9,7 @@ def test_parmparse():
     dir_name = os.path.dirname(__file__)
     pp.addfile(os.path.join(dir_name, "/parmparse_inputs"))
     pp_param = amr.ParmParse("param")
-    (_, ncell) = pp_param.query_int("ncell")
+    _, ncell = pp_param.query_int("ncell")
     dt = pp_param.get_real("dt")
     dopml = pp_param.get_bool("do_pml")
 
