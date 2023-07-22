@@ -5,12 +5,9 @@ import amrex.space3d as amr
 
 
 def test_parmparse():
-    dopml = False
-    ncell = 10
-    dt = 0.0
     pp = amr.ParmParse("")
     dir_name = os.path.dirname(__file__)
-    pp.addfile(dir_name + "/parmparse_inputs")
+    pp.addfile(os.path.join(dir_name, "/parmparse_inputs"))
     pp_param = amr.ParmParse("param")
     (_, ncell) = pp_param.query_int("ncell")
     dt = pp_param.get_real("dt")
