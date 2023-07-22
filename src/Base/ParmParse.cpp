@@ -30,7 +30,7 @@ void init_ParmParse(py::module &m)
 
         .def("remove", &ParmParse::remove)
 
-        .def("addfile", &ParmParse::addfile)
+        .def_static("addfile", &ParmParse::addfile)
 
         .def("add", py::overload_cast<char const*, bool const>(&ParmParse::add))
         .def("add", py::overload_cast<char const*, int const>(&ParmParse::add))
@@ -52,6 +52,41 @@ void init_ParmParse(py::module &m)
         .def("addarr", py::overload_cast<char const*, std::vector<amrex::Box> const &>(&ParmParse::addarr))
 
         // TODO: getters and queries
+        .def("get_bool",
+            [](ParmParse &pp, std::string name, int ival) {
+                bool ref;
+                pp.get(name.c_str(), ref, ival);
+                return ref;
+            },
+            "parses input values", py::arg("name"), py::arg("ival")=0
+         )
+
+        .def("get_int",
+            [](ParmParse &pp, std::string name, int ival) {
+                int ref;
+                pp.get(name.c_str(), ref, ival);
+                return ref;
+            },
+            "parses input values", py::arg("name"), py::arg("ival")=0
+         )
+
+        .def("get_real",
+            [](ParmParse &pp, std::string name, int ival) {
+                amrex::Real ref;
+                pp.get(name.c_str(), ref, ival);
+                return ref;
+            },
+            "parses input values", py::arg("name"), py::arg("ival")=0
+         )
+
+         .def("query_int",
+             [](ParmParse &pp, std::string name, int ival) {
+                 int ref;
+                 bool exist = pp.query(name.c_str(), ref, ival);
+                 return std::make_tuple(exist,ref);
+             },
+             "queries input values", py::arg("name"), py::arg("ival")=0
+         )
 
         // TODO: dumpTable, hasUnusedInputs, getUnusedInputs, getEntries
     ;

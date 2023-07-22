@@ -1,0 +1,3 @@
+param.dt = 1.e-5
+param.ncell = 100
+param.do_pml = 1
