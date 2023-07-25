@@ -5,12 +5,13 @@
  */
 #include "pyAMReX.H"
 
-#include <AMReX_PODVector.H>
+#include <AMReX_Vector.H>
 
+#include <memory>
+#include <optional>
 #include <sstream>
 #include <string>
 #include <type_traits>
-#include <optional>
 #include <vector>
 
 
