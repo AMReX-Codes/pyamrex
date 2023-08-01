@@ -144,4 +144,3 @@ def test_ptile_aos():
     cpus = amr.unpack_cpus(cpuids)
     assert(np.array_equal(ids, np.array([0, 0, 0, 0, 0])))
     assert(np.array_equal(cpus,np.array([100, 100, 100, 100, 100])))
-}
