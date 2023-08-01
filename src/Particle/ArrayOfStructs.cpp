@@ -15,6 +15,23 @@ namespace
 {
     using namespace amrex;
 
+    // Note - this function MUST be consistent with AMReX_Particle.H
+    Long unpack_id (uint64_t cpuid) {
+        Long r = 0;
+
+        uint64_t sign = cpuid >> 63;  // extract leftmost sign bit
+        uint64_t val  = ((cpuid >> 24) & 0x7FFFFFFFFF);  // extract next 39 id bits
+
+        Long lval = static_cast<Long>(val);  // bc we take -
+        r = (sign) ? lval : -lval;
+        return r;
+    }
+
+    // Note - this function MUST be consistent with AMReX_Particle.H
+    int unpack_cpu (uint64_t cpuid) {
+        return static_cast<int>(cpuid & 0x00FFFFFF);
+    }
+
     /** CPU: __array_interface__ v3
      *
      * https://numpy.org/doc/stable/reference/arrays.interface.html
@@ -156,4 +173,7 @@ void init_ArrayOfStructs(py::module& m) {
     make_ArrayOfStructs<0, 0> (m);  // WarpX 22.07, ImpactX 22.07, HiPACE++ 22.07
     make_ArrayOfStructs<1, 1> (m);  // test in ParticleContainer
     make_ArrayOfStructs<2, 1> (m);  // test
+
+    m.def("unpack_ids", py::vectorize(unpack_id));
+    m.def("unpack_cpus", py::vectorize(unpack_cpu));
 }
