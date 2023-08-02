@@ -137,3 +137,11 @@ def test_ptile_aos():
     print(aos)
     assert np.isclose(aos[0]["x"], 3.0) and np.isclose(aos[0]["y"], 0)
     assert np.isclose(aos[2][0], 0.0) and np.isclose(aos[2][2], 20)
+
+
+def test_ptile_aos():
+    cpuids = np.array([100, 100, 100, 100, 100], dtype=np.uint64)
+    ids = amr.unpack_ids(cpuids)
+    cpus = amr.unpack_cpus(cpuids)
+    assert np.array_equal(ids, np.array([0, 0, 0, 0, 0]))
+    assert np.array_equal(cpus, np.array([100, 100, 100, 100, 100]))
