@@ -56,7 +56,7 @@ pyAMReX depends on the following popular third party software.
 - [CMake 3.20.0+](https://cmake.org)
 - [AMReX *development*](https://amrex-codes.github.io): we automatically download and compile a copy of AMReX
 - [pybind11](https://github.com/pybind/pybind11/) 2.10.1+: we automatically download and compile a copy of pybind11 ([new BSD](https://github.com/pybind/pybind11/blob/master/LICENSE))
-  - [Python](https://python.org) 3.7+
+  - [Python](https://python.org) 3.8+
   - [Numpy](https://numpy.org) 1.15+
 
 Optional dependencies include:
