@@ -60,7 +60,7 @@ pyAMReX depends on the following popular third party software.
   - [Numpy](https://numpy.org) 1.15+
 
 Optional dependencies include:
-- [mpi4py](https://www.openmp.org) 2.1+: for multi-node and/or multi-GPU execution
+- [mpi4py](https://mpi4py.readthedocs.io) 2.1+: for multi-node and/or multi-GPU execution
 - [CCache](https://ccache.dev): to speed up rebuilds (for CUDA support, needs 3.7.9+ and 4.2+ is recommended)
 - further [optional dependencies of AMReX](https://github.com/AMReX-Codes/amrex/)
 - [pytest](https://docs.pytest.org/en/stable/) 6.2+: for running unit tests
