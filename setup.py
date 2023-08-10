@@ -216,8 +216,8 @@ setup(
     # Python sources:
     package_dir={"": "src"},
     # pyAMReX authors:
-    author="Axel Huebl, Ryan Sandberg, Shreyas Ananthan, Remi Lehe, Weiqun Zhang, et al.",
-    author_email="axelhuebl@lbl.gov, rsandberg@lbl.gov, shreyas.ananthan@nrel.gov, rlehe@lbl.gov, weiqunzhang@lbl.gov",
+    author="Axel Huebl, Ryan T. Sandberg, Shreyas Ananthan, David P. Grote, Revathi Jambunathan, Edoardo Zoni, Remi Lehe, Andrew Myers, Weiqun Zhang",
+    author_email="axelhuebl@lbl.gov",
     # wheel/pypi packages:
     maintainer="Axel Huebl",
     maintainer_email="axelhuebl@lbl.gov",
