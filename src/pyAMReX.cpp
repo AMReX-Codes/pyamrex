@@ -41,6 +41,7 @@ void init_PlotFileUtil(py::module &);
 void init_PODVector(py::module &);
 void init_Utility(py::module &);
 void init_Vector(py::module &);
+void init_Version(py::module &);
 
 
 #if AMREX_SPACEDIM == 1
@@ -117,14 +118,7 @@ PYBIND11_MODULE(amrex_3d_pybind, m) {
     // Wrappers around standalone functions
     init_PlotFileUtil(m);
     init_Utility(m);
-
-    // API runtime version
-    //   note PEP-440 syntax: x.y.zaN but x.y.z.devN
-#ifdef PYAMReX_VERSION_INFO
-    m.attr("__version__") = MACRO_STRINGIFY(PYAMReX_VERSION_INFO);
-#else
-    m.attr("__version__") = "dev";
-#endif
+    init_Version(m);
 
     // authors
     m.attr("__author__") =

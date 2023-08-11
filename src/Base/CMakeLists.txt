@@ -24,5 +24,6 @@ foreach(D IN LISTS AMReX_SPACEDIM)
         PODVector.cpp
         Utility.cpp
         Vector.cpp
+        Version.cpp
     )
 endforeach()
