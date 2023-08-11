@@ -32,3 +32,9 @@ __author__ = amrex_1d_pybind.__author__
 #
 def d_decl(x, y, z):
     return (x,)
+
+
+def Print(*args, **kwargs):
+    """Wrap amrex::Print() - only the IO processor writes"""
+    if ParallelDescriptor.IOProcessor():
+        print(*args, **kwargs)
