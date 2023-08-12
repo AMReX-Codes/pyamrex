@@ -4,6 +4,7 @@
 #include <AMReX_CoordSys.H>
 #include <AMReX_MultiFab.H>
 #include <AMReX_Periodicity.H>
+#include <AMReX_REAL.H>
 
 #include <sstream>
 #include <string>
@@ -194,10 +195,10 @@ void init_Geometry(py::module& m)
         .def("setPeriodicity", &Geometry::setPeriodicity)
         .def("coarsen", &Geometry::coarsen)
         .def("refine", &Geometry::refine)
-        .def("outsideRoundOffDomain", py::overload_cast<AMREX_D_DECL(Real, Real, Real)>
+        .def("outsideRoundOffDomain", py::overload_cast<AMREX_D_DECL(ParticleReal, ParticleReal, ParticleReal)>
                 (&Geometry::outsideRoundoffDomain, py::const_),
             "Returns true if a point is outside the roundoff domain. All particles with positions inside the roundoff domain are sure to be mapped to cells inside the Domain() box. Note that the same need not be true for all points inside ProbDomain()")
-        .def("insideRoundOffDomain", py::overload_cast<AMREX_D_DECL(Real, Real, Real)>
+        .def("insideRoundOffDomain", py::overload_cast<AMREX_D_DECL(ParticleReal, ParticleReal, ParticleReal)>
                 (&Geometry::insideRoundoffDomain, py::const_),
             "Returns true if a point is inside the roundoff domain. All particles with positions inside the roundoff domain are sure to be mapped to cells inside the Domain() box. Note that the same need not be true for all points inside ProbDomain()")
 
