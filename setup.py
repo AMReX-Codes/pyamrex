@@ -211,7 +211,7 @@ with open("./requirements.txt") as f:
 setup(
     name="amrex",
     # note PEP-440 syntax: x.y.zaN but x.y.z.devN
-    version="23.06",
+    version="23.08",
     packages=["amrex"],
     # Python sources:
     package_dir={"": "src"},
@@ -231,8 +231,8 @@ setup(
         "Tutorials": "https://amrex-codes.github.io/amrex/tutorials_html/",
         "Doxygen": "https://amrex-codes.github.io/amrex/doxygen/",
         "Reference": "https://doi.org/10.5281/zenodo.2555438",
-        "Source": "https://github.com/AMReX-Codes/amrex",
-        "Tracker": "https://github.com/AMReX-Codes/amrex/issues",
+        "Source": "https://github.com/AMReX-Codes/pyamrex",
+        "Tracker": "https://github.com/AMReX-Codes/pyamrex/issues",
     },
     # CMake: self-built as extension module
     ext_modules=cxx_modules,
