@@ -59,8 +59,6 @@ option(pyAMReX_IPO
     ON
 )
 
-set(pyAMReX_VERSION_INFO "" CACHE STRING
-    "PEP-440 conformant version (set by distutils)")
 # change the default build type to Release (or RelWithDebInfo) instead of Debug
 set_default_build_type("Release")
 
@@ -185,11 +183,7 @@ endforeach()
 
 # Defines #####################################################################
 #
-# for module __version__
-foreach(D IN LISTS AMReX_SPACEDIM)
-    target_compile_definitions(pyAMReX_${D}d PRIVATE
-        PYAMReX_VERSION_INFO=${pyAMReX_VERSION_INFO})
-endforeach()
+# none needed - please use AMReX_Config.H
 
 
 # Warnings ####################################################################
