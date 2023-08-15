@@ -32,3 +32,12 @@ __author__ = amrex_3d_pybind.__author__
 #
 def d_decl(x, y, z):
     return (x, y, z)
+
+
+def Print(*args, **kwargs):
+    """Wrap amrex::Print() - only the IO processor writes"""
+    if not initialized():
+        print("warning: Print all - AMReX not initialized")
+        print(*args, **kwargs)
+    elif ParallelDescriptor.IOProcessor():
+        print(*args, **kwargs)
