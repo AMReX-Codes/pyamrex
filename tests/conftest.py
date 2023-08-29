@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import itertools
+import os
 
 import pytest
 
@@ -17,6 +18,9 @@ except ImportError:
 
 if amr.Config.have_mpi:
     from mpi4py import MPI
+
+# base path for input files
+basepath = os.getcwd()
 
 
 @pytest.fixture(autouse=True, scope="function")
