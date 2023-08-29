@@ -35,8 +35,8 @@ def amrex_init(tmpdir):
                 # "abort_on_out_of_gpu_memory=1",
             ]
         )
-    yield
-    amr.finalize()
+        yield
+        amr.finalize()
 
 
 @pytest.fixture(scope="function")
