@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import itertools
+import os
 
 import pytest
 
@@ -18,24 +19,28 @@ except ImportError:
 if amr.Config.have_mpi:
     from mpi4py import MPI
 
+# base path for input files
+basepath = os.getcwd()
+
 
 @pytest.fixture(autouse=True, scope="function")
-def amrex_init():
-    amr.initialize(
-        [
-            # print AMReX status messages
-            "amrex.verbose=2",
-            # throw exceptions and create core dumps instead of
-            # AMReX backtrace files: allows to attach to
-            # debuggers
-            "amrex.throw_exception=1",
-            "amrex.signal_handling=0",
-            # abort GPU runs if out-of-memory instead of swapping to host RAM
-            # "abort_on_out_of_gpu_memory=1",
-        ]
-    )
-    yield
-    amr.finalize()
+def amrex_init(tmpdir):
+    with tmpdir.as_cwd():
+        amr.initialize(
+            [
+                # print AMReX status messages
+                "amrex.verbose=2",
+                # throw exceptions and create core dumps instead of
+                # AMReX backtrace files: allows to attach to
+                # debuggers
+                "amrex.throw_exception=1",
+                "amrex.signal_handling=0",
+                # abort GPU runs if out-of-memory instead of swapping to host RAM
+                # "abort_on_out_of_gpu_memory=1",
+            ]
+        )
+        yield
+        amr.finalize()
 
 
 @pytest.fixture(scope="function")
