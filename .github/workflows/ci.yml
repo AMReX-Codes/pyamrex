@@ -1,0 +1,34 @@
+name: 👑 CI
+
+# This workflow updates the .pyi stub files for documentation and interactive use.
+
+on: [push, pull_request]
+
+concurrency:
+  group: ${{ github.ref }}-${{ github.head_ref }}-ci
+  cancel-in-progress: true
+
+jobs:
+  stubs:
+    name: 🔄 Update Stub Files
+    uses: ./.github/workflows/stubs.yml
+  ubuntu:
+    name: 🐧 Ubuntu
+    needs: stubs
+    uses: ./.github/workflows/ubuntu.yml
+  intel:
+    name: 🐧 Intel
+    needs: stubs
+    uses: ./.github/workflows/intel.yml
+  hip:
+    name: 🐧 HIP
+    needs: stubs
+    uses: ./.github/workflows/hip.yml
+  macos:
+    name: 🍏 macOS
+    needs: stubs
+    uses: ./.github/workflows/macos.yml
+  windows:
+    name: 🪟 Windows
+    needs: stubs
+    uses: ./.github/workflows/windows.yml

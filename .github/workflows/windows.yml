@@ -1,6 +1,6 @@
 name: 🪟 Windows
 
-on: [push, pull_request]
+on: [workflow_call]
 
 concurrency:
   group: ${{ github.ref }}-${{ github.head_ref }}-windows
