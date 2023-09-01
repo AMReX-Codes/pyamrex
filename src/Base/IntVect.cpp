@@ -5,6 +5,8 @@
  */
 #include "pyAMReX.H"
 
+#include "Base/Vector.H"
+
 #include <AMReX_Dim3.H>
 #include <AMReX_IntVect.H>
 
@@ -153,4 +155,6 @@ void init_IntVect(py::module &m)
           py::overload_cast<const IntVect&, int>(&coarsen));
     m.def("refine",
           py::overload_cast<const Dim3&, const IntVect&>(&refine));
+
+    make_Vector<IntVect> (m, "IntVect");
 }

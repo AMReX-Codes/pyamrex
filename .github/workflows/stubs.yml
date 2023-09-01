@@ -56,7 +56,7 @@ jobs:
     - name: Run pre-commit cleanup
       run: |
         git add .
-        pre-commit run -a
+        pre-commit run -a || true
         git add .
 
     - name: Update Install

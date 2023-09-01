@@ -76,9 +76,12 @@ void make_Array4(py::module &m, std::string typestr)
 {
     using namespace amrex;
 
+    constexpr bool is_not_const = std::is_same_v<std::remove_cv_t<T>, T>;
+
     // dispatch simpler via: py::format_descriptor<T>::format() naming
     auto const array_name = std::string("Array4_").append(typestr);
-    py::class_< Array4<T> >(m, array_name.c_str())
+    py::class_< Array4<T> > py_array4(m, array_name.c_str());
+    py_array4
         .def("__repr__",
              [typestr](Array4<T> const & a4) {
                  std::stringstream s;
@@ -193,15 +196,7 @@ void make_Array4(py::module &m, std::string typestr)
         .def("contains", &Array4<T>::contains)
         //.def("__contains__", &Array4<T>::contains)
 
-        // setter & getter
-        .def("__setitem__", [](Array4<T> & a4, IntVect const & v, T const value){ a4(v) = value; })
-        .def("__setitem__", [](Array4<T> & a4, std::array<int, 4> const key, T const value){
-            a4(key[0], key[1], key[2], key[3]) = value;
-        })
-        .def("__setitem__", [](Array4<T> & a4, std::array<int, 3> const key, T const value){
-            a4(key[0], key[1], key[2]) = value;
-        })
-
+        // getter
         .def("__getitem__", [](Array4<T> & a4, IntVect const & v){ return a4(v); })
         .def("__getitem__", [](Array4<T> & a4, std::array<int, 4> const key){
             return a4(key[0], key[1], key[2], key[3]);
@@ -211,11 +206,25 @@ void make_Array4(py::module &m, std::string typestr)
         })
     ;
 
+    // setter
+    if constexpr (is_not_const)
+    {
+        py_array4
+            .def("__setitem__", [](Array4<T> & a4, IntVect const & v, T const value){ a4(v) = value; })
+            .def("__setitem__", [](Array4<T> & a4, std::array<int, 4> const key, T const value){
+                a4(key[0], key[1], key[2], key[3]) = value;
+            })
+            .def("__setitem__", [](Array4<T> & a4, std::array<int, 3> const key, T const value){
+                a4(key[0], key[1], key[2]) = value;
+            })
+        ;
+    }
+
     // free standing C++ functions:
-    m.def("lbound", &lbound< Array4<T> >);
-    m.def("ubound", &ubound< Array4<T> >);
-    m.def("length", &length< Array4<T> >);
-    m.def("makePolymorphic", &makePolymorphic< Array4<T> >);
+    m.def("lbound", &lbound< T >);
+    m.def("ubound", &ubound< T >);
+    m.def("length", &length< T >);
+    //m.def("makePolymorphic", &makePolymorphic< T >);
 }
 
 void init_Array4(py::module &m) {
@@ -232,6 +241,20 @@ void init_Array4(py::module &m) {
     make_Array4< unsigned int >(m, "uint");
     make_Array4< unsigned long >(m, "ulong");
     make_Array4< unsigned long long >(m, "ulonglong");
+
+    make_Array4< float const >(m, "float_const");
+    make_Array4< double const >(m, "double_const");
+    make_Array4< long double const >(m, "longdouble_const");
+
+    make_Array4< short const >(m, "short_const");
+    make_Array4< int const >(m, "int_const");
+    make_Array4< long const >(m, "long_const");
+    make_Array4< long long const >(m, "longlong_const");
+
+    make_Array4< unsigned short const >(m, "ushort_const");
+    make_Array4< unsigned int const >(m, "uint_const");
+    make_Array4< unsigned long const >(m, "ulong_const");
+    make_Array4< unsigned long long const >(m, "ulonglong_const");
 
     // std::complex< float|double|long double> ?
 

@@ -5,6 +5,8 @@
  */
 #include "pyAMReX.H"
 
+#include "Base/Vector.H"
+
 #include <AMReX_BoxArray.H>
 #include <AMReX_IntVect.H>
 
@@ -281,4 +283,6 @@ void init_BoxArray(py::module &m) {
 */
 
     ;
+
+    make_Vector<BoxArray> (m, "BoxArray");
 }

@@ -59,8 +59,8 @@ void make_Base_Iterators (py::module &m, std::string allocstr)
     auto py_it_base = py::class_<iterator_base, MFIter>(m, particle_it_base_name.c_str())
         .def(py::init<container&, int>(),
             py::arg("particle_container"), py::arg("level"))
-        .def(py::init<container&, int, MFItInfo&>(),
-             py::arg("particle_container"), py::arg("level"), py::arg("info"))
+        //.def(py::init<container&, int, MFItInfo&>(),
+        //     py::arg("particle_container"), py::arg("level"), py::arg("info"))
 
         .def("particle_tile", &iterator_base::GetParticleTile,
                                py::return_value_policy::reference_internal)
@@ -124,8 +124,8 @@ void make_Iterators (py::module &m, std::string allocstr)
         )
         .def(py::init<container&, int>(),
              py::arg("particle_container"), py::arg("level"))
-        .def(py::init<container&, int, MFItInfo&>(),
-             py::arg("particle_container"), py::arg("level"), py::arg("info"))
+        //.def(py::init<container&, int, MFItInfo&>(),
+        //     py::arg("particle_container"), py::arg("level"), py::arg("info"))
         .def_property_readonly_static("is_soa_particle", [](const py::object&){ return ParticleType::is_soa_particle;})
     ;
 }
@@ -316,8 +316,8 @@ void make_ParticleContainer_and_Iterators (py::module &m, std::string allocstr)
         // void WritePlotFilePre ();
 
         // void WritePlotFilePost ();
-        .def("GetParticles", py::overload_cast<>(&ParticleContainerType::GetParticles), py::return_value_policy::reference_internal)
-        .def("GetParticles", py::overload_cast<int>(&ParticleContainerType::GetParticles), py::return_value_policy::reference_internal)
+        //.def("GetParticles", py::overload_cast<>(&ParticleContainerType::GetParticles), py::return_value_policy::reference_internal)
+        .def("GetParticles", py::overload_cast<int>(&ParticleContainerType::GetParticles), py::return_value_policy::reference_internal, py::arg("level"))
         // .def("ParticlesAt", py::overload_cast<int,int,int>(&ParticleContainerType::ParticlesAt),
         //     py::return_value_policy::reference_internal)
         // .def("ParticlesAt", py::overload_cast<int,int,int>(&ParticleContainerType::ParticlesAt,py::const_))
@@ -346,6 +346,7 @@ void make_ParticleContainer_and_Iterators (py::module &m, std::string allocstr)
         //     { return ParticlesAt(lev, iter.index(), iter.LocalTileIndex()); }
         // .def("DefineAndReturnParticleTile", py::overload_cast<int,int,int>(&ParticleContainerType::DefineAndReturnParticleTile))
         // .def("DefineAndReturnParticleTile", py::overload_cast<int,int,int>(&ParticleContainerType::DefineAndReturnParticleTile, py::const_))
+        /*
         .def("DefineAndReturnParticleTile",
             [](ParticleContainerType& pc,
                 int lev,
@@ -353,6 +354,7 @@ void make_ParticleContainer_and_Iterators (py::module &m, std::string allocstr)
                 int tile) {
                 return pc.DefineAndReturnParticleTile(lev,grid,tile);
             })
+        */
         // ParticleTileType& DefineAndReturnParticleTile (int lev, int grid, int tile)
         // {
         //     m_particles[lev][std::make_pair(grid, tile)].define(NumRuntimeRealComps(), NumRuntimeIntComps());

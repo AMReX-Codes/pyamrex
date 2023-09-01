@@ -5,6 +5,8 @@
  */
 #include "pyAMReX.H"
 
+#include "Base/Vector.H"
+
 #include <AMReX_BoxArray.H>
 #include <AMReX_DistributionMapping.H>
 #include <AMReX_Vector.H>
@@ -73,4 +75,6 @@ void init_DistributionMapping(py::module &m) {
                 return dm[index];
             })
     ;
+
+    make_Vector<DistributionMapping> (m, "DistributionMapping");
 }

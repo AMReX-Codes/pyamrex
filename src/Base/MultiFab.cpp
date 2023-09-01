@@ -34,6 +34,10 @@ void init_MultiFab(py::module &m)
 {
     using namespace amrex;
 
+    py::class_< FabArrayBase > py_FabArrayBase(m, "FabArrayBase");
+    py::class_< FabArray<FArrayBox>, FabArrayBase > py_FabArray_FArrayBox(m, "FabArray_FArrayBox");
+    py::class_< MultiFab, FabArray<FArrayBox> > py_MultiFab(m, "MultiFab");
+
     py::class_< MFInfo >(m, "MFInfo")
         .def_readwrite("alloc", &MFInfo::alloc)
         .def_readwrite("arena", &MFInfo::arena)
@@ -47,30 +51,6 @@ void init_MultiFab(py::module &m)
         .def("set_tag", [](MFInfo & info, std::string tag) { info.SetTag(std::move(tag)); })
     ;
 
-    py::class_< FabArrayBase >(m, "FabArrayBase")
-        .def_property_readonly("is_all_cell_centered", &FabArrayBase::is_cell_centered)
-        .def_property_readonly("is_all_nodal",
-             py::overload_cast< >(&FabArrayBase::is_nodal, py::const_))
-        .def("is_nodal",
-             py::overload_cast< int >(&FabArrayBase::is_nodal, py::const_))
-
-        .def_property_readonly("nComp", &FabArrayBase::nComp)
-        .def_property_readonly("num_comp", &FabArrayBase::nComp)
-        .def_property_readonly("size", &FabArrayBase::size)
-
-        .def_property_readonly("nGrowVect", &FabArrayBase::nGrowVect)
-
-        /* data access in Box index space */
-        .def("__iter__",
-             [](FabArrayBase& fab) {
-                 return MFIter(fab);
-             },
-             // while the returned iterator (argument 0) exists,
-             // keep the FabArrayBase (argument 1; usually a MultiFab) alive
-             py::keep_alive<0, 1>()
-        )
-    ;
-
     py::class_< MFIter >(m, "MFIter", py::dynamic_attr())
         .def("__repr__",
              [](MFIter const & mfi) {
@@ -81,10 +61,10 @@ void init_MultiFab(py::module &m)
              }
         )
         .def(py::init< FabArrayBase const & >())
-        .def(py::init< FabArrayBase const &, MFItInfo const & >())
+        //.def(py::init< FabArrayBase const &, MFItInfo const & >())
 
         .def(py::init< MultiFab const & >())
-        .def(py::init< MultiFab const &, MFItInfo const & >())
+        //.def(py::init< MultiFab const &, MFItInfo const & >())
 
         //.def(py::init< iMultiFab const & >())
         //.def(py::init< iMultiFab const &, MFItInfo const & >())
@@ -122,7 +102,31 @@ void init_MultiFab(py::module &m)
         .def_property_readonly("length", &MFIter::length)
     ;
 
-    py::class_< FabArray<FArrayBox>, FabArrayBase >(m, "FabArray_FArrayBox")
+    py_FabArrayBase
+        .def_property_readonly("is_all_cell_centered", &FabArrayBase::is_cell_centered)
+        .def_property_readonly("is_all_nodal",
+             py::overload_cast< >(&FabArrayBase::is_nodal, py::const_))
+        .def("is_nodal",
+             py::overload_cast< int >(&FabArrayBase::is_nodal, py::const_))
+
+        .def_property_readonly("nComp", &FabArrayBase::nComp)
+        .def_property_readonly("num_comp", &FabArrayBase::nComp)
+        .def_property_readonly("size", &FabArrayBase::size)
+
+        .def_property_readonly("nGrowVect", &FabArrayBase::nGrowVect)
+
+        /* data access in Box index space */
+        .def("__iter__",
+             [](FabArrayBase& fab) {
+                 return MFIter(fab);
+             },
+             // while the returned iterator (argument 0) exists,
+             // keep the FabArrayBase (argument 1; usually a MultiFab) alive
+             py::keep_alive<0, 1>()
+        )
+    ;
+
+    py_FabArray_FArrayBox
         //.def("array", py::overload_cast< const MFIter& >(&FabArray<FArrayBox>::array))
         //.def("const_array", &FabArray<FArrayBox>::const_array)
         .def("array", [](FabArray<FArrayBox> & fa, MFIter const & mfi)
@@ -175,7 +179,7 @@ void init_MultiFab(py::module &m)
           py::arg("dest"), py::arg("src"), py::arg("scomp"), py::arg("dcomp"), py::arg("ncomp")
     );
 
-    py::class_< MultiFab, FabArray<FArrayBox> >(m, "MultiFab")
+    py_MultiFab
         .def("__repr__",
              [](MultiFab const & mf) {
                  return "<amrex.MultiFab with '" + std::to_string(mf.nComp()) +
@@ -189,29 +193,29 @@ void init_MultiFab(py::module &m)
         .def(py::init< const BoxArray&, const DistributionMapping&, int, int >())
         .def(py::init< const BoxArray&, const DistributionMapping&, int, int,
                        MFInfo const & >())
-        .def(py::init< const BoxArray&, const DistributionMapping&, int, int,
-                       MFInfo const &, FabFactory<FArrayBox> const & >())
+        //.def(py::init< const BoxArray&, const DistributionMapping&, int, int,
+        //               MFInfo const &, FabFactory<FArrayBox> const & >())
 
         .def(py::init< const BoxArray&, const DistributionMapping&, int,
                        IntVect const& >())
         .def(py::init< const BoxArray&, const DistributionMapping&, int,
                        IntVect const&,
                        MFInfo const& >())
-        .def(py::init< const BoxArray&, const DistributionMapping&, int,
-                       IntVect const&,
-                       MFInfo const&, FabFactory<FArrayBox> const & >())
+        //.def(py::init< const BoxArray&, const DistributionMapping&, int,
+        //               IntVect const&,
+        //               MFInfo const&, FabFactory<FArrayBox> const & >())
 
-        .def(py::init< MultiFab const&, MakeType, int, int >())
+        //.def(py::init< MultiFab const&, MakeType, int, int >())
 
         /* delayed defines */
-        .def("define",
-            py::overload_cast< const BoxArray&, const DistributionMapping&, int, int,
-                               MFInfo const &, FabFactory<FArrayBox> const &
-        >(&MultiFab::define))
-        .def("define",
-            py::overload_cast< const BoxArray&, const DistributionMapping&, int,
-                               IntVect const&, MFInfo const &, FabFactory<FArrayBox> const &
-        >(&MultiFab::define))
+        //.def("define",
+        //    py::overload_cast< const BoxArray&, const DistributionMapping&, int, int,
+        //                       MFInfo const &, FabFactory<FArrayBox> const &
+        //>(&MultiFab::define))
+        //.def("define",
+        //    py::overload_cast< const BoxArray&, const DistributionMapping&, int,
+        //                       IntVect const&, MFInfo const &, FabFactory<FArrayBox> const &
+        //>(&MultiFab::define))
 
         /* setters */
         //.def("set_val",

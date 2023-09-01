@@ -1,6 +1,6 @@
 /* Copyright 2021-2022 The AMReX Community
  *
- * Authors: David Grote
+ * Authors: David Grote, Axel Huebl
  * License: BSD-3-Clause-LBNL
  */
 #include "pyAMReX.H"
@@ -28,6 +28,12 @@ void init_IndexType(py::module &m) {
     using namespace amrex;
 
     py::class_< IndexType > index_type(m, "IndexType");
+
+    py::enum_<IndexType::CellIndex>(index_type, "CellIndex")
+        .value("CELL", IndexType::CellIndex::CELL)
+        .value("NODE", IndexType::CellIndex::NODE)
+        .export_values();
+
     index_type.def("__repr__",
              [](py::object& obj) {
                  py::str py_name = obj.attr("__class__").attr("__name__");
@@ -111,10 +117,4 @@ void init_IndexType(py::module &m) {
         .def_static("node_type", &IndexType::TheNodeType)
 
         ;
-
-    py::enum_<IndexType::CellIndex>(index_type, "CellIndex")
-        .value("CELL", IndexType::CellIndex::CELL)
-        .value("NODE", IndexType::CellIndex::NODE)
-        .export_values();
-
 }
