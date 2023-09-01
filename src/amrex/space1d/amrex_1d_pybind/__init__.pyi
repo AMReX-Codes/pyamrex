@@ -1470,9 +1470,9 @@ class BoxArray:
 class Config:
     amrex_version: typing.ClassVar[str] = "23.08"
     gpu_backend = None
-    have_gpu: typing.ClassVar[bool]  # value = False
-    have_mpi: typing.ClassVar[bool]  # value = True
-    have_omp: typing.ClassVar[bool]  # value = False
+    have_gpu: typing.ClassVar[bool] = False
+    have_mpi: typing.ClassVar[bool] = True
+    have_omp: typing.ClassVar[bool] = False
     spacedim: typing.ClassVar[int] = 1
     verbose: typing.ClassVar[int] = 1
 
@@ -2586,7 +2586,7 @@ class PODVector_real_std:
     def __cuda_array_interface__(self) -> dict: ...
 
 class ParConstIterBase_0_0_4_0_arena(MFIter):
-    is_soa_particle: typing.ClassVar[bool]  # value = False
+    is_soa_particle: typing.ClassVar[bool] = False
     def __init__(
         self, particle_container: ParticleContainer_0_0_4_0_arena, level: int
     ) -> None: ...
@@ -2608,7 +2608,7 @@ class ParConstIterBase_0_0_4_0_arena(MFIter):
     def pair_index(self) -> tuple[int, int]: ...
 
 class ParConstIterBase_0_0_4_0_default(MFIter):
-    is_soa_particle: typing.ClassVar[bool]  # value = False
+    is_soa_particle: typing.ClassVar[bool] = False
     def __init__(
         self, particle_container: ParticleContainer_0_0_4_0_default, level: int
     ) -> None: ...
@@ -2630,7 +2630,7 @@ class ParConstIterBase_0_0_4_0_default(MFIter):
     def pair_index(self) -> tuple[int, int]: ...
 
 class ParConstIterBase_0_0_4_0_pinned(MFIter):
-    is_soa_particle: typing.ClassVar[bool]  # value = False
+    is_soa_particle: typing.ClassVar[bool] = False
     def __init__(
         self, particle_container: ParticleContainer_0_0_4_0_pinned, level: int
     ) -> None: ...
@@ -2652,7 +2652,7 @@ class ParConstIterBase_0_0_4_0_pinned(MFIter):
     def pair_index(self) -> tuple[int, int]: ...
 
 class ParConstIterBase_0_0_5_0_arena(MFIter):
-    is_soa_particle: typing.ClassVar[bool]  # value = False
+    is_soa_particle: typing.ClassVar[bool] = False
     def __init__(
         self, particle_container: ParticleContainer_0_0_5_0_arena, level: int
     ) -> None: ...
@@ -2674,7 +2674,7 @@ class ParConstIterBase_0_0_5_0_arena(MFIter):
     def pair_index(self) -> tuple[int, int]: ...
 
 class ParConstIterBase_0_0_5_0_default(MFIter):
-    is_soa_particle: typing.ClassVar[bool]  # value = False
+    is_soa_particle: typing.ClassVar[bool] = False
     def __init__(
         self, particle_container: ParticleContainer_0_0_5_0_default, level: int
     ) -> None: ...
@@ -2696,7 +2696,7 @@ class ParConstIterBase_0_0_5_0_default(MFIter):
     def pair_index(self) -> tuple[int, int]: ...
 
 class ParConstIterBase_0_0_5_0_pinned(MFIter):
-    is_soa_particle: typing.ClassVar[bool]  # value = False
+    is_soa_particle: typing.ClassVar[bool] = False
     def __init__(
         self, particle_container: ParticleContainer_0_0_5_0_pinned, level: int
     ) -> None: ...
@@ -2718,7 +2718,7 @@ class ParConstIterBase_0_0_5_0_pinned(MFIter):
     def pair_index(self) -> tuple[int, int]: ...
 
 class ParConstIterBase_1_1_2_1_arena(MFIter):
-    is_soa_particle: typing.ClassVar[bool]  # value = False
+    is_soa_particle: typing.ClassVar[bool] = False
     def __init__(
         self, particle_container: ParticleContainer_1_1_2_1_arena, level: int
     ) -> None: ...
@@ -2740,7 +2740,7 @@ class ParConstIterBase_1_1_2_1_arena(MFIter):
     def pair_index(self) -> tuple[int, int]: ...
 
 class ParConstIterBase_1_1_2_1_default(MFIter):
-    is_soa_particle: typing.ClassVar[bool]  # value = False
+    is_soa_particle: typing.ClassVar[bool] = False
     def __init__(
         self, particle_container: ParticleContainer_1_1_2_1_default, level: int
     ) -> None: ...
@@ -2762,7 +2762,7 @@ class ParConstIterBase_1_1_2_1_default(MFIter):
     def pair_index(self) -> tuple[int, int]: ...
 
 class ParConstIterBase_1_1_2_1_pinned(MFIter):
-    is_soa_particle: typing.ClassVar[bool]  # value = False
+    is_soa_particle: typing.ClassVar[bool] = False
     def __init__(
         self, particle_container: ParticleContainer_1_1_2_1_pinned, level: int
     ) -> None: ...
@@ -2784,7 +2784,7 @@ class ParConstIterBase_1_1_2_1_pinned(MFIter):
     def pair_index(self) -> tuple[int, int]: ...
 
 class ParConstIterBase_pureSoA_8_2_arena(MFIter):
-    is_soa_particle: typing.ClassVar[bool]  # value = True
+    is_soa_particle: typing.ClassVar[bool] = True
     def __init__(
         self, particle_container: ParticleContainer_pureSoA_8_2_arena, level: int
     ) -> None: ...
@@ -2805,7 +2805,7 @@ class ParConstIterBase_pureSoA_8_2_arena(MFIter):
     def pair_index(self) -> tuple[int, int]: ...
 
 class ParConstIterBase_pureSoA_8_2_default(MFIter):
-    is_soa_particle: typing.ClassVar[bool]  # value = True
+    is_soa_particle: typing.ClassVar[bool] = True
     def __init__(
         self, particle_container: ParticleContainer_pureSoA_8_2_default, level: int
     ) -> None: ...
@@ -2826,7 +2826,7 @@ class ParConstIterBase_pureSoA_8_2_default(MFIter):
     def pair_index(self) -> tuple[int, int]: ...
 
 class ParConstIterBase_pureSoA_8_2_pinned(MFIter):
-    is_soa_particle: typing.ClassVar[bool]  # value = True
+    is_soa_particle: typing.ClassVar[bool] = True
     def __init__(
         self, particle_container: ParticleContainer_pureSoA_8_2_pinned, level: int
     ) -> None: ...
@@ -2847,91 +2847,91 @@ class ParConstIterBase_pureSoA_8_2_pinned(MFIter):
     def pair_index(self) -> tuple[int, int]: ...
 
 class ParConstIter_0_0_4_0_arena(ParConstIterBase_0_0_4_0_arena):
-    is_soa_particle: typing.ClassVar[bool]  # value = False
+    is_soa_particle: typing.ClassVar[bool] = False
     def __init__(
         self, particle_container: ParticleContainer_0_0_4_0_arena, level: int
     ) -> None: ...
     def __repr__(self) -> str: ...
 
 class ParConstIter_0_0_4_0_default(ParConstIterBase_0_0_4_0_default):
-    is_soa_particle: typing.ClassVar[bool]  # value = False
+    is_soa_particle: typing.ClassVar[bool] = False
     def __init__(
         self, particle_container: ParticleContainer_0_0_4_0_default, level: int
     ) -> None: ...
     def __repr__(self) -> str: ...
 
 class ParConstIter_0_0_4_0_pinned(ParConstIterBase_0_0_4_0_pinned):
-    is_soa_particle: typing.ClassVar[bool]  # value = False
+    is_soa_particle: typing.ClassVar[bool] = False
     def __init__(
         self, particle_container: ParticleContainer_0_0_4_0_pinned, level: int
     ) -> None: ...
     def __repr__(self) -> str: ...
 
 class ParConstIter_0_0_5_0_arena(ParConstIterBase_0_0_5_0_arena):
-    is_soa_particle: typing.ClassVar[bool]  # value = False
+    is_soa_particle: typing.ClassVar[bool] = False
     def __init__(
         self, particle_container: ParticleContainer_0_0_5_0_arena, level: int
     ) -> None: ...
     def __repr__(self) -> str: ...
 
 class ParConstIter_0_0_5_0_default(ParConstIterBase_0_0_5_0_default):
-    is_soa_particle: typing.ClassVar[bool]  # value = False
+    is_soa_particle: typing.ClassVar[bool] = False
     def __init__(
         self, particle_container: ParticleContainer_0_0_5_0_default, level: int
     ) -> None: ...
     def __repr__(self) -> str: ...
 
 class ParConstIter_0_0_5_0_pinned(ParConstIterBase_0_0_5_0_pinned):
-    is_soa_particle: typing.ClassVar[bool]  # value = False
+    is_soa_particle: typing.ClassVar[bool] = False
     def __init__(
         self, particle_container: ParticleContainer_0_0_5_0_pinned, level: int
     ) -> None: ...
     def __repr__(self) -> str: ...
 
 class ParConstIter_1_1_2_1_arena(ParConstIterBase_1_1_2_1_arena):
-    is_soa_particle: typing.ClassVar[bool]  # value = False
+    is_soa_particle: typing.ClassVar[bool] = False
     def __init__(
         self, particle_container: ParticleContainer_1_1_2_1_arena, level: int
     ) -> None: ...
     def __repr__(self) -> str: ...
 
 class ParConstIter_1_1_2_1_default(ParConstIterBase_1_1_2_1_default):
-    is_soa_particle: typing.ClassVar[bool]  # value = False
+    is_soa_particle: typing.ClassVar[bool] = False
     def __init__(
         self, particle_container: ParticleContainer_1_1_2_1_default, level: int
     ) -> None: ...
     def __repr__(self) -> str: ...
 
 class ParConstIter_1_1_2_1_pinned(ParConstIterBase_1_1_2_1_pinned):
-    is_soa_particle: typing.ClassVar[bool]  # value = False
+    is_soa_particle: typing.ClassVar[bool] = False
     def __init__(
         self, particle_container: ParticleContainer_1_1_2_1_pinned, level: int
     ) -> None: ...
     def __repr__(self) -> str: ...
 
 class ParConstIter_pureSoA_8_2_arena(ParConstIterBase_pureSoA_8_2_arena):
-    is_soa_particle: typing.ClassVar[bool]  # value = True
+    is_soa_particle: typing.ClassVar[bool] = True
     def __init__(
         self, particle_container: ParticleContainer_pureSoA_8_2_arena, level: int
     ) -> None: ...
     def __repr__(self) -> str: ...
 
 class ParConstIter_pureSoA_8_2_default(ParConstIterBase_pureSoA_8_2_default):
-    is_soa_particle: typing.ClassVar[bool]  # value = True
+    is_soa_particle: typing.ClassVar[bool] = True
     def __init__(
         self, particle_container: ParticleContainer_pureSoA_8_2_default, level: int
     ) -> None: ...
     def __repr__(self) -> str: ...
 
 class ParConstIter_pureSoA_8_2_pinned(ParConstIterBase_pureSoA_8_2_pinned):
-    is_soa_particle: typing.ClassVar[bool]  # value = True
+    is_soa_particle: typing.ClassVar[bool] = True
     def __init__(
         self, particle_container: ParticleContainer_pureSoA_8_2_pinned, level: int
     ) -> None: ...
     def __repr__(self) -> str: ...
 
 class ParIterBase_0_0_4_0_arena(MFIter):
-    is_soa_particle: typing.ClassVar[bool]  # value = False
+    is_soa_particle: typing.ClassVar[bool] = False
     def __init__(
         self, particle_container: ParticleContainer_0_0_4_0_arena, level: int
     ) -> None: ...
@@ -2953,7 +2953,7 @@ class ParIterBase_0_0_4_0_arena(MFIter):
     def pair_index(self) -> tuple[int, int]: ...
 
 class ParIterBase_0_0_4_0_default(MFIter):
-    is_soa_particle: typing.ClassVar[bool]  # value = False
+    is_soa_particle: typing.ClassVar[bool] = False
     def __init__(
         self, particle_container: ParticleContainer_0_0_4_0_default, level: int
     ) -> None: ...
@@ -2975,7 +2975,7 @@ class ParIterBase_0_0_4_0_default(MFIter):
     def pair_index(self) -> tuple[int, int]: ...
 
 class ParIterBase_0_0_4_0_pinned(MFIter):
-    is_soa_particle: typing.ClassVar[bool]  # value = False
+    is_soa_particle: typing.ClassVar[bool] = False
     def __init__(
         self, particle_container: ParticleContainer_0_0_4_0_pinned, level: int
     ) -> None: ...
@@ -2997,7 +2997,7 @@ class ParIterBase_0_0_4_0_pinned(MFIter):
     def pair_index(self) -> tuple[int, int]: ...
 
 class ParIterBase_0_0_5_0_arena(MFIter):
-    is_soa_particle: typing.ClassVar[bool]  # value = False
+    is_soa_particle: typing.ClassVar[bool] = False
     def __init__(
         self, particle_container: ParticleContainer_0_0_5_0_arena, level: int
     ) -> None: ...
@@ -3019,7 +3019,7 @@ class ParIterBase_0_0_5_0_arena(MFIter):
     def pair_index(self) -> tuple[int, int]: ...
 
 class ParIterBase_0_0_5_0_default(MFIter):
-    is_soa_particle: typing.ClassVar[bool]  # value = False
+    is_soa_particle: typing.ClassVar[bool] = False
     def __init__(
         self, particle_container: ParticleContainer_0_0_5_0_default, level: int
     ) -> None: ...
@@ -3041,7 +3041,7 @@ class ParIterBase_0_0_5_0_default(MFIter):
     def pair_index(self) -> tuple[int, int]: ...
 
 class ParIterBase_0_0_5_0_pinned(MFIter):
-    is_soa_particle: typing.ClassVar[bool]  # value = False
+    is_soa_particle: typing.ClassVar[bool] = False
     def __init__(
         self, particle_container: ParticleContainer_0_0_5_0_pinned, level: int
     ) -> None: ...
@@ -3063,7 +3063,7 @@ class ParIterBase_0_0_5_0_pinned(MFIter):
     def pair_index(self) -> tuple[int, int]: ...
 
 class ParIterBase_1_1_2_1_arena(MFIter):
-    is_soa_particle: typing.ClassVar[bool]  # value = False
+    is_soa_particle: typing.ClassVar[bool] = False
     def __init__(
         self, particle_container: ParticleContainer_1_1_2_1_arena, level: int
     ) -> None: ...
@@ -3085,7 +3085,7 @@ class ParIterBase_1_1_2_1_arena(MFIter):
     def pair_index(self) -> tuple[int, int]: ...
 
 class ParIterBase_1_1_2_1_default(MFIter):
-    is_soa_particle: typing.ClassVar[bool]  # value = False
+    is_soa_particle: typing.ClassVar[bool] = False
     def __init__(
         self, particle_container: ParticleContainer_1_1_2_1_default, level: int
     ) -> None: ...
@@ -3107,7 +3107,7 @@ class ParIterBase_1_1_2_1_default(MFIter):
     def pair_index(self) -> tuple[int, int]: ...
 
 class ParIterBase_1_1_2_1_pinned(MFIter):
-    is_soa_particle: typing.ClassVar[bool]  # value = False
+    is_soa_particle: typing.ClassVar[bool] = False
     def __init__(
         self, particle_container: ParticleContainer_1_1_2_1_pinned, level: int
     ) -> None: ...
@@ -3129,7 +3129,7 @@ class ParIterBase_1_1_2_1_pinned(MFIter):
     def pair_index(self) -> tuple[int, int]: ...
 
 class ParIterBase_pureSoA_8_2_arena(MFIter):
-    is_soa_particle: typing.ClassVar[bool]  # value = True
+    is_soa_particle: typing.ClassVar[bool] = True
     def __init__(
         self, particle_container: ParticleContainer_pureSoA_8_2_arena, level: int
     ) -> None: ...
@@ -3150,7 +3150,7 @@ class ParIterBase_pureSoA_8_2_arena(MFIter):
     def pair_index(self) -> tuple[int, int]: ...
 
 class ParIterBase_pureSoA_8_2_default(MFIter):
-    is_soa_particle: typing.ClassVar[bool]  # value = True
+    is_soa_particle: typing.ClassVar[bool] = True
     def __init__(
         self, particle_container: ParticleContainer_pureSoA_8_2_default, level: int
     ) -> None: ...
@@ -3171,7 +3171,7 @@ class ParIterBase_pureSoA_8_2_default(MFIter):
     def pair_index(self) -> tuple[int, int]: ...
 
 class ParIterBase_pureSoA_8_2_pinned(MFIter):
-    is_soa_particle: typing.ClassVar[bool]  # value = True
+    is_soa_particle: typing.ClassVar[bool] = True
     def __init__(
         self, particle_container: ParticleContainer_pureSoA_8_2_pinned, level: int
     ) -> None: ...
@@ -3192,84 +3192,84 @@ class ParIterBase_pureSoA_8_2_pinned(MFIter):
     def pair_index(self) -> tuple[int, int]: ...
 
 class ParIter_0_0_4_0_arena(ParIterBase_0_0_4_0_arena):
-    is_soa_particle: typing.ClassVar[bool]  # value = False
+    is_soa_particle: typing.ClassVar[bool] = False
     def __init__(
         self, particle_container: ParticleContainer_0_0_4_0_arena, level: int
     ) -> None: ...
     def __repr__(self) -> str: ...
 
 class ParIter_0_0_4_0_default(ParIterBase_0_0_4_0_default):
-    is_soa_particle: typing.ClassVar[bool]  # value = False
+    is_soa_particle: typing.ClassVar[bool] = False
     def __init__(
         self, particle_container: ParticleContainer_0_0_4_0_default, level: int
     ) -> None: ...
     def __repr__(self) -> str: ...
 
 class ParIter_0_0_4_0_pinned(ParIterBase_0_0_4_0_pinned):
-    is_soa_particle: typing.ClassVar[bool]  # value = False
+    is_soa_particle: typing.ClassVar[bool] = False
     def __init__(
         self, particle_container: ParticleContainer_0_0_4_0_pinned, level: int
     ) -> None: ...
     def __repr__(self) -> str: ...
 
 class ParIter_0_0_5_0_arena(ParIterBase_0_0_5_0_arena):
-    is_soa_particle: typing.ClassVar[bool]  # value = False
+    is_soa_particle: typing.ClassVar[bool] = False
     def __init__(
         self, particle_container: ParticleContainer_0_0_5_0_arena, level: int
     ) -> None: ...
     def __repr__(self) -> str: ...
 
 class ParIter_0_0_5_0_default(ParIterBase_0_0_5_0_default):
-    is_soa_particle: typing.ClassVar[bool]  # value = False
+    is_soa_particle: typing.ClassVar[bool] = False
     def __init__(
         self, particle_container: ParticleContainer_0_0_5_0_default, level: int
     ) -> None: ...
     def __repr__(self) -> str: ...
 
 class ParIter_0_0_5_0_pinned(ParIterBase_0_0_5_0_pinned):
-    is_soa_particle: typing.ClassVar[bool]  # value = False
+    is_soa_particle: typing.ClassVar[bool] = False
     def __init__(
         self, particle_container: ParticleContainer_0_0_5_0_pinned, level: int
     ) -> None: ...
     def __repr__(self) -> str: ...
 
 class ParIter_1_1_2_1_arena(ParIterBase_1_1_2_1_arena):
-    is_soa_particle: typing.ClassVar[bool]  # value = False
+    is_soa_particle: typing.ClassVar[bool] = False
     def __init__(
         self, particle_container: ParticleContainer_1_1_2_1_arena, level: int
     ) -> None: ...
     def __repr__(self) -> str: ...
 
 class ParIter_1_1_2_1_default(ParIterBase_1_1_2_1_default):
-    is_soa_particle: typing.ClassVar[bool]  # value = False
+    is_soa_particle: typing.ClassVar[bool] = False
     def __init__(
         self, particle_container: ParticleContainer_1_1_2_1_default, level: int
     ) -> None: ...
     def __repr__(self) -> str: ...
 
 class ParIter_1_1_2_1_pinned(ParIterBase_1_1_2_1_pinned):
-    is_soa_particle: typing.ClassVar[bool]  # value = False
+    is_soa_particle: typing.ClassVar[bool] = False
     def __init__(
         self, particle_container: ParticleContainer_1_1_2_1_pinned, level: int
     ) -> None: ...
     def __repr__(self) -> str: ...
 
 class ParIter_pureSoA_8_2_arena(ParIterBase_pureSoA_8_2_arena):
-    is_soa_particle: typing.ClassVar[bool]  # value = True
+    is_soa_particle: typing.ClassVar[bool] = True
     def __init__(
         self, particle_container: ParticleContainer_pureSoA_8_2_arena, level: int
     ) -> None: ...
     def __repr__(self) -> str: ...
 
 class ParIter_pureSoA_8_2_default(ParIterBase_pureSoA_8_2_default):
-    is_soa_particle: typing.ClassVar[bool]  # value = True
+    is_soa_particle: typing.ClassVar[bool] = True
     def __init__(
         self, particle_container: ParticleContainer_pureSoA_8_2_default, level: int
     ) -> None: ...
     def __repr__(self) -> str: ...
 
 class ParIter_pureSoA_8_2_pinned(ParIterBase_pureSoA_8_2_pinned):
-    is_soa_particle: typing.ClassVar[bool]  # value = True
+    is_soa_particle: typing.ClassVar[bool] = True
     def __init__(
         self, particle_container: ParticleContainer_pureSoA_8_2_pinned, level: int
     ) -> None: ...
@@ -3337,7 +3337,7 @@ class ParticleContainer_0_0_4_0_arena:
     NArrayReal: typing.ClassVar[int] = 4
     NStructInt: typing.ClassVar[int] = 0
     NStructReal: typing.ClassVar[int] = 0
-    is_soa_particle: typing.ClassVar[bool]  # value = False
+    is_soa_particle: typing.ClassVar[bool] = False
     def AddParticlesAtLevel(
         self, particles: ParticleTile_0_0_4_0_arena, level: int, ngrow: int = ...
     ) -> None: ...
@@ -3438,7 +3438,7 @@ class ParticleContainer_0_0_4_0_default:
     NArrayReal: typing.ClassVar[int] = 4
     NStructInt: typing.ClassVar[int] = 0
     NStructReal: typing.ClassVar[int] = 0
-    is_soa_particle: typing.ClassVar[bool]  # value = False
+    is_soa_particle: typing.ClassVar[bool] = False
     def AddParticlesAtLevel(
         self, particles: ParticleTile_0_0_4_0_default, level: int, ngrow: int = ...
     ) -> None: ...
@@ -3539,7 +3539,7 @@ class ParticleContainer_0_0_4_0_pinned:
     NArrayReal: typing.ClassVar[int] = 4
     NStructInt: typing.ClassVar[int] = 0
     NStructReal: typing.ClassVar[int] = 0
-    is_soa_particle: typing.ClassVar[bool]  # value = False
+    is_soa_particle: typing.ClassVar[bool] = False
     def AddParticlesAtLevel(
         self, particles: ParticleTile_0_0_4_0_pinned, level: int, ngrow: int = ...
     ) -> None: ...
@@ -3640,7 +3640,7 @@ class ParticleContainer_0_0_5_0_arena:
     NArrayReal: typing.ClassVar[int] = 5
     NStructInt: typing.ClassVar[int] = 0
     NStructReal: typing.ClassVar[int] = 0
-    is_soa_particle: typing.ClassVar[bool]  # value = False
+    is_soa_particle: typing.ClassVar[bool] = False
     def AddParticlesAtLevel(
         self, particles: ParticleTile_0_0_5_0_arena, level: int, ngrow: int = ...
     ) -> None: ...
@@ -3741,7 +3741,7 @@ class ParticleContainer_0_0_5_0_default:
     NArrayReal: typing.ClassVar[int] = 5
     NStructInt: typing.ClassVar[int] = 0
     NStructReal: typing.ClassVar[int] = 0
-    is_soa_particle: typing.ClassVar[bool]  # value = False
+    is_soa_particle: typing.ClassVar[bool] = False
     def AddParticlesAtLevel(
         self, particles: ParticleTile_0_0_5_0_default, level: int, ngrow: int = ...
     ) -> None: ...
@@ -3842,7 +3842,7 @@ class ParticleContainer_0_0_5_0_pinned:
     NArrayReal: typing.ClassVar[int] = 5
     NStructInt: typing.ClassVar[int] = 0
     NStructReal: typing.ClassVar[int] = 0
-    is_soa_particle: typing.ClassVar[bool]  # value = False
+    is_soa_particle: typing.ClassVar[bool] = False
     def AddParticlesAtLevel(
         self, particles: ParticleTile_0_0_5_0_pinned, level: int, ngrow: int = ...
     ) -> None: ...
@@ -3943,7 +3943,7 @@ class ParticleContainer_1_1_2_1_arena:
     NArrayReal: typing.ClassVar[int] = 2
     NStructInt: typing.ClassVar[int] = 1
     NStructReal: typing.ClassVar[int] = 1
-    is_soa_particle: typing.ClassVar[bool]  # value = False
+    is_soa_particle: typing.ClassVar[bool] = False
     def AddParticlesAtLevel(
         self, particles: ParticleTile_1_1_2_1_arena, level: int, ngrow: int = ...
     ) -> None: ...
@@ -4044,7 +4044,7 @@ class ParticleContainer_1_1_2_1_default:
     NArrayReal: typing.ClassVar[int] = 2
     NStructInt: typing.ClassVar[int] = 1
     NStructReal: typing.ClassVar[int] = 1
-    is_soa_particle: typing.ClassVar[bool]  # value = False
+    is_soa_particle: typing.ClassVar[bool] = False
     def AddParticlesAtLevel(
         self, particles: ParticleTile_1_1_2_1_default, level: int, ngrow: int = ...
     ) -> None: ...
@@ -4145,7 +4145,7 @@ class ParticleContainer_1_1_2_1_pinned:
     NArrayReal: typing.ClassVar[int] = 2
     NStructInt: typing.ClassVar[int] = 1
     NStructReal: typing.ClassVar[int] = 1
-    is_soa_particle: typing.ClassVar[bool]  # value = False
+    is_soa_particle: typing.ClassVar[bool] = False
     def AddParticlesAtLevel(
         self, particles: ParticleTile_1_1_2_1_pinned, level: int, ngrow: int = ...
     ) -> None: ...
@@ -4246,7 +4246,7 @@ class ParticleContainer_pureSoA_8_2_arena:
     NArrayReal: typing.ClassVar[int] = 8
     NStructInt: typing.ClassVar[int] = 0
     NStructReal: typing.ClassVar[int] = 0
-    is_soa_particle: typing.ClassVar[bool]  # value = True
+    is_soa_particle: typing.ClassVar[bool] = True
     def AddParticlesAtLevel(
         self, particles: ParticleTile_0_0_8_2_arena, level: int, ngrow: int = ...
     ) -> None: ...
@@ -4333,7 +4333,7 @@ class ParticleContainer_pureSoA_8_2_default:
     NArrayReal: typing.ClassVar[int] = 8
     NStructInt: typing.ClassVar[int] = 0
     NStructReal: typing.ClassVar[int] = 0
-    is_soa_particle: typing.ClassVar[bool]  # value = True
+    is_soa_particle: typing.ClassVar[bool] = True
     def AddParticlesAtLevel(
         self, particles: ParticleTile_0_0_8_2_default, level: int, ngrow: int = ...
     ) -> None: ...
@@ -4420,7 +4420,7 @@ class ParticleContainer_pureSoA_8_2_pinned:
     NArrayReal: typing.ClassVar[int] = 8
     NStructInt: typing.ClassVar[int] = 0
     NStructReal: typing.ClassVar[int] = 0
-    is_soa_particle: typing.ClassVar[bool]  # value = True
+    is_soa_particle: typing.ClassVar[bool] = True
     def AddParticlesAtLevel(
         self, particles: ParticleTile_0_0_8_2_pinned, level: int, ngrow: int = ...
     ) -> None: ...
@@ -4503,7 +4503,7 @@ class ParticleContainer_pureSoA_8_2_pinned:
     def finest_level(self) -> int: ...
 
 class ParticleInitType_0_0_4_0:
-    is_soa_particle: typing.ClassVar[bool]  # value = False
+    is_soa_particle: typing.ClassVar[bool] = False
     int_array_data: list[int[0]]
     int_struct_data: list[int[0]]
     real_array_data: list[float[4]]
@@ -4511,7 +4511,7 @@ class ParticleInitType_0_0_4_0:
     def __init__(self) -> None: ...
 
 class ParticleInitType_0_0_5_0:
-    is_soa_particle: typing.ClassVar[bool]  # value = False
+    is_soa_particle: typing.ClassVar[bool] = False
     int_array_data: list[int[0]]
     int_struct_data: list[int[0]]
     real_array_data: list[float[5]]
@@ -4519,7 +4519,7 @@ class ParticleInitType_0_0_5_0:
     def __init__(self) -> None: ...
 
 class ParticleInitType_1_1_2_1:
-    is_soa_particle: typing.ClassVar[bool]  # value = False
+    is_soa_particle: typing.ClassVar[bool] = False
     int_array_data: list[int[1]]
     int_struct_data: list[int[1]]
     real_array_data: list[float[2]]
