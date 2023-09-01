@@ -9,6 +9,7 @@
 
 #include <AMReX_Vector.H>
 
+#include <cstdint>
 #include <memory>
 #include <sstream>
 #include <string>
@@ -18,15 +19,13 @@
 
 namespace
 {
-    using namespace amrex;
-
     /** CPU: __array_interface__ v3
      *
      * https://numpy.org/doc/stable/reference/arrays.interface.html
      */
     template <class T, class Allocator = std::allocator<T> >
     py::dict
-    array_interface(Vector<T, Allocator> const & vector)
+    array_interface(amrex::Vector<T, Allocator> const & vector)
     {
         auto d = py::dict();
         bool const read_only = false;
