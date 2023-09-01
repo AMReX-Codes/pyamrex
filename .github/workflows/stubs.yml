@@ -1,0 +1,73 @@
+name: 🔄 Update Stub Files
+
+# This workflow updates the .pyi stub files for documentation and interactive use.
+
+on: [workflow_call]
+
+concurrency:
+  group: ${{ github.ref }}-${{ github.head_ref }}-stubs
+  cancel-in-progress: true
+
+jobs:
+  # Build and install libamrex as AMReX CMake project
+  stubs:
+    name: Stubs
+    runs-on: ubuntu-22.04
+    env:
+      CC: gcc
+      CXX: g++
+      CXXFLAGS: "-O1"
+      OMP_NUM_THREAD: 2
+
+    if: github.event.pull_request.draft == false
+    permissions:
+      # Give the default GITHUB_TOKEN write permission to commit and push the
+      # changed files back to the repository.
+      contents: write
+
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        repository: ${{ github.event.pull_request.head.repo.full_name }}
+        ref: ${{ github.head_ref }}
+
+    - name: Pull Remote Changes
+      run: git pull
+
+    - uses: actions/setup-python@v4
+      name: Install Python
+      with:
+        python-version: '3.9'
+
+    - name: Dependencies
+      run: .github/workflows/dependencies/dependencies_gcc10.sh
+
+    - name: Build & Install
+      run: |
+        python3 -m pip install -U pip setuptools wheel
+        python3 -m pip install -U pip mpi4py pytest pybind11-stubgen pre-commit
+        cmake -S . -B build -DAMReX_SPACEDIM="1;2;3" -DpyAMReX_IPO=OFF
+        cmake --build build -j 2 --target pip_install
+
+    - name: Update Stubs
+      run: |
+        .github/update_stub.sh
+
+    - name: Run pre-commit cleanup
+      run: |
+        git add .
+        pre-commit run -a || true
+        git add .
+
+    - name: Update Install
+      run: |
+        cmake --build build -j 2 --target pip_install
+
+    - name: Unit tests
+      run: |
+        mpiexec -np 1 python3 -m pytest tests/
+
+    - uses: stefanzweifel/git-auto-commit-action@v4
+      name: Commit Updated Stub Files
+      with:
+        commit_message: Update Stub Files

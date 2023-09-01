@@ -321,10 +321,12 @@ void init_Particle(py::module& m) {
     py::enum_<PIdx::IntValues>(pidx, "IntValues")
     ;
     make_Particle< PIdx::nRealAttribs, PIdx::nIntAttribs > (m);
+    make_Particle< 0, 0 > (m);
     make_Particle< 1, 1 > (m);
     make_Particle< 2, 1 > (m);
     make_Particle< 3, 2 > (m);
     make_Particle< 4, 0 > (m);  // HiPACE++ 22.07
     make_Particle< 5, 0 > (m);  // ImpactX 22.07
+    make_Particle< 8, 2 > (m);  // ImpactX 23.09+
     make_Particle< 37, 1> (m);  // HiPACE++ 22.07
 }

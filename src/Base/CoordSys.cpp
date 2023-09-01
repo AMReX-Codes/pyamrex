@@ -1,3 +1,8 @@
+/* Copyright 2021-2023 The AMReX Community
+ *
+ * Authors: Axel Huebl, Ryan Sandberg
+ * License: BSD-3-Clause-LBNL
+ */
 #include "pyAMReX.H"
 
 #include <AMReX_CoordSys.H>
@@ -8,6 +13,14 @@ void init_CoordSys(py::module& m)
     using namespace amrex;
 
     py::class_<CoordSys> coord_sys(m, "CoordSys");
+
+    py::enum_<CoordSys::CoordType>(coord_sys, "CoordType")
+        .value("undef", CoordSys::CoordType::undef)
+        .value("cartesian", CoordSys::CoordType::cartesian)
+        .value("RZ", CoordSys::CoordType::RZ)
+        .value("SPHERICAL", CoordSys::CoordType::SPHERICAL)
+        .export_values();
+
     coord_sys.def("__repr__",
              [](const CoordSys&) {
                  return "<amrex.CoordSys>";
@@ -27,10 +40,4 @@ void init_CoordSys(py::module& m)
         // ...
     ;
 
-    py::enum_<CoordSys::CoordType>(coord_sys, "CoordType")
-        .value("undef", CoordSys::CoordType::undef)
-        .value("cartesian", CoordSys::CoordType::cartesian)
-        .value("RZ", CoordSys::CoordType::RZ)
-        .value("SPHERICAL", CoordSys::CoordType::SPHERICAL)
-        .export_values();
 }

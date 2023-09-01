@@ -1,5 +1,7 @@
 #include "pyAMReX.H"
 
+#include "Base/Vector.H"
+
 #include <AMReX_Geometry.H>
 #include <AMReX_CoordSys.H>
 #include <AMReX_MultiFab.H>
@@ -205,4 +207,6 @@ void init_Geometry(py::module& m)
         // .def("computeRoundoffDomain")
     ;
 
+
+    make_Vector<Geometry> (m, "Geometry");
 }

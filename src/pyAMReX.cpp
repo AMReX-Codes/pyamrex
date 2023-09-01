@@ -86,32 +86,33 @@ PYBIND11_MODULE(amrex_3d_pybind, m) {
                Vector
     )pbdoc";
 
-    // note: order from parent to child classes
+    // note: order from parent to child classes and argument usage
     init_AMReX(m);
     init_Arena(m);
     init_Dim3(m);
     init_IntVect(m);
     init_IndexType(m);
     init_RealVect(m);
+    init_Box(m);
     init_Periodicity(m);
     init_Array4(m);
-    init_Box(m);
     init_BoxArray(m);
     init_ParmParse(m);
+    init_CoordSys(m);
+    init_RealBox(m);
+    init_Vector(m);
+    init_Geometry(m);
+    init_DistributionMapping(m);
     init_BaseFab(m);
     init_FArrayBox(m);
     init_MultiFab(m);
-    init_DistributionMapping(m);
-    init_RealBox(m);
-    init_CoordSys(m);
-    init_Geometry(m);
     init_ParallelDescriptor(m);
     init_Particle(m);
+    init_PODVector(m);
     init_StructOfArrays(m);
     init_ArrayOfStructs(m);
     init_ParticleTile(m);
-    init_PODVector(m);
-    init_Vector(m);
+
     init_ParticleContainer(m);
     init_AmrMesh(m);
 

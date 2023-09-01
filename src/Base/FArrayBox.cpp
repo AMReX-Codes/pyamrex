@@ -27,7 +27,7 @@ void init_FArrayBox(py::module &m) {
         .def(py::init< Arena* >())
         .def(py::init< Box const &, int, Arena* >())
         .def(py::init< Box const &, int, bool, bool, Arena* >())
-        .def(py::init< FArrayBox const &, MakeType, int, int >())
+        //.def(py::init< FArrayBox const &, MakeType, int, int >())
         .def(py::init< Box const &, int, Real const* >())
         .def(py::init< Box const &, int, Real* >())
         .def(py::init< Array4<Real> const& >())
@@ -35,6 +35,7 @@ void init_FArrayBox(py::module &m) {
         .def(py::init< Array4<Real const> const& >())
         .def(py::init< Array4<Real const> const&, IndexType >())
 
+        /*
         .def("read_from",
              py::overload_cast<std::istream&>(&FArrayBox::readFrom),
              py::arg("is")
@@ -51,5 +52,6 @@ void init_FArrayBox(py::module &m) {
              py::overload_cast<std::ostream&, int, int>(&FArrayBox::writeOn, py::const_),
              py::arg("of"), py::arg("comp"), py::arg("num_comp")
         )
+        */
     ;
 }

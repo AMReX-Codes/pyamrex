@@ -9,6 +9,7 @@
 #include <AMReX_GpuAllocators.H>
 #include <AMReX_IntVect.H>
 #include <AMReX_ParticleTile.H>
+#include <AMReX_Particle.H>
 
 #include <sstream>
 
@@ -81,12 +82,20 @@ void make_ParticleTile(py::module &m, std::string allocstr)
         .def("setNumNeighbors", &ParticleTileType::setNumNeighbors)
         .def("getNumNeighbors", &ParticleTileType::getNumNeighbors)
         .def("resize", &ParticleTileType::resize)
+    ;
 
-        .def("push_back", [](ParticleTileType& ptile, const ParticleType &p){ ptile.push_back(p);})
-        // .def("push_back", py::overload_cast<const ParticleType&>(&ParticleTileType::push_back), "Add one particle to this tile.")
-        // .def("push_back", py::overload_cast<const SuperParticleType&>(&ParticleTileType::push_back), "Add one particle to this tile.")
+    if constexpr (!T_ParticleType::is_soa_particle) {
+        py_particle_tile
+            .def("push_back",
+                 [](ParticleTileType& ptile, const ParticleType &p) { ptile.push_back(p); },
+                 "Add one particle to this tile.")
+        ;
+    }
 
-        .def("push_back", [](ParticleTileType& ptile, const SuperParticleType &p) {ptile.push_back(p);})
+    py_particle_tile
+        .def("push_back",
+             [](ParticleTileType& ptile, const SuperParticleType &p) {ptile.push_back(p);},
+             "Add one particle to this tile.")
         .def("push_back_real", [](ParticleTileType& ptile, int comp, ParticleReal v) {ptile.push_back_real(comp, v);})
         .def("push_back_real", [](ParticleTileType& ptile,
                             const std::array<ParticleReal, NArrayReal>& v) {ptile.push_back_real(v);})
@@ -127,7 +136,12 @@ void make_ParticleTile(py::module &m, std::string allocstr)
 template <typename T_ParticleType, int NArrayReal, int NArrayInt>
 void make_ParticleTile(py::module &m)
 {
-    make_ParticleTileData<T_ParticleType, NArrayReal, NArrayInt>(m);
+    if constexpr (T_ParticleType::is_soa_particle) {
+        make_ParticleTileData<amrex::SoAParticleBase, NArrayReal, NArrayInt>(m);
+    }
+    else {
+        make_ParticleTileData<T_ParticleType, NArrayReal, NArrayInt>(m);
+    }
 
     // see Src/Base/AMReX_GpuContainers.H
     //   !AMREX_USE_GPU: DefaultAllocator = std::allocator
@@ -168,12 +182,13 @@ void init_ParticleTile(py::module& m) {
     // AMReX legacy AoS position + id/cpu particle ype
     using ParticleType_0_0 = Particle<0, 0>;
     using ParticleType_1_1 = Particle<1, 1>;
+    using SoAParticleType_8_2 = SoAParticle<8, 2>;
 
     // TODO: we might need to move all or most of the defines in here into a
     //       test/example submodule, so they do not collide with downstream projects
     make_ParticleTile<ParticleType_1_1, 2, 1> (m);
     make_ParticleTile<ParticleType_0_0, 4, 0> (m);   // HiPACE++ 22.07
     make_ParticleTile<ParticleType_0_0, 5, 0> (m);   // ImpactX 22.07
-    make_ParticleTile<ParticleType_0_0, 7, 0> (m);
+    make_ParticleTile<SoAParticleType_8_2, 8, 2> (m);   // ImpactX 23.09+
     make_ParticleTile<ParticleType_0_0, 37, 1> (m);  // HiPACE++ 22.07
 }
