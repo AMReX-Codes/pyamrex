@@ -38,6 +38,15 @@ namespace
     }
 }
 
+/** Register an ``amrex::Vector`` type with pybind11.
+ *
+ * Specialized for a specific data type ``T`` and memory ``Allocator``.
+ *
+ * @tparam T data type per vector element
+ * @tparam Allocator the memory allocator, e.g., an AMReX Arena or std::allocator
+ * @param m the pyAMReX pybind11 module object
+ * @param typestr a unique suffix for the type ``T`` and ``Allocator``
+ */
 template <class T, class Allocator = std::allocator<T> >
 void make_Vector(py::module &m, std::string typestr)
 {
