@@ -18,10 +18,24 @@ jobs:
     - uses: actions/checkout@v3
     - name: install dependencies
       shell: bash
-      run: .github/workflows/dependencies/hip.sh
+      run: |
+        .github/workflows/dependencies/hip.sh
+        .github/workflows/dependencies/dependencies_ccache.sh
+    - name: Set Up Cache
+      uses: actions/cache@v3
+      with:
+        path: ~/.cache/ccache
+        key: ccache-${{ github.workflow }}-${{ github.job }}-git-${{ github.sha }}
+        restore-keys: |
+             ccache-${{ github.workflow }}-${{ github.job }}-git-
     - name: build ImpactX
       shell: bash
       run: |
+        export CCACHE_COMPRESS=1
+        export CCACHE_COMPRESSLEVEL=10
+        export CCACHE_MAXSIZE=300M
+        ccache -z
+
         source /etc/profile.d/rocm.sh
         hipcc --version
         which clang
@@ -43,3 +57,6 @@ jobs:
             -DAMReX_AMD_ARCH=gfx900      \
             -DAMReX_SPACEDIM="1;2;3"
         cmake --build build --target pip_install -j 2
+
+        ccache -s
+        du -hs ~/.cache/ccache
