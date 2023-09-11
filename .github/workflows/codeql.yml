@@ -44,10 +44,23 @@ jobs:
           python -m pip install --upgrade mpi4py
           python -m pip install --upgrade pytest
 
+          .github/workflows/dependencies/dependencies_ccache.sh
+          sudo ln -s /usr/local/bin/ccache /usr/local/bin/g++
+
+      - name: Set Up Cache
+        if: ${{ matrix.language == 'cpp' }}
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/ccache
+          key: ccache-${{ github.workflow }}-${{ github.job }}-git-${{ github.sha }}
+          restore-keys: |
+               ccache-${{ github.workflow }}-${{ github.job }}-git-
+
       - name: Configure (C++)
         if: ${{ matrix.language == 'cpp' }}
         run: |
-          $CMAKE -S . -B build -DAMReX_SPACEDIM="1;2;3"
+          $CMAKE -S . -B build -DAMReX_SPACEDIM="1;2;3" \
+                 -DCMAKE_CXX_COMPILER="/usr/local/bin/g++"
 
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v2
@@ -62,6 +75,19 @@ jobs:
       - name: Build (C++)
         if: ${{ matrix.language == 'cpp' }}
         run: |
+          export CCACHE_COMPRESS=1
+          export CCACHE_COMPRESSLEVEL=10
+          export CCACHE_MAXSIZE=400M
+          ccache -z
+
+          $CMAKE --build build -j 2
+
+          ccache -s
+          du -hs ~/.cache/ccache
+
+          # Make sure CodeQL has something to do
+          touch build/_deps/fetchedamrex-src/Src/Base/AMReX.cpp
+          export CCACHE_DISABLE=1
           $CMAKE --build build -j 2
 
       - name: Perform CodeQL Analysis
