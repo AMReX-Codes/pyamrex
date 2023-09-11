@@ -31,7 +31,7 @@ jobs:
 
   clang:
     name: Clang w/o MPI shared debug
-    runs-on: windows-latest
+    runs-on: windows-2022
     if: github.event.pull_request.draft == false
     steps:
     - uses: actions/checkout@v3
@@ -41,15 +41,22 @@ jobs:
     - uses: seanmiddleditch/gha-setup-ninja@master
     - name: Build
       run: |
+        $Env:VCVARSALL = "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\vc\Auxiliary\build\vcvarsall.bat"
+        $Env:VCVARSPLATFORM = "x64"
+        $Env:VCVARSVERSION = "14.36"
+        Invoke-Expression -Command .github/ci/vcvarsall.ps1
+
         python3 -m pip install -U pip setuptools wheel pytest
         python3 -m pip install -U cmake
         python3 -m pip install -r requirements.txt
 
-        cmake -S . -B build               `
-              -T "ClangCl"                `
-              -DCMAKE_VERBOSE_MAKEFILE=ON `
-              -DBUILD_SHARED_LIBS=ON      `
-              -DAMReX_MPI=OFF             `
+        cmake -S . -B build                 `
+              -G "Ninja"                    `
+              -DCMAKE_C_COMPILER=clang-cl   `
+              -DCMAKE_CXX_COMPILER=clang-cl `
+              -DCMAKE_VERBOSE_MAKEFILE=ON   `
+              -DBUILD_SHARED_LIBS=ON        `
+              -DAMReX_MPI=OFF               `
               -DAMReX_SPACEDIM="1;2;3"
         if(!$?) { Exit $LASTEXITCODE }
 
