@@ -40,7 +40,7 @@
 *.pyc
 __pycache__
 _tmppythonbuild/
-pyamrex.egg-info/
+amrex.egg-info/
 
 #######
 # IDE #
@@ -122,12 +122,14 @@ docs/doxyxml/
 docs/html/
 docs/xml/
 docs/doxygen_sqlite3.db
-docs/openpmd-api-doxygen-web.tag.xml
+docs/amrex-doxygen-web.tag.xml
+docs/pyamrex-doxygen-web.tag.xml
 
 ####################
 # Sphinx & Breathe #
 ####################
 docs/build/
 docs/source/_static/doxyhtml/
-
-src/*.egg-info
+docs/source/_static/
+docs/doxyhtml/
+docs/doxyxml/

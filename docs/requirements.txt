@@ -1,0 +1,18 @@
+# Copyright 2019-2023 Axel Huebl, Maxence Thevenet
+#
+# This file is part of WarpX.
+#
+# License: BSD-3-Clause-LBNL
+
+breathe
+docutils>=0.17.1
+pygments
+recommonmark
+# Sphinx<7.2 because we are waiting for
+#   https://github.com/breathe-doc/breathe/issues/943
+sphinx>=5.3,<7.2
+sphinx-design
+sphinx_rtd_theme>=1.1.1
+# reference system
+#sphinxcontrib-bibtex
+#sphinxcontrib-napoleon
