@@ -33,7 +33,7 @@ def test_array_interface():
     podv.push_back(2)
     podv.push_back(1)
     podv.push_back(5)
-    arr = np.array(podv, copy=False)
+    arr = podv.to_numpy()
     print(arr)
 
     # podv[2] = 3

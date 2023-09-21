@@ -45,18 +45,17 @@ def test_mfab_loop(make_mfab):
 
         # numpy representation: non-copying view, including the
         # guard/ghost region
-        #   note: in numpy, indices are in C-order!
-        marr_np = np.array(marr, copy=False)
+        marr_np = marr.to_numpy()
 
         # check the values at start/end are the same: first component
         assert marr_np[0, 0, 0, 0] == marr[bx.small_end]
-        assert marr_np[0, -1, -1, -1] == marr[bx.big_end]
+        assert marr_np[-1, -1, -1, 0] == marr[bx.big_end]
         # same check, but for all components
         for n in range(mfab.num_comp):
             small_end_comp = list(bx.small_end) + [n]
             big_end_comp = list(bx.big_end) + [n]
-            assert marr_np[n, 0, 0, 0] == marr[small_end_comp]
-            assert marr_np[n, -1, -1, -1] == marr[big_end_comp]
+            assert marr_np[0, 0, 0, n] == marr[small_end_comp]
+            assert marr_np[-1, -1, -1, n] == marr[big_end_comp]
 
         # now we do some faster assignments, using range based access
         #   this should fail as out-of-bounds, but does not
@@ -64,7 +63,7 @@ def test_mfab_loop(make_mfab):
         # marr_np[24:200, :, :, :] = 42.
 
         #   all components and all indices set at once to 42
-        marr_np[:, :, :, :] = 42.0
+        marr_np[()] = 42.0
 
         # values in start & end still match?
         assert marr_np[0, 0, 0, 0] == marr[bx.small_end]
@@ -210,10 +209,11 @@ def test_mfab_ops_cuda_cupy(make_mfab_device):
     with cupy.profiler.time_range("assign 3 [()]", color_id=0):
         for mfi in mfab_device:
             bx = mfi.tilebox().grow(ngv)
-            marr = mfab_device.array(mfi)
-            marr_cupy = cp.array(marr, copy=False)
+            marr_cupy = mfab_device.array(mfi).to_cupy(order="C")
             # print(marr_cupy.shape)  # 1, 32, 32, 32
             # print(marr_cupy.dtype)  # float64
+            # performance:
+            #   https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
 
             # write and read into the marr_cupy
             marr_cupy[()] = 3.0
@@ -244,8 +244,11 @@ def test_mfab_ops_cuda_cupy(make_mfab_device):
 
         for mfi in mfab_device:
             bx = mfi.tilebox().grow(ngv)
-            marr = mfab_device.array(mfi)
-            marr_cupy = cp.array(marr, copy=False)
+            marr_cupy = mfab_device.array(mfi).to_cupy(order="F")
+            # print(marr_cupy.shape)  # 32, 32, 32, 1
+            # print(marr_cupy.dtype)  # float64
+            # performance:
+            #   https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
 
             # write and read into the marr_cupy
             fives_cp = set_to_five(marr_cupy)
@@ -266,8 +269,7 @@ def test_mfab_ops_cuda_cupy(make_mfab_device):
 
         for mfi in mfab_device:
             bx = mfi.tilebox().grow(ngv)
-            marr = mfab_device.array(mfi)
-            marr_cupy = cp.array(marr, copy=False)
+            marr_cupy = mfab_device.array(mfi).to_cupy(order="C")
 
             # write and read into the marr_cupy
             set_to_seven(marr_cupy)

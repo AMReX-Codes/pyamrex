@@ -137,7 +137,7 @@ def test_pc_init():
             print(pti.geom(level=lvl))
 
             aos = pti.aos()
-            aos_arr = np.array(aos, copy=False)
+            aos_arr = aos.to_numpy()
             aos_arr[0]["x"] = 0.30
             aos_arr[0]["y"] = 0.35
             aos_arr[0]["z"] = 0.40
@@ -163,7 +163,7 @@ def test_pc_init():
             assert pti.level == lvl
 
             aos = pti.aos()
-            aos_arr = np.array(aos, copy=False)
+            aos_arr = aos.to_numpy()
             assert aos[0].x == 0.30
             assert aos[0].y == 0.35
             assert aos[0].z == 0.40
@@ -196,7 +196,7 @@ def test_particle_init(Npart, particle_container):
         real_arrays = pt.GetStructOfArrays().GetRealData()
         int_arrays = pt.GetStructOfArrays().GetIntData()
         aos = pt.GetArrayOfStructs()
-        aos_arr = np.array(aos, copy=False)
+        aos_arr = aos.to_numpy()
         if len(real_arrays) > 0:
             assert np.isclose(real_arrays[0][0], 0.5) and np.isclose(
                 real_arrays[1][0], 0.2
@@ -226,13 +226,13 @@ def test_particle_init(Npart, particle_container):
             print(real_arrays)
             print(ra1)
             for ii, arr in enumerate(real_arrays):
-                assert np.allclose(np.array(arr), np.array(ra1[ii]))
+                assert np.allclose(arr.to_numpy(), ra1[ii].to_numpy())
 
             print("soa int test")
-            iarr_np = np.array(int_arrays[0], copy=False)
+            iarr_np = int_arrays[0].to_numpy()
             iarr_np[0] = -3
             ia1 = pt.GetStructOfArrays().GetIntData()
-            ia1_np = np.array(ia1[0], copy=False)
+            ia1_np = ia1[0].to_numpy()
             print(iarr_np)
             print(ia1_np)
             assert np.allclose(iarr_np, ia1_np)
