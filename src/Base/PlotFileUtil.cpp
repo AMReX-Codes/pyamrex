@@ -28,6 +28,6 @@ void init_PlotFileUtil(py::module& m)
           py::arg("versionName")="HyperCLaw-V1.1",
           py::arg("levelPrefix")="Level_",
           py::arg("mfPrefix")="Cell",
-          py::arg("extra_dirs")=Vector<std::string>()
+          py::arg_v("extra_dirs", Vector<std::string>(), "list[str]")
     );
 }

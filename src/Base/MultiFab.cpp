@@ -309,7 +309,9 @@ void init_MultiFab(py::module &m)
              "Returns the sum of component 'comp' over the MultiFab -- no ghost cells are included."
         )
         .def("sum_unique", &MultiFab::sum_unique,
-             py::arg("comp") = 0, py::arg("local") = false, py::arg("period") = Periodicity::NonPeriodic(),
+             py::arg("comp") = 0,
+             py::arg("local") = false,
+             py::arg_v("period", Periodicity::NonPeriodic(), "Periodicity.non_periodic()"),
              "Same as sum with local=false, but for non-cell-centered data, this"
              "skips non-unique points that are owned by multiple boxes."
         )
