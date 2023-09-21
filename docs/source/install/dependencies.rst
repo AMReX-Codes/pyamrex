@@ -10,7 +10,10 @@ Please see installation instructions below.
 - `CMake 3.20.0+ <https://cmake.org>`__
 - `Git 2.18+ <https://git-scm.com>`__
 - `AMReX <https://amrex-codes.github.io>`__: we automatically download and compile a copy
-- `ABLASTR/WarpX <https://github.com/ECP-WarpX/warpx>`__: we automatically download and compile a copy
+- `pybind11 2.10.1+ <https://github.com/pybind/pybind11/>`__: we automatically download and compile a copy
+- `Python 3.8+ <https://www.python.org>`__
+
+  - `numpy 1.15+ <https://numpy.org>`__
 
 Optional dependencies include:
 
@@ -22,11 +25,13 @@ Optional dependencies include:
   - `ROCm 5.2+ (5.5+ recommended) <https://gpuopen.com/learn/amd-lab-notes/amd-lab-notes-rocm-installation-readme/>`__: for AMD GPU support
 - `CCache <https://ccache.dev>`__: to speed up rebuilds (For CUDA support, needs version 3.7.9+ and 4.2+ is recommended)
 - `Ninja <https://ninja-build.org>`__: for faster parallel compiles
-- `Python 3.8+ <https://www.python.org>`__
+- further `optional dependencies of AMReX <https://github.com/AMReX-Codes/amrex/>`__
+- `Python dependencies <https://www.python.org>`__
 
   - `mpi4py <https://mpi4py.readthedocs.io>`__
-  - `numpy <https://numpy.org>`__
-  - see our ``requirements.txt`` file for compatible versions
+  - `cupy <https://github.com/cupy/cupy#installation>`__ 11.2+
+  - `numba <https://numba.readthedocs.io/en/stable/user/installing.html>`__ 0.56+
+  - `torch <https://pytorch.org/get-started/locally/>`__ 1.12+
 
 For all other systems, we recommend to use a **package dependency manager**:
 Pick *one* of the installation methods below to install all dependencies for pyAMReX development in a consistent manner.
