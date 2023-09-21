@@ -329,6 +329,65 @@ class Array4_double:
     @typing.overload
     def __setitem__(self, arg0: list[int[3]], arg1: float) -> None: ...
     def contains(self, arg0: int, arg1: int, arg2: int) -> bool: ...
+    def to_cupy(self, copy=False, order="F"):
+        """
+
+        Provide a Cupy view into an Array4.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        cupy.array
+            A cupy n-dimensional array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if cupy is not installed
+
+        """
+    def to_numpy(self, copy=False, order="F"):
+        """
+
+        Provide a Numpy view into an Array4.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        np.array
+            A numpy n-dimensional array.
+
+        """
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -359,6 +418,65 @@ class Array4_double_const:
     def __init__(self, arg0: numpy.ndarray[numpy.float64]) -> None: ...
     def __repr__(self) -> str: ...
     def contains(self, arg0: int, arg1: int, arg2: int) -> bool: ...
+    def to_cupy(self, copy=False, order="F"):
+        """
+
+        Provide a Cupy view into an Array4.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        cupy.array
+            A cupy n-dimensional array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if cupy is not installed
+
+        """
+    def to_numpy(self, copy=False, order="F"):
+        """
+
+        Provide a Numpy view into an Array4.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        np.array
+            A numpy n-dimensional array.
+
+        """
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -395,6 +513,65 @@ class Array4_float:
     @typing.overload
     def __setitem__(self, arg0: list[int[3]], arg1: float) -> None: ...
     def contains(self, arg0: int, arg1: int, arg2: int) -> bool: ...
+    def to_cupy(self, copy=False, order="F"):
+        """
+
+        Provide a Cupy view into an Array4.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        cupy.array
+            A cupy n-dimensional array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if cupy is not installed
+
+        """
+    def to_numpy(self, copy=False, order="F"):
+        """
+
+        Provide a Numpy view into an Array4.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        np.array
+            A numpy n-dimensional array.
+
+        """
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -425,6 +602,65 @@ class Array4_float_const:
     def __init__(self, arg0: numpy.ndarray[numpy.float32]) -> None: ...
     def __repr__(self) -> str: ...
     def contains(self, arg0: int, arg1: int, arg2: int) -> bool: ...
+    def to_cupy(self, copy=False, order="F"):
+        """
+
+        Provide a Cupy view into an Array4.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        cupy.array
+            A cupy n-dimensional array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if cupy is not installed
+
+        """
+    def to_numpy(self, copy=False, order="F"):
+        """
+
+        Provide a Numpy view into an Array4.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        np.array
+            A numpy n-dimensional array.
+
+        """
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -461,6 +697,65 @@ class Array4_int:
     @typing.overload
     def __setitem__(self, arg0: list[int[3]], arg1: int) -> None: ...
     def contains(self, arg0: int, arg1: int, arg2: int) -> bool: ...
+    def to_cupy(self, copy=False, order="F"):
+        """
+
+        Provide a Cupy view into an Array4.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        cupy.array
+            A cupy n-dimensional array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if cupy is not installed
+
+        """
+    def to_numpy(self, copy=False, order="F"):
+        """
+
+        Provide a Numpy view into an Array4.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        np.array
+            A numpy n-dimensional array.
+
+        """
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -491,6 +786,65 @@ class Array4_int_const:
     def __init__(self, arg0: numpy.ndarray[numpy.int32]) -> None: ...
     def __repr__(self) -> str: ...
     def contains(self, arg0: int, arg1: int, arg2: int) -> bool: ...
+    def to_cupy(self, copy=False, order="F"):
+        """
+
+        Provide a Cupy view into an Array4.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        cupy.array
+            A cupy n-dimensional array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if cupy is not installed
+
+        """
+    def to_numpy(self, copy=False, order="F"):
+        """
+
+        Provide a Numpy view into an Array4.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        np.array
+            A numpy n-dimensional array.
+
+        """
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -527,6 +881,65 @@ class Array4_long:
     @typing.overload
     def __setitem__(self, arg0: list[int[3]], arg1: int) -> None: ...
     def contains(self, arg0: int, arg1: int, arg2: int) -> bool: ...
+    def to_cupy(self, copy=False, order="F"):
+        """
+
+        Provide a Cupy view into an Array4.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        cupy.array
+            A cupy n-dimensional array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if cupy is not installed
+
+        """
+    def to_numpy(self, copy=False, order="F"):
+        """
+
+        Provide a Numpy view into an Array4.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        np.array
+            A numpy n-dimensional array.
+
+        """
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -557,6 +970,65 @@ class Array4_long_const:
     def __init__(self, arg0: numpy.ndarray[numpy.int64]) -> None: ...
     def __repr__(self) -> str: ...
     def contains(self, arg0: int, arg1: int, arg2: int) -> bool: ...
+    def to_cupy(self, copy=False, order="F"):
+        """
+
+        Provide a Cupy view into an Array4.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        cupy.array
+            A cupy n-dimensional array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if cupy is not installed
+
+        """
+    def to_numpy(self, copy=False, order="F"):
+        """
+
+        Provide a Numpy view into an Array4.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        np.array
+            A numpy n-dimensional array.
+
+        """
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -593,6 +1065,65 @@ class Array4_longdouble:
     @typing.overload
     def __setitem__(self, arg0: list[int[3]], arg1: float) -> None: ...
     def contains(self, arg0: int, arg1: int, arg2: int) -> bool: ...
+    def to_cupy(self, copy=False, order="F"):
+        """
+
+        Provide a Cupy view into an Array4.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        cupy.array
+            A cupy n-dimensional array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if cupy is not installed
+
+        """
+    def to_numpy(self, copy=False, order="F"):
+        """
+
+        Provide a Numpy view into an Array4.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        np.array
+            A numpy n-dimensional array.
+
+        """
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -623,6 +1154,65 @@ class Array4_longdouble_const:
     def __init__(self, arg0: numpy.ndarray[numpy.longdouble]) -> None: ...
     def __repr__(self) -> str: ...
     def contains(self, arg0: int, arg1: int, arg2: int) -> bool: ...
+    def to_cupy(self, copy=False, order="F"):
+        """
+
+        Provide a Cupy view into an Array4.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        cupy.array
+            A cupy n-dimensional array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if cupy is not installed
+
+        """
+    def to_numpy(self, copy=False, order="F"):
+        """
+
+        Provide a Numpy view into an Array4.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        np.array
+            A numpy n-dimensional array.
+
+        """
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -659,6 +1249,65 @@ class Array4_longlong:
     @typing.overload
     def __setitem__(self, arg0: list[int[3]], arg1: int) -> None: ...
     def contains(self, arg0: int, arg1: int, arg2: int) -> bool: ...
+    def to_cupy(self, copy=False, order="F"):
+        """
+
+        Provide a Cupy view into an Array4.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        cupy.array
+            A cupy n-dimensional array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if cupy is not installed
+
+        """
+    def to_numpy(self, copy=False, order="F"):
+        """
+
+        Provide a Numpy view into an Array4.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        np.array
+            A numpy n-dimensional array.
+
+        """
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -689,6 +1338,65 @@ class Array4_longlong_const:
     def __init__(self, arg0: numpy.ndarray[numpy.int64]) -> None: ...
     def __repr__(self) -> str: ...
     def contains(self, arg0: int, arg1: int, arg2: int) -> bool: ...
+    def to_cupy(self, copy=False, order="F"):
+        """
+
+        Provide a Cupy view into an Array4.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        cupy.array
+            A cupy n-dimensional array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if cupy is not installed
+
+        """
+    def to_numpy(self, copy=False, order="F"):
+        """
+
+        Provide a Numpy view into an Array4.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        np.array
+            A numpy n-dimensional array.
+
+        """
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -725,6 +1433,65 @@ class Array4_short:
     @typing.overload
     def __setitem__(self, arg0: list[int[3]], arg1: int) -> None: ...
     def contains(self, arg0: int, arg1: int, arg2: int) -> bool: ...
+    def to_cupy(self, copy=False, order="F"):
+        """
+
+        Provide a Cupy view into an Array4.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        cupy.array
+            A cupy n-dimensional array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if cupy is not installed
+
+        """
+    def to_numpy(self, copy=False, order="F"):
+        """
+
+        Provide a Numpy view into an Array4.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        np.array
+            A numpy n-dimensional array.
+
+        """
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -755,6 +1522,65 @@ class Array4_short_const:
     def __init__(self, arg0: numpy.ndarray[numpy.int16]) -> None: ...
     def __repr__(self) -> str: ...
     def contains(self, arg0: int, arg1: int, arg2: int) -> bool: ...
+    def to_cupy(self, copy=False, order="F"):
+        """
+
+        Provide a Cupy view into an Array4.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        cupy.array
+            A cupy n-dimensional array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if cupy is not installed
+
+        """
+    def to_numpy(self, copy=False, order="F"):
+        """
+
+        Provide a Numpy view into an Array4.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        np.array
+            A numpy n-dimensional array.
+
+        """
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -791,6 +1617,65 @@ class Array4_uint:
     @typing.overload
     def __setitem__(self, arg0: list[int[3]], arg1: int) -> None: ...
     def contains(self, arg0: int, arg1: int, arg2: int) -> bool: ...
+    def to_cupy(self, copy=False, order="F"):
+        """
+
+        Provide a Cupy view into an Array4.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        cupy.array
+            A cupy n-dimensional array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if cupy is not installed
+
+        """
+    def to_numpy(self, copy=False, order="F"):
+        """
+
+        Provide a Numpy view into an Array4.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        np.array
+            A numpy n-dimensional array.
+
+        """
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -821,6 +1706,65 @@ class Array4_uint_const:
     def __init__(self, arg0: numpy.ndarray[numpy.uint32]) -> None: ...
     def __repr__(self) -> str: ...
     def contains(self, arg0: int, arg1: int, arg2: int) -> bool: ...
+    def to_cupy(self, copy=False, order="F"):
+        """
+
+        Provide a Cupy view into an Array4.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        cupy.array
+            A cupy n-dimensional array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if cupy is not installed
+
+        """
+    def to_numpy(self, copy=False, order="F"):
+        """
+
+        Provide a Numpy view into an Array4.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        np.array
+            A numpy n-dimensional array.
+
+        """
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -857,6 +1801,65 @@ class Array4_ulong:
     @typing.overload
     def __setitem__(self, arg0: list[int[3]], arg1: int) -> None: ...
     def contains(self, arg0: int, arg1: int, arg2: int) -> bool: ...
+    def to_cupy(self, copy=False, order="F"):
+        """
+
+        Provide a Cupy view into an Array4.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        cupy.array
+            A cupy n-dimensional array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if cupy is not installed
+
+        """
+    def to_numpy(self, copy=False, order="F"):
+        """
+
+        Provide a Numpy view into an Array4.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        np.array
+            A numpy n-dimensional array.
+
+        """
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -887,6 +1890,65 @@ class Array4_ulong_const:
     def __init__(self, arg0: numpy.ndarray[numpy.uint64]) -> None: ...
     def __repr__(self) -> str: ...
     def contains(self, arg0: int, arg1: int, arg2: int) -> bool: ...
+    def to_cupy(self, copy=False, order="F"):
+        """
+
+        Provide a Cupy view into an Array4.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        cupy.array
+            A cupy n-dimensional array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if cupy is not installed
+
+        """
+    def to_numpy(self, copy=False, order="F"):
+        """
+
+        Provide a Numpy view into an Array4.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        np.array
+            A numpy n-dimensional array.
+
+        """
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -923,6 +1985,65 @@ class Array4_ulonglong:
     @typing.overload
     def __setitem__(self, arg0: list[int[3]], arg1: int) -> None: ...
     def contains(self, arg0: int, arg1: int, arg2: int) -> bool: ...
+    def to_cupy(self, copy=False, order="F"):
+        """
+
+        Provide a Cupy view into an Array4.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        cupy.array
+            A cupy n-dimensional array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if cupy is not installed
+
+        """
+    def to_numpy(self, copy=False, order="F"):
+        """
+
+        Provide a Numpy view into an Array4.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        np.array
+            A numpy n-dimensional array.
+
+        """
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -953,6 +2074,65 @@ class Array4_ulonglong_const:
     def __init__(self, arg0: numpy.ndarray[numpy.uint64]) -> None: ...
     def __repr__(self) -> str: ...
     def contains(self, arg0: int, arg1: int, arg2: int) -> bool: ...
+    def to_cupy(self, copy=False, order="F"):
+        """
+
+        Provide a Cupy view into an Array4.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        cupy.array
+            A cupy n-dimensional array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if cupy is not installed
+
+        """
+    def to_numpy(self, copy=False, order="F"):
+        """
+
+        Provide a Numpy view into an Array4.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        np.array
+            A numpy n-dimensional array.
+
+        """
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -989,6 +2169,65 @@ class Array4_ushort:
     @typing.overload
     def __setitem__(self, arg0: list[int[3]], arg1: int) -> None: ...
     def contains(self, arg0: int, arg1: int, arg2: int) -> bool: ...
+    def to_cupy(self, copy=False, order="F"):
+        """
+
+        Provide a Cupy view into an Array4.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        cupy.array
+            A cupy n-dimensional array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if cupy is not installed
+
+        """
+    def to_numpy(self, copy=False, order="F"):
+        """
+
+        Provide a Numpy view into an Array4.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        np.array
+            A numpy n-dimensional array.
+
+        """
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -1019,6 +2258,65 @@ class Array4_ushort_const:
     def __init__(self, arg0: numpy.ndarray[numpy.uint16]) -> None: ...
     def __repr__(self) -> str: ...
     def contains(self, arg0: int, arg1: int, arg2: int) -> bool: ...
+    def to_cupy(self, copy=False, order="F"):
+        """
+
+        Provide a Cupy view into an Array4.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        cupy.array
+            A cupy n-dimensional array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if cupy is not installed
+
+        """
+    def to_numpy(self, copy=False, order="F"):
+        """
+
+        Provide a Numpy view into an Array4.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        np.array
+            A numpy n-dimensional array.
+
+        """
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -1053,6 +2351,50 @@ class ArrayOfStructs_0_0_arena:
     def push_back(self, arg0: Particle_0_0) -> None: ...
     def setNumNeighbors(self, arg0: int) -> None: ...
     def size(self) -> int: ...
+    def to_cupy(self, copy=False):
+        """
+
+        Provide Cupy views into a ArrayOfStructs.
+
+        Parameters
+        ----------
+        self : amrex.ArrayOfStructs_*
+            An ArrayOfStructs class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        namedtuple
+            A tuple with real and int components that are each lists
+            of 1D numpy arrays.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if cupy is not installed
+
+        """
+    def to_host(self) -> ArrayOfStructs_0_0_default: ...
+    def to_numpy(self, copy=False):
+        """
+
+        Provide Numpy views into a ArrayOfStructs.
+
+        Parameters
+        ----------
+        self : amrex.ArrayOfStructs_*
+            An ArrayOfStructs class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        namedtuple
+            A tuple with real and int components that are each lists
+            of 1D numpy arrays.
+
+        """
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -1081,6 +2423,50 @@ class ArrayOfStructs_0_0_default:
     def push_back(self, arg0: Particle_0_0) -> None: ...
     def setNumNeighbors(self, arg0: int) -> None: ...
     def size(self) -> int: ...
+    def to_cupy(self, copy=False):
+        """
+
+        Provide Cupy views into a ArrayOfStructs.
+
+        Parameters
+        ----------
+        self : amrex.ArrayOfStructs_*
+            An ArrayOfStructs class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        namedtuple
+            A tuple with real and int components that are each lists
+            of 1D numpy arrays.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if cupy is not installed
+
+        """
+    def to_host(self) -> ArrayOfStructs_0_0_default: ...
+    def to_numpy(self, copy=False):
+        """
+
+        Provide Numpy views into a ArrayOfStructs.
+
+        Parameters
+        ----------
+        self : amrex.ArrayOfStructs_*
+            An ArrayOfStructs class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        namedtuple
+            A tuple with real and int components that are each lists
+            of 1D numpy arrays.
+
+        """
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -1109,6 +2495,50 @@ class ArrayOfStructs_0_0_pinned:
     def push_back(self, arg0: Particle_0_0) -> None: ...
     def setNumNeighbors(self, arg0: int) -> None: ...
     def size(self) -> int: ...
+    def to_cupy(self, copy=False):
+        """
+
+        Provide Cupy views into a ArrayOfStructs.
+
+        Parameters
+        ----------
+        self : amrex.ArrayOfStructs_*
+            An ArrayOfStructs class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        namedtuple
+            A tuple with real and int components that are each lists
+            of 1D numpy arrays.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if cupy is not installed
+
+        """
+    def to_host(self) -> ArrayOfStructs_0_0_default: ...
+    def to_numpy(self, copy=False):
+        """
+
+        Provide Numpy views into a ArrayOfStructs.
+
+        Parameters
+        ----------
+        self : amrex.ArrayOfStructs_*
+            An ArrayOfStructs class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        namedtuple
+            A tuple with real and int components that are each lists
+            of 1D numpy arrays.
+
+        """
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -1137,6 +2567,50 @@ class ArrayOfStructs_1_1_arena:
     def push_back(self, arg0: Particle_1_1) -> None: ...
     def setNumNeighbors(self, arg0: int) -> None: ...
     def size(self) -> int: ...
+    def to_cupy(self, copy=False):
+        """
+
+        Provide Cupy views into a ArrayOfStructs.
+
+        Parameters
+        ----------
+        self : amrex.ArrayOfStructs_*
+            An ArrayOfStructs class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        namedtuple
+            A tuple with real and int components that are each lists
+            of 1D numpy arrays.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if cupy is not installed
+
+        """
+    def to_host(self) -> ArrayOfStructs_1_1_default: ...
+    def to_numpy(self, copy=False):
+        """
+
+        Provide Numpy views into a ArrayOfStructs.
+
+        Parameters
+        ----------
+        self : amrex.ArrayOfStructs_*
+            An ArrayOfStructs class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        namedtuple
+            A tuple with real and int components that are each lists
+            of 1D numpy arrays.
+
+        """
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -1165,6 +2639,50 @@ class ArrayOfStructs_1_1_default:
     def push_back(self, arg0: Particle_1_1) -> None: ...
     def setNumNeighbors(self, arg0: int) -> None: ...
     def size(self) -> int: ...
+    def to_cupy(self, copy=False):
+        """
+
+        Provide Cupy views into a ArrayOfStructs.
+
+        Parameters
+        ----------
+        self : amrex.ArrayOfStructs_*
+            An ArrayOfStructs class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        namedtuple
+            A tuple with real and int components that are each lists
+            of 1D numpy arrays.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if cupy is not installed
+
+        """
+    def to_host(self) -> ArrayOfStructs_1_1_default: ...
+    def to_numpy(self, copy=False):
+        """
+
+        Provide Numpy views into a ArrayOfStructs.
+
+        Parameters
+        ----------
+        self : amrex.ArrayOfStructs_*
+            An ArrayOfStructs class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        namedtuple
+            A tuple with real and int components that are each lists
+            of 1D numpy arrays.
+
+        """
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -1193,6 +2711,50 @@ class ArrayOfStructs_1_1_pinned:
     def push_back(self, arg0: Particle_1_1) -> None: ...
     def setNumNeighbors(self, arg0: int) -> None: ...
     def size(self) -> int: ...
+    def to_cupy(self, copy=False):
+        """
+
+        Provide Cupy views into a ArrayOfStructs.
+
+        Parameters
+        ----------
+        self : amrex.ArrayOfStructs_*
+            An ArrayOfStructs class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        namedtuple
+            A tuple with real and int components that are each lists
+            of 1D numpy arrays.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if cupy is not installed
+
+        """
+    def to_host(self) -> ArrayOfStructs_1_1_default: ...
+    def to_numpy(self, copy=False):
+        """
+
+        Provide Numpy views into a ArrayOfStructs.
+
+        Parameters
+        ----------
+        self : amrex.ArrayOfStructs_*
+            An ArrayOfStructs class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        namedtuple
+            A tuple with real and int components that are each lists
+            of 1D numpy arrays.
+
+        """
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -1221,6 +2783,50 @@ class ArrayOfStructs_2_1_arena:
     def push_back(self, arg0: Particle_2_1) -> None: ...
     def setNumNeighbors(self, arg0: int) -> None: ...
     def size(self) -> int: ...
+    def to_cupy(self, copy=False):
+        """
+
+        Provide Cupy views into a ArrayOfStructs.
+
+        Parameters
+        ----------
+        self : amrex.ArrayOfStructs_*
+            An ArrayOfStructs class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        namedtuple
+            A tuple with real and int components that are each lists
+            of 1D numpy arrays.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if cupy is not installed
+
+        """
+    def to_host(self) -> ArrayOfStructs_2_1_default: ...
+    def to_numpy(self, copy=False):
+        """
+
+        Provide Numpy views into a ArrayOfStructs.
+
+        Parameters
+        ----------
+        self : amrex.ArrayOfStructs_*
+            An ArrayOfStructs class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        namedtuple
+            A tuple with real and int components that are each lists
+            of 1D numpy arrays.
+
+        """
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -1249,6 +2855,50 @@ class ArrayOfStructs_2_1_default:
     def push_back(self, arg0: Particle_2_1) -> None: ...
     def setNumNeighbors(self, arg0: int) -> None: ...
     def size(self) -> int: ...
+    def to_cupy(self, copy=False):
+        """
+
+        Provide Cupy views into a ArrayOfStructs.
+
+        Parameters
+        ----------
+        self : amrex.ArrayOfStructs_*
+            An ArrayOfStructs class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        namedtuple
+            A tuple with real and int components that are each lists
+            of 1D numpy arrays.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if cupy is not installed
+
+        """
+    def to_host(self) -> ArrayOfStructs_2_1_default: ...
+    def to_numpy(self, copy=False):
+        """
+
+        Provide Numpy views into a ArrayOfStructs.
+
+        Parameters
+        ----------
+        self : amrex.ArrayOfStructs_*
+            An ArrayOfStructs class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        namedtuple
+            A tuple with real and int components that are each lists
+            of 1D numpy arrays.
+
+        """
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -1277,6 +2927,50 @@ class ArrayOfStructs_2_1_pinned:
     def push_back(self, arg0: Particle_2_1) -> None: ...
     def setNumNeighbors(self, arg0: int) -> None: ...
     def size(self) -> int: ...
+    def to_cupy(self, copy=False):
+        """
+
+        Provide Cupy views into a ArrayOfStructs.
+
+        Parameters
+        ----------
+        self : amrex.ArrayOfStructs_*
+            An ArrayOfStructs class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        namedtuple
+            A tuple with real and int components that are each lists
+            of 1D numpy arrays.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if cupy is not installed
+
+        """
+    def to_host(self) -> ArrayOfStructs_2_1_default: ...
+    def to_numpy(self, copy=False):
+        """
+
+        Provide Numpy views into a ArrayOfStructs.
+
+        Parameters
+        ----------
+        self : amrex.ArrayOfStructs_*
+            An ArrayOfStructs class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        namedtuple
+            A tuple with real and int components that are each lists
+            of 1D numpy arrays.
+
+        """
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -2446,6 +4140,48 @@ class PODVector_int_arena:
     def resize(self, arg0: int, arg1: int) -> None: ...
     def shrink_to_fit(self) -> None: ...
     def size(self) -> int: ...
+    def to_cupy(self, copy=False):
+        """
+
+        Provide a Cupy view into a PODVector (e.g., RealVector, IntVector).
+
+        Parameters
+        ----------
+        self : amrex.PODVector_*
+            A PODVector class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        cupy.array
+            A 1D cupy array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if cupy is not installed
+
+        """
+    def to_host(self) -> PODVector_int_std: ...
+    def to_numpy(self, copy=False):
+        """
+
+        Provide a Numpy view into a PODVector (e.g., RealVector, IntVector).
+
+        Parameters
+        ----------
+        self : amrex.PODVector_*
+            A PODVector class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        np.array
+            A 1D numpy array.
+
+        """
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -2474,6 +4210,48 @@ class PODVector_int_pinned:
     def resize(self, arg0: int, arg1: int) -> None: ...
     def shrink_to_fit(self) -> None: ...
     def size(self) -> int: ...
+    def to_cupy(self, copy=False):
+        """
+
+        Provide a Cupy view into a PODVector (e.g., RealVector, IntVector).
+
+        Parameters
+        ----------
+        self : amrex.PODVector_*
+            A PODVector class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        cupy.array
+            A 1D cupy array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if cupy is not installed
+
+        """
+    def to_host(self) -> PODVector_int_std: ...
+    def to_numpy(self, copy=False):
+        """
+
+        Provide a Numpy view into a PODVector (e.g., RealVector, IntVector).
+
+        Parameters
+        ----------
+        self : amrex.PODVector_*
+            A PODVector class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        np.array
+            A 1D numpy array.
+
+        """
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -2502,6 +4280,48 @@ class PODVector_int_std:
     def resize(self, arg0: int, arg1: int) -> None: ...
     def shrink_to_fit(self) -> None: ...
     def size(self) -> int: ...
+    def to_cupy(self, copy=False):
+        """
+
+        Provide a Cupy view into a PODVector (e.g., RealVector, IntVector).
+
+        Parameters
+        ----------
+        self : amrex.PODVector_*
+            A PODVector class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        cupy.array
+            A 1D cupy array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if cupy is not installed
+
+        """
+    def to_host(self) -> PODVector_int_std: ...
+    def to_numpy(self, copy=False):
+        """
+
+        Provide a Numpy view into a PODVector (e.g., RealVector, IntVector).
+
+        Parameters
+        ----------
+        self : amrex.PODVector_*
+            A PODVector class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        np.array
+            A 1D numpy array.
+
+        """
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -2530,6 +4350,48 @@ class PODVector_real_arena:
     def resize(self, arg0: int, arg1: float) -> None: ...
     def shrink_to_fit(self) -> None: ...
     def size(self) -> int: ...
+    def to_cupy(self, copy=False):
+        """
+
+        Provide a Cupy view into a PODVector (e.g., RealVector, IntVector).
+
+        Parameters
+        ----------
+        self : amrex.PODVector_*
+            A PODVector class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        cupy.array
+            A 1D cupy array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if cupy is not installed
+
+        """
+    def to_host(self) -> PODVector_real_std: ...
+    def to_numpy(self, copy=False):
+        """
+
+        Provide a Numpy view into a PODVector (e.g., RealVector, IntVector).
+
+        Parameters
+        ----------
+        self : amrex.PODVector_*
+            A PODVector class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        np.array
+            A 1D numpy array.
+
+        """
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -2558,6 +4420,48 @@ class PODVector_real_pinned:
     def resize(self, arg0: int, arg1: float) -> None: ...
     def shrink_to_fit(self) -> None: ...
     def size(self) -> int: ...
+    def to_cupy(self, copy=False):
+        """
+
+        Provide a Cupy view into a PODVector (e.g., RealVector, IntVector).
+
+        Parameters
+        ----------
+        self : amrex.PODVector_*
+            A PODVector class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        cupy.array
+            A 1D cupy array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if cupy is not installed
+
+        """
+    def to_host(self) -> PODVector_real_std: ...
+    def to_numpy(self, copy=False):
+        """
+
+        Provide a Numpy view into a PODVector (e.g., RealVector, IntVector).
+
+        Parameters
+        ----------
+        self : amrex.PODVector_*
+            A PODVector class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        np.array
+            A 1D numpy array.
+
+        """
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -2586,6 +4490,48 @@ class PODVector_real_std:
     def resize(self, arg0: int, arg1: float) -> None: ...
     def shrink_to_fit(self) -> None: ...
     def size(self) -> int: ...
+    def to_cupy(self, copy=False):
+        """
+
+        Provide a Cupy view into a PODVector (e.g., RealVector, IntVector).
+
+        Parameters
+        ----------
+        self : amrex.PODVector_*
+            A PODVector class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        cupy.array
+            A 1D cupy array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if cupy is not installed
+
+        """
+    def to_host(self) -> PODVector_real_std: ...
+    def to_numpy(self, copy=False):
+        """
+
+        Provide a Numpy view into a PODVector (e.g., RealVector, IntVector).
+
+        Parameters
+        ----------
+        self : amrex.PODVector_*
+            A PODVector class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        np.array
+            A 1D numpy array.
+
+        """
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -6077,6 +8023,49 @@ class StructOfArrays_2_1_arena:
         """
         Get the number of particles
         """
+    def to_cupy(self, copy=False):
+        """
+
+        Provide Cupy views into a StructOfArrays.
+
+        Parameters
+        ----------
+        self : amrex.StructOfArrays_*
+            A StructOfArrays class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        namedtuple
+            A tuple with real and int components that are each lists
+            of 1D numpy arrays.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if cupy is not installed
+
+        """
+    def to_numpy(self, copy=False):
+        """
+
+        Provide Numpy views into a StructOfArrays.
+
+        Parameters
+        ----------
+        self : amrex.StructOfArrays_*
+            A StructOfArrays class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        namedtuple
+            A tuple with real and int components that are each lists
+            of 1D numpy arrays.
+
+        """
 
 class StructOfArrays_2_1_default:
     @typing.overload
@@ -6122,6 +8111,49 @@ class StructOfArrays_2_1_default:
     def size(self) -> int:
         """
         Get the number of particles
+        """
+    def to_cupy(self, copy=False):
+        """
+
+        Provide Cupy views into a StructOfArrays.
+
+        Parameters
+        ----------
+        self : amrex.StructOfArrays_*
+            A StructOfArrays class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        namedtuple
+            A tuple with real and int components that are each lists
+            of 1D numpy arrays.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if cupy is not installed
+
+        """
+    def to_numpy(self, copy=False):
+        """
+
+        Provide Numpy views into a StructOfArrays.
+
+        Parameters
+        ----------
+        self : amrex.StructOfArrays_*
+            A StructOfArrays class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        namedtuple
+            A tuple with real and int components that are each lists
+            of 1D numpy arrays.
+
         """
 
 class StructOfArrays_2_1_pinned:
@@ -6169,6 +8201,49 @@ class StructOfArrays_2_1_pinned:
         """
         Get the number of particles
         """
+    def to_cupy(self, copy=False):
+        """
+
+        Provide Cupy views into a StructOfArrays.
+
+        Parameters
+        ----------
+        self : amrex.StructOfArrays_*
+            A StructOfArrays class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        namedtuple
+            A tuple with real and int components that are each lists
+            of 1D numpy arrays.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if cupy is not installed
+
+        """
+    def to_numpy(self, copy=False):
+        """
+
+        Provide Numpy views into a StructOfArrays.
+
+        Parameters
+        ----------
+        self : amrex.StructOfArrays_*
+            A StructOfArrays class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        namedtuple
+            A tuple with real and int components that are each lists
+            of 1D numpy arrays.
+
+        """
 
 class StructOfArrays_37_1_arena:
     @typing.overload
@@ -6214,6 +8289,49 @@ class StructOfArrays_37_1_arena:
     def size(self) -> int:
         """
         Get the number of particles
+        """
+    def to_cupy(self, copy=False):
+        """
+
+        Provide Cupy views into a StructOfArrays.
+
+        Parameters
+        ----------
+        self : amrex.StructOfArrays_*
+            A StructOfArrays class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        namedtuple
+            A tuple with real and int components that are each lists
+            of 1D numpy arrays.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if cupy is not installed
+
+        """
+    def to_numpy(self, copy=False):
+        """
+
+        Provide Numpy views into a StructOfArrays.
+
+        Parameters
+        ----------
+        self : amrex.StructOfArrays_*
+            A StructOfArrays class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        namedtuple
+            A tuple with real and int components that are each lists
+            of 1D numpy arrays.
+
         """
 
 class StructOfArrays_37_1_default:
@@ -6261,6 +8379,49 @@ class StructOfArrays_37_1_default:
         """
         Get the number of particles
         """
+    def to_cupy(self, copy=False):
+        """
+
+        Provide Cupy views into a StructOfArrays.
+
+        Parameters
+        ----------
+        self : amrex.StructOfArrays_*
+            A StructOfArrays class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        namedtuple
+            A tuple with real and int components that are each lists
+            of 1D numpy arrays.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if cupy is not installed
+
+        """
+    def to_numpy(self, copy=False):
+        """
+
+        Provide Numpy views into a StructOfArrays.
+
+        Parameters
+        ----------
+        self : amrex.StructOfArrays_*
+            A StructOfArrays class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        namedtuple
+            A tuple with real and int components that are each lists
+            of 1D numpy arrays.
+
+        """
 
 class StructOfArrays_37_1_pinned:
     @typing.overload
@@ -6306,6 +8467,49 @@ class StructOfArrays_37_1_pinned:
     def size(self) -> int:
         """
         Get the number of particles
+        """
+    def to_cupy(self, copy=False):
+        """
+
+        Provide Cupy views into a StructOfArrays.
+
+        Parameters
+        ----------
+        self : amrex.StructOfArrays_*
+            A StructOfArrays class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        namedtuple
+            A tuple with real and int components that are each lists
+            of 1D numpy arrays.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if cupy is not installed
+
+        """
+    def to_numpy(self, copy=False):
+        """
+
+        Provide Numpy views into a StructOfArrays.
+
+        Parameters
+        ----------
+        self : amrex.StructOfArrays_*
+            A StructOfArrays class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        namedtuple
+            A tuple with real and int components that are each lists
+            of 1D numpy arrays.
+
         """
 
 class StructOfArrays_4_0_arena:
@@ -6353,6 +8557,49 @@ class StructOfArrays_4_0_arena:
         """
         Get the number of particles
         """
+    def to_cupy(self, copy=False):
+        """
+
+        Provide Cupy views into a StructOfArrays.
+
+        Parameters
+        ----------
+        self : amrex.StructOfArrays_*
+            A StructOfArrays class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        namedtuple
+            A tuple with real and int components that are each lists
+            of 1D numpy arrays.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if cupy is not installed
+
+        """
+    def to_numpy(self, copy=False):
+        """
+
+        Provide Numpy views into a StructOfArrays.
+
+        Parameters
+        ----------
+        self : amrex.StructOfArrays_*
+            A StructOfArrays class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        namedtuple
+            A tuple with real and int components that are each lists
+            of 1D numpy arrays.
+
+        """
 
 class StructOfArrays_4_0_default:
     @typing.overload
@@ -6398,6 +8645,49 @@ class StructOfArrays_4_0_default:
     def size(self) -> int:
         """
         Get the number of particles
+        """
+    def to_cupy(self, copy=False):
+        """
+
+        Provide Cupy views into a StructOfArrays.
+
+        Parameters
+        ----------
+        self : amrex.StructOfArrays_*
+            A StructOfArrays class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        namedtuple
+            A tuple with real and int components that are each lists
+            of 1D numpy arrays.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if cupy is not installed
+
+        """
+    def to_numpy(self, copy=False):
+        """
+
+        Provide Numpy views into a StructOfArrays.
+
+        Parameters
+        ----------
+        self : amrex.StructOfArrays_*
+            A StructOfArrays class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        namedtuple
+            A tuple with real and int components that are each lists
+            of 1D numpy arrays.
+
         """
 
 class StructOfArrays_4_0_pinned:
@@ -6445,6 +8735,49 @@ class StructOfArrays_4_0_pinned:
         """
         Get the number of particles
         """
+    def to_cupy(self, copy=False):
+        """
+
+        Provide Cupy views into a StructOfArrays.
+
+        Parameters
+        ----------
+        self : amrex.StructOfArrays_*
+            A StructOfArrays class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        namedtuple
+            A tuple with real and int components that are each lists
+            of 1D numpy arrays.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if cupy is not installed
+
+        """
+    def to_numpy(self, copy=False):
+        """
+
+        Provide Numpy views into a StructOfArrays.
+
+        Parameters
+        ----------
+        self : amrex.StructOfArrays_*
+            A StructOfArrays class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        namedtuple
+            A tuple with real and int components that are each lists
+            of 1D numpy arrays.
+
+        """
 
 class StructOfArrays_5_0_arena:
     @typing.overload
@@ -6490,6 +8823,49 @@ class StructOfArrays_5_0_arena:
     def size(self) -> int:
         """
         Get the number of particles
+        """
+    def to_cupy(self, copy=False):
+        """
+
+        Provide Cupy views into a StructOfArrays.
+
+        Parameters
+        ----------
+        self : amrex.StructOfArrays_*
+            A StructOfArrays class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        namedtuple
+            A tuple with real and int components that are each lists
+            of 1D numpy arrays.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if cupy is not installed
+
+        """
+    def to_numpy(self, copy=False):
+        """
+
+        Provide Numpy views into a StructOfArrays.
+
+        Parameters
+        ----------
+        self : amrex.StructOfArrays_*
+            A StructOfArrays class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        namedtuple
+            A tuple with real and int components that are each lists
+            of 1D numpy arrays.
+
         """
 
 class StructOfArrays_5_0_default:
@@ -6537,6 +8913,49 @@ class StructOfArrays_5_0_default:
         """
         Get the number of particles
         """
+    def to_cupy(self, copy=False):
+        """
+
+        Provide Cupy views into a StructOfArrays.
+
+        Parameters
+        ----------
+        self : amrex.StructOfArrays_*
+            A StructOfArrays class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        namedtuple
+            A tuple with real and int components that are each lists
+            of 1D numpy arrays.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if cupy is not installed
+
+        """
+    def to_numpy(self, copy=False):
+        """
+
+        Provide Numpy views into a StructOfArrays.
+
+        Parameters
+        ----------
+        self : amrex.StructOfArrays_*
+            A StructOfArrays class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        namedtuple
+            A tuple with real and int components that are each lists
+            of 1D numpy arrays.
+
+        """
 
 class StructOfArrays_5_0_pinned:
     @typing.overload
@@ -6582,6 +9001,49 @@ class StructOfArrays_5_0_pinned:
     def size(self) -> int:
         """
         Get the number of particles
+        """
+    def to_cupy(self, copy=False):
+        """
+
+        Provide Cupy views into a StructOfArrays.
+
+        Parameters
+        ----------
+        self : amrex.StructOfArrays_*
+            A StructOfArrays class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        namedtuple
+            A tuple with real and int components that are each lists
+            of 1D numpy arrays.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if cupy is not installed
+
+        """
+    def to_numpy(self, copy=False):
+        """
+
+        Provide Numpy views into a StructOfArrays.
+
+        Parameters
+        ----------
+        self : amrex.StructOfArrays_*
+            A StructOfArrays class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        namedtuple
+            A tuple with real and int components that are each lists
+            of 1D numpy arrays.
+
         """
 
 class StructOfArrays_8_2_arena:
@@ -6629,6 +9091,49 @@ class StructOfArrays_8_2_arena:
         """
         Get the number of particles
         """
+    def to_cupy(self, copy=False):
+        """
+
+        Provide Cupy views into a StructOfArrays.
+
+        Parameters
+        ----------
+        self : amrex.StructOfArrays_*
+            A StructOfArrays class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        namedtuple
+            A tuple with real and int components that are each lists
+            of 1D numpy arrays.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if cupy is not installed
+
+        """
+    def to_numpy(self, copy=False):
+        """
+
+        Provide Numpy views into a StructOfArrays.
+
+        Parameters
+        ----------
+        self : amrex.StructOfArrays_*
+            A StructOfArrays class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        namedtuple
+            A tuple with real and int components that are each lists
+            of 1D numpy arrays.
+
+        """
 
 class StructOfArrays_8_2_default:
     @typing.overload
@@ -6675,6 +9180,49 @@ class StructOfArrays_8_2_default:
         """
         Get the number of particles
         """
+    def to_cupy(self, copy=False):
+        """
+
+        Provide Cupy views into a StructOfArrays.
+
+        Parameters
+        ----------
+        self : amrex.StructOfArrays_*
+            A StructOfArrays class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        namedtuple
+            A tuple with real and int components that are each lists
+            of 1D numpy arrays.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if cupy is not installed
+
+        """
+    def to_numpy(self, copy=False):
+        """
+
+        Provide Numpy views into a StructOfArrays.
+
+        Parameters
+        ----------
+        self : amrex.StructOfArrays_*
+            A StructOfArrays class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        namedtuple
+            A tuple with real and int components that are each lists
+            of 1D numpy arrays.
+
+        """
 
 class StructOfArrays_8_2_pinned:
     @typing.overload
@@ -6720,6 +9268,49 @@ class StructOfArrays_8_2_pinned:
     def size(self) -> int:
         """
         Get the number of particles
+        """
+    def to_cupy(self, copy=False):
+        """
+
+        Provide Cupy views into a StructOfArrays.
+
+        Parameters
+        ----------
+        self : amrex.StructOfArrays_*
+            A StructOfArrays class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        namedtuple
+            A tuple with real and int components that are each lists
+            of 1D numpy arrays.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if cupy is not installed
+
+        """
+    def to_numpy(self, copy=False):
+        """
+
+        Provide Numpy views into a StructOfArrays.
+
+        Parameters
+        ----------
+        self : amrex.StructOfArrays_*
+            A StructOfArrays class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        namedtuple
+            A tuple with real and int components that are each lists
+            of 1D numpy arrays.
+
         """
 
 class Vector_BoxArray:

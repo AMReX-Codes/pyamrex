@@ -36,6 +36,10 @@ from __future__ import annotations
 
 import os as os
 
+from amrex.Array4 import register_Array4_extension
+from amrex.ArrayOfStructs import register_AoS_extension
+from amrex.PODVector import register_PODVector_extension
+from amrex.StructOfArrays import register_SoA_extension
 from amrex.space3d.amrex_3d_pybind import (
     AlmostEqual,
     AMReX,
@@ -455,6 +459,10 @@ __all__ = [
     "min",
     "os",
     "refine",
+    "register_AoS_extension",
+    "register_Array4_extension",
+    "register_PODVector_extension",
+    "register_SoA_extension",
     "size",
     "ubound",
     "unpack_cpus",
@@ -467,7 +475,10 @@ def Print(*args, **kwargs):
     Wrap amrex::Print() - only the IO processor writes
     """
 
-def d_decl(x, y, z): ...
+def d_decl(x, y, z):
+    """
+    Return a tuple of the three passed elements
+    """
 
 __author__: str = "Axel Huebl, Ryan T. Sandberg, Shreyas Ananthan, David P. Grote, Revathi Jambunathan, Edoardo Zoni, Remi Lehe, Andrew Myers, Weiqun Zhang"
 __license__: str = "BSD-3-Clause-LBNL"
