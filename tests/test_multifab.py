@@ -350,3 +350,13 @@ def test_mfab_dtoh_copy(make_mfab_device):
     device_max = mfab_device.max(0)
     assert device_min == device_max
     assert device_max == 11.0
+
+    # numpy bindings (w/ copy)
+    local_boxes_host = mfab_device.to_numpy(copy=True)
+    assert max([np.max(box) for box in local_boxes_host]) == device_max
+
+    # cupy bindings (w/o copy)
+    import cupy as cp
+
+    local_boxes_device = mfab_device.to_cupy()
+    assert max([cp.max(box) for box in local_boxes_device]) == device_max

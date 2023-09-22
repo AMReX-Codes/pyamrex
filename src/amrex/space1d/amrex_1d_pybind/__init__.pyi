@@ -4043,6 +4043,67 @@ class MultiFab(FabArray_FArrayBox):
         """
         Same as sum with local=false, but for non-cell-centered data, thisskips non-unique points that are owned by multiple boxes.
         """
+    def to_cupy(self, copy=False, order="F"):
+        """
+
+        Provide a Cupy view into a MultiFab.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.MultiFab
+            A MultiFab class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        list of cupy.array
+            A list of cupy n-dimensional arrays, for each local block in the
+            MultiFab.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if cupy is not installed
+
+        """
+    def to_numpy(self, copy=False, order="F"):
+        """
+
+        Provide a Numpy view into a MultiFab.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.MultiFab
+            A MultiFab class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        list of numpy.array
+            A list of numpy n-dimensional arrays, for each local block in the
+            MultiFab.
+
+        """
     def weighted_sync(self, arg0: MultiFab, arg1: Periodicity) -> None: ...
 
 class PIdx:
