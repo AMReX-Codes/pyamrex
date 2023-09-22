@@ -7,7 +7,7 @@ License: BSD-3-Clause-LBNL
 """
 
 
-def mf_to_numpy(self, copy=False, order="F"):
+def mf_to_numpy(amr, self, copy=False, order="F"):
     """
     Provide a Numpy view into a MultiFab.
 
@@ -29,13 +29,24 @@ def mf_to_numpy(self, copy=False, order="F"):
 
     Returns
     -------
-    list of np.array
+    list of numpy.array
         A list of numpy n-dimensional arrays, for each local block in the
         MultiFab.
     """
+    mf = self
+    if copy:
+        mf = amr.MultiFab(
+            self.box_array(),
+            self.dm(),
+            self.n_comp(),
+            self.n_grow_vect(),
+            amr.MFInfo().set_arena(amr.The_Pinned_Arena()),
+        )
+        amr.dtoh_memcpy(mf, self)
+
     views = []
-    for mfi in self:
-        views.append(self.array(mfi).to_numpy(copy, order))
+    for mfi in mf:
+        views.append(mf.array(mfi).to_numpy(copy=False, order=order))
 
     return views
 
@@ -80,15 +91,11 @@ def mf_to_cupy(self, copy=False, order="F"):
 
 def register_MultiFab_extension(amr):
     """MultiFab helper methods"""
-    import inspect
-    import sys
 
-    # register member functions for every MultiFab* type
-    for _, MultiFab_type in inspect.getmembers(
-        sys.modules[amr.__name__],
-        lambda member: inspect.isclass(member)
-        and member.__module__ == amr.__name__
-        and member.__name__.startswith("MultiFab"),
-    ):
-        MultiFab_type.to_numpy = mf_to_numpy
-        MultiFab_type.to_cupy = mf_to_cupy
+    # register member functions for the MultiFab type
+    amr.MultiFab.to_numpy = lambda self, copy=False, order="F": mf_to_numpy(
+        amr, self, copy, order
+    )
+    amr.MultiFab.to_numpy.__doc__ = mf_to_numpy.__doc__
+
+    amr.MultiFab.to_cupy = mf_to_cupy
