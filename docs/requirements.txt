@@ -6,6 +6,7 @@
 
 breathe
 docutils>=0.17.1
+numpy  # in public APIs
 pygments
 recommonmark
 # Sphinx<7.2 because we are waiting for
