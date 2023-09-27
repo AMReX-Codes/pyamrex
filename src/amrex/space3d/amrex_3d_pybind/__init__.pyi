@@ -4246,6 +4246,14 @@ class PODVector_int_arena:
             A 1D numpy array.
 
         """
+    def to_torch(self, copy=False):
+        """
+
+        Provide PyTorch tensor views into a PODVector (e.g., RealVector, IntVector).
+
+        ...
+
+        """
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -4314,6 +4322,14 @@ class PODVector_int_pinned:
         -------
         np.array
             A 1D numpy array.
+
+        """
+    def to_torch(self, copy=False):
+        """
+
+        Provide PyTorch tensor views into a PODVector (e.g., RealVector, IntVector).
+
+        ...
 
         """
     @property
@@ -4386,6 +4402,14 @@ class PODVector_int_std:
             A 1D numpy array.
 
         """
+    def to_torch(self, copy=False):
+        """
+
+        Provide PyTorch tensor views into a PODVector (e.g., RealVector, IntVector).
+
+        ...
+
+        """
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -4454,6 +4478,14 @@ class PODVector_real_arena:
         -------
         np.array
             A 1D numpy array.
+
+        """
+    def to_torch(self, copy=False):
+        """
+
+        Provide PyTorch tensor views into a PODVector (e.g., RealVector, IntVector).
+
+        ...
 
         """
     @property
@@ -4526,6 +4558,14 @@ class PODVector_real_pinned:
             A 1D numpy array.
 
         """
+    def to_torch(self, copy=False):
+        """
+
+        Provide PyTorch tensor views into a PODVector (e.g., RealVector, IntVector).
+
+        ...
+
+        """
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -4594,6 +4634,14 @@ class PODVector_real_std:
         -------
         np.array
             A 1D numpy array.
+
+        """
+    def to_torch(self, copy=False):
+        """
+
+        Provide PyTorch tensor views into a PODVector (e.g., RealVector, IntVector).
+
+        ...
 
         """
     @property
@@ -8151,6 +8199,14 @@ class StructOfArrays_2_1_arena:
             of 1D numpy arrays.
 
         """
+    def to_torch(self, copy=False):
+        """
+
+        Provide PyTorch tensor views into a StructOfArrays.
+
+        ...
+
+        """
 
 class StructOfArrays_2_1_default:
     @typing.overload
@@ -8238,6 +8294,14 @@ class StructOfArrays_2_1_default:
         namedtuple
             A tuple with real and int components that are each lists
             of 1D numpy arrays.
+
+        """
+    def to_torch(self, copy=False):
+        """
+
+        Provide PyTorch tensor views into a StructOfArrays.
+
+        ...
 
         """
 
@@ -8329,6 +8393,14 @@ class StructOfArrays_2_1_pinned:
             of 1D numpy arrays.
 
         """
+    def to_torch(self, copy=False):
+        """
+
+        Provide PyTorch tensor views into a StructOfArrays.
+
+        ...
+
+        """
 
 class StructOfArrays_37_1_arena:
     @typing.overload
@@ -8416,6 +8488,14 @@ class StructOfArrays_37_1_arena:
         namedtuple
             A tuple with real and int components that are each lists
             of 1D numpy arrays.
+
+        """
+    def to_torch(self, copy=False):
+        """
+
+        Provide PyTorch tensor views into a StructOfArrays.
+
+        ...
 
         """
 
@@ -8507,6 +8587,14 @@ class StructOfArrays_37_1_default:
             of 1D numpy arrays.
 
         """
+    def to_torch(self, copy=False):
+        """
+
+        Provide PyTorch tensor views into a StructOfArrays.
+
+        ...
+
+        """
 
 class StructOfArrays_37_1_pinned:
     @typing.overload
@@ -8594,6 +8682,14 @@ class StructOfArrays_37_1_pinned:
         namedtuple
             A tuple with real and int components that are each lists
             of 1D numpy arrays.
+
+        """
+    def to_torch(self, copy=False):
+        """
+
+        Provide PyTorch tensor views into a StructOfArrays.
+
+        ...
 
         """
 
@@ -8685,6 +8781,14 @@ class StructOfArrays_4_0_arena:
             of 1D numpy arrays.
 
         """
+    def to_torch(self, copy=False):
+        """
+
+        Provide PyTorch tensor views into a StructOfArrays.
+
+        ...
+
+        """
 
 class StructOfArrays_4_0_default:
     @typing.overload
@@ -8772,6 +8876,14 @@ class StructOfArrays_4_0_default:
         namedtuple
             A tuple with real and int components that are each lists
             of 1D numpy arrays.
+
+        """
+    def to_torch(self, copy=False):
+        """
+
+        Provide PyTorch tensor views into a StructOfArrays.
+
+        ...
 
         """
 
@@ -8863,6 +8975,14 @@ class StructOfArrays_4_0_pinned:
             of 1D numpy arrays.
 
         """
+    def to_torch(self, copy=False):
+        """
+
+        Provide PyTorch tensor views into a StructOfArrays.
+
+        ...
+
+        """
 
 class StructOfArrays_5_0_arena:
     @typing.overload
@@ -8950,6 +9070,14 @@ class StructOfArrays_5_0_arena:
         namedtuple
             A tuple with real and int components that are each lists
             of 1D numpy arrays.
+
+        """
+    def to_torch(self, copy=False):
+        """
+
+        Provide PyTorch tensor views into a StructOfArrays.
+
+        ...
 
         """
 
@@ -9041,6 +9169,14 @@ class StructOfArrays_5_0_default:
             of 1D numpy arrays.
 
         """
+    def to_torch(self, copy=False):
+        """
+
+        Provide PyTorch tensor views into a StructOfArrays.
+
+        ...
+
+        """
 
 class StructOfArrays_5_0_pinned:
     @typing.overload
@@ -9128,6 +9264,14 @@ class StructOfArrays_5_0_pinned:
         namedtuple
             A tuple with real and int components that are each lists
             of 1D numpy arrays.
+
+        """
+    def to_torch(self, copy=False):
+        """
+
+        Provide PyTorch tensor views into a StructOfArrays.
+
+        ...
 
         """
 
@@ -9219,6 +9363,14 @@ class StructOfArrays_8_2_arena:
             of 1D numpy arrays.
 
         """
+    def to_torch(self, copy=False):
+        """
+
+        Provide PyTorch tensor views into a StructOfArrays.
+
+        ...
+
+        """
 
 class StructOfArrays_8_2_default:
     @typing.overload
@@ -9308,6 +9460,14 @@ class StructOfArrays_8_2_default:
             of 1D numpy arrays.
 
         """
+    def to_torch(self, copy=False):
+        """
+
+        Provide PyTorch tensor views into a StructOfArrays.
+
+        ...
+
+        """
 
 class StructOfArrays_8_2_pinned:
     @typing.overload
@@ -9395,6 +9555,14 @@ class StructOfArrays_8_2_pinned:
         namedtuple
             A tuple with real and int components that are each lists
             of 1D numpy arrays.
+
+        """
+    def to_torch(self, copy=False):
+        """
+
+        Provide PyTorch tensor views into a StructOfArrays.
+
+        ...
 
         """
 
