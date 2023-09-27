@@ -68,6 +68,19 @@ def podvector_to_cupy(self, copy=False):
         raise ValueError("Vector is empty.")
 
 
+def podvector_to_torch(self, copy=False):
+    """
+    Provide PyTorch tensor views into a PODVector (e.g., RealVector, IntVector).
+
+    ...
+    """
+    import torch
+
+    # if CUDA else ...
+    # pick right device (context? device number?)
+    return torch.as_tensor(self.to_cupy(copy), device="cuda")
+
+
 def register_PODVector_extension(amr):
     """PODVector helper methods"""
     import inspect
@@ -82,3 +95,4 @@ def register_PODVector_extension(amr):
     ):
         POD_type.to_numpy = podvector_to_numpy
         POD_type.to_cupy = podvector_to_cupy
+        POD_type.to_torch = podvector_to_torch

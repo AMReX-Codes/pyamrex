@@ -75,6 +75,9 @@ def aos_to_cupy(self, copy=False):
     return cp.array(self, copy=copy)
 
 
+# torch
+
+
 def register_AoS_extension(amr):
     """ArrayOfStructs helper methods"""
     import inspect

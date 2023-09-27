@@ -89,6 +89,9 @@ def mf_to_cupy(self, copy=False, order="F"):
     return views
 
 
+# torch
+
+
 def register_MultiFab_extension(amr):
     """MultiFab helper methods"""
 
@@ -99,3 +102,5 @@ def register_MultiFab_extension(amr):
     amr.MultiFab.to_numpy.__doc__ = mf_to_numpy.__doc__
 
     amr.MultiFab.to_cupy = mf_to_cupy
+
+    # torch

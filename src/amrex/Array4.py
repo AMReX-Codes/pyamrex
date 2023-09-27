@@ -82,6 +82,9 @@ def array4_to_cupy(self, copy=False, order="F"):
         raise ValueError("The order argument must be F or C.")
 
 
+# torch
+
+
 def register_Array4_extension(amr):
     """Array4 helper methods"""
     import inspect
