@@ -4,6 +4,14 @@ foreach(D IN LISTS AMReX_SPACEDIM)
         AMReX.cpp
         Arena.cpp
         Array4.cpp
+        Array4_complex.cpp
+        Array4_complex_const.cpp
+        Array4_float.cpp
+        Array4_float_const.cpp
+        Array4_int.cpp
+        Array4_int_const.cpp
+        Array4_uint.cpp
+        Array4_uint_const.cpp
         BaseFab.cpp
         Box.cpp
         RealBox.cpp

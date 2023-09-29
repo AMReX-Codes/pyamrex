@@ -137,7 +137,7 @@ void init_MultiFab(py::module &m)
         .def("const_array", [](FabArray<FArrayBox> & fa, MFIter const & mfi)
             { return fa.const_array(mfi); },
             // as long as the return value (argument 0) exists, keep the fa (argument 1) alive
-             py::keep_alive<0, 1>()
+            py::keep_alive<0, 1>()
         )
 
         .def_static("saxpy", py::overload_cast< FabArray<FArrayBox> &, Real, FabArray<FArrayBox> const &, int, int, int, IntVect const & >(&FabArray<FArrayBox>::template Saxpy<FArrayBox>)

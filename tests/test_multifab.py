@@ -332,7 +332,7 @@ def test_mfab_dtoh_copy(make_mfab_device):
         mfab_device.n_grow_vect(),
         amr.MFInfo().set_arena(amr.The_Pinned_Arena()),
     )
-    mfab_host.set_val(42.0, 0, mfab_host.n_comp())
+    mfab_host.set_val(42.0)
 
     amr.dtoh_memcpy(mfab_host, mfab_device)
 
@@ -342,21 +342,27 @@ def test_mfab_dtoh_copy(make_mfab_device):
     assert host_min == host_max
     assert host_max == 0.0
 
-    mfab_host.set_val(11.0, 0, mfab_host.n_comp())
+    dev_val = 11.0
+    mfab_host.set_val(dev_val)
     amr.dtoh_memcpy(mfab_device, mfab_host)
 
     # assert all are 11.0 on device
-    device_min = mfab_device.min(0)
-    device_max = mfab_device.max(0)
-    assert device_min == device_max
-    assert device_max == 11.0
+    for n in range(mfab_device.n_comp()):
+        assert mfab_device.min(comp=n) == dev_val
+        assert mfab_device.max(comp=n) == dev_val
 
     # numpy bindings (w/ copy)
     local_boxes_host = mfab_device.to_numpy(copy=True)
-    assert max([np.max(box) for box in local_boxes_host]) == device_max
+    assert max([np.max(box) for box in local_boxes_host]) == dev_val
+
+    # numpy bindings (w/ copy)
+    for mfi in mfab_device:
+        marr = mfab_device.array(mfi).to_numpy(copy=True)
+        assert np.min(marr) >= dev_val
+        assert np.max(marr) <= dev_val
 
     # cupy bindings (w/o copy)
     import cupy as cp
 
     local_boxes_device = mfab_device.to_cupy()
-    assert max([cp.max(box) for box in local_boxes_device]) == device_max
+    assert max([cp.max(box) for box in local_boxes_device]) == dev_val

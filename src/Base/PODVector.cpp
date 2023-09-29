@@ -74,13 +74,12 @@ void make_PODVector(py::module &m, std::string typestr, std::string allocstr)
         .def("reserve", &PODVector_type::reserve)
         .def("shrink_to_fit", &PODVector_type::shrink_to_fit)
         .def("to_host", [](PODVector_type const & pv) {
-            PODVector<T, std::allocator<T>> h_data(pv.size());
-            //py::array_t<T> h_data(pv.size());
-            amrex::Gpu::copy(amrex::Gpu::deviceToHost,
+            PODVector<T, amrex::PinnedArenaAllocator<T>> h_data(pv.size());
+            amrex::Gpu::copyAsync(amrex::Gpu::deviceToHost,
                pv.begin(), pv.end(),
                h_data.begin()
-               //h_data.ptr()
             );
+            Gpu::streamSynchronize();
             return h_data;
         })
 
@@ -125,9 +124,9 @@ template <class T>
 void make_PODVector(py::module &m, std::string typestr)
 {
     // see Src/Base/AMReX_GpuContainers.H
-    make_PODVector<T, std::allocator<T>> (m, typestr, "std");
-    make_PODVector<T, amrex::ArenaAllocator<T>> (m, typestr, "arena");
     make_PODVector<T, amrex::PinnedArenaAllocator<T>> (m, typestr, "pinned");
+    make_PODVector<T, amrex::ArenaAllocator<T>> (m, typestr, "arena");
+    make_PODVector<T, std::allocator<T>> (m, typestr, "std");
 #ifdef AMREX_USE_GPU
     make_PODVector<T, amrex::DeviceArenaAllocator<T>> (m, typestr, "device");
     make_PODVector<T, amrex::ManagedArenaAllocator<T>> (m, typestr, "managed");
