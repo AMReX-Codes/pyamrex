@@ -10,7 +10,7 @@
 [dev-alpha]: https://img.shields.io/badge/phase-alpha-yellowgreen "Status: Alpha"
 
 The Python binding pyAMReX bridges the worlds of block-structured codes and data science: it provides zero-copy application GPU data access for AI/ML, in situ analysis, application coupling and enables rapid, massively parallel prototyping.
-pyAMReX enhances the [AMReX library](https://amrex-codes.github.io).
+pyAMReX enhances the [Block-Structured AMR Software Framework AMReX](https://amrex-codes.github.io) and its applications.
 
 ## Users
 
