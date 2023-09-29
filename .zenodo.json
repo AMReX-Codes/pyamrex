@@ -1,0 +1,62 @@
+{
+    "creators": [
+      {
+        "affiliation": "Lawrence Berkeley National Laboratory",
+        "name": "Huebl, Axel",
+        "orcid": "0000-0003-1943-7141"
+      },
+      {
+        "affiliation": "National Renewable Energy Laboratory",
+        "name": "Ananthan, Shreyas",
+        "orcid": "0000-0003-3966-4595"
+      },
+      {
+        "affiliation": "Lawrence Livermore National Laboratory",
+        "name": "Grote, David",
+        "orcid": "0000-0002-4057-8582"
+      },
+      {
+        "affiliation": "Lawrence Berkeley National Laboratory",
+        "name": "Sandberg, Ryan T.",
+        "orcid": "0000-0001-7680-8733"
+      },
+      {
+        "affiliation": "Lawrence Berkeley National Laboratory",
+        "name": "Zoni, Edoardo",
+        "orcid": "0000-0001-5662-4646"
+      },
+      {
+        "affiliation": "Lawrence Berkeley National Laboratory",
+        "name": "Jambunathan, Revathi",
+        "orcid": "0000-0001-9432-2091"
+      },
+      {
+        "affiliation": "Lawrence Berkeley National Laboratory",
+        "name": "Lehe, Remi",
+        "orcid": "0000-0002-3656-9659"
+      },
+      {
+        "affiliation": "Lawrence Berkeley National Laboratory",
+        "name": "Myers, Andrew",
+        "orcid": "0000-0001-8427-8330"
+      },
+      {
+        "affiliation": "Lawrence Berkeley National Laboratory",
+        "name": "Zhang, Weiqun",
+        "orcid": "0000-0001-8092-1974"
+      }
+    ],
+    "license": {
+      "id": "BSD-3-Clause-LBNL"
+    },
+    "language": "eng",
+    "keywords": [
+      "research",
+      "simulation",
+      "modeling",
+      "data science",
+      "amr",
+      "ml"
+    ],
+    "access_right": "open"
+}
