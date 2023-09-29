@@ -63,7 +63,7 @@ master_doc = "index"
 
 # General information about the project.
 project = "pyAMReX"
-copyright = "2023, The Regents of the University of California, through Lawrence Berkeley National Laboratory, National Renewable Energy Laboratory Alliance for Sustainable Energy, LLC and Lawrence Livermore National Security, LLC (subject to receipt of any required approvals from the U.S. Dept. of Energy)."
+copyright = "2023, The Regents of the University of California, through Lawrence Berkeley National Laboratory, National Renewable Energy Laboratory Alliance for Sustainable Energy, LLC and Lawrence Livermore National Security, LLC (subject to receipt of any required approvals from the U.S. Dept. of Energy)"
 author = "AMReX collaboration"
 
 # The version info for the project you're documenting, acts as replacement for
