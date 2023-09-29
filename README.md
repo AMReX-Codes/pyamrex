@@ -10,15 +10,13 @@
 [dev-alpha]: https://img.shields.io/badge/phase-alpha-yellowgreen "Status: Alpha"
 
 The Python binding pyAMReX bridges the worlds of block-structured codes and data science: it provides zero-copy application GPU data access for AI/ML, in situ analysis, application coupling and enables rapid, massively parallel prototyping.
-
-pyAMReX is part of AMReX.
-Due to its **highly experimental** nature, we develop it currently in a separate respository.
-
-We will add further information here once first development versions are ready for testing.
+pyAMReX enhances the `AMReX library <https://amrex-codes.github.io>`__.
 
 ## Users
 
-*to do*
+pyAMReX can be installed `from source <https://pyamrex.readthedocs.io/en/latest/install/users.html>`__.
+
+*Coming soon:*
 
 - pip/pypa
 - conda-forge
@@ -28,8 +26,9 @@ We will add further information here once first development versions are ready f
 
 ### Usage
 
-*to do*
+Please see the `manual <https://pyamrex.readthedocs.io/en/latest/usage/how_to_run.html>`__ and our `test cases <https://github.com/AMReX-Codes/pyamrex/tree/development/tests>`__ for detailed examples.
 
+Use AMReX objects and APIs from Python:
 ```python
 import amrex.space3d as amr
 
