@@ -37,4 +37,4 @@ Standalone
 Please see the `AMReX Tutorials <https://amrex-codes.github.io/amrex/tutorials_html/Python_Tutorial.html>`__ for Python-written, GPU-accelerated AMReX examples:
 
 * `MultiFab example <https://github.com/AMReX-Codes/amrex-tutorials/blob/main/GuidedTutorials/MultiFab/main.py>`__
-* `Heat Equation example <https://github.com/AMReX-Codes/amrex-tutorials/pull/96>`__
+* `Heat Equation example <https://github.com/AMReX-Codes/amrex-tutorials/blob/main/GuidedTutorials/HeatEquation/Source/main.py>`__
