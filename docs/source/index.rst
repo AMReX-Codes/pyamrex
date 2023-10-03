@@ -20,7 +20,7 @@ The `pyAMReX GitHub repo <https://github.com/AMReX-Codes/pyamrex>`__ is the main
 Have a look at the action icons on the top right of the web page: feel free to watch the repo if you want to receive updates, or to star the repo to support the project.
 For bug reports or to request new features, you can also open a new `issue <https://github.com/AMReX-Codes/pyamrex/issues>`__.
 
-ON our `discussion page <https://github.com/ECP-WarpX/impactx/discussions>`__, you can find already answered questions, add new questions, get help with installation procedures, discuss ideas or share comments.
+On our `discussion page <https://github.com/AMReX-Codes/pyamrex/discussions>`__, you can find already answered questions, add new questions, get help with installation procedures, discuss ideas or share comments.
 
 .. raw:: html
 
@@ -65,6 +65,7 @@ Usage
 
    usage/how_to_run
    usage/api
+   usage/zerocopy
    usage/workflows
 ..   usage/tests
 

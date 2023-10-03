@@ -33,6 +33,11 @@ Further pyAMReX References
 
 Works using pyAMReX:
 
+- Huebl A et al.,
+  **Exascale and ML Models for Accelerator Simulations**.
+  presentation at the 6th European Advanced Accelerator Concepts workshop (EAAC23), Isola d'Elba, Italy, Sep 17 – 23, 2023.
+  `DOI:10.5281/zenodo.8362549 <https://doi.org/10.5281/zenodo.8362549>`__
+
 - Sandberg R T, Lehe R, Mitchell C E, Garten M, Qiang J, Vay J-L and Huebl A.
   **Hybrid Beamline Element ML-Training for Surrogates in the ImpactX Beam-Dynamics Code**.
   14th International Particle Accelerator Conference (IPAC'23), WEPA101, *in print*, 2023.
