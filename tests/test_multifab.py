@@ -199,14 +199,14 @@ def test_mfab_ops_cuda_cupy(make_mfab_device):
     mfab_device = make_mfab_device()
     # https://docs.cupy.dev/en/stable/user_guide/interoperability.html
     import cupy as cp
-    import cupy.profiler
+    import cupyx.profiler
 
     # AMReX -> cupy
     ngv = mfab_device.nGrowVect
     print(f"\n  mfab_device={mfab_device}, mfab_device.nGrowVect={ngv}")
 
     # assign 3
-    with cupy.profiler.time_range("assign 3 [()]", color_id=0):
+    with cupyx.profiler.time_range("assign 3 [()]", color_id=0):
         for mfi in mfab_device:
             bx = mfi.tilebox().grow(ngv)
             marr_cupy = mfab_device.array(mfi).to_cupy(order="C")
@@ -219,21 +219,21 @@ def test_mfab_ops_cuda_cupy(make_mfab_device):
             marr_cupy[()] = 3.0
 
     # verify result with a .sum_unique
-    with cupy.profiler.time_range("verify 3", color_id=0):
+    with cupyx.profiler.time_range("verify 3", color_id=0):
         shape = 32**3 * 8
         # print(mfab_device.shape)
         sum_threes = mfab_device.sum_unique(comp=0, local=False)
         assert sum_threes == shape * 3
 
     # assign 2
-    with cupy.profiler.time_range("assign 2 (set_val)", color_id=1):
+    with cupyx.profiler.time_range("assign 2 (set_val)", color_id=1):
         mfab_device.set_val(2.0)
-    with cupy.profiler.time_range("verify 2", color_id=1):
+    with cupyx.profiler.time_range("verify 2", color_id=1):
         sum_twos = mfab_device.sum_unique(comp=0, local=False)
         assert sum_twos == shape * 2
 
     # assign 5
-    with cupy.profiler.time_range("assign 5 (ones-like)", color_id=2):
+    with cupyx.profiler.time_range("assign 5 (ones-like)", color_id=2):
 
         def set_to_five(mm):
             xp = cp.get_array_module(mm)
@@ -256,12 +256,12 @@ def test_mfab_ops_cuda_cupy(make_mfab_device):
             marr_cupy += fives_cp
 
     # verify
-    with cupy.profiler.time_range("verify 5", color_id=2):
+    with cupyx.profiler.time_range("verify 5", color_id=2):
         sum = mfab_device.sum_unique(comp=0, local=False)
         assert sum == shape * 5
 
     # assign 7
-    with cupy.profiler.time_range("assign 7 (fuse)", color_id=3):
+    with cupyx.profiler.time_range("assign 7 (fuse)", color_id=3):
 
         @cp.fuse(kernel_name="set_to_seven")
         def set_to_seven(x):
@@ -275,7 +275,7 @@ def test_mfab_ops_cuda_cupy(make_mfab_device):
             set_to_seven(marr_cupy)
 
     # verify
-    with cupy.profiler.time_range("verify 7", color_id=3):
+    with cupyx.profiler.time_range("verify 7", color_id=3):
         sum = mfab_device.sum_unique(comp=0, local=False)
         assert sum == shape * 7
 
