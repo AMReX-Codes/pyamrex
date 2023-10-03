@@ -34,10 +34,16 @@ def array4_to_numpy(self, copy=False, order="F"):
     """
     import numpy as np
 
+    if copy:
+        # This supports a device-to-host copy.
+        data = self.to_host()
+    else:
+        data = np.array(self, copy=False)
+
     if order == "F":
-        return np.array(self, copy=copy).T
+        return data.T
     elif order == "C":
-        return np.array(self, copy=copy)
+        return data
     else:
         raise ValueError("The order argument must be F or C.")
 
