@@ -244,7 +244,7 @@ setup(
     # cmdclass={'test': PyTest},
     # platforms='any',
     classifiers=[
-        "Development Status :: 3 - Alpha",
+        "Development Status :: 4 - Beta",
         "Natural Language :: English",
         "Environment :: Console",
         "Environment :: GPU",
