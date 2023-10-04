@@ -2,6 +2,7 @@
 
 [![Python3][api-py3]](https://www.python.org/)
 ![Python3 API: Beta][dev-beta]
+[![Documentation Status](https://readthedocs.org/projects/pyamrex/badge/?version=latest)](https://pyamrex.readthedocs.io)
 [![Discussions](https://img.shields.io/badge/chat-discussions-turquoise.svg)](https://github.com/AMReX-Codes/pyamrex/discussions)  
 ![linux](https://github.com/AMReX-Codes/pyamrex/workflows/linux/badge.svg?branch=development)
 ![macos](https://github.com/AMReX-Codes/pyamrex/workflows/macos/badge.svg?branch=development)
