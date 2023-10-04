@@ -1,13 +1,16 @@
 # pyAMReX
 
-[![Python3][api-py3]](https://www.python.org/) ![Python3 API: Alpha][dev-alpha]
-[![License AMReX](https://img.shields.io/badge/license-BSD--3--Clause--LBNL-blue.svg)](https://spdx.org/licenses/BSD-3-Clause-LBNL.html)  
+[![Python3][api-py3]](https://www.python.org/)
+![Python3 API: Beta][dev-beta]
+[![Discussions](https://img.shields.io/badge/chat-discussions-turquoise.svg)](https://github.com/AMReX-Codes/pyamrex/discussions)  
 ![linux](https://github.com/AMReX-Codes/pyamrex/workflows/linux/badge.svg?branch=development)
 ![macos](https://github.com/AMReX-Codes/pyamrex/workflows/macos/badge.svg?branch=development)
-![windows](https://github.com/AMReX-Codes/pyamrex/workflows/windows/badge.svg?branch=development)
+![windows](https://github.com/AMReX-Codes/pyamrex/workflows/windows/badge.svg?branch=development)  
+[![License pyAMReX](https://img.shields.io/badge/license-BSD--3--Clause--LBNL-blue.svg)](https://spdx.org/licenses/BSD-3-Clause-LBNL.html)
+[![DOI (source)](https://img.shields.io/badge/DOI%20(source)-10.5281/zenodo.8408733-blue.svg)](https://doi.org/10.5281/zenodo.8408733)
 
 [api-py3]: https://img.shields.io/badge/language-Python3-yellowgreen "Python3 API"
-[dev-alpha]: https://img.shields.io/badge/phase-alpha-yellowgreen "Status: Alpha"
+[dev-beta]: https://img.shields.io/badge/phase-beta-yellowgreen "Status: Beta"
 
 The Python binding pyAMReX bridges the worlds of block-structured codes and data science: it provides zero-copy application GPU data access for AI/ML, in situ analysis, application coupling and enables rapid, massively parallel prototyping.
 pyAMReX enhances the [Block-Structured AMR Software Framework AMReX](https://amrex-codes.github.io) and its applications.
