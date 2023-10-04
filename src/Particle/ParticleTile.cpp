@@ -189,6 +189,6 @@ void init_ParticleTile(py::module& m) {
     make_ParticleTile<ParticleType_1_1, 2, 1> (m);
     make_ParticleTile<ParticleType_0_0, 4, 0> (m);   // HiPACE++ 22.07
     make_ParticleTile<ParticleType_0_0, 5, 0> (m);   // ImpactX 22.07
-    make_ParticleTile<SoAParticleType_8_2, 8, 2> (m);   // ImpactX 23.09+
+    make_ParticleTile<SoAParticleType_8_2, 8, 2> (m);   // ImpactX 23.11+
     make_ParticleTile<ParticleType_0_0, 37, 1> (m);  // HiPACE++ 22.07
 }
