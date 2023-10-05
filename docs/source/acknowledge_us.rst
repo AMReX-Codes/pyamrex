@@ -15,7 +15,7 @@ Huebl A, Ananthan S, Grote D P, Sandberg R T, Zoni E, Jambunathan R, Lehe R, Mye
 *software*, 2023. `DOI:10.5281/zenodo.8408733 <https://doi.org/10.5281/zenodo.8408733>`__
 `github.com/AMReX-Codes/pyamrex <https://github.com/AMReX-Codes/pyamrex>`__
 
-.. code-block:: latex
+.. code-block:: bibtex
 
    @misc{pyAMReX,
      author       = {Huebl, Axel and
