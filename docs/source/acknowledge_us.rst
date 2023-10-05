@@ -10,22 +10,37 @@ In Publications
 If a project using pyAMReX leads to a scientific publication, please consider citing it.
 This helps to keep in touch with the community, shows its use and supports the project.
 
+Huebl A, Ananthan S, Grote D P, Sandberg R T, Zoni E, Jambunathan R, Lehe R, Myers A, Zhang W.
+**pyAMReX: GPU-Enabled, Zero-Copy AMReX Python Bindings including AI/ML**.
+*software*, 2023. `DOI:10.5281/zenodo.8408733 <https://doi.org/10.5281/zenodo.8408733>`__
+`github.com/AMReX-Codes/pyamrex <https://github.com/AMReX-Codes/pyamrex>`__
+
 .. code-block:: latex
 
-  \usepackage{hyperref}
-  This research used the open-source code pyAMReX \url{https://github.com/AMReX-Codes/pyamrex}.
-  We acknowledge all AMReX contributors.
-
-
-- Huebl A, Ananthan S, Grote D P, Sandberg R T, Zoni E, Lehe R, Jambunathan R, Myers A, Zhang W.
-  **pyAMReX**.
-  *software*, 2023.
-  `github.com/AMReX-Codes/pyamrex <https://github.com/AMReX-Codes/pyamrex>`__
+   @misc{pyAMReX,
+     author       = {Huebl, Axel and
+                     Ananthan, Shreyas and
+                     Grote, David P. and
+                     Sandberg, Ryan T. and
+                     Zoni, Edoardo and
+                     Jambunathan, Revathi and
+                     Lehe, Remi and
+                     Myers, Andrew and
+                     Zhang, Weiqun},
+     title        = {{pyAMReX: GPU-Enabled, Zero-Copy AMReX Python Bindings including AI/ML}},
+     year         = 2023,
+     publisher    = {Zenodo},
+     doi          = {10.5281/zenodo.8408733},
+     url          = {https://github.com/AMReX-Codes/pyamrex},
+     howpublished = {https://github.com/AMReX-Codes/pyamrex}
+   }
 
 You can also add an acknowledgement, e.g.,
 
-  This research used the open-source code pyAMReX [citation].
-  We acknowledge all AMReX contributors.
+.. code-block:: latex
+
+   This research used the open-source code pyAMReX~\cite{pyAMReX}.
+   We acknowledge all AMReX contributors.
 
 
 Further pyAMReX References
