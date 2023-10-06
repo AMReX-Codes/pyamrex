@@ -38,3 +38,12 @@ Please see the `AMReX Tutorials <https://amrex-codes.github.io/amrex/tutorials_h
 
 * `MultiFab example <https://github.com/AMReX-Codes/amrex-tutorials/blob/main/GuidedTutorials/MultiFab/main.py>`__
 * `Heat Equation example <https://github.com/AMReX-Codes/amrex-tutorials/blob/main/GuidedTutorials/HeatEquation/Source/main.py>`__
+
+
+Unit Tests
+----------
+
+We ensure the correctness of pyAMReX with `unit tests <https://en.wikipedia.org/wiki/Unit_testing>`__.
+Our tests are small, plentiful and can be found in the source code, see:
+
+* `tests/ <https://github.com/AMReX-Codes/pyamrex/tree/development/tests>`__
