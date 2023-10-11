@@ -280,6 +280,17 @@ add_custom_target(${pyAMReX_CUSTOM_TARGET_PREFIX}pip_install
         ${pyAMReX_CUSTOM_TARGET_PREFIX}pip_install_requirements
 )
 
+# this is for package managers only
+add_custom_target(${pyAMReX_CUSTOM_TARGET_PREFIX}pip_install_nodeps
+    ${CMAKE_COMMAND} -E env AMREX_MPI=${AMReX_MPI}
+        ${Python_EXECUTABLE} -m pip install --force-reinstall --no-index --no-deps ${PYINSTALLOPTIONS} --find-links=amrex-whl amrex
+    WORKING_DIRECTORY
+        ${pyAMReX_BINARY_DIR}
+    DEPENDS
+        ${pyAMReX_INSTALL_TARGET_NAMES}
+        ${pyAMReX_CUSTOM_TARGET_PREFIX}pip_wheel
+)
+
 
 # Tests #######################################################################
 #
