@@ -83,6 +83,19 @@ def soa_to_cupy(self, copy=False):
     return soa_view
 
 
+def soa_to_torch(self, copy=False):
+    """
+    Provide PyTorch tensor views into a StructOfArrays.
+
+    ...
+    """
+    import torch
+
+    # if CUDA else ...
+    # pick right device (context? device number?)
+    return torch.as_tensor(self.to_cupy(copy), device="cuda")
+
+
 def register_SoA_extension(amr):
     """StructOfArrays helper methods"""
     import inspect
@@ -97,3 +110,4 @@ def register_SoA_extension(amr):
     ):
         SoA_type.to_numpy = soa_to_numpy
         SoA_type.to_cupy = soa_to_cupy
+        SoA_type.to_torch = soa_to_torch
