@@ -184,6 +184,22 @@ void init_Box(py::module &m) {
              py::overload_cast< Direction, int >(&Box::grow),
              py::arg("d"), py::arg("n_cell")
         )
+        .def("grow_low",
+             py::overload_cast< int, int >(&Box::growLo),
+             py::arg("idir"), py::arg("n_cell")
+        )
+        .def("grow_low",
+             py::overload_cast< Direction, int >(&Box::growLo),
+             py::arg("d"), py::arg("n_cell")
+        )
+        .def("grow_high",
+             py::overload_cast< int, int >(&Box::growHi),
+             py::arg("idir"), py::arg("n_cell")
+        )
+        .def("grow_high",
+             py::overload_cast< Direction, int >(&Box::growHi),
+             py::arg("d"), py::arg("n_cell")
+        )
 
         .def("surrounding_nodes",
              py::overload_cast< >(&Box::surroundingNodes))
@@ -209,8 +225,6 @@ void init_Box(py::module &m) {
 
         // minBox
         // chop
-        // growLo
-        // growHi
         // refine
         // coarsen
         // next
