@@ -37,10 +37,10 @@ def d_decl(x, y, z):
 
 def Print(*args, **kwargs):
     """Wrap amrex::Print() - only the IO processor writes"""
-    if not initialized():
+    if not initialized():  # noqa
         print("warning: Print all - AMReX not initialized")
         print(*args, **kwargs)
-    elif ParallelDescriptor.IOProcessor():
+    elif ParallelDescriptor.IOProcessor():  # noqa
         print(*args, **kwargs)
 
 

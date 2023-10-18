@@ -16,8 +16,9 @@ except ImportError:
         except ImportError:
             raise ImportError("AMReX: No 1D, 2D or 3D module found!")
 
+# Import calls MPI_Initialize, if not called already
 if amr.Config.have_mpi:
-    from mpi4py import MPI
+    from mpi4py import MPI  # noqa
 
 # base path for input files
 basepath = os.getcwd()

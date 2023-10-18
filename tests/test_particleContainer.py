@@ -121,7 +121,7 @@ def test_pc_init():
     assert pc.TotalNumberOfParticles() == pc.NumberOfParticlesAtLevel(0) == npart
     assert pc.OK()
 
-    print(f"Finest level = ", pc.finest_level)
+    print(f"Finest level = {pc.finest_level}")
 
     print("Iterate particle boxes & set values")
     # lvl = 0
