@@ -150,7 +150,7 @@ def test_mfab_mfiter(make_mfab):
     assert iter(mfab).length == 8
 
     cnt = 0
-    for mfi in mfab:
+    for _mfi in mfab:
         cnt += 1
 
     assert iter(mfab).length == cnt

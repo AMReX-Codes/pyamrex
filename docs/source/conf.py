@@ -212,7 +212,7 @@ if os.path.exists(dst_path) and os.path.isdir(dst_path):
     shutil.rmtree(dst_path)
 shutil.copytree(src_path, dst_path)
 
-for subdir, dirs, files in os.walk(dst_path):
+for subdir, _dirs, files in os.walk(dst_path):
     for f in files:
         if f.find(".pyi") > 0:
             dir_path = os.path.relpath(subdir, dst_path)

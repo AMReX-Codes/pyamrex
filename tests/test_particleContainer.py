@@ -262,6 +262,7 @@ def test_per_cell(empty_particle_container, std_geometry, std_particle):
 
     sum_1 = 0
     for tile_ind, pt in lev.items():
+        print("tile", tile_ind)
         real_arrays = pt.GetStructOfArrays().GetRealData()
         sum_1 += np.sum(real_arrays[1])
     print(sum_1)
