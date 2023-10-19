@@ -45,7 +45,7 @@ jobs:
     uses: ./.github/workflows/stubs.yml
 
   save_pr_number:
-    if: github.event_name == 'pull_request'
+    if: github.event_name != 'push'
     runs-on: ubuntu-latest
     steps:
       - name: Save PR number
