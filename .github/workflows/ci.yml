@@ -2,7 +2,7 @@ name: 👑 CI
 
 # This workflow updates the .pyi stub files for documentation and interactive use.
 
-on: [push, pull_request]
+on: [push, pull_request, pull_request_target]
 
 concurrency:
   group: ${{ github.ref }}-${{ github.head_ref }}-ci
@@ -10,28 +10,38 @@ concurrency:
 
 jobs:
   ubuntu:
+    if: github.event_name != 'pull_request_target'
     name: 🐧 Ubuntu
     uses: ./.github/workflows/ubuntu.yml
 
   intel:
+    if: github.event_name != 'pull_request_target'
     name: 🐧 Intel
     uses: ./.github/workflows/intel.yml
 
   hip:
+    if: github.event_name != 'pull_request_target'
     name: 🐧 HIP
     uses: ./.github/workflows/hip.yml
 
   macos:
+    if: github.event_name != 'pull_request_target'
     name: 🍏 macOS
     uses: ./.github/workflows/macos.yml
 
   windows:
+    if: github.event_name != 'pull_request_target'
     name: 🪟 Windows
     uses: ./.github/workflows/windows.yml
 
   stubs:
+    if: github.event_name != 'pull_request'
     name: 🔄 Update Stub Files
     needs: [ubuntu, intel, hip, macos, windows]
+    permissions:
+      # Give the default GITHUB_TOKEN write permission to commit and push the
+      # changed files back to the repository.
+      contents: write
     uses: ./.github/workflows/stubs.yml
 
   save_pr_number:
