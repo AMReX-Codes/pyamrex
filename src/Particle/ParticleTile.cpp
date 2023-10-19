@@ -143,6 +143,10 @@ void make_ParticleTile(py::module &m)
         make_ParticleTileData<T_ParticleType, NArrayReal, NArrayInt>(m);
     }
 
+    // first, because used as copy target in methods in containers with other allocators
+    make_ParticleTile<T_ParticleType, NArrayReal, NArrayInt,
+                      amrex::PinnedArenaAllocator>(m, "pinned");
+
     // see Src/Base/AMReX_GpuContainers.H
     //   !AMREX_USE_GPU: DefaultAllocator = std::allocator
     //    AMREX_USE_GPU: DefaultAllocator = amrex::ArenaAllocator
@@ -164,8 +168,6 @@ void make_ParticleTile(py::module &m)
                       amrex::ArenaAllocator>(m, "arena");
 #endif
     //   end work-around
-    make_ParticleTile<T_ParticleType, NArrayReal, NArrayInt,
-                      amrex::PinnedArenaAllocator>(m, "pinned");
 #ifdef AMREX_USE_GPU
     make_ParticleTile<T_ParticleType, NArrayReal, NArrayInt,
                       amrex::DeviceArenaAllocator>(m, "device");

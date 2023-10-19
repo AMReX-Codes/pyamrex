@@ -394,6 +394,10 @@ void make_ParticleContainer_and_Iterators (py::module &m)
     if constexpr (!T_ParticleType::is_soa_particle)
         make_ParticleInitData<T_ParticleType, T_NArrayReal, T_NArrayInt>(m);
 
+    // first, because used as copy target in methods in containers with other allocators
+    make_ParticleContainer_and_Iterators<T_ParticleType, T_NArrayReal, T_NArrayInt,
+            amrex::PinnedArenaAllocator>(m, "pinned");
+
     // see Src/Base/AMReX_GpuContainers.H
     //   !AMREX_USE_GPU: DefaultAllocator = std::allocator
     //    AMREX_USE_GPU: DefaultAllocator = amrex::ArenaAllocator
@@ -415,8 +419,6 @@ void make_ParticleContainer_and_Iterators (py::module &m)
             amrex::ArenaAllocator>(m, "arena");
 #endif
     //   end work-around
-    make_ParticleContainer_and_Iterators<T_ParticleType, T_NArrayReal, T_NArrayInt,
-            amrex::PinnedArenaAllocator>(m, "pinned");
 #ifdef AMREX_USE_GPU
     make_ParticleContainer_and_Iterators<T_ParticleType, T_NArrayReal, T_NArrayInt,
                                          amrex::DeviceArenaAllocator>(m, "device");
