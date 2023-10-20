@@ -2773,7 +2773,7 @@ class ArrayOfStructs_0_0_arena:
             Raises an exception if cupy is not installed
 
         """
-    def to_host(self) -> ArrayOfStructs_0_0_default: ...
+    def to_host(self) -> ArrayOfStructs_0_0_pinned: ...
     def to_numpy(self, copy=False):
         """
 
@@ -2845,7 +2845,7 @@ class ArrayOfStructs_0_0_default:
             Raises an exception if cupy is not installed
 
         """
-    def to_host(self) -> ArrayOfStructs_0_0_default: ...
+    def to_host(self) -> ArrayOfStructs_0_0_pinned: ...
     def to_numpy(self, copy=False):
         """
 
@@ -2917,7 +2917,7 @@ class ArrayOfStructs_0_0_pinned:
             Raises an exception if cupy is not installed
 
         """
-    def to_host(self) -> ArrayOfStructs_0_0_default: ...
+    def to_host(self) -> ArrayOfStructs_0_0_pinned: ...
     def to_numpy(self, copy=False):
         """
 
@@ -2989,7 +2989,7 @@ class ArrayOfStructs_1_1_arena:
             Raises an exception if cupy is not installed
 
         """
-    def to_host(self) -> ArrayOfStructs_1_1_default: ...
+    def to_host(self) -> ArrayOfStructs_1_1_pinned: ...
     def to_numpy(self, copy=False):
         """
 
@@ -3061,7 +3061,7 @@ class ArrayOfStructs_1_1_default:
             Raises an exception if cupy is not installed
 
         """
-    def to_host(self) -> ArrayOfStructs_1_1_default: ...
+    def to_host(self) -> ArrayOfStructs_1_1_pinned: ...
     def to_numpy(self, copy=False):
         """
 
@@ -3133,7 +3133,7 @@ class ArrayOfStructs_1_1_pinned:
             Raises an exception if cupy is not installed
 
         """
-    def to_host(self) -> ArrayOfStructs_1_1_default: ...
+    def to_host(self) -> ArrayOfStructs_1_1_pinned: ...
     def to_numpy(self, copy=False):
         """
 
@@ -3205,7 +3205,7 @@ class ArrayOfStructs_2_1_arena:
             Raises an exception if cupy is not installed
 
         """
-    def to_host(self) -> ArrayOfStructs_2_1_default: ...
+    def to_host(self) -> ArrayOfStructs_2_1_pinned: ...
     def to_numpy(self, copy=False):
         """
 
@@ -3277,7 +3277,7 @@ class ArrayOfStructs_2_1_default:
             Raises an exception if cupy is not installed
 
         """
-    def to_host(self) -> ArrayOfStructs_2_1_default: ...
+    def to_host(self) -> ArrayOfStructs_2_1_pinned: ...
     def to_numpy(self, copy=False):
         """
 
@@ -3349,7 +3349,7 @@ class ArrayOfStructs_2_1_pinned:
             Raises an exception if cupy is not installed
 
         """
-    def to_host(self) -> ArrayOfStructs_2_1_default: ...
+    def to_host(self) -> ArrayOfStructs_2_1_pinned: ...
     def to_numpy(self, copy=False):
         """
 

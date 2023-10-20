@@ -62,6 +62,9 @@ void make_StructOfArrays(py::module &m, std::string allocstr)
 template <int NReal, int NInt>
 void make_StructOfArrays(py::module &m)
 {
+    // first, because used as copy target in methods in containers with other allocators
+    make_StructOfArrays<NReal, NInt, amrex::PinnedArenaAllocator>(m, "pinned");
+
     // see Src/Base/AMReX_GpuContainers.H
     //   !AMREX_USE_GPU: DefaultAllocator = std::allocator
     //    AMREX_USE_GPU: DefaultAllocator = amrex::ArenaAllocator
@@ -77,7 +80,6 @@ void make_StructOfArrays(py::module &m)
     make_StructOfArrays<NReal, NInt, amrex::ArenaAllocator>(m, "arena");
 #endif
     //   end work-around
-    make_StructOfArrays<NReal, NInt, amrex::PinnedArenaAllocator>(m, "pinned");
 #ifdef AMREX_USE_GPU
     make_StructOfArrays<NReal, NInt, amrex::DeviceArenaAllocator>(m, "device");
     make_StructOfArrays<NReal, NInt, amrex::ManagedArenaAllocator>(m, "managed");

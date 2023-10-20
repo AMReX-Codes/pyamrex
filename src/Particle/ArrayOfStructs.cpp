@@ -137,7 +137,7 @@ void make_ArrayOfStructs(py::module &m, std::string allocstr)
         .def("__getitem__", [](AOSType &aos, int const v){ return aos[v]; }, py::return_value_policy::reference)
 
         .def("to_host", [](AOSType const & aos) {
-            ArrayOfStructs<T_ParticleType, std::allocator> h_data;
+            ArrayOfStructs<T_ParticleType, amrex::PinnedArenaAllocator> h_data;
             h_data.resize(aos.size());
             //py::array_t<T_ParticleType> h_data(aos.size());
             amrex::Gpu::copy(amrex::Gpu::deviceToHost,
@@ -158,6 +158,9 @@ void make_ArrayOfStructs(py::module &m)
     // AMReX legacy AoS position + id/cpu particle ype
     using ParticleType = Particle<NReal, NInt>;
 
+    // first, because used as copy target in methods in containers with other allocators
+    make_ArrayOfStructs<ParticleType, amrex::PinnedArenaAllocator> (m, "pinned");
+
     // see Src/Base/AMReX_GpuContainers.H
     //   !AMREX_USE_GPU: DefaultAllocator = std::allocator
     //    AMREX_USE_GPU: DefaultAllocator = amrex::ArenaAllocator
@@ -173,7 +176,6 @@ void make_ArrayOfStructs(py::module &m)
     make_ArrayOfStructs<ParticleType, amrex::ArenaAllocator> (m, "arena");
 #endif
     //   end work-around
-    make_ArrayOfStructs<ParticleType, amrex::PinnedArenaAllocator> (m, "pinned");
 #ifdef AMREX_USE_GPU
     make_ArrayOfStructs<ParticleType, amrex::DeviceArenaAllocator> (m, "device");
     make_ArrayOfStructs<ParticleType, amrex::ManagedArenaAllocator> (m, "managed");
