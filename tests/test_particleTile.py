@@ -119,7 +119,7 @@ def test_ptile_soa():
 
 
 @pytest.mark.skipif(amr.Config.spacedim != 3, reason="Requires AMREX_SPACEDIM = 3")
-def test_ptile_aos():
+def test_ptile_aos_3d():
     pt = amr.ParticleTile_1_1_2_1_default()
     p1 = amr.Particle_1_1()
     p2 = amr.Particle_1_1()

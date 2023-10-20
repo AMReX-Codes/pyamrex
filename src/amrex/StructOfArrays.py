@@ -25,8 +25,6 @@ def soa_to_numpy(self, copy=False):
         A tuple with real and int components that are each lists
         of 1D numpy arrays.
     """
-    import numpy as np
-
     SoA_np = namedtuple(type(self).__name__ + "_np", ["real", "int"])
 
     soa_view = SoA_np([], [])
@@ -65,8 +63,6 @@ def soa_to_cupy(self, copy=False):
     ImportError
         Raises an exception if cupy is not installed
     """
-    import cupy as cp
-
     SoA_cp = namedtuple(type(self).__name__ + "_cp", ["real", "int"])
 
     soa_view = SoA_cp([], [])

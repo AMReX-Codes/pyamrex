@@ -1,8 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import numpy as np
-import pytest
-
 import amrex.space3d as amr
 from amrex.space3d import RealVect as RV
 from amrex.space3d import XDim3

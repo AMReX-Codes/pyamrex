@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import numpy as np
-import pytest
 
 import amrex.space3d as amr
 
@@ -85,6 +84,9 @@ def test_array_interface():
     print(arr)
     print(aos[0], aos[1])
     print("-------")
+    aos[0] = p4
+    assert aos[0].x == 0
+    assert aos[0].y == -5
     aos[0] = p3
     print("array:", arr)
     print("aos[0]:", aos[0], "aos[1]:", aos[1])

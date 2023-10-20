@@ -115,7 +115,7 @@ def test_periodic_queries(box, real_box):
     is_periodic = [0, 0, 1]
     gm = Gm(box, real_box, coord, is_periodic)
 
-    pdcity = gm.periodicity()
+    pdcity = gm.periodicity()  # noqa
 
     assert gm.isAnyPeriodic()
     assert not gm.isPeriodic(0) and not gm.isPeriodic(1) and gm.isPeriodic(2)

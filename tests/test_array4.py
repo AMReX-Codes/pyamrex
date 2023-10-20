@@ -87,8 +87,10 @@ def test_array4_numba():
     )  # type: numpy.ndarray
 
     # host-to-device copy
-    x_numba = cuda.to_device(x)  # type: numba.cuda.cudadrv.devicearray.DeviceNDArray
-    # x_cupy = cupy.asarray(x_numba)      # type: cupy.ndarray
+    x_numba = cuda.to_device(x)  # noqa
+    #   type is numba.cuda.cudadrv.devicearray.DeviceNDArray
+    # x_cupy = cupy.asarray(x_numba)
+    #   type is cupy.ndarray
 
     # TODO: Implement __cuda_array_interface__ or DLPack in Array4 constructor
     # x_arr = amr.Array4_double(x_numba)  # type: amr.Array4_double

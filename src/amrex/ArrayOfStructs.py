@@ -5,7 +5,6 @@ Copyright 2023 AMReX community
 Authors: Axel Huebl
 License: BSD-3-Clause-LBNL
 """
-from collections import namedtuple
 
 
 def aos_to_numpy(self, copy=False):
@@ -64,10 +63,6 @@ def aos_to_cupy(self, copy=False):
         Raises an exception if cupy is not installed
     """
     import cupy as cp
-
-    SoA_cp = namedtuple(type(self).__name__ + "_cp", ["real", "int"])
-
-    soa_view = SoA_cp([], [])
 
     if self.size() == 0:
         raise ValueError("AoS is empty.")

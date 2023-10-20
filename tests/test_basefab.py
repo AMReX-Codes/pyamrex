@@ -6,7 +6,7 @@ import amrex.space3d as amr
 
 
 def test_basefab():
-    bf = amr.BaseFab_Real()
+    bf = amr.BaseFab_Real()  # noqa
 
 
 def test_basefab_to_host():

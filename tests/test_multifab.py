@@ -175,7 +175,7 @@ def test_mfab_ops_cuda_numba(make_mfab_device):
 
     # assign 3: loop through boxes and launch kernels
     for mfi in mfab_device:
-        bx = mfi.tilebox().grow(ngv)
+        bx = mfi.tilebox().grow(ngv)  # noqa
         marr = mfab_device.array(mfi)
         marr_numba = cuda.as_cuda_array(marr)
 
@@ -208,7 +208,7 @@ def test_mfab_ops_cuda_cupy(make_mfab_device):
     # assign 3
     with cupyx.profiler.time_range("assign 3 [()]", color_id=0):
         for mfi in mfab_device:
-            bx = mfi.tilebox().grow(ngv)
+            bx = mfi.tilebox().grow(ngv)  # noqa
             marr_cupy = mfab_device.array(mfi).to_cupy(order="C")
             # print(marr_cupy.shape)  # 1, 32, 32, 32
             # print(marr_cupy.dtype)  # float64
@@ -243,7 +243,7 @@ def test_mfab_ops_cuda_cupy(make_mfab_device):
             return mm
 
         for mfi in mfab_device:
-            bx = mfi.tilebox().grow(ngv)
+            bx = mfi.tilebox().grow(ngv)  # noqa
             marr_cupy = mfab_device.array(mfi).to_cupy(order="F")
             # print(marr_cupy.shape)  # 32, 32, 32, 1
             # print(marr_cupy.dtype)  # float64
@@ -268,7 +268,7 @@ def test_mfab_ops_cuda_cupy(make_mfab_device):
             x[...] = 7.0
 
         for mfi in mfab_device:
-            bx = mfi.tilebox().grow(ngv)
+            bx = mfi.tilebox().grow(ngv)  # noqa
             marr_cupy = mfab_device.array(mfi).to_cupy(order="C")
 
             # write and read into the marr_cupy
@@ -306,7 +306,7 @@ def test_mfab_ops_cuda_pytorch(make_mfab_device):
     amr.Config.gpu_backend != "CUDA", reason="Requires AMReX_GPU_BACKEND=CUDA"
 )
 def test_mfab_ops_cuda_cuml(make_mfab_device):
-    mfab_device = make_mfab_device()
+    mfab_device = make_mfab_device()  # noqa
     # https://github.com/rapidsai/cuml
     # https://github.com/rapidsai/cudf
     #   maybe better for particles as a dataframe test
