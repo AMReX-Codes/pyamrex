@@ -8,8 +8,7 @@ import pytest
 import amrex.space3d as amr
 
 
-def test_mfab_loop(make_mfab):
-    mfab = make_mfab()
+def test_mfab_loop(mfab):
     ngv = mfab.nGrowVect
     print(f"\n  mfab={mfab}, mfab.nGrowVect={ngv}")
 
@@ -78,8 +77,7 @@ def test_mfab_loop(make_mfab):
         #   TODO
 
 
-def test_mfab_simple(make_mfab):
-    mfab = make_mfab()
+def test_mfab_simple(mfab):
     assert mfab.is_all_cell_centered
     # assert(all(not mfab.is_nodal(i) for i in [-1, 0, 1, 2]))  # -1??
     assert all(not mfab.is_nodal(i) for i in [0, 1, 2])
@@ -144,8 +142,7 @@ def test_mfab_ops(boxarr, distmap, nghost):
     np.testing.assert_allclose(dst.max(0), 150.0)
 
 
-def test_mfab_mfiter(make_mfab):
-    mfab = make_mfab()
+def test_mfab_mfiter(mfab):
     assert iter(mfab).is_valid
     assert iter(mfab).length == 8
 
@@ -159,8 +156,7 @@ def test_mfab_mfiter(make_mfab):
 @pytest.mark.skipif(
     amr.Config.gpu_backend != "CUDA", reason="Requires AMReX_GPU_BACKEND=CUDA"
 )
-def test_mfab_ops_cuda_numba(make_mfab_device):
-    mfab_device = make_mfab_device()
+def test_mfab_ops_cuda_numba(mfab_device):
     # https://numba.pydata.org/numba-doc/dev/cuda/cuda_array_interface.html
     from numba import cuda
 
@@ -195,8 +191,7 @@ def test_mfab_ops_cuda_numba(make_mfab_device):
 @pytest.mark.skipif(
     amr.Config.gpu_backend != "CUDA", reason="Requires AMReX_GPU_BACKEND=CUDA"
 )
-def test_mfab_ops_cuda_cupy(make_mfab_device):
-    mfab_device = make_mfab_device()
+def test_mfab_ops_cuda_cupy(mfab_device):
     # https://docs.cupy.dev/en/stable/user_guide/interoperability.html
     import cupy as cp
     import cupyx.profiler
@@ -285,8 +280,7 @@ def test_mfab_ops_cuda_cupy(make_mfab_device):
 @pytest.mark.skipif(
     amr.Config.gpu_backend != "CUDA", reason="Requires AMReX_GPU_BACKEND=CUDA"
 )
-def test_mfab_ops_cuda_pytorch(make_mfab_device):
-    mfab_device = make_mfab_device()
+def test_mfab_ops_cuda_pytorch(mfab_device):
     # https://docs.cupy.dev/en/stable/user_guide/interoperability.html#pytorch
     import torch
 
@@ -305,8 +299,8 @@ def test_mfab_ops_cuda_pytorch(make_mfab_device):
 @pytest.mark.skipif(
     amr.Config.gpu_backend != "CUDA", reason="Requires AMReX_GPU_BACKEND=CUDA"
 )
-def test_mfab_ops_cuda_cuml(make_mfab_device):
-    mfab_device = make_mfab_device()  # noqa
+def test_mfab_ops_cuda_cuml(mfab_device):
+    pass
     # https://github.com/rapidsai/cuml
     # https://github.com/rapidsai/cudf
     #   maybe better for particles as a dataframe test
@@ -322,9 +316,7 @@ def test_mfab_ops_cuda_cuml(make_mfab_device):
 @pytest.mark.skipif(
     amr.Config.gpu_backend != "CUDA", reason="Requires AMReX_GPU_BACKEND=CUDA"
 )
-def test_mfab_dtoh_copy(make_mfab_device):
-    mfab_device = make_mfab_device()
-
+def test_mfab_dtoh_copy(mfab_device):
     mfab_host = amr.MultiFab(
         mfab_device.box_array(),
         mfab_device.dm(),
