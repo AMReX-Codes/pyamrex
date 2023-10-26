@@ -194,13 +194,21 @@ set_cxx_warnings()
 # Generate Configuration and .pc Files ########################################
 #
 # these files are used if pyAMReX is installed and picked up by a downstream
-# project (not needed yet)
+# project
+include(CMakePackageConfigHelpers)
+configure_package_config_file(
+    ${pyAMReX_SOURCE_DIR}/pyAMReXConfig.cmake.in
+    ${pyAMReX_BINARY_DIR}/pyAMReXConfig.cmake
+    INSTALL_DESTINATION ${pyAMReX_INSTALL_CMAKEDIR}
+    #PATH_VARS MODULE_PATH
+    # We have our own check_required_components
+    NO_CHECK_REQUIRED_COMPONENTS_MACRO
+)
 
-#include(CMakePackageConfigHelpers)
-#write_basic_package_version_file("pyAMReXConfigVersion.cmake"
-#    VERSION ${pyAMReX_VERSION}
-#    COMPATIBILITY SameMajorVersion
-#)
+write_basic_package_version_file("pyAMReXConfigVersion.cmake"
+    VERSION ${pyAMReX_VERSION}
+    COMPATIBILITY SameMinorVersion
+)
 
 
 # Installs ####################################################################
@@ -220,17 +228,17 @@ install(TARGETS ${pyAMReX_INSTALL_TARGET_NAMES}
 )
 
 # CMake package file for find_package(pyAMReX) in depending projects
-#install(EXPORT pyAMReXTargets
-#    FILE pyAMReXTargets.cmake
-#    NAMESPACE pyAMReX::
-#    DESTINATION ${pyAMReX_INSTALL_CMAKEDIR}
-#)
-#install(
-#    FILES
-#        ${pyAMReX_BINARY_DIR}/pyAMReXConfig.cmake
-#        ${pyAMReX_BINARY_DIR}/pyAMReXConfigVersion.cmake
-#    DESTINATION ${pyAMReX_INSTALL_CMAKEDIR}
-#)
+install(EXPORT pyAMReXTargets
+    FILE pyAMReXTargets.cmake
+    NAMESPACE pyAMReX::
+    DESTINATION ${pyAMReX_INSTALL_CMAKEDIR}
+)
+install(
+    FILES
+        ${pyAMReX_BINARY_DIR}/pyAMReXConfig.cmake
+        ${pyAMReX_BINARY_DIR}/pyAMReXConfigVersion.cmake
+    DESTINATION ${pyAMReX_INSTALL_CMAKEDIR}
+)
 
 
 # pip helpers for the amrex package ###########################################
