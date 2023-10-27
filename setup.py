@@ -5,9 +5,6 @@
 # Authors: Axel Huebl
 # License: BSD-3-Clause-LBNL
 #
-from distutils.command.build import build
-from distutils.command.clean import clean
-from distutils.version import LooseVersion
 import os
 import platform
 import re
@@ -16,6 +13,7 @@ import subprocess
 import sys
 
 from setuptools import Extension, setup
+from setuptools.command.build import build
 from setuptools.command.build_ext import build_ext
 
 
@@ -33,10 +31,8 @@ class CopyPreBuild(build):
         #   by default, this stays around. We want to make sure generated
         #   files like amrex_*d_pybind.*.(so|pyd) are always only the
         #   ones we want to package and not ones from an earlier wheel's stage
-        c = clean(self.distribution)
-        c.all = True
-        c.finalize_options()
-        c.run()
+        if os.path.exists(self.build_base):
+            shutil.rmtree(self.build_base)
 
         # call superclass
         build.run(self)
@@ -54,6 +50,8 @@ class CMakeExtension(Extension):
 
 class CMakeBuild(build_ext):
     def run(self):
+        from packaging.version import parse
+
         try:
             out = subprocess.check_output(["cmake", "--version"])
         except OSError:
@@ -63,10 +61,8 @@ class CMakeBuild(build_ext):
                 + ", ".join(e.name for e in self.extensions)
             )
 
-        cmake_version = LooseVersion(
-            re.search(r"version\s*([\d.]+)", out.decode()).group(1)
-        )
-        if cmake_version < "3.20.0":
+        cmake_version = parse(re.search(r"version\s*([\d.]+)", out.decode()).group(1))
+        if cmake_version < parse("3.20.0"):
             raise RuntimeError("CMake >= 3.20.0 is required")
 
         for ext in self.extensions:
