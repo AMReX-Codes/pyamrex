@@ -12,7 +12,8 @@ In order to run our tests, you need to have a few :ref:`Python packages installe
 
 .. code-block:: sh
 
-   python3 -m pip install -U pip setuptools wheel pytest
+   python3 -m pip install -U pip
+   python3 -m pip install -U build packaging setuptools wheel pytest
    python3 -m pip install -r requirements.txt
 
 

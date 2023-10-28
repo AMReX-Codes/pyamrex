@@ -25,8 +25,10 @@ spack:
   - cmake
   - mpi
   - python
+  - py-build
   - py-mpi4py
   - py-numpy
+  - py-packaging
   - py-pip
   - py-setuptools
   - py-wheel
