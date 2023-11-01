@@ -85,7 +85,7 @@ def distmap(boxarr):
 
 
 @pytest.fixture(scope="function", params=list(itertools.product([1, 3], [0, 1])))
-def make_mfab(boxarr, distmap, request):
+def mfab(boxarr, distmap, request):
     """MultiFab that is either managed or device:
     The MultiFab object itself is not a fixture because we want to avoid caching
     it between amr.initialize/finalize calls of various tests.
@@ -93,21 +93,27 @@ def make_mfab(boxarr, distmap, request):
     https://github.com/pytest-dev/pytest/issues/5642#issuecomment-1279612764
     """
 
-    def create():
-        num_components = request.param[0]
-        num_ghost = request.param[1]
-        mfab = amr.MultiFab(boxarr, distmap, num_components, num_ghost)
-        mfab.set_val(0.0, 0, num_components)
-        return mfab
+    class MfabContextManager:
+        def __enter__(self):
+            num_components = request.param[0]
+            num_ghost = request.param[1]
+            self.mfab = amr.MultiFab(boxarr, distmap, num_components, num_ghost)
+            self.mfab.set_val(0.0, 0, num_components)
+            return self.mfab
 
-    return create
+        def __exit__(self, exc_type, exc_value, traceback):
+            self.mfab.clear()
+            del self.mfab
+
+    with MfabContextManager() as mfab:
+        yield mfab
 
 
 @pytest.mark.skipif(
     amr.Config.gpu_backend != "CUDA", reason="Requires AMReX_GPU_BACKEND=CUDA"
 )
 @pytest.fixture(scope="function", params=list(itertools.product([1, 3], [0, 1])))
-def make_mfab_device(boxarr, distmap, request):
+def mfab_device(boxarr, distmap, request):
     """MultiFab that resides purely on the device:
     The MultiFab object itself is not a fixture because we want to avoid caching
     it between amr.initialize/finalize calls of various tests.
@@ -115,17 +121,23 @@ def make_mfab_device(boxarr, distmap, request):
     https://github.com/pytest-dev/pytest/issues/5642#issuecomment-1279612764
     """
 
-    def create():
-        num_components = request.param[0]
-        num_ghost = request.param[1]
-        mfab = amr.MultiFab(
-            boxarr,
-            distmap,
-            num_components,
-            num_ghost,
-            amr.MFInfo().set_arena(amr.The_Device_Arena()),
-        )
-        mfab.set_val(0.0, 0, num_components)
-        return mfab
+    class MfabDeviceContextManager:
+        def __enter__(self):
+            num_components = request.param[0]
+            num_ghost = request.param[1]
+            self.mfab = amr.MultiFab(
+                boxarr,
+                distmap,
+                num_components,
+                num_ghost,
+                amr.MFInfo().set_arena(amr.The_Device_Arena()),
+            )
+            self.mfab.set_val(0.0, 0, num_components)
+            return self.mfab
 
-    return create
+        def __exit__(self, exc_type, exc_value, traceback):
+            self.mfab.clear()
+            del self.mfab
+
+    with MfabDeviceContextManager() as mfab:
+        yield mfab
