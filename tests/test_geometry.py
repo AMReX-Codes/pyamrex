@@ -132,7 +132,7 @@ def test_periodicity(geometry):
     gm = geometry
     bx = gm.Domain()
 
-    for non_periodic_coord in [0, 1]:
+    for _non_periodic_coord in [0, 1]:
         error_thrown = False
         try:
             gm.period(0)

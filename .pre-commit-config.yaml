@@ -86,17 +86,6 @@ repos:
   - id: isort
     name: isort (python)
 
-# Python: Flake8 (checks only, does this support auto-fixes?)
-#- repo: https://github.com/PyCQA/flake8
-#  rev: 4.0.1
-#  hooks:
-#  - id: flake8
-#    additional_dependencies: &flake8_dependencies
-#      - flake8-bugbear
-#      - pep8-naming
-#    exclude: ^(docs/.*|tools/.*)$
-# Alternatively: use autopep8?
-
 # Python Formatting
 - repo: https://github.com/psf/black
   rev: 23.10.1 # Keep in sync with blacken-docs
@@ -109,6 +98,26 @@ repos:
     additional_dependencies:
     - black==23.10.1 # keep in sync with black hook
   # TODO: black-jupyter
+
+# Python: Ruff linter
+#   https://docs.astral.sh/ruff/
+- repo: https://github.com/astral-sh/ruff-pre-commit
+  rev: v0.1.0
+  hooks:
+    - id: ruff
+      args: [--fix, --exit-non-zero-on-fix]
+      types_or: [python, jupyter]
+
+# Python: Flake8 (only for pyflake and bugbear)
+#   Ruff above is faster
+#- repo: https://github.com/PyCQA/flake8
+#  rev: 6.1.0
+#  hooks:
+#  - id: flake8
+#    additional_dependencies: &flake8_dependencies
+#      - flake8-bugbear
+#      - Flake8-pyproject
+#    exclude: ^(docs/.*|tools/.*)$
 
 # Jupyter Notebooks: clean up all cell outputs
 - repo: https://github.com/roy-ht/pre-commit-jupyter

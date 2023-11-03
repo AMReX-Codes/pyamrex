@@ -6,3 +6,14 @@ requires = [
     "packaging>=23",
 ]
 build-backend = "setuptools.build_meta"
+
+
+[tool.flake8]
+#ignore = ['E231', 'E241']
+select = ['F', 'B']
+
+
+[tool.ruff]
+# https://docs.astral.sh/ruff/
+select = ["E4", "E7", "E9", "F"]
+ignore = ["E402"]
