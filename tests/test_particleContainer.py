@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import importlib
+
 import numpy as np
 import pytest
 
@@ -272,3 +274,38 @@ def test_per_cell(empty_particle_container, std_geometry, std_particle):
     assert pc.TotalNumberOfParticles() == pc.NumberOfParticlesAtLevel(0) == ncells
     print("npts * real_1", ncells * std_particle.real_array_data[1])
     assert ncells * std_particle.real_array_data[1] == sum_1
+
+
+@pytest.mark.skipif(
+    importlib.util.find_spec("pandas") is None, reason="pandas is not available"
+)
+def test_pc_df(particle_container, Npart):
+    pc = particle_container
+    print(f"pc={pc}")
+    df = pc.to_df()
+    print(df.columns)
+    print(df)
+
+
+@pytest.mark.skipif(
+    importlib.util.find_spec("pandas") is None, reason="pandas is not available"
+)
+def test_pc_empty_df(empty_particle_container, Npart):
+    pc = empty_particle_container
+    print(f"pc={pc}")
+    df = pc.to_df()
+    assert df is None
+
+
+@pytest.mark.skipif(
+    importlib.util.find_spec("pandas") is None, reason="pandas is not available"
+)
+@pytest.mark.skipif(not amr.Config.have_mpi, reason="Requires AMReX_MPI=ON")
+def test_pc_df_mpi(particle_container, Npart):
+    pc = particle_container
+    print(f"pc={pc}")
+    df = pc.to_df(local=False)
+    if df is not None:
+        # only rank 0
+        print(df.columns)
+        print(df)

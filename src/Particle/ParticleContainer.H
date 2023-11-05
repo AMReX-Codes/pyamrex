@@ -68,6 +68,8 @@ void make_Base_Iterators (py::module &m, std::string allocstr)
                                py::return_value_policy::reference_internal)
 
         .def_property_readonly_static("is_soa_particle", [](const py::object&){ return ParticleType::is_soa_particle;})
+        .def_property_readonly("size", &iterator_base::numParticles,
+                               "the number of particles on this tile")
         .def_property_readonly("num_particles", &iterator_base::numParticles)
         .def_property_readonly("num_real_particles", &iterator_base::numRealParticles)
         .def_property_readonly("num_neighbor_particles", &iterator_base::numNeighborParticles)
@@ -382,6 +384,14 @@ void make_ParticleContainer_and_Iterators (py::module &m, std::string allocstr)
     make_Iterators< false, iterator, Allocator >(m, allocstr);
     using const_iterator = amrex::ParConstIter_impl<ParticleType, T_NArrayReal, T_NArrayInt, Allocator>;
     make_Iterators< true, const_iterator, Allocator >(m, allocstr);
+
+    // simpler particle iterator loops: return types of this particle box
+    py_pc
+        .def_property_readonly_static("iterator", [](py::object /* pc */){ return py::type::of<iterator>(); },
+            "amrex iterator for particle boxes")
+        .def_property_readonly_static("const_iterator", [](py::object /* pc */){ return py::type::of<const_iterator>(); },
+            "amrex constant iterator for particle boxes (read-only)")
+    ;
 }
 
 /** Create ParticleContainers and Iterators

@@ -66,6 +66,7 @@ Optional dependencies include:
 - [mpi4py](https://mpi4py.readthedocs.io) 2.1+: for multi-node and/or multi-GPU execution
 - [CCache](https://ccache.dev): to speed up rebuilds (for CUDA support, needs 3.7.9+ and 4.2+ is recommended)
 - further [optional dependencies of AMReX](https://github.com/AMReX-Codes/amrex/)
+- [pandas](https://pandas.pydata.org/) 2+: for DataFrame support
 - [pytest](https://docs.pytest.org/en/stable/) 6.2+: for running unit tests
 
 Optional CUDA-capable dependencies for tests include:
@@ -104,6 +105,10 @@ If you wish to run unit tests, then please install `pytest`
 ```bash
 python3 -m pip install -U pytest
 ```
+
+Some of our tests depend on optional third-party modules (e.g., `pandas`, `cupy`, `numba`, and/or `pytorch`).
+If these are not installed then their tests will be skipped.
+
 
 ### Configure your compiler
 
