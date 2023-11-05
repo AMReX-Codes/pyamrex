@@ -40,6 +40,7 @@ from amrex.Array4 import register_Array4_extension
 from amrex.ArrayOfStructs import register_AoS_extension
 from amrex.MultiFab import register_MultiFab_extension
 from amrex.PODVector import register_PODVector_extension
+from amrex.ParticleContainer import register_ParticleContainer_extension
 from amrex.StructOfArrays import register_SoA_extension
 from amrex.space3d.amrex_3d_pybind import (
     AlmostEqual,
@@ -472,6 +473,7 @@ __all__ = [
     "register_Array4_extension",
     "register_MultiFab_extension",
     "register_PODVector_extension",
+    "register_ParticleContainer_extension",
     "register_SoA_extension",
     "size",
     "ubound",
