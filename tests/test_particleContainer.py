@@ -46,6 +46,25 @@ def particle_container(Npart, std_geometry, distmap, boxarr, std_real_box):
 
     iseed = 1
     pc.init_random(Npart, iseed, myt, False, std_real_box)
+
+    # add runtime components: 1 real 2 int
+    pc.add_real_comp(True)
+    pc.add_int_comp(True)
+    pc.add_int_comp(True)
+
+    #   can be removed after
+    #     https://github.com/AMReX-Codes/amrex/pull/3615
+    pc.resize_runtime_real_comp(1, True)
+    pc.resize_runtime_int_comp(2, True)
+
+    # assign some values to runtime components
+    for lvl in range(pc.finest_level + 1):
+        for pti in pc.iterator(pc, level=lvl):
+            soa = pti.soa()
+            soa.get_real_data(2).assign(1.2345)
+            soa.get_int_data(1).assign(42)
+            soa.get_int_data(2).assign(33)
+
     return pc
 
 
@@ -58,6 +77,25 @@ def soa_particle_container(Npart, std_geometry, distmap, boxarr, std_real_box):
 
     iseed = 1
     pc.init_random(Npart, iseed, myt, False, std_real_box)
+
+    # add runtime components: 1 real 2 int
+    pc.add_real_comp(True)
+    pc.add_int_comp(True)
+    pc.add_int_comp(True)
+
+    #   can be removed after
+    #     https://github.com/AMReX-Codes/amrex/pull/3615
+    pc.resize_runtime_real_comp(1, True)
+    pc.resize_runtime_int_comp(2, True)
+
+    # assign some values to runtime components
+    for lvl in range(pc.finest_level + 1):
+        for pti in pc.iterator(pc, level=lvl):
+            soa = pti.soa()
+            soa.get_real_data(8).assign(1.2345)
+            soa.get_int_data(0).assign(42)
+            soa.get_int_data(1).assign(33)
+
     return pc
 
 
@@ -414,6 +452,8 @@ def test_pc_df(particle_container, Npart):
     print(df.columns)
     print(df)
 
+    assert len(df.columns) == 12
+
 
 @pytest.mark.skipif(
     importlib.util.find_spec("pandas") is None, reason="pandas is not available"
@@ -502,3 +542,5 @@ def test_pc_df_mpi(particle_container, Npart):
         # only rank 0
         print(df.columns)
         print(df)
+
+        assert len(df.columns) == 12
