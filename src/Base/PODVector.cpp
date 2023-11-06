@@ -61,6 +61,9 @@ void make_PODVector(py::module &m, std::string typestr, std::string allocstr)
         .def(py::init<>())
         .def(py::init<std::size_t>(), py::arg("size"))
         .def(py::init<PODVector_type&>(), py::arg("other"))
+        .def("assign", [](PODVector_type & pv, T const & value){
+            pv.assign(pv.size(), value);
+        }, py::arg("value"), "assign the same value to every element")
         .def("push_back", py::overload_cast<const T&>(&PODVector_type::push_back))
         .def("pop_back", &PODVector_type::pop_back)
         .def("clear", &PODVector_type::clear)
