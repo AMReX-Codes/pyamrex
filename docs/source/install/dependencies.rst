@@ -28,10 +28,11 @@ Optional dependencies include:
 - further `optional dependencies of AMReX <https://github.com/AMReX-Codes/amrex/>`__
 - `Python dependencies <https://www.python.org>`__
 
-  - `mpi4py <https://mpi4py.readthedocs.io>`__
-  - `cupy <https://github.com/cupy/cupy#installation>`__ 11.2+
-  - `numba <https://numba.readthedocs.io/en/stable/user/installing.html>`__ 0.56+
-  - `torch <https://pytorch.org/get-started/locally/>`__ 1.12+
+  - `mpi4py 2.1+ <https://mpi4py.readthedocs.io>`__: for multi-node and/or multi-GPU execution
+  - `cupy 11.2+ <https://github.com/cupy/cupy#installation>`__
+  - `numba 0.56+ <https://numba.readthedocs.io/en/stable/user/installing.html>`__
+  - `pandas 2+ <https://pandas.pydata.org>`__: for DataFrame support
+  - `torch 1.12+ <https://pytorch.org/get-started/locally/>`__
 
 For all other systems, we recommend to use a **package dependency manager**:
 Pick *one* of the installation methods below to install all dependencies for pyAMReX development in a consistent manner.

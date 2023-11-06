@@ -5028,6 +5028,11 @@ class ParConstIterBase_0_0_4_0_arena(MFIter):
     def num_real_particles(self) -> int: ...
     @property
     def pair_index(self) -> tuple[int, int]: ...
+    @property
+    def size(self) -> int:
+        """
+        the number of particles on this tile
+        """
 
 class ParConstIterBase_0_0_4_0_default(MFIter):
     is_soa_particle: typing.ClassVar[bool] = False
@@ -5050,6 +5055,11 @@ class ParConstIterBase_0_0_4_0_default(MFIter):
     def num_real_particles(self) -> int: ...
     @property
     def pair_index(self) -> tuple[int, int]: ...
+    @property
+    def size(self) -> int:
+        """
+        the number of particles on this tile
+        """
 
 class ParConstIterBase_0_0_4_0_pinned(MFIter):
     is_soa_particle: typing.ClassVar[bool] = False
@@ -5072,6 +5082,11 @@ class ParConstIterBase_0_0_4_0_pinned(MFIter):
     def num_real_particles(self) -> int: ...
     @property
     def pair_index(self) -> tuple[int, int]: ...
+    @property
+    def size(self) -> int:
+        """
+        the number of particles on this tile
+        """
 
 class ParConstIterBase_0_0_5_0_arena(MFIter):
     is_soa_particle: typing.ClassVar[bool] = False
@@ -5094,6 +5109,11 @@ class ParConstIterBase_0_0_5_0_arena(MFIter):
     def num_real_particles(self) -> int: ...
     @property
     def pair_index(self) -> tuple[int, int]: ...
+    @property
+    def size(self) -> int:
+        """
+        the number of particles on this tile
+        """
 
 class ParConstIterBase_0_0_5_0_default(MFIter):
     is_soa_particle: typing.ClassVar[bool] = False
@@ -5116,6 +5136,11 @@ class ParConstIterBase_0_0_5_0_default(MFIter):
     def num_real_particles(self) -> int: ...
     @property
     def pair_index(self) -> tuple[int, int]: ...
+    @property
+    def size(self) -> int:
+        """
+        the number of particles on this tile
+        """
 
 class ParConstIterBase_0_0_5_0_pinned(MFIter):
     is_soa_particle: typing.ClassVar[bool] = False
@@ -5138,6 +5163,11 @@ class ParConstIterBase_0_0_5_0_pinned(MFIter):
     def num_real_particles(self) -> int: ...
     @property
     def pair_index(self) -> tuple[int, int]: ...
+    @property
+    def size(self) -> int:
+        """
+        the number of particles on this tile
+        """
 
 class ParConstIterBase_1_1_2_1_arena(MFIter):
     is_soa_particle: typing.ClassVar[bool] = False
@@ -5160,6 +5190,11 @@ class ParConstIterBase_1_1_2_1_arena(MFIter):
     def num_real_particles(self) -> int: ...
     @property
     def pair_index(self) -> tuple[int, int]: ...
+    @property
+    def size(self) -> int:
+        """
+        the number of particles on this tile
+        """
 
 class ParConstIterBase_1_1_2_1_default(MFIter):
     is_soa_particle: typing.ClassVar[bool] = False
@@ -5182,6 +5217,11 @@ class ParConstIterBase_1_1_2_1_default(MFIter):
     def num_real_particles(self) -> int: ...
     @property
     def pair_index(self) -> tuple[int, int]: ...
+    @property
+    def size(self) -> int:
+        """
+        the number of particles on this tile
+        """
 
 class ParConstIterBase_1_1_2_1_pinned(MFIter):
     is_soa_particle: typing.ClassVar[bool] = False
@@ -5204,6 +5244,11 @@ class ParConstIterBase_1_1_2_1_pinned(MFIter):
     def num_real_particles(self) -> int: ...
     @property
     def pair_index(self) -> tuple[int, int]: ...
+    @property
+    def size(self) -> int:
+        """
+        the number of particles on this tile
+        """
 
 class ParConstIterBase_pureSoA_8_2_arena(MFIter):
     is_soa_particle: typing.ClassVar[bool] = True
@@ -5225,6 +5270,11 @@ class ParConstIterBase_pureSoA_8_2_arena(MFIter):
     def num_real_particles(self) -> int: ...
     @property
     def pair_index(self) -> tuple[int, int]: ...
+    @property
+    def size(self) -> int:
+        """
+        the number of particles on this tile
+        """
 
 class ParConstIterBase_pureSoA_8_2_default(MFIter):
     is_soa_particle: typing.ClassVar[bool] = True
@@ -5246,6 +5296,11 @@ class ParConstIterBase_pureSoA_8_2_default(MFIter):
     def num_real_particles(self) -> int: ...
     @property
     def pair_index(self) -> tuple[int, int]: ...
+    @property
+    def size(self) -> int:
+        """
+        the number of particles on this tile
+        """
 
 class ParConstIterBase_pureSoA_8_2_pinned(MFIter):
     is_soa_particle: typing.ClassVar[bool] = True
@@ -5267,6 +5322,11 @@ class ParConstIterBase_pureSoA_8_2_pinned(MFIter):
     def num_real_particles(self) -> int: ...
     @property
     def pair_index(self) -> tuple[int, int]: ...
+    @property
+    def size(self) -> int:
+        """
+        the number of particles on this tile
+        """
 
 class ParConstIter_0_0_4_0_arena(ParConstIterBase_0_0_4_0_arena):
     is_soa_particle: typing.ClassVar[bool] = False
@@ -5373,6 +5433,11 @@ class ParIterBase_0_0_4_0_arena(MFIter):
     def num_real_particles(self) -> int: ...
     @property
     def pair_index(self) -> tuple[int, int]: ...
+    @property
+    def size(self) -> int:
+        """
+        the number of particles on this tile
+        """
 
 class ParIterBase_0_0_4_0_default(MFIter):
     is_soa_particle: typing.ClassVar[bool] = False
@@ -5395,6 +5460,11 @@ class ParIterBase_0_0_4_0_default(MFIter):
     def num_real_particles(self) -> int: ...
     @property
     def pair_index(self) -> tuple[int, int]: ...
+    @property
+    def size(self) -> int:
+        """
+        the number of particles on this tile
+        """
 
 class ParIterBase_0_0_4_0_pinned(MFIter):
     is_soa_particle: typing.ClassVar[bool] = False
@@ -5417,6 +5487,11 @@ class ParIterBase_0_0_4_0_pinned(MFIter):
     def num_real_particles(self) -> int: ...
     @property
     def pair_index(self) -> tuple[int, int]: ...
+    @property
+    def size(self) -> int:
+        """
+        the number of particles on this tile
+        """
 
 class ParIterBase_0_0_5_0_arena(MFIter):
     is_soa_particle: typing.ClassVar[bool] = False
@@ -5439,6 +5514,11 @@ class ParIterBase_0_0_5_0_arena(MFIter):
     def num_real_particles(self) -> int: ...
     @property
     def pair_index(self) -> tuple[int, int]: ...
+    @property
+    def size(self) -> int:
+        """
+        the number of particles on this tile
+        """
 
 class ParIterBase_0_0_5_0_default(MFIter):
     is_soa_particle: typing.ClassVar[bool] = False
@@ -5461,6 +5541,11 @@ class ParIterBase_0_0_5_0_default(MFIter):
     def num_real_particles(self) -> int: ...
     @property
     def pair_index(self) -> tuple[int, int]: ...
+    @property
+    def size(self) -> int:
+        """
+        the number of particles on this tile
+        """
 
 class ParIterBase_0_0_5_0_pinned(MFIter):
     is_soa_particle: typing.ClassVar[bool] = False
@@ -5483,6 +5568,11 @@ class ParIterBase_0_0_5_0_pinned(MFIter):
     def num_real_particles(self) -> int: ...
     @property
     def pair_index(self) -> tuple[int, int]: ...
+    @property
+    def size(self) -> int:
+        """
+        the number of particles on this tile
+        """
 
 class ParIterBase_1_1_2_1_arena(MFIter):
     is_soa_particle: typing.ClassVar[bool] = False
@@ -5505,6 +5595,11 @@ class ParIterBase_1_1_2_1_arena(MFIter):
     def num_real_particles(self) -> int: ...
     @property
     def pair_index(self) -> tuple[int, int]: ...
+    @property
+    def size(self) -> int:
+        """
+        the number of particles on this tile
+        """
 
 class ParIterBase_1_1_2_1_default(MFIter):
     is_soa_particle: typing.ClassVar[bool] = False
@@ -5527,6 +5622,11 @@ class ParIterBase_1_1_2_1_default(MFIter):
     def num_real_particles(self) -> int: ...
     @property
     def pair_index(self) -> tuple[int, int]: ...
+    @property
+    def size(self) -> int:
+        """
+        the number of particles on this tile
+        """
 
 class ParIterBase_1_1_2_1_pinned(MFIter):
     is_soa_particle: typing.ClassVar[bool] = False
@@ -5549,6 +5649,11 @@ class ParIterBase_1_1_2_1_pinned(MFIter):
     def num_real_particles(self) -> int: ...
     @property
     def pair_index(self) -> tuple[int, int]: ...
+    @property
+    def size(self) -> int:
+        """
+        the number of particles on this tile
+        """
 
 class ParIterBase_pureSoA_8_2_arena(MFIter):
     is_soa_particle: typing.ClassVar[bool] = True
@@ -5570,6 +5675,11 @@ class ParIterBase_pureSoA_8_2_arena(MFIter):
     def num_real_particles(self) -> int: ...
     @property
     def pair_index(self) -> tuple[int, int]: ...
+    @property
+    def size(self) -> int:
+        """
+        the number of particles on this tile
+        """
 
 class ParIterBase_pureSoA_8_2_default(MFIter):
     is_soa_particle: typing.ClassVar[bool] = True
@@ -5591,6 +5701,11 @@ class ParIterBase_pureSoA_8_2_default(MFIter):
     def num_real_particles(self) -> int: ...
     @property
     def pair_index(self) -> tuple[int, int]: ...
+    @property
+    def size(self) -> int:
+        """
+        the number of particles on this tile
+        """
 
 class ParIterBase_pureSoA_8_2_pinned(MFIter):
     is_soa_particle: typing.ClassVar[bool] = True
@@ -5612,6 +5727,11 @@ class ParIterBase_pureSoA_8_2_pinned(MFIter):
     def num_real_particles(self) -> int: ...
     @property
     def pair_index(self) -> tuple[int, int]: ...
+    @property
+    def size(self) -> int:
+        """
+        the number of particles on this tile
+        """
 
 class ParIter_0_0_4_0_arena(ParIterBase_0_0_4_0_arena):
     is_soa_particle: typing.ClassVar[bool] = False
@@ -5760,6 +5880,8 @@ class ParticleContainer_0_0_4_0_arena:
     NStructInt: typing.ClassVar[int] = 0
     NStructReal: typing.ClassVar[int] = 0
     is_soa_particle: typing.ClassVar[bool] = False
+    const_iterator = ParConstIter_0_0_4_0_arena
+    iterator = ParIter_0_0_4_0_arena
     def AddParticlesAtLevel(
         self, particles: ParticleTile_0_0_4_0_arena, level: int, ngrow: int = 0
     ) -> None: ...
@@ -5852,6 +5974,30 @@ class ParticleContainer_0_0_4_0_arena:
     def numLocalTilesAtLevel(self, arg0: int) -> int: ...
     def reserveData(self) -> None: ...
     def resizeData(self) -> None: ...
+    def to_df(self, local=True, comm=None, root_rank=0):
+        """
+
+        Copy all particles into a pandas.DataFrame
+
+        Parameters
+        ----------
+        self : amrex.ParticleContainer_*
+            A ParticleContainer class in pyAMReX
+        local : bool
+            MPI-local particles
+        comm : MPI Communicator
+            if local is False, this defaults to mpi4py.MPI.COMM_WORLD
+        root_rank : MPI root rank to gather to
+            if local is False, this defaults to 0
+
+        Returns
+        -------
+        A concatenated pandas.DataFrame with particles from all levels.
+
+        Returns None if no particles were found.
+        If local=False, then all ranks but the root_rank will return None.
+
+        """
     @property
     def finest_level(self) -> int: ...
 
@@ -5861,6 +6007,8 @@ class ParticleContainer_0_0_4_0_default:
     NStructInt: typing.ClassVar[int] = 0
     NStructReal: typing.ClassVar[int] = 0
     is_soa_particle: typing.ClassVar[bool] = False
+    const_iterator = ParConstIter_0_0_4_0_default
+    iterator = ParIter_0_0_4_0_default
     def AddParticlesAtLevel(
         self, particles: ParticleTile_0_0_4_0_default, level: int, ngrow: int = 0
     ) -> None: ...
@@ -5953,6 +6101,30 @@ class ParticleContainer_0_0_4_0_default:
     def numLocalTilesAtLevel(self, arg0: int) -> int: ...
     def reserveData(self) -> None: ...
     def resizeData(self) -> None: ...
+    def to_df(self, local=True, comm=None, root_rank=0):
+        """
+
+        Copy all particles into a pandas.DataFrame
+
+        Parameters
+        ----------
+        self : amrex.ParticleContainer_*
+            A ParticleContainer class in pyAMReX
+        local : bool
+            MPI-local particles
+        comm : MPI Communicator
+            if local is False, this defaults to mpi4py.MPI.COMM_WORLD
+        root_rank : MPI root rank to gather to
+            if local is False, this defaults to 0
+
+        Returns
+        -------
+        A concatenated pandas.DataFrame with particles from all levels.
+
+        Returns None if no particles were found.
+        If local=False, then all ranks but the root_rank will return None.
+
+        """
     @property
     def finest_level(self) -> int: ...
 
@@ -5962,6 +6134,8 @@ class ParticleContainer_0_0_4_0_pinned:
     NStructInt: typing.ClassVar[int] = 0
     NStructReal: typing.ClassVar[int] = 0
     is_soa_particle: typing.ClassVar[bool] = False
+    const_iterator = ParConstIter_0_0_4_0_pinned
+    iterator = ParIter_0_0_4_0_pinned
     def AddParticlesAtLevel(
         self, particles: ParticleTile_0_0_4_0_pinned, level: int, ngrow: int = 0
     ) -> None: ...
@@ -6054,6 +6228,30 @@ class ParticleContainer_0_0_4_0_pinned:
     def numLocalTilesAtLevel(self, arg0: int) -> int: ...
     def reserveData(self) -> None: ...
     def resizeData(self) -> None: ...
+    def to_df(self, local=True, comm=None, root_rank=0):
+        """
+
+        Copy all particles into a pandas.DataFrame
+
+        Parameters
+        ----------
+        self : amrex.ParticleContainer_*
+            A ParticleContainer class in pyAMReX
+        local : bool
+            MPI-local particles
+        comm : MPI Communicator
+            if local is False, this defaults to mpi4py.MPI.COMM_WORLD
+        root_rank : MPI root rank to gather to
+            if local is False, this defaults to 0
+
+        Returns
+        -------
+        A concatenated pandas.DataFrame with particles from all levels.
+
+        Returns None if no particles were found.
+        If local=False, then all ranks but the root_rank will return None.
+
+        """
     @property
     def finest_level(self) -> int: ...
 
@@ -6063,6 +6261,8 @@ class ParticleContainer_0_0_5_0_arena:
     NStructInt: typing.ClassVar[int] = 0
     NStructReal: typing.ClassVar[int] = 0
     is_soa_particle: typing.ClassVar[bool] = False
+    const_iterator = ParConstIter_0_0_5_0_arena
+    iterator = ParIter_0_0_5_0_arena
     def AddParticlesAtLevel(
         self, particles: ParticleTile_0_0_5_0_arena, level: int, ngrow: int = 0
     ) -> None: ...
@@ -6155,6 +6355,30 @@ class ParticleContainer_0_0_5_0_arena:
     def numLocalTilesAtLevel(self, arg0: int) -> int: ...
     def reserveData(self) -> None: ...
     def resizeData(self) -> None: ...
+    def to_df(self, local=True, comm=None, root_rank=0):
+        """
+
+        Copy all particles into a pandas.DataFrame
+
+        Parameters
+        ----------
+        self : amrex.ParticleContainer_*
+            A ParticleContainer class in pyAMReX
+        local : bool
+            MPI-local particles
+        comm : MPI Communicator
+            if local is False, this defaults to mpi4py.MPI.COMM_WORLD
+        root_rank : MPI root rank to gather to
+            if local is False, this defaults to 0
+
+        Returns
+        -------
+        A concatenated pandas.DataFrame with particles from all levels.
+
+        Returns None if no particles were found.
+        If local=False, then all ranks but the root_rank will return None.
+
+        """
     @property
     def finest_level(self) -> int: ...
 
@@ -6164,6 +6388,8 @@ class ParticleContainer_0_0_5_0_default:
     NStructInt: typing.ClassVar[int] = 0
     NStructReal: typing.ClassVar[int] = 0
     is_soa_particle: typing.ClassVar[bool] = False
+    const_iterator = ParConstIter_0_0_5_0_default
+    iterator = ParIter_0_0_5_0_default
     def AddParticlesAtLevel(
         self, particles: ParticleTile_0_0_5_0_default, level: int, ngrow: int = 0
     ) -> None: ...
@@ -6256,6 +6482,30 @@ class ParticleContainer_0_0_5_0_default:
     def numLocalTilesAtLevel(self, arg0: int) -> int: ...
     def reserveData(self) -> None: ...
     def resizeData(self) -> None: ...
+    def to_df(self, local=True, comm=None, root_rank=0):
+        """
+
+        Copy all particles into a pandas.DataFrame
+
+        Parameters
+        ----------
+        self : amrex.ParticleContainer_*
+            A ParticleContainer class in pyAMReX
+        local : bool
+            MPI-local particles
+        comm : MPI Communicator
+            if local is False, this defaults to mpi4py.MPI.COMM_WORLD
+        root_rank : MPI root rank to gather to
+            if local is False, this defaults to 0
+
+        Returns
+        -------
+        A concatenated pandas.DataFrame with particles from all levels.
+
+        Returns None if no particles were found.
+        If local=False, then all ranks but the root_rank will return None.
+
+        """
     @property
     def finest_level(self) -> int: ...
 
@@ -6265,6 +6515,8 @@ class ParticleContainer_0_0_5_0_pinned:
     NStructInt: typing.ClassVar[int] = 0
     NStructReal: typing.ClassVar[int] = 0
     is_soa_particle: typing.ClassVar[bool] = False
+    const_iterator = ParConstIter_0_0_5_0_pinned
+    iterator = ParIter_0_0_5_0_pinned
     def AddParticlesAtLevel(
         self, particles: ParticleTile_0_0_5_0_pinned, level: int, ngrow: int = 0
     ) -> None: ...
@@ -6357,6 +6609,30 @@ class ParticleContainer_0_0_5_0_pinned:
     def numLocalTilesAtLevel(self, arg0: int) -> int: ...
     def reserveData(self) -> None: ...
     def resizeData(self) -> None: ...
+    def to_df(self, local=True, comm=None, root_rank=0):
+        """
+
+        Copy all particles into a pandas.DataFrame
+
+        Parameters
+        ----------
+        self : amrex.ParticleContainer_*
+            A ParticleContainer class in pyAMReX
+        local : bool
+            MPI-local particles
+        comm : MPI Communicator
+            if local is False, this defaults to mpi4py.MPI.COMM_WORLD
+        root_rank : MPI root rank to gather to
+            if local is False, this defaults to 0
+
+        Returns
+        -------
+        A concatenated pandas.DataFrame with particles from all levels.
+
+        Returns None if no particles were found.
+        If local=False, then all ranks but the root_rank will return None.
+
+        """
     @property
     def finest_level(self) -> int: ...
 
@@ -6366,6 +6642,8 @@ class ParticleContainer_1_1_2_1_arena:
     NStructInt: typing.ClassVar[int] = 1
     NStructReal: typing.ClassVar[int] = 1
     is_soa_particle: typing.ClassVar[bool] = False
+    const_iterator = ParConstIter_1_1_2_1_arena
+    iterator = ParIter_1_1_2_1_arena
     def AddParticlesAtLevel(
         self, particles: ParticleTile_1_1_2_1_arena, level: int, ngrow: int = 0
     ) -> None: ...
@@ -6458,6 +6736,30 @@ class ParticleContainer_1_1_2_1_arena:
     def numLocalTilesAtLevel(self, arg0: int) -> int: ...
     def reserveData(self) -> None: ...
     def resizeData(self) -> None: ...
+    def to_df(self, local=True, comm=None, root_rank=0):
+        """
+
+        Copy all particles into a pandas.DataFrame
+
+        Parameters
+        ----------
+        self : amrex.ParticleContainer_*
+            A ParticleContainer class in pyAMReX
+        local : bool
+            MPI-local particles
+        comm : MPI Communicator
+            if local is False, this defaults to mpi4py.MPI.COMM_WORLD
+        root_rank : MPI root rank to gather to
+            if local is False, this defaults to 0
+
+        Returns
+        -------
+        A concatenated pandas.DataFrame with particles from all levels.
+
+        Returns None if no particles were found.
+        If local=False, then all ranks but the root_rank will return None.
+
+        """
     @property
     def finest_level(self) -> int: ...
 
@@ -6467,6 +6769,8 @@ class ParticleContainer_1_1_2_1_default:
     NStructInt: typing.ClassVar[int] = 1
     NStructReal: typing.ClassVar[int] = 1
     is_soa_particle: typing.ClassVar[bool] = False
+    const_iterator = ParConstIter_1_1_2_1_default
+    iterator = ParIter_1_1_2_1_default
     def AddParticlesAtLevel(
         self, particles: ParticleTile_1_1_2_1_default, level: int, ngrow: int = 0
     ) -> None: ...
@@ -6559,6 +6863,30 @@ class ParticleContainer_1_1_2_1_default:
     def numLocalTilesAtLevel(self, arg0: int) -> int: ...
     def reserveData(self) -> None: ...
     def resizeData(self) -> None: ...
+    def to_df(self, local=True, comm=None, root_rank=0):
+        """
+
+        Copy all particles into a pandas.DataFrame
+
+        Parameters
+        ----------
+        self : amrex.ParticleContainer_*
+            A ParticleContainer class in pyAMReX
+        local : bool
+            MPI-local particles
+        comm : MPI Communicator
+            if local is False, this defaults to mpi4py.MPI.COMM_WORLD
+        root_rank : MPI root rank to gather to
+            if local is False, this defaults to 0
+
+        Returns
+        -------
+        A concatenated pandas.DataFrame with particles from all levels.
+
+        Returns None if no particles were found.
+        If local=False, then all ranks but the root_rank will return None.
+
+        """
     @property
     def finest_level(self) -> int: ...
 
@@ -6568,6 +6896,8 @@ class ParticleContainer_1_1_2_1_pinned:
     NStructInt: typing.ClassVar[int] = 1
     NStructReal: typing.ClassVar[int] = 1
     is_soa_particle: typing.ClassVar[bool] = False
+    const_iterator = ParConstIter_1_1_2_1_pinned
+    iterator = ParIter_1_1_2_1_pinned
     def AddParticlesAtLevel(
         self, particles: ParticleTile_1_1_2_1_pinned, level: int, ngrow: int = 0
     ) -> None: ...
@@ -6660,6 +6990,30 @@ class ParticleContainer_1_1_2_1_pinned:
     def numLocalTilesAtLevel(self, arg0: int) -> int: ...
     def reserveData(self) -> None: ...
     def resizeData(self) -> None: ...
+    def to_df(self, local=True, comm=None, root_rank=0):
+        """
+
+        Copy all particles into a pandas.DataFrame
+
+        Parameters
+        ----------
+        self : amrex.ParticleContainer_*
+            A ParticleContainer class in pyAMReX
+        local : bool
+            MPI-local particles
+        comm : MPI Communicator
+            if local is False, this defaults to mpi4py.MPI.COMM_WORLD
+        root_rank : MPI root rank to gather to
+            if local is False, this defaults to 0
+
+        Returns
+        -------
+        A concatenated pandas.DataFrame with particles from all levels.
+
+        Returns None if no particles were found.
+        If local=False, then all ranks but the root_rank will return None.
+
+        """
     @property
     def finest_level(self) -> int: ...
 
@@ -6669,6 +7023,8 @@ class ParticleContainer_pureSoA_8_2_arena:
     NStructInt: typing.ClassVar[int] = 0
     NStructReal: typing.ClassVar[int] = 0
     is_soa_particle: typing.ClassVar[bool] = True
+    const_iterator = ParConstIter_pureSoA_8_2_arena
+    iterator = ParIter_pureSoA_8_2_arena
     def AddParticlesAtLevel(
         self, particles: ParticleTile_0_0_8_2_arena, level: int, ngrow: int = 0
     ) -> None: ...
@@ -6747,6 +7103,30 @@ class ParticleContainer_pureSoA_8_2_arena:
     def numLocalTilesAtLevel(self, arg0: int) -> int: ...
     def reserveData(self) -> None: ...
     def resizeData(self) -> None: ...
+    def to_df(self, local=True, comm=None, root_rank=0):
+        """
+
+        Copy all particles into a pandas.DataFrame
+
+        Parameters
+        ----------
+        self : amrex.ParticleContainer_*
+            A ParticleContainer class in pyAMReX
+        local : bool
+            MPI-local particles
+        comm : MPI Communicator
+            if local is False, this defaults to mpi4py.MPI.COMM_WORLD
+        root_rank : MPI root rank to gather to
+            if local is False, this defaults to 0
+
+        Returns
+        -------
+        A concatenated pandas.DataFrame with particles from all levels.
+
+        Returns None if no particles were found.
+        If local=False, then all ranks but the root_rank will return None.
+
+        """
     @property
     def finest_level(self) -> int: ...
 
@@ -6756,6 +7136,8 @@ class ParticleContainer_pureSoA_8_2_default:
     NStructInt: typing.ClassVar[int] = 0
     NStructReal: typing.ClassVar[int] = 0
     is_soa_particle: typing.ClassVar[bool] = True
+    const_iterator = ParConstIter_pureSoA_8_2_default
+    iterator = ParIter_pureSoA_8_2_default
     def AddParticlesAtLevel(
         self, particles: ParticleTile_0_0_8_2_default, level: int, ngrow: int = 0
     ) -> None: ...
@@ -6834,6 +7216,30 @@ class ParticleContainer_pureSoA_8_2_default:
     def numLocalTilesAtLevel(self, arg0: int) -> int: ...
     def reserveData(self) -> None: ...
     def resizeData(self) -> None: ...
+    def to_df(self, local=True, comm=None, root_rank=0):
+        """
+
+        Copy all particles into a pandas.DataFrame
+
+        Parameters
+        ----------
+        self : amrex.ParticleContainer_*
+            A ParticleContainer class in pyAMReX
+        local : bool
+            MPI-local particles
+        comm : MPI Communicator
+            if local is False, this defaults to mpi4py.MPI.COMM_WORLD
+        root_rank : MPI root rank to gather to
+            if local is False, this defaults to 0
+
+        Returns
+        -------
+        A concatenated pandas.DataFrame with particles from all levels.
+
+        Returns None if no particles were found.
+        If local=False, then all ranks but the root_rank will return None.
+
+        """
     @property
     def finest_level(self) -> int: ...
 
@@ -6843,6 +7249,8 @@ class ParticleContainer_pureSoA_8_2_pinned:
     NStructInt: typing.ClassVar[int] = 0
     NStructReal: typing.ClassVar[int] = 0
     is_soa_particle: typing.ClassVar[bool] = True
+    const_iterator = ParConstIter_pureSoA_8_2_pinned
+    iterator = ParIter_pureSoA_8_2_pinned
     def AddParticlesAtLevel(
         self, particles: ParticleTile_0_0_8_2_pinned, level: int, ngrow: int = 0
     ) -> None: ...
@@ -6921,6 +7329,30 @@ class ParticleContainer_pureSoA_8_2_pinned:
     def numLocalTilesAtLevel(self, arg0: int) -> int: ...
     def reserveData(self) -> None: ...
     def resizeData(self) -> None: ...
+    def to_df(self, local=True, comm=None, root_rank=0):
+        """
+
+        Copy all particles into a pandas.DataFrame
+
+        Parameters
+        ----------
+        self : amrex.ParticleContainer_*
+            A ParticleContainer class in pyAMReX
+        local : bool
+            MPI-local particles
+        comm : MPI Communicator
+            if local is False, this defaults to mpi4py.MPI.COMM_WORLD
+        root_rank : MPI root rank to gather to
+            if local is False, this defaults to 0
+
+        Returns
+        -------
+        A concatenated pandas.DataFrame with particles from all levels.
+
+        Returns None if no particles were found.
+        If local=False, then all ranks but the root_rank will return None.
+
+        """
     @property
     def finest_level(self) -> int: ...
 
