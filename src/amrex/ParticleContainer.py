@@ -16,7 +16,7 @@ def pc_to_df(self, local=True, comm=None, root_rank=0):
     self : amrex.ParticleContainer_*
         A ParticleContainer class in pyAMReX
     local : bool
-        MPI-local particles
+        MPI rank-local particles only
     comm : MPI Communicator
         if local is False, this defaults to mpi4py.MPI.COMM_WORLD
     root_rank : MPI root rank to gather to
@@ -30,6 +30,14 @@ def pc_to_df(self, local=True, comm=None, root_rank=0):
     If local=False, then all ranks but the root_rank will return None.
     """
     import pandas as pd
+
+    # silently ignore local=False for non-MPI runs
+    if local is False:
+        from inspect import getmodule
+
+        amr = getmodule(self)
+        if not amr.Config.have_mpi:
+            local = True
 
     # create a DataFrame per particle box and append it to the list of
     # local DataFrame(s)
