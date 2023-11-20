@@ -3575,7 +3575,7 @@ class BoxArray:
     def size(self) -> int: ...
 
 class Config:
-    amrex_version: typing.ClassVar[str] = "23.11"
+    amrex_version: typing.ClassVar[str] = "23.11-14-g175b99d913dc"
     gpu_backend = None
     have_gpu: typing.ClassVar[bool] = False
     have_mpi: typing.ClassVar[bool] = True
@@ -5990,7 +5990,7 @@ class ParticleContainer_0_0_4_0_arena:
         self : amrex.ParticleContainer_*
             A ParticleContainer class in pyAMReX
         local : bool
-            MPI-local particles
+            MPI rank-local particles only
         comm : MPI Communicator
             if local is False, this defaults to mpi4py.MPI.COMM_WORLD
         root_rank : MPI root rank to gather to
@@ -6117,7 +6117,7 @@ class ParticleContainer_0_0_4_0_default:
         self : amrex.ParticleContainer_*
             A ParticleContainer class in pyAMReX
         local : bool
-            MPI-local particles
+            MPI rank-local particles only
         comm : MPI Communicator
             if local is False, this defaults to mpi4py.MPI.COMM_WORLD
         root_rank : MPI root rank to gather to
@@ -6244,7 +6244,7 @@ class ParticleContainer_0_0_4_0_pinned:
         self : amrex.ParticleContainer_*
             A ParticleContainer class in pyAMReX
         local : bool
-            MPI-local particles
+            MPI rank-local particles only
         comm : MPI Communicator
             if local is False, this defaults to mpi4py.MPI.COMM_WORLD
         root_rank : MPI root rank to gather to
@@ -6371,7 +6371,7 @@ class ParticleContainer_0_0_5_0_arena:
         self : amrex.ParticleContainer_*
             A ParticleContainer class in pyAMReX
         local : bool
-            MPI-local particles
+            MPI rank-local particles only
         comm : MPI Communicator
             if local is False, this defaults to mpi4py.MPI.COMM_WORLD
         root_rank : MPI root rank to gather to
@@ -6498,7 +6498,7 @@ class ParticleContainer_0_0_5_0_default:
         self : amrex.ParticleContainer_*
             A ParticleContainer class in pyAMReX
         local : bool
-            MPI-local particles
+            MPI rank-local particles only
         comm : MPI Communicator
             if local is False, this defaults to mpi4py.MPI.COMM_WORLD
         root_rank : MPI root rank to gather to
@@ -6625,7 +6625,7 @@ class ParticleContainer_0_0_5_0_pinned:
         self : amrex.ParticleContainer_*
             A ParticleContainer class in pyAMReX
         local : bool
-            MPI-local particles
+            MPI rank-local particles only
         comm : MPI Communicator
             if local is False, this defaults to mpi4py.MPI.COMM_WORLD
         root_rank : MPI root rank to gather to
@@ -6752,7 +6752,7 @@ class ParticleContainer_1_1_2_1_arena:
         self : amrex.ParticleContainer_*
             A ParticleContainer class in pyAMReX
         local : bool
-            MPI-local particles
+            MPI rank-local particles only
         comm : MPI Communicator
             if local is False, this defaults to mpi4py.MPI.COMM_WORLD
         root_rank : MPI root rank to gather to
@@ -6879,7 +6879,7 @@ class ParticleContainer_1_1_2_1_default:
         self : amrex.ParticleContainer_*
             A ParticleContainer class in pyAMReX
         local : bool
-            MPI-local particles
+            MPI rank-local particles only
         comm : MPI Communicator
             if local is False, this defaults to mpi4py.MPI.COMM_WORLD
         root_rank : MPI root rank to gather to
@@ -7006,7 +7006,7 @@ class ParticleContainer_1_1_2_1_pinned:
         self : amrex.ParticleContainer_*
             A ParticleContainer class in pyAMReX
         local : bool
-            MPI-local particles
+            MPI rank-local particles only
         comm : MPI Communicator
             if local is False, this defaults to mpi4py.MPI.COMM_WORLD
         root_rank : MPI root rank to gather to
@@ -7119,7 +7119,7 @@ class ParticleContainer_pureSoA_8_2_arena:
         self : amrex.ParticleContainer_*
             A ParticleContainer class in pyAMReX
         local : bool
-            MPI-local particles
+            MPI rank-local particles only
         comm : MPI Communicator
             if local is False, this defaults to mpi4py.MPI.COMM_WORLD
         root_rank : MPI root rank to gather to
@@ -7232,7 +7232,7 @@ class ParticleContainer_pureSoA_8_2_default:
         self : amrex.ParticleContainer_*
             A ParticleContainer class in pyAMReX
         local : bool
-            MPI-local particles
+            MPI rank-local particles only
         comm : MPI Communicator
             if local is False, this defaults to mpi4py.MPI.COMM_WORLD
         root_rank : MPI root rank to gather to
@@ -7345,7 +7345,7 @@ class ParticleContainer_pureSoA_8_2_pinned:
         self : amrex.ParticleContainer_*
             A ParticleContainer class in pyAMReX
         local : bool
-            MPI-local particles
+            MPI rank-local particles only
         comm : MPI Communicator
             if local is False, this defaults to mpi4py.MPI.COMM_WORLD
         root_rank : MPI root rank to gather to
@@ -11304,4 +11304,4 @@ def write_single_level_plotfile(
 
 __author__: str = "Axel Huebl, Ryan T. Sandberg, Shreyas Ananthan, David P. Grote, Revathi Jambunathan, Edoardo Zoni, Remi Lehe, Andrew Myers, Weiqun Zhang"
 __license__: str = "BSD-3-Clause-LBNL"
-__version__: str = "23.11"
+__version__: str = "23.11-14-g175b99d913dc"
