@@ -73,7 +73,7 @@ repos:
 
 # Autoremoves unused Python imports
 - repo: https://github.com/hadialqattan/pycln
-  rev: v2.3.0
+  rev: v2.4.0
   hooks:
   - id: pycln
     name: pycln (python)
@@ -88,7 +88,7 @@ repos:
 
 # Python Formatting
 - repo: https://github.com/psf/black
-  rev: 23.10.1 # Keep in sync with blacken-docs
+  rev: 23.11.0 # Keep in sync with blacken-docs
   hooks:
   - id: black
 - repo: https://github.com/asottile/blacken-docs
@@ -102,7 +102,7 @@ repos:
 # Python: Ruff linter
 #   https://docs.astral.sh/ruff/
 - repo: https://github.com/astral-sh/ruff-pre-commit
-  rev: v0.1.4
+  rev: v0.1.6
   hooks:
     - id: ruff
       args: [--fix, --exit-non-zero-on-fix]
