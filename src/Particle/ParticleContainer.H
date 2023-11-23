@@ -192,6 +192,15 @@ void make_ParticleContainer_and_Iterators (py::module &m, std::string allocstr)
         .def_property_readonly_static("NArrayReal", [](const py::object&){return ParticleContainerType::NArrayReal; })
         .def_property_readonly_static("NArrayInt", [](const py::object&){return ParticleContainerType::NArrayInt; })
 
+        .def_property_readonly("NumRealComps", &ParticleContainerType::NumRealComps,
+            "The number of compile-time and runtime Real components in SoA")
+        .def_property_readonly("NumIntComps", &ParticleContainerType::NumIntComps,
+            "The number of compile-time and runtime int components in SoA")
+        .def_property_readonly("NumRuntimeRealComps", &ParticleContainerType::NumRuntimeRealComps,
+            "The number of runtime Real components in SoA")
+        .def_property_readonly("NumRuntimeIntComps", &ParticleContainerType::NumRuntimeIntComps,
+            "The number of runtime Int components in SoA")
+
         .def_property_readonly("finest_level", &ParticleContainerBase::finestLevel)
 
         // ParticleContainer ( const ParticleContainer &) = delete;
