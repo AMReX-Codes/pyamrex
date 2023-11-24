@@ -5999,6 +5999,26 @@ class ParticleContainer_0_0_4_0_arena:
 
         """
     @property
+    def NumIntComps(self) -> int:
+        """
+        The number of compile-time and runtime int components in SoA
+        """
+    @property
+    def NumRealComps(self) -> int:
+        """
+        The number of compile-time and runtime Real components in SoA
+        """
+    @property
+    def NumRuntimeIntComps(self) -> int:
+        """
+        The number of runtime Int components in SoA
+        """
+    @property
+    def NumRuntimeRealComps(self) -> int:
+        """
+        The number of runtime Real components in SoA
+        """
+    @property
     def finest_level(self) -> int: ...
 
 class ParticleContainer_0_0_4_0_default:
@@ -6124,6 +6144,26 @@ class ParticleContainer_0_0_4_0_default:
         Returns None if no particles were found.
         If local=False, then all ranks but the root_rank will return None.
 
+        """
+    @property
+    def NumIntComps(self) -> int:
+        """
+        The number of compile-time and runtime int components in SoA
+        """
+    @property
+    def NumRealComps(self) -> int:
+        """
+        The number of compile-time and runtime Real components in SoA
+        """
+    @property
+    def NumRuntimeIntComps(self) -> int:
+        """
+        The number of runtime Int components in SoA
+        """
+    @property
+    def NumRuntimeRealComps(self) -> int:
+        """
+        The number of runtime Real components in SoA
         """
     @property
     def finest_level(self) -> int: ...
@@ -6253,6 +6293,26 @@ class ParticleContainer_0_0_4_0_pinned:
 
         """
     @property
+    def NumIntComps(self) -> int:
+        """
+        The number of compile-time and runtime int components in SoA
+        """
+    @property
+    def NumRealComps(self) -> int:
+        """
+        The number of compile-time and runtime Real components in SoA
+        """
+    @property
+    def NumRuntimeIntComps(self) -> int:
+        """
+        The number of runtime Int components in SoA
+        """
+    @property
+    def NumRuntimeRealComps(self) -> int:
+        """
+        The number of runtime Real components in SoA
+        """
+    @property
     def finest_level(self) -> int: ...
 
 class ParticleContainer_0_0_5_0_arena:
@@ -6378,6 +6438,26 @@ class ParticleContainer_0_0_5_0_arena:
         Returns None if no particles were found.
         If local=False, then all ranks but the root_rank will return None.
 
+        """
+    @property
+    def NumIntComps(self) -> int:
+        """
+        The number of compile-time and runtime int components in SoA
+        """
+    @property
+    def NumRealComps(self) -> int:
+        """
+        The number of compile-time and runtime Real components in SoA
+        """
+    @property
+    def NumRuntimeIntComps(self) -> int:
+        """
+        The number of runtime Int components in SoA
+        """
+    @property
+    def NumRuntimeRealComps(self) -> int:
+        """
+        The number of runtime Real components in SoA
         """
     @property
     def finest_level(self) -> int: ...
@@ -6507,6 +6587,26 @@ class ParticleContainer_0_0_5_0_default:
 
         """
     @property
+    def NumIntComps(self) -> int:
+        """
+        The number of compile-time and runtime int components in SoA
+        """
+    @property
+    def NumRealComps(self) -> int:
+        """
+        The number of compile-time and runtime Real components in SoA
+        """
+    @property
+    def NumRuntimeIntComps(self) -> int:
+        """
+        The number of runtime Int components in SoA
+        """
+    @property
+    def NumRuntimeRealComps(self) -> int:
+        """
+        The number of runtime Real components in SoA
+        """
+    @property
     def finest_level(self) -> int: ...
 
 class ParticleContainer_0_0_5_0_pinned:
@@ -6632,6 +6732,26 @@ class ParticleContainer_0_0_5_0_pinned:
         Returns None if no particles were found.
         If local=False, then all ranks but the root_rank will return None.
 
+        """
+    @property
+    def NumIntComps(self) -> int:
+        """
+        The number of compile-time and runtime int components in SoA
+        """
+    @property
+    def NumRealComps(self) -> int:
+        """
+        The number of compile-time and runtime Real components in SoA
+        """
+    @property
+    def NumRuntimeIntComps(self) -> int:
+        """
+        The number of runtime Int components in SoA
+        """
+    @property
+    def NumRuntimeRealComps(self) -> int:
+        """
+        The number of runtime Real components in SoA
         """
     @property
     def finest_level(self) -> int: ...
@@ -6761,6 +6881,26 @@ class ParticleContainer_1_1_2_1_arena:
 
         """
     @property
+    def NumIntComps(self) -> int:
+        """
+        The number of compile-time and runtime int components in SoA
+        """
+    @property
+    def NumRealComps(self) -> int:
+        """
+        The number of compile-time and runtime Real components in SoA
+        """
+    @property
+    def NumRuntimeIntComps(self) -> int:
+        """
+        The number of runtime Int components in SoA
+        """
+    @property
+    def NumRuntimeRealComps(self) -> int:
+        """
+        The number of runtime Real components in SoA
+        """
+    @property
     def finest_level(self) -> int: ...
 
 class ParticleContainer_1_1_2_1_default:
@@ -6886,6 +7026,26 @@ class ParticleContainer_1_1_2_1_default:
         Returns None if no particles were found.
         If local=False, then all ranks but the root_rank will return None.
 
+        """
+    @property
+    def NumIntComps(self) -> int:
+        """
+        The number of compile-time and runtime int components in SoA
+        """
+    @property
+    def NumRealComps(self) -> int:
+        """
+        The number of compile-time and runtime Real components in SoA
+        """
+    @property
+    def NumRuntimeIntComps(self) -> int:
+        """
+        The number of runtime Int components in SoA
+        """
+    @property
+    def NumRuntimeRealComps(self) -> int:
+        """
+        The number of runtime Real components in SoA
         """
     @property
     def finest_level(self) -> int: ...
@@ -7015,6 +7175,26 @@ class ParticleContainer_1_1_2_1_pinned:
 
         """
     @property
+    def NumIntComps(self) -> int:
+        """
+        The number of compile-time and runtime int components in SoA
+        """
+    @property
+    def NumRealComps(self) -> int:
+        """
+        The number of compile-time and runtime Real components in SoA
+        """
+    @property
+    def NumRuntimeIntComps(self) -> int:
+        """
+        The number of runtime Int components in SoA
+        """
+    @property
+    def NumRuntimeRealComps(self) -> int:
+        """
+        The number of runtime Real components in SoA
+        """
+    @property
     def finest_level(self) -> int: ...
 
 class ParticleContainer_pureSoA_8_2_arena:
@@ -7126,6 +7306,26 @@ class ParticleContainer_pureSoA_8_2_arena:
         Returns None if no particles were found.
         If local=False, then all ranks but the root_rank will return None.
 
+        """
+    @property
+    def NumIntComps(self) -> int:
+        """
+        The number of compile-time and runtime int components in SoA
+        """
+    @property
+    def NumRealComps(self) -> int:
+        """
+        The number of compile-time and runtime Real components in SoA
+        """
+    @property
+    def NumRuntimeIntComps(self) -> int:
+        """
+        The number of runtime Int components in SoA
+        """
+    @property
+    def NumRuntimeRealComps(self) -> int:
+        """
+        The number of runtime Real components in SoA
         """
     @property
     def finest_level(self) -> int: ...
@@ -7241,6 +7441,26 @@ class ParticleContainer_pureSoA_8_2_default:
 
         """
     @property
+    def NumIntComps(self) -> int:
+        """
+        The number of compile-time and runtime int components in SoA
+        """
+    @property
+    def NumRealComps(self) -> int:
+        """
+        The number of compile-time and runtime Real components in SoA
+        """
+    @property
+    def NumRuntimeIntComps(self) -> int:
+        """
+        The number of runtime Int components in SoA
+        """
+    @property
+    def NumRuntimeRealComps(self) -> int:
+        """
+        The number of runtime Real components in SoA
+        """
+    @property
     def finest_level(self) -> int: ...
 
 class ParticleContainer_pureSoA_8_2_pinned:
@@ -7352,6 +7572,26 @@ class ParticleContainer_pureSoA_8_2_pinned:
         Returns None if no particles were found.
         If local=False, then all ranks but the root_rank will return None.
 
+        """
+    @property
+    def NumIntComps(self) -> int:
+        """
+        The number of compile-time and runtime int components in SoA
+        """
+    @property
+    def NumRealComps(self) -> int:
+        """
+        The number of compile-time and runtime Real components in SoA
+        """
+    @property
+    def NumRuntimeIntComps(self) -> int:
+        """
+        The number of runtime Int components in SoA
+        """
+    @property
+    def NumRuntimeRealComps(self) -> int:
+        """
+        The number of runtime Real components in SoA
         """
     @property
     def finest_level(self) -> int: ...
