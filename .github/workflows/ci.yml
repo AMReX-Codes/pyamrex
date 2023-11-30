@@ -1,48 +1,51 @@
 name: 👑 CI
 
-# This workflow updates the .pyi stub files for documentation and interactive use.
-
-on: [push, pull_request, pull_request_target]
+on: [push, pull_request]
 
 concurrency:
   group: ${{ github.ref }}-${{ github.head_ref }}-ci
   cancel-in-progress: true
 
 jobs:
-  ubuntu:
-    if: github.event_name != 'pull_request_target'
-    name: 🐧 Ubuntu
-    uses: ./.github/workflows/ubuntu.yml
-
-  intel:
-    if: github.event_name != 'pull_request_target'
-    name: 🐧 Intel
-    uses: ./.github/workflows/intel.yml
-
-  hip:
-    if: github.event_name != 'pull_request_target'
-    name: 🐧 HIP
-    uses: ./.github/workflows/hip.yml
-
-  macos:
-    if: github.event_name != 'pull_request_target'
-    name: 🍏 macOS
-    uses: ./.github/workflows/macos.yml
-
-  windows:
-    if: github.event_name != 'pull_request_target'
-    name: 🪟 Windows
-    uses: ./.github/workflows/windows.yml
-
   stubs:
-    if: github.event_name != 'pull_request'
+    # Pushes should only run on mainline branch "development"
+    if: github.event_name == 'push' && github.repository == 'AMReX-Codes/pyamrex' && github.ref == 'refs/heads/development'
     name: 🔄 Update Stub Files
-    needs: [ubuntu, intel, hip, macos, windows]
     permissions:
       # Give the default GITHUB_TOKEN write permission to commit and push the
       # changed files back to the repository.
       contents: write
     uses: ./.github/workflows/stubs.yml
+
+  ubuntu:
+    if: github.event.pull_request.draft == false
+    name: 🐧 Ubuntu
+    needs: [stubs]
+    uses: ./.github/workflows/ubuntu.yml
+
+  intel:
+    if: github.event.pull_request.draft == false
+    name: 🐧 Intel
+    needs: [stubs]
+    uses: ./.github/workflows/intel.yml
+
+  hip:
+    if: github.event.pull_request.draft == false
+    name: 🐧 HIP
+    needs: [stubs]
+    uses: ./.github/workflows/hip.yml
+
+  macos:
+    if: github.event.pull_request.draft == false
+    name: 🍏 macOS
+    needs: [stubs]
+    uses: ./.github/workflows/macos.yml
+
+  windows:
+    if: github.event.pull_request.draft == false
+    name: 🪟 Windows
+    needs: [stubs]
+    uses: ./.github/workflows/windows.yml
 
   save_pr_number:
     if: github.event_name != 'push'

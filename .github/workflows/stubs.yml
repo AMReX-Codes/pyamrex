@@ -19,7 +19,6 @@ jobs:
       CXXFLAGS: "-O1"
       OMP_NUM_THREAD: 2
 
-    if: github.event.pull_request.draft == false
     permissions:
       # Give the default GITHUB_TOKEN write permission to commit and push the
       # changed files back to the repository.
@@ -28,8 +27,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
       with:
-        repository: ${{ github.event.pull_request.head.repo.full_name }}
-        ref: ${{ github.head_ref }}
+        token: ${{ secrets.PYAMREX_PUSH_TOKEN }}
 
     - name: Pull Remote Changes
       run: git pull
