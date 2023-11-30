@@ -9,6 +9,7 @@ concurrency:
 jobs:
   stubs:
     # Pushes should only run on mainline branch "development"
+    # TODO: We can also skip this, if the latest commit's name is "Update Stub Files"
     if: github.event_name == 'push' && github.repository == 'AMReX-Codes/pyamrex' && github.ref == 'refs/heads/development'
     name: 🔄 Update Stub Files
     secrets:
@@ -44,6 +45,16 @@ jobs:
     name: 🪟 Windows
     needs: [stubs]
     uses: ./.github/workflows/windows.yml
+
+  codeql:
+    if: github.event.pull_request.draft == false
+    name: 🔎 CodeQL
+    needs: [ubuntu]
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+    uses: ./.github/workflows/codeql.yml
 
   save_pr_number:
     if: github.event_name != 'push'
