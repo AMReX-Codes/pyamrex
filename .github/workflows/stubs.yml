@@ -2,7 +2,11 @@ name: 🔄 Update Stub Files
 
 # This workflow updates the .pyi stub files for documentation and interactive use.
 
-on: [workflow_call]
+on:
+  workflow_call:
+    secrets:
+        PYAMREX_PUSH_TOKEN:
+          required: true
 
 concurrency:
   group: ${{ github.ref }}-${{ github.head_ref }}-stubs
@@ -19,13 +23,8 @@ jobs:
       CXXFLAGS: "-O1"
       OMP_NUM_THREAD: 2
 
-    permissions:
-      # Give the default GITHUB_TOKEN write permission to commit and push the
-      # changed files back to the repository.
-      contents: write
-
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       with:
         token: ${{ secrets.PYAMREX_PUSH_TOKEN }}
 
@@ -83,7 +82,7 @@ jobs:
       run: |
         mpiexec -np 1 python3 -m pytest tests/
 
-    - uses: stefanzweifel/git-auto-commit-action@v4
+    - uses: stefanzweifel/git-auto-commit-action@v5
       name: Commit Updated Stub Files
       with:
         commit_message: Update Stub Files
