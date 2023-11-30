@@ -17,37 +17,32 @@ jobs:
     uses: ./.github/workflows/stubs.yml
 
   ubuntu:
-    if: github.event.pull_request.draft == false
+    if: always() && !contains(needs.*.result, 'failure') && github.event.pull_request.draft == false
     name: 🐧 Ubuntu
     needs: [stubs]
     uses: ./.github/workflows/ubuntu.yml
 
   intel:
-    if: github.event.pull_request.draft == false
     name: 🐧 Intel
-    needs: [stubs]
+    needs: [ubuntu]
     uses: ./.github/workflows/intel.yml
 
   hip:
-    if: github.event.pull_request.draft == false
     name: 🐧 HIP
-    needs: [stubs]
+    needs: [ubuntu]
     uses: ./.github/workflows/hip.yml
 
   macos:
-    if: github.event.pull_request.draft == false
     name: 🍏 macOS
-    needs: [stubs]
+    needs: [ubuntu]
     uses: ./.github/workflows/macos.yml
 
   windows:
-    if: github.event.pull_request.draft == false
     name: 🪟 Windows
-    needs: [stubs]
+    needs: [ubuntu]
     uses: ./.github/workflows/windows.yml
 
   codeql:
-    if: github.event.pull_request.draft == false
     name: 🔎 CodeQL
     needs: [ubuntu]
     permissions:
