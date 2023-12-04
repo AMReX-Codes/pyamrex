@@ -13,7 +13,6 @@ jobs:
   appleclang:
     name: AppleClang@14.0 w/o MPI
     runs-on: macos-latest
-    if: github.event.pull_request.draft == false
     steps:
     - uses: actions/checkout@v3
     - name: Dependencies

@@ -13,7 +13,6 @@ jobs:
     env:
       CXXFLAGS: "-Werror -Wno-deprecated-declarations -Wno-error=pass-failed -fno-operator-names"
       CMAKE_GENERATOR: Ninja
-    if: github.event.pull_request.draft == false
     steps:
     - uses: actions/checkout@v3
     - name: install dependencies

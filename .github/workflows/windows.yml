@@ -10,7 +10,6 @@ jobs:
   msvc:
     name: MSVC w/o MPI static release
     runs-on: windows-latest
-    if: github.event.pull_request.draft == false
     steps:
     - uses: actions/checkout@v3
     - uses: actions/setup-python@v4
@@ -33,7 +32,6 @@ jobs:
   clang:
     name: Clang w/o MPI shared debug
     runs-on: windows-latest
-    if: github.event.pull_request.draft == false
     steps:
     - uses: actions/checkout@v3
     - uses: actions/setup-python@v4
