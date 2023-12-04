@@ -89,8 +89,8 @@ void make_StructOfArrays(py::module &m)
 
 void init_StructOfArrays(py::module& m) {
     make_StructOfArrays< 2, 1>(m);
-    make_StructOfArrays< 4, 0>(m);  // HiPACE++ 22.08 - 23.11
-    make_StructOfArrays< 5, 0>(m);  // ImpactX 22.07 - 23.11
-    make_StructOfArrays< 8, 2>(m);  // ImpactX 23.12+
-    make_StructOfArrays<37, 1>(m);  // HiPACE++ 22.09 - 23.11
+    make_StructOfArrays< 4, 0>(m);  // HiPACE++ 22.08 - 23.12
+    make_StructOfArrays< 5, 0>(m);  // ImpactX 22.07 - 23.12
+    make_StructOfArrays< 8, 2>(m);  // ImpactX 24.01+
+    make_StructOfArrays<37, 1>(m);  // HiPACE++ 22.09 - 23.12
 }
