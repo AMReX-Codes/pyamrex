@@ -10,7 +10,7 @@ Please see installation instructions below.
 - `CMake 3.20.0+ <https://cmake.org>`__
 - `Git 2.18+ <https://git-scm.com>`__
 - `AMReX <https://amrex-codes.github.io>`__: we automatically download and compile a copy
-- `pybind11 2.10.1+ <https://github.com/pybind/pybind11/>`__: we automatically download and compile a copy
+- `pybind11 2.11.1+ <https://github.com/pybind/pybind11/>`__: we automatically download and compile a copy
 - `Python 3.8+ <https://www.python.org>`__
 
   - `numpy 1.15+ <https://numpy.org>`__
