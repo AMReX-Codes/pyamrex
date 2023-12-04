@@ -37,6 +37,7 @@ from __future__ import annotations
 import typing
 
 import numpy
+import pybind11_stubgen.typing_ext
 
 from . import ParallelDescriptor
 
@@ -295,7 +296,7 @@ class AmrMesh:
         n_cell_in: Vector_int,
         coord: int,
         ref_ratios: Vector_IntVect,
-        is_per: list[int[3]],
+        is_per: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
     ) -> None: ...
     def __repr__(self) -> str: ...
     def finest_level(self) -> int: ...
@@ -312,9 +313,15 @@ class Array4_cdouble:
     @typing.overload
     def __getitem__(self, arg0: IntVect) -> complex: ...
     @typing.overload
-    def __getitem__(self, arg0: list[int[4]]) -> complex: ...
+    def __getitem__(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(4)],
+    ) -> complex: ...
     @typing.overload
-    def __getitem__(self, arg0: list[int[3]]) -> complex: ...
+    def __getitem__(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
+    ) -> complex: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
@@ -329,9 +336,17 @@ class Array4_cdouble:
     @typing.overload
     def __setitem__(self, arg0: IntVect, arg1: complex) -> None: ...
     @typing.overload
-    def __setitem__(self, arg0: list[int[4]], arg1: complex) -> None: ...
+    def __setitem__(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(4)],
+        arg1: complex,
+    ) -> None: ...
     @typing.overload
-    def __setitem__(self, arg0: list[int[3]], arg1: complex) -> None: ...
+    def __setitem__(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
+        arg1: complex,
+    ) -> None: ...
     def contains(self, arg0: int, arg1: int, arg2: int) -> bool: ...
     def to_cupy(self, copy=False, order="F"):
         """
@@ -408,9 +423,15 @@ class Array4_cdouble_const:
     @typing.overload
     def __getitem__(self, arg0: IntVect) -> complex: ...
     @typing.overload
-    def __getitem__(self, arg0: list[int[4]]) -> complex: ...
+    def __getitem__(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(4)],
+    ) -> complex: ...
     @typing.overload
-    def __getitem__(self, arg0: list[int[3]]) -> complex: ...
+    def __getitem__(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
+    ) -> complex: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
@@ -498,9 +519,15 @@ class Array4_cfloat:
     @typing.overload
     def __getitem__(self, arg0: IntVect) -> complex: ...
     @typing.overload
-    def __getitem__(self, arg0: list[int[4]]) -> complex: ...
+    def __getitem__(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(4)],
+    ) -> complex: ...
     @typing.overload
-    def __getitem__(self, arg0: list[int[3]]) -> complex: ...
+    def __getitem__(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
+    ) -> complex: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
@@ -515,9 +542,17 @@ class Array4_cfloat:
     @typing.overload
     def __setitem__(self, arg0: IntVect, arg1: complex) -> None: ...
     @typing.overload
-    def __setitem__(self, arg0: list[int[4]], arg1: complex) -> None: ...
+    def __setitem__(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(4)],
+        arg1: complex,
+    ) -> None: ...
     @typing.overload
-    def __setitem__(self, arg0: list[int[3]], arg1: complex) -> None: ...
+    def __setitem__(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
+        arg1: complex,
+    ) -> None: ...
     def contains(self, arg0: int, arg1: int, arg2: int) -> bool: ...
     def to_cupy(self, copy=False, order="F"):
         """
@@ -594,9 +629,15 @@ class Array4_cfloat_const:
     @typing.overload
     def __getitem__(self, arg0: IntVect) -> complex: ...
     @typing.overload
-    def __getitem__(self, arg0: list[int[4]]) -> complex: ...
+    def __getitem__(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(4)],
+    ) -> complex: ...
     @typing.overload
-    def __getitem__(self, arg0: list[int[3]]) -> complex: ...
+    def __getitem__(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
+    ) -> complex: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
@@ -684,9 +725,15 @@ class Array4_double:
     @typing.overload
     def __getitem__(self, arg0: IntVect) -> float: ...
     @typing.overload
-    def __getitem__(self, arg0: list[int[4]]) -> float: ...
+    def __getitem__(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(4)],
+    ) -> float: ...
     @typing.overload
-    def __getitem__(self, arg0: list[int[3]]) -> float: ...
+    def __getitem__(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
+    ) -> float: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
@@ -701,9 +748,17 @@ class Array4_double:
     @typing.overload
     def __setitem__(self, arg0: IntVect, arg1: float) -> None: ...
     @typing.overload
-    def __setitem__(self, arg0: list[int[4]], arg1: float) -> None: ...
+    def __setitem__(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(4)],
+        arg1: float,
+    ) -> None: ...
     @typing.overload
-    def __setitem__(self, arg0: list[int[3]], arg1: float) -> None: ...
+    def __setitem__(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
+        arg1: float,
+    ) -> None: ...
     def contains(self, arg0: int, arg1: int, arg2: int) -> bool: ...
     def to_cupy(self, copy=False, order="F"):
         """
@@ -780,9 +835,15 @@ class Array4_double_const:
     @typing.overload
     def __getitem__(self, arg0: IntVect) -> float: ...
     @typing.overload
-    def __getitem__(self, arg0: list[int[4]]) -> float: ...
+    def __getitem__(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(4)],
+    ) -> float: ...
     @typing.overload
-    def __getitem__(self, arg0: list[int[3]]) -> float: ...
+    def __getitem__(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
+    ) -> float: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
@@ -870,9 +931,15 @@ class Array4_float:
     @typing.overload
     def __getitem__(self, arg0: IntVect) -> float: ...
     @typing.overload
-    def __getitem__(self, arg0: list[int[4]]) -> float: ...
+    def __getitem__(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(4)],
+    ) -> float: ...
     @typing.overload
-    def __getitem__(self, arg0: list[int[3]]) -> float: ...
+    def __getitem__(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
+    ) -> float: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
@@ -887,9 +954,17 @@ class Array4_float:
     @typing.overload
     def __setitem__(self, arg0: IntVect, arg1: float) -> None: ...
     @typing.overload
-    def __setitem__(self, arg0: list[int[4]], arg1: float) -> None: ...
+    def __setitem__(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(4)],
+        arg1: float,
+    ) -> None: ...
     @typing.overload
-    def __setitem__(self, arg0: list[int[3]], arg1: float) -> None: ...
+    def __setitem__(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
+        arg1: float,
+    ) -> None: ...
     def contains(self, arg0: int, arg1: int, arg2: int) -> bool: ...
     def to_cupy(self, copy=False, order="F"):
         """
@@ -966,9 +1041,15 @@ class Array4_float_const:
     @typing.overload
     def __getitem__(self, arg0: IntVect) -> float: ...
     @typing.overload
-    def __getitem__(self, arg0: list[int[4]]) -> float: ...
+    def __getitem__(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(4)],
+    ) -> float: ...
     @typing.overload
-    def __getitem__(self, arg0: list[int[3]]) -> float: ...
+    def __getitem__(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
+    ) -> float: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
@@ -1056,9 +1137,15 @@ class Array4_int:
     @typing.overload
     def __getitem__(self, arg0: IntVect) -> int: ...
     @typing.overload
-    def __getitem__(self, arg0: list[int[4]]) -> int: ...
+    def __getitem__(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(4)],
+    ) -> int: ...
     @typing.overload
-    def __getitem__(self, arg0: list[int[3]]) -> int: ...
+    def __getitem__(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
+    ) -> int: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
@@ -1073,9 +1160,17 @@ class Array4_int:
     @typing.overload
     def __setitem__(self, arg0: IntVect, arg1: int) -> None: ...
     @typing.overload
-    def __setitem__(self, arg0: list[int[4]], arg1: int) -> None: ...
+    def __setitem__(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(4)],
+        arg1: int,
+    ) -> None: ...
     @typing.overload
-    def __setitem__(self, arg0: list[int[3]], arg1: int) -> None: ...
+    def __setitem__(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
+        arg1: int,
+    ) -> None: ...
     def contains(self, arg0: int, arg1: int, arg2: int) -> bool: ...
     def to_cupy(self, copy=False, order="F"):
         """
@@ -1152,9 +1247,15 @@ class Array4_int_const:
     @typing.overload
     def __getitem__(self, arg0: IntVect) -> int: ...
     @typing.overload
-    def __getitem__(self, arg0: list[int[4]]) -> int: ...
+    def __getitem__(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(4)],
+    ) -> int: ...
     @typing.overload
-    def __getitem__(self, arg0: list[int[3]]) -> int: ...
+    def __getitem__(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
+    ) -> int: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
@@ -1242,9 +1343,15 @@ class Array4_long:
     @typing.overload
     def __getitem__(self, arg0: IntVect) -> int: ...
     @typing.overload
-    def __getitem__(self, arg0: list[int[4]]) -> int: ...
+    def __getitem__(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(4)],
+    ) -> int: ...
     @typing.overload
-    def __getitem__(self, arg0: list[int[3]]) -> int: ...
+    def __getitem__(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
+    ) -> int: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
@@ -1259,9 +1366,17 @@ class Array4_long:
     @typing.overload
     def __setitem__(self, arg0: IntVect, arg1: int) -> None: ...
     @typing.overload
-    def __setitem__(self, arg0: list[int[4]], arg1: int) -> None: ...
+    def __setitem__(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(4)],
+        arg1: int,
+    ) -> None: ...
     @typing.overload
-    def __setitem__(self, arg0: list[int[3]], arg1: int) -> None: ...
+    def __setitem__(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
+        arg1: int,
+    ) -> None: ...
     def contains(self, arg0: int, arg1: int, arg2: int) -> bool: ...
     def to_cupy(self, copy=False, order="F"):
         """
@@ -1338,9 +1453,15 @@ class Array4_long_const:
     @typing.overload
     def __getitem__(self, arg0: IntVect) -> int: ...
     @typing.overload
-    def __getitem__(self, arg0: list[int[4]]) -> int: ...
+    def __getitem__(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(4)],
+    ) -> int: ...
     @typing.overload
-    def __getitem__(self, arg0: list[int[3]]) -> int: ...
+    def __getitem__(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
+    ) -> int: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
@@ -1428,9 +1549,15 @@ class Array4_longdouble:
     @typing.overload
     def __getitem__(self, arg0: IntVect) -> float: ...
     @typing.overload
-    def __getitem__(self, arg0: list[int[4]]) -> float: ...
+    def __getitem__(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(4)],
+    ) -> float: ...
     @typing.overload
-    def __getitem__(self, arg0: list[int[3]]) -> float: ...
+    def __getitem__(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
+    ) -> float: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
@@ -1445,9 +1572,17 @@ class Array4_longdouble:
     @typing.overload
     def __setitem__(self, arg0: IntVect, arg1: float) -> None: ...
     @typing.overload
-    def __setitem__(self, arg0: list[int[4]], arg1: float) -> None: ...
+    def __setitem__(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(4)],
+        arg1: float,
+    ) -> None: ...
     @typing.overload
-    def __setitem__(self, arg0: list[int[3]], arg1: float) -> None: ...
+    def __setitem__(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
+        arg1: float,
+    ) -> None: ...
     def contains(self, arg0: int, arg1: int, arg2: int) -> bool: ...
     def to_cupy(self, copy=False, order="F"):
         """
@@ -1524,9 +1659,15 @@ class Array4_longdouble_const:
     @typing.overload
     def __getitem__(self, arg0: IntVect) -> float: ...
     @typing.overload
-    def __getitem__(self, arg0: list[int[4]]) -> float: ...
+    def __getitem__(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(4)],
+    ) -> float: ...
     @typing.overload
-    def __getitem__(self, arg0: list[int[3]]) -> float: ...
+    def __getitem__(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
+    ) -> float: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
@@ -1614,9 +1755,15 @@ class Array4_longlong:
     @typing.overload
     def __getitem__(self, arg0: IntVect) -> int: ...
     @typing.overload
-    def __getitem__(self, arg0: list[int[4]]) -> int: ...
+    def __getitem__(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(4)],
+    ) -> int: ...
     @typing.overload
-    def __getitem__(self, arg0: list[int[3]]) -> int: ...
+    def __getitem__(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
+    ) -> int: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
@@ -1631,9 +1778,17 @@ class Array4_longlong:
     @typing.overload
     def __setitem__(self, arg0: IntVect, arg1: int) -> None: ...
     @typing.overload
-    def __setitem__(self, arg0: list[int[4]], arg1: int) -> None: ...
+    def __setitem__(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(4)],
+        arg1: int,
+    ) -> None: ...
     @typing.overload
-    def __setitem__(self, arg0: list[int[3]], arg1: int) -> None: ...
+    def __setitem__(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
+        arg1: int,
+    ) -> None: ...
     def contains(self, arg0: int, arg1: int, arg2: int) -> bool: ...
     def to_cupy(self, copy=False, order="F"):
         """
@@ -1710,9 +1865,15 @@ class Array4_longlong_const:
     @typing.overload
     def __getitem__(self, arg0: IntVect) -> int: ...
     @typing.overload
-    def __getitem__(self, arg0: list[int[4]]) -> int: ...
+    def __getitem__(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(4)],
+    ) -> int: ...
     @typing.overload
-    def __getitem__(self, arg0: list[int[3]]) -> int: ...
+    def __getitem__(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
+    ) -> int: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
@@ -1800,9 +1961,15 @@ class Array4_short:
     @typing.overload
     def __getitem__(self, arg0: IntVect) -> int: ...
     @typing.overload
-    def __getitem__(self, arg0: list[int[4]]) -> int: ...
+    def __getitem__(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(4)],
+    ) -> int: ...
     @typing.overload
-    def __getitem__(self, arg0: list[int[3]]) -> int: ...
+    def __getitem__(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
+    ) -> int: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
@@ -1817,9 +1984,17 @@ class Array4_short:
     @typing.overload
     def __setitem__(self, arg0: IntVect, arg1: int) -> None: ...
     @typing.overload
-    def __setitem__(self, arg0: list[int[4]], arg1: int) -> None: ...
+    def __setitem__(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(4)],
+        arg1: int,
+    ) -> None: ...
     @typing.overload
-    def __setitem__(self, arg0: list[int[3]], arg1: int) -> None: ...
+    def __setitem__(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
+        arg1: int,
+    ) -> None: ...
     def contains(self, arg0: int, arg1: int, arg2: int) -> bool: ...
     def to_cupy(self, copy=False, order="F"):
         """
@@ -1896,9 +2071,15 @@ class Array4_short_const:
     @typing.overload
     def __getitem__(self, arg0: IntVect) -> int: ...
     @typing.overload
-    def __getitem__(self, arg0: list[int[4]]) -> int: ...
+    def __getitem__(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(4)],
+    ) -> int: ...
     @typing.overload
-    def __getitem__(self, arg0: list[int[3]]) -> int: ...
+    def __getitem__(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
+    ) -> int: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
@@ -1986,9 +2167,15 @@ class Array4_uint:
     @typing.overload
     def __getitem__(self, arg0: IntVect) -> int: ...
     @typing.overload
-    def __getitem__(self, arg0: list[int[4]]) -> int: ...
+    def __getitem__(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(4)],
+    ) -> int: ...
     @typing.overload
-    def __getitem__(self, arg0: list[int[3]]) -> int: ...
+    def __getitem__(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
+    ) -> int: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
@@ -2003,9 +2190,17 @@ class Array4_uint:
     @typing.overload
     def __setitem__(self, arg0: IntVect, arg1: int) -> None: ...
     @typing.overload
-    def __setitem__(self, arg0: list[int[4]], arg1: int) -> None: ...
+    def __setitem__(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(4)],
+        arg1: int,
+    ) -> None: ...
     @typing.overload
-    def __setitem__(self, arg0: list[int[3]], arg1: int) -> None: ...
+    def __setitem__(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
+        arg1: int,
+    ) -> None: ...
     def contains(self, arg0: int, arg1: int, arg2: int) -> bool: ...
     def to_cupy(self, copy=False, order="F"):
         """
@@ -2082,9 +2277,15 @@ class Array4_uint_const:
     @typing.overload
     def __getitem__(self, arg0: IntVect) -> int: ...
     @typing.overload
-    def __getitem__(self, arg0: list[int[4]]) -> int: ...
+    def __getitem__(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(4)],
+    ) -> int: ...
     @typing.overload
-    def __getitem__(self, arg0: list[int[3]]) -> int: ...
+    def __getitem__(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
+    ) -> int: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
@@ -2172,9 +2373,15 @@ class Array4_ulong:
     @typing.overload
     def __getitem__(self, arg0: IntVect) -> int: ...
     @typing.overload
-    def __getitem__(self, arg0: list[int[4]]) -> int: ...
+    def __getitem__(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(4)],
+    ) -> int: ...
     @typing.overload
-    def __getitem__(self, arg0: list[int[3]]) -> int: ...
+    def __getitem__(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
+    ) -> int: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
@@ -2189,9 +2396,17 @@ class Array4_ulong:
     @typing.overload
     def __setitem__(self, arg0: IntVect, arg1: int) -> None: ...
     @typing.overload
-    def __setitem__(self, arg0: list[int[4]], arg1: int) -> None: ...
+    def __setitem__(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(4)],
+        arg1: int,
+    ) -> None: ...
     @typing.overload
-    def __setitem__(self, arg0: list[int[3]], arg1: int) -> None: ...
+    def __setitem__(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
+        arg1: int,
+    ) -> None: ...
     def contains(self, arg0: int, arg1: int, arg2: int) -> bool: ...
     def to_cupy(self, copy=False, order="F"):
         """
@@ -2268,9 +2483,15 @@ class Array4_ulong_const:
     @typing.overload
     def __getitem__(self, arg0: IntVect) -> int: ...
     @typing.overload
-    def __getitem__(self, arg0: list[int[4]]) -> int: ...
+    def __getitem__(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(4)],
+    ) -> int: ...
     @typing.overload
-    def __getitem__(self, arg0: list[int[3]]) -> int: ...
+    def __getitem__(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
+    ) -> int: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
@@ -2358,9 +2579,15 @@ class Array4_ulonglong:
     @typing.overload
     def __getitem__(self, arg0: IntVect) -> int: ...
     @typing.overload
-    def __getitem__(self, arg0: list[int[4]]) -> int: ...
+    def __getitem__(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(4)],
+    ) -> int: ...
     @typing.overload
-    def __getitem__(self, arg0: list[int[3]]) -> int: ...
+    def __getitem__(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
+    ) -> int: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
@@ -2375,9 +2602,17 @@ class Array4_ulonglong:
     @typing.overload
     def __setitem__(self, arg0: IntVect, arg1: int) -> None: ...
     @typing.overload
-    def __setitem__(self, arg0: list[int[4]], arg1: int) -> None: ...
+    def __setitem__(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(4)],
+        arg1: int,
+    ) -> None: ...
     @typing.overload
-    def __setitem__(self, arg0: list[int[3]], arg1: int) -> None: ...
+    def __setitem__(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
+        arg1: int,
+    ) -> None: ...
     def contains(self, arg0: int, arg1: int, arg2: int) -> bool: ...
     def to_cupy(self, copy=False, order="F"):
         """
@@ -2454,9 +2689,15 @@ class Array4_ulonglong_const:
     @typing.overload
     def __getitem__(self, arg0: IntVect) -> int: ...
     @typing.overload
-    def __getitem__(self, arg0: list[int[4]]) -> int: ...
+    def __getitem__(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(4)],
+    ) -> int: ...
     @typing.overload
-    def __getitem__(self, arg0: list[int[3]]) -> int: ...
+    def __getitem__(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
+    ) -> int: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
@@ -2544,9 +2785,15 @@ class Array4_ushort:
     @typing.overload
     def __getitem__(self, arg0: IntVect) -> int: ...
     @typing.overload
-    def __getitem__(self, arg0: list[int[4]]) -> int: ...
+    def __getitem__(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(4)],
+    ) -> int: ...
     @typing.overload
-    def __getitem__(self, arg0: list[int[3]]) -> int: ...
+    def __getitem__(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
+    ) -> int: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
@@ -2561,9 +2808,17 @@ class Array4_ushort:
     @typing.overload
     def __setitem__(self, arg0: IntVect, arg1: int) -> None: ...
     @typing.overload
-    def __setitem__(self, arg0: list[int[4]], arg1: int) -> None: ...
+    def __setitem__(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(4)],
+        arg1: int,
+    ) -> None: ...
     @typing.overload
-    def __setitem__(self, arg0: list[int[3]], arg1: int) -> None: ...
+    def __setitem__(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
+        arg1: int,
+    ) -> None: ...
     def contains(self, arg0: int, arg1: int, arg2: int) -> bool: ...
     def to_cupy(self, copy=False, order="F"):
         """
@@ -2640,9 +2895,15 @@ class Array4_ushort_const:
     @typing.overload
     def __getitem__(self, arg0: IntVect) -> int: ...
     @typing.overload
-    def __getitem__(self, arg0: list[int[4]]) -> int: ...
+    def __getitem__(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(4)],
+    ) -> int: ...
     @typing.overload
-    def __getitem__(self, arg0: list[int[3]]) -> int: ...
+    def __getitem__(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
+    ) -> int: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
@@ -3429,10 +3690,17 @@ class Box:
     @typing.overload
     def __init__(self, small: IntVect, big: IntVect, t: IndexType) -> None: ...
     @typing.overload
-    def __init__(self, small: list[int[3]], big: list[int[3]]) -> None: ...
+    def __init__(
+        self,
+        small: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
+        big: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
+    ) -> None: ...
     @typing.overload
     def __init__(
-        self, small: list[int[3]], big: list[int[3]], t: IndexType
+        self,
+        small: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
+        big: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
+        t: IndexType,
     ) -> None: ...
     def __isub__(self, arg0: IntVect) -> Box: ...
     def __iter__(self) -> typing.Iterator: ...
@@ -3575,7 +3843,7 @@ class BoxArray:
     def size(self) -> int: ...
 
 class Config:
-    amrex_version: typing.ClassVar[str] = "23.11-14-g175b99d913dc"
+    amrex_version: typing.ClassVar[str] = "23.12"
     gpu_backend = None
     have_gpu: typing.ClassVar[bool] = False
     have_mpi: typing.ClassVar[bool] = True
@@ -3813,7 +4081,9 @@ class Geometry(CoordSys):
         Get the hi end of the problem domain in specified direction
         """
     @typing.overload
-    def ProbHi(self) -> list[float[3]]:
+    def ProbHi(
+        self,
+    ) -> typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(3)]:
         """
         Get the list of lo ends of the problem domain
         """
@@ -3827,7 +4097,9 @@ class Geometry(CoordSys):
         Get the lo end of the problem domain in specified direction
         """
     @typing.overload
-    def ProbLo(self) -> list[float[3]]:
+    def ProbLo(
+        self,
+    ) -> typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(3)]:
         """
         Get the list of lo ends of the problem domain
         """
@@ -3839,7 +4111,9 @@ class Geometry(CoordSys):
         """
         Reset default coord of Geometry class with an Array of `int`
         """
-    def ResetDefaultPeriodicity(self: list[int[3]]) -> None:
+    def ResetDefaultPeriodicity(
+        self: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)]
+    ) -> None:
         """
         Reset default periodicity of Geometry class with an Array of `int`
         """
@@ -3851,7 +4125,11 @@ class Geometry(CoordSys):
     def __init__(self) -> None: ...
     @typing.overload
     def __init__(
-        self, dom: Box, rb: RealBox, coord: int, is_per: list[int[3]]
+        self,
+        dom: Box,
+        rb: RealBox,
+        coord: int,
+        is_per: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
     ) -> None: ...
     def __repr__(self) -> str: ...
     def __str__(self) -> str: ...
@@ -3860,7 +4138,13 @@ class Geometry(CoordSys):
         """
         Returns non-static copy of geometry's stored data
         """
-    def define(self, arg0: Box, arg1: RealBox, arg2: int, arg3: list[int[3]]) -> None:
+    def define(
+        self,
+        arg0: Box,
+        arg1: RealBox,
+        arg2: int,
+        arg3: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
+    ) -> None:
         """
         Set geometry
         """
@@ -3890,7 +4174,9 @@ class Geometry(CoordSys):
         Is the domain periodic in the specified direction?
         """
     @typing.overload
-    def isPeriodic(self) -> list[int[3]]:
+    def isPeriodic(
+        self,
+    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)]:
         """
         Return list indicating whether domain is periodic in each direction
         """
@@ -3910,11 +4196,16 @@ class Geometry(CoordSys):
         Return Periodicity object with lengths determined by input Box
         """
     def refine(self, arg0: IntVect) -> None: ...
-    def setPeriodicity(self, arg0: list[int[3]]) -> list[int[3]]: ...
+    def setPeriodicity(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
+    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)]: ...
 
 class GeometryData:
     @typing.overload
-    def CellSize(self) -> list[float[3]]:
+    def CellSize(
+        self,
+    ) -> typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(3)]:
         """
         Returns the cellsize for each coordinate direction.
         """
@@ -3932,7 +4223,9 @@ class GeometryData:
         Returns our rectangular domain
         """
     @typing.overload
-    def ProbHi(self) -> list[float[3]]:
+    def ProbHi(
+        self,
+    ) -> typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(3)]:
         """
         Returns the hi end for each coordinate direction.
         """
@@ -3942,7 +4235,9 @@ class GeometryData:
         Returns the hi end of the problem domain in specified dimension.
         """
     @typing.overload
-    def ProbLo(self) -> list[float[3]]:
+    def ProbLo(
+        self,
+    ) -> typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(3)]:
         """
         Returns the lo end for each coordinate direction.
         """
@@ -3954,7 +4249,9 @@ class GeometryData:
     def __init__(self) -> None: ...
     def __repr__(self) -> str: ...
     @typing.overload
-    def isPeriodic(self) -> list[int[3]]:
+    def isPeriodic(
+        self,
+    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)]:
         """
         Returns whether the domain is periodic in each direction.
         """
@@ -3968,9 +4265,13 @@ class GeometryData:
     @property
     def domain(self) -> Box: ...
     @property
-    def dx(self) -> list[float[3]]: ...
+    def dx(
+        self,
+    ) -> typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(3)]: ...
     @property
-    def is_periodic(self) -> list[int[3]]: ...
+    def is_periodic(
+        self,
+    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)]: ...
     @property
     def prob_domain(self) -> RealBox: ...
 
@@ -4091,7 +4392,10 @@ class IntVect:
     @typing.overload
     def __init__(self, arg0: int) -> None: ...
     @typing.overload
-    def __init__(self, arg0: list[int[3]]) -> None: ...
+    def __init__(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
+    ) -> None: ...
     @typing.overload
     def __isub__(self, arg0: int) -> IntVect: ...
     @typing.overload
@@ -5894,7 +6198,9 @@ class ParticleContainer_0_0_4_0_arena:
     def AddParticlesAtLevel(
         self, particles: ParticleTile_0_0_4_0_arena, level: int, ngrow: int = 0
     ) -> None: ...
-    def ByteSpread(self) -> list[int[3]]: ...
+    def ByteSpread(
+        self,
+    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)]: ...
     @typing.overload
     def Define(
         self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray
@@ -5940,7 +6246,9 @@ class ParticleContainer_0_0_4_0_arena:
         self, level: int, only_valid: bool = True, only_local: bool = False
     ) -> Vector_Long: ...
     def OK(self, lev_min: int = 0, lev_max: int = -1, nGrow: int = 0) -> bool: ...
-    def PrintCapacity(self) -> list[int[3]]: ...
+    def PrintCapacity(
+        self,
+    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)]: ...
     def Redistribute(
         self,
         lev_min: int = 0,
@@ -6041,7 +6349,9 @@ class ParticleContainer_0_0_4_0_default:
     def AddParticlesAtLevel(
         self, particles: ParticleTile_0_0_4_0_default, level: int, ngrow: int = 0
     ) -> None: ...
-    def ByteSpread(self) -> list[int[3]]: ...
+    def ByteSpread(
+        self,
+    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)]: ...
     @typing.overload
     def Define(
         self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray
@@ -6087,7 +6397,9 @@ class ParticleContainer_0_0_4_0_default:
         self, level: int, only_valid: bool = True, only_local: bool = False
     ) -> Vector_Long: ...
     def OK(self, lev_min: int = 0, lev_max: int = -1, nGrow: int = 0) -> bool: ...
-    def PrintCapacity(self) -> list[int[3]]: ...
+    def PrintCapacity(
+        self,
+    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)]: ...
     def Redistribute(
         self,
         lev_min: int = 0,
@@ -6188,7 +6500,9 @@ class ParticleContainer_0_0_4_0_pinned:
     def AddParticlesAtLevel(
         self, particles: ParticleTile_0_0_4_0_pinned, level: int, ngrow: int = 0
     ) -> None: ...
-    def ByteSpread(self) -> list[int[3]]: ...
+    def ByteSpread(
+        self,
+    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)]: ...
     @typing.overload
     def Define(
         self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray
@@ -6234,7 +6548,9 @@ class ParticleContainer_0_0_4_0_pinned:
         self, level: int, only_valid: bool = True, only_local: bool = False
     ) -> Vector_Long: ...
     def OK(self, lev_min: int = 0, lev_max: int = -1, nGrow: int = 0) -> bool: ...
-    def PrintCapacity(self) -> list[int[3]]: ...
+    def PrintCapacity(
+        self,
+    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)]: ...
     def Redistribute(
         self,
         lev_min: int = 0,
@@ -6335,7 +6651,9 @@ class ParticleContainer_0_0_5_0_arena:
     def AddParticlesAtLevel(
         self, particles: ParticleTile_0_0_5_0_arena, level: int, ngrow: int = 0
     ) -> None: ...
-    def ByteSpread(self) -> list[int[3]]: ...
+    def ByteSpread(
+        self,
+    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)]: ...
     @typing.overload
     def Define(
         self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray
@@ -6381,7 +6699,9 @@ class ParticleContainer_0_0_5_0_arena:
         self, level: int, only_valid: bool = True, only_local: bool = False
     ) -> Vector_Long: ...
     def OK(self, lev_min: int = 0, lev_max: int = -1, nGrow: int = 0) -> bool: ...
-    def PrintCapacity(self) -> list[int[3]]: ...
+    def PrintCapacity(
+        self,
+    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)]: ...
     def Redistribute(
         self,
         lev_min: int = 0,
@@ -6482,7 +6802,9 @@ class ParticleContainer_0_0_5_0_default:
     def AddParticlesAtLevel(
         self, particles: ParticleTile_0_0_5_0_default, level: int, ngrow: int = 0
     ) -> None: ...
-    def ByteSpread(self) -> list[int[3]]: ...
+    def ByteSpread(
+        self,
+    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)]: ...
     @typing.overload
     def Define(
         self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray
@@ -6528,7 +6850,9 @@ class ParticleContainer_0_0_5_0_default:
         self, level: int, only_valid: bool = True, only_local: bool = False
     ) -> Vector_Long: ...
     def OK(self, lev_min: int = 0, lev_max: int = -1, nGrow: int = 0) -> bool: ...
-    def PrintCapacity(self) -> list[int[3]]: ...
+    def PrintCapacity(
+        self,
+    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)]: ...
     def Redistribute(
         self,
         lev_min: int = 0,
@@ -6629,7 +6953,9 @@ class ParticleContainer_0_0_5_0_pinned:
     def AddParticlesAtLevel(
         self, particles: ParticleTile_0_0_5_0_pinned, level: int, ngrow: int = 0
     ) -> None: ...
-    def ByteSpread(self) -> list[int[3]]: ...
+    def ByteSpread(
+        self,
+    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)]: ...
     @typing.overload
     def Define(
         self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray
@@ -6675,7 +7001,9 @@ class ParticleContainer_0_0_5_0_pinned:
         self, level: int, only_valid: bool = True, only_local: bool = False
     ) -> Vector_Long: ...
     def OK(self, lev_min: int = 0, lev_max: int = -1, nGrow: int = 0) -> bool: ...
-    def PrintCapacity(self) -> list[int[3]]: ...
+    def PrintCapacity(
+        self,
+    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)]: ...
     def Redistribute(
         self,
         lev_min: int = 0,
@@ -6776,7 +7104,9 @@ class ParticleContainer_1_1_2_1_arena:
     def AddParticlesAtLevel(
         self, particles: ParticleTile_1_1_2_1_arena, level: int, ngrow: int = 0
     ) -> None: ...
-    def ByteSpread(self) -> list[int[3]]: ...
+    def ByteSpread(
+        self,
+    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)]: ...
     @typing.overload
     def Define(
         self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray
@@ -6822,7 +7152,9 @@ class ParticleContainer_1_1_2_1_arena:
         self, level: int, only_valid: bool = True, only_local: bool = False
     ) -> Vector_Long: ...
     def OK(self, lev_min: int = 0, lev_max: int = -1, nGrow: int = 0) -> bool: ...
-    def PrintCapacity(self) -> list[int[3]]: ...
+    def PrintCapacity(
+        self,
+    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)]: ...
     def Redistribute(
         self,
         lev_min: int = 0,
@@ -6923,7 +7255,9 @@ class ParticleContainer_1_1_2_1_default:
     def AddParticlesAtLevel(
         self, particles: ParticleTile_1_1_2_1_default, level: int, ngrow: int = 0
     ) -> None: ...
-    def ByteSpread(self) -> list[int[3]]: ...
+    def ByteSpread(
+        self,
+    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)]: ...
     @typing.overload
     def Define(
         self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray
@@ -6969,7 +7303,9 @@ class ParticleContainer_1_1_2_1_default:
         self, level: int, only_valid: bool = True, only_local: bool = False
     ) -> Vector_Long: ...
     def OK(self, lev_min: int = 0, lev_max: int = -1, nGrow: int = 0) -> bool: ...
-    def PrintCapacity(self) -> list[int[3]]: ...
+    def PrintCapacity(
+        self,
+    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)]: ...
     def Redistribute(
         self,
         lev_min: int = 0,
@@ -7070,7 +7406,9 @@ class ParticleContainer_1_1_2_1_pinned:
     def AddParticlesAtLevel(
         self, particles: ParticleTile_1_1_2_1_pinned, level: int, ngrow: int = 0
     ) -> None: ...
-    def ByteSpread(self) -> list[int[3]]: ...
+    def ByteSpread(
+        self,
+    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)]: ...
     @typing.overload
     def Define(
         self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray
@@ -7116,7 +7454,9 @@ class ParticleContainer_1_1_2_1_pinned:
         self, level: int, only_valid: bool = True, only_local: bool = False
     ) -> Vector_Long: ...
     def OK(self, lev_min: int = 0, lev_max: int = -1, nGrow: int = 0) -> bool: ...
-    def PrintCapacity(self) -> list[int[3]]: ...
+    def PrintCapacity(
+        self,
+    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)]: ...
     def Redistribute(
         self,
         lev_min: int = 0,
@@ -7217,7 +7557,9 @@ class ParticleContainer_pureSoA_8_2_arena:
     def AddParticlesAtLevel(
         self, particles: ParticleTile_0_0_8_2_arena, level: int, ngrow: int = 0
     ) -> None: ...
-    def ByteSpread(self) -> list[int[3]]: ...
+    def ByteSpread(
+        self,
+    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)]: ...
     @typing.overload
     def Define(
         self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray
@@ -7249,7 +7591,9 @@ class ParticleContainer_pureSoA_8_2_arena:
         self, level: int, only_valid: bool = True, only_local: bool = False
     ) -> Vector_Long: ...
     def OK(self, lev_min: int = 0, lev_max: int = -1, nGrow: int = 0) -> bool: ...
-    def PrintCapacity(self) -> list[int[3]]: ...
+    def PrintCapacity(
+        self,
+    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)]: ...
     def Redistribute(
         self,
         lev_min: int = 0,
@@ -7350,7 +7694,9 @@ class ParticleContainer_pureSoA_8_2_default:
     def AddParticlesAtLevel(
         self, particles: ParticleTile_0_0_8_2_default, level: int, ngrow: int = 0
     ) -> None: ...
-    def ByteSpread(self) -> list[int[3]]: ...
+    def ByteSpread(
+        self,
+    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)]: ...
     @typing.overload
     def Define(
         self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray
@@ -7382,7 +7728,9 @@ class ParticleContainer_pureSoA_8_2_default:
         self, level: int, only_valid: bool = True, only_local: bool = False
     ) -> Vector_Long: ...
     def OK(self, lev_min: int = 0, lev_max: int = -1, nGrow: int = 0) -> bool: ...
-    def PrintCapacity(self) -> list[int[3]]: ...
+    def PrintCapacity(
+        self,
+    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)]: ...
     def Redistribute(
         self,
         lev_min: int = 0,
@@ -7483,7 +7831,9 @@ class ParticleContainer_pureSoA_8_2_pinned:
     def AddParticlesAtLevel(
         self, particles: ParticleTile_0_0_8_2_pinned, level: int, ngrow: int = 0
     ) -> None: ...
-    def ByteSpread(self) -> list[int[3]]: ...
+    def ByteSpread(
+        self,
+    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)]: ...
     @typing.overload
     def Define(
         self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray
@@ -7515,7 +7865,9 @@ class ParticleContainer_pureSoA_8_2_pinned:
         self, level: int, only_valid: bool = True, only_local: bool = False
     ) -> Vector_Long: ...
     def OK(self, lev_min: int = 0, lev_max: int = -1, nGrow: int = 0) -> bool: ...
-    def PrintCapacity(self) -> list[int[3]]: ...
+    def PrintCapacity(
+        self,
+    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)]: ...
     def Redistribute(
         self,
         lev_min: int = 0,
@@ -7607,26 +7959,50 @@ class ParticleContainer_pureSoA_8_2_pinned:
 
 class ParticleInitType_0_0_4_0:
     is_soa_particle: typing.ClassVar[bool] = False
-    int_array_data: list[int[0]]
-    int_struct_data: list[int[0]]
-    real_array_data: list[float[4]]
-    real_struct_data: list[float[0]]
+    int_array_data: typing.Annotated[
+        list[int], pybind11_stubgen.typing_ext.FixedSize(0)
+    ]
+    int_struct_data: typing.Annotated[
+        list[int], pybind11_stubgen.typing_ext.FixedSize(0)
+    ]
+    real_array_data: typing.Annotated[
+        list[float], pybind11_stubgen.typing_ext.FixedSize(4)
+    ]
+    real_struct_data: typing.Annotated[
+        list[float], pybind11_stubgen.typing_ext.FixedSize(0)
+    ]
     def __init__(self) -> None: ...
 
 class ParticleInitType_0_0_5_0:
     is_soa_particle: typing.ClassVar[bool] = False
-    int_array_data: list[int[0]]
-    int_struct_data: list[int[0]]
-    real_array_data: list[float[5]]
-    real_struct_data: list[float[0]]
+    int_array_data: typing.Annotated[
+        list[int], pybind11_stubgen.typing_ext.FixedSize(0)
+    ]
+    int_struct_data: typing.Annotated[
+        list[int], pybind11_stubgen.typing_ext.FixedSize(0)
+    ]
+    real_array_data: typing.Annotated[
+        list[float], pybind11_stubgen.typing_ext.FixedSize(5)
+    ]
+    real_struct_data: typing.Annotated[
+        list[float], pybind11_stubgen.typing_ext.FixedSize(0)
+    ]
     def __init__(self) -> None: ...
 
 class ParticleInitType_1_1_2_1:
     is_soa_particle: typing.ClassVar[bool] = False
-    int_array_data: list[int[1]]
-    int_struct_data: list[int[1]]
-    real_array_data: list[float[2]]
-    real_struct_data: list[float[1]]
+    int_array_data: typing.Annotated[
+        list[int], pybind11_stubgen.typing_ext.FixedSize(1)
+    ]
+    int_struct_data: typing.Annotated[
+        list[int], pybind11_stubgen.typing_ext.FixedSize(1)
+    ]
+    real_array_data: typing.Annotated[
+        list[float], pybind11_stubgen.typing_ext.FixedSize(2)
+    ]
+    real_struct_data: typing.Annotated[
+        list[float], pybind11_stubgen.typing_ext.FixedSize(1)
+    ]
     def __init__(self) -> None: ...
 
 class ParticleTileData_0_0_37_1:
@@ -7728,13 +8104,19 @@ class ParticleTile_0_0_37_1_arena:
     @typing.overload
     def push_back_int(self, arg0: int, arg1: int) -> None: ...
     @typing.overload
-    def push_back_int(self, arg0: list[int[1]]) -> None: ...
+    def push_back_int(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(1)],
+    ) -> None: ...
     @typing.overload
     def push_back_int(self, arg0: int, arg1: int, arg2: int) -> None: ...
     @typing.overload
     def push_back_real(self, arg0: int, arg1: float) -> None: ...
     @typing.overload
-    def push_back_real(self, arg0: list[float[37]]) -> None: ...
+    def push_back_real(
+        self,
+        arg0: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(37)],
+    ) -> None: ...
     @typing.overload
     def push_back_real(self, arg0: int, arg1: int, arg2: float) -> None: ...
     def resize(self, arg0: int) -> None: ...
@@ -7777,13 +8159,19 @@ class ParticleTile_0_0_37_1_default:
     @typing.overload
     def push_back_int(self, arg0: int, arg1: int) -> None: ...
     @typing.overload
-    def push_back_int(self, arg0: list[int[1]]) -> None: ...
+    def push_back_int(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(1)],
+    ) -> None: ...
     @typing.overload
     def push_back_int(self, arg0: int, arg1: int, arg2: int) -> None: ...
     @typing.overload
     def push_back_real(self, arg0: int, arg1: float) -> None: ...
     @typing.overload
-    def push_back_real(self, arg0: list[float[37]]) -> None: ...
+    def push_back_real(
+        self,
+        arg0: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(37)],
+    ) -> None: ...
     @typing.overload
     def push_back_real(self, arg0: int, arg1: int, arg2: float) -> None: ...
     def resize(self, arg0: int) -> None: ...
@@ -7826,13 +8214,19 @@ class ParticleTile_0_0_37_1_pinned:
     @typing.overload
     def push_back_int(self, arg0: int, arg1: int) -> None: ...
     @typing.overload
-    def push_back_int(self, arg0: list[int[1]]) -> None: ...
+    def push_back_int(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(1)],
+    ) -> None: ...
     @typing.overload
     def push_back_int(self, arg0: int, arg1: int, arg2: int) -> None: ...
     @typing.overload
     def push_back_real(self, arg0: int, arg1: float) -> None: ...
     @typing.overload
-    def push_back_real(self, arg0: list[float[37]]) -> None: ...
+    def push_back_real(
+        self,
+        arg0: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(37)],
+    ) -> None: ...
     @typing.overload
     def push_back_real(self, arg0: int, arg1: int, arg2: float) -> None: ...
     def resize(self, arg0: int) -> None: ...
@@ -7875,13 +8269,19 @@ class ParticleTile_0_0_4_0_arena:
     @typing.overload
     def push_back_int(self, arg0: int, arg1: int) -> None: ...
     @typing.overload
-    def push_back_int(self, arg0: list[int[0]]) -> None: ...
+    def push_back_int(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(0)],
+    ) -> None: ...
     @typing.overload
     def push_back_int(self, arg0: int, arg1: int, arg2: int) -> None: ...
     @typing.overload
     def push_back_real(self, arg0: int, arg1: float) -> None: ...
     @typing.overload
-    def push_back_real(self, arg0: list[float[4]]) -> None: ...
+    def push_back_real(
+        self,
+        arg0: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(4)],
+    ) -> None: ...
     @typing.overload
     def push_back_real(self, arg0: int, arg1: int, arg2: float) -> None: ...
     def resize(self, arg0: int) -> None: ...
@@ -7924,13 +8324,19 @@ class ParticleTile_0_0_4_0_default:
     @typing.overload
     def push_back_int(self, arg0: int, arg1: int) -> None: ...
     @typing.overload
-    def push_back_int(self, arg0: list[int[0]]) -> None: ...
+    def push_back_int(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(0)],
+    ) -> None: ...
     @typing.overload
     def push_back_int(self, arg0: int, arg1: int, arg2: int) -> None: ...
     @typing.overload
     def push_back_real(self, arg0: int, arg1: float) -> None: ...
     @typing.overload
-    def push_back_real(self, arg0: list[float[4]]) -> None: ...
+    def push_back_real(
+        self,
+        arg0: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(4)],
+    ) -> None: ...
     @typing.overload
     def push_back_real(self, arg0: int, arg1: int, arg2: float) -> None: ...
     def resize(self, arg0: int) -> None: ...
@@ -7973,13 +8379,19 @@ class ParticleTile_0_0_4_0_pinned:
     @typing.overload
     def push_back_int(self, arg0: int, arg1: int) -> None: ...
     @typing.overload
-    def push_back_int(self, arg0: list[int[0]]) -> None: ...
+    def push_back_int(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(0)],
+    ) -> None: ...
     @typing.overload
     def push_back_int(self, arg0: int, arg1: int, arg2: int) -> None: ...
     @typing.overload
     def push_back_real(self, arg0: int, arg1: float) -> None: ...
     @typing.overload
-    def push_back_real(self, arg0: list[float[4]]) -> None: ...
+    def push_back_real(
+        self,
+        arg0: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(4)],
+    ) -> None: ...
     @typing.overload
     def push_back_real(self, arg0: int, arg1: int, arg2: float) -> None: ...
     def resize(self, arg0: int) -> None: ...
@@ -8022,13 +8434,19 @@ class ParticleTile_0_0_5_0_arena:
     @typing.overload
     def push_back_int(self, arg0: int, arg1: int) -> None: ...
     @typing.overload
-    def push_back_int(self, arg0: list[int[0]]) -> None: ...
+    def push_back_int(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(0)],
+    ) -> None: ...
     @typing.overload
     def push_back_int(self, arg0: int, arg1: int, arg2: int) -> None: ...
     @typing.overload
     def push_back_real(self, arg0: int, arg1: float) -> None: ...
     @typing.overload
-    def push_back_real(self, arg0: list[float[5]]) -> None: ...
+    def push_back_real(
+        self,
+        arg0: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(5)],
+    ) -> None: ...
     @typing.overload
     def push_back_real(self, arg0: int, arg1: int, arg2: float) -> None: ...
     def resize(self, arg0: int) -> None: ...
@@ -8071,13 +8489,19 @@ class ParticleTile_0_0_5_0_default:
     @typing.overload
     def push_back_int(self, arg0: int, arg1: int) -> None: ...
     @typing.overload
-    def push_back_int(self, arg0: list[int[0]]) -> None: ...
+    def push_back_int(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(0)],
+    ) -> None: ...
     @typing.overload
     def push_back_int(self, arg0: int, arg1: int, arg2: int) -> None: ...
     @typing.overload
     def push_back_real(self, arg0: int, arg1: float) -> None: ...
     @typing.overload
-    def push_back_real(self, arg0: list[float[5]]) -> None: ...
+    def push_back_real(
+        self,
+        arg0: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(5)],
+    ) -> None: ...
     @typing.overload
     def push_back_real(self, arg0: int, arg1: int, arg2: float) -> None: ...
     def resize(self, arg0: int) -> None: ...
@@ -8120,13 +8544,19 @@ class ParticleTile_0_0_5_0_pinned:
     @typing.overload
     def push_back_int(self, arg0: int, arg1: int) -> None: ...
     @typing.overload
-    def push_back_int(self, arg0: list[int[0]]) -> None: ...
+    def push_back_int(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(0)],
+    ) -> None: ...
     @typing.overload
     def push_back_int(self, arg0: int, arg1: int, arg2: int) -> None: ...
     @typing.overload
     def push_back_real(self, arg0: int, arg1: float) -> None: ...
     @typing.overload
-    def push_back_real(self, arg0: list[float[5]]) -> None: ...
+    def push_back_real(
+        self,
+        arg0: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(5)],
+    ) -> None: ...
     @typing.overload
     def push_back_real(self, arg0: int, arg1: int, arg2: float) -> None: ...
     def resize(self, arg0: int) -> None: ...
@@ -8162,13 +8592,19 @@ class ParticleTile_0_0_8_2_arena:
     @typing.overload
     def push_back_int(self, arg0: int, arg1: int) -> None: ...
     @typing.overload
-    def push_back_int(self, arg0: list[int[2]]) -> None: ...
+    def push_back_int(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(2)],
+    ) -> None: ...
     @typing.overload
     def push_back_int(self, arg0: int, arg1: int, arg2: int) -> None: ...
     @typing.overload
     def push_back_real(self, arg0: int, arg1: float) -> None: ...
     @typing.overload
-    def push_back_real(self, arg0: list[float[8]]) -> None: ...
+    def push_back_real(
+        self,
+        arg0: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(8)],
+    ) -> None: ...
     @typing.overload
     def push_back_real(self, arg0: int, arg1: int, arg2: float) -> None: ...
     def resize(self, arg0: int) -> None: ...
@@ -8204,13 +8640,19 @@ class ParticleTile_0_0_8_2_default:
     @typing.overload
     def push_back_int(self, arg0: int, arg1: int) -> None: ...
     @typing.overload
-    def push_back_int(self, arg0: list[int[2]]) -> None: ...
+    def push_back_int(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(2)],
+    ) -> None: ...
     @typing.overload
     def push_back_int(self, arg0: int, arg1: int, arg2: int) -> None: ...
     @typing.overload
     def push_back_real(self, arg0: int, arg1: float) -> None: ...
     @typing.overload
-    def push_back_real(self, arg0: list[float[8]]) -> None: ...
+    def push_back_real(
+        self,
+        arg0: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(8)],
+    ) -> None: ...
     @typing.overload
     def push_back_real(self, arg0: int, arg1: int, arg2: float) -> None: ...
     def resize(self, arg0: int) -> None: ...
@@ -8246,13 +8688,19 @@ class ParticleTile_0_0_8_2_pinned:
     @typing.overload
     def push_back_int(self, arg0: int, arg1: int) -> None: ...
     @typing.overload
-    def push_back_int(self, arg0: list[int[2]]) -> None: ...
+    def push_back_int(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(2)],
+    ) -> None: ...
     @typing.overload
     def push_back_int(self, arg0: int, arg1: int, arg2: int) -> None: ...
     @typing.overload
     def push_back_real(self, arg0: int, arg1: float) -> None: ...
     @typing.overload
-    def push_back_real(self, arg0: list[float[8]]) -> None: ...
+    def push_back_real(
+        self,
+        arg0: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(8)],
+    ) -> None: ...
     @typing.overload
     def push_back_real(self, arg0: int, arg1: int, arg2: float) -> None: ...
     def resize(self, arg0: int) -> None: ...
@@ -8295,13 +8743,19 @@ class ParticleTile_1_1_2_1_arena:
     @typing.overload
     def push_back_int(self, arg0: int, arg1: int) -> None: ...
     @typing.overload
-    def push_back_int(self, arg0: list[int[1]]) -> None: ...
+    def push_back_int(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(1)],
+    ) -> None: ...
     @typing.overload
     def push_back_int(self, arg0: int, arg1: int, arg2: int) -> None: ...
     @typing.overload
     def push_back_real(self, arg0: int, arg1: float) -> None: ...
     @typing.overload
-    def push_back_real(self, arg0: list[float[2]]) -> None: ...
+    def push_back_real(
+        self,
+        arg0: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(2)],
+    ) -> None: ...
     @typing.overload
     def push_back_real(self, arg0: int, arg1: int, arg2: float) -> None: ...
     def resize(self, arg0: int) -> None: ...
@@ -8344,13 +8798,19 @@ class ParticleTile_1_1_2_1_default:
     @typing.overload
     def push_back_int(self, arg0: int, arg1: int) -> None: ...
     @typing.overload
-    def push_back_int(self, arg0: list[int[1]]) -> None: ...
+    def push_back_int(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(1)],
+    ) -> None: ...
     @typing.overload
     def push_back_int(self, arg0: int, arg1: int, arg2: int) -> None: ...
     @typing.overload
     def push_back_real(self, arg0: int, arg1: float) -> None: ...
     @typing.overload
-    def push_back_real(self, arg0: list[float[2]]) -> None: ...
+    def push_back_real(
+        self,
+        arg0: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(2)],
+    ) -> None: ...
     @typing.overload
     def push_back_real(self, arg0: int, arg1: int, arg2: float) -> None: ...
     def resize(self, arg0: int) -> None: ...
@@ -8393,13 +8853,19 @@ class ParticleTile_1_1_2_1_pinned:
     @typing.overload
     def push_back_int(self, arg0: int, arg1: int) -> None: ...
     @typing.overload
-    def push_back_int(self, arg0: list[int[1]]) -> None: ...
+    def push_back_int(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(1)],
+    ) -> None: ...
     @typing.overload
     def push_back_int(self, arg0: int, arg1: int, arg2: int) -> None: ...
     @typing.overload
     def push_back_real(self, arg0: int, arg1: float) -> None: ...
     @typing.overload
-    def push_back_real(self, arg0: list[float[2]]) -> None: ...
+    def push_back_real(
+        self,
+        arg0: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(2)],
+    ) -> None: ...
     @typing.overload
     def push_back_real(self, arg0: int, arg1: int, arg2: float) -> None: ...
     def resize(self, arg0: int) -> None: ...
@@ -8449,19 +8915,28 @@ class Particle_0_0:
     @typing.overload
     def setPos(self, arg0: RealVect) -> None: ...
     @typing.overload
-    def setPos(self, arg0: list[float[3]]) -> None: ...
+    def setPos(
+        self,
+        arg0: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(3)],
+    ) -> None: ...
     @typing.overload
     def set_idata(self, arg0: int, arg1: int) -> None: ...
     @typing.overload
     def set_idata(self, arg0: IntVect) -> None: ...
     @typing.overload
-    def set_idata(self, arg0: list[int[0]]) -> None: ...
+    def set_idata(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(0)],
+    ) -> None: ...
     @typing.overload
     def set_rdata(self, arg0: int, arg1: float) -> None: ...
     @typing.overload
     def set_rdata(self, arg0: RealVect) -> None: ...
     @typing.overload
-    def set_rdata(self, arg0: list[float[0]]) -> None: ...
+    def set_rdata(
+        self,
+        arg0: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(0)],
+    ) -> None: ...
 
 class Particle_1_1:
     NInt: typing.ClassVar[int] = 1
@@ -8489,11 +8964,15 @@ class Particle_1_1:
     @typing.overload
     def get_idata(self, arg0: int) -> int: ...
     @typing.overload
-    def get_idata(self) -> list[int[1]]: ...
+    def get_idata(
+        self,
+    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(1)]: ...
     @typing.overload
     def get_rdata(self, arg0: int) -> float: ...
     @typing.overload
-    def get_rdata(self) -> list[float[1]]: ...
+    def get_rdata(
+        self,
+    ) -> typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(1)]: ...
     def id(self) -> int: ...
     @typing.overload
     def pos(self, arg0: int) -> float: ...
@@ -8504,19 +8983,28 @@ class Particle_1_1:
     @typing.overload
     def setPos(self, arg0: RealVect) -> None: ...
     @typing.overload
-    def setPos(self, arg0: list[float[3]]) -> None: ...
+    def setPos(
+        self,
+        arg0: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(3)],
+    ) -> None: ...
     @typing.overload
     def set_idata(self, arg0: int, arg1: int) -> None: ...
     @typing.overload
     def set_idata(self, arg0: IntVect) -> None: ...
     @typing.overload
-    def set_idata(self, arg0: list[int[1]]) -> None: ...
+    def set_idata(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(1)],
+    ) -> None: ...
     @typing.overload
     def set_rdata(self, arg0: int, arg1: float) -> None: ...
     @typing.overload
     def set_rdata(self, arg0: RealVect) -> None: ...
     @typing.overload
-    def set_rdata(self, arg0: list[float[1]]) -> None: ...
+    def set_rdata(
+        self,
+        arg0: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(1)],
+    ) -> None: ...
 
 class Particle_2_1:
     NInt: typing.ClassVar[int] = 1
@@ -8544,11 +9032,15 @@ class Particle_2_1:
     @typing.overload
     def get_idata(self, arg0: int) -> int: ...
     @typing.overload
-    def get_idata(self) -> list[int[1]]: ...
+    def get_idata(
+        self,
+    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(1)]: ...
     @typing.overload
     def get_rdata(self, arg0: int) -> float: ...
     @typing.overload
-    def get_rdata(self) -> list[float[2]]: ...
+    def get_rdata(
+        self,
+    ) -> typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(2)]: ...
     def id(self) -> int: ...
     @typing.overload
     def pos(self, arg0: int) -> float: ...
@@ -8559,19 +9051,28 @@ class Particle_2_1:
     @typing.overload
     def setPos(self, arg0: RealVect) -> None: ...
     @typing.overload
-    def setPos(self, arg0: list[float[3]]) -> None: ...
+    def setPos(
+        self,
+        arg0: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(3)],
+    ) -> None: ...
     @typing.overload
     def set_idata(self, arg0: int, arg1: int) -> None: ...
     @typing.overload
     def set_idata(self, arg0: IntVect) -> None: ...
     @typing.overload
-    def set_idata(self, arg0: list[int[1]]) -> None: ...
+    def set_idata(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(1)],
+    ) -> None: ...
     @typing.overload
     def set_rdata(self, arg0: int, arg1: float) -> None: ...
     @typing.overload
     def set_rdata(self, arg0: RealVect) -> None: ...
     @typing.overload
-    def set_rdata(self, arg0: list[float[2]]) -> None: ...
+    def set_rdata(
+        self,
+        arg0: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(2)],
+    ) -> None: ...
 
 class Particle_37_1:
     NInt: typing.ClassVar[int] = 1
@@ -8599,11 +9100,15 @@ class Particle_37_1:
     @typing.overload
     def get_idata(self, arg0: int) -> int: ...
     @typing.overload
-    def get_idata(self) -> list[int[1]]: ...
+    def get_idata(
+        self,
+    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(1)]: ...
     @typing.overload
     def get_rdata(self, arg0: int) -> float: ...
     @typing.overload
-    def get_rdata(self) -> list[float[37]]: ...
+    def get_rdata(
+        self,
+    ) -> typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(37)]: ...
     def id(self) -> int: ...
     @typing.overload
     def pos(self, arg0: int) -> float: ...
@@ -8614,19 +9119,28 @@ class Particle_37_1:
     @typing.overload
     def setPos(self, arg0: RealVect) -> None: ...
     @typing.overload
-    def setPos(self, arg0: list[float[3]]) -> None: ...
+    def setPos(
+        self,
+        arg0: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(3)],
+    ) -> None: ...
     @typing.overload
     def set_idata(self, arg0: int, arg1: int) -> None: ...
     @typing.overload
     def set_idata(self, arg0: IntVect) -> None: ...
     @typing.overload
-    def set_idata(self, arg0: list[int[1]]) -> None: ...
+    def set_idata(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(1)],
+    ) -> None: ...
     @typing.overload
     def set_rdata(self, arg0: int, arg1: float) -> None: ...
     @typing.overload
     def set_rdata(self, arg0: RealVect) -> None: ...
     @typing.overload
-    def set_rdata(self, arg0: list[float[37]]) -> None: ...
+    def set_rdata(
+        self,
+        arg0: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(37)],
+    ) -> None: ...
 
 class Particle_3_2:
     NInt: typing.ClassVar[int] = 2
@@ -8654,11 +9168,15 @@ class Particle_3_2:
     @typing.overload
     def get_idata(self, arg0: int) -> int: ...
     @typing.overload
-    def get_idata(self) -> list[int[2]]: ...
+    def get_idata(
+        self,
+    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(2)]: ...
     @typing.overload
     def get_rdata(self, arg0: int) -> float: ...
     @typing.overload
-    def get_rdata(self) -> list[float[3]]: ...
+    def get_rdata(
+        self,
+    ) -> typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(3)]: ...
     def id(self) -> int: ...
     @typing.overload
     def pos(self, arg0: int) -> float: ...
@@ -8669,19 +9187,28 @@ class Particle_3_2:
     @typing.overload
     def setPos(self, arg0: RealVect) -> None: ...
     @typing.overload
-    def setPos(self, arg0: list[float[3]]) -> None: ...
+    def setPos(
+        self,
+        arg0: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(3)],
+    ) -> None: ...
     @typing.overload
     def set_idata(self, arg0: int, arg1: int) -> None: ...
     @typing.overload
     def set_idata(self, arg0: IntVect) -> None: ...
     @typing.overload
-    def set_idata(self, arg0: list[int[2]]) -> None: ...
+    def set_idata(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(2)],
+    ) -> None: ...
     @typing.overload
     def set_rdata(self, arg0: int, arg1: float) -> None: ...
     @typing.overload
     def set_rdata(self, arg0: RealVect) -> None: ...
     @typing.overload
-    def set_rdata(self, arg0: list[float[3]]) -> None: ...
+    def set_rdata(
+        self,
+        arg0: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(3)],
+    ) -> None: ...
 
 class Particle_4_0:
     NInt: typing.ClassVar[int] = 0
@@ -8713,7 +9240,9 @@ class Particle_4_0:
     @typing.overload
     def get_rdata(self, arg0: int) -> float: ...
     @typing.overload
-    def get_rdata(self) -> list[float[4]]: ...
+    def get_rdata(
+        self,
+    ) -> typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(4)]: ...
     def id(self) -> int: ...
     @typing.overload
     def pos(self, arg0: int) -> float: ...
@@ -8724,19 +9253,28 @@ class Particle_4_0:
     @typing.overload
     def setPos(self, arg0: RealVect) -> None: ...
     @typing.overload
-    def setPos(self, arg0: list[float[3]]) -> None: ...
+    def setPos(
+        self,
+        arg0: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(3)],
+    ) -> None: ...
     @typing.overload
     def set_idata(self, arg0: int, arg1: int) -> None: ...
     @typing.overload
     def set_idata(self, arg0: IntVect) -> None: ...
     @typing.overload
-    def set_idata(self, arg0: list[int[0]]) -> None: ...
+    def set_idata(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(0)],
+    ) -> None: ...
     @typing.overload
     def set_rdata(self, arg0: int, arg1: float) -> None: ...
     @typing.overload
     def set_rdata(self, arg0: RealVect) -> None: ...
     @typing.overload
-    def set_rdata(self, arg0: list[float[4]]) -> None: ...
+    def set_rdata(
+        self,
+        arg0: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(4)],
+    ) -> None: ...
 
 class Particle_5_0:
     NInt: typing.ClassVar[int] = 0
@@ -8768,7 +9306,9 @@ class Particle_5_0:
     @typing.overload
     def get_rdata(self, arg0: int) -> float: ...
     @typing.overload
-    def get_rdata(self) -> list[float[5]]: ...
+    def get_rdata(
+        self,
+    ) -> typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(5)]: ...
     def id(self) -> int: ...
     @typing.overload
     def pos(self, arg0: int) -> float: ...
@@ -8779,19 +9319,28 @@ class Particle_5_0:
     @typing.overload
     def setPos(self, arg0: RealVect) -> None: ...
     @typing.overload
-    def setPos(self, arg0: list[float[3]]) -> None: ...
+    def setPos(
+        self,
+        arg0: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(3)],
+    ) -> None: ...
     @typing.overload
     def set_idata(self, arg0: int, arg1: int) -> None: ...
     @typing.overload
     def set_idata(self, arg0: IntVect) -> None: ...
     @typing.overload
-    def set_idata(self, arg0: list[int[0]]) -> None: ...
+    def set_idata(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(0)],
+    ) -> None: ...
     @typing.overload
     def set_rdata(self, arg0: int, arg1: float) -> None: ...
     @typing.overload
     def set_rdata(self, arg0: RealVect) -> None: ...
     @typing.overload
-    def set_rdata(self, arg0: list[float[5]]) -> None: ...
+    def set_rdata(
+        self,
+        arg0: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(5)],
+    ) -> None: ...
 
 class Particle_7_0:
     NInt: typing.ClassVar[int] = 0
@@ -8823,7 +9372,9 @@ class Particle_7_0:
     @typing.overload
     def get_rdata(self, arg0: int) -> float: ...
     @typing.overload
-    def get_rdata(self) -> list[float[7]]: ...
+    def get_rdata(
+        self,
+    ) -> typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(7)]: ...
     def id(self) -> int: ...
     @typing.overload
     def pos(self, arg0: int) -> float: ...
@@ -8834,19 +9385,28 @@ class Particle_7_0:
     @typing.overload
     def setPos(self, arg0: RealVect) -> None: ...
     @typing.overload
-    def setPos(self, arg0: list[float[3]]) -> None: ...
+    def setPos(
+        self,
+        arg0: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(3)],
+    ) -> None: ...
     @typing.overload
     def set_idata(self, arg0: int, arg1: int) -> None: ...
     @typing.overload
     def set_idata(self, arg0: IntVect) -> None: ...
     @typing.overload
-    def set_idata(self, arg0: list[int[0]]) -> None: ...
+    def set_idata(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(0)],
+    ) -> None: ...
     @typing.overload
     def set_rdata(self, arg0: int, arg1: float) -> None: ...
     @typing.overload
     def set_rdata(self, arg0: RealVect) -> None: ...
     @typing.overload
-    def set_rdata(self, arg0: list[float[7]]) -> None: ...
+    def set_rdata(
+        self,
+        arg0: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(7)],
+    ) -> None: ...
 
 class Particle_8_2:
     NInt: typing.ClassVar[int] = 2
@@ -8874,11 +9434,15 @@ class Particle_8_2:
     @typing.overload
     def get_idata(self, arg0: int) -> int: ...
     @typing.overload
-    def get_idata(self) -> list[int[2]]: ...
+    def get_idata(
+        self,
+    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(2)]: ...
     @typing.overload
     def get_rdata(self, arg0: int) -> float: ...
     @typing.overload
-    def get_rdata(self) -> list[float[8]]: ...
+    def get_rdata(
+        self,
+    ) -> typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(8)]: ...
     def id(self) -> int: ...
     @typing.overload
     def pos(self, arg0: int) -> float: ...
@@ -8889,19 +9453,28 @@ class Particle_8_2:
     @typing.overload
     def setPos(self, arg0: RealVect) -> None: ...
     @typing.overload
-    def setPos(self, arg0: list[float[3]]) -> None: ...
+    def setPos(
+        self,
+        arg0: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(3)],
+    ) -> None: ...
     @typing.overload
     def set_idata(self, arg0: int, arg1: int) -> None: ...
     @typing.overload
     def set_idata(self, arg0: IntVect) -> None: ...
     @typing.overload
-    def set_idata(self, arg0: list[int[2]]) -> None: ...
+    def set_idata(
+        self,
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(2)],
+    ) -> None: ...
     @typing.overload
     def set_rdata(self, arg0: int, arg1: float) -> None: ...
     @typing.overload
     def set_rdata(self, arg0: RealVect) -> None: ...
     @typing.overload
-    def set_rdata(self, arg0: list[float[8]]) -> None: ...
+    def set_rdata(
+        self,
+        arg0: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(8)],
+    ) -> None: ...
 
 class Periodicity:
     __hash__: typing.ClassVar[None] = None
@@ -8944,9 +9517,18 @@ class RealBox:
         z_hi: float,
     ) -> None: ...
     @typing.overload
-    def __init__(self, a_lo: list[float[3]], a_hi: list[float[3]]) -> None: ...
+    def __init__(
+        self,
+        a_lo: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(3)],
+        a_hi: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(3)],
+    ) -> None: ...
     @typing.overload
-    def __init__(self, bx: Box, dx: list[float[3]], base: list[float[3]]) -> None: ...
+    def __init__(
+        self,
+        bx: Box,
+        dx: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(3)],
+        base: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(3)],
+    ) -> None: ...
     def __repr__(self) -> str: ...
     def __str(self) -> str: ...
     @typing.overload
@@ -8975,7 +9557,9 @@ class RealBox:
         Get ith component of ``xhi``
         """
     @typing.overload
-    def hi(self) -> list[float[3]]:
+    def hi(
+        self,
+    ) -> typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(3)]:
         """
         Get all components of ``xhi``
         """
@@ -8990,7 +9574,9 @@ class RealBox:
         Get ith component of ``xlo``
         """
     @typing.overload
-    def lo(self) -> list[float[3]]:
+    def lo(
+        self,
+    ) -> typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(3)]:
         """
         Get all components of ``xlo``
         """
@@ -9020,9 +9606,13 @@ class RealBox:
         """
     def volume(self) -> float: ...
     @property
-    def xhi(self) -> list[float[3]]: ...
+    def xhi(
+        self,
+    ) -> typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(3)]: ...
     @property
-    def xlo(self) -> list[float[3]]: ...
+    def xlo(
+        self,
+    ) -> typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(3)]: ...
 
 class RealVect:
     __hash__: typing.ClassVar[None] = None
@@ -9152,7 +9742,11 @@ class RealVect:
 
 class StructOfArrays_2_1_arena:
     @typing.overload
-    def GetIntData(self) -> list[PODVector_int_arena[1]]:
+    def GetIntData(
+        self,
+    ) -> typing.Annotated[
+        list[PODVector_int_arena], pybind11_stubgen.typing_ext.FixedSize(1)
+    ]:
         """
         Get access to the particle Int Arrays (only compile-time components)
         """
@@ -9162,7 +9756,11 @@ class StructOfArrays_2_1_arena:
         Get access to a particle Real component Array (compile-time and runtime component)
         """
     @typing.overload
-    def GetRealData(self) -> list[PODVector_real_arena[2]]:
+    def GetRealData(
+        self,
+    ) -> typing.Annotated[
+        list[PODVector_real_arena], pybind11_stubgen.typing_ext.FixedSize(2)
+    ]:
         """
         Get access to the particle Real Arrays (only compile-time components)
         """
@@ -9241,7 +9839,11 @@ class StructOfArrays_2_1_arena:
 
 class StructOfArrays_2_1_default:
     @typing.overload
-    def GetIntData(self) -> list[PODVector_int_std[1]]:
+    def GetIntData(
+        self,
+    ) -> typing.Annotated[
+        list[PODVector_int_std], pybind11_stubgen.typing_ext.FixedSize(1)
+    ]:
         """
         Get access to the particle Int Arrays (only compile-time components)
         """
@@ -9251,7 +9853,11 @@ class StructOfArrays_2_1_default:
         Get access to a particle Real component Array (compile-time and runtime component)
         """
     @typing.overload
-    def GetRealData(self) -> list[PODVector_real_std[2]]:
+    def GetRealData(
+        self,
+    ) -> typing.Annotated[
+        list[PODVector_real_std], pybind11_stubgen.typing_ext.FixedSize(2)
+    ]:
         """
         Get access to the particle Real Arrays (only compile-time components)
         """
@@ -9330,7 +9936,11 @@ class StructOfArrays_2_1_default:
 
 class StructOfArrays_2_1_pinned:
     @typing.overload
-    def GetIntData(self) -> list[PODVector_int_pinned[1]]:
+    def GetIntData(
+        self,
+    ) -> typing.Annotated[
+        list[PODVector_int_pinned], pybind11_stubgen.typing_ext.FixedSize(1)
+    ]:
         """
         Get access to the particle Int Arrays (only compile-time components)
         """
@@ -9340,7 +9950,11 @@ class StructOfArrays_2_1_pinned:
         Get access to a particle Real component Array (compile-time and runtime component)
         """
     @typing.overload
-    def GetRealData(self) -> list[PODVector_real_pinned[2]]:
+    def GetRealData(
+        self,
+    ) -> typing.Annotated[
+        list[PODVector_real_pinned], pybind11_stubgen.typing_ext.FixedSize(2)
+    ]:
         """
         Get access to the particle Real Arrays (only compile-time components)
         """
@@ -9419,7 +10033,11 @@ class StructOfArrays_2_1_pinned:
 
 class StructOfArrays_37_1_arena:
     @typing.overload
-    def GetIntData(self) -> list[PODVector_int_arena[1]]:
+    def GetIntData(
+        self,
+    ) -> typing.Annotated[
+        list[PODVector_int_arena], pybind11_stubgen.typing_ext.FixedSize(1)
+    ]:
         """
         Get access to the particle Int Arrays (only compile-time components)
         """
@@ -9429,7 +10047,11 @@ class StructOfArrays_37_1_arena:
         Get access to a particle Real component Array (compile-time and runtime component)
         """
     @typing.overload
-    def GetRealData(self) -> list[PODVector_real_arena[37]]:
+    def GetRealData(
+        self,
+    ) -> typing.Annotated[
+        list[PODVector_real_arena], pybind11_stubgen.typing_ext.FixedSize(37)
+    ]:
         """
         Get access to the particle Real Arrays (only compile-time components)
         """
@@ -9508,7 +10130,11 @@ class StructOfArrays_37_1_arena:
 
 class StructOfArrays_37_1_default:
     @typing.overload
-    def GetIntData(self) -> list[PODVector_int_std[1]]:
+    def GetIntData(
+        self,
+    ) -> typing.Annotated[
+        list[PODVector_int_std], pybind11_stubgen.typing_ext.FixedSize(1)
+    ]:
         """
         Get access to the particle Int Arrays (only compile-time components)
         """
@@ -9518,7 +10144,11 @@ class StructOfArrays_37_1_default:
         Get access to a particle Real component Array (compile-time and runtime component)
         """
     @typing.overload
-    def GetRealData(self) -> list[PODVector_real_std[37]]:
+    def GetRealData(
+        self,
+    ) -> typing.Annotated[
+        list[PODVector_real_std], pybind11_stubgen.typing_ext.FixedSize(37)
+    ]:
         """
         Get access to the particle Real Arrays (only compile-time components)
         """
@@ -9597,7 +10227,11 @@ class StructOfArrays_37_1_default:
 
 class StructOfArrays_37_1_pinned:
     @typing.overload
-    def GetIntData(self) -> list[PODVector_int_pinned[1]]:
+    def GetIntData(
+        self,
+    ) -> typing.Annotated[
+        list[PODVector_int_pinned], pybind11_stubgen.typing_ext.FixedSize(1)
+    ]:
         """
         Get access to the particle Int Arrays (only compile-time components)
         """
@@ -9607,7 +10241,11 @@ class StructOfArrays_37_1_pinned:
         Get access to a particle Real component Array (compile-time and runtime component)
         """
     @typing.overload
-    def GetRealData(self) -> list[PODVector_real_pinned[37]]:
+    def GetRealData(
+        self,
+    ) -> typing.Annotated[
+        list[PODVector_real_pinned], pybind11_stubgen.typing_ext.FixedSize(37)
+    ]:
         """
         Get access to the particle Real Arrays (only compile-time components)
         """
@@ -9686,7 +10324,11 @@ class StructOfArrays_37_1_pinned:
 
 class StructOfArrays_4_0_arena:
     @typing.overload
-    def GetIntData(self) -> list[PODVector_int_arena[0]]:
+    def GetIntData(
+        self,
+    ) -> typing.Annotated[
+        list[PODVector_int_arena], pybind11_stubgen.typing_ext.FixedSize(0)
+    ]:
         """
         Get access to the particle Int Arrays (only compile-time components)
         """
@@ -9696,7 +10338,11 @@ class StructOfArrays_4_0_arena:
         Get access to a particle Real component Array (compile-time and runtime component)
         """
     @typing.overload
-    def GetRealData(self) -> list[PODVector_real_arena[4]]:
+    def GetRealData(
+        self,
+    ) -> typing.Annotated[
+        list[PODVector_real_arena], pybind11_stubgen.typing_ext.FixedSize(4)
+    ]:
         """
         Get access to the particle Real Arrays (only compile-time components)
         """
@@ -9775,7 +10421,11 @@ class StructOfArrays_4_0_arena:
 
 class StructOfArrays_4_0_default:
     @typing.overload
-    def GetIntData(self) -> list[PODVector_int_std[0]]:
+    def GetIntData(
+        self,
+    ) -> typing.Annotated[
+        list[PODVector_int_std], pybind11_stubgen.typing_ext.FixedSize(0)
+    ]:
         """
         Get access to the particle Int Arrays (only compile-time components)
         """
@@ -9785,7 +10435,11 @@ class StructOfArrays_4_0_default:
         Get access to a particle Real component Array (compile-time and runtime component)
         """
     @typing.overload
-    def GetRealData(self) -> list[PODVector_real_std[4]]:
+    def GetRealData(
+        self,
+    ) -> typing.Annotated[
+        list[PODVector_real_std], pybind11_stubgen.typing_ext.FixedSize(4)
+    ]:
         """
         Get access to the particle Real Arrays (only compile-time components)
         """
@@ -9864,7 +10518,11 @@ class StructOfArrays_4_0_default:
 
 class StructOfArrays_4_0_pinned:
     @typing.overload
-    def GetIntData(self) -> list[PODVector_int_pinned[0]]:
+    def GetIntData(
+        self,
+    ) -> typing.Annotated[
+        list[PODVector_int_pinned], pybind11_stubgen.typing_ext.FixedSize(0)
+    ]:
         """
         Get access to the particle Int Arrays (only compile-time components)
         """
@@ -9874,7 +10532,11 @@ class StructOfArrays_4_0_pinned:
         Get access to a particle Real component Array (compile-time and runtime component)
         """
     @typing.overload
-    def GetRealData(self) -> list[PODVector_real_pinned[4]]:
+    def GetRealData(
+        self,
+    ) -> typing.Annotated[
+        list[PODVector_real_pinned], pybind11_stubgen.typing_ext.FixedSize(4)
+    ]:
         """
         Get access to the particle Real Arrays (only compile-time components)
         """
@@ -9953,7 +10615,11 @@ class StructOfArrays_4_0_pinned:
 
 class StructOfArrays_5_0_arena:
     @typing.overload
-    def GetIntData(self) -> list[PODVector_int_arena[0]]:
+    def GetIntData(
+        self,
+    ) -> typing.Annotated[
+        list[PODVector_int_arena], pybind11_stubgen.typing_ext.FixedSize(0)
+    ]:
         """
         Get access to the particle Int Arrays (only compile-time components)
         """
@@ -9963,7 +10629,11 @@ class StructOfArrays_5_0_arena:
         Get access to a particle Real component Array (compile-time and runtime component)
         """
     @typing.overload
-    def GetRealData(self) -> list[PODVector_real_arena[5]]:
+    def GetRealData(
+        self,
+    ) -> typing.Annotated[
+        list[PODVector_real_arena], pybind11_stubgen.typing_ext.FixedSize(5)
+    ]:
         """
         Get access to the particle Real Arrays (only compile-time components)
         """
@@ -10042,7 +10712,11 @@ class StructOfArrays_5_0_arena:
 
 class StructOfArrays_5_0_default:
     @typing.overload
-    def GetIntData(self) -> list[PODVector_int_std[0]]:
+    def GetIntData(
+        self,
+    ) -> typing.Annotated[
+        list[PODVector_int_std], pybind11_stubgen.typing_ext.FixedSize(0)
+    ]:
         """
         Get access to the particle Int Arrays (only compile-time components)
         """
@@ -10052,7 +10726,11 @@ class StructOfArrays_5_0_default:
         Get access to a particle Real component Array (compile-time and runtime component)
         """
     @typing.overload
-    def GetRealData(self) -> list[PODVector_real_std[5]]:
+    def GetRealData(
+        self,
+    ) -> typing.Annotated[
+        list[PODVector_real_std], pybind11_stubgen.typing_ext.FixedSize(5)
+    ]:
         """
         Get access to the particle Real Arrays (only compile-time components)
         """
@@ -10131,7 +10809,11 @@ class StructOfArrays_5_0_default:
 
 class StructOfArrays_5_0_pinned:
     @typing.overload
-    def GetIntData(self) -> list[PODVector_int_pinned[0]]:
+    def GetIntData(
+        self,
+    ) -> typing.Annotated[
+        list[PODVector_int_pinned], pybind11_stubgen.typing_ext.FixedSize(0)
+    ]:
         """
         Get access to the particle Int Arrays (only compile-time components)
         """
@@ -10141,7 +10823,11 @@ class StructOfArrays_5_0_pinned:
         Get access to a particle Real component Array (compile-time and runtime component)
         """
     @typing.overload
-    def GetRealData(self) -> list[PODVector_real_pinned[5]]:
+    def GetRealData(
+        self,
+    ) -> typing.Annotated[
+        list[PODVector_real_pinned], pybind11_stubgen.typing_ext.FixedSize(5)
+    ]:
         """
         Get access to the particle Real Arrays (only compile-time components)
         """
@@ -10220,7 +10906,11 @@ class StructOfArrays_5_0_pinned:
 
 class StructOfArrays_8_2_arena:
     @typing.overload
-    def GetIntData(self) -> list[PODVector_int_arena[2]]:
+    def GetIntData(
+        self,
+    ) -> typing.Annotated[
+        list[PODVector_int_arena], pybind11_stubgen.typing_ext.FixedSize(2)
+    ]:
         """
         Get access to the particle Int Arrays (only compile-time components)
         """
@@ -10230,7 +10920,11 @@ class StructOfArrays_8_2_arena:
         Get access to a particle Real component Array (compile-time and runtime component)
         """
     @typing.overload
-    def GetRealData(self) -> list[PODVector_real_arena[8]]:
+    def GetRealData(
+        self,
+    ) -> typing.Annotated[
+        list[PODVector_real_arena], pybind11_stubgen.typing_ext.FixedSize(8)
+    ]:
         """
         Get access to the particle Real Arrays (only compile-time components)
         """
@@ -10309,7 +11003,11 @@ class StructOfArrays_8_2_arena:
 
 class StructOfArrays_8_2_default:
     @typing.overload
-    def GetIntData(self) -> list[PODVector_int_std[2]]:
+    def GetIntData(
+        self,
+    ) -> typing.Annotated[
+        list[PODVector_int_std], pybind11_stubgen.typing_ext.FixedSize(2)
+    ]:
         """
         Get access to the particle Int Arrays (only compile-time components)
         """
@@ -10319,7 +11017,11 @@ class StructOfArrays_8_2_default:
         Get access to a particle Real component Array (compile-time and runtime component)
         """
     @typing.overload
-    def GetRealData(self) -> list[PODVector_real_std[8]]:
+    def GetRealData(
+        self,
+    ) -> typing.Annotated[
+        list[PODVector_real_std], pybind11_stubgen.typing_ext.FixedSize(8)
+    ]:
         """
         Get access to the particle Real Arrays (only compile-time components)
         """
@@ -10398,7 +11100,11 @@ class StructOfArrays_8_2_default:
 
 class StructOfArrays_8_2_pinned:
     @typing.overload
-    def GetIntData(self) -> list[PODVector_int_pinned[2]]:
+    def GetIntData(
+        self,
+    ) -> typing.Annotated[
+        list[PODVector_int_pinned], pybind11_stubgen.typing_ext.FixedSize(2)
+    ]:
         """
         Get access to the particle Int Arrays (only compile-time components)
         """
@@ -10408,7 +11114,11 @@ class StructOfArrays_8_2_pinned:
         Get access to a particle Real component Array (compile-time and runtime component)
         """
     @typing.overload
-    def GetRealData(self) -> list[PODVector_real_pinned[8]]:
+    def GetRealData(
+        self,
+    ) -> typing.Annotated[
+        list[PODVector_real_pinned], pybind11_stubgen.typing_ext.FixedSize(8)
+    ]:
         """
         Get access to the particle Real Arrays (only compile-time components)
         """
@@ -11568,4 +12278,4 @@ def write_single_level_plotfile(
 
 __author__: str = "Axel Huebl, Ryan T. Sandberg, Shreyas Ananthan, David P. Grote, Revathi Jambunathan, Edoardo Zoni, Remi Lehe, Andrew Myers, Weiqun Zhang"
 __license__: str = "BSD-3-Clause-LBNL"
-__version__: str = "23.11-14-g175b99d913dc"
+__version__: str = "23.12"
