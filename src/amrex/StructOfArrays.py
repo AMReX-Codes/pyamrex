@@ -32,10 +32,10 @@ def soa_to_numpy(self, copy=False):
     if self.size() == 0:
         raise ValueError("SoA is empty.")
 
-    for idx_real in range(self.NumRealComps()):
+    for idx_real in range(self.num_real_comps):
         soa_view.real.append(self.GetRealData(idx_real).to_numpy(copy=copy))
 
-    for idx_int in range(self.NumIntComps()):
+    for idx_int in range(self.num_int_comps):
         soa_view.int.append(self.GetIntData(idx_int).to_numpy(copy=copy))
 
     return soa_view
@@ -70,10 +70,10 @@ def soa_to_cupy(self, copy=False):
     if self.size() == 0:
         raise ValueError("SoA is empty.")
 
-    for idx_real in range(self.NumRealComps()):
+    for idx_real in range(self.num_real_comps):
         soa_view.real.append(self.GetRealData(idx_real).to_cupy(copy=copy))
 
-    for idx_int in range(self.NumIntComps()):
+    for idx_int in range(self.num_int_comps):
         soa_view.int.append(self.GetIntData(idx_int).to_cupy(copy=copy))
 
     return soa_view

@@ -129,7 +129,7 @@ def test_pc_init():
     # lvl = 0
     for lvl in range(pc.finest_level + 1):
         print(f"at level {lvl}:")
-        for pti in amr.ParIter_1_1_2_1_default(pc, level=lvl):
+        for pti in pc.iterator(pc, level=lvl):
             print("...")
             assert pti.num_particles == 1
             assert pti.num_real_particles == 1
@@ -158,7 +158,7 @@ def test_pc_init():
 
     # read-only
     for lvl in range(pc.finest_level + 1):
-        for pti in amr.ParConstIter_1_1_2_1_default(pc, level=lvl):
+        for pti in pc.const_iterator(pc, level=lvl):
             assert pti.num_particles == 1
             assert pti.num_real_particles == 1
             assert pti.num_neighbor_particles == 0
