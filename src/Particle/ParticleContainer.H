@@ -192,13 +192,13 @@ void make_ParticleContainer_and_Iterators (py::module &m, std::string allocstr)
         .def_property_readonly_static("NArrayReal", [](const py::object&){return ParticleContainerType::NArrayReal; })
         .def_property_readonly_static("NArrayInt", [](const py::object&){return ParticleContainerType::NArrayInt; })
 
-        .def_property_readonly("NumRealComps", &ParticleContainerType::NumRealComps,
+        .def_property_readonly("num_real_comps", &ParticleContainerType::NumRealComps,
             "The number of compile-time and runtime Real components in SoA")
-        .def_property_readonly("NumIntComps", &ParticleContainerType::NumIntComps,
+        .def_property_readonly("num_int_comps", &ParticleContainerType::NumIntComps,
             "The number of compile-time and runtime int components in SoA")
-        .def_property_readonly("NumRuntimeRealComps", &ParticleContainerType::NumRuntimeRealComps,
+        .def_property_readonly("num_runtime_real_comps", &ParticleContainerType::NumRuntimeRealComps,
             "The number of runtime Real components in SoA")
-        .def_property_readonly("NumRuntimeIntComps", &ParticleContainerType::NumRuntimeIntComps,
+        .def_property_readonly("num_runtime_int_comps", &ParticleContainerType::NumRuntimeIntComps,
             "The number of runtime Int components in SoA")
 
         .def_property_readonly("finest_level", &ParticleContainerBase::finestLevel)
@@ -231,8 +231,8 @@ void make_ParticleContainer_and_Iterators (py::module &m, std::string allocstr)
 
         .def("numLocalTilesAtLevel", &ParticleContainerType::numLocalTilesAtLevel)
 
-        .def("reserveData", &ParticleContainerType::reserveData)
-        .def("resizeData", &ParticleContainerType::resizeData)
+        .def("reserve_data", &ParticleContainerType::reserveData)
+        .def("resize_data", &ParticleContainerType::resizeData)
 
         // void InitFromAsciiFile (const std::string& file, int extradata,
         //                         const IntVect* Nrep = nullptr);

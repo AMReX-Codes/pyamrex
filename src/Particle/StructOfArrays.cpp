@@ -24,9 +24,9 @@ void make_StructOfArrays(py::module &m, std::string allocstr)
     py::class_<SOAType>(m, soa_name.c_str())
         .def(py::init())
         .def("define", &SOAType::define)
-        .def("NumRealComps", &SOAType::NumRealComps,
+        .def_property_readonly("num_real_comps", &SOAType::NumRealComps,
              "Get the number of compile-time + runtime Real components")
-        .def("NumIntComps", &SOAType::NumIntComps,
+        .def_property_readonly("num_int_comps", &SOAType::NumIntComps,
              "Get the number of compile-time + runtime Int components")
 
         // compile-time components

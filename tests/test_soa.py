@@ -8,15 +8,15 @@ import amrex.space3d as amr
 def test_soa_init():
     soa = amr.StructOfArrays_2_1_default()
     print("--test init --")
-    print("num real components", soa.NumRealComps())
-    print("num int components", soa.NumIntComps())
-    assert soa.NumRealComps() == 2 and soa.NumIntComps() == 1
+    print("num real components", soa.num_real_comps)
+    print("num int components", soa.num_int_comps)
+    assert soa.num_real_comps == 2 and soa.num_int_comps == 1
 
     soa.define(1, 3)
     print("--test define --")
-    print("num real components", soa.NumRealComps())
-    print("num int components", soa.NumIntComps())
-    assert soa.NumRealComps() == 3 and soa.NumIntComps() == 4
+    print("num real components", soa.num_real_comps)
+    print("num int components", soa.num_int_comps)
+    assert soa.num_real_comps == 3 and soa.num_int_comps == 4
     print("num particles", soa.numParticles())
     print("num real particles", soa.numRealParticles())
     print("num totalparticles", soa.numTotalParticles())
