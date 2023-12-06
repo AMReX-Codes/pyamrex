@@ -6289,8 +6289,8 @@ class ParticleContainer_0_0_4_0_arena:
     ) -> None: ...
     def clearParticles(self) -> None: ...
     def numLocalTilesAtLevel(self, arg0: int) -> int: ...
-    def reserveData(self) -> None: ...
-    def resizeData(self) -> None: ...
+    def reserve_data(self) -> None: ...
+    def resize_data(self) -> None: ...
     def to_df(self, local=True, comm=None, root_rank=0):
         """
 
@@ -6316,27 +6316,27 @@ class ParticleContainer_0_0_4_0_arena:
 
         """
     @property
-    def NumIntComps(self) -> int:
+    def finest_level(self) -> int: ...
+    @property
+    def num_int_comps(self) -> int:
         """
         The number of compile-time and runtime int components in SoA
         """
     @property
-    def NumRealComps(self) -> int:
+    def num_real_comps(self) -> int:
         """
         The number of compile-time and runtime Real components in SoA
         """
     @property
-    def NumRuntimeIntComps(self) -> int:
+    def num_runtime_int_comps(self) -> int:
         """
         The number of runtime Int components in SoA
         """
     @property
-    def NumRuntimeRealComps(self) -> int:
+    def num_runtime_real_comps(self) -> int:
         """
         The number of runtime Real components in SoA
         """
-    @property
-    def finest_level(self) -> int: ...
 
 class ParticleContainer_0_0_4_0_default:
     NArrayInt: typing.ClassVar[int] = 0
@@ -6440,8 +6440,8 @@ class ParticleContainer_0_0_4_0_default:
     ) -> None: ...
     def clearParticles(self) -> None: ...
     def numLocalTilesAtLevel(self, arg0: int) -> int: ...
-    def reserveData(self) -> None: ...
-    def resizeData(self) -> None: ...
+    def reserve_data(self) -> None: ...
+    def resize_data(self) -> None: ...
     def to_df(self, local=True, comm=None, root_rank=0):
         """
 
@@ -6467,27 +6467,27 @@ class ParticleContainer_0_0_4_0_default:
 
         """
     @property
-    def NumIntComps(self) -> int:
+    def finest_level(self) -> int: ...
+    @property
+    def num_int_comps(self) -> int:
         """
         The number of compile-time and runtime int components in SoA
         """
     @property
-    def NumRealComps(self) -> int:
+    def num_real_comps(self) -> int:
         """
         The number of compile-time and runtime Real components in SoA
         """
     @property
-    def NumRuntimeIntComps(self) -> int:
+    def num_runtime_int_comps(self) -> int:
         """
         The number of runtime Int components in SoA
         """
     @property
-    def NumRuntimeRealComps(self) -> int:
+    def num_runtime_real_comps(self) -> int:
         """
         The number of runtime Real components in SoA
         """
-    @property
-    def finest_level(self) -> int: ...
 
 class ParticleContainer_0_0_4_0_pinned:
     NArrayInt: typing.ClassVar[int] = 0
@@ -6591,8 +6591,8 @@ class ParticleContainer_0_0_4_0_pinned:
     ) -> None: ...
     def clearParticles(self) -> None: ...
     def numLocalTilesAtLevel(self, arg0: int) -> int: ...
-    def reserveData(self) -> None: ...
-    def resizeData(self) -> None: ...
+    def reserve_data(self) -> None: ...
+    def resize_data(self) -> None: ...
     def to_df(self, local=True, comm=None, root_rank=0):
         """
 
@@ -6618,27 +6618,27 @@ class ParticleContainer_0_0_4_0_pinned:
 
         """
     @property
-    def NumIntComps(self) -> int:
+    def finest_level(self) -> int: ...
+    @property
+    def num_int_comps(self) -> int:
         """
         The number of compile-time and runtime int components in SoA
         """
     @property
-    def NumRealComps(self) -> int:
+    def num_real_comps(self) -> int:
         """
         The number of compile-time and runtime Real components in SoA
         """
     @property
-    def NumRuntimeIntComps(self) -> int:
+    def num_runtime_int_comps(self) -> int:
         """
         The number of runtime Int components in SoA
         """
     @property
-    def NumRuntimeRealComps(self) -> int:
+    def num_runtime_real_comps(self) -> int:
         """
         The number of runtime Real components in SoA
         """
-    @property
-    def finest_level(self) -> int: ...
 
 class ParticleContainer_0_0_5_0_arena:
     NArrayInt: typing.ClassVar[int] = 0
@@ -6742,8 +6742,8 @@ class ParticleContainer_0_0_5_0_arena:
     ) -> None: ...
     def clearParticles(self) -> None: ...
     def numLocalTilesAtLevel(self, arg0: int) -> int: ...
-    def reserveData(self) -> None: ...
-    def resizeData(self) -> None: ...
+    def reserve_data(self) -> None: ...
+    def resize_data(self) -> None: ...
     def to_df(self, local=True, comm=None, root_rank=0):
         """
 
@@ -6769,27 +6769,27 @@ class ParticleContainer_0_0_5_0_arena:
 
         """
     @property
-    def NumIntComps(self) -> int:
+    def finest_level(self) -> int: ...
+    @property
+    def num_int_comps(self) -> int:
         """
         The number of compile-time and runtime int components in SoA
         """
     @property
-    def NumRealComps(self) -> int:
+    def num_real_comps(self) -> int:
         """
         The number of compile-time and runtime Real components in SoA
         """
     @property
-    def NumRuntimeIntComps(self) -> int:
+    def num_runtime_int_comps(self) -> int:
         """
         The number of runtime Int components in SoA
         """
     @property
-    def NumRuntimeRealComps(self) -> int:
+    def num_runtime_real_comps(self) -> int:
         """
         The number of runtime Real components in SoA
         """
-    @property
-    def finest_level(self) -> int: ...
 
 class ParticleContainer_0_0_5_0_default:
     NArrayInt: typing.ClassVar[int] = 0
@@ -6893,8 +6893,8 @@ class ParticleContainer_0_0_5_0_default:
     ) -> None: ...
     def clearParticles(self) -> None: ...
     def numLocalTilesAtLevel(self, arg0: int) -> int: ...
-    def reserveData(self) -> None: ...
-    def resizeData(self) -> None: ...
+    def reserve_data(self) -> None: ...
+    def resize_data(self) -> None: ...
     def to_df(self, local=True, comm=None, root_rank=0):
         """
 
@@ -6920,27 +6920,27 @@ class ParticleContainer_0_0_5_0_default:
 
         """
     @property
-    def NumIntComps(self) -> int:
+    def finest_level(self) -> int: ...
+    @property
+    def num_int_comps(self) -> int:
         """
         The number of compile-time and runtime int components in SoA
         """
     @property
-    def NumRealComps(self) -> int:
+    def num_real_comps(self) -> int:
         """
         The number of compile-time and runtime Real components in SoA
         """
     @property
-    def NumRuntimeIntComps(self) -> int:
+    def num_runtime_int_comps(self) -> int:
         """
         The number of runtime Int components in SoA
         """
     @property
-    def NumRuntimeRealComps(self) -> int:
+    def num_runtime_real_comps(self) -> int:
         """
         The number of runtime Real components in SoA
         """
-    @property
-    def finest_level(self) -> int: ...
 
 class ParticleContainer_0_0_5_0_pinned:
     NArrayInt: typing.ClassVar[int] = 0
@@ -7044,8 +7044,8 @@ class ParticleContainer_0_0_5_0_pinned:
     ) -> None: ...
     def clearParticles(self) -> None: ...
     def numLocalTilesAtLevel(self, arg0: int) -> int: ...
-    def reserveData(self) -> None: ...
-    def resizeData(self) -> None: ...
+    def reserve_data(self) -> None: ...
+    def resize_data(self) -> None: ...
     def to_df(self, local=True, comm=None, root_rank=0):
         """
 
@@ -7071,27 +7071,27 @@ class ParticleContainer_0_0_5_0_pinned:
 
         """
     @property
-    def NumIntComps(self) -> int:
+    def finest_level(self) -> int: ...
+    @property
+    def num_int_comps(self) -> int:
         """
         The number of compile-time and runtime int components in SoA
         """
     @property
-    def NumRealComps(self) -> int:
+    def num_real_comps(self) -> int:
         """
         The number of compile-time and runtime Real components in SoA
         """
     @property
-    def NumRuntimeIntComps(self) -> int:
+    def num_runtime_int_comps(self) -> int:
         """
         The number of runtime Int components in SoA
         """
     @property
-    def NumRuntimeRealComps(self) -> int:
+    def num_runtime_real_comps(self) -> int:
         """
         The number of runtime Real components in SoA
         """
-    @property
-    def finest_level(self) -> int: ...
 
 class ParticleContainer_1_1_2_1_arena:
     NArrayInt: typing.ClassVar[int] = 1
@@ -7195,8 +7195,8 @@ class ParticleContainer_1_1_2_1_arena:
     ) -> None: ...
     def clearParticles(self) -> None: ...
     def numLocalTilesAtLevel(self, arg0: int) -> int: ...
-    def reserveData(self) -> None: ...
-    def resizeData(self) -> None: ...
+    def reserve_data(self) -> None: ...
+    def resize_data(self) -> None: ...
     def to_df(self, local=True, comm=None, root_rank=0):
         """
 
@@ -7222,27 +7222,27 @@ class ParticleContainer_1_1_2_1_arena:
 
         """
     @property
-    def NumIntComps(self) -> int:
+    def finest_level(self) -> int: ...
+    @property
+    def num_int_comps(self) -> int:
         """
         The number of compile-time and runtime int components in SoA
         """
     @property
-    def NumRealComps(self) -> int:
+    def num_real_comps(self) -> int:
         """
         The number of compile-time and runtime Real components in SoA
         """
     @property
-    def NumRuntimeIntComps(self) -> int:
+    def num_runtime_int_comps(self) -> int:
         """
         The number of runtime Int components in SoA
         """
     @property
-    def NumRuntimeRealComps(self) -> int:
+    def num_runtime_real_comps(self) -> int:
         """
         The number of runtime Real components in SoA
         """
-    @property
-    def finest_level(self) -> int: ...
 
 class ParticleContainer_1_1_2_1_default:
     NArrayInt: typing.ClassVar[int] = 1
@@ -7346,8 +7346,8 @@ class ParticleContainer_1_1_2_1_default:
     ) -> None: ...
     def clearParticles(self) -> None: ...
     def numLocalTilesAtLevel(self, arg0: int) -> int: ...
-    def reserveData(self) -> None: ...
-    def resizeData(self) -> None: ...
+    def reserve_data(self) -> None: ...
+    def resize_data(self) -> None: ...
     def to_df(self, local=True, comm=None, root_rank=0):
         """
 
@@ -7373,27 +7373,27 @@ class ParticleContainer_1_1_2_1_default:
 
         """
     @property
-    def NumIntComps(self) -> int:
+    def finest_level(self) -> int: ...
+    @property
+    def num_int_comps(self) -> int:
         """
         The number of compile-time and runtime int components in SoA
         """
     @property
-    def NumRealComps(self) -> int:
+    def num_real_comps(self) -> int:
         """
         The number of compile-time and runtime Real components in SoA
         """
     @property
-    def NumRuntimeIntComps(self) -> int:
+    def num_runtime_int_comps(self) -> int:
         """
         The number of runtime Int components in SoA
         """
     @property
-    def NumRuntimeRealComps(self) -> int:
+    def num_runtime_real_comps(self) -> int:
         """
         The number of runtime Real components in SoA
         """
-    @property
-    def finest_level(self) -> int: ...
 
 class ParticleContainer_1_1_2_1_pinned:
     NArrayInt: typing.ClassVar[int] = 1
@@ -7497,8 +7497,8 @@ class ParticleContainer_1_1_2_1_pinned:
     ) -> None: ...
     def clearParticles(self) -> None: ...
     def numLocalTilesAtLevel(self, arg0: int) -> int: ...
-    def reserveData(self) -> None: ...
-    def resizeData(self) -> None: ...
+    def reserve_data(self) -> None: ...
+    def resize_data(self) -> None: ...
     def to_df(self, local=True, comm=None, root_rank=0):
         """
 
@@ -7524,27 +7524,27 @@ class ParticleContainer_1_1_2_1_pinned:
 
         """
     @property
-    def NumIntComps(self) -> int:
+    def finest_level(self) -> int: ...
+    @property
+    def num_int_comps(self) -> int:
         """
         The number of compile-time and runtime int components in SoA
         """
     @property
-    def NumRealComps(self) -> int:
+    def num_real_comps(self) -> int:
         """
         The number of compile-time and runtime Real components in SoA
         """
     @property
-    def NumRuntimeIntComps(self) -> int:
+    def num_runtime_int_comps(self) -> int:
         """
         The number of runtime Int components in SoA
         """
     @property
-    def NumRuntimeRealComps(self) -> int:
+    def num_runtime_real_comps(self) -> int:
         """
         The number of runtime Real components in SoA
         """
-    @property
-    def finest_level(self) -> int: ...
 
 class ParticleContainer_pureSoA_8_2_arena:
     NArrayInt: typing.ClassVar[int] = 2
@@ -7634,8 +7634,8 @@ class ParticleContainer_pureSoA_8_2_arena:
     ) -> None: ...
     def clearParticles(self) -> None: ...
     def numLocalTilesAtLevel(self, arg0: int) -> int: ...
-    def reserveData(self) -> None: ...
-    def resizeData(self) -> None: ...
+    def reserve_data(self) -> None: ...
+    def resize_data(self) -> None: ...
     def to_df(self, local=True, comm=None, root_rank=0):
         """
 
@@ -7661,27 +7661,27 @@ class ParticleContainer_pureSoA_8_2_arena:
 
         """
     @property
-    def NumIntComps(self) -> int:
+    def finest_level(self) -> int: ...
+    @property
+    def num_int_comps(self) -> int:
         """
         The number of compile-time and runtime int components in SoA
         """
     @property
-    def NumRealComps(self) -> int:
+    def num_real_comps(self) -> int:
         """
         The number of compile-time and runtime Real components in SoA
         """
     @property
-    def NumRuntimeIntComps(self) -> int:
+    def num_runtime_int_comps(self) -> int:
         """
         The number of runtime Int components in SoA
         """
     @property
-    def NumRuntimeRealComps(self) -> int:
+    def num_runtime_real_comps(self) -> int:
         """
         The number of runtime Real components in SoA
         """
-    @property
-    def finest_level(self) -> int: ...
 
 class ParticleContainer_pureSoA_8_2_default:
     NArrayInt: typing.ClassVar[int] = 2
@@ -7771,8 +7771,8 @@ class ParticleContainer_pureSoA_8_2_default:
     ) -> None: ...
     def clearParticles(self) -> None: ...
     def numLocalTilesAtLevel(self, arg0: int) -> int: ...
-    def reserveData(self) -> None: ...
-    def resizeData(self) -> None: ...
+    def reserve_data(self) -> None: ...
+    def resize_data(self) -> None: ...
     def to_df(self, local=True, comm=None, root_rank=0):
         """
 
@@ -7798,27 +7798,27 @@ class ParticleContainer_pureSoA_8_2_default:
 
         """
     @property
-    def NumIntComps(self) -> int:
+    def finest_level(self) -> int: ...
+    @property
+    def num_int_comps(self) -> int:
         """
         The number of compile-time and runtime int components in SoA
         """
     @property
-    def NumRealComps(self) -> int:
+    def num_real_comps(self) -> int:
         """
         The number of compile-time and runtime Real components in SoA
         """
     @property
-    def NumRuntimeIntComps(self) -> int:
+    def num_runtime_int_comps(self) -> int:
         """
         The number of runtime Int components in SoA
         """
     @property
-    def NumRuntimeRealComps(self) -> int:
+    def num_runtime_real_comps(self) -> int:
         """
         The number of runtime Real components in SoA
         """
-    @property
-    def finest_level(self) -> int: ...
 
 class ParticleContainer_pureSoA_8_2_pinned:
     NArrayInt: typing.ClassVar[int] = 2
@@ -7908,8 +7908,8 @@ class ParticleContainer_pureSoA_8_2_pinned:
     ) -> None: ...
     def clearParticles(self) -> None: ...
     def numLocalTilesAtLevel(self, arg0: int) -> int: ...
-    def reserveData(self) -> None: ...
-    def resizeData(self) -> None: ...
+    def reserve_data(self) -> None: ...
+    def resize_data(self) -> None: ...
     def to_df(self, local=True, comm=None, root_rank=0):
         """
 
@@ -7935,27 +7935,27 @@ class ParticleContainer_pureSoA_8_2_pinned:
 
         """
     @property
-    def NumIntComps(self) -> int:
+    def finest_level(self) -> int: ...
+    @property
+    def num_int_comps(self) -> int:
         """
         The number of compile-time and runtime int components in SoA
         """
     @property
-    def NumRealComps(self) -> int:
+    def num_real_comps(self) -> int:
         """
         The number of compile-time and runtime Real components in SoA
         """
     @property
-    def NumRuntimeIntComps(self) -> int:
+    def num_runtime_int_comps(self) -> int:
         """
         The number of runtime Int components in SoA
         """
     @property
-    def NumRuntimeRealComps(self) -> int:
+    def num_runtime_real_comps(self) -> int:
         """
         The number of runtime Real components in SoA
         """
-    @property
-    def finest_level(self) -> int: ...
 
 class ParticleInitType_0_0_4_0:
     is_soa_particle: typing.ClassVar[bool] = False
@@ -9769,14 +9769,6 @@ class StructOfArrays_2_1_arena:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
-    def NumIntComps(self) -> int:
-        """
-        Get the number of compile-time + runtime Int components
-        """
-    def NumRealComps(self) -> int:
-        """
-        Get the number of compile-time + runtime Real components
-        """
     def __init__(self) -> None: ...
     def __len__(self) -> int:
         """
@@ -9835,6 +9827,16 @@ class StructOfArrays_2_1_arena:
             A tuple with real and int components that are each lists
             of 1D numpy arrays.
 
+        """
+    @property
+    def num_int_comps(self) -> int:
+        """
+        Get the number of compile-time + runtime Int components
+        """
+    @property
+    def num_real_comps(self) -> int:
+        """
+        Get the number of compile-time + runtime Real components
         """
 
 class StructOfArrays_2_1_default:
@@ -9866,14 +9868,6 @@ class StructOfArrays_2_1_default:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
-    def NumIntComps(self) -> int:
-        """
-        Get the number of compile-time + runtime Int components
-        """
-    def NumRealComps(self) -> int:
-        """
-        Get the number of compile-time + runtime Real components
-        """
     def __init__(self) -> None: ...
     def __len__(self) -> int:
         """
@@ -9932,6 +9926,16 @@ class StructOfArrays_2_1_default:
             A tuple with real and int components that are each lists
             of 1D numpy arrays.
 
+        """
+    @property
+    def num_int_comps(self) -> int:
+        """
+        Get the number of compile-time + runtime Int components
+        """
+    @property
+    def num_real_comps(self) -> int:
+        """
+        Get the number of compile-time + runtime Real components
         """
 
 class StructOfArrays_2_1_pinned:
@@ -9963,14 +9967,6 @@ class StructOfArrays_2_1_pinned:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
-    def NumIntComps(self) -> int:
-        """
-        Get the number of compile-time + runtime Int components
-        """
-    def NumRealComps(self) -> int:
-        """
-        Get the number of compile-time + runtime Real components
-        """
     def __init__(self) -> None: ...
     def __len__(self) -> int:
         """
@@ -10029,6 +10025,16 @@ class StructOfArrays_2_1_pinned:
             A tuple with real and int components that are each lists
             of 1D numpy arrays.
 
+        """
+    @property
+    def num_int_comps(self) -> int:
+        """
+        Get the number of compile-time + runtime Int components
+        """
+    @property
+    def num_real_comps(self) -> int:
+        """
+        Get the number of compile-time + runtime Real components
         """
 
 class StructOfArrays_37_1_arena:
@@ -10060,14 +10066,6 @@ class StructOfArrays_37_1_arena:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
-    def NumIntComps(self) -> int:
-        """
-        Get the number of compile-time + runtime Int components
-        """
-    def NumRealComps(self) -> int:
-        """
-        Get the number of compile-time + runtime Real components
-        """
     def __init__(self) -> None: ...
     def __len__(self) -> int:
         """
@@ -10126,6 +10124,16 @@ class StructOfArrays_37_1_arena:
             A tuple with real and int components that are each lists
             of 1D numpy arrays.
 
+        """
+    @property
+    def num_int_comps(self) -> int:
+        """
+        Get the number of compile-time + runtime Int components
+        """
+    @property
+    def num_real_comps(self) -> int:
+        """
+        Get the number of compile-time + runtime Real components
         """
 
 class StructOfArrays_37_1_default:
@@ -10157,14 +10165,6 @@ class StructOfArrays_37_1_default:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
-    def NumIntComps(self) -> int:
-        """
-        Get the number of compile-time + runtime Int components
-        """
-    def NumRealComps(self) -> int:
-        """
-        Get the number of compile-time + runtime Real components
-        """
     def __init__(self) -> None: ...
     def __len__(self) -> int:
         """
@@ -10223,6 +10223,16 @@ class StructOfArrays_37_1_default:
             A tuple with real and int components that are each lists
             of 1D numpy arrays.
 
+        """
+    @property
+    def num_int_comps(self) -> int:
+        """
+        Get the number of compile-time + runtime Int components
+        """
+    @property
+    def num_real_comps(self) -> int:
+        """
+        Get the number of compile-time + runtime Real components
         """
 
 class StructOfArrays_37_1_pinned:
@@ -10254,14 +10264,6 @@ class StructOfArrays_37_1_pinned:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
-    def NumIntComps(self) -> int:
-        """
-        Get the number of compile-time + runtime Int components
-        """
-    def NumRealComps(self) -> int:
-        """
-        Get the number of compile-time + runtime Real components
-        """
     def __init__(self) -> None: ...
     def __len__(self) -> int:
         """
@@ -10320,6 +10322,16 @@ class StructOfArrays_37_1_pinned:
             A tuple with real and int components that are each lists
             of 1D numpy arrays.
 
+        """
+    @property
+    def num_int_comps(self) -> int:
+        """
+        Get the number of compile-time + runtime Int components
+        """
+    @property
+    def num_real_comps(self) -> int:
+        """
+        Get the number of compile-time + runtime Real components
         """
 
 class StructOfArrays_4_0_arena:
@@ -10351,14 +10363,6 @@ class StructOfArrays_4_0_arena:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
-    def NumIntComps(self) -> int:
-        """
-        Get the number of compile-time + runtime Int components
-        """
-    def NumRealComps(self) -> int:
-        """
-        Get the number of compile-time + runtime Real components
-        """
     def __init__(self) -> None: ...
     def __len__(self) -> int:
         """
@@ -10417,6 +10421,16 @@ class StructOfArrays_4_0_arena:
             A tuple with real and int components that are each lists
             of 1D numpy arrays.
 
+        """
+    @property
+    def num_int_comps(self) -> int:
+        """
+        Get the number of compile-time + runtime Int components
+        """
+    @property
+    def num_real_comps(self) -> int:
+        """
+        Get the number of compile-time + runtime Real components
         """
 
 class StructOfArrays_4_0_default:
@@ -10448,14 +10462,6 @@ class StructOfArrays_4_0_default:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
-    def NumIntComps(self) -> int:
-        """
-        Get the number of compile-time + runtime Int components
-        """
-    def NumRealComps(self) -> int:
-        """
-        Get the number of compile-time + runtime Real components
-        """
     def __init__(self) -> None: ...
     def __len__(self) -> int:
         """
@@ -10514,6 +10520,16 @@ class StructOfArrays_4_0_default:
             A tuple with real and int components that are each lists
             of 1D numpy arrays.
 
+        """
+    @property
+    def num_int_comps(self) -> int:
+        """
+        Get the number of compile-time + runtime Int components
+        """
+    @property
+    def num_real_comps(self) -> int:
+        """
+        Get the number of compile-time + runtime Real components
         """
 
 class StructOfArrays_4_0_pinned:
@@ -10545,14 +10561,6 @@ class StructOfArrays_4_0_pinned:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
-    def NumIntComps(self) -> int:
-        """
-        Get the number of compile-time + runtime Int components
-        """
-    def NumRealComps(self) -> int:
-        """
-        Get the number of compile-time + runtime Real components
-        """
     def __init__(self) -> None: ...
     def __len__(self) -> int:
         """
@@ -10611,6 +10619,16 @@ class StructOfArrays_4_0_pinned:
             A tuple with real and int components that are each lists
             of 1D numpy arrays.
 
+        """
+    @property
+    def num_int_comps(self) -> int:
+        """
+        Get the number of compile-time + runtime Int components
+        """
+    @property
+    def num_real_comps(self) -> int:
+        """
+        Get the number of compile-time + runtime Real components
         """
 
 class StructOfArrays_5_0_arena:
@@ -10642,14 +10660,6 @@ class StructOfArrays_5_0_arena:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
-    def NumIntComps(self) -> int:
-        """
-        Get the number of compile-time + runtime Int components
-        """
-    def NumRealComps(self) -> int:
-        """
-        Get the number of compile-time + runtime Real components
-        """
     def __init__(self) -> None: ...
     def __len__(self) -> int:
         """
@@ -10708,6 +10718,16 @@ class StructOfArrays_5_0_arena:
             A tuple with real and int components that are each lists
             of 1D numpy arrays.
 
+        """
+    @property
+    def num_int_comps(self) -> int:
+        """
+        Get the number of compile-time + runtime Int components
+        """
+    @property
+    def num_real_comps(self) -> int:
+        """
+        Get the number of compile-time + runtime Real components
         """
 
 class StructOfArrays_5_0_default:
@@ -10739,14 +10759,6 @@ class StructOfArrays_5_0_default:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
-    def NumIntComps(self) -> int:
-        """
-        Get the number of compile-time + runtime Int components
-        """
-    def NumRealComps(self) -> int:
-        """
-        Get the number of compile-time + runtime Real components
-        """
     def __init__(self) -> None: ...
     def __len__(self) -> int:
         """
@@ -10805,6 +10817,16 @@ class StructOfArrays_5_0_default:
             A tuple with real and int components that are each lists
             of 1D numpy arrays.
 
+        """
+    @property
+    def num_int_comps(self) -> int:
+        """
+        Get the number of compile-time + runtime Int components
+        """
+    @property
+    def num_real_comps(self) -> int:
+        """
+        Get the number of compile-time + runtime Real components
         """
 
 class StructOfArrays_5_0_pinned:
@@ -10836,14 +10858,6 @@ class StructOfArrays_5_0_pinned:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
-    def NumIntComps(self) -> int:
-        """
-        Get the number of compile-time + runtime Int components
-        """
-    def NumRealComps(self) -> int:
-        """
-        Get the number of compile-time + runtime Real components
-        """
     def __init__(self) -> None: ...
     def __len__(self) -> int:
         """
@@ -10902,6 +10916,16 @@ class StructOfArrays_5_0_pinned:
             A tuple with real and int components that are each lists
             of 1D numpy arrays.
 
+        """
+    @property
+    def num_int_comps(self) -> int:
+        """
+        Get the number of compile-time + runtime Int components
+        """
+    @property
+    def num_real_comps(self) -> int:
+        """
+        Get the number of compile-time + runtime Real components
         """
 
 class StructOfArrays_8_2_arena:
@@ -10933,14 +10957,6 @@ class StructOfArrays_8_2_arena:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
-    def NumIntComps(self) -> int:
-        """
-        Get the number of compile-time + runtime Int components
-        """
-    def NumRealComps(self) -> int:
-        """
-        Get the number of compile-time + runtime Real components
-        """
     def __init__(self) -> None: ...
     def __len__(self) -> int:
         """
@@ -10999,6 +11015,16 @@ class StructOfArrays_8_2_arena:
             A tuple with real and int components that are each lists
             of 1D numpy arrays.
 
+        """
+    @property
+    def num_int_comps(self) -> int:
+        """
+        Get the number of compile-time + runtime Int components
+        """
+    @property
+    def num_real_comps(self) -> int:
+        """
+        Get the number of compile-time + runtime Real components
         """
 
 class StructOfArrays_8_2_default:
@@ -11030,14 +11056,6 @@ class StructOfArrays_8_2_default:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
-    def NumIntComps(self) -> int:
-        """
-        Get the number of compile-time + runtime Int components
-        """
-    def NumRealComps(self) -> int:
-        """
-        Get the number of compile-time + runtime Real components
-        """
     def __init__(self) -> None: ...
     def __len__(self) -> int:
         """
@@ -11096,6 +11114,16 @@ class StructOfArrays_8_2_default:
             A tuple with real and int components that are each lists
             of 1D numpy arrays.
 
+        """
+    @property
+    def num_int_comps(self) -> int:
+        """
+        Get the number of compile-time + runtime Int components
+        """
+    @property
+    def num_real_comps(self) -> int:
+        """
+        Get the number of compile-time + runtime Real components
         """
 
 class StructOfArrays_8_2_pinned:
@@ -11127,14 +11155,6 @@ class StructOfArrays_8_2_pinned:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
-    def NumIntComps(self) -> int:
-        """
-        Get the number of compile-time + runtime Int components
-        """
-    def NumRealComps(self) -> int:
-        """
-        Get the number of compile-time + runtime Real components
-        """
     def __init__(self) -> None: ...
     def __len__(self) -> int:
         """
@@ -11193,6 +11213,16 @@ class StructOfArrays_8_2_pinned:
             A tuple with real and int components that are each lists
             of 1D numpy arrays.
 
+        """
+    @property
+    def num_int_comps(self) -> int:
+        """
+        Get the number of compile-time + runtime Int components
+        """
+    @property
+    def num_real_comps(self) -> int:
+        """
+        Get the number of compile-time + runtime Real components
         """
 
 class Vector_BoxArray:
