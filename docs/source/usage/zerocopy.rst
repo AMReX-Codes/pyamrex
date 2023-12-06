@@ -4,7 +4,7 @@ Zero-Copy
 =========
 
 pyAMReX is designed to bridge the worlds of block-structured codes and data science.
-As such, it includes zero-copy GPU data access for AI/ML, in situ analysis, application coupling by implementing :ref:`standardized data interfaces <developers-implementation`.
+As such, it includes zero-copy GPU data access for AI/ML, in situ analysis, application coupling by implementing :ref:`standardized data interfaces <developers-implementation>`.
 
 
 CPU: numpy

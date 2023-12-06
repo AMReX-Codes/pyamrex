@@ -22,6 +22,8 @@ For brevity, below the 3D APIs are shown.
 pyAMReX classes and functions follow the same structure as the `C++ AMReX APIs <https://amrex-codes.github.io/amrex/doxygen/>`__.
 
 
+.. _usage-api-base:
+
 Base
 ----
 
@@ -186,6 +188,8 @@ Utility
 .. autofunction:: amrex.space3d.write_single_level_plotfile
 
 
+.. _usage-api-amrcore:
+
 AmrCore
 -------
 
@@ -197,6 +201,8 @@ AmrCore
    :members:
    :undoc-members:
 
+
+.. _usage-api-particles:
 
 Particles
 ---------

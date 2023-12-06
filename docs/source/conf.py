@@ -44,6 +44,7 @@ extensions = [
     "sphinx.ext.autodoc",
     "sphinx.ext.mathjax",
     "sphinx.ext.viewcode",
+    "sphinx_copybutton",
     "sphinx_design",
     "sphinx_rtd_theme",
     "breathe",
