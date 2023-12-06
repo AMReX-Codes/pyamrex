@@ -8,9 +8,47 @@ import pytest
 import amrex.space3d as amr
 
 
+def test_mfab_numpy(mfab):
+    """Used in docs/source/usage/compute.rst"""
+
+    # Manual: Compute Mfab START
+    # finest active MR level, get from a simulation's AmrMesh object, e.g.:
+    # finest_level = sim.finest_level
+    finest_level = 0  # no MR
+
+    # iterate over every mesh-refinement levels
+    for lev in range(finest_level + 1):
+        # get an existing MultiFab, e.g., from a simulation:
+        # mfab = sim.get_field(lev=lev)  # code-specific getter function
+
+        # grow (aka guard/ghost/halo) regions
+        ngv = mfab.n_grow_vect
+
+        # get every local block of the field
+        for mfi in mfab:
+            # global index space box, including guards
+            bx = mfi.tilebox().grow(ngv)
+            print(bx)  # note: global index space of this block
+
+            # numpy representation: non-copying view, including the
+            # guard/ghost region
+            field_np = mfab.array(mfi).to_numpy()
+
+            # notes on indexing in field_np:
+            # - numpy uses locally zero-based indexing
+            # - layout is F_CONTIGUOUS by default, just like AMReX
+
+            # notes:
+            # Only the next lines are the "HOT LOOP" of the computation.
+            # For efficiency, use numpy array operation for speed on CPUs.
+            # For GPUs use .to_cupy() above and compute with cupy or numba.
+            field_np[()] = 42.0
+    # Manual: Compute Mfab END
+
+
 def test_mfab_loop(mfab):
-    ngv = mfab.nGrowVect
-    print(f"\n  mfab={mfab}, mfab.nGrowVect={ngv}")
+    ngv = mfab.n_grow_vect
+    print(f"\n  mfab={mfab}, mfab.n_grow_vect={ngv}")
 
     for mfi in mfab:
         bx = mfi.tilebox().grow(ngv)
@@ -160,7 +198,7 @@ def test_mfab_ops_cuda_numba(mfab_device):
     # https://numba.pydata.org/numba-doc/dev/cuda/cuda_array_interface.html
     from numba import cuda
 
-    ngv = mfab_device.nGrowVect
+    ngv = mfab_device.n_grow_vect
 
     # assign 3: define kernel
     @cuda.jit
@@ -197,8 +235,8 @@ def test_mfab_ops_cuda_cupy(mfab_device):
     import cupyx.profiler
 
     # AMReX -> cupy
-    ngv = mfab_device.nGrowVect
-    print(f"\n  mfab_device={mfab_device}, mfab_device.nGrowVect={ngv}")
+    ngv = mfab_device.n_grow_vect
+    print(f"\n  mfab_device={mfab_device}, mfab_device.n_grow_vect={ngv}")
 
     # assign 3
     with cupyx.profiler.time_range("assign 3 [()]", color_id=0):

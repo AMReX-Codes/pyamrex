@@ -113,7 +113,7 @@ void init_MultiFab(py::module &m)
         .def_property_readonly("num_comp", &FabArrayBase::nComp)
         .def_property_readonly("size", &FabArrayBase::size)
 
-        .def_property_readonly("nGrowVect", &FabArrayBase::nGrowVect)
+        .def_property_readonly("n_grow_vect", &FabArrayBase::nGrowVect)
 
         /* data access in Box index space */
         .def("__iter__",
@@ -410,8 +410,8 @@ void init_MultiFab(py::module &m)
 
         .def("box_array", &MultiFab::boxArray)
         .def("dm", &MultiFab::DistributionMap)
-        .def("n_comp", &MultiFab::nComp)
-        .def("n_grow_vect", &MultiFab::nGrowVect)
+        .def_property_readonly("n_comp", &MultiFab::nComp)
+        .def_property_readonly("n_grow_vect", &MultiFab::nGrowVect)
 
         /* masks & ownership */
         // TODO:

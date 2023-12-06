@@ -66,6 +66,7 @@ Usage
    usage/how_to_run
    usage/api
    usage/zerocopy
+   usage/compute
    usage/workflows
 ..   usage/tests
 

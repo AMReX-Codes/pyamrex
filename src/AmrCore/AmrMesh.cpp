@@ -68,9 +68,9 @@ void init_AmrMesh(py::module &m)
              >(),
              py::arg("rb"), py::arg("max_level_in"), py::arg("n_cell_in"), py::arg("coord"), py::arg("ref_ratios"), py::arg("is_per"))
 
-        .def("Verbose", &AmrMesh::Verbose)
-        .def("max_level", &AmrMesh::maxLevel)
-        .def("finest_level", &AmrMesh::finestLevel)
+        .def_property_readonly("verbose", &AmrMesh::Verbose)
+        .def_property_readonly("max_level", &AmrMesh::maxLevel)
+        .def_property_readonly("finest_level", &AmrMesh::finestLevel)
         .def("ref_ratio", py::overload_cast< >(&AmrMesh::refRatio, py::const_))
         .def("ref_ratio", py::overload_cast< int >(&AmrMesh::refRatio, py::const_))
     ;

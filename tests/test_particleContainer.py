@@ -276,6 +276,46 @@ def test_per_cell(empty_particle_container, std_geometry, std_particle):
     assert ncells * std_particle.real_array_data[1] == sum_1
 
 
+def test_pc_numpy(particle_container, Npart):
+    """Used in docs/source/usage/compute.rst"""
+    pc = particle_container
+
+    # Manual: Compute PC START
+    # code-specific getter function, e.g.:
+    # pc = sim.get_particles()
+
+    # iterate over every mesh-refinement levels (no MR: lev=0)
+    for lvl in range(pc.finest_level + 1):
+        # get every local chunk of particles
+        for pti in pc.iterator(pc, level=lvl):
+            # default layout: AoS with positions and cpuid
+            # note: not part of the new PureSoA particle container layout
+            aos = pti.aos().to_numpy()
+
+            # additional compile-time and runtime attributes in SoA format
+            soa = pti.soa().to_numpy()
+
+            # notes:
+            # Only the next lines are the "HOT LOOP" of the computation.
+            # For efficiency, use numpy array operation for speed on CPUs.
+            # For GPUs use .to_cupy() above and compute with cupy or numba.
+
+            # print all particle ids in the chunk
+            print(aos[()]["cpuid"])
+
+            # write to all particles in the chunk
+            aos[()]["x"] = 0.30
+            aos[()]["y"] = 0.35
+            aos[()]["z"] = 0.40
+
+            for soa_real in soa.real:
+                soa_real[()] = 42.0
+
+            for soa_int in soa.int:
+                soa_int[()] = 12
+    # Manual: Compute PC END
+
+
 @pytest.mark.skipif(
     importlib.util.find_spec("pandas") is None, reason="pandas is not available"
 )
