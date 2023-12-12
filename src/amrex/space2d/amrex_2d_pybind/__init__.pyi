@@ -4110,15 +4110,17 @@ class Geometry(CoordSys):
         """
         the overall size of the domain
         """
-    def ResetDefaultCoord(self) -> None:
+    def ResetDefaultCoord(self: int) -> None:
         """
         Reset default coord of Geometry class with an Array of `int`
         """
-    def ResetDefaultPeriodicity(self) -> None:
+    def ResetDefaultPeriodicity(
+        self: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(2)]
+    ) -> None:
         """
         Reset default periodicity of Geometry class with an Array of `int`
         """
-    def ResetDefaultProbDomain(self) -> None:
+    def ResetDefaultProbDomain(self: RealBox) -> None:
         """
         Reset default problem domain of Geometry class with a `RealBox`
         """
@@ -4651,7 +4653,7 @@ class MultiFab(FabArray_FArrayBox):
     @typing.overload
     def abs(self, arg0: int, arg1: int, arg2: int) -> None: ...
     def average_sync(self, arg0: Periodicity) -> None: ...
-    def box_array(self) -> BoxArray: ...
+    def box_array(self: FabArrayBase) -> BoxArray: ...
     @typing.overload
     def contains_inf(self, arg0: bool) -> bool: ...
     @typing.overload
@@ -4665,7 +4667,7 @@ class MultiFab(FabArray_FArrayBox):
     @typing.overload
     def contains_nan(self, arg0: int, arg1: int, arg2: IntVect, arg3: bool) -> bool: ...
     def divi(self, arg0: MultiFab, arg1: int, arg2: int, arg3: int) -> None: ...
-    def dm(self) -> DistributionMapping: ...
+    def dm(self: FabArrayBase) -> DistributionMapping: ...
     @typing.overload
     def invert(self, arg0: float, arg1: int) -> None: ...
     @typing.overload
@@ -9601,7 +9603,7 @@ class RealVect:
     def unit_vector() -> RealVect: ...
     @staticmethod
     def zero_vector() -> RealVect: ...
-    def BASISREALV(self) -> RealVect:
+    def BASISREALV(self: int) -> RealVect:
         """
         return basis vector in given coordinate direction
         """
