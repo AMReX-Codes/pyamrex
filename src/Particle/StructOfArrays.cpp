@@ -12,12 +12,13 @@
 
 
 template <int NReal, int NInt,
-          template<class> class Allocator=amrex::DefaultAllocator>
+          template<class> class Allocator=amrex::DefaultAllocator,
+          bool use64BitIdCpu=false>
 void make_StructOfArrays(py::module &m, std::string allocstr)
 {
     using namespace amrex;
 
-    using SOAType = StructOfArrays<NReal, NInt, Allocator>;
+    using SOAType = StructOfArrays<NReal, NInt, Allocator, use64BitIdCpu>;
 
     auto const soa_name = std::string("StructOfArrays_") + std::to_string(NReal) + "_" +
                           std::to_string(NInt) + "_" + allocstr;
@@ -59,31 +60,31 @@ void make_StructOfArrays(py::module &m, std::string allocstr)
     ;
 }
 
-template <int NReal, int NInt>
+template <int NReal, int NInt, bool use64BitIdCpu=false>
 void make_StructOfArrays(py::module &m)
 {
     // first, because used as copy target in methods in containers with other allocators
-    make_StructOfArrays<NReal, NInt, amrex::PinnedArenaAllocator>(m, "pinned");
+    make_StructOfArrays<NReal, NInt, amrex::PinnedArenaAllocator, use64BitIdCpu>(m, "pinned");
 
     // see Src/Base/AMReX_GpuContainers.H
     //   !AMREX_USE_GPU: DefaultAllocator = std::allocator
     //    AMREX_USE_GPU: DefaultAllocator = amrex::ArenaAllocator
 
     //   work-around for https://github.com/pybind/pybind11/pull/4581
-    //make_StructOfArrays<NReal, NInt, std::allocator>(m, "std");
-    //make_StructOfArrays<NReal, NInt, amrex::ArenaAllocator>(m, "arena");
+    //make_StructOfArrays<NReal, NInt, std::allocator, use64BitIdCpu>(m, "std");
+    //make_StructOfArrays<NReal, NInt, amrex::ArenaAllocator, use64BitIdCpu>(m, "arena");
 #ifdef AMREX_USE_GPU
-    make_StructOfArrays<NReal, NInt, std::allocator>(m, "std");
-    make_StructOfArrays<NReal, NInt, amrex::DefaultAllocator> (m, "default");  // amrex::ArenaAllocator
+    make_StructOfArrays<NReal, NInt, std::allocator, use64BitIdCpu>(m, "std");
+    make_StructOfArrays<NReal, NInt, amrex::DefaultAllocator, use64BitIdCpu> (m, "default");  // amrex::ArenaAllocator
 #else
-    make_StructOfArrays<NReal, NInt, amrex::DefaultAllocator> (m, "default");  // std::allocator
-    make_StructOfArrays<NReal, NInt, amrex::ArenaAllocator>(m, "arena");
+    make_StructOfArrays<NReal, NInt, amrex::DefaultAllocator, use64BitIdCpu> (m, "default");  // std::allocator
+    make_StructOfArrays<NReal, NInt, amrex::ArenaAllocator, use64BitIdCpu>(m, "arena");
 #endif
     //   end work-around
 #ifdef AMREX_USE_GPU
-    make_StructOfArrays<NReal, NInt, amrex::DeviceArenaAllocator>(m, "device");
-    make_StructOfArrays<NReal, NInt, amrex::ManagedArenaAllocator>(m, "managed");
-    make_StructOfArrays<NReal, NInt, amrex::AsyncArenaAllocator>(m, "async");
+    make_StructOfArrays<NReal, NInt, amrex::DeviceArenaAllocator, use64BitIdCpu>(m, "device");
+    make_StructOfArrays<NReal, NInt, amrex::ManagedArenaAllocator, use64BitIdCpu>(m, "managed");
+    make_StructOfArrays<NReal, NInt, amrex::AsyncArenaAllocator, use64BitIdCpu>(m, "async");
 #endif
 }
 
@@ -91,6 +92,6 @@ void init_StructOfArrays(py::module& m) {
     make_StructOfArrays< 2, 1>(m);
     make_StructOfArrays< 4, 0>(m);  // HiPACE++ 22.08 - 23.12
     make_StructOfArrays< 5, 0>(m);  // ImpactX 22.07 - 23.12
-    make_StructOfArrays< 8, 0>(m);  // ImpactX 24.01+
+    make_StructOfArrays< 8, 0, true>(m);  // ImpactX 24.01+
     make_StructOfArrays<37, 1>(m);  // HiPACE++ 22.09 - 23.12
 }
