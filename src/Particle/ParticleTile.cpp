@@ -184,13 +184,13 @@ void init_ParticleTile(py::module& m) {
     // AMReX legacy AoS position + id/cpu particle ype
     using ParticleType_0_0 = Particle<0, 0>;
     using ParticleType_1_1 = Particle<1, 1>;
-    using SoAParticleType_8_2 = SoAParticle<8, 2>;
+    using SoAParticleType_8_0 = SoAParticle<8, 0>;
 
     // TODO: we might need to move all or most of the defines in here into a
     //       test/example submodule, so they do not collide with downstream projects
     make_ParticleTile<ParticleType_1_1, 2, 1> (m);
     make_ParticleTile<ParticleType_0_0, 4, 0> (m);   // HiPACE++ 22.07
     make_ParticleTile<ParticleType_0_0, 5, 0> (m);   // ImpactX 22.07
-    make_ParticleTile<SoAParticleType_8_2, 8, 2> (m);   // ImpactX 23.12+
+    make_ParticleTile<SoAParticleType_8_0, 8, 0> (m);   // ImpactX 23.12+
     make_ParticleTile<ParticleType_0_0, 37, 1> (m);  // HiPACE++ 22.07
 }

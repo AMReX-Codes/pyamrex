@@ -327,6 +327,6 @@ void init_Particle(py::module& m) {
     make_Particle< 3, 2 > (m);
     make_Particle< 4, 0 > (m);  // HiPACE++ 22.07
     make_Particle< 5, 0 > (m);  // ImpactX 22.07
-    make_Particle< 8, 2 > (m);  // ImpactX 23.12+
+    make_Particle< 8, 0 > (m);  // ImpactX 24.01+
     make_Particle< 37, 1> (m);  // HiPACE++ 22.07
 }
