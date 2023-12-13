@@ -172,7 +172,7 @@ texinfo_documents = [
         "pyAMReX Documentation",
         author,
         "pyAMReX",
-        "The Python binding pyAMReX bridges the worlds of block-structured codes and data science.",
+        "GPU-Enabled, Zero-Copy AMReX Python Bindings including AI/ML",
         "Miscellaneous",
     ),
 ]

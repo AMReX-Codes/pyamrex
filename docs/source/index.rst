@@ -3,7 +3,7 @@
 pyAMReX
 -------
 
-The Python binding pyAMReX bridges the worlds of block-structured codes and data science:
+The Python binding pyAMReX bridges the compute in AMReX block-structured codes and data science:
 it provides zero-copy application GPU data access for AI/ML, in situ analysis, application coupling and enables rapid, massively parallel prototyping.
 
 pyAMReX is part of the `AMReX software ecosystem <https://amrex-codes.github.io>`__ and builds directly on the AMReX C++ library.

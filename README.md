@@ -13,7 +13,8 @@
 [api-py3]: https://img.shields.io/badge/language-Python3-yellowgreen "Python3 API"
 [dev-beta]: https://img.shields.io/badge/phase-beta-yellowgreen "Status: Beta"
 
-The Python binding pyAMReX bridges the worlds of block-structured codes and data science: it provides zero-copy application GPU data access for AI/ML, in situ analysis, application coupling and enables rapid, massively parallel prototyping.
+The Python binding pyAMReX bridges the compute in AMReX block-structured codes and data science:
+it provides zero-copy application GPU data access for AI/ML, in situ analysis, application coupling and enables rapid, massively parallel prototyping.
 pyAMReX enhances the [Block-Structured AMR Software Framework AMReX](https://amrex-codes.github.io) and its applications.
 
 ## Users
