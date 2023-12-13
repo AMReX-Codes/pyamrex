@@ -18,15 +18,8 @@ pyAMReX enhances the [Block-Structured AMR Software Framework AMReX](https://amr
 
 ## Users
 
-pyAMReX can be installed [from source](https://pyamrex.readthedocs.io/en/latest/install/users.html).
+pyAMReX [can be installed](https://pyamrex.readthedocs.io/en/latest/install/users.html) with package managers or from source.
 
-*Coming soon:*
-
-- pip/pypa
-- conda-forge
-- spack
-- brew
-- ...
 
 ### Usage
 

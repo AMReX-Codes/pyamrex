@@ -31,9 +31,33 @@ Choose **one** of the installation methods below to get started:
 Using the Conda Package
 -----------------------
 
+A package for pyAMReX is available via the `Conda <https://conda.io>`_ package manager.
+
+.. tip::
+
+   We recommend to configure your conda to use the faster ``libmamba`` `dependency solver <https://www.anaconda.com/blog/a-faster-conda-for-a-growing-community>`__.
+
+   .. code-block:: bash
+
+      conda update -n base conda
+      conda install -n base conda-libmamba-solver
+      conda config --set solver libmamba
+
+   We recommend to deactivate that conda self-activates its ``base`` environment.
+   This `avoids interference with the system and other package managers <https://collegeville.github.io/CW20/WorkshopResources/WhitePapers/huebl-working-with-multiple-pkg-mgrs.pdf>`__.
+
+   .. code-block:: bash
+
+      conda config --set auto_activate_base false
+
+.. code-block:: bash
+
+   conda create -n pyamrex -c conda-forge pyamrex
+   conda activate pyamrex
+
 .. note::
 
-   Coming soon.
+   The ``pyamrex`` `conda package <https://anaconda.org/conda-forge/pyamrex>`__ does not yet provide GPU support.
 
 
 .. _install-spack:
