@@ -58,6 +58,10 @@ option(pyAMReX_IPO
     "Compile with interprocedural optimization (IPO) / link-time optimization (LTO)"
     ON
 )
+option(pyAMReX_INSTALL
+    "Enable install targets for pyAMReX"
+    ON
+)
 
 # change the default build type to Release (or RelWithDebInfo) instead of Debug
 set_default_build_type("Release")
@@ -219,26 +223,28 @@ foreach(D IN LISTS AMReX_SPACEDIM)
     set(pyAMReX_INSTALL_TARGET_NAMES ${pyAMReX_INSTALL_TARGET_NAMES} pyAMReX_${D}d)
 endforeach()
 
-install(TARGETS ${pyAMReX_INSTALL_TARGET_NAMES}
-    EXPORT pyAMReXTargets
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-    INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
-)
+if(pyAMReX_INSTALL)
+    install(TARGETS ${pyAMReX_INSTALL_TARGET_NAMES}
+        EXPORT pyAMReXTargets
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+        INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+    )
 
-# CMake package file for find_package(pyAMReX) in depending projects
-install(EXPORT pyAMReXTargets
-    FILE pyAMReXTargets.cmake
-    NAMESPACE pyAMReX::
-    DESTINATION ${pyAMReX_INSTALL_CMAKEDIR}
-)
-install(
-    FILES
-        ${pyAMReX_BINARY_DIR}/pyAMReXConfig.cmake
-        ${pyAMReX_BINARY_DIR}/pyAMReXConfigVersion.cmake
-    DESTINATION ${pyAMReX_INSTALL_CMAKEDIR}
-)
+    # CMake package file for find_package(pyAMReX) in depending projects
+    install(EXPORT pyAMReXTargets
+        FILE pyAMReXTargets.cmake
+        NAMESPACE pyAMReX::
+        DESTINATION ${pyAMReX_INSTALL_CMAKEDIR}
+    )
+    install(
+        FILES
+            ${pyAMReX_BINARY_DIR}/pyAMReXConfig.cmake
+            ${pyAMReX_BINARY_DIR}/pyAMReXConfigVersion.cmake
+        DESTINATION ${pyAMReX_INSTALL_CMAKEDIR}
+    )
+endif()
 
 
 # pip helpers for the amrex package ###########################################
