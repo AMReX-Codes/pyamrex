@@ -186,8 +186,9 @@ Furthermore, pyAMReX adds a few selected CMake build options:
 
 | CMake Option                 | Default & Values                           | Description                                                   |
 |------------------------------|--------------------------------------------|---------------------------------------------------------------|
-| `AMReX_SPACEDIM`             | **3**, use `"1;2;3"` for all               | Dimension(s) of AMReX as a ``;``-separated list              |
+| `AMReX_SPACEDIM`             | **3**, use `"1;2;3"` for all               | Dimension(s) of AMReX as a ``;``-separated list               |
 | `pyAMReX_IPO`                | **ON**/OFF                                 | Compile with interprocedural/link optimization (IPO/LTO)      |
+| `pyAMReX_INSTALL`            | **ON**/OFF                                 | Enable install targets for pyAMReX                            |
 | `pyAMReX_amrex_src`          | *None*                                     | Absolute path to AMReX source directory (preferred if set)    |
 | `pyAMReX_amrex_internal`     | **ON**/OFF                                 | Needs a pre-installed AMReX library if set to `OFF`           |
 | `pyAMReX_amrex_repo`         | `https://github.com/AMReX-Codes/amrex.git` | Repository URI to pull and build AMReX from                   |
