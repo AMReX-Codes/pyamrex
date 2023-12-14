@@ -63,7 +63,7 @@ Usage
    :maxdepth: 1
    :hidden:
 
-   usage/how_to_run
+   usage/examples
    usage/api
    usage/zerocopy
    usage/compute

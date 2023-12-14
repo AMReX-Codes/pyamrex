@@ -1,7 +1,12 @@
+.. _usage_examples:
+
+Examples
+========
+
 .. _usage_run:
 
-Run pyAMReX
-===========
+When to Use pyAMReX?
+--------------------
 
 pyAMReX is usually used for these kinds of workflows:
 
