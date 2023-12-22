@@ -30,10 +30,15 @@ void make_ParticleTileData(py::module &m)
     using ParticleTileDataType = ParticleTileData<T_ParticleType, NArrayReal, NArrayInt>;
     using SuperParticleType = Particle<NStructReal + NArrayReal, NStructInt + NArrayInt>;
 
-    auto const particle_tile_data_type =
-        std::string("ParticleTileData_") + std::to_string(NStructReal) + "_" +
-        std::to_string(NStructInt) + "_" + std::to_string(NArrayReal) + "_" +
+    auto particle_tile_data_type = std::string("ParticleTileData_");
+    if (T_ParticleType::is_soa_particle)
+        particle_tile_data_type += "pureSoA_";
+    particle_tile_data_type +=
+        std::to_string(NStructReal) + "_" +
+        std::to_string(NStructInt) + "_" +
+        std::to_string(NArrayReal) + "_" +
         std::to_string(NArrayInt);
+
     py::class_<ParticleTileDataType>(m, particle_tile_data_type.c_str())
             .def(py::init())
             .def_readonly("m_size", &ParticleTileDataType::m_size)
@@ -63,9 +68,14 @@ void make_ParticleTile(py::module &m, std::string allocstr)
     using ParticleTileType = ParticleTile<T_ParticleType, NArrayReal, NArrayInt, Allocator>;
     using SuperParticleType = Particle<NStructReal + NArrayReal, NStructInt + NArrayInt>;
 
-    auto const particle_tile_type = std::string("ParticleTile_") + std::to_string(NStructReal) + "_" +
-                                    std::to_string(NStructInt) + "_" + std::to_string(NArrayReal) + "_" +
-                                    std::to_string(NArrayInt) + "_" + allocstr;
+    auto particle_tile_type = std::string("ParticleTile_");
+    if (T_ParticleType::is_soa_particle)
+        particle_tile_type += "pureSoA_";
+    particle_tile_type += std::to_string(NStructReal) + "_" +
+                          std::to_string(NStructInt) + "_" +
+                          std::to_string(NArrayReal) + "_" +
+                          std::to_string(NArrayInt) + "_" + allocstr;
+
     auto py_particle_tile = py::class_<ParticleTileType>(m, particle_tile_type.c_str())
         .def(py::init())
         .def_readonly_static("NAR", &ParticleTileType::NAR)
@@ -184,7 +194,13 @@ void init_ParticleTile(py::module& m) {
     // AMReX legacy AoS position + id/cpu particle ype
     using ParticleType_0_0 = Particle<0, 0>;
     using ParticleType_1_1 = Particle<1, 1>;
+#if AMREX_SPACEDIM == 1
+    using SoAParticleType_5_0 = SoAParticle<5, 0>;
+#elif AMREX_SPACEDIM == 2
+    using SoAParticleType_6_0 = SoAParticle<6, 0>;
+#elif AMREX_SPACEDIM == 3
     using SoAParticleType_7_0 = SoAParticle<7, 0>;
+#endif
     using SoAParticleType_8_0 = SoAParticle<8, 0>;
 
     // TODO: we might need to move all or most of the defines in here into a
@@ -192,7 +208,13 @@ void init_ParticleTile(py::module& m) {
     make_ParticleTile<ParticleType_1_1, 2, 1> (m);
     make_ParticleTile<ParticleType_0_0, 4, 0> (m);   // HiPACE++ 22.07
     make_ParticleTile<ParticleType_0_0, 5, 0> (m);   // ImpactX 22.07
-    make_ParticleTile<SoAParticleType_7_0, 7, 0> (m);   // ImpactX 24.01+
+#if AMREX_SPACEDIM == 1
+    make_ParticleTile<SoAParticleType_5_0, 5, 0> (m);   // WarpX 24.01+ 1D
+#elif AMREX_SPACEDIM == 2
+    make_ParticleTile<SoAParticleType_6_0, 6, 0> (m);   // WarpX 24.01+ 2D
+#elif AMREX_SPACEDIM == 3
+    make_ParticleTile<SoAParticleType_7_0, 7, 0> (m);   // WarpX 24.01+ 3D
+#endif
     make_ParticleTile<SoAParticleType_8_0, 8, 0> (m);   // ImpactX 24.01+
     make_ParticleTile<ParticleType_0_0, 37, 1> (m);  // HiPACE++ 22.07
 }
