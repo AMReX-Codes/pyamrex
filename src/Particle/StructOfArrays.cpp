@@ -20,9 +20,14 @@ void make_StructOfArrays(py::module &m, std::string allocstr)
 
     using SOAType = StructOfArrays<NReal, NInt, Allocator, use64BitIdCpu>;
 
-    auto const soa_name = std::string("StructOfArrays_") + std::to_string(NReal) + "_" +
-                          std::to_string(NInt) + "_" + allocstr;
-    py::class_<SOAType>(m, soa_name.c_str())
+    auto soa_name = std::string("StructOfArrays_") + std::to_string(NReal) + "_" +
+                    std::to_string(NInt);
+    if (use64BitIdCpu)
+        soa_name += "_idcpu";
+    soa_name += "_" + allocstr;
+
+    py::class_<SOAType> py_SoA(m, soa_name.c_str());
+    py_SoA
         .def(py::init())
         .def("define", &SOAType::define)
         .def_property_readonly("num_real_comps", &SOAType::NumRealComps,
@@ -58,6 +63,10 @@ void make_StructOfArrays(py::module &m, std::string allocstr)
         .def("getNumNeighbors", &SOAType::getNumNeighbors)
         .def("resize", &SOAType::resize)
     ;
+    if (use64BitIdCpu)
+        py_SoA.def("GetIdCPUData", py::overload_cast<>(&SOAType::GetIdCPUData),
+                   py::return_value_policy::reference_internal,
+                   "Get access to a particle IdCPU component Array");
 }
 
 template <int NReal, int NInt, bool use64BitIdCpu=false>
@@ -92,7 +101,13 @@ void init_StructOfArrays(py::module& m) {
     make_StructOfArrays< 2, 1>(m);
     make_StructOfArrays< 4, 0>(m);  // HiPACE++ 22.08 - 23.12
     make_StructOfArrays< 5, 0>(m);  // ImpactX 22.07 - 23.12
-    make_StructOfArrays< 7, 0, true>(m);  // WarpX 24.01+
+#if AMREX_SPACEDIM == 1
+    make_StructOfArrays< 5, 0, true>(m);  // WarpX 24.01+ 1D
+#elif AMREX_SPACEDIM == 2
+    make_StructOfArrays< 6, 0, true>(m);  // WarpX 24.01+ 2D
+#elif AMREX_SPACEDIM == 3
+    make_StructOfArrays< 7, 0, true>(m);  // WarpX 24.01+ 3D
+#endif
     make_StructOfArrays< 8, 0, true>(m);  // ImpactX 24.01+
     make_StructOfArrays<37, 1>(m);  // HiPACE++ 22.09 - 23.12
 }

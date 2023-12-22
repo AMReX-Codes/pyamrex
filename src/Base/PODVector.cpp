@@ -137,4 +137,5 @@ void make_PODVector(py::module &m, std::string typestr)
 void init_PODVector(py::module& m) {
     make_PODVector<ParticleReal> (m, "real");
     make_PODVector<int> (m, "int");
+    make_PODVector<uint64_t> (m, "uint64");
 }
