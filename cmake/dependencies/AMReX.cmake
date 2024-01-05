@@ -70,7 +70,7 @@ macro(find_amrex)
     elseif(NOT pyAMReX_amrex_internal)
         message(STATUS "Searching for pre-installed AMReX ...")
         # https://amrex-codes.github.io/amrex/docs_html/BuildingAMReX.html#importing-amrex-into-your-cmake-project
-        find_package(AMReX 23.12 CONFIG REQUIRED COMPONENTS PARTICLES PIC)
+        find_package(AMReX 24.01 CONFIG REQUIRED COMPONENTS PARTICLES PIC)
         message(STATUS "AMReX: Found version '${AMReX_VERSION}'")
     endif()
 endmacro()
@@ -85,7 +85,7 @@ option(pyAMReX_amrex_internal "Download & build AMReX" ON)
 set(pyAMReX_amrex_repo "https://github.com/AMReX-Codes/amrex.git"
     CACHE STRING
     "Repository URI to pull and build AMReX from if(pyAMReX_amrex_internal)")
-set(pyAMReX_amrex_branch "ecaa46d0be4b5c79b8806e48e3469000d8bb7252"
+set(pyAMReX_amrex_branch "24.01"
     CACHE STRING
     "Repository branch for pyAMReX_amrex_repo if(pyAMReX_amrex_internal)")
 
