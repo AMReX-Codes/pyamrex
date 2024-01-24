@@ -20,6 +20,7 @@ void init_ParticleContainer_WarpX(py::module& m) {
     make_ParticleContainer_and_Iterators<SoAParticle<5, 0>, 5, 0>(m);  // WarpX 24.02+ 1D
 #elif AMREX_SPACEDIM == 2
     make_ParticleContainer_and_Iterators<SoAParticle<6, 0>, 6, 0>(m);  // WarpX 24.02+ 2D
+    make_ParticleContainer_and_Iterators<SoAParticle<7, 0>, 7, 0>(m);  // WarpX 24.02+ RZ
 #elif AMREX_SPACEDIM == 3
     make_ParticleContainer_and_Iterators<SoAParticle<7, 0>, 7, 0>(m);  // WarpX 24.02+ 3D
 #endif
