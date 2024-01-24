@@ -105,6 +105,7 @@ void init_StructOfArrays(py::module& m) {
     make_StructOfArrays< 5, 0, true>(m);  // WarpX 24.02+ 1D
 #elif AMREX_SPACEDIM == 2
     make_StructOfArrays< 6, 0, true>(m);  // WarpX 24.02+ 2D
+    make_StructOfArrays< 7, 0, true>(m);  // WarpX 24.02+ RZ
 #elif AMREX_SPACEDIM == 3
     make_StructOfArrays< 7, 0, true>(m);  // WarpX 24.02+ 3D
 #endif

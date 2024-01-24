@@ -198,6 +198,7 @@ void init_ParticleTile(py::module& m) {
     using SoAParticleType_5_0 = SoAParticle<5, 0>;
 #elif AMREX_SPACEDIM == 2
     using SoAParticleType_6_0 = SoAParticle<6, 0>;
+    using SoAParticleType_7_0 = SoAParticle<7, 0>;
 #elif AMREX_SPACEDIM == 3
     using SoAParticleType_7_0 = SoAParticle<7, 0>;
 #endif
@@ -209,12 +210,13 @@ void init_ParticleTile(py::module& m) {
     make_ParticleTile<ParticleType_0_0, 4, 0> (m);   // HiPACE++ 22.07
     make_ParticleTile<ParticleType_0_0, 5, 0> (m);   // ImpactX 22.07
 #if AMREX_SPACEDIM == 1
-    make_ParticleTile<SoAParticleType_5_0, 5, 0> (m);   // WarpX 24.01+ 1D
+    make_ParticleTile<SoAParticleType_5_0, 5, 0> (m);   // WarpX 24.02+ 1D
 #elif AMREX_SPACEDIM == 2
-    make_ParticleTile<SoAParticleType_6_0, 6, 0> (m);   // WarpX 24.01+ 2D
+    make_ParticleTile<SoAParticleType_6_0, 6, 0> (m);   // WarpX 24.02+ 2D
+    make_ParticleTile<SoAParticleType_7_0, 7, 0> (m);   // WarpX 24.02+ RZ
 #elif AMREX_SPACEDIM == 3
-    make_ParticleTile<SoAParticleType_7_0, 7, 0> (m);   // WarpX 24.01+ 3D
+    make_ParticleTile<SoAParticleType_7_0, 7, 0> (m);   // WarpX 24.02+ 3D
 #endif
-    make_ParticleTile<SoAParticleType_8_0, 8, 0> (m);   // ImpactX 24.01+
+    make_ParticleTile<SoAParticleType_8_0, 8, 0> (m);   // ImpactX 24.02+
     make_ParticleTile<ParticleType_0_0, 37, 1> (m);  // HiPACE++ 22.07
 }
