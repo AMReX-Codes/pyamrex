@@ -32,6 +32,7 @@
                Vector
 
 """
+
 from __future__ import annotations
 
 import typing
@@ -409,6 +410,7 @@ class Array4_cdouble:
             Raises an exception if cupy is not installed
 
         """
+
     def to_host(self) -> numpy.ndarray[numpy.complex128]: ...
     def to_numpy(self, copy=False, order="F"):
         """
@@ -437,6 +439,7 @@ class Array4_cdouble:
             A numpy n-dimensional array.
 
         """
+
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -505,6 +508,7 @@ class Array4_cdouble_const:
             Raises an exception if cupy is not installed
 
         """
+
     def to_host(self) -> numpy.ndarray[numpy.complex128]: ...
     def to_numpy(self, copy=False, order="F"):
         """
@@ -533,6 +537,7 @@ class Array4_cdouble_const:
             A numpy n-dimensional array.
 
         """
+
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -615,6 +620,7 @@ class Array4_cfloat:
             Raises an exception if cupy is not installed
 
         """
+
     def to_host(self) -> numpy.ndarray[numpy.complex64]: ...
     def to_numpy(self, copy=False, order="F"):
         """
@@ -643,6 +649,7 @@ class Array4_cfloat:
             A numpy n-dimensional array.
 
         """
+
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -711,6 +718,7 @@ class Array4_cfloat_const:
             Raises an exception if cupy is not installed
 
         """
+
     def to_host(self) -> numpy.ndarray[numpy.complex64]: ...
     def to_numpy(self, copy=False, order="F"):
         """
@@ -739,6 +747,7 @@ class Array4_cfloat_const:
             A numpy n-dimensional array.
 
         """
+
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -821,6 +830,7 @@ class Array4_double:
             Raises an exception if cupy is not installed
 
         """
+
     def to_host(self) -> numpy.ndarray[numpy.float64]: ...
     def to_numpy(self, copy=False, order="F"):
         """
@@ -849,6 +859,7 @@ class Array4_double:
             A numpy n-dimensional array.
 
         """
+
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -917,6 +928,7 @@ class Array4_double_const:
             Raises an exception if cupy is not installed
 
         """
+
     def to_host(self) -> numpy.ndarray[numpy.float64]: ...
     def to_numpy(self, copy=False, order="F"):
         """
@@ -945,6 +957,7 @@ class Array4_double_const:
             A numpy n-dimensional array.
 
         """
+
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -1027,6 +1040,7 @@ class Array4_float:
             Raises an exception if cupy is not installed
 
         """
+
     def to_host(self) -> numpy.ndarray[numpy.float32]: ...
     def to_numpy(self, copy=False, order="F"):
         """
@@ -1055,6 +1069,7 @@ class Array4_float:
             A numpy n-dimensional array.
 
         """
+
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -1123,6 +1138,7 @@ class Array4_float_const:
             Raises an exception if cupy is not installed
 
         """
+
     def to_host(self) -> numpy.ndarray[numpy.float32]: ...
     def to_numpy(self, copy=False, order="F"):
         """
@@ -1151,6 +1167,7 @@ class Array4_float_const:
             A numpy n-dimensional array.
 
         """
+
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -1233,6 +1250,7 @@ class Array4_int:
             Raises an exception if cupy is not installed
 
         """
+
     def to_host(self) -> numpy.ndarray[numpy.int32]: ...
     def to_numpy(self, copy=False, order="F"):
         """
@@ -1261,6 +1279,7 @@ class Array4_int:
             A numpy n-dimensional array.
 
         """
+
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -1329,6 +1348,7 @@ class Array4_int_const:
             Raises an exception if cupy is not installed
 
         """
+
     def to_host(self) -> numpy.ndarray[numpy.int32]: ...
     def to_numpy(self, copy=False, order="F"):
         """
@@ -1357,6 +1377,7 @@ class Array4_int_const:
             A numpy n-dimensional array.
 
         """
+
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -1439,6 +1460,7 @@ class Array4_long:
             Raises an exception if cupy is not installed
 
         """
+
     def to_host(self) -> numpy.ndarray[numpy.int64]: ...
     def to_numpy(self, copy=False, order="F"):
         """
@@ -1467,6 +1489,7 @@ class Array4_long:
             A numpy n-dimensional array.
 
         """
+
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -1535,6 +1558,7 @@ class Array4_long_const:
             Raises an exception if cupy is not installed
 
         """
+
     def to_host(self) -> numpy.ndarray[numpy.int64]: ...
     def to_numpy(self, copy=False, order="F"):
         """
@@ -1563,6 +1587,7 @@ class Array4_long_const:
             A numpy n-dimensional array.
 
         """
+
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -1645,6 +1670,7 @@ class Array4_longdouble:
             Raises an exception if cupy is not installed
 
         """
+
     def to_host(self) -> numpy.ndarray[numpy.longdouble]: ...
     def to_numpy(self, copy=False, order="F"):
         """
@@ -1673,6 +1699,7 @@ class Array4_longdouble:
             A numpy n-dimensional array.
 
         """
+
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -1741,6 +1768,7 @@ class Array4_longdouble_const:
             Raises an exception if cupy is not installed
 
         """
+
     def to_host(self) -> numpy.ndarray[numpy.longdouble]: ...
     def to_numpy(self, copy=False, order="F"):
         """
@@ -1769,6 +1797,7 @@ class Array4_longdouble_const:
             A numpy n-dimensional array.
 
         """
+
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -1851,6 +1880,7 @@ class Array4_longlong:
             Raises an exception if cupy is not installed
 
         """
+
     def to_host(self) -> numpy.ndarray[numpy.int64]: ...
     def to_numpy(self, copy=False, order="F"):
         """
@@ -1879,6 +1909,7 @@ class Array4_longlong:
             A numpy n-dimensional array.
 
         """
+
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -1947,6 +1978,7 @@ class Array4_longlong_const:
             Raises an exception if cupy is not installed
 
         """
+
     def to_host(self) -> numpy.ndarray[numpy.int64]: ...
     def to_numpy(self, copy=False, order="F"):
         """
@@ -1975,6 +2007,7 @@ class Array4_longlong_const:
             A numpy n-dimensional array.
 
         """
+
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -2057,6 +2090,7 @@ class Array4_short:
             Raises an exception if cupy is not installed
 
         """
+
     def to_host(self) -> numpy.ndarray[numpy.int16]: ...
     def to_numpy(self, copy=False, order="F"):
         """
@@ -2085,6 +2119,7 @@ class Array4_short:
             A numpy n-dimensional array.
 
         """
+
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -2153,6 +2188,7 @@ class Array4_short_const:
             Raises an exception if cupy is not installed
 
         """
+
     def to_host(self) -> numpy.ndarray[numpy.int16]: ...
     def to_numpy(self, copy=False, order="F"):
         """
@@ -2181,6 +2217,7 @@ class Array4_short_const:
             A numpy n-dimensional array.
 
         """
+
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -2263,6 +2300,7 @@ class Array4_uint:
             Raises an exception if cupy is not installed
 
         """
+
     def to_host(self) -> numpy.ndarray[numpy.uint32]: ...
     def to_numpy(self, copy=False, order="F"):
         """
@@ -2291,6 +2329,7 @@ class Array4_uint:
             A numpy n-dimensional array.
 
         """
+
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -2359,6 +2398,7 @@ class Array4_uint_const:
             Raises an exception if cupy is not installed
 
         """
+
     def to_host(self) -> numpy.ndarray[numpy.uint32]: ...
     def to_numpy(self, copy=False, order="F"):
         """
@@ -2387,6 +2427,7 @@ class Array4_uint_const:
             A numpy n-dimensional array.
 
         """
+
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -2469,6 +2510,7 @@ class Array4_ulong:
             Raises an exception if cupy is not installed
 
         """
+
     def to_host(self) -> numpy.ndarray[numpy.uint64]: ...
     def to_numpy(self, copy=False, order="F"):
         """
@@ -2497,6 +2539,7 @@ class Array4_ulong:
             A numpy n-dimensional array.
 
         """
+
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -2565,6 +2608,7 @@ class Array4_ulong_const:
             Raises an exception if cupy is not installed
 
         """
+
     def to_host(self) -> numpy.ndarray[numpy.uint64]: ...
     def to_numpy(self, copy=False, order="F"):
         """
@@ -2593,6 +2637,7 @@ class Array4_ulong_const:
             A numpy n-dimensional array.
 
         """
+
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -2675,6 +2720,7 @@ class Array4_ulonglong:
             Raises an exception if cupy is not installed
 
         """
+
     def to_host(self) -> numpy.ndarray[numpy.uint64]: ...
     def to_numpy(self, copy=False, order="F"):
         """
@@ -2703,6 +2749,7 @@ class Array4_ulonglong:
             A numpy n-dimensional array.
 
         """
+
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -2771,6 +2818,7 @@ class Array4_ulonglong_const:
             Raises an exception if cupy is not installed
 
         """
+
     def to_host(self) -> numpy.ndarray[numpy.uint64]: ...
     def to_numpy(self, copy=False, order="F"):
         """
@@ -2799,6 +2847,7 @@ class Array4_ulonglong_const:
             A numpy n-dimensional array.
 
         """
+
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -2881,6 +2930,7 @@ class Array4_ushort:
             Raises an exception if cupy is not installed
 
         """
+
     def to_host(self) -> numpy.ndarray[numpy.uint16]: ...
     def to_numpy(self, copy=False, order="F"):
         """
@@ -2909,6 +2959,7 @@ class Array4_ushort:
             A numpy n-dimensional array.
 
         """
+
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -2977,6 +3028,7 @@ class Array4_ushort_const:
             Raises an exception if cupy is not installed
 
         """
+
     def to_host(self) -> numpy.ndarray[numpy.uint16]: ...
     def to_numpy(self, copy=False, order="F"):
         """
@@ -3005,6 +3057,7 @@ class Array4_ushort_const:
             A numpy n-dimensional array.
 
         """
+
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -3026,6 +3079,7 @@ class ArrayOfStructs_0_0_arena:
         """
         get back member.  Problem!!!!! this is perfo
         """
+
     @typing.overload
     def empty(self) -> bool: ...
     @typing.overload
@@ -3063,6 +3117,7 @@ class ArrayOfStructs_0_0_arena:
             Raises an exception if cupy is not installed
 
         """
+
     def to_host(self) -> ArrayOfStructs_0_0_pinned: ...
     def to_numpy(self, copy=False):
         """
@@ -3083,6 +3138,7 @@ class ArrayOfStructs_0_0_arena:
             of 1D numpy arrays.
 
         """
+
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -3098,6 +3154,7 @@ class ArrayOfStructs_0_0_default:
         """
         get back member.  Problem!!!!! this is perfo
         """
+
     @typing.overload
     def empty(self) -> bool: ...
     @typing.overload
@@ -3135,6 +3192,7 @@ class ArrayOfStructs_0_0_default:
             Raises an exception if cupy is not installed
 
         """
+
     def to_host(self) -> ArrayOfStructs_0_0_pinned: ...
     def to_numpy(self, copy=False):
         """
@@ -3155,6 +3213,7 @@ class ArrayOfStructs_0_0_default:
             of 1D numpy arrays.
 
         """
+
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -3170,6 +3229,7 @@ class ArrayOfStructs_0_0_pinned:
         """
         get back member.  Problem!!!!! this is perfo
         """
+
     @typing.overload
     def empty(self) -> bool: ...
     @typing.overload
@@ -3207,6 +3267,7 @@ class ArrayOfStructs_0_0_pinned:
             Raises an exception if cupy is not installed
 
         """
+
     def to_host(self) -> ArrayOfStructs_0_0_pinned: ...
     def to_numpy(self, copy=False):
         """
@@ -3227,6 +3288,7 @@ class ArrayOfStructs_0_0_pinned:
             of 1D numpy arrays.
 
         """
+
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -3242,6 +3304,7 @@ class ArrayOfStructs_1_1_arena:
         """
         get back member.  Problem!!!!! this is perfo
         """
+
     @typing.overload
     def empty(self) -> bool: ...
     @typing.overload
@@ -3279,6 +3342,7 @@ class ArrayOfStructs_1_1_arena:
             Raises an exception if cupy is not installed
 
         """
+
     def to_host(self) -> ArrayOfStructs_1_1_pinned: ...
     def to_numpy(self, copy=False):
         """
@@ -3299,6 +3363,7 @@ class ArrayOfStructs_1_1_arena:
             of 1D numpy arrays.
 
         """
+
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -3314,6 +3379,7 @@ class ArrayOfStructs_1_1_default:
         """
         get back member.  Problem!!!!! this is perfo
         """
+
     @typing.overload
     def empty(self) -> bool: ...
     @typing.overload
@@ -3351,6 +3417,7 @@ class ArrayOfStructs_1_1_default:
             Raises an exception if cupy is not installed
 
         """
+
     def to_host(self) -> ArrayOfStructs_1_1_pinned: ...
     def to_numpy(self, copy=False):
         """
@@ -3371,6 +3438,7 @@ class ArrayOfStructs_1_1_default:
             of 1D numpy arrays.
 
         """
+
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -3386,6 +3454,7 @@ class ArrayOfStructs_1_1_pinned:
         """
         get back member.  Problem!!!!! this is perfo
         """
+
     @typing.overload
     def empty(self) -> bool: ...
     @typing.overload
@@ -3423,6 +3492,7 @@ class ArrayOfStructs_1_1_pinned:
             Raises an exception if cupy is not installed
 
         """
+
     def to_host(self) -> ArrayOfStructs_1_1_pinned: ...
     def to_numpy(self, copy=False):
         """
@@ -3443,6 +3513,7 @@ class ArrayOfStructs_1_1_pinned:
             of 1D numpy arrays.
 
         """
+
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -3458,6 +3529,7 @@ class ArrayOfStructs_2_1_arena:
         """
         get back member.  Problem!!!!! this is perfo
         """
+
     @typing.overload
     def empty(self) -> bool: ...
     @typing.overload
@@ -3495,6 +3567,7 @@ class ArrayOfStructs_2_1_arena:
             Raises an exception if cupy is not installed
 
         """
+
     def to_host(self) -> ArrayOfStructs_2_1_pinned: ...
     def to_numpy(self, copy=False):
         """
@@ -3515,6 +3588,7 @@ class ArrayOfStructs_2_1_arena:
             of 1D numpy arrays.
 
         """
+
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -3530,6 +3604,7 @@ class ArrayOfStructs_2_1_default:
         """
         get back member.  Problem!!!!! this is perfo
         """
+
     @typing.overload
     def empty(self) -> bool: ...
     @typing.overload
@@ -3567,6 +3642,7 @@ class ArrayOfStructs_2_1_default:
             Raises an exception if cupy is not installed
 
         """
+
     def to_host(self) -> ArrayOfStructs_2_1_pinned: ...
     def to_numpy(self, copy=False):
         """
@@ -3587,6 +3663,7 @@ class ArrayOfStructs_2_1_default:
             of 1D numpy arrays.
 
         """
+
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -3602,6 +3679,7 @@ class ArrayOfStructs_2_1_pinned:
         """
         get back member.  Problem!!!!! this is perfo
         """
+
     @typing.overload
     def empty(self) -> bool: ...
     @typing.overload
@@ -3639,6 +3717,7 @@ class ArrayOfStructs_2_1_pinned:
             Raises an exception if cupy is not installed
 
         """
+
     def to_host(self) -> ArrayOfStructs_2_1_pinned: ...
     def to_numpy(self, copy=False):
         """
@@ -3659,6 +3738,7 @@ class ArrayOfStructs_2_1_pinned:
             of 1D numpy arrays.
 
         """
+
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -3771,17 +3851,20 @@ class Box:
         """
         Return IntVect of lengths of the Box
         """
+
     @typing.overload
     def length(self, arg0: int) -> int:
         """
         Return the length of the Box in given direction.
         """
+
     def make_slab(self, direction: int, slab_index: int) -> Box: ...
     def normalize(self) -> None: ...
     def numPts(self) -> int:
         """
         Return the number of points in the Box.
         """
+
     def same_size(self, arg0: Box) -> bool: ...
     def same_type(self, arg0: Box) -> bool: ...
     def shift(self, arg0: IntVect) -> Box: ...
@@ -3919,6 +4002,7 @@ class CoordSys:
         def name(self) -> str: ...
         @property
         def value(self) -> int: ...
+
     RZ: typing.ClassVar[CoordSys.CoordType]  # value = <CoordType.RZ: 1>
     SPHERICAL: typing.ClassVar[CoordSys.CoordType]  # value = <CoordType.SPHERICAL: 2>
     cartesian: typing.ClassVar[CoordSys.CoordType]  # value = <CoordType.cartesian: 0>
@@ -4095,6 +4179,7 @@ class Geometry(CoordSys):
         """
         Return rectangular domain
         """
+
     @typing.overload
     def Domain(self, arg0: Box) -> None: ...
     @typing.overload
@@ -4102,6 +4187,7 @@ class Geometry(CoordSys):
         """
         Return problem domain
         """
+
     @typing.overload
     def ProbDomain(self, arg0: RealBox) -> None: ...
     @typing.overload
@@ -4109,6 +4195,7 @@ class Geometry(CoordSys):
         """
         Get the hi end of the problem domain in specified direction
         """
+
     @typing.overload
     def ProbHi(
         self,
@@ -4116,15 +4203,18 @@ class Geometry(CoordSys):
         """
         Get the list of lo ends of the problem domain
         """
+
     def ProbLength(self, arg0: int) -> float:
         """
         length of problem domain in specified dimension
         """
+
     @typing.overload
     def ProbLo(self, arg0: int) -> float:
         """
         Get the lo end of the problem domain in specified direction
         """
+
     @typing.overload
     def ProbLo(
         self,
@@ -4132,24 +4222,29 @@ class Geometry(CoordSys):
         """
         Get the list of lo ends of the problem domain
         """
+
     def ProbSize(self) -> float:
         """
         the overall size of the domain
         """
+
     def ResetDefaultCoord(self: int) -> None:
         """
         Reset default coord of Geometry class with an Array of `int`
         """
+
     def ResetDefaultPeriodicity(
         self: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)]
     ) -> None:
         """
         Reset default periodicity of Geometry class with an Array of `int`
         """
+
     def ResetDefaultProbDomain(self: RealBox) -> None:
         """
         Reset default problem domain of Geometry class with a `RealBox`
         """
+
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
@@ -4167,6 +4262,7 @@ class Geometry(CoordSys):
         """
         Returns non-static copy of geometry's stored data
         """
+
     def define(
         self,
         arg0: Box,
@@ -4177,6 +4273,7 @@ class Geometry(CoordSys):
         """
         Set geometry
         """
+
     @typing.overload
     def growNonPeriodicDomain(self, arg0: IntVect) -> Box: ...
     @typing.overload
@@ -4189,19 +4286,23 @@ class Geometry(CoordSys):
         """
         Returns true if a point is inside the roundoff domain. All particles with positions inside the roundoff domain are sure to be mapped to cells inside the Domain() box. Note that the same need not be true for all points inside ProbDomain()
         """
+
     def isAllPeriodic(self) -> bool:
         """
         Is domain periodic in all directions?
         """
+
     def isAnyPeriodic(self) -> bool:
         """
         Is domain periodic in any direction?
         """
+
     @typing.overload
     def isPeriodic(self, arg0: int) -> bool:
         """
         Is the domain periodic in the specified direction?
         """
+
     @typing.overload
     def isPeriodic(
         self,
@@ -4209,14 +4310,17 @@ class Geometry(CoordSys):
         """
         Return list indicating whether domain is periodic in each direction
         """
+
     def outsideRoundOffDomain(self, arg0: float, arg1: float, arg2: float) -> bool:
         """
         Returns true if a point is outside the roundoff domain. All particles with positions inside the roundoff domain are sure to be mapped to cells inside the Domain() box. Note that the same need not be true for all points inside ProbDomain()
         """
+
     def period(self, arg0: int) -> int:
         """
         Return the period in the specified direction
         """
+
     @typing.overload
     def periodicity(self) -> Periodicity: ...
     @typing.overload
@@ -4224,6 +4328,7 @@ class Geometry(CoordSys):
         """
         Return Periodicity object with lengths determined by input Box
         """
+
     def refine(self, arg0: IntVect) -> None: ...
     def setPeriodicity(
         self,
@@ -4238,19 +4343,23 @@ class GeometryData:
         """
         Returns the cellsize for each coordinate direction.
         """
+
     @typing.overload
     def CellSize(self, arg0: int) -> float:
         """
         Returns the cellsize for specified coordinate direction.
         """
+
     def Coord(self) -> int:
         """
         return integer coordinate type
         """
+
     def Domain(self) -> Box:
         """
         Returns our rectangular domain
         """
+
     @typing.overload
     def ProbHi(
         self,
@@ -4258,11 +4367,13 @@ class GeometryData:
         """
         Returns the hi end for each coordinate direction.
         """
+
     @typing.overload
     def ProbHi(self, arg0: int) -> float:
         """
         Returns the hi end of the problem domain in specified dimension.
         """
+
     @typing.overload
     def ProbLo(
         self,
@@ -4270,11 +4381,13 @@ class GeometryData:
         """
         Returns the lo end for each coordinate direction.
         """
+
     @typing.overload
     def ProbLo(self, arg0: int) -> float:
         """
         Returns the lo end of the problem domain in specified dimension.
         """
+
     def __init__(self) -> None: ...
     def __repr__(self) -> str: ...
     @typing.overload
@@ -4284,11 +4397,13 @@ class GeometryData:
         """
         Returns whether the domain is periodic in each direction.
         """
+
     @typing.overload
     def isPeriodic(self, arg0: int) -> int:
         """
         Returns whether the domain is periodic in the given direction.
         """
+
     @property
     def coord(self) -> int: ...
     @property
@@ -4333,6 +4448,7 @@ class IndexType:
         def name(self) -> str: ...
         @property
         def value(self) -> int: ...
+
     CELL: typing.ClassVar[IndexType.CellIndex]  # value = <CellIndex.CELL: 0>
     NODE: typing.ClassVar[IndexType.CellIndex]  # value = <CellIndex.NODE: 1>
     __hash__: typing.ClassVar[None] = None
@@ -4714,6 +4830,7 @@ class MultiFab(FabArray_FArrayBox):
         """
         Returns the maximum value of the specfied component of the MultiFab.
         """
+
     @typing.overload
     def max(
         self, region: Box, comp: int = 0, nghost: int = 0, local: bool = False
@@ -4721,12 +4838,14 @@ class MultiFab(FabArray_FArrayBox):
         """
         Returns the maximum value of the specfied component of the MultiFab over the region.
         """
+
     def maxIndex(self, arg0: int, arg1: int) -> IntVect: ...
     @typing.overload
     def min(self, comp: int = 0, nghost: int = 0, local: bool = False) -> float:
         """
         Returns the minimum value of the specfied component of the MultiFab.
         """
+
     @typing.overload
     def min(
         self, region: Box, comp: int = 0, nghost: int = 0, local: bool = False
@@ -4734,6 +4853,7 @@ class MultiFab(FabArray_FArrayBox):
         """
         Returns the minimum value of the specfied component of the MultiFab over the region.
         """
+
     def minIndex(self, arg0: int, arg1: int) -> IntVect: ...
     def minus(self, arg0: MultiFab, arg1: int, arg2: int, arg3: int) -> None: ...
     @typing.overload
@@ -4792,12 +4912,14 @@ class MultiFab(FabArray_FArrayBox):
         """
         Returns the sum of component 'comp' over the MultiFab -- no ghost cells are included.
         """
+
     def sum_unique(
         self, comp: int = 0, local: bool = False, period: Periodicity = ...
     ) -> float:
         """
         Same as sum with local=false, but for non-cell-centered data, thisskips non-unique points that are owned by multiple boxes.
         """
+
     def to_cupy(self, copy=False, order="F"):
         """
 
@@ -4831,6 +4953,7 @@ class MultiFab(FabArray_FArrayBox):
             Raises an exception if cupy is not installed
 
         """
+
     def to_numpy(self, copy=False, order="F"):
         """
 
@@ -4859,6 +4982,7 @@ class MultiFab(FabArray_FArrayBox):
             MultiFab.
 
         """
+
     def weighted_sync(self, arg0: MultiFab, arg1: Periodicity) -> None: ...
     @property
     def n_comp(self) -> int: ...
@@ -4977,6 +5101,7 @@ class PODVector_int_arena:
             Raises an exception if cupy is not installed
 
         """
+
     def to_host(self) -> PODVector_int_pinned: ...
     def to_numpy(self, copy=False):
         """
@@ -4996,6 +5121,7 @@ class PODVector_int_arena:
             A 1D numpy array.
 
         """
+
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -5047,6 +5173,7 @@ class PODVector_int_pinned:
             Raises an exception if cupy is not installed
 
         """
+
     def to_host(self) -> PODVector_int_pinned: ...
     def to_numpy(self, copy=False):
         """
@@ -5066,6 +5193,7 @@ class PODVector_int_pinned:
             A 1D numpy array.
 
         """
+
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -5117,6 +5245,7 @@ class PODVector_int_std:
             Raises an exception if cupy is not installed
 
         """
+
     def to_host(self) -> PODVector_int_pinned: ...
     def to_numpy(self, copy=False):
         """
@@ -5136,6 +5265,7 @@ class PODVector_int_std:
             A 1D numpy array.
 
         """
+
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -5187,6 +5317,7 @@ class PODVector_real_arena:
             Raises an exception if cupy is not installed
 
         """
+
     def to_host(self) -> PODVector_real_pinned: ...
     def to_numpy(self, copy=False):
         """
@@ -5206,6 +5337,7 @@ class PODVector_real_arena:
             A 1D numpy array.
 
         """
+
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -5257,6 +5389,7 @@ class PODVector_real_pinned:
             Raises an exception if cupy is not installed
 
         """
+
     def to_host(self) -> PODVector_real_pinned: ...
     def to_numpy(self, copy=False):
         """
@@ -5276,6 +5409,7 @@ class PODVector_real_pinned:
             A 1D numpy array.
 
         """
+
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -5327,6 +5461,7 @@ class PODVector_real_std:
             Raises an exception if cupy is not installed
 
         """
+
     def to_host(self) -> PODVector_real_pinned: ...
     def to_numpy(self, copy=False):
         """
@@ -5346,6 +5481,7 @@ class PODVector_real_std:
             A 1D numpy array.
 
         """
+
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -5397,6 +5533,7 @@ class PODVector_uint64_arena:
             Raises an exception if cupy is not installed
 
         """
+
     def to_host(self) -> PODVector_uint64_pinned: ...
     def to_numpy(self, copy=False):
         """
@@ -5416,6 +5553,7 @@ class PODVector_uint64_arena:
             A 1D numpy array.
 
         """
+
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -5467,6 +5605,7 @@ class PODVector_uint64_pinned:
             Raises an exception if cupy is not installed
 
         """
+
     def to_host(self) -> PODVector_uint64_pinned: ...
     def to_numpy(self, copy=False):
         """
@@ -5486,6 +5625,7 @@ class PODVector_uint64_pinned:
             A 1D numpy array.
 
         """
+
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -5537,6 +5677,7 @@ class PODVector_uint64_std:
             Raises an exception if cupy is not installed
 
         """
+
     def to_host(self) -> PODVector_uint64_pinned: ...
     def to_numpy(self, copy=False):
         """
@@ -5556,6 +5697,7 @@ class PODVector_uint64_std:
             A 1D numpy array.
 
         """
+
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -6612,18 +6754,22 @@ class ParmParse:
         """
         parses input values
         """
+
     def get_int(self, name: str, ival: int = 0) -> int:
         """
         parses input values
         """
+
     def get_real(self, name: str, ival: int = 0) -> float:
         """
         parses input values
         """
+
     def query_int(self, name: str, ival: int = 0) -> tuple[bool, int]:
         """
         queries input values
         """
+
     def remove(self, arg0: str) -> int: ...
 
 class ParticleContainer_0_0_4_0_arena:
@@ -6754,6 +6900,7 @@ class ParticleContainer_0_0_4_0_arena:
         If local=False, then all ranks but the root_rank will return None.
 
         """
+
     @property
     def finest_level(self) -> int: ...
     @property
@@ -6761,16 +6908,19 @@ class ParticleContainer_0_0_4_0_arena:
         """
         The number of compile-time and runtime int components in SoA
         """
+
     @property
     def num_real_comps(self) -> int:
         """
         The number of compile-time and runtime Real components in SoA
         """
+
     @property
     def num_runtime_int_comps(self) -> int:
         """
         The number of runtime Int components in SoA
         """
+
     @property
     def num_runtime_real_comps(self) -> int:
         """
@@ -6905,6 +7055,7 @@ class ParticleContainer_0_0_4_0_default:
         If local=False, then all ranks but the root_rank will return None.
 
         """
+
     @property
     def finest_level(self) -> int: ...
     @property
@@ -6912,16 +7063,19 @@ class ParticleContainer_0_0_4_0_default:
         """
         The number of compile-time and runtime int components in SoA
         """
+
     @property
     def num_real_comps(self) -> int:
         """
         The number of compile-time and runtime Real components in SoA
         """
+
     @property
     def num_runtime_int_comps(self) -> int:
         """
         The number of runtime Int components in SoA
         """
+
     @property
     def num_runtime_real_comps(self) -> int:
         """
@@ -7056,6 +7210,7 @@ class ParticleContainer_0_0_4_0_pinned:
         If local=False, then all ranks but the root_rank will return None.
 
         """
+
     @property
     def finest_level(self) -> int: ...
     @property
@@ -7063,16 +7218,19 @@ class ParticleContainer_0_0_4_0_pinned:
         """
         The number of compile-time and runtime int components in SoA
         """
+
     @property
     def num_real_comps(self) -> int:
         """
         The number of compile-time and runtime Real components in SoA
         """
+
     @property
     def num_runtime_int_comps(self) -> int:
         """
         The number of runtime Int components in SoA
         """
+
     @property
     def num_runtime_real_comps(self) -> int:
         """
@@ -7207,6 +7365,7 @@ class ParticleContainer_0_0_5_0_arena:
         If local=False, then all ranks but the root_rank will return None.
 
         """
+
     @property
     def finest_level(self) -> int: ...
     @property
@@ -7214,16 +7373,19 @@ class ParticleContainer_0_0_5_0_arena:
         """
         The number of compile-time and runtime int components in SoA
         """
+
     @property
     def num_real_comps(self) -> int:
         """
         The number of compile-time and runtime Real components in SoA
         """
+
     @property
     def num_runtime_int_comps(self) -> int:
         """
         The number of runtime Int components in SoA
         """
+
     @property
     def num_runtime_real_comps(self) -> int:
         """
@@ -7358,6 +7520,7 @@ class ParticleContainer_0_0_5_0_default:
         If local=False, then all ranks but the root_rank will return None.
 
         """
+
     @property
     def finest_level(self) -> int: ...
     @property
@@ -7365,16 +7528,19 @@ class ParticleContainer_0_0_5_0_default:
         """
         The number of compile-time and runtime int components in SoA
         """
+
     @property
     def num_real_comps(self) -> int:
         """
         The number of compile-time and runtime Real components in SoA
         """
+
     @property
     def num_runtime_int_comps(self) -> int:
         """
         The number of runtime Int components in SoA
         """
+
     @property
     def num_runtime_real_comps(self) -> int:
         """
@@ -7509,6 +7675,7 @@ class ParticleContainer_0_0_5_0_pinned:
         If local=False, then all ranks but the root_rank will return None.
 
         """
+
     @property
     def finest_level(self) -> int: ...
     @property
@@ -7516,16 +7683,19 @@ class ParticleContainer_0_0_5_0_pinned:
         """
         The number of compile-time and runtime int components in SoA
         """
+
     @property
     def num_real_comps(self) -> int:
         """
         The number of compile-time and runtime Real components in SoA
         """
+
     @property
     def num_runtime_int_comps(self) -> int:
         """
         The number of runtime Int components in SoA
         """
+
     @property
     def num_runtime_real_comps(self) -> int:
         """
@@ -7660,6 +7830,7 @@ class ParticleContainer_1_1_2_1_arena:
         If local=False, then all ranks but the root_rank will return None.
 
         """
+
     @property
     def finest_level(self) -> int: ...
     @property
@@ -7667,16 +7838,19 @@ class ParticleContainer_1_1_2_1_arena:
         """
         The number of compile-time and runtime int components in SoA
         """
+
     @property
     def num_real_comps(self) -> int:
         """
         The number of compile-time and runtime Real components in SoA
         """
+
     @property
     def num_runtime_int_comps(self) -> int:
         """
         The number of runtime Int components in SoA
         """
+
     @property
     def num_runtime_real_comps(self) -> int:
         """
@@ -7811,6 +7985,7 @@ class ParticleContainer_1_1_2_1_default:
         If local=False, then all ranks but the root_rank will return None.
 
         """
+
     @property
     def finest_level(self) -> int: ...
     @property
@@ -7818,16 +7993,19 @@ class ParticleContainer_1_1_2_1_default:
         """
         The number of compile-time and runtime int components in SoA
         """
+
     @property
     def num_real_comps(self) -> int:
         """
         The number of compile-time and runtime Real components in SoA
         """
+
     @property
     def num_runtime_int_comps(self) -> int:
         """
         The number of runtime Int components in SoA
         """
+
     @property
     def num_runtime_real_comps(self) -> int:
         """
@@ -7962,6 +8140,7 @@ class ParticleContainer_1_1_2_1_pinned:
         If local=False, then all ranks but the root_rank will return None.
 
         """
+
     @property
     def finest_level(self) -> int: ...
     @property
@@ -7969,16 +8148,19 @@ class ParticleContainer_1_1_2_1_pinned:
         """
         The number of compile-time and runtime int components in SoA
         """
+
     @property
     def num_real_comps(self) -> int:
         """
         The number of compile-time and runtime Real components in SoA
         """
+
     @property
     def num_runtime_int_comps(self) -> int:
         """
         The number of runtime Int components in SoA
         """
+
     @property
     def num_runtime_real_comps(self) -> int:
         """
@@ -8099,6 +8281,7 @@ class ParticleContainer_pureSoA_7_0_arena:
         If local=False, then all ranks but the root_rank will return None.
 
         """
+
     @property
     def finest_level(self) -> int: ...
     @property
@@ -8106,16 +8289,19 @@ class ParticleContainer_pureSoA_7_0_arena:
         """
         The number of compile-time and runtime int components in SoA
         """
+
     @property
     def num_real_comps(self) -> int:
         """
         The number of compile-time and runtime Real components in SoA
         """
+
     @property
     def num_runtime_int_comps(self) -> int:
         """
         The number of runtime Int components in SoA
         """
+
     @property
     def num_runtime_real_comps(self) -> int:
         """
@@ -8239,6 +8425,7 @@ class ParticleContainer_pureSoA_7_0_default:
         If local=False, then all ranks but the root_rank will return None.
 
         """
+
     @property
     def finest_level(self) -> int: ...
     @property
@@ -8246,16 +8433,19 @@ class ParticleContainer_pureSoA_7_0_default:
         """
         The number of compile-time and runtime int components in SoA
         """
+
     @property
     def num_real_comps(self) -> int:
         """
         The number of compile-time and runtime Real components in SoA
         """
+
     @property
     def num_runtime_int_comps(self) -> int:
         """
         The number of runtime Int components in SoA
         """
+
     @property
     def num_runtime_real_comps(self) -> int:
         """
@@ -8376,6 +8566,7 @@ class ParticleContainer_pureSoA_7_0_pinned:
         If local=False, then all ranks but the root_rank will return None.
 
         """
+
     @property
     def finest_level(self) -> int: ...
     @property
@@ -8383,16 +8574,19 @@ class ParticleContainer_pureSoA_7_0_pinned:
         """
         The number of compile-time and runtime int components in SoA
         """
+
     @property
     def num_real_comps(self) -> int:
         """
         The number of compile-time and runtime Real components in SoA
         """
+
     @property
     def num_runtime_int_comps(self) -> int:
         """
         The number of runtime Int components in SoA
         """
+
     @property
     def num_runtime_real_comps(self) -> int:
         """
@@ -8513,6 +8707,7 @@ class ParticleContainer_pureSoA_8_0_arena:
         If local=False, then all ranks but the root_rank will return None.
 
         """
+
     @property
     def finest_level(self) -> int: ...
     @property
@@ -8520,16 +8715,19 @@ class ParticleContainer_pureSoA_8_0_arena:
         """
         The number of compile-time and runtime int components in SoA
         """
+
     @property
     def num_real_comps(self) -> int:
         """
         The number of compile-time and runtime Real components in SoA
         """
+
     @property
     def num_runtime_int_comps(self) -> int:
         """
         The number of runtime Int components in SoA
         """
+
     @property
     def num_runtime_real_comps(self) -> int:
         """
@@ -8653,6 +8851,7 @@ class ParticleContainer_pureSoA_8_0_default:
         If local=False, then all ranks but the root_rank will return None.
 
         """
+
     @property
     def finest_level(self) -> int: ...
     @property
@@ -8660,16 +8859,19 @@ class ParticleContainer_pureSoA_8_0_default:
         """
         The number of compile-time and runtime int components in SoA
         """
+
     @property
     def num_real_comps(self) -> int:
         """
         The number of compile-time and runtime Real components in SoA
         """
+
     @property
     def num_runtime_int_comps(self) -> int:
         """
         The number of runtime Int components in SoA
         """
+
     @property
     def num_runtime_real_comps(self) -> int:
         """
@@ -8790,6 +8992,7 @@ class ParticleContainer_pureSoA_8_0_pinned:
         If local=False, then all ranks but the root_rank will return None.
 
         """
+
     @property
     def finest_level(self) -> int: ...
     @property
@@ -8797,16 +9000,19 @@ class ParticleContainer_pureSoA_8_0_pinned:
         """
         The number of compile-time and runtime int components in SoA
         """
+
     @property
     def num_real_comps(self) -> int:
         """
         The number of compile-time and runtime Real components in SoA
         """
+
     @property
     def num_runtime_int_comps(self) -> int:
         """
         The number of runtime Int components in SoA
         """
+
     @property
     def num_runtime_real_comps(self) -> int:
         """
@@ -8965,11 +9171,13 @@ class ParticleTile_0_0_37_1_arena:
         """
         Add one particle to this tile.
         """
+
     @typing.overload
     def push_back(self, arg0: Particle_37_1) -> None:
         """
         Add one particle to this tile.
         """
+
     @typing.overload
     def push_back_int(self, arg0: int, arg1: int) -> None: ...
     @typing.overload
@@ -9020,11 +9228,13 @@ class ParticleTile_0_0_37_1_default:
         """
         Add one particle to this tile.
         """
+
     @typing.overload
     def push_back(self, arg0: Particle_37_1) -> None:
         """
         Add one particle to this tile.
         """
+
     @typing.overload
     def push_back_int(self, arg0: int, arg1: int) -> None: ...
     @typing.overload
@@ -9075,11 +9285,13 @@ class ParticleTile_0_0_37_1_pinned:
         """
         Add one particle to this tile.
         """
+
     @typing.overload
     def push_back(self, arg0: Particle_37_1) -> None:
         """
         Add one particle to this tile.
         """
+
     @typing.overload
     def push_back_int(self, arg0: int, arg1: int) -> None: ...
     @typing.overload
@@ -9130,11 +9342,13 @@ class ParticleTile_0_0_4_0_arena:
         """
         Add one particle to this tile.
         """
+
     @typing.overload
     def push_back(self, arg0: Particle_4_0) -> None:
         """
         Add one particle to this tile.
         """
+
     @typing.overload
     def push_back_int(self, arg0: int, arg1: int) -> None: ...
     @typing.overload
@@ -9185,11 +9399,13 @@ class ParticleTile_0_0_4_0_default:
         """
         Add one particle to this tile.
         """
+
     @typing.overload
     def push_back(self, arg0: Particle_4_0) -> None:
         """
         Add one particle to this tile.
         """
+
     @typing.overload
     def push_back_int(self, arg0: int, arg1: int) -> None: ...
     @typing.overload
@@ -9240,11 +9456,13 @@ class ParticleTile_0_0_4_0_pinned:
         """
         Add one particle to this tile.
         """
+
     @typing.overload
     def push_back(self, arg0: Particle_4_0) -> None:
         """
         Add one particle to this tile.
         """
+
     @typing.overload
     def push_back_int(self, arg0: int, arg1: int) -> None: ...
     @typing.overload
@@ -9295,11 +9513,13 @@ class ParticleTile_0_0_5_0_arena:
         """
         Add one particle to this tile.
         """
+
     @typing.overload
     def push_back(self, arg0: Particle_5_0) -> None:
         """
         Add one particle to this tile.
         """
+
     @typing.overload
     def push_back_int(self, arg0: int, arg1: int) -> None: ...
     @typing.overload
@@ -9350,11 +9570,13 @@ class ParticleTile_0_0_5_0_default:
         """
         Add one particle to this tile.
         """
+
     @typing.overload
     def push_back(self, arg0: Particle_5_0) -> None:
         """
         Add one particle to this tile.
         """
+
     @typing.overload
     def push_back_int(self, arg0: int, arg1: int) -> None: ...
     @typing.overload
@@ -9405,11 +9627,13 @@ class ParticleTile_0_0_5_0_pinned:
         """
         Add one particle to this tile.
         """
+
     @typing.overload
     def push_back(self, arg0: Particle_5_0) -> None:
         """
         Add one particle to this tile.
         """
+
     @typing.overload
     def push_back_int(self, arg0: int, arg1: int) -> None: ...
     @typing.overload
@@ -9460,11 +9684,13 @@ class ParticleTile_1_1_2_1_arena:
         """
         Add one particle to this tile.
         """
+
     @typing.overload
     def push_back(self, arg0: Particle_3_2) -> None:
         """
         Add one particle to this tile.
         """
+
     @typing.overload
     def push_back_int(self, arg0: int, arg1: int) -> None: ...
     @typing.overload
@@ -9515,11 +9741,13 @@ class ParticleTile_1_1_2_1_default:
         """
         Add one particle to this tile.
         """
+
     @typing.overload
     def push_back(self, arg0: Particle_3_2) -> None:
         """
         Add one particle to this tile.
         """
+
     @typing.overload
     def push_back_int(self, arg0: int, arg1: int) -> None: ...
     @typing.overload
@@ -9570,11 +9798,13 @@ class ParticleTile_1_1_2_1_pinned:
         """
         Add one particle to this tile.
         """
+
     @typing.overload
     def push_back(self, arg0: Particle_3_2) -> None:
         """
         Add one particle to this tile.
         """
+
     @typing.overload
     def push_back_int(self, arg0: int, arg1: int) -> None: ...
     @typing.overload
@@ -9623,6 +9853,7 @@ class ParticleTile_pureSoA_0_0_7_0_arena:
         """
         Add one particle to this tile.
         """
+
     @typing.overload
     def push_back_int(self, arg0: int, arg1: int) -> None: ...
     @typing.overload
@@ -9671,6 +9902,7 @@ class ParticleTile_pureSoA_0_0_7_0_default:
         """
         Add one particle to this tile.
         """
+
     @typing.overload
     def push_back_int(self, arg0: int, arg1: int) -> None: ...
     @typing.overload
@@ -9719,6 +9951,7 @@ class ParticleTile_pureSoA_0_0_7_0_pinned:
         """
         Add one particle to this tile.
         """
+
     @typing.overload
     def push_back_int(self, arg0: int, arg1: int) -> None: ...
     @typing.overload
@@ -9767,6 +10000,7 @@ class ParticleTile_pureSoA_0_0_8_0_arena:
         """
         Add one particle to this tile.
         """
+
     @typing.overload
     def push_back_int(self, arg0: int, arg1: int) -> None: ...
     @typing.overload
@@ -9815,6 +10049,7 @@ class ParticleTile_pureSoA_0_0_8_0_default:
         """
         Add one particle to this tile.
         """
+
     @typing.overload
     def push_back_int(self, arg0: int, arg1: int) -> None: ...
     @typing.overload
@@ -9863,6 +10098,7 @@ class ParticleTile_pureSoA_0_0_8_0_pinned:
         """
         Add one particle to this tile.
         """
+
     @typing.overload
     def push_back_int(self, arg0: int, arg1: int) -> None: ...
     @typing.overload
@@ -10560,6 +10796,7 @@ class Periodicity:
         """
         Return the Periodicity object that is not periodic in any direction
         """
+
     def __eq__(self, arg0: Periodicity) -> bool: ...
     def __getitem__(self, dir: int) -> bool: ...
     @typing.overload
@@ -10573,6 +10810,7 @@ class Periodicity:
         """
         Cell-centered domain Box "infinitely" long in non-periodic directions.
         """
+
     @property
     def is_all_periodic(self) -> bool: ...
     @property
@@ -10613,26 +10851,31 @@ class RealBox:
         """
         Determine if RealBox contains ``pt``, within tolerance ``eps``
         """
+
     @typing.overload
     def contains(self, rb: RealVect, eps: float = 0.0) -> bool:
         """
         Determine if RealBox contains ``pt``, within tolerance ``eps``
         """
+
     @typing.overload
     def contains(self, rb: RealBox, eps: float = 0.0) -> bool:
         """
         Determine if RealBox contains another RealBox, within tolerance ``eps``
         """
+
     @typing.overload
     def contains(self, rb: list[float], eps: float = 0.0) -> bool:
         """
         Determine if RealBox contains ``pt``, within tolerance ``eps``
         """
+
     @typing.overload
     def hi(self, arg0: int) -> float:
         """
         Get ith component of ``xhi``
         """
+
     @typing.overload
     def hi(
         self,
@@ -10640,16 +10883,19 @@ class RealBox:
         """
         Get all components of ``xhi``
         """
+
     def intersects(self, arg0: RealBox) -> bool:
         """
         determine if box intersects with a box
         """
+
     def length(self, arg0: int) -> float: ...
     @typing.overload
     def lo(self, arg0: int) -> float:
         """
         Get ith component of ``xlo``
         """
+
     @typing.overload
     def lo(
         self,
@@ -10657,30 +10903,36 @@ class RealBox:
         """
         Get all components of ``xlo``
         """
+
     def ok(self) -> bool:
         """
         Determine if RealBox satisfies ``xlo[i]<xhi[i]`` for ``i=0,1,...,AMREX_SPACEDIM``.
         """
+
     @typing.overload
     def setHi(self, arg0: list[float]) -> None:
         """
         Get all components of ``xlo``
         """
+
     @typing.overload
     def setHi(self, arg0: int, arg1: float) -> None:
         """
         Get ith component of ``xhi``
         """
+
     @typing.overload
     def setLo(self, arg0: list[float]) -> None:
         """
         Get ith component of ``xlo``
         """
+
     @typing.overload
     def setLo(self, arg0: int, arg1: float) -> None:
         """
         Get all components of ``xlo``
         """
+
     def volume(self) -> float: ...
     @property
     def xhi(
@@ -10701,6 +10953,7 @@ class RealVect:
         """
         return basis vector in given coordinate direction
         """
+
     @typing.overload
     def __add__(self, arg0: float) -> RealVect: ...
     @typing.overload
@@ -10760,57 +11013,70 @@ class RealVect:
         """
         Return an ``IntVect`` whose components are the std::ceil of the vector components
         """
+
     def crossProduct(self, arg0: RealVect) -> RealVect:
         """
         Return cross product of this vector with another
         """
+
     def dotProduct(self, arg0: RealVect) -> float:
         """
         Return dot product of this vector with another
         """
+
     def floor(self) -> IntVect:
         """
         Return an ``IntVect`` whose components are the std::floor of the vector components
         """
+
     def max(self, arg0: RealVect) -> RealVect:
         """
         Replace vector with the component-wise maxima of this vector and another
         """
+
     def maxDir(self, arg0: bool) -> int:
         """
         direction or index of maximum value of this vector
         """
+
     def min(self, arg0: RealVect) -> RealVect:
         """
         Replace vector with the component-wise minima of this vector and another
         """
+
     def minDir(self, arg0: bool) -> int:
         """
         direction or index of minimum value of this vector
         """
+
     def round(self) -> IntVect:
         """
         Return an ``IntVect`` whose components are the std::round of the vector components
         """
+
     def scale(self, arg0: float) -> RealVect:
         """
         Multiplify each component of this vector by a scalar
         """
+
     @property
     def product(self) -> float:
         """
         Product of entries of this vector
         """
+
     @property
     def radSquared(self) -> float:
         """
         Length squared of this vector
         """
+
     @property
     def sum(self) -> float:
         """
         Sum of the components of this vector
         """
+
     @property
     def vectorLength(self) -> float:
         """
@@ -10827,11 +11093,13 @@ class StructOfArrays_2_1_arena:
         """
         Get access to the particle Int Arrays (only compile-time components)
         """
+
     @typing.overload
     def GetIntData(self, index: int) -> PODVector_int_arena:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
+
     @typing.overload
     def GetRealData(
         self,
@@ -10841,16 +11109,19 @@ class StructOfArrays_2_1_arena:
         """
         Get access to the particle Real Arrays (only compile-time components)
         """
+
     @typing.overload
     def GetRealData(self, index: int) -> PODVector_real_arena:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
+
     def __init__(self) -> None: ...
     def __len__(self) -> int:
         """
         Get the number of particles
         """
+
     def define(self, arg0: int, arg1: int) -> None: ...
     def getNumNeighbors(self) -> int: ...
     def numParticles(self) -> int: ...
@@ -10862,6 +11133,7 @@ class StructOfArrays_2_1_arena:
         """
         Get the number of particles
         """
+
     def to_cupy(self, copy=False):
         """
 
@@ -10886,6 +11158,7 @@ class StructOfArrays_2_1_arena:
             Raises an exception if cupy is not installed
 
         """
+
     def to_numpy(self, copy=False):
         """
 
@@ -10905,11 +11178,13 @@ class StructOfArrays_2_1_arena:
             of 1D numpy arrays.
 
         """
+
     @property
     def num_int_comps(self) -> int:
         """
         Get the number of compile-time + runtime Int components
         """
+
     @property
     def num_real_comps(self) -> int:
         """
@@ -10926,11 +11201,13 @@ class StructOfArrays_2_1_default:
         """
         Get access to the particle Int Arrays (only compile-time components)
         """
+
     @typing.overload
     def GetIntData(self, index: int) -> PODVector_int_std:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
+
     @typing.overload
     def GetRealData(
         self,
@@ -10940,16 +11217,19 @@ class StructOfArrays_2_1_default:
         """
         Get access to the particle Real Arrays (only compile-time components)
         """
+
     @typing.overload
     def GetRealData(self, index: int) -> PODVector_real_std:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
+
     def __init__(self) -> None: ...
     def __len__(self) -> int:
         """
         Get the number of particles
         """
+
     def define(self, arg0: int, arg1: int) -> None: ...
     def getNumNeighbors(self) -> int: ...
     def numParticles(self) -> int: ...
@@ -10961,6 +11241,7 @@ class StructOfArrays_2_1_default:
         """
         Get the number of particles
         """
+
     def to_cupy(self, copy=False):
         """
 
@@ -10985,6 +11266,7 @@ class StructOfArrays_2_1_default:
             Raises an exception if cupy is not installed
 
         """
+
     def to_numpy(self, copy=False):
         """
 
@@ -11004,11 +11286,13 @@ class StructOfArrays_2_1_default:
             of 1D numpy arrays.
 
         """
+
     @property
     def num_int_comps(self) -> int:
         """
         Get the number of compile-time + runtime Int components
         """
+
     @property
     def num_real_comps(self) -> int:
         """
@@ -11025,11 +11309,13 @@ class StructOfArrays_2_1_pinned:
         """
         Get access to the particle Int Arrays (only compile-time components)
         """
+
     @typing.overload
     def GetIntData(self, index: int) -> PODVector_int_pinned:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
+
     @typing.overload
     def GetRealData(
         self,
@@ -11039,16 +11325,19 @@ class StructOfArrays_2_1_pinned:
         """
         Get access to the particle Real Arrays (only compile-time components)
         """
+
     @typing.overload
     def GetRealData(self, index: int) -> PODVector_real_pinned:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
+
     def __init__(self) -> None: ...
     def __len__(self) -> int:
         """
         Get the number of particles
         """
+
     def define(self, arg0: int, arg1: int) -> None: ...
     def getNumNeighbors(self) -> int: ...
     def numParticles(self) -> int: ...
@@ -11060,6 +11349,7 @@ class StructOfArrays_2_1_pinned:
         """
         Get the number of particles
         """
+
     def to_cupy(self, copy=False):
         """
 
@@ -11084,6 +11374,7 @@ class StructOfArrays_2_1_pinned:
             Raises an exception if cupy is not installed
 
         """
+
     def to_numpy(self, copy=False):
         """
 
@@ -11103,11 +11394,13 @@ class StructOfArrays_2_1_pinned:
             of 1D numpy arrays.
 
         """
+
     @property
     def num_int_comps(self) -> int:
         """
         Get the number of compile-time + runtime Int components
         """
+
     @property
     def num_real_comps(self) -> int:
         """
@@ -11124,11 +11417,13 @@ class StructOfArrays_37_1_arena:
         """
         Get access to the particle Int Arrays (only compile-time components)
         """
+
     @typing.overload
     def GetIntData(self, index: int) -> PODVector_int_arena:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
+
     @typing.overload
     def GetRealData(
         self,
@@ -11138,16 +11433,19 @@ class StructOfArrays_37_1_arena:
         """
         Get access to the particle Real Arrays (only compile-time components)
         """
+
     @typing.overload
     def GetRealData(self, index: int) -> PODVector_real_arena:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
+
     def __init__(self) -> None: ...
     def __len__(self) -> int:
         """
         Get the number of particles
         """
+
     def define(self, arg0: int, arg1: int) -> None: ...
     def getNumNeighbors(self) -> int: ...
     def numParticles(self) -> int: ...
@@ -11159,6 +11457,7 @@ class StructOfArrays_37_1_arena:
         """
         Get the number of particles
         """
+
     def to_cupy(self, copy=False):
         """
 
@@ -11183,6 +11482,7 @@ class StructOfArrays_37_1_arena:
             Raises an exception if cupy is not installed
 
         """
+
     def to_numpy(self, copy=False):
         """
 
@@ -11202,11 +11502,13 @@ class StructOfArrays_37_1_arena:
             of 1D numpy arrays.
 
         """
+
     @property
     def num_int_comps(self) -> int:
         """
         Get the number of compile-time + runtime Int components
         """
+
     @property
     def num_real_comps(self) -> int:
         """
@@ -11223,11 +11525,13 @@ class StructOfArrays_37_1_default:
         """
         Get access to the particle Int Arrays (only compile-time components)
         """
+
     @typing.overload
     def GetIntData(self, index: int) -> PODVector_int_std:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
+
     @typing.overload
     def GetRealData(
         self,
@@ -11237,16 +11541,19 @@ class StructOfArrays_37_1_default:
         """
         Get access to the particle Real Arrays (only compile-time components)
         """
+
     @typing.overload
     def GetRealData(self, index: int) -> PODVector_real_std:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
+
     def __init__(self) -> None: ...
     def __len__(self) -> int:
         """
         Get the number of particles
         """
+
     def define(self, arg0: int, arg1: int) -> None: ...
     def getNumNeighbors(self) -> int: ...
     def numParticles(self) -> int: ...
@@ -11258,6 +11565,7 @@ class StructOfArrays_37_1_default:
         """
         Get the number of particles
         """
+
     def to_cupy(self, copy=False):
         """
 
@@ -11282,6 +11590,7 @@ class StructOfArrays_37_1_default:
             Raises an exception if cupy is not installed
 
         """
+
     def to_numpy(self, copy=False):
         """
 
@@ -11301,11 +11610,13 @@ class StructOfArrays_37_1_default:
             of 1D numpy arrays.
 
         """
+
     @property
     def num_int_comps(self) -> int:
         """
         Get the number of compile-time + runtime Int components
         """
+
     @property
     def num_real_comps(self) -> int:
         """
@@ -11322,11 +11633,13 @@ class StructOfArrays_37_1_pinned:
         """
         Get access to the particle Int Arrays (only compile-time components)
         """
+
     @typing.overload
     def GetIntData(self, index: int) -> PODVector_int_pinned:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
+
     @typing.overload
     def GetRealData(
         self,
@@ -11336,16 +11649,19 @@ class StructOfArrays_37_1_pinned:
         """
         Get access to the particle Real Arrays (only compile-time components)
         """
+
     @typing.overload
     def GetRealData(self, index: int) -> PODVector_real_pinned:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
+
     def __init__(self) -> None: ...
     def __len__(self) -> int:
         """
         Get the number of particles
         """
+
     def define(self, arg0: int, arg1: int) -> None: ...
     def getNumNeighbors(self) -> int: ...
     def numParticles(self) -> int: ...
@@ -11357,6 +11673,7 @@ class StructOfArrays_37_1_pinned:
         """
         Get the number of particles
         """
+
     def to_cupy(self, copy=False):
         """
 
@@ -11381,6 +11698,7 @@ class StructOfArrays_37_1_pinned:
             Raises an exception if cupy is not installed
 
         """
+
     def to_numpy(self, copy=False):
         """
 
@@ -11400,11 +11718,13 @@ class StructOfArrays_37_1_pinned:
             of 1D numpy arrays.
 
         """
+
     @property
     def num_int_comps(self) -> int:
         """
         Get the number of compile-time + runtime Int components
         """
+
     @property
     def num_real_comps(self) -> int:
         """
@@ -11421,11 +11741,13 @@ class StructOfArrays_4_0_arena:
         """
         Get access to the particle Int Arrays (only compile-time components)
         """
+
     @typing.overload
     def GetIntData(self, index: int) -> PODVector_int_arena:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
+
     @typing.overload
     def GetRealData(
         self,
@@ -11435,16 +11757,19 @@ class StructOfArrays_4_0_arena:
         """
         Get access to the particle Real Arrays (only compile-time components)
         """
+
     @typing.overload
     def GetRealData(self, index: int) -> PODVector_real_arena:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
+
     def __init__(self) -> None: ...
     def __len__(self) -> int:
         """
         Get the number of particles
         """
+
     def define(self, arg0: int, arg1: int) -> None: ...
     def getNumNeighbors(self) -> int: ...
     def numParticles(self) -> int: ...
@@ -11456,6 +11781,7 @@ class StructOfArrays_4_0_arena:
         """
         Get the number of particles
         """
+
     def to_cupy(self, copy=False):
         """
 
@@ -11480,6 +11806,7 @@ class StructOfArrays_4_0_arena:
             Raises an exception if cupy is not installed
 
         """
+
     def to_numpy(self, copy=False):
         """
 
@@ -11499,11 +11826,13 @@ class StructOfArrays_4_0_arena:
             of 1D numpy arrays.
 
         """
+
     @property
     def num_int_comps(self) -> int:
         """
         Get the number of compile-time + runtime Int components
         """
+
     @property
     def num_real_comps(self) -> int:
         """
@@ -11520,11 +11849,13 @@ class StructOfArrays_4_0_default:
         """
         Get access to the particle Int Arrays (only compile-time components)
         """
+
     @typing.overload
     def GetIntData(self, index: int) -> PODVector_int_std:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
+
     @typing.overload
     def GetRealData(
         self,
@@ -11534,16 +11865,19 @@ class StructOfArrays_4_0_default:
         """
         Get access to the particle Real Arrays (only compile-time components)
         """
+
     @typing.overload
     def GetRealData(self, index: int) -> PODVector_real_std:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
+
     def __init__(self) -> None: ...
     def __len__(self) -> int:
         """
         Get the number of particles
         """
+
     def define(self, arg0: int, arg1: int) -> None: ...
     def getNumNeighbors(self) -> int: ...
     def numParticles(self) -> int: ...
@@ -11555,6 +11889,7 @@ class StructOfArrays_4_0_default:
         """
         Get the number of particles
         """
+
     def to_cupy(self, copy=False):
         """
 
@@ -11579,6 +11914,7 @@ class StructOfArrays_4_0_default:
             Raises an exception if cupy is not installed
 
         """
+
     def to_numpy(self, copy=False):
         """
 
@@ -11598,11 +11934,13 @@ class StructOfArrays_4_0_default:
             of 1D numpy arrays.
 
         """
+
     @property
     def num_int_comps(self) -> int:
         """
         Get the number of compile-time + runtime Int components
         """
+
     @property
     def num_real_comps(self) -> int:
         """
@@ -11619,11 +11957,13 @@ class StructOfArrays_4_0_pinned:
         """
         Get access to the particle Int Arrays (only compile-time components)
         """
+
     @typing.overload
     def GetIntData(self, index: int) -> PODVector_int_pinned:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
+
     @typing.overload
     def GetRealData(
         self,
@@ -11633,16 +11973,19 @@ class StructOfArrays_4_0_pinned:
         """
         Get access to the particle Real Arrays (only compile-time components)
         """
+
     @typing.overload
     def GetRealData(self, index: int) -> PODVector_real_pinned:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
+
     def __init__(self) -> None: ...
     def __len__(self) -> int:
         """
         Get the number of particles
         """
+
     def define(self, arg0: int, arg1: int) -> None: ...
     def getNumNeighbors(self) -> int: ...
     def numParticles(self) -> int: ...
@@ -11654,6 +11997,7 @@ class StructOfArrays_4_0_pinned:
         """
         Get the number of particles
         """
+
     def to_cupy(self, copy=False):
         """
 
@@ -11678,6 +12022,7 @@ class StructOfArrays_4_0_pinned:
             Raises an exception if cupy is not installed
 
         """
+
     def to_numpy(self, copy=False):
         """
 
@@ -11697,11 +12042,13 @@ class StructOfArrays_4_0_pinned:
             of 1D numpy arrays.
 
         """
+
     @property
     def num_int_comps(self) -> int:
         """
         Get the number of compile-time + runtime Int components
         """
+
     @property
     def num_real_comps(self) -> int:
         """
@@ -11718,11 +12065,13 @@ class StructOfArrays_5_0_arena:
         """
         Get access to the particle Int Arrays (only compile-time components)
         """
+
     @typing.overload
     def GetIntData(self, index: int) -> PODVector_int_arena:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
+
     @typing.overload
     def GetRealData(
         self,
@@ -11732,16 +12081,19 @@ class StructOfArrays_5_0_arena:
         """
         Get access to the particle Real Arrays (only compile-time components)
         """
+
     @typing.overload
     def GetRealData(self, index: int) -> PODVector_real_arena:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
+
     def __init__(self) -> None: ...
     def __len__(self) -> int:
         """
         Get the number of particles
         """
+
     def define(self, arg0: int, arg1: int) -> None: ...
     def getNumNeighbors(self) -> int: ...
     def numParticles(self) -> int: ...
@@ -11753,6 +12105,7 @@ class StructOfArrays_5_0_arena:
         """
         Get the number of particles
         """
+
     def to_cupy(self, copy=False):
         """
 
@@ -11777,6 +12130,7 @@ class StructOfArrays_5_0_arena:
             Raises an exception if cupy is not installed
 
         """
+
     def to_numpy(self, copy=False):
         """
 
@@ -11796,11 +12150,13 @@ class StructOfArrays_5_0_arena:
             of 1D numpy arrays.
 
         """
+
     @property
     def num_int_comps(self) -> int:
         """
         Get the number of compile-time + runtime Int components
         """
+
     @property
     def num_real_comps(self) -> int:
         """
@@ -11817,11 +12173,13 @@ class StructOfArrays_5_0_default:
         """
         Get access to the particle Int Arrays (only compile-time components)
         """
+
     @typing.overload
     def GetIntData(self, index: int) -> PODVector_int_std:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
+
     @typing.overload
     def GetRealData(
         self,
@@ -11831,16 +12189,19 @@ class StructOfArrays_5_0_default:
         """
         Get access to the particle Real Arrays (only compile-time components)
         """
+
     @typing.overload
     def GetRealData(self, index: int) -> PODVector_real_std:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
+
     def __init__(self) -> None: ...
     def __len__(self) -> int:
         """
         Get the number of particles
         """
+
     def define(self, arg0: int, arg1: int) -> None: ...
     def getNumNeighbors(self) -> int: ...
     def numParticles(self) -> int: ...
@@ -11852,6 +12213,7 @@ class StructOfArrays_5_0_default:
         """
         Get the number of particles
         """
+
     def to_cupy(self, copy=False):
         """
 
@@ -11876,6 +12238,7 @@ class StructOfArrays_5_0_default:
             Raises an exception if cupy is not installed
 
         """
+
     def to_numpy(self, copy=False):
         """
 
@@ -11895,11 +12258,13 @@ class StructOfArrays_5_0_default:
             of 1D numpy arrays.
 
         """
+
     @property
     def num_int_comps(self) -> int:
         """
         Get the number of compile-time + runtime Int components
         """
+
     @property
     def num_real_comps(self) -> int:
         """
@@ -11916,11 +12281,13 @@ class StructOfArrays_5_0_pinned:
         """
         Get access to the particle Int Arrays (only compile-time components)
         """
+
     @typing.overload
     def GetIntData(self, index: int) -> PODVector_int_pinned:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
+
     @typing.overload
     def GetRealData(
         self,
@@ -11930,16 +12297,19 @@ class StructOfArrays_5_0_pinned:
         """
         Get access to the particle Real Arrays (only compile-time components)
         """
+
     @typing.overload
     def GetRealData(self, index: int) -> PODVector_real_pinned:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
+
     def __init__(self) -> None: ...
     def __len__(self) -> int:
         """
         Get the number of particles
         """
+
     def define(self, arg0: int, arg1: int) -> None: ...
     def getNumNeighbors(self) -> int: ...
     def numParticles(self) -> int: ...
@@ -11951,6 +12321,7 @@ class StructOfArrays_5_0_pinned:
         """
         Get the number of particles
         """
+
     def to_cupy(self, copy=False):
         """
 
@@ -11975,6 +12346,7 @@ class StructOfArrays_5_0_pinned:
             Raises an exception if cupy is not installed
 
         """
+
     def to_numpy(self, copy=False):
         """
 
@@ -11994,11 +12366,13 @@ class StructOfArrays_5_0_pinned:
             of 1D numpy arrays.
 
         """
+
     @property
     def num_int_comps(self) -> int:
         """
         Get the number of compile-time + runtime Int components
         """
+
     @property
     def num_real_comps(self) -> int:
         """
@@ -12010,6 +12384,7 @@ class StructOfArrays_7_0_idcpu_arena:
         """
         Get access to a particle IdCPU component Array
         """
+
     @typing.overload
     def GetIntData(
         self,
@@ -12019,11 +12394,13 @@ class StructOfArrays_7_0_idcpu_arena:
         """
         Get access to the particle Int Arrays (only compile-time components)
         """
+
     @typing.overload
     def GetIntData(self, index: int) -> PODVector_int_arena:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
+
     @typing.overload
     def GetRealData(
         self,
@@ -12033,16 +12410,19 @@ class StructOfArrays_7_0_idcpu_arena:
         """
         Get access to the particle Real Arrays (only compile-time components)
         """
+
     @typing.overload
     def GetRealData(self, index: int) -> PODVector_real_arena:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
+
     def __init__(self) -> None: ...
     def __len__(self) -> int:
         """
         Get the number of particles
         """
+
     def define(self, arg0: int, arg1: int) -> None: ...
     def getNumNeighbors(self) -> int: ...
     def numParticles(self) -> int: ...
@@ -12054,6 +12434,7 @@ class StructOfArrays_7_0_idcpu_arena:
         """
         Get the number of particles
         """
+
     def to_cupy(self, copy=False):
         """
 
@@ -12078,6 +12459,7 @@ class StructOfArrays_7_0_idcpu_arena:
             Raises an exception if cupy is not installed
 
         """
+
     def to_numpy(self, copy=False):
         """
 
@@ -12097,11 +12479,13 @@ class StructOfArrays_7_0_idcpu_arena:
             of 1D numpy arrays.
 
         """
+
     @property
     def num_int_comps(self) -> int:
         """
         Get the number of compile-time + runtime Int components
         """
+
     @property
     def num_real_comps(self) -> int:
         """
@@ -12113,6 +12497,7 @@ class StructOfArrays_7_0_idcpu_default:
         """
         Get access to a particle IdCPU component Array
         """
+
     @typing.overload
     def GetIntData(
         self,
@@ -12122,11 +12507,13 @@ class StructOfArrays_7_0_idcpu_default:
         """
         Get access to the particle Int Arrays (only compile-time components)
         """
+
     @typing.overload
     def GetIntData(self, index: int) -> PODVector_int_std:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
+
     @typing.overload
     def GetRealData(
         self,
@@ -12136,16 +12523,19 @@ class StructOfArrays_7_0_idcpu_default:
         """
         Get access to the particle Real Arrays (only compile-time components)
         """
+
     @typing.overload
     def GetRealData(self, index: int) -> PODVector_real_std:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
+
     def __init__(self) -> None: ...
     def __len__(self) -> int:
         """
         Get the number of particles
         """
+
     def define(self, arg0: int, arg1: int) -> None: ...
     def getNumNeighbors(self) -> int: ...
     def numParticles(self) -> int: ...
@@ -12157,6 +12547,7 @@ class StructOfArrays_7_0_idcpu_default:
         """
         Get the number of particles
         """
+
     def to_cupy(self, copy=False):
         """
 
@@ -12181,6 +12572,7 @@ class StructOfArrays_7_0_idcpu_default:
             Raises an exception if cupy is not installed
 
         """
+
     def to_numpy(self, copy=False):
         """
 
@@ -12200,11 +12592,13 @@ class StructOfArrays_7_0_idcpu_default:
             of 1D numpy arrays.
 
         """
+
     @property
     def num_int_comps(self) -> int:
         """
         Get the number of compile-time + runtime Int components
         """
+
     @property
     def num_real_comps(self) -> int:
         """
@@ -12216,6 +12610,7 @@ class StructOfArrays_7_0_idcpu_pinned:
         """
         Get access to a particle IdCPU component Array
         """
+
     @typing.overload
     def GetIntData(
         self,
@@ -12225,11 +12620,13 @@ class StructOfArrays_7_0_idcpu_pinned:
         """
         Get access to the particle Int Arrays (only compile-time components)
         """
+
     @typing.overload
     def GetIntData(self, index: int) -> PODVector_int_pinned:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
+
     @typing.overload
     def GetRealData(
         self,
@@ -12239,16 +12636,19 @@ class StructOfArrays_7_0_idcpu_pinned:
         """
         Get access to the particle Real Arrays (only compile-time components)
         """
+
     @typing.overload
     def GetRealData(self, index: int) -> PODVector_real_pinned:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
+
     def __init__(self) -> None: ...
     def __len__(self) -> int:
         """
         Get the number of particles
         """
+
     def define(self, arg0: int, arg1: int) -> None: ...
     def getNumNeighbors(self) -> int: ...
     def numParticles(self) -> int: ...
@@ -12260,6 +12660,7 @@ class StructOfArrays_7_0_idcpu_pinned:
         """
         Get the number of particles
         """
+
     def to_cupy(self, copy=False):
         """
 
@@ -12284,6 +12685,7 @@ class StructOfArrays_7_0_idcpu_pinned:
             Raises an exception if cupy is not installed
 
         """
+
     def to_numpy(self, copy=False):
         """
 
@@ -12303,11 +12705,13 @@ class StructOfArrays_7_0_idcpu_pinned:
             of 1D numpy arrays.
 
         """
+
     @property
     def num_int_comps(self) -> int:
         """
         Get the number of compile-time + runtime Int components
         """
+
     @property
     def num_real_comps(self) -> int:
         """
@@ -12319,6 +12723,7 @@ class StructOfArrays_8_0_idcpu_arena:
         """
         Get access to a particle IdCPU component Array
         """
+
     @typing.overload
     def GetIntData(
         self,
@@ -12328,11 +12733,13 @@ class StructOfArrays_8_0_idcpu_arena:
         """
         Get access to the particle Int Arrays (only compile-time components)
         """
+
     @typing.overload
     def GetIntData(self, index: int) -> PODVector_int_arena:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
+
     @typing.overload
     def GetRealData(
         self,
@@ -12342,16 +12749,19 @@ class StructOfArrays_8_0_idcpu_arena:
         """
         Get access to the particle Real Arrays (only compile-time components)
         """
+
     @typing.overload
     def GetRealData(self, index: int) -> PODVector_real_arena:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
+
     def __init__(self) -> None: ...
     def __len__(self) -> int:
         """
         Get the number of particles
         """
+
     def define(self, arg0: int, arg1: int) -> None: ...
     def getNumNeighbors(self) -> int: ...
     def numParticles(self) -> int: ...
@@ -12363,6 +12773,7 @@ class StructOfArrays_8_0_idcpu_arena:
         """
         Get the number of particles
         """
+
     def to_cupy(self, copy=False):
         """
 
@@ -12387,6 +12798,7 @@ class StructOfArrays_8_0_idcpu_arena:
             Raises an exception if cupy is not installed
 
         """
+
     def to_numpy(self, copy=False):
         """
 
@@ -12406,11 +12818,13 @@ class StructOfArrays_8_0_idcpu_arena:
             of 1D numpy arrays.
 
         """
+
     @property
     def num_int_comps(self) -> int:
         """
         Get the number of compile-time + runtime Int components
         """
+
     @property
     def num_real_comps(self) -> int:
         """
@@ -12422,6 +12836,7 @@ class StructOfArrays_8_0_idcpu_default:
         """
         Get access to a particle IdCPU component Array
         """
+
     @typing.overload
     def GetIntData(
         self,
@@ -12431,11 +12846,13 @@ class StructOfArrays_8_0_idcpu_default:
         """
         Get access to the particle Int Arrays (only compile-time components)
         """
+
     @typing.overload
     def GetIntData(self, index: int) -> PODVector_int_std:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
+
     @typing.overload
     def GetRealData(
         self,
@@ -12445,16 +12862,19 @@ class StructOfArrays_8_0_idcpu_default:
         """
         Get access to the particle Real Arrays (only compile-time components)
         """
+
     @typing.overload
     def GetRealData(self, index: int) -> PODVector_real_std:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
+
     def __init__(self) -> None: ...
     def __len__(self) -> int:
         """
         Get the number of particles
         """
+
     def define(self, arg0: int, arg1: int) -> None: ...
     def getNumNeighbors(self) -> int: ...
     def numParticles(self) -> int: ...
@@ -12466,6 +12886,7 @@ class StructOfArrays_8_0_idcpu_default:
         """
         Get the number of particles
         """
+
     def to_cupy(self, copy=False):
         """
 
@@ -12490,6 +12911,7 @@ class StructOfArrays_8_0_idcpu_default:
             Raises an exception if cupy is not installed
 
         """
+
     def to_numpy(self, copy=False):
         """
 
@@ -12509,11 +12931,13 @@ class StructOfArrays_8_0_idcpu_default:
             of 1D numpy arrays.
 
         """
+
     @property
     def num_int_comps(self) -> int:
         """
         Get the number of compile-time + runtime Int components
         """
+
     @property
     def num_real_comps(self) -> int:
         """
@@ -12525,6 +12949,7 @@ class StructOfArrays_8_0_idcpu_pinned:
         """
         Get access to a particle IdCPU component Array
         """
+
     @typing.overload
     def GetIntData(
         self,
@@ -12534,11 +12959,13 @@ class StructOfArrays_8_0_idcpu_pinned:
         """
         Get access to the particle Int Arrays (only compile-time components)
         """
+
     @typing.overload
     def GetIntData(self, index: int) -> PODVector_int_pinned:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
+
     @typing.overload
     def GetRealData(
         self,
@@ -12548,16 +12975,19 @@ class StructOfArrays_8_0_idcpu_pinned:
         """
         Get access to the particle Real Arrays (only compile-time components)
         """
+
     @typing.overload
     def GetRealData(self, index: int) -> PODVector_real_pinned:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
+
     def __init__(self) -> None: ...
     def __len__(self) -> int:
         """
         Get the number of particles
         """
+
     def define(self, arg0: int, arg1: int) -> None: ...
     def getNumNeighbors(self) -> int: ...
     def numParticles(self) -> int: ...
@@ -12569,6 +12999,7 @@ class StructOfArrays_8_0_idcpu_pinned:
         """
         Get the number of particles
         """
+
     def to_cupy(self, copy=False):
         """
 
@@ -12593,6 +13024,7 @@ class StructOfArrays_8_0_idcpu_pinned:
             Raises an exception if cupy is not installed
 
         """
+
     def to_numpy(self, copy=False):
         """
 
@@ -12612,11 +13044,13 @@ class StructOfArrays_8_0_idcpu_pinned:
             of 1D numpy arrays.
 
         """
+
     @property
     def num_int_comps(self) -> int:
         """
         Get the number of compile-time + runtime Int components
         """
+
     @property
     def num_real_comps(self) -> int:
         """
@@ -12629,26 +13063,31 @@ class Vector_BoxArray:
         """
         Check whether the list is nonempty
         """
+
     def __contains__(self, x: BoxArray) -> bool:
         """
         Return true the container contains ``x``
         """
+
     @typing.overload
     def __delitem__(self, arg0: int) -> None:
         """
         Delete the list elements at index ``i``
         """
+
     @typing.overload
     def __delitem__(self, arg0: slice) -> None:
         """
         Delete list elements using a slice object
         """
+
     def __eq__(self, arg0: Vector_BoxArray) -> bool: ...
     @typing.overload
     def __getitem__(self, s: slice) -> Vector_BoxArray:
         """
         Retrieve list elements using a slice object
         """
+
     @typing.overload
     def __getitem__(self, arg0: int) -> BoxArray: ...
     @typing.overload
@@ -12660,6 +13099,7 @@ class Vector_BoxArray:
         """
         Copy constructor
         """
+
     @typing.overload
     def __init__(self, arg0: typing.Iterable) -> None: ...
     @typing.overload
@@ -12674,6 +13114,7 @@ class Vector_BoxArray:
         """
         Return the canonical string representation of this list.
         """
+
     @typing.overload
     def __repr__(self) -> str: ...
     @typing.overload
@@ -12683,48 +13124,58 @@ class Vector_BoxArray:
         """
         Assign list elements using a slice object
         """
+
     @typing.overload
     def __setitem__(self, arg0: int, arg1: BoxArray) -> None: ...
     def append(self, x: BoxArray) -> None:
         """
         Add an item to the end of the list
         """
+
     def clear(self) -> None:
         """
         Clear the contents
         """
+
     def count(self, x: BoxArray) -> int:
         """
         Return the number of times ``x`` appears in the list
         """
+
     @typing.overload
     def extend(self, L: Vector_BoxArray) -> None:
         """
         Extend the list by appending all the items in the given list
         """
+
     @typing.overload
     def extend(self, L: typing.Iterable) -> None:
         """
         Extend the list by appending all the items in the given list
         """
+
     def insert(self, i: int, x: BoxArray) -> None:
         """
         Insert an item at a given position.
         """
+
     @typing.overload
     def pop(self) -> BoxArray:
         """
         Remove and return the last item
         """
+
     @typing.overload
     def pop(self, i: int) -> BoxArray:
         """
         Remove and return the item at index ``i``
         """
+
     def remove(self, x: BoxArray) -> None:
         """
         Remove the first item from the list whose value is x. It is an error if there is no such item.
         """
+
     def size(self) -> int: ...
 
 class Vector_DistributionMapping:
@@ -12733,26 +13184,31 @@ class Vector_DistributionMapping:
         """
         Check whether the list is nonempty
         """
+
     def __contains__(self, x: DistributionMapping) -> bool:
         """
         Return true the container contains ``x``
         """
+
     @typing.overload
     def __delitem__(self, arg0: int) -> None:
         """
         Delete the list elements at index ``i``
         """
+
     @typing.overload
     def __delitem__(self, arg0: slice) -> None:
         """
         Delete list elements using a slice object
         """
+
     def __eq__(self, arg0: Vector_DistributionMapping) -> bool: ...
     @typing.overload
     def __getitem__(self, s: slice) -> Vector_DistributionMapping:
         """
         Retrieve list elements using a slice object
         """
+
     @typing.overload
     def __getitem__(self, arg0: int) -> DistributionMapping: ...
     @typing.overload
@@ -12764,6 +13220,7 @@ class Vector_DistributionMapping:
         """
         Copy constructor
         """
+
     @typing.overload
     def __init__(self, arg0: typing.Iterable) -> None: ...
     @typing.overload
@@ -12778,6 +13235,7 @@ class Vector_DistributionMapping:
         """
         Return the canonical string representation of this list.
         """
+
     @typing.overload
     def __repr__(self) -> str: ...
     @typing.overload
@@ -12787,48 +13245,58 @@ class Vector_DistributionMapping:
         """
         Assign list elements using a slice object
         """
+
     @typing.overload
     def __setitem__(self, arg0: int, arg1: DistributionMapping) -> None: ...
     def append(self, x: DistributionMapping) -> None:
         """
         Add an item to the end of the list
         """
+
     def clear(self) -> None:
         """
         Clear the contents
         """
+
     def count(self, x: DistributionMapping) -> int:
         """
         Return the number of times ``x`` appears in the list
         """
+
     @typing.overload
     def extend(self, L: Vector_DistributionMapping) -> None:
         """
         Extend the list by appending all the items in the given list
         """
+
     @typing.overload
     def extend(self, L: typing.Iterable) -> None:
         """
         Extend the list by appending all the items in the given list
         """
+
     def insert(self, i: int, x: DistributionMapping) -> None:
         """
         Insert an item at a given position.
         """
+
     @typing.overload
     def pop(self) -> DistributionMapping:
         """
         Remove and return the last item
         """
+
     @typing.overload
     def pop(self, i: int) -> DistributionMapping:
         """
         Remove and return the item at index ``i``
         """
+
     def remove(self, x: DistributionMapping) -> None:
         """
         Remove the first item from the list whose value is x. It is an error if there is no such item.
         """
+
     def size(self) -> int: ...
 
 class Vector_Geometry:
@@ -12836,21 +13304,25 @@ class Vector_Geometry:
         """
         Check whether the list is nonempty
         """
+
     @typing.overload
     def __delitem__(self, arg0: int) -> None:
         """
         Delete the list elements at index ``i``
         """
+
     @typing.overload
     def __delitem__(self, arg0: slice) -> None:
         """
         Delete list elements using a slice object
         """
+
     @typing.overload
     def __getitem__(self, s: slice) -> Vector_Geometry:
         """
         Retrieve list elements using a slice object
         """
+
     @typing.overload
     def __getitem__(self, arg0: int) -> Geometry: ...
     @typing.overload
@@ -12862,6 +13334,7 @@ class Vector_Geometry:
         """
         Copy constructor
         """
+
     @typing.overload
     def __init__(self, arg0: typing.Iterable) -> None: ...
     @typing.overload
@@ -12875,6 +13348,7 @@ class Vector_Geometry:
         """
         Return the canonical string representation of this list.
         """
+
     @typing.overload
     def __repr__(self) -> str: ...
     @typing.overload
@@ -12884,40 +13358,48 @@ class Vector_Geometry:
         """
         Assign list elements using a slice object
         """
+
     @typing.overload
     def __setitem__(self, arg0: int, arg1: Geometry) -> None: ...
     def append(self, x: Geometry) -> None:
         """
         Add an item to the end of the list
         """
+
     def clear(self) -> None:
         """
         Clear the contents
         """
+
     @typing.overload
     def extend(self, L: Vector_Geometry) -> None:
         """
         Extend the list by appending all the items in the given list
         """
+
     @typing.overload
     def extend(self, L: typing.Iterable) -> None:
         """
         Extend the list by appending all the items in the given list
         """
+
     def insert(self, i: int, x: Geometry) -> None:
         """
         Insert an item at a given position.
         """
+
     @typing.overload
     def pop(self) -> Geometry:
         """
         Remove and return the last item
         """
+
     @typing.overload
     def pop(self, i: int) -> Geometry:
         """
         Remove and return the item at index ``i``
         """
+
     def size(self) -> int: ...
 
 class Vector_IntVect:
@@ -12926,26 +13408,31 @@ class Vector_IntVect:
         """
         Check whether the list is nonempty
         """
+
     def __contains__(self, x: IntVect) -> bool:
         """
         Return true the container contains ``x``
         """
+
     @typing.overload
     def __delitem__(self, arg0: int) -> None:
         """
         Delete the list elements at index ``i``
         """
+
     @typing.overload
     def __delitem__(self, arg0: slice) -> None:
         """
         Delete list elements using a slice object
         """
+
     def __eq__(self, arg0: Vector_IntVect) -> bool: ...
     @typing.overload
     def __getitem__(self, s: slice) -> Vector_IntVect:
         """
         Retrieve list elements using a slice object
         """
+
     @typing.overload
     def __getitem__(self, arg0: int) -> IntVect: ...
     @typing.overload
@@ -12957,6 +13444,7 @@ class Vector_IntVect:
         """
         Copy constructor
         """
+
     @typing.overload
     def __init__(self, arg0: typing.Iterable) -> None: ...
     @typing.overload
@@ -12971,6 +13459,7 @@ class Vector_IntVect:
         """
         Return the canonical string representation of this list.
         """
+
     @typing.overload
     def __repr__(self) -> str: ...
     @typing.overload
@@ -12980,48 +13469,58 @@ class Vector_IntVect:
         """
         Assign list elements using a slice object
         """
+
     @typing.overload
     def __setitem__(self, arg0: int, arg1: IntVect) -> None: ...
     def append(self, x: IntVect) -> None:
         """
         Add an item to the end of the list
         """
+
     def clear(self) -> None:
         """
         Clear the contents
         """
+
     def count(self, x: IntVect) -> int:
         """
         Return the number of times ``x`` appears in the list
         """
+
     @typing.overload
     def extend(self, L: Vector_IntVect) -> None:
         """
         Extend the list by appending all the items in the given list
         """
+
     @typing.overload
     def extend(self, L: typing.Iterable) -> None:
         """
         Extend the list by appending all the items in the given list
         """
+
     def insert(self, i: int, x: IntVect) -> None:
         """
         Insert an item at a given position.
         """
+
     @typing.overload
     def pop(self) -> IntVect:
         """
         Remove and return the last item
         """
+
     @typing.overload
     def pop(self, i: int) -> IntVect:
         """
         Remove and return the item at index ``i``
         """
+
     def remove(self, x: IntVect) -> None:
         """
         Remove the first item from the list whose value is x. It is an error if there is no such item.
         """
+
     def size(self) -> int: ...
 
 class Vector_Long:
@@ -13030,26 +13529,31 @@ class Vector_Long:
         """
         Check whether the list is nonempty
         """
+
     def __contains__(self, x: int) -> bool:
         """
         Return true the container contains ``x``
         """
+
     @typing.overload
     def __delitem__(self, arg0: int) -> None:
         """
         Delete the list elements at index ``i``
         """
+
     @typing.overload
     def __delitem__(self, arg0: slice) -> None:
         """
         Delete list elements using a slice object
         """
+
     def __eq__(self, arg0: Vector_Long) -> bool: ...
     @typing.overload
     def __getitem__(self, s: slice) -> Vector_Long:
         """
         Retrieve list elements using a slice object
         """
+
     @typing.overload
     def __getitem__(self, arg0: int) -> int: ...
     @typing.overload
@@ -13061,6 +13565,7 @@ class Vector_Long:
         """
         Copy constructor
         """
+
     @typing.overload
     def __init__(self, arg0: typing.Iterable) -> None: ...
     @typing.overload
@@ -13075,6 +13580,7 @@ class Vector_Long:
         """
         Return the canonical string representation of this list.
         """
+
     @typing.overload
     def __repr__(self) -> str: ...
     @typing.overload
@@ -13084,48 +13590,58 @@ class Vector_Long:
         """
         Assign list elements using a slice object
         """
+
     @typing.overload
     def __setitem__(self, arg0: int, arg1: int) -> None: ...
     def append(self, x: int) -> None:
         """
         Add an item to the end of the list
         """
+
     def clear(self) -> None:
         """
         Clear the contents
         """
+
     def count(self, x: int) -> int:
         """
         Return the number of times ``x`` appears in the list
         """
+
     @typing.overload
     def extend(self, L: Vector_Long) -> None:
         """
         Extend the list by appending all the items in the given list
         """
+
     @typing.overload
     def extend(self, L: typing.Iterable) -> None:
         """
         Extend the list by appending all the items in the given list
         """
+
     def insert(self, i: int, x: int) -> None:
         """
         Insert an item at a given position.
         """
+
     @typing.overload
     def pop(self) -> int:
         """
         Remove and return the last item
         """
+
     @typing.overload
     def pop(self, i: int) -> int:
         """
         Remove and return the item at index ``i``
         """
+
     def remove(self, x: int) -> None:
         """
         Remove the first item from the list whose value is x. It is an error if there is no such item.
         """
+
     def size(self) -> int: ...
     @property
     def __array_interface__(self) -> dict: ...
@@ -13138,26 +13654,31 @@ class Vector_Real:
         """
         Check whether the list is nonempty
         """
+
     def __contains__(self, x: float) -> bool:
         """
         Return true the container contains ``x``
         """
+
     @typing.overload
     def __delitem__(self, arg0: int) -> None:
         """
         Delete the list elements at index ``i``
         """
+
     @typing.overload
     def __delitem__(self, arg0: slice) -> None:
         """
         Delete list elements using a slice object
         """
+
     def __eq__(self, arg0: Vector_Real) -> bool: ...
     @typing.overload
     def __getitem__(self, s: slice) -> Vector_Real:
         """
         Retrieve list elements using a slice object
         """
+
     @typing.overload
     def __getitem__(self, arg0: int) -> float: ...
     @typing.overload
@@ -13169,6 +13690,7 @@ class Vector_Real:
         """
         Copy constructor
         """
+
     @typing.overload
     def __init__(self, arg0: typing.Iterable) -> None: ...
     @typing.overload
@@ -13183,6 +13705,7 @@ class Vector_Real:
         """
         Return the canonical string representation of this list.
         """
+
     @typing.overload
     def __repr__(self) -> str: ...
     @typing.overload
@@ -13192,48 +13715,58 @@ class Vector_Real:
         """
         Assign list elements using a slice object
         """
+
     @typing.overload
     def __setitem__(self, arg0: int, arg1: float) -> None: ...
     def append(self, x: float) -> None:
         """
         Add an item to the end of the list
         """
+
     def clear(self) -> None:
         """
         Clear the contents
         """
+
     def count(self, x: float) -> int:
         """
         Return the number of times ``x`` appears in the list
         """
+
     @typing.overload
     def extend(self, L: Vector_Real) -> None:
         """
         Extend the list by appending all the items in the given list
         """
+
     @typing.overload
     def extend(self, L: typing.Iterable) -> None:
         """
         Extend the list by appending all the items in the given list
         """
+
     def insert(self, i: int, x: float) -> None:
         """
         Insert an item at a given position.
         """
+
     @typing.overload
     def pop(self) -> float:
         """
         Remove and return the last item
         """
+
     @typing.overload
     def pop(self, i: int) -> float:
         """
         Remove and return the item at index ``i``
         """
+
     def remove(self, x: float) -> None:
         """
         Remove the first item from the list whose value is x. It is an error if there is no such item.
         """
+
     def size(self) -> int: ...
     @property
     def __array_interface__(self) -> dict: ...
@@ -13246,26 +13779,31 @@ class Vector_int:
         """
         Check whether the list is nonempty
         """
+
     def __contains__(self, x: int) -> bool:
         """
         Return true the container contains ``x``
         """
+
     @typing.overload
     def __delitem__(self, arg0: int) -> None:
         """
         Delete the list elements at index ``i``
         """
+
     @typing.overload
     def __delitem__(self, arg0: slice) -> None:
         """
         Delete list elements using a slice object
         """
+
     def __eq__(self, arg0: Vector_int) -> bool: ...
     @typing.overload
     def __getitem__(self, s: slice) -> Vector_int:
         """
         Retrieve list elements using a slice object
         """
+
     @typing.overload
     def __getitem__(self, arg0: int) -> int: ...
     @typing.overload
@@ -13277,6 +13815,7 @@ class Vector_int:
         """
         Copy constructor
         """
+
     @typing.overload
     def __init__(self, arg0: typing.Iterable) -> None: ...
     @typing.overload
@@ -13291,6 +13830,7 @@ class Vector_int:
         """
         Return the canonical string representation of this list.
         """
+
     @typing.overload
     def __repr__(self) -> str: ...
     @typing.overload
@@ -13300,48 +13840,58 @@ class Vector_int:
         """
         Assign list elements using a slice object
         """
+
     @typing.overload
     def __setitem__(self, arg0: int, arg1: int) -> None: ...
     def append(self, x: int) -> None:
         """
         Add an item to the end of the list
         """
+
     def clear(self) -> None:
         """
         Clear the contents
         """
+
     def count(self, x: int) -> int:
         """
         Return the number of times ``x`` appears in the list
         """
+
     @typing.overload
     def extend(self, L: Vector_int) -> None:
         """
         Extend the list by appending all the items in the given list
         """
+
     @typing.overload
     def extend(self, L: typing.Iterable) -> None:
         """
         Extend the list by appending all the items in the given list
         """
+
     def insert(self, i: int, x: int) -> None:
         """
         Insert an item at a given position.
         """
+
     @typing.overload
     def pop(self) -> int:
         """
         Remove and return the last item
         """
+
     @typing.overload
     def pop(self, i: int) -> int:
         """
         Remove and return the item at index ``i``
         """
+
     def remove(self, x: int) -> None:
         """
         Remove the first item from the list whose value is x. It is an error if there is no such item.
         """
+
     def size(self) -> int: ...
     @property
     def __array_interface__(self) -> dict: ...
@@ -13354,26 +13904,31 @@ class Vector_string:
         """
         Check whether the list is nonempty
         """
+
     def __contains__(self, x: str) -> bool:
         """
         Return true the container contains ``x``
         """
+
     @typing.overload
     def __delitem__(self, arg0: int) -> None:
         """
         Delete the list elements at index ``i``
         """
+
     @typing.overload
     def __delitem__(self, arg0: slice) -> None:
         """
         Delete list elements using a slice object
         """
+
     def __eq__(self, arg0: Vector_string) -> bool: ...
     @typing.overload
     def __getitem__(self, s: slice) -> Vector_string:
         """
         Retrieve list elements using a slice object
         """
+
     @typing.overload
     def __getitem__(self, arg0: int) -> str: ...
     @typing.overload
@@ -13385,6 +13940,7 @@ class Vector_string:
         """
         Copy constructor
         """
+
     @typing.overload
     def __init__(self, arg0: typing.Iterable) -> None: ...
     @typing.overload
@@ -13399,6 +13955,7 @@ class Vector_string:
         """
         Return the canonical string representation of this list.
         """
+
     @typing.overload
     def __repr__(self) -> str: ...
     @typing.overload
@@ -13408,48 +13965,58 @@ class Vector_string:
         """
         Assign list elements using a slice object
         """
+
     @typing.overload
     def __setitem__(self, arg0: int, arg1: str) -> None: ...
     def append(self, x: str) -> None:
         """
         Add an item to the end of the list
         """
+
     def clear(self) -> None:
         """
         Clear the contents
         """
+
     def count(self, x: str) -> int:
         """
         Return the number of times ``x`` appears in the list
         """
+
     @typing.overload
     def extend(self, L: Vector_string) -> None:
         """
         Extend the list by appending all the items in the given list
         """
+
     @typing.overload
     def extend(self, L: typing.Iterable) -> None:
         """
         Extend the list by appending all the items in the given list
         """
+
     def insert(self, i: int, x: str) -> None:
         """
         Insert an item at a given position.
         """
+
     @typing.overload
     def pop(self) -> str:
         """
         Remove and return the last item
         """
+
     @typing.overload
     def pop(self, i: int) -> str:
         """
         Remove and return the item at index ``i``
         """
+
     def remove(self, x: str) -> None:
         """
         Remove the first item from the list whose value is x. It is an error if there is no such item.
         """
+
     def size(self) -> int: ...
 
 class XDim3:
@@ -13704,6 +14271,8 @@ def write_single_level_plotfile(
     Writes single level plotfile
     """
 
-__author__: str = "Axel Huebl, Ryan T. Sandberg, Shreyas Ananthan, David P. Grote, Revathi Jambunathan, Edoardo Zoni, Remi Lehe, Andrew Myers, Weiqun Zhang"
+__author__: str = (
+    "Axel Huebl, Ryan T. Sandberg, Shreyas Ananthan, David P. Grote, Revathi Jambunathan, Edoardo Zoni, Remi Lehe, Andrew Myers, Weiqun Zhang"
+)
 __license__: str = "BSD-3-Clause-LBNL"
 __version__: str = "24.01"
