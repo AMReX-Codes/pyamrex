@@ -137,11 +137,17 @@ void make_ParticleInitData (py::module &m) {
     using namespace amrex;
 
     using ParticleType = T_ParticleType;
-    using ParticleInitData = ParticleInitType<ParticleType::NReal, ParticleType::NInt, T_NArrayReal, T_NArrayInt>;
-    // depends on https://github.com/AMReX-Codes/amrex/pull/3280
-    // using ParticleInitData = ParticleInitType<ParticleType, T_NArrayReal, T_NArrayInt>;
 
-    std::string const suffix = particle_type_suffix<T_ParticleType, T_NArrayReal, T_NArrayInt>();
+    //using ParticleInitData = typename ParticleContainerType::ParticleInitData;
+    using ParticleInitData = typename std::conditional<
+        ParticleType::is_soa_particle,
+        // SoA Particle: init w/o positions and id/cpu, but explicitly listed in define
+        ParticleInitTypeSoA<T_NArrayReal - AMREX_SPACEDIM, T_NArrayInt - 2>,
+        // legacy particle: init w/o positions and id/cpu, only implicitly listed in define
+        ParticleInitType<ParticleType::NReal, ParticleType::NInt, T_NArrayReal, T_NArrayInt>
+    >::type;
+
+    std::string const suffix = particle_type_suffix<ParticleType, T_NArrayReal, T_NArrayInt>();
     auto const particle_init_data_type =
         std::string("ParticleInitType_") + suffix;
     auto py_particle_init_data = py::class_<ParticleInitData>(m, particle_init_data_type.c_str())
@@ -238,14 +244,16 @@ void make_ParticleContainer_and_Iterators (py::module &m, std::string allocstr)
         //                         const IntVect* Nrep = nullptr);
 
         // void InitFromBinaryFile (const std::string& file, int extradata);
-
         // void InitFromBinaryMetaFile
-        //     void InitRandom (Long icount, ULong iseed,
-        //                  const ParticleInitData& mass,
-        //                  bool serialize = false, RealBox bx = RealBox());
 
-        .def("Increment", &ParticleContainerType::Increment) // TODO pure SoA
-        //.def("IncrementWithTotal", &ParticleContainerType::IncrementWithTotal, py::arg("mf"), py::arg("level"), py::arg("local")=false) // TODO pure SoA
+        // TODO for pure SoA
+        // depends on https://github.com/AMReX-Codes/amrex/pull/3280
+        .def("InitRandom", py::overload_cast<Long, ULong, const ParticleInitData&, bool, RealBox>(&ParticleContainerType::InitRandom))
+        //.def("InitRandomPerBox", py::overload_cast<Long, ULong, const ParticleInitData&>(&ParticleContainerType::InitRandomPerBox)) // TODO pure SoA
+        .def("InitOnePerCell", &ParticleContainerType::InitOnePerCell) // TODO pure SoA
+
+        .def("Increment", &ParticleContainerType::Increment)
+        .def("IncrementWithTotal", &ParticleContainerType::IncrementWithTotal, py::arg("mf"), py::arg("level"), py::arg("local")=false)
         .def("Redistribute", &ParticleContainerType::Redistribute, py::arg("lev_min")=0, py::arg("lev_max")=-1,
                                             py::arg("nGrow")=0, py::arg("local")=0, py::arg("remove_negative")=true)
         .def("SortParticlesByCell", &ParticleContainerType::SortParticlesByCell)
@@ -380,15 +388,6 @@ void make_ParticleContainer_and_Iterators (py::module &m, std::string allocstr)
         // }
     ;
 
-    // TODO for pure SoA
-    // depends on https://github.com/AMReX-Codes/amrex/pull/3280
-    if constexpr (!T_ParticleType::is_soa_particle) {
-        py_pc
-            .def("InitRandom", py::overload_cast<Long, ULong, const ParticleInitData&, bool, RealBox>(&ParticleContainerType::InitRandom)) // TODO pure SoA
-            .def("InitRandomPerBox", py::overload_cast<Long, ULong, const ParticleInitData&>(&ParticleContainerType::InitRandomPerBox)) // TODO pure SoA
-            .def("InitOnePerCell", &ParticleContainerType::InitOnePerCell);
-    }
-
     using iterator = amrex::ParIter_impl<ParticleType, T_NArrayReal, T_NArrayInt, Allocator>;
     make_Iterators< false, iterator, Allocator >(m, allocstr);
     using const_iterator = amrex::ParConstIter_impl<ParticleType, T_NArrayReal, T_NArrayInt, Allocator>;
@@ -410,8 +409,7 @@ void make_ParticleContainer_and_Iterators (py::module &m)
 {
     // TODO for pure SoA
     // depends on https://github.com/AMReX-Codes/amrex/pull/3280
-    if constexpr (!T_ParticleType::is_soa_particle)
-        make_ParticleInitData<T_ParticleType, T_NArrayReal, T_NArrayInt>(m);
+    make_ParticleInitData<T_ParticleType, T_NArrayReal, T_NArrayInt>(m);
 
     // first, because used as copy target in methods in containers with other allocators
     make_ParticleContainer_and_Iterators<T_ParticleType, T_NArrayReal, T_NArrayInt,
