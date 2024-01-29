@@ -88,7 +88,7 @@ repos:
 
 # Python Formatting
 - repo: https://github.com/psf/black
-  rev: 23.12.1 # Keep in sync with blacken-docs
+  rev: 24.1.1 # Keep in sync with blacken-docs
   hooks:
   - id: black
 - repo: https://github.com/asottile/blacken-docs
