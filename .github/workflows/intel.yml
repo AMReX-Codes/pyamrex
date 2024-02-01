@@ -11,7 +11,7 @@ jobs:
     name: oneAPI SYCL 3D
     runs-on: ubuntu-20.04
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Dependencies
       run: |
         .github/workflows/dependencies/dpcpp.sh
@@ -60,7 +60,7 @@ jobs:
     name: ICPX
     runs-on: ubuntu-20.04
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Dependencies
       run: |
         .github/workflows/dependencies/dpcpp.sh
@@ -117,7 +117,7 @@ jobs:
     name: ICC
     runs-on: ubuntu-20.04
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: install dependencies
       run: |
         export DEBIAN_FRONTEND=noninteractive
