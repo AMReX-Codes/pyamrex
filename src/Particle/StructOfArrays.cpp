@@ -99,16 +99,16 @@ void make_StructOfArrays(py::module &m)
 
 void init_StructOfArrays(py::module& m) {
     make_StructOfArrays< 2, 1>(m);
-    make_StructOfArrays< 4, 0>(m);  // HiPACE++ 22.08 - 24.01
-    make_StructOfArrays< 5, 0>(m);  // ImpactX 22.07 - 24.01
+    make_StructOfArrays< 4, 0>(m);  // HiPACE++ 22.08 - 24.02
+    make_StructOfArrays< 5, 0>(m);  // ImpactX 22.07 - 24.02
 #if AMREX_SPACEDIM == 1
-    make_StructOfArrays< 5, 0, true>(m);  // WarpX 24.02+ 1D
+    make_StructOfArrays< 5, 0, true>(m);  // WarpX 24.03+ 1D
 #elif AMREX_SPACEDIM == 2
-    make_StructOfArrays< 6, 0, true>(m);  // WarpX 24.02+ 2D
-    make_StructOfArrays< 7, 0, true>(m);  // WarpX 24.02+ RZ
+    make_StructOfArrays< 6, 0, true>(m);  // WarpX 24.03+ 2D
+    make_StructOfArrays< 7, 0, true>(m);  // WarpX 24.03+ RZ
 #elif AMREX_SPACEDIM == 3
-    make_StructOfArrays< 7, 0, true>(m);  // WarpX 24.02+ 3D
+    make_StructOfArrays< 7, 0, true>(m);  // WarpX 24.03+ 3D
 #endif
-    make_StructOfArrays< 8, 0, true>(m);  // ImpactX 24.02+
-    make_StructOfArrays<37, 1>(m);  // HiPACE++ 22.09 - 23.12
+    make_StructOfArrays< 8, 0, true>(m);  // ImpactX 24.03+
+    make_StructOfArrays<37, 1>(m);  // HiPACE++ 22.09 - 24.02
 }
