@@ -64,15 +64,13 @@ int main(int argc, char* argv[])
 
         amrex::Geometry geom(domain, &real_box);
 
-
         //Calculate Cell Sizes
         amrex::GpuArray<amrex::Real,3> dx = geom.CellSizeArray();  //dx[0] = dx dx[1] = dy dx[2] = dz
 
 
-        //Fill a MultiFab with Data
         //At the time of writing this is still the most commonly seen
         //method.
-
+        /*
         for(amrex::MFIter mfi(mf); mfi.isValid(); ++mfi){
             const amrex::Box& bx = mfi.validbox();
             const amrex::Array4<amrex::Real>& mf_array = mf.array(mfi);
@@ -90,7 +88,7 @@ int main(int argc, char* argv[])
 
             });
          }
-
+        */
         //A second newer method
         //In this approach the same functionality is contained in a
         //single ParallelFor function.
@@ -112,14 +110,13 @@ int main(int argc, char* argv[])
         });
         */
 
-        //Plot MultiFab Data
-        WriteSingleLevelPlotfile("cpp_plt001", mf, {"comp0","comp1"}, geom, 0., 0);
-
 #if USE_AMREX_MPMD
-        // Create an MPMD Copier and send the populated MultiFab to python side
+        // Create an MPMD Copier and populate it from python side
         auto copr = amrex::MPMD::Copier(ba,dm);
-        copr.send(mf,0,ncomp);
+        copr.recv(mf,0,ncomp);
 #endif
+        //Plot MultiFab Data
+        WriteSingleLevelPlotfile("plt_cpp_001", mf, {"comp0","comp1"}, geom, 0., 0);
 
     }
     amrex::Finalize();
