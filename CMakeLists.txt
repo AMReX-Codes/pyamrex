@@ -40,7 +40,15 @@ set_cxx17_superbuild()
 # this is an optional tool that stores compiled object files; allows fast
 # re-builds even with "make clean" in between. Mainly used to store AMReX
 # objects
-set_ccache()
+if(CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
+    set(pyAMReX_CCACHE_DEFAULT ON)
+else()
+    set(pyAMReX_CCACHE_DEFAULT OFF)  # we are a subproject in a superbuild
+endif()
+option(pyAMReX_CCACHE "Enable ccache for faster rebuilds" ${pyAMReX_CCACHE_DEFAULT})
+if(pyAMReX_CCACHE)
+    set_ccache()
+endif()
 
 
 # Output (build) Directories ##################################################
