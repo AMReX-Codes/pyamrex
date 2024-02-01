@@ -32,6 +32,7 @@
                Vector
 
 """
+
 from __future__ import annotations
 
 import os as os
@@ -544,6 +545,8 @@ def d_decl(x, y, z):
     Return a tuple of the first passed element
     """
 
-__author__: str = "Axel Huebl, Ryan T. Sandberg, Shreyas Ananthan, David P. Grote, Revathi Jambunathan, Edoardo Zoni, Remi Lehe, Andrew Myers, Weiqun Zhang"
+__author__: str = (
+    "Axel Huebl, Ryan T. Sandberg, Shreyas Ananthan, David P. Grote, Revathi Jambunathan, Edoardo Zoni, Remi Lehe, Andrew Myers, Weiqun Zhang"
+)
 __license__: str = "BSD-3-Clause-LBNL"
 __version__: str = "24.01"
