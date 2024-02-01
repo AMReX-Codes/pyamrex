@@ -190,6 +190,7 @@ if PYAMREX_libdir:
     cmdclass = dict(build=CopyPreBuild)
 # CMake: build pyAMReX ourselves
 else:
+    # TODO: modernize into a single build
     cmdclass = dict(build_ext=CMakeBuild)
     for dim in [x.lower() for x in AMReX_SPACEDIM.split(";")]:
         name = dim + "d"
@@ -207,7 +208,7 @@ with open("./requirements.txt") as f:
 setup(
     name="amrex",
     # note PEP-440 syntax: x.y.zaN but x.y.z.devN
-    version="24.01",
+    version="24.02",
     packages=["amrex"],
     # Python sources:
     package_dir={"": "src"},

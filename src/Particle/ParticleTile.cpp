@@ -210,13 +210,13 @@ void init_ParticleTile(py::module& m) {
     make_ParticleTile<ParticleType_0_0, 4, 0> (m);   // HiPACE++ 22.07
     make_ParticleTile<ParticleType_0_0, 5, 0> (m);   // ImpactX 22.07
 #if AMREX_SPACEDIM == 1
-    make_ParticleTile<SoAParticleType_5_0, 5, 0> (m);   // WarpX 24.02+ 1D
+    make_ParticleTile<SoAParticleType_5_0, 5, 0> (m);   // WarpX 24.03+ 1D
 #elif AMREX_SPACEDIM == 2
-    make_ParticleTile<SoAParticleType_6_0, 6, 0> (m);   // WarpX 24.02+ 2D
-    make_ParticleTile<SoAParticleType_7_0, 7, 0> (m);   // WarpX 24.02+ RZ
+    make_ParticleTile<SoAParticleType_6_0, 6, 0> (m);   // WarpX 24.03+ 2D
+    make_ParticleTile<SoAParticleType_7_0, 7, 0> (m);   // WarpX 24.03+ RZ
 #elif AMREX_SPACEDIM == 3
-    make_ParticleTile<SoAParticleType_7_0, 7, 0> (m);   // WarpX 24.02+ 3D
+    make_ParticleTile<SoAParticleType_7_0, 7, 0> (m);   // WarpX 24.03+ 3D
 #endif
-    make_ParticleTile<SoAParticleType_8_0, 8, 0> (m);   // ImpactX 24.02+
+    make_ParticleTile<SoAParticleType_8_0, 8, 0> (m);   // ImpactX 24.03+
     make_ParticleTile<ParticleType_0_0, 37, 1> (m);  // HiPACE++ 22.07
 }
