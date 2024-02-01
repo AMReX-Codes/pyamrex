@@ -34,6 +34,24 @@
 *.out
 *.app
 
+## Compiler debris
+**/tmp_build_dir
+
+## Crash debris
+**/Backtrace.*
+
+## All compiled programs
+**/*.gnu.*.ex
+**/*.o
+**/*.ex
+
+## MacOS creates dynamic linker symbol files
+*.dSym
+
+## MacOS crap
+.DS_Store
+
+
 ##########
 # Python #
 ##########
@@ -133,3 +151,10 @@ docs/source/_static/doxyhtml/
 docs/source/_static/
 docs/doxyhtml/
 docs/doxyxml/
+
+### Output ####
+## Plot files
+**/plt*
+## Checkpoints
+**/chk*
+
