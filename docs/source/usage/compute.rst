@@ -61,15 +61,27 @@ AMReX `Particles <https://amrex-codes.github.io/amrex/docs_html/Particle_Chapter
 There are a few small differences to the `iteration over a ParticleContainer <https://amrex-codes.github.io/amrex/docs_html/Particle.html#iterating-over-particles>`__ compared to a ``MultiFab``:
 
 * ``ParticleContainer`` is aware of mesh-refinement levels,
-* AMReX supports a variety of data layouts for particles (AoS and SoA + runtime SoA attributes), which requires a few more calls to access.
+* AMReX supports a variety of data layouts for particles, the modern pure SoA + runtime attribute layout and the legacy AoS + SoA + runtime SoA attributes layout.
 
 Here is the general structure for computing on particles:
 
-.. literalinclude:: ../../../tests/test_particleContainer.py
-   :language: python3
-   :dedent: 4
-   :start-after: # Manual: Compute PC START
-   :end-before: # Manual: Compute PC END
+.. tab-set::
+
+   .. tab-item:: Modern (pure SoA) Layout
+
+      .. literalinclude:: ../../../tests/test_particleContainer.py
+         :language: python3
+         :dedent: 4
+         :start-after: # Manual: Pure SoA Compute PC START
+         :end-before: # Manual: Pure SoA Compute PC END
+
+   .. tab-item:: Legacy (AoS + SoA) Layout
+
+      .. literalinclude:: ../../../tests/test_particleContainer.py
+         :language: python3
+         :dedent: 4
+         :start-after: # Manual: Legacy Compute PC START
+         :end-before: # Manual: Legacy Compute PC END
 
 For many small CPU and GPU examples on how to compute on particles, see the following test cases:
 
