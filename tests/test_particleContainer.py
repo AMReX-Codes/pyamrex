@@ -43,6 +43,18 @@ def particle_container(Npart, std_geometry, distmap, boxarr, std_real_box):
     return pc
 
 
+@pytest.fixture(scope="function")
+def soa_particle_container(Npart, std_geometry, distmap, boxarr, std_real_box):
+    pc = amr.ParticleContainer_pureSoA_8_0_default(std_geometry, distmap, boxarr)
+    myt = amr.ParticleInitType_pureSoA_8_0()
+    myt.real_array_data = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8]
+    myt.int_array_data = []
+
+    iseed = 1
+    pc.InitRandom(Npart, iseed, myt, False, std_real_box)
+    return pc
+
+
 def test_particleInitType():
     myt = amr.ParticleInitType_1_1_2_1()
     print(myt.real_struct_data)
@@ -276,13 +288,58 @@ def test_per_cell(empty_particle_container, std_geometry, std_particle):
     assert ncells * std_particle.real_array_data[1] == sum_1
 
 
+def test_soa_pc_numpy(soa_particle_container, Npart):
+    """Used in docs/source/usage/compute.rst"""
+    pc = soa_particle_container
+
+    class Config:
+        have_gpu = False
+
+    # Manual: Pure SoA Compute PC START
+    # code-specific getter function, e.g.:
+    # pc = sim.get_particles()
+    # Config = sim.extension.Config
+
+    # iterate over every mesh-refinement levels (no MR: lev=0)
+    for lvl in range(pc.finest_level + 1):
+        # get every local chunk of particles
+        for pti in pc.iterator(pc, level=lvl):
+            # additional compile-time and runtime attributes in SoA format
+            soa = pti.soa().to_cupy() if Config.have_gpu else pti.soa().to_numpy()
+
+            # notes:
+            # Only the next lines are the "HOT LOOP" of the computation.
+            # For efficiency, use numpy array operation for speed.
+
+            # write to all particles in the chunk
+            # note: careful, if you change particle positions, you need to
+            #       redistribute particles before continuing the simulation step
+            print(soa.real)
+            soa.real[0][()] = 0.30  # x
+            soa.real[1][()] = 0.35  # y
+            soa.real[2][()] = 0.40  # z
+
+            # all other real attributes
+            for soa_real in soa.real[3:]:
+                soa_real[()] = 42.0
+
+            # all int attributes
+            for soa_int in soa.int:
+                soa_int[()] = 12
+    # Manual: Pure SoA Compute PC END
+
+
 def test_pc_numpy(particle_container, Npart):
     """Used in docs/source/usage/compute.rst"""
     pc = particle_container
 
-    # Manual: Compute PC START
+    class Config:
+        have_gpu = False
+
+    # Manual: Legacy Compute PC START
     # code-specific getter function, e.g.:
     # pc = sim.get_particles()
+    # Config = sim.extension.Config
 
     # iterate over every mesh-refinement levels (no MR: lev=0)
     for lvl in range(pc.finest_level + 1):
@@ -290,10 +347,14 @@ def test_pc_numpy(particle_container, Npart):
         for pti in pc.iterator(pc, level=lvl):
             # default layout: AoS with positions and cpuid
             # note: not part of the new PureSoA particle container layout
-            aos = pti.aos().to_numpy()
+            aos = (
+                pti.aos().to_numpy(copy=True)
+                if Config.have_gpu
+                else pti.aos().to_numpy()
+            )
 
             # additional compile-time and runtime attributes in SoA format
-            soa = pti.soa().to_numpy()
+            soa = pti.soa().to_cupy() if Config.have_gpu else pti.soa().to_numpy()
 
             # notes:
             # Only the next lines are the "HOT LOOP" of the computation.
@@ -313,7 +374,7 @@ def test_pc_numpy(particle_container, Npart):
 
             for soa_int in soa.int:
                 soa_int[()] = 12
-    # Manual: Compute PC END
+    # Manual: Legacy Compute PC END
 
 
 @pytest.mark.skipif(
