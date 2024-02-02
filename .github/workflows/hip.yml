@@ -14,7 +14,7 @@ jobs:
       CXXFLAGS: "-Werror -Wno-deprecated-declarations -Wno-error=pass-failed -fno-operator-names"
       CMAKE_GENERATOR: Ninja
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: install dependencies
       shell: bash
       run: |

@@ -108,7 +108,7 @@ By default, the most important dependencies of pyAMReX are automatically downloa
 CMake Option                  Default & Values                               Description
 ============================= ============================================== ===========================================================
 ``BUILD_SHARED_LIBS``         ON/**OFF**                                     Build shared libraries for dependencies
-``CCACHE_PROGRAM``            First found ``ccache`` executable.             Set to ``-DCCACHE_PROGRAM=NO`` to disable CCache.
+``pyAMReX_CCACHE``            **ON**/OFF                                     Search and use CCache to speed up rebuilds.
 ``pyAMReX_amrex_src``         *None*                                         Path to AMReX source directory (preferred if set)
 ``pyAMReX_amrex_repo``        ``https://github.com/AMReX-Codes/amrex.git``   Repository URI to pull and build AMReX from
 ``pyAMReX_amrex_branch``      *we set and maintain a compatible commit*      Repository branch for ``pyAMReX_amrex_repo``
