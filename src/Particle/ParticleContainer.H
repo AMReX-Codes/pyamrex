@@ -380,13 +380,17 @@ void make_ParticleContainer_and_Iterators (py::module &m, std::string allocstr)
         // }
     ;
 
+    py_pc
+        .def("InitRandom", py::overload_cast<Long, ULong, const ParticleInitData&, bool, RealBox>(&ParticleContainerType::InitRandom))
+    ;
+
     // TODO for pure SoA
     // depends on https://github.com/AMReX-Codes/amrex/pull/3280
     if constexpr (!T_ParticleType::is_soa_particle) {
         py_pc
-            .def("InitRandom", py::overload_cast<Long, ULong, const ParticleInitData&, bool, RealBox>(&ParticleContainerType::InitRandom)) // TODO pure SoA
-            .def("InitRandomPerBox", py::overload_cast<Long, ULong, const ParticleInitData&>(&ParticleContainerType::InitRandomPerBox)) // TODO pure SoA
-            .def("InitOnePerCell", &ParticleContainerType::InitOnePerCell);
+            .def("InitRandomPerBox", py::overload_cast<Long, ULong, const ParticleInitData&>(&ParticleContainerType::InitRandomPerBox))
+            .def("InitOnePerCell", &ParticleContainerType::InitOnePerCell)
+        ;
     }
 
     using iterator = amrex::ParIter_impl<ParticleType, T_NArrayReal, T_NArrayInt, Allocator>;
@@ -408,10 +412,7 @@ void make_ParticleContainer_and_Iterators (py::module &m, std::string allocstr)
 template <typename T_ParticleType, int T_NArrayReal=0, int T_NArrayInt=0>
 void make_ParticleContainer_and_Iterators (py::module &m)
 {
-    // TODO for pure SoA
-    // depends on https://github.com/AMReX-Codes/amrex/pull/3280
-    if constexpr (!T_ParticleType::is_soa_particle)
-        make_ParticleInitData<T_ParticleType, T_NArrayReal, T_NArrayInt>(m);
+    make_ParticleInitData<T_ParticleType, T_NArrayReal, T_NArrayInt>(m);
 
     // first, because used as copy target in methods in containers with other allocators
     make_ParticleContainer_and_Iterators<T_ParticleType, T_NArrayReal, T_NArrayInt,

@@ -111,12 +111,6 @@ __all__ = [
     "PODVector_uint64_arena",
     "PODVector_uint64_pinned",
     "PODVector_uint64_std",
-    "ParConstIterBase_0_0_4_0_arena",
-    "ParConstIterBase_0_0_4_0_default",
-    "ParConstIterBase_0_0_4_0_pinned",
-    "ParConstIterBase_0_0_5_0_arena",
-    "ParConstIterBase_0_0_5_0_default",
-    "ParConstIterBase_0_0_5_0_pinned",
     "ParConstIterBase_1_1_2_1_arena",
     "ParConstIterBase_1_1_2_1_default",
     "ParConstIterBase_1_1_2_1_pinned",
@@ -126,12 +120,6 @@ __all__ = [
     "ParConstIterBase_pureSoA_8_0_arena",
     "ParConstIterBase_pureSoA_8_0_default",
     "ParConstIterBase_pureSoA_8_0_pinned",
-    "ParConstIter_0_0_4_0_arena",
-    "ParConstIter_0_0_4_0_default",
-    "ParConstIter_0_0_4_0_pinned",
-    "ParConstIter_0_0_5_0_arena",
-    "ParConstIter_0_0_5_0_default",
-    "ParConstIter_0_0_5_0_pinned",
     "ParConstIter_1_1_2_1_arena",
     "ParConstIter_1_1_2_1_default",
     "ParConstIter_1_1_2_1_pinned",
@@ -141,12 +129,6 @@ __all__ = [
     "ParConstIter_pureSoA_8_0_arena",
     "ParConstIter_pureSoA_8_0_default",
     "ParConstIter_pureSoA_8_0_pinned",
-    "ParIterBase_0_0_4_0_arena",
-    "ParIterBase_0_0_4_0_default",
-    "ParIterBase_0_0_4_0_pinned",
-    "ParIterBase_0_0_5_0_arena",
-    "ParIterBase_0_0_5_0_default",
-    "ParIterBase_0_0_5_0_pinned",
     "ParIterBase_1_1_2_1_arena",
     "ParIterBase_1_1_2_1_default",
     "ParIterBase_1_1_2_1_pinned",
@@ -156,12 +138,6 @@ __all__ = [
     "ParIterBase_pureSoA_8_0_arena",
     "ParIterBase_pureSoA_8_0_default",
     "ParIterBase_pureSoA_8_0_pinned",
-    "ParIter_0_0_4_0_arena",
-    "ParIter_0_0_4_0_default",
-    "ParIter_0_0_4_0_pinned",
-    "ParIter_0_0_5_0_arena",
-    "ParIter_0_0_5_0_default",
-    "ParIter_0_0_5_0_pinned",
     "ParIter_1_1_2_1_arena",
     "ParIter_1_1_2_1_default",
     "ParIter_1_1_2_1_pinned",
@@ -173,12 +149,6 @@ __all__ = [
     "ParIter_pureSoA_8_0_pinned",
     "ParallelDescriptor",
     "ParmParse",
-    "ParticleContainer_0_0_4_0_arena",
-    "ParticleContainer_0_0_4_0_default",
-    "ParticleContainer_0_0_4_0_pinned",
-    "ParticleContainer_0_0_5_0_arena",
-    "ParticleContainer_0_0_5_0_default",
-    "ParticleContainer_0_0_5_0_pinned",
     "ParticleContainer_1_1_2_1_arena",
     "ParticleContainer_1_1_2_1_default",
     "ParticleContainer_1_1_2_1_pinned",
@@ -188,9 +158,9 @@ __all__ = [
     "ParticleContainer_pureSoA_8_0_arena",
     "ParticleContainer_pureSoA_8_0_default",
     "ParticleContainer_pureSoA_8_0_pinned",
-    "ParticleInitType_0_0_4_0",
-    "ParticleInitType_0_0_5_0",
     "ParticleInitType_1_1_2_1",
+    "ParticleInitType_pureSoA_5_0",
+    "ParticleInitType_pureSoA_8_0",
     "ParticleTileData_0_0_37_1",
     "ParticleTileData_0_0_4_0",
     "ParticleTileData_0_0_5_0",
@@ -5694,168 +5664,6 @@ class PODVector_uint64_std:
     @property
     def __cuda_array_interface__(self) -> dict: ...
 
-class ParConstIterBase_0_0_4_0_arena(MFIter):
-    is_soa_particle: typing.ClassVar[bool] = False
-    def __init__(
-        self, particle_container: ParticleContainer_0_0_4_0_arena, level: int
-    ) -> None: ...
-    def __iter__(self) -> ParConstIterBase_0_0_4_0_arena: ...
-    def __next__(self) -> ParConstIterBase_0_0_4_0_arena: ...
-    def aos(self) -> ArrayOfStructs_0_0_arena: ...
-    def geom(self, level: int) -> Geometry: ...
-    def particle_tile(self) -> ParticleTile_0_0_4_0_arena: ...
-    def soa(self) -> StructOfArrays_4_0_arena: ...
-    @property
-    def level(self) -> int: ...
-    @property
-    def num_neighbor_particles(self) -> int: ...
-    @property
-    def num_particles(self) -> int: ...
-    @property
-    def num_real_particles(self) -> int: ...
-    @property
-    def pair_index(self) -> tuple[int, int]: ...
-    @property
-    def size(self) -> int:
-        """
-        the number of particles on this tile
-        """
-
-class ParConstIterBase_0_0_4_0_default(MFIter):
-    is_soa_particle: typing.ClassVar[bool] = False
-    def __init__(
-        self, particle_container: ParticleContainer_0_0_4_0_default, level: int
-    ) -> None: ...
-    def __iter__(self) -> ParConstIterBase_0_0_4_0_default: ...
-    def __next__(self) -> ParConstIterBase_0_0_4_0_default: ...
-    def aos(self) -> ArrayOfStructs_0_0_default: ...
-    def geom(self, level: int) -> Geometry: ...
-    def particle_tile(self) -> ParticleTile_0_0_4_0_default: ...
-    def soa(self) -> StructOfArrays_4_0_default: ...
-    @property
-    def level(self) -> int: ...
-    @property
-    def num_neighbor_particles(self) -> int: ...
-    @property
-    def num_particles(self) -> int: ...
-    @property
-    def num_real_particles(self) -> int: ...
-    @property
-    def pair_index(self) -> tuple[int, int]: ...
-    @property
-    def size(self) -> int:
-        """
-        the number of particles on this tile
-        """
-
-class ParConstIterBase_0_0_4_0_pinned(MFIter):
-    is_soa_particle: typing.ClassVar[bool] = False
-    def __init__(
-        self, particle_container: ParticleContainer_0_0_4_0_pinned, level: int
-    ) -> None: ...
-    def __iter__(self) -> ParConstIterBase_0_0_4_0_pinned: ...
-    def __next__(self) -> ParConstIterBase_0_0_4_0_pinned: ...
-    def aos(self) -> ArrayOfStructs_0_0_pinned: ...
-    def geom(self, level: int) -> Geometry: ...
-    def particle_tile(self) -> ParticleTile_0_0_4_0_pinned: ...
-    def soa(self) -> StructOfArrays_4_0_pinned: ...
-    @property
-    def level(self) -> int: ...
-    @property
-    def num_neighbor_particles(self) -> int: ...
-    @property
-    def num_particles(self) -> int: ...
-    @property
-    def num_real_particles(self) -> int: ...
-    @property
-    def pair_index(self) -> tuple[int, int]: ...
-    @property
-    def size(self) -> int:
-        """
-        the number of particles on this tile
-        """
-
-class ParConstIterBase_0_0_5_0_arena(MFIter):
-    is_soa_particle: typing.ClassVar[bool] = False
-    def __init__(
-        self, particle_container: ParticleContainer_0_0_5_0_arena, level: int
-    ) -> None: ...
-    def __iter__(self) -> ParConstIterBase_0_0_5_0_arena: ...
-    def __next__(self) -> ParConstIterBase_0_0_5_0_arena: ...
-    def aos(self) -> ArrayOfStructs_0_0_arena: ...
-    def geom(self, level: int) -> Geometry: ...
-    def particle_tile(self) -> ParticleTile_0_0_5_0_arena: ...
-    def soa(self) -> StructOfArrays_5_0_arena: ...
-    @property
-    def level(self) -> int: ...
-    @property
-    def num_neighbor_particles(self) -> int: ...
-    @property
-    def num_particles(self) -> int: ...
-    @property
-    def num_real_particles(self) -> int: ...
-    @property
-    def pair_index(self) -> tuple[int, int]: ...
-    @property
-    def size(self) -> int:
-        """
-        the number of particles on this tile
-        """
-
-class ParConstIterBase_0_0_5_0_default(MFIter):
-    is_soa_particle: typing.ClassVar[bool] = False
-    def __init__(
-        self, particle_container: ParticleContainer_0_0_5_0_default, level: int
-    ) -> None: ...
-    def __iter__(self) -> ParConstIterBase_0_0_5_0_default: ...
-    def __next__(self) -> ParConstIterBase_0_0_5_0_default: ...
-    def aos(self) -> ArrayOfStructs_0_0_default: ...
-    def geom(self, level: int) -> Geometry: ...
-    def particle_tile(self) -> ParticleTile_0_0_5_0_default: ...
-    def soa(self) -> StructOfArrays_5_0_default: ...
-    @property
-    def level(self) -> int: ...
-    @property
-    def num_neighbor_particles(self) -> int: ...
-    @property
-    def num_particles(self) -> int: ...
-    @property
-    def num_real_particles(self) -> int: ...
-    @property
-    def pair_index(self) -> tuple[int, int]: ...
-    @property
-    def size(self) -> int:
-        """
-        the number of particles on this tile
-        """
-
-class ParConstIterBase_0_0_5_0_pinned(MFIter):
-    is_soa_particle: typing.ClassVar[bool] = False
-    def __init__(
-        self, particle_container: ParticleContainer_0_0_5_0_pinned, level: int
-    ) -> None: ...
-    def __iter__(self) -> ParConstIterBase_0_0_5_0_pinned: ...
-    def __next__(self) -> ParConstIterBase_0_0_5_0_pinned: ...
-    def aos(self) -> ArrayOfStructs_0_0_pinned: ...
-    def geom(self, level: int) -> Geometry: ...
-    def particle_tile(self) -> ParticleTile_0_0_5_0_pinned: ...
-    def soa(self) -> StructOfArrays_5_0_pinned: ...
-    @property
-    def level(self) -> int: ...
-    @property
-    def num_neighbor_particles(self) -> int: ...
-    @property
-    def num_particles(self) -> int: ...
-    @property
-    def num_real_particles(self) -> int: ...
-    @property
-    def pair_index(self) -> tuple[int, int]: ...
-    @property
-    def size(self) -> int:
-        """
-        the number of particles on this tile
-        """
-
 class ParConstIterBase_1_1_2_1_arena(MFIter):
     is_soa_particle: typing.ClassVar[bool] = False
     def __init__(
@@ -6093,48 +5901,6 @@ class ParConstIterBase_pureSoA_8_0_pinned(MFIter):
         the number of particles on this tile
         """
 
-class ParConstIter_0_0_4_0_arena(ParConstIterBase_0_0_4_0_arena):
-    is_soa_particle: typing.ClassVar[bool] = False
-    def __init__(
-        self, particle_container: ParticleContainer_0_0_4_0_arena, level: int
-    ) -> None: ...
-    def __repr__(self) -> str: ...
-
-class ParConstIter_0_0_4_0_default(ParConstIterBase_0_0_4_0_default):
-    is_soa_particle: typing.ClassVar[bool] = False
-    def __init__(
-        self, particle_container: ParticleContainer_0_0_4_0_default, level: int
-    ) -> None: ...
-    def __repr__(self) -> str: ...
-
-class ParConstIter_0_0_4_0_pinned(ParConstIterBase_0_0_4_0_pinned):
-    is_soa_particle: typing.ClassVar[bool] = False
-    def __init__(
-        self, particle_container: ParticleContainer_0_0_4_0_pinned, level: int
-    ) -> None: ...
-    def __repr__(self) -> str: ...
-
-class ParConstIter_0_0_5_0_arena(ParConstIterBase_0_0_5_0_arena):
-    is_soa_particle: typing.ClassVar[bool] = False
-    def __init__(
-        self, particle_container: ParticleContainer_0_0_5_0_arena, level: int
-    ) -> None: ...
-    def __repr__(self) -> str: ...
-
-class ParConstIter_0_0_5_0_default(ParConstIterBase_0_0_5_0_default):
-    is_soa_particle: typing.ClassVar[bool] = False
-    def __init__(
-        self, particle_container: ParticleContainer_0_0_5_0_default, level: int
-    ) -> None: ...
-    def __repr__(self) -> str: ...
-
-class ParConstIter_0_0_5_0_pinned(ParConstIterBase_0_0_5_0_pinned):
-    is_soa_particle: typing.ClassVar[bool] = False
-    def __init__(
-        self, particle_container: ParticleContainer_0_0_5_0_pinned, level: int
-    ) -> None: ...
-    def __repr__(self) -> str: ...
-
 class ParConstIter_1_1_2_1_arena(ParConstIterBase_1_1_2_1_arena):
     is_soa_particle: typing.ClassVar[bool] = False
     def __init__(
@@ -6197,168 +5963,6 @@ class ParConstIter_pureSoA_8_0_pinned(ParConstIterBase_pureSoA_8_0_pinned):
         self, particle_container: ParticleContainer_pureSoA_8_0_pinned, level: int
     ) -> None: ...
     def __repr__(self) -> str: ...
-
-class ParIterBase_0_0_4_0_arena(MFIter):
-    is_soa_particle: typing.ClassVar[bool] = False
-    def __init__(
-        self, particle_container: ParticleContainer_0_0_4_0_arena, level: int
-    ) -> None: ...
-    def __iter__(self) -> ParIterBase_0_0_4_0_arena: ...
-    def __next__(self) -> ParIterBase_0_0_4_0_arena: ...
-    def aos(self) -> ArrayOfStructs_0_0_arena: ...
-    def geom(self, level: int) -> Geometry: ...
-    def particle_tile(self) -> ParticleTile_0_0_4_0_arena: ...
-    def soa(self) -> StructOfArrays_4_0_arena: ...
-    @property
-    def level(self) -> int: ...
-    @property
-    def num_neighbor_particles(self) -> int: ...
-    @property
-    def num_particles(self) -> int: ...
-    @property
-    def num_real_particles(self) -> int: ...
-    @property
-    def pair_index(self) -> tuple[int, int]: ...
-    @property
-    def size(self) -> int:
-        """
-        the number of particles on this tile
-        """
-
-class ParIterBase_0_0_4_0_default(MFIter):
-    is_soa_particle: typing.ClassVar[bool] = False
-    def __init__(
-        self, particle_container: ParticleContainer_0_0_4_0_default, level: int
-    ) -> None: ...
-    def __iter__(self) -> ParIterBase_0_0_4_0_default: ...
-    def __next__(self) -> ParIterBase_0_0_4_0_default: ...
-    def aos(self) -> ArrayOfStructs_0_0_default: ...
-    def geom(self, level: int) -> Geometry: ...
-    def particle_tile(self) -> ParticleTile_0_0_4_0_default: ...
-    def soa(self) -> StructOfArrays_4_0_default: ...
-    @property
-    def level(self) -> int: ...
-    @property
-    def num_neighbor_particles(self) -> int: ...
-    @property
-    def num_particles(self) -> int: ...
-    @property
-    def num_real_particles(self) -> int: ...
-    @property
-    def pair_index(self) -> tuple[int, int]: ...
-    @property
-    def size(self) -> int:
-        """
-        the number of particles on this tile
-        """
-
-class ParIterBase_0_0_4_0_pinned(MFIter):
-    is_soa_particle: typing.ClassVar[bool] = False
-    def __init__(
-        self, particle_container: ParticleContainer_0_0_4_0_pinned, level: int
-    ) -> None: ...
-    def __iter__(self) -> ParIterBase_0_0_4_0_pinned: ...
-    def __next__(self) -> ParIterBase_0_0_4_0_pinned: ...
-    def aos(self) -> ArrayOfStructs_0_0_pinned: ...
-    def geom(self, level: int) -> Geometry: ...
-    def particle_tile(self) -> ParticleTile_0_0_4_0_pinned: ...
-    def soa(self) -> StructOfArrays_4_0_pinned: ...
-    @property
-    def level(self) -> int: ...
-    @property
-    def num_neighbor_particles(self) -> int: ...
-    @property
-    def num_particles(self) -> int: ...
-    @property
-    def num_real_particles(self) -> int: ...
-    @property
-    def pair_index(self) -> tuple[int, int]: ...
-    @property
-    def size(self) -> int:
-        """
-        the number of particles on this tile
-        """
-
-class ParIterBase_0_0_5_0_arena(MFIter):
-    is_soa_particle: typing.ClassVar[bool] = False
-    def __init__(
-        self, particle_container: ParticleContainer_0_0_5_0_arena, level: int
-    ) -> None: ...
-    def __iter__(self) -> ParIterBase_0_0_5_0_arena: ...
-    def __next__(self) -> ParIterBase_0_0_5_0_arena: ...
-    def aos(self) -> ArrayOfStructs_0_0_arena: ...
-    def geom(self, level: int) -> Geometry: ...
-    def particle_tile(self) -> ParticleTile_0_0_5_0_arena: ...
-    def soa(self) -> StructOfArrays_5_0_arena: ...
-    @property
-    def level(self) -> int: ...
-    @property
-    def num_neighbor_particles(self) -> int: ...
-    @property
-    def num_particles(self) -> int: ...
-    @property
-    def num_real_particles(self) -> int: ...
-    @property
-    def pair_index(self) -> tuple[int, int]: ...
-    @property
-    def size(self) -> int:
-        """
-        the number of particles on this tile
-        """
-
-class ParIterBase_0_0_5_0_default(MFIter):
-    is_soa_particle: typing.ClassVar[bool] = False
-    def __init__(
-        self, particle_container: ParticleContainer_0_0_5_0_default, level: int
-    ) -> None: ...
-    def __iter__(self) -> ParIterBase_0_0_5_0_default: ...
-    def __next__(self) -> ParIterBase_0_0_5_0_default: ...
-    def aos(self) -> ArrayOfStructs_0_0_default: ...
-    def geom(self, level: int) -> Geometry: ...
-    def particle_tile(self) -> ParticleTile_0_0_5_0_default: ...
-    def soa(self) -> StructOfArrays_5_0_default: ...
-    @property
-    def level(self) -> int: ...
-    @property
-    def num_neighbor_particles(self) -> int: ...
-    @property
-    def num_particles(self) -> int: ...
-    @property
-    def num_real_particles(self) -> int: ...
-    @property
-    def pair_index(self) -> tuple[int, int]: ...
-    @property
-    def size(self) -> int:
-        """
-        the number of particles on this tile
-        """
-
-class ParIterBase_0_0_5_0_pinned(MFIter):
-    is_soa_particle: typing.ClassVar[bool] = False
-    def __init__(
-        self, particle_container: ParticleContainer_0_0_5_0_pinned, level: int
-    ) -> None: ...
-    def __iter__(self) -> ParIterBase_0_0_5_0_pinned: ...
-    def __next__(self) -> ParIterBase_0_0_5_0_pinned: ...
-    def aos(self) -> ArrayOfStructs_0_0_pinned: ...
-    def geom(self, level: int) -> Geometry: ...
-    def particle_tile(self) -> ParticleTile_0_0_5_0_pinned: ...
-    def soa(self) -> StructOfArrays_5_0_pinned: ...
-    @property
-    def level(self) -> int: ...
-    @property
-    def num_neighbor_particles(self) -> int: ...
-    @property
-    def num_particles(self) -> int: ...
-    @property
-    def num_real_particles(self) -> int: ...
-    @property
-    def pair_index(self) -> tuple[int, int]: ...
-    @property
-    def size(self) -> int:
-        """
-        the number of particles on this tile
-        """
 
 class ParIterBase_1_1_2_1_arena(MFIter):
     is_soa_particle: typing.ClassVar[bool] = False
@@ -6597,48 +6201,6 @@ class ParIterBase_pureSoA_8_0_pinned(MFIter):
         the number of particles on this tile
         """
 
-class ParIter_0_0_4_0_arena(ParIterBase_0_0_4_0_arena):
-    is_soa_particle: typing.ClassVar[bool] = False
-    def __init__(
-        self, particle_container: ParticleContainer_0_0_4_0_arena, level: int
-    ) -> None: ...
-    def __repr__(self) -> str: ...
-
-class ParIter_0_0_4_0_default(ParIterBase_0_0_4_0_default):
-    is_soa_particle: typing.ClassVar[bool] = False
-    def __init__(
-        self, particle_container: ParticleContainer_0_0_4_0_default, level: int
-    ) -> None: ...
-    def __repr__(self) -> str: ...
-
-class ParIter_0_0_4_0_pinned(ParIterBase_0_0_4_0_pinned):
-    is_soa_particle: typing.ClassVar[bool] = False
-    def __init__(
-        self, particle_container: ParticleContainer_0_0_4_0_pinned, level: int
-    ) -> None: ...
-    def __repr__(self) -> str: ...
-
-class ParIter_0_0_5_0_arena(ParIterBase_0_0_5_0_arena):
-    is_soa_particle: typing.ClassVar[bool] = False
-    def __init__(
-        self, particle_container: ParticleContainer_0_0_5_0_arena, level: int
-    ) -> None: ...
-    def __repr__(self) -> str: ...
-
-class ParIter_0_0_5_0_default(ParIterBase_0_0_5_0_default):
-    is_soa_particle: typing.ClassVar[bool] = False
-    def __init__(
-        self, particle_container: ParticleContainer_0_0_5_0_default, level: int
-    ) -> None: ...
-    def __repr__(self) -> str: ...
-
-class ParIter_0_0_5_0_pinned(ParIterBase_0_0_5_0_pinned):
-    is_soa_particle: typing.ClassVar[bool] = False
-    def __init__(
-        self, particle_container: ParticleContainer_0_0_5_0_pinned, level: int
-    ) -> None: ...
-    def __repr__(self) -> str: ...
-
 class ParIter_1_1_2_1_arena(ParIterBase_1_1_2_1_arena):
     is_soa_particle: typing.ClassVar[bool] = False
     def __init__(
@@ -6762,936 +6324,6 @@ class ParmParse:
         """
 
     def remove(self, arg0: str) -> int: ...
-
-class ParticleContainer_0_0_4_0_arena:
-    NArrayInt: typing.ClassVar[int] = 0
-    NArrayReal: typing.ClassVar[int] = 4
-    NStructInt: typing.ClassVar[int] = 0
-    NStructReal: typing.ClassVar[int] = 0
-    is_soa_particle: typing.ClassVar[bool] = False
-    const_iterator = ParConstIter_0_0_4_0_arena
-    iterator = ParIter_0_0_4_0_arena
-    def AddParticlesAtLevel(
-        self, particles: ParticleTile_0_0_4_0_arena, level: int, ngrow: int = 0
-    ) -> None: ...
-    def ByteSpread(
-        self,
-    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)]: ...
-    @typing.overload
-    def Define(
-        self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray
-    ) -> None: ...
-    @typing.overload
-    def Define(
-        self,
-        arg0: Vector_Geometry,
-        arg1: Vector_DistributionMapping,
-        arg2: Vector_BoxArray,
-        arg3: Vector_int,
-    ) -> None: ...
-    @typing.overload
-    def Define(
-        self,
-        arg0: Vector_Geometry,
-        arg1: Vector_DistributionMapping,
-        arg2: Vector_BoxArray,
-        arg3: Vector_IntVect,
-    ) -> None: ...
-    def GetParticles(
-        self, level: int
-    ) -> dict[tuple[int, int], ParticleTile_0_0_4_0_arena]: ...
-    def Increment(self, arg0: MultiFab, arg1: int) -> None: ...
-    def InitOnePerCell(
-        self, arg0: float, arg1: float, arg2: float, arg3: ParticleInitType_0_0_4_0
-    ) -> None: ...
-    def InitRandom(
-        self,
-        arg0: int,
-        arg1: int,
-        arg2: ParticleInitType_0_0_4_0,
-        arg3: bool,
-        arg4: RealBox,
-    ) -> None: ...
-    def InitRandomPerBox(
-        self, arg0: int, arg1: int, arg2: ParticleInitType_0_0_4_0
-    ) -> None: ...
-    def NumberOfParticlesAtLevel(
-        self, level: int, only_valid: bool = True, only_local: bool = False
-    ) -> int: ...
-    def NumberOfParticlesInGrid(
-        self, level: int, only_valid: bool = True, only_local: bool = False
-    ) -> Vector_Long: ...
-    def OK(self, lev_min: int = 0, lev_max: int = -1, nGrow: int = 0) -> bool: ...
-    def PrintCapacity(
-        self,
-    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)]: ...
-    def Redistribute(
-        self,
-        lev_min: int = 0,
-        lev_max: int = -1,
-        nGrow: int = 0,
-        local: int = 0,
-        remove_negative: bool = True,
-    ) -> None: ...
-    def RemoveParticlesAtLevel(self, arg0: int) -> None: ...
-    def RemoveParticlesNotAtFinestLevel(self) -> None: ...
-    def ShrinkToFit(self) -> None: ...
-    def SortParticlesByBin(self, arg0: IntVect) -> None: ...
-    def SortParticlesByCell(self) -> None: ...
-    def TotalNumberOfParticles(
-        self, only_valid: bool = True, only_local: bool = False
-    ) -> int: ...
-    @typing.overload
-    def __init__(self) -> None: ...
-    @typing.overload
-    def __init__(
-        self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray
-    ) -> None: ...
-    @typing.overload
-    def __init__(
-        self,
-        arg0: Vector_Geometry,
-        arg1: Vector_DistributionMapping,
-        arg2: Vector_BoxArray,
-        arg3: Vector_int,
-    ) -> None: ...
-    @typing.overload
-    def __init__(
-        self,
-        arg0: Vector_Geometry,
-        arg1: Vector_DistributionMapping,
-        arg2: Vector_BoxArray,
-        arg3: Vector_IntVect,
-    ) -> None: ...
-    def clearParticles(self) -> None: ...
-    def numLocalTilesAtLevel(self, arg0: int) -> int: ...
-    def reserve_data(self) -> None: ...
-    def resize_data(self) -> None: ...
-    def to_df(self, local=True, comm=None, root_rank=0):
-        """
-
-        Copy all particles into a pandas.DataFrame
-
-        Parameters
-        ----------
-        self : amrex.ParticleContainer_*
-            A ParticleContainer class in pyAMReX
-        local : bool
-            MPI rank-local particles only
-        comm : MPI Communicator
-            if local is False, this defaults to mpi4py.MPI.COMM_WORLD
-        root_rank : MPI root rank to gather to
-            if local is False, this defaults to 0
-
-        Returns
-        -------
-        A concatenated pandas.DataFrame with particles from all levels.
-
-        Returns None if no particles were found.
-        If local=False, then all ranks but the root_rank will return None.
-
-        """
-
-    @property
-    def finest_level(self) -> int: ...
-    @property
-    def num_int_comps(self) -> int:
-        """
-        The number of compile-time and runtime int components in SoA
-        """
-
-    @property
-    def num_real_comps(self) -> int:
-        """
-        The number of compile-time and runtime Real components in SoA
-        """
-
-    @property
-    def num_runtime_int_comps(self) -> int:
-        """
-        The number of runtime Int components in SoA
-        """
-
-    @property
-    def num_runtime_real_comps(self) -> int:
-        """
-        The number of runtime Real components in SoA
-        """
-
-class ParticleContainer_0_0_4_0_default:
-    NArrayInt: typing.ClassVar[int] = 0
-    NArrayReal: typing.ClassVar[int] = 4
-    NStructInt: typing.ClassVar[int] = 0
-    NStructReal: typing.ClassVar[int] = 0
-    is_soa_particle: typing.ClassVar[bool] = False
-    const_iterator = ParConstIter_0_0_4_0_default
-    iterator = ParIter_0_0_4_0_default
-    def AddParticlesAtLevel(
-        self, particles: ParticleTile_0_0_4_0_default, level: int, ngrow: int = 0
-    ) -> None: ...
-    def ByteSpread(
-        self,
-    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)]: ...
-    @typing.overload
-    def Define(
-        self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray
-    ) -> None: ...
-    @typing.overload
-    def Define(
-        self,
-        arg0: Vector_Geometry,
-        arg1: Vector_DistributionMapping,
-        arg2: Vector_BoxArray,
-        arg3: Vector_int,
-    ) -> None: ...
-    @typing.overload
-    def Define(
-        self,
-        arg0: Vector_Geometry,
-        arg1: Vector_DistributionMapping,
-        arg2: Vector_BoxArray,
-        arg3: Vector_IntVect,
-    ) -> None: ...
-    def GetParticles(
-        self, level: int
-    ) -> dict[tuple[int, int], ParticleTile_0_0_4_0_default]: ...
-    def Increment(self, arg0: MultiFab, arg1: int) -> None: ...
-    def InitOnePerCell(
-        self, arg0: float, arg1: float, arg2: float, arg3: ParticleInitType_0_0_4_0
-    ) -> None: ...
-    def InitRandom(
-        self,
-        arg0: int,
-        arg1: int,
-        arg2: ParticleInitType_0_0_4_0,
-        arg3: bool,
-        arg4: RealBox,
-    ) -> None: ...
-    def InitRandomPerBox(
-        self, arg0: int, arg1: int, arg2: ParticleInitType_0_0_4_0
-    ) -> None: ...
-    def NumberOfParticlesAtLevel(
-        self, level: int, only_valid: bool = True, only_local: bool = False
-    ) -> int: ...
-    def NumberOfParticlesInGrid(
-        self, level: int, only_valid: bool = True, only_local: bool = False
-    ) -> Vector_Long: ...
-    def OK(self, lev_min: int = 0, lev_max: int = -1, nGrow: int = 0) -> bool: ...
-    def PrintCapacity(
-        self,
-    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)]: ...
-    def Redistribute(
-        self,
-        lev_min: int = 0,
-        lev_max: int = -1,
-        nGrow: int = 0,
-        local: int = 0,
-        remove_negative: bool = True,
-    ) -> None: ...
-    def RemoveParticlesAtLevel(self, arg0: int) -> None: ...
-    def RemoveParticlesNotAtFinestLevel(self) -> None: ...
-    def ShrinkToFit(self) -> None: ...
-    def SortParticlesByBin(self, arg0: IntVect) -> None: ...
-    def SortParticlesByCell(self) -> None: ...
-    def TotalNumberOfParticles(
-        self, only_valid: bool = True, only_local: bool = False
-    ) -> int: ...
-    @typing.overload
-    def __init__(self) -> None: ...
-    @typing.overload
-    def __init__(
-        self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray
-    ) -> None: ...
-    @typing.overload
-    def __init__(
-        self,
-        arg0: Vector_Geometry,
-        arg1: Vector_DistributionMapping,
-        arg2: Vector_BoxArray,
-        arg3: Vector_int,
-    ) -> None: ...
-    @typing.overload
-    def __init__(
-        self,
-        arg0: Vector_Geometry,
-        arg1: Vector_DistributionMapping,
-        arg2: Vector_BoxArray,
-        arg3: Vector_IntVect,
-    ) -> None: ...
-    def clearParticles(self) -> None: ...
-    def numLocalTilesAtLevel(self, arg0: int) -> int: ...
-    def reserve_data(self) -> None: ...
-    def resize_data(self) -> None: ...
-    def to_df(self, local=True, comm=None, root_rank=0):
-        """
-
-        Copy all particles into a pandas.DataFrame
-
-        Parameters
-        ----------
-        self : amrex.ParticleContainer_*
-            A ParticleContainer class in pyAMReX
-        local : bool
-            MPI rank-local particles only
-        comm : MPI Communicator
-            if local is False, this defaults to mpi4py.MPI.COMM_WORLD
-        root_rank : MPI root rank to gather to
-            if local is False, this defaults to 0
-
-        Returns
-        -------
-        A concatenated pandas.DataFrame with particles from all levels.
-
-        Returns None if no particles were found.
-        If local=False, then all ranks but the root_rank will return None.
-
-        """
-
-    @property
-    def finest_level(self) -> int: ...
-    @property
-    def num_int_comps(self) -> int:
-        """
-        The number of compile-time and runtime int components in SoA
-        """
-
-    @property
-    def num_real_comps(self) -> int:
-        """
-        The number of compile-time and runtime Real components in SoA
-        """
-
-    @property
-    def num_runtime_int_comps(self) -> int:
-        """
-        The number of runtime Int components in SoA
-        """
-
-    @property
-    def num_runtime_real_comps(self) -> int:
-        """
-        The number of runtime Real components in SoA
-        """
-
-class ParticleContainer_0_0_4_0_pinned:
-    NArrayInt: typing.ClassVar[int] = 0
-    NArrayReal: typing.ClassVar[int] = 4
-    NStructInt: typing.ClassVar[int] = 0
-    NStructReal: typing.ClassVar[int] = 0
-    is_soa_particle: typing.ClassVar[bool] = False
-    const_iterator = ParConstIter_0_0_4_0_pinned
-    iterator = ParIter_0_0_4_0_pinned
-    def AddParticlesAtLevel(
-        self, particles: ParticleTile_0_0_4_0_pinned, level: int, ngrow: int = 0
-    ) -> None: ...
-    def ByteSpread(
-        self,
-    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)]: ...
-    @typing.overload
-    def Define(
-        self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray
-    ) -> None: ...
-    @typing.overload
-    def Define(
-        self,
-        arg0: Vector_Geometry,
-        arg1: Vector_DistributionMapping,
-        arg2: Vector_BoxArray,
-        arg3: Vector_int,
-    ) -> None: ...
-    @typing.overload
-    def Define(
-        self,
-        arg0: Vector_Geometry,
-        arg1: Vector_DistributionMapping,
-        arg2: Vector_BoxArray,
-        arg3: Vector_IntVect,
-    ) -> None: ...
-    def GetParticles(
-        self, level: int
-    ) -> dict[tuple[int, int], ParticleTile_0_0_4_0_pinned]: ...
-    def Increment(self, arg0: MultiFab, arg1: int) -> None: ...
-    def InitOnePerCell(
-        self, arg0: float, arg1: float, arg2: float, arg3: ParticleInitType_0_0_4_0
-    ) -> None: ...
-    def InitRandom(
-        self,
-        arg0: int,
-        arg1: int,
-        arg2: ParticleInitType_0_0_4_0,
-        arg3: bool,
-        arg4: RealBox,
-    ) -> None: ...
-    def InitRandomPerBox(
-        self, arg0: int, arg1: int, arg2: ParticleInitType_0_0_4_0
-    ) -> None: ...
-    def NumberOfParticlesAtLevel(
-        self, level: int, only_valid: bool = True, only_local: bool = False
-    ) -> int: ...
-    def NumberOfParticlesInGrid(
-        self, level: int, only_valid: bool = True, only_local: bool = False
-    ) -> Vector_Long: ...
-    def OK(self, lev_min: int = 0, lev_max: int = -1, nGrow: int = 0) -> bool: ...
-    def PrintCapacity(
-        self,
-    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)]: ...
-    def Redistribute(
-        self,
-        lev_min: int = 0,
-        lev_max: int = -1,
-        nGrow: int = 0,
-        local: int = 0,
-        remove_negative: bool = True,
-    ) -> None: ...
-    def RemoveParticlesAtLevel(self, arg0: int) -> None: ...
-    def RemoveParticlesNotAtFinestLevel(self) -> None: ...
-    def ShrinkToFit(self) -> None: ...
-    def SortParticlesByBin(self, arg0: IntVect) -> None: ...
-    def SortParticlesByCell(self) -> None: ...
-    def TotalNumberOfParticles(
-        self, only_valid: bool = True, only_local: bool = False
-    ) -> int: ...
-    @typing.overload
-    def __init__(self) -> None: ...
-    @typing.overload
-    def __init__(
-        self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray
-    ) -> None: ...
-    @typing.overload
-    def __init__(
-        self,
-        arg0: Vector_Geometry,
-        arg1: Vector_DistributionMapping,
-        arg2: Vector_BoxArray,
-        arg3: Vector_int,
-    ) -> None: ...
-    @typing.overload
-    def __init__(
-        self,
-        arg0: Vector_Geometry,
-        arg1: Vector_DistributionMapping,
-        arg2: Vector_BoxArray,
-        arg3: Vector_IntVect,
-    ) -> None: ...
-    def clearParticles(self) -> None: ...
-    def numLocalTilesAtLevel(self, arg0: int) -> int: ...
-    def reserve_data(self) -> None: ...
-    def resize_data(self) -> None: ...
-    def to_df(self, local=True, comm=None, root_rank=0):
-        """
-
-        Copy all particles into a pandas.DataFrame
-
-        Parameters
-        ----------
-        self : amrex.ParticleContainer_*
-            A ParticleContainer class in pyAMReX
-        local : bool
-            MPI rank-local particles only
-        comm : MPI Communicator
-            if local is False, this defaults to mpi4py.MPI.COMM_WORLD
-        root_rank : MPI root rank to gather to
-            if local is False, this defaults to 0
-
-        Returns
-        -------
-        A concatenated pandas.DataFrame with particles from all levels.
-
-        Returns None if no particles were found.
-        If local=False, then all ranks but the root_rank will return None.
-
-        """
-
-    @property
-    def finest_level(self) -> int: ...
-    @property
-    def num_int_comps(self) -> int:
-        """
-        The number of compile-time and runtime int components in SoA
-        """
-
-    @property
-    def num_real_comps(self) -> int:
-        """
-        The number of compile-time and runtime Real components in SoA
-        """
-
-    @property
-    def num_runtime_int_comps(self) -> int:
-        """
-        The number of runtime Int components in SoA
-        """
-
-    @property
-    def num_runtime_real_comps(self) -> int:
-        """
-        The number of runtime Real components in SoA
-        """
-
-class ParticleContainer_0_0_5_0_arena:
-    NArrayInt: typing.ClassVar[int] = 0
-    NArrayReal: typing.ClassVar[int] = 5
-    NStructInt: typing.ClassVar[int] = 0
-    NStructReal: typing.ClassVar[int] = 0
-    is_soa_particle: typing.ClassVar[bool] = False
-    const_iterator = ParConstIter_0_0_5_0_arena
-    iterator = ParIter_0_0_5_0_arena
-    def AddParticlesAtLevel(
-        self, particles: ParticleTile_0_0_5_0_arena, level: int, ngrow: int = 0
-    ) -> None: ...
-    def ByteSpread(
-        self,
-    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)]: ...
-    @typing.overload
-    def Define(
-        self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray
-    ) -> None: ...
-    @typing.overload
-    def Define(
-        self,
-        arg0: Vector_Geometry,
-        arg1: Vector_DistributionMapping,
-        arg2: Vector_BoxArray,
-        arg3: Vector_int,
-    ) -> None: ...
-    @typing.overload
-    def Define(
-        self,
-        arg0: Vector_Geometry,
-        arg1: Vector_DistributionMapping,
-        arg2: Vector_BoxArray,
-        arg3: Vector_IntVect,
-    ) -> None: ...
-    def GetParticles(
-        self, level: int
-    ) -> dict[tuple[int, int], ParticleTile_0_0_5_0_arena]: ...
-    def Increment(self, arg0: MultiFab, arg1: int) -> None: ...
-    def InitOnePerCell(
-        self, arg0: float, arg1: float, arg2: float, arg3: ParticleInitType_0_0_5_0
-    ) -> None: ...
-    def InitRandom(
-        self,
-        arg0: int,
-        arg1: int,
-        arg2: ParticleInitType_0_0_5_0,
-        arg3: bool,
-        arg4: RealBox,
-    ) -> None: ...
-    def InitRandomPerBox(
-        self, arg0: int, arg1: int, arg2: ParticleInitType_0_0_5_0
-    ) -> None: ...
-    def NumberOfParticlesAtLevel(
-        self, level: int, only_valid: bool = True, only_local: bool = False
-    ) -> int: ...
-    def NumberOfParticlesInGrid(
-        self, level: int, only_valid: bool = True, only_local: bool = False
-    ) -> Vector_Long: ...
-    def OK(self, lev_min: int = 0, lev_max: int = -1, nGrow: int = 0) -> bool: ...
-    def PrintCapacity(
-        self,
-    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)]: ...
-    def Redistribute(
-        self,
-        lev_min: int = 0,
-        lev_max: int = -1,
-        nGrow: int = 0,
-        local: int = 0,
-        remove_negative: bool = True,
-    ) -> None: ...
-    def RemoveParticlesAtLevel(self, arg0: int) -> None: ...
-    def RemoveParticlesNotAtFinestLevel(self) -> None: ...
-    def ShrinkToFit(self) -> None: ...
-    def SortParticlesByBin(self, arg0: IntVect) -> None: ...
-    def SortParticlesByCell(self) -> None: ...
-    def TotalNumberOfParticles(
-        self, only_valid: bool = True, only_local: bool = False
-    ) -> int: ...
-    @typing.overload
-    def __init__(self) -> None: ...
-    @typing.overload
-    def __init__(
-        self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray
-    ) -> None: ...
-    @typing.overload
-    def __init__(
-        self,
-        arg0: Vector_Geometry,
-        arg1: Vector_DistributionMapping,
-        arg2: Vector_BoxArray,
-        arg3: Vector_int,
-    ) -> None: ...
-    @typing.overload
-    def __init__(
-        self,
-        arg0: Vector_Geometry,
-        arg1: Vector_DistributionMapping,
-        arg2: Vector_BoxArray,
-        arg3: Vector_IntVect,
-    ) -> None: ...
-    def clearParticles(self) -> None: ...
-    def numLocalTilesAtLevel(self, arg0: int) -> int: ...
-    def reserve_data(self) -> None: ...
-    def resize_data(self) -> None: ...
-    def to_df(self, local=True, comm=None, root_rank=0):
-        """
-
-        Copy all particles into a pandas.DataFrame
-
-        Parameters
-        ----------
-        self : amrex.ParticleContainer_*
-            A ParticleContainer class in pyAMReX
-        local : bool
-            MPI rank-local particles only
-        comm : MPI Communicator
-            if local is False, this defaults to mpi4py.MPI.COMM_WORLD
-        root_rank : MPI root rank to gather to
-            if local is False, this defaults to 0
-
-        Returns
-        -------
-        A concatenated pandas.DataFrame with particles from all levels.
-
-        Returns None if no particles were found.
-        If local=False, then all ranks but the root_rank will return None.
-
-        """
-
-    @property
-    def finest_level(self) -> int: ...
-    @property
-    def num_int_comps(self) -> int:
-        """
-        The number of compile-time and runtime int components in SoA
-        """
-
-    @property
-    def num_real_comps(self) -> int:
-        """
-        The number of compile-time and runtime Real components in SoA
-        """
-
-    @property
-    def num_runtime_int_comps(self) -> int:
-        """
-        The number of runtime Int components in SoA
-        """
-
-    @property
-    def num_runtime_real_comps(self) -> int:
-        """
-        The number of runtime Real components in SoA
-        """
-
-class ParticleContainer_0_0_5_0_default:
-    NArrayInt: typing.ClassVar[int] = 0
-    NArrayReal: typing.ClassVar[int] = 5
-    NStructInt: typing.ClassVar[int] = 0
-    NStructReal: typing.ClassVar[int] = 0
-    is_soa_particle: typing.ClassVar[bool] = False
-    const_iterator = ParConstIter_0_0_5_0_default
-    iterator = ParIter_0_0_5_0_default
-    def AddParticlesAtLevel(
-        self, particles: ParticleTile_0_0_5_0_default, level: int, ngrow: int = 0
-    ) -> None: ...
-    def ByteSpread(
-        self,
-    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)]: ...
-    @typing.overload
-    def Define(
-        self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray
-    ) -> None: ...
-    @typing.overload
-    def Define(
-        self,
-        arg0: Vector_Geometry,
-        arg1: Vector_DistributionMapping,
-        arg2: Vector_BoxArray,
-        arg3: Vector_int,
-    ) -> None: ...
-    @typing.overload
-    def Define(
-        self,
-        arg0: Vector_Geometry,
-        arg1: Vector_DistributionMapping,
-        arg2: Vector_BoxArray,
-        arg3: Vector_IntVect,
-    ) -> None: ...
-    def GetParticles(
-        self, level: int
-    ) -> dict[tuple[int, int], ParticleTile_0_0_5_0_default]: ...
-    def Increment(self, arg0: MultiFab, arg1: int) -> None: ...
-    def InitOnePerCell(
-        self, arg0: float, arg1: float, arg2: float, arg3: ParticleInitType_0_0_5_0
-    ) -> None: ...
-    def InitRandom(
-        self,
-        arg0: int,
-        arg1: int,
-        arg2: ParticleInitType_0_0_5_0,
-        arg3: bool,
-        arg4: RealBox,
-    ) -> None: ...
-    def InitRandomPerBox(
-        self, arg0: int, arg1: int, arg2: ParticleInitType_0_0_5_0
-    ) -> None: ...
-    def NumberOfParticlesAtLevel(
-        self, level: int, only_valid: bool = True, only_local: bool = False
-    ) -> int: ...
-    def NumberOfParticlesInGrid(
-        self, level: int, only_valid: bool = True, only_local: bool = False
-    ) -> Vector_Long: ...
-    def OK(self, lev_min: int = 0, lev_max: int = -1, nGrow: int = 0) -> bool: ...
-    def PrintCapacity(
-        self,
-    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)]: ...
-    def Redistribute(
-        self,
-        lev_min: int = 0,
-        lev_max: int = -1,
-        nGrow: int = 0,
-        local: int = 0,
-        remove_negative: bool = True,
-    ) -> None: ...
-    def RemoveParticlesAtLevel(self, arg0: int) -> None: ...
-    def RemoveParticlesNotAtFinestLevel(self) -> None: ...
-    def ShrinkToFit(self) -> None: ...
-    def SortParticlesByBin(self, arg0: IntVect) -> None: ...
-    def SortParticlesByCell(self) -> None: ...
-    def TotalNumberOfParticles(
-        self, only_valid: bool = True, only_local: bool = False
-    ) -> int: ...
-    @typing.overload
-    def __init__(self) -> None: ...
-    @typing.overload
-    def __init__(
-        self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray
-    ) -> None: ...
-    @typing.overload
-    def __init__(
-        self,
-        arg0: Vector_Geometry,
-        arg1: Vector_DistributionMapping,
-        arg2: Vector_BoxArray,
-        arg3: Vector_int,
-    ) -> None: ...
-    @typing.overload
-    def __init__(
-        self,
-        arg0: Vector_Geometry,
-        arg1: Vector_DistributionMapping,
-        arg2: Vector_BoxArray,
-        arg3: Vector_IntVect,
-    ) -> None: ...
-    def clearParticles(self) -> None: ...
-    def numLocalTilesAtLevel(self, arg0: int) -> int: ...
-    def reserve_data(self) -> None: ...
-    def resize_data(self) -> None: ...
-    def to_df(self, local=True, comm=None, root_rank=0):
-        """
-
-        Copy all particles into a pandas.DataFrame
-
-        Parameters
-        ----------
-        self : amrex.ParticleContainer_*
-            A ParticleContainer class in pyAMReX
-        local : bool
-            MPI rank-local particles only
-        comm : MPI Communicator
-            if local is False, this defaults to mpi4py.MPI.COMM_WORLD
-        root_rank : MPI root rank to gather to
-            if local is False, this defaults to 0
-
-        Returns
-        -------
-        A concatenated pandas.DataFrame with particles from all levels.
-
-        Returns None if no particles were found.
-        If local=False, then all ranks but the root_rank will return None.
-
-        """
-
-    @property
-    def finest_level(self) -> int: ...
-    @property
-    def num_int_comps(self) -> int:
-        """
-        The number of compile-time and runtime int components in SoA
-        """
-
-    @property
-    def num_real_comps(self) -> int:
-        """
-        The number of compile-time and runtime Real components in SoA
-        """
-
-    @property
-    def num_runtime_int_comps(self) -> int:
-        """
-        The number of runtime Int components in SoA
-        """
-
-    @property
-    def num_runtime_real_comps(self) -> int:
-        """
-        The number of runtime Real components in SoA
-        """
-
-class ParticleContainer_0_0_5_0_pinned:
-    NArrayInt: typing.ClassVar[int] = 0
-    NArrayReal: typing.ClassVar[int] = 5
-    NStructInt: typing.ClassVar[int] = 0
-    NStructReal: typing.ClassVar[int] = 0
-    is_soa_particle: typing.ClassVar[bool] = False
-    const_iterator = ParConstIter_0_0_5_0_pinned
-    iterator = ParIter_0_0_5_0_pinned
-    def AddParticlesAtLevel(
-        self, particles: ParticleTile_0_0_5_0_pinned, level: int, ngrow: int = 0
-    ) -> None: ...
-    def ByteSpread(
-        self,
-    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)]: ...
-    @typing.overload
-    def Define(
-        self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray
-    ) -> None: ...
-    @typing.overload
-    def Define(
-        self,
-        arg0: Vector_Geometry,
-        arg1: Vector_DistributionMapping,
-        arg2: Vector_BoxArray,
-        arg3: Vector_int,
-    ) -> None: ...
-    @typing.overload
-    def Define(
-        self,
-        arg0: Vector_Geometry,
-        arg1: Vector_DistributionMapping,
-        arg2: Vector_BoxArray,
-        arg3: Vector_IntVect,
-    ) -> None: ...
-    def GetParticles(
-        self, level: int
-    ) -> dict[tuple[int, int], ParticleTile_0_0_5_0_pinned]: ...
-    def Increment(self, arg0: MultiFab, arg1: int) -> None: ...
-    def InitOnePerCell(
-        self, arg0: float, arg1: float, arg2: float, arg3: ParticleInitType_0_0_5_0
-    ) -> None: ...
-    def InitRandom(
-        self,
-        arg0: int,
-        arg1: int,
-        arg2: ParticleInitType_0_0_5_0,
-        arg3: bool,
-        arg4: RealBox,
-    ) -> None: ...
-    def InitRandomPerBox(
-        self, arg0: int, arg1: int, arg2: ParticleInitType_0_0_5_0
-    ) -> None: ...
-    def NumberOfParticlesAtLevel(
-        self, level: int, only_valid: bool = True, only_local: bool = False
-    ) -> int: ...
-    def NumberOfParticlesInGrid(
-        self, level: int, only_valid: bool = True, only_local: bool = False
-    ) -> Vector_Long: ...
-    def OK(self, lev_min: int = 0, lev_max: int = -1, nGrow: int = 0) -> bool: ...
-    def PrintCapacity(
-        self,
-    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)]: ...
-    def Redistribute(
-        self,
-        lev_min: int = 0,
-        lev_max: int = -1,
-        nGrow: int = 0,
-        local: int = 0,
-        remove_negative: bool = True,
-    ) -> None: ...
-    def RemoveParticlesAtLevel(self, arg0: int) -> None: ...
-    def RemoveParticlesNotAtFinestLevel(self) -> None: ...
-    def ShrinkToFit(self) -> None: ...
-    def SortParticlesByBin(self, arg0: IntVect) -> None: ...
-    def SortParticlesByCell(self) -> None: ...
-    def TotalNumberOfParticles(
-        self, only_valid: bool = True, only_local: bool = False
-    ) -> int: ...
-    @typing.overload
-    def __init__(self) -> None: ...
-    @typing.overload
-    def __init__(
-        self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray
-    ) -> None: ...
-    @typing.overload
-    def __init__(
-        self,
-        arg0: Vector_Geometry,
-        arg1: Vector_DistributionMapping,
-        arg2: Vector_BoxArray,
-        arg3: Vector_int,
-    ) -> None: ...
-    @typing.overload
-    def __init__(
-        self,
-        arg0: Vector_Geometry,
-        arg1: Vector_DistributionMapping,
-        arg2: Vector_BoxArray,
-        arg3: Vector_IntVect,
-    ) -> None: ...
-    def clearParticles(self) -> None: ...
-    def numLocalTilesAtLevel(self, arg0: int) -> int: ...
-    def reserve_data(self) -> None: ...
-    def resize_data(self) -> None: ...
-    def to_df(self, local=True, comm=None, root_rank=0):
-        """
-
-        Copy all particles into a pandas.DataFrame
-
-        Parameters
-        ----------
-        self : amrex.ParticleContainer_*
-            A ParticleContainer class in pyAMReX
-        local : bool
-            MPI rank-local particles only
-        comm : MPI Communicator
-            if local is False, this defaults to mpi4py.MPI.COMM_WORLD
-        root_rank : MPI root rank to gather to
-            if local is False, this defaults to 0
-
-        Returns
-        -------
-        A concatenated pandas.DataFrame with particles from all levels.
-
-        Returns None if no particles were found.
-        If local=False, then all ranks but the root_rank will return None.
-
-        """
-
-    @property
-    def finest_level(self) -> int: ...
-    @property
-    def num_int_comps(self) -> int:
-        """
-        The number of compile-time and runtime int components in SoA
-        """
-
-    @property
-    def num_real_comps(self) -> int:
-        """
-        The number of compile-time and runtime Real components in SoA
-        """
-
-    @property
-    def num_runtime_int_comps(self) -> int:
-        """
-        The number of runtime Int components in SoA
-        """
-
-    @property
-    def num_runtime_real_comps(self) -> int:
-        """
-        The number of runtime Real components in SoA
-        """
 
 class ParticleContainer_1_1_2_1_arena:
     NArrayInt: typing.ClassVar[int] = 1
@@ -8196,6 +6828,14 @@ class ParticleContainer_pureSoA_5_0_arena:
         self, level: int
     ) -> dict[tuple[int, int], ParticleTile_pureSoA_0_0_5_0_arena]: ...
     def Increment(self, arg0: MultiFab, arg1: int) -> None: ...
+    def InitRandom(
+        self,
+        arg0: int,
+        arg1: int,
+        arg2: ParticleInitType_pureSoA_5_0,
+        arg3: bool,
+        arg4: RealBox,
+    ) -> None: ...
     def NumberOfParticlesAtLevel(
         self, level: int, only_valid: bool = True, only_local: bool = False
     ) -> int: ...
@@ -8340,6 +6980,14 @@ class ParticleContainer_pureSoA_5_0_default:
         self, level: int
     ) -> dict[tuple[int, int], ParticleTile_pureSoA_0_0_5_0_default]: ...
     def Increment(self, arg0: MultiFab, arg1: int) -> None: ...
+    def InitRandom(
+        self,
+        arg0: int,
+        arg1: int,
+        arg2: ParticleInitType_pureSoA_5_0,
+        arg3: bool,
+        arg4: RealBox,
+    ) -> None: ...
     def NumberOfParticlesAtLevel(
         self, level: int, only_valid: bool = True, only_local: bool = False
     ) -> int: ...
@@ -8481,6 +7129,14 @@ class ParticleContainer_pureSoA_5_0_pinned:
         self, level: int
     ) -> dict[tuple[int, int], ParticleTile_pureSoA_0_0_5_0_pinned]: ...
     def Increment(self, arg0: MultiFab, arg1: int) -> None: ...
+    def InitRandom(
+        self,
+        arg0: int,
+        arg1: int,
+        arg2: ParticleInitType_pureSoA_5_0,
+        arg3: bool,
+        arg4: RealBox,
+    ) -> None: ...
     def NumberOfParticlesAtLevel(
         self, level: int, only_valid: bool = True, only_local: bool = False
     ) -> int: ...
@@ -8622,6 +7278,14 @@ class ParticleContainer_pureSoA_8_0_arena:
         self, level: int
     ) -> dict[tuple[int, int], ParticleTile_pureSoA_0_0_8_0_arena]: ...
     def Increment(self, arg0: MultiFab, arg1: int) -> None: ...
+    def InitRandom(
+        self,
+        arg0: int,
+        arg1: int,
+        arg2: ParticleInitType_pureSoA_8_0,
+        arg3: bool,
+        arg4: RealBox,
+    ) -> None: ...
     def NumberOfParticlesAtLevel(
         self, level: int, only_valid: bool = True, only_local: bool = False
     ) -> int: ...
@@ -8766,6 +7430,14 @@ class ParticleContainer_pureSoA_8_0_default:
         self, level: int
     ) -> dict[tuple[int, int], ParticleTile_pureSoA_0_0_8_0_default]: ...
     def Increment(self, arg0: MultiFab, arg1: int) -> None: ...
+    def InitRandom(
+        self,
+        arg0: int,
+        arg1: int,
+        arg2: ParticleInitType_pureSoA_8_0,
+        arg3: bool,
+        arg4: RealBox,
+    ) -> None: ...
     def NumberOfParticlesAtLevel(
         self, level: int, only_valid: bool = True, only_local: bool = False
     ) -> int: ...
@@ -8907,6 +7579,14 @@ class ParticleContainer_pureSoA_8_0_pinned:
         self, level: int
     ) -> dict[tuple[int, int], ParticleTile_pureSoA_0_0_8_0_pinned]: ...
     def Increment(self, arg0: MultiFab, arg1: int) -> None: ...
+    def InitRandom(
+        self,
+        arg0: int,
+        arg1: int,
+        arg2: ParticleInitType_pureSoA_8_0,
+        arg3: bool,
+        arg4: RealBox,
+    ) -> None: ...
     def NumberOfParticlesAtLevel(
         self, level: int, only_valid: bool = True, only_local: bool = False
     ) -> int: ...
@@ -9010,38 +7690,6 @@ class ParticleContainer_pureSoA_8_0_pinned:
         The number of runtime Real components in SoA
         """
 
-class ParticleInitType_0_0_4_0:
-    is_soa_particle: typing.ClassVar[bool] = False
-    int_array_data: typing.Annotated[
-        list[int], pybind11_stubgen.typing_ext.FixedSize(0)
-    ]
-    int_struct_data: typing.Annotated[
-        list[int], pybind11_stubgen.typing_ext.FixedSize(0)
-    ]
-    real_array_data: typing.Annotated[
-        list[float], pybind11_stubgen.typing_ext.FixedSize(4)
-    ]
-    real_struct_data: typing.Annotated[
-        list[float], pybind11_stubgen.typing_ext.FixedSize(0)
-    ]
-    def __init__(self) -> None: ...
-
-class ParticleInitType_0_0_5_0:
-    is_soa_particle: typing.ClassVar[bool] = False
-    int_array_data: typing.Annotated[
-        list[int], pybind11_stubgen.typing_ext.FixedSize(0)
-    ]
-    int_struct_data: typing.Annotated[
-        list[int], pybind11_stubgen.typing_ext.FixedSize(0)
-    ]
-    real_array_data: typing.Annotated[
-        list[float], pybind11_stubgen.typing_ext.FixedSize(5)
-    ]
-    real_struct_data: typing.Annotated[
-        list[float], pybind11_stubgen.typing_ext.FixedSize(0)
-    ]
-    def __init__(self) -> None: ...
-
 class ParticleInitType_1_1_2_1:
     is_soa_particle: typing.ClassVar[bool] = False
     int_array_data: typing.Annotated[
@@ -9055,6 +7703,26 @@ class ParticleInitType_1_1_2_1:
     ]
     real_struct_data: typing.Annotated[
         list[float], pybind11_stubgen.typing_ext.FixedSize(1)
+    ]
+    def __init__(self) -> None: ...
+
+class ParticleInitType_pureSoA_5_0:
+    is_soa_particle: typing.ClassVar[bool] = True
+    int_array_data: typing.Annotated[
+        list[int], pybind11_stubgen.typing_ext.FixedSize(0)
+    ]
+    real_array_data: typing.Annotated[
+        list[float], pybind11_stubgen.typing_ext.FixedSize(5)
+    ]
+    def __init__(self) -> None: ...
+
+class ParticleInitType_pureSoA_8_0:
+    is_soa_particle: typing.ClassVar[bool] = True
+    int_array_data: typing.Annotated[
+        list[int], pybind11_stubgen.typing_ext.FixedSize(0)
+    ]
+    real_array_data: typing.Annotated[
+        list[float], pybind11_stubgen.typing_ext.FixedSize(8)
     ]
     def __init__(self) -> None: ...
 
