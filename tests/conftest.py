@@ -109,9 +109,6 @@ def mfab(boxarr, distmap, request):
         yield mfab
 
 
-@pytest.mark.skipif(
-    amr.Config.gpu_backend != "CUDA", reason="Requires AMReX_GPU_BACKEND=CUDA"
-)
 @pytest.fixture(scope="function", params=list(itertools.product([1, 3], [0, 1])))
 def mfab_device(boxarr, distmap, request):
     """MultiFab that resides purely on the device:
