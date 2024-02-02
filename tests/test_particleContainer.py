@@ -300,19 +300,19 @@ def test_soa_pc_numpy(soa_particle_container, Npart):
     # pc = sim.get_particles()
     # Config = sim.extension.Config
 
-    # iterate over every mesh-refinement levels (no MR: lev=0)
+    # iterate over mesh-refinement level (no MR: lev=0)
     for lvl in range(pc.finest_level + 1):
         # get every local chunk of particles
         for pti in pc.iterator(pc, level=lvl):
-            # additional compile-time and runtime attributes in SoA format
+            # compile-time and runtime attributes in SoA format
             soa = pti.soa().to_cupy() if Config.have_gpu else pti.soa().to_numpy()
 
             # notes:
             # Only the next lines are the "HOT LOOP" of the computation.
-            # For efficiency, use numpy array operation for speed.
+            # For speed, use array operations.
 
             # write to all particles in the chunk
-            # note: careful, if you change particle positions, you need to
+            # note: careful, if you change particle positions, you might need to
             #       redistribute particles before continuing the simulation step
             print(soa.real)
             soa.real[0][()] = 0.30  # x
@@ -341,7 +341,7 @@ def test_pc_numpy(particle_container, Npart):
     # pc = sim.get_particles()
     # Config = sim.extension.Config
 
-    # iterate over every mesh-refinement levels (no MR: lev=0)
+    # iterate over mesh-refinement level (no MR: lev=0)
     for lvl in range(pc.finest_level + 1):
         # get every local chunk of particles
         for pti in pc.iterator(pc, level=lvl):
