@@ -331,6 +331,9 @@ if(pyAMReX_BUILD_TESTING)
             ${CMAKE_PYTHON_OUTPUT_DIRECTORY}
     )
 
+    # limit threads
+    set_property(TEST pytest.AMReX APPEND PROPERTY ENVIRONMENT "OMP_NUM_THREADS=2")
+
     # set PYTHONPATH and PATH (for .dll files)
     pyamrex_test_set_pythonpath(pytest.AMReX)
 endif()
