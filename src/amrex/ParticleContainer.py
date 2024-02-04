@@ -48,23 +48,37 @@ def pc_to_df(self, local=True, comm=None, root_rank=0):
                 continue
 
             if self.is_soa_particle:
+                soa_view = pti.soa().to_numpy(copy=True)
+
                 next_df = pd.DataFrame()
+
+                next_df["idcpu"] = soa_view.idcpu
+
+                soa_np_real = soa_view.real
+                for name, array in soa_np_real.items():
+                    next_df[name] = array
+
+                soa_np_int = soa_view.int
+                for name, array in soa_np_int.items():
+                    next_df[name] = array
             else:
                 # AoS
                 aos_np = pti.aos().to_numpy(copy=True)
                 next_df = pd.DataFrame(aos_np)
-                next_df.set_index("cpuid")
-                next_df.index.name = "cpuid"
 
-            # SoA
-            soa_view = pti.soa().to_numpy(copy=True)
-            soa_np_real = soa_view.real
-            soa_np_int = soa_view.int
+                # SoA
+                soa_view = pti.soa().to_numpy(copy=True)
+                soa_np_real = soa_view.real
+                soa_np_int = soa_view.int
 
-            for idx, array in enumerate(soa_np_real):
-                next_df[f"SoA_real_{idx}"] = array
-            for idx, array in enumerate(soa_np_int):
-                next_df[f"SoA_int_{idx}"] = array
+                for name, array in soa_np_real.items():
+                    next_df[f"SoA_{name}"] = array
+
+                for name, array in soa_np_int.items():
+                    next_df[f"SoA_{name}"] = array
+
+            next_df.set_index("idcpu")
+            next_df.index.name = "idcpu"
 
             dfs_local.append(next_df)
 

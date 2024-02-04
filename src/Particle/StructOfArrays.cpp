@@ -34,37 +34,40 @@ void make_StructOfArrays(py::module &m, std::string allocstr)
              "Get the number of compile-time + runtime Real components")
         .def_property_readonly("num_int_comps", &SOAType::NumIntComps,
              "Get the number of compile-time + runtime Int components")
+        .def_property_readonly("has_idcpu", [](const py::object&){ return use64BitIdCpu; },
+             "In pure SoA particle layout, idcpu is an array in the SoA")
 
         // compile-time components
-        .def("GetRealData", py::overload_cast<>(&SOAType::GetRealData),
+        .def("get_real_data", py::overload_cast<>(&SOAType::GetRealData),
             py::return_value_policy::reference_internal,
             "Get access to the particle Real Arrays (only compile-time components)")
-        .def("GetIntData", py::overload_cast<>(&SOAType::GetIntData),
+        .def("get_int_data", py::overload_cast<>(&SOAType::GetIntData),
             py::return_value_policy::reference_internal,
             "Get access to the particle Int Arrays (only compile-time components)")
         // compile-time and runtime components
-        .def("GetRealData", py::overload_cast<const int>(&SOAType::GetRealData),
+        .def("get_real_data", py::overload_cast<const int>(&SOAType::GetRealData),
              py::return_value_policy::reference_internal,
              py::arg("index"),
              "Get access to a particle Real component Array (compile-time and runtime component)")
-        .def("GetIntData", py::overload_cast<const int>(&SOAType::GetIntData),
+        .def("get_int_data", py::overload_cast<const int>(&SOAType::GetIntData),
              py::return_value_policy::reference_internal,
              py::arg("index"),
              "Get access to a particle Real component Array (compile-time and runtime component)")
 
-        .def("size", &SOAType::size,
-             "Get the number of particles")
         .def("__len__", &SOAType::size,
              "Get the number of particles")
-        .def("numParticles", &SOAType::numParticles)
-        .def("numRealParticles", &SOAType::numRealParticles)
-        .def("numTotalParticles", &SOAType::numTotalParticles)
-        .def("setNumNeighbors", &SOAType::setNumNeighbors)
-        .def("getNumNeighbors", &SOAType::getNumNeighbors)
+        .def_property_readonly("size", &SOAType::size,
+             "Get the number of particles")
+        .def_property_readonly("num_particles", &SOAType::numParticles)
+        .def_property_readonly("num_real_particles", &SOAType::numRealParticles)
+        .def_property_readonly("num_total_particles", &SOAType::numTotalParticles)
+
+        .def("set_num_neighbors", &SOAType::setNumNeighbors)
+        .def("get_num_neighbors", &SOAType::getNumNeighbors)
         .def("resize", &SOAType::resize)
     ;
     if (use64BitIdCpu)
-        py_SoA.def("GetIdCPUData", py::overload_cast<>(&SOAType::GetIdCPUData),
+        py_SoA.def("get_idcpu_data", py::overload_cast<>(&SOAType::GetIdCPUData),
                    py::return_value_policy::reference_internal,
                    "Get access to a particle IdCPU component Array");
 }

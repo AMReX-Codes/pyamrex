@@ -16,11 +16,11 @@ namespace
     using namespace amrex;
 
     // Note - this function MUST be consistent with AMReX_Particle.H
-    Long unpack_id (uint64_t cpuid) {
+    Long unpack_id (uint64_t idcpu) {
         Long r = 0;
 
-        uint64_t sign = cpuid >> 63;  // extract leftmost sign bit
-        uint64_t val  = ((cpuid >> 24) & 0x7FFFFFFFFF);  // extract next 39 id bits
+        uint64_t sign = idcpu >> 63;  // extract leftmost sign bit
+        uint64_t val  = ((idcpu >> 24) & 0x7FFFFFFFFF);  // extract next 39 id bits
 
         Long lval = static_cast<Long>(val);  // bc we take -
         r = (sign) ? lval : -lval;
@@ -28,8 +28,8 @@ namespace
     }
 
     // Note - this function MUST be consistent with AMReX_Particle.H
-    int unpack_cpu (uint64_t cpuid) {
-        return static_cast<int>(cpuid & 0x00FFFFFF);
+    int unpack_cpu (uint64_t idcpu) {
+        return static_cast<int>(idcpu & 0x00FFFFFF);
     }
 
     /** CPU: __array_interface__ v3
@@ -63,7 +63,7 @@ namespace
                 descr.append(py::make_tuple("rdata_"+std::to_string(ii),py::format_descriptor<RealType>::format()));
             }
         }
-        descr.append(py::make_tuple("cpuid", py::format_descriptor<uint64_t>::format()) );
+        descr.append(py::make_tuple("idcpu", py::format_descriptor<uint64_t>::format()) );
         if constexpr (ParticleType::NInt > 0) {
             for(int ii=0; ii < ParticleType::NInt; ++ii) {
                 descr.append(py::make_tuple("idata_"+std::to_string(ii),py::format_descriptor<int>::format()));
