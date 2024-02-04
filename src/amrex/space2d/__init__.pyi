@@ -41,6 +41,7 @@ from amrex.Array4 import register_Array4_extension
 from amrex.ArrayOfStructs import register_AoS_extension
 from amrex.MultiFab import register_MultiFab_extension
 from amrex.PODVector import register_PODVector_extension
+from amrex.ParticleComponentNames import soa_int_comps, soa_real_comps
 from amrex.ParticleContainer import register_ParticleContainer_extension
 from amrex.StructOfArrays import register_SoA_extension
 from amrex.space2d.amrex_2d_pybind import (
@@ -515,6 +516,8 @@ __all__ = [
     "register_ParticleContainer_extension",
     "register_SoA_extension",
     "size",
+    "soa_int_comps",
+    "soa_real_comps",
     "ubound",
     "unpack_cpus",
     "unpack_ids",
