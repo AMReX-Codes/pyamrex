@@ -38,8 +38,8 @@ def mf_to_numpy(amr, self, copy=False, order="F"):
         mf = amr.MultiFab(
             self.box_array(),
             self.dm(),
-            self.n_comp(),
-            self.n_grow_vect(),
+            self.n_comp,
+            self.n_grow_vect,
             amr.MFInfo().set_arena(amr.The_Pinned_Arena()),
         )
         amr.dtoh_memcpy(mf, self)
