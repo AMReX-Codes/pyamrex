@@ -20,6 +20,12 @@ def empty_particle_container(std_geometry, distmap, boxarr):
 
 
 @pytest.fixture(scope="function")
+def empty_soa_particle_container(std_geometry, distmap, boxarr):
+    pc = amr.ParticleContainer_pureSoA_8_0_default(std_geometry, distmap, boxarr)
+    return pc
+
+
+@pytest.fixture(scope="function")
 def std_particle():
     myt = amr.ParticleInitType_1_1_2_1()
     myt.real_struct_data = [0.5]
@@ -39,7 +45,7 @@ def particle_container(Npart, std_geometry, distmap, boxarr, std_real_box):
     myt.int_array_data = [1]
 
     iseed = 1
-    pc.InitRandom(Npart, iseed, myt, False, std_real_box)
+    pc.init_random(Npart, iseed, myt, False, std_real_box)
     return pc
 
 
@@ -51,7 +57,7 @@ def soa_particle_container(Npart, std_geometry, distmap, boxarr, std_real_box):
     myt.int_array_data = []
 
     iseed = 1
-    pc.InitRandom(Npart, iseed, myt, False, std_real_box)
+    pc.init_random(Npart, iseed, myt, False, std_real_box)
     return pc
 
 
@@ -76,22 +82,30 @@ def test_particleInitType():
 def test_n_particles(particle_container, Npart):
     pc = particle_container
     assert pc.OK()
-    assert pc.NStructReal == amr.ParticleContainer_1_1_2_1_default.NStructReal == 1
-    assert pc.NStructInt == amr.ParticleContainer_1_1_2_1_default.NStructInt == 1
-    assert pc.NArrayReal == amr.ParticleContainer_1_1_2_1_default.NArrayReal == 2
-    assert pc.NArrayInt == amr.ParticleContainer_1_1_2_1_default.NArrayInt == 1
     assert (
-        pc.NumberOfParticlesAtLevel(0) == np.sum(pc.NumberOfParticlesInGrid(0)) == Npart
+        pc.num_struct_real == amr.ParticleContainer_1_1_2_1_default.num_struct_real == 1
+    )
+    assert (
+        pc.num_struct_int == amr.ParticleContainer_1_1_2_1_default.num_struct_int == 1
+    )
+    assert (
+        pc.num_array_real == amr.ParticleContainer_1_1_2_1_default.num_array_real == 2
+    )
+    assert pc.num_array_int == amr.ParticleContainer_1_1_2_1_default.num_array_int == 1
+    assert (
+        pc.number_of_particles_at_level(0)
+        == np.sum(pc.number_of_particles_in_grid(0))
+        == Npart
     )
 
 
 def test_pc_init():
     pc = amr.ParticleContainer_1_1_2_1_default()
 
-    print("bytespread", pc.ByteSpread())
-    print("capacity", pc.PrintCapacity())
-    print("NumberOfParticles", pc.NumberOfParticlesAtLevel(0))
-    assert pc.NumberOfParticlesAtLevel(0) == 0
+    print("bytespread", pc.byte_spread)
+    print("capacity", pc.print_capacity())
+    print("number_of_particles_at_level(0)", pc.number_of_particles_at_level(0))
+    assert pc.number_of_particles_at_level(0) == 0
 
     bx = amr.Box(amr.IntVect(0, 0, 0), amr.IntVect(63, 63, 63))
     rb = amr.RealBox(0, 0, 0, 1, 1, 1)
@@ -107,15 +121,21 @@ def test_pc_init():
     print("define particle container")
     pc.Define(gm, dm, ba)
     assert pc.OK()
-    assert pc.NStructReal == amr.ParticleContainer_1_1_2_1_default.NStructReal == 1
-    assert pc.NStructInt == amr.ParticleContainer_1_1_2_1_default.NStructInt == 1
-    assert pc.NArrayReal == amr.ParticleContainer_1_1_2_1_default.NArrayReal == 2
-    assert pc.NArrayInt == amr.ParticleContainer_1_1_2_1_default.NArrayInt == 1
+    assert (
+        pc.num_struct_real == amr.ParticleContainer_1_1_2_1_default.num_struct_real == 1
+    )
+    assert (
+        pc.num_struct_int == amr.ParticleContainer_1_1_2_1_default.num_struct_int == 1
+    )
+    assert (
+        pc.num_array_real == amr.ParticleContainer_1_1_2_1_default.num_array_real == 2
+    )
+    assert pc.num_array_int == amr.ParticleContainer_1_1_2_1_default.num_array_int == 1
 
-    print("bytespread", pc.ByteSpread())
-    print("capacity", pc.PrintCapacity())
-    print("NumberOfParticles", pc.NumberOfParticlesAtLevel(0))
-    assert pc.TotalNumberOfParticles() == pc.NumberOfParticlesAtLevel(0) == 0
+    print("bytespread", pc.byte_spread)
+    print("capacity", pc.print_capacity())
+    print("number_of_particles_at_level(0)", pc.number_of_particles_at_level(0))
+    assert pc.total_number_of_particles() == pc.number_of_particles_at_level(0) == 0
     assert pc.OK()
 
     print("---------------------------")
@@ -127,12 +147,12 @@ def test_pc_init():
     myt.int_struct_data = [5]
     myt.real_array_data = [0.5, 0.2]
     myt.int_array_data = [1]
-    pc.InitRandomPerBox(Npart_grid, iseed, myt)
+    pc.init_random_per_box(Npart_grid, iseed, myt)
     ngrid = ba.size
     npart = Npart_grid * ngrid
 
-    print("NumberOfParticles", pc.NumberOfParticlesAtLevel(0))
-    assert pc.TotalNumberOfParticles() == pc.NumberOfParticlesAtLevel(0) == npart
+    print("NumberOfParticles", pc.number_of_particles_at_level(0))
+    assert pc.total_number_of_particles() == pc.number_of_particles_at_level(0) == npart
     assert pc.OK()
 
     print(f"Finest level = {pc.finest_level}")
@@ -158,8 +178,8 @@ def test_pc_init():
 
             # TODO: this seems to write into a copy of the data
             soa = pti.soa()
-            real_arrays = soa.GetRealData()
-            int_arrays = soa.GetIntData()
+            real_arrays = soa.get_real_data()
+            int_arrays = soa.get_int_data()
             real_arrays[0] = [0.55]
             real_arrays[1] = [0.22]
             int_arrays[0] = [2]
@@ -184,8 +204,8 @@ def test_pc_init():
             assert aos_arr[0]["z"] == 0.40
 
             soa = pti.soa()
-            real_arrays = soa.GetRealData()
-            int_arrays = soa.GetIntData()
+            real_arrays = soa.get_real_data()
+            int_arrays = soa.get_int_data()
             print(real_arrays[0])
             print(int_arrays[0])
             # TODO: this does not work yet and is still the original data
@@ -197,19 +217,21 @@ def test_pc_init():
 def test_particle_init(Npart, particle_container):
     pc = particle_container
     assert (
-        pc.NumberOfParticlesAtLevel(0) == np.sum(pc.NumberOfParticlesInGrid(0)) == Npart
+        pc.number_of_particles_at_level(0)
+        == np.sum(pc.number_of_particles_in_grid(0))
+        == Npart
     )
 
     # pc.resizeData()
-    print(pc.numLocalTilesAtLevel(0))
-    lev = pc.GetParticles(0)
+    print(pc.num_local_tiles_at_level(0))
+    lev = pc.get_particles(0)
     print(len(lev.items()))
-    assert pc.numLocalTilesAtLevel(0) == len(lev.items())
+    assert pc.num_local_tiles_at_level(0) == len(lev.items())
     for tile_ind, pt in lev.items():
         print("tile", tile_ind)
-        real_arrays = pt.GetStructOfArrays().GetRealData()
-        int_arrays = pt.GetStructOfArrays().GetIntData()
-        aos = pt.GetArrayOfStructs()
+        real_arrays = pt.get_struct_of_arrays().get_real_data()
+        int_arrays = pt.get_struct_of_arrays().get_int_data()
+        aos = pt.get_array_of_structs()
         aos_arr = aos.to_numpy()
         if len(real_arrays) > 0:
             assert np.isclose(real_arrays[0][0], 0.5) and np.isclose(
@@ -222,7 +244,7 @@ def test_particle_init(Npart, particle_container):
             assert np.isclose(aos_arr[0]["rdata_0"], 0.5) and aos_arr[0]["idata_0"] == 5
 
             aos_arr[0]["idata_0"] = 2
-            aos1 = pt.GetArrayOfStructs()
+            aos1 = pt.get_array_of_structs()
             print(aos1[0])
             print(aos[0])
             print(aos_arr[0])
@@ -236,7 +258,7 @@ def test_particle_init(Npart, particle_container):
             print("soa test")
             real_arrays[1][0] = -1.2
 
-            ra1 = pt.GetStructOfArrays().GetRealData()
+            ra1 = pt.get_struct_of_arrays().get_real_data()
             print(real_arrays)
             print(ra1)
             for ii, arr in enumerate(real_arrays):
@@ -245,7 +267,7 @@ def test_particle_init(Npart, particle_container):
             print("soa int test")
             iarr_np = int_arrays[0].to_numpy()
             iarr_np[0] = -3
-            ia1 = pt.GetStructOfArrays().GetIntData()
+            ia1 = pt.get_struct_of_arrays().get_int_data()
             ia1_np = ia1[0].to_numpy()
             print(iarr_np)
             print(ia1_np)
@@ -254,12 +276,12 @@ def test_particle_init(Npart, particle_container):
     print(
         "---- is the particle tile recording changes or passed by reference? --------"
     )
-    lev1 = pc.GetParticles(0)
+    lev1 = pc.get_particles(0)
     for tile_ind, pt in lev1.items():
         print("tile", tile_ind)
-        real_arrays = pt.GetStructOfArrays().GetRealData()
-        int_arrays = pt.GetStructOfArrays().GetIntData()
-        aos = pt.GetArrayOfStructs()
+        real_arrays = pt.get_struct_of_arrays().get_real_data()
+        int_arrays = pt.get_struct_of_arrays().get_int_data()
+        aos = pt.get_array_of_structs()
         print(aos[0])
         assert aos[0].get_idata(0) == 2
         assert real_arrays[1][0] == -1.2
@@ -268,22 +290,24 @@ def test_particle_init(Npart, particle_container):
 
 def test_per_cell(empty_particle_container, std_geometry, std_particle):
     pc = empty_particle_container
-    pc.InitOnePerCell(0.5, 0.5, 0.5, std_particle)
+    pc.init_one_per_cell(0.5, 0.5, 0.5, std_particle)
     assert pc.OK()
 
-    lev = pc.GetParticles(0)
-    assert pc.numLocalTilesAtLevel(0) == len(lev.items())
+    lev = pc.get_particles(0)
+    assert pc.num_local_tiles_at_level(0) == len(lev.items())
 
     sum_1 = 0
     for tile_ind, pt in lev.items():
         print("tile", tile_ind)
-        real_arrays = pt.GetStructOfArrays().GetRealData()
+        real_arrays = pt.get_struct_of_arrays().get_real_data()
         sum_1 += np.sum(real_arrays[1])
     print(sum_1)
     ncells = std_geometry.Domain().numPts()
     print("ncells from box", ncells)
-    print("NumberOfParticles", pc.NumberOfParticlesAtLevel(0))
-    assert pc.TotalNumberOfParticles() == pc.NumberOfParticlesAtLevel(0) == ncells
+    print("NumberOfParticles", pc.number_of_particles_at_level(0))
+    assert (
+        pc.total_number_of_particles() == pc.number_of_particles_at_level(0) == ncells
+    )
     print("npts * real_1", ncells * std_particle.real_array_data[1])
     assert ncells * std_particle.real_array_data[1] == sum_1
 
@@ -307,6 +331,9 @@ def test_soa_pc_numpy(soa_particle_container, Npart):
             # compile-time and runtime attributes in SoA format
             soa = pti.soa().to_cupy() if Config.have_gpu else pti.soa().to_numpy()
 
+            # print all particle ids in the chunk
+            print("idcpu =", soa.idcpu)
+
             # notes:
             # Only the next lines are the "HOT LOOP" of the computation.
             # For speed, use array operations.
@@ -314,18 +341,18 @@ def test_soa_pc_numpy(soa_particle_container, Npart):
             # write to all particles in the chunk
             # note: careful, if you change particle positions, you might need to
             #       redistribute particles before continuing the simulation step
-            print(soa.real)
-            soa.real[0][()] = 0.30  # x
-            soa.real[1][()] = 0.35  # y
-            soa.real[2][()] = 0.40  # z
+            soa.real["x"][:] = 0.30
+            soa.real["y"][:] = 0.35
+            soa.real["z"][:] = 0.40
 
-            # all other real attributes
-            for soa_real in soa.real[3:]:
-                soa_real[()] = 42.0
+            soa.real["a"][:] = 0.50
+            soa.real["b"][:] = 0.50
+            soa.real["c"][:] = 0.50
+            # ...
 
             # all int attributes
-            for soa_int in soa.int:
-                soa_int[()] = 12
+            for soa_int in soa.int.values():
+                soa_int[:] = 12
     # Manual: Pure SoA Compute PC END
 
 
@@ -345,7 +372,7 @@ def test_pc_numpy(particle_container, Npart):
     for lvl in range(pc.finest_level + 1):
         # get every local chunk of particles
         for pti in pc.iterator(pc, level=lvl):
-            # default layout: AoS with positions and cpuid
+            # default layout: AoS with positions and idcpu
             # note: not part of the new PureSoA particle container layout
             aos = (
                 pti.aos().to_numpy(copy=True)
@@ -362,18 +389,19 @@ def test_pc_numpy(particle_container, Npart):
             # For GPUs use .to_cupy() above and compute with cupy or numba.
 
             # print all particle ids in the chunk
-            print(aos[()]["cpuid"])
+            print("idcpu =", aos[:]["idcpu"])
 
             # write to all particles in the chunk
-            aos[()]["x"] = 0.30
-            aos[()]["y"] = 0.35
-            aos[()]["z"] = 0.40
+            aos[:]["x"] = 0.30
+            aos[:]["y"] = 0.35
+            aos[:]["z"] = 0.40
 
-            for soa_real in soa.real:
-                soa_real[()] = 42.0
+            print(soa.real)
+            for soa_real in soa.real.values():
+                soa_real[:] = 42.0
 
-            for soa_int in soa.int:
-                soa_int[()] = 12
+            for soa_int in soa.int.values():
+                soa_int[:] = 12
     # Manual: Legacy Compute PC END
 
 
@@ -386,6 +414,30 @@ def test_pc_df(particle_container, Npart):
     df = pc.to_df()
     print(df.columns)
     print(df)
+
+
+@pytest.mark.skipif(
+    importlib.util.find_spec("pandas") is None, reason="pandas is not available"
+)
+def test_soa_pc_empty_df(empty_soa_particle_container, Npart):
+    pc = empty_soa_particle_container
+    print(f"pc={pc}")
+    df = pc.to_df()
+    assert df is None
+
+
+@pytest.mark.skipif(
+    importlib.util.find_spec("pandas") is None, reason="pandas is not available"
+)
+@pytest.mark.skipif(not amr.Config.have_mpi, reason="Requires AMReX_MPI=ON")
+def test_soa_pc_df_mpi(soa_particle_container, Npart):
+    pc = soa_particle_container
+    print(f"pc={pc}")
+    df = pc.to_df(local=False)
+    if df is not None:
+        # only rank 0
+        print(df.columns)
+        print(df)
 
 
 @pytest.mark.skipif(

@@ -187,10 +187,10 @@ void make_ParticleContainer_and_Iterators (py::module &m, std::string allocstr)
                       const Vector<IntVect>&>())
 
         .def_property_readonly_static("is_soa_particle", [](const py::object&){return ParticleType::is_soa_particle;})
-        .def_property_readonly_static("NStructReal", [](const py::object&){return ParticleContainerType::NStructReal; })
-        .def_property_readonly_static("NStructInt", [](const py::object&){return ParticleContainerType::NStructInt; })
-        .def_property_readonly_static("NArrayReal", [](const py::object&){return ParticleContainerType::NArrayReal; })
-        .def_property_readonly_static("NArrayInt", [](const py::object&){return ParticleContainerType::NArrayInt; })
+        .def_property_readonly_static("num_struct_real", [](const py::object&){return ParticleContainerType::NStructReal; })
+        .def_property_readonly_static("num_struct_int", [](const py::object&){return ParticleContainerType::NStructInt; })
+        .def_property_readonly_static("num_array_real", [](const py::object&){return ParticleContainerType::NArrayReal; })
+        .def_property_readonly_static("num_array_int", [](const py::object&){return ParticleContainerType::NArrayInt; })
 
         .def_property_readonly("num_real_comps", &ParticleContainerType::NumRealComps,
             "The number of compile-time and runtime Real components in SoA")
@@ -200,6 +200,9 @@ void make_ParticleContainer_and_Iterators (py::module &m, std::string allocstr)
             "The number of runtime Real components in SoA")
         .def_property_readonly("num_runtime_int_comps", &ParticleContainerType::NumRuntimeIntComps,
             "The number of runtime Int components in SoA")
+
+        .def_property_readonly("num_position_components", [](const py::object&){ return AMREX_SPACEDIM; })
+        .def_property_readonly("byte_spread", &ParticleContainerType::ByteSpread)
 
         .def_property_readonly("finest_level", &ParticleContainerBase::finestLevel)
 
@@ -229,7 +232,7 @@ void make_ParticleContainer_and_Iterators (py::module &m, std::string allocstr)
                                     const Vector<IntVect>&>
                 (&ParticleContainerType::Define))
 
-        .def("numLocalTilesAtLevel", &ParticleContainerType::numLocalTilesAtLevel)
+        .def("num_local_tiles_at_level", &ParticleContainerType::numLocalTilesAtLevel)
 
         .def("reserve_data", &ParticleContainerType::reserveData)
         .def("resize_data", &ParticleContainerType::resizeData)
@@ -244,30 +247,29 @@ void make_ParticleContainer_and_Iterators (py::module &m, std::string allocstr)
         //                  const ParticleInitData& mass,
         //                  bool serialize = false, RealBox bx = RealBox());
 
-        .def("Increment", &ParticleContainerType::Increment) // TODO pure SoA
+        .def("increment", &ParticleContainerType::Increment) // TODO pure SoA
         //.def("IncrementWithTotal", &ParticleContainerType::IncrementWithTotal, py::arg("mf"), py::arg("level"), py::arg("local")=false) // TODO pure SoA
-        .def("Redistribute", &ParticleContainerType::Redistribute, py::arg("lev_min")=0, py::arg("lev_max")=-1,
+        .def("redistribute", &ParticleContainerType::Redistribute, py::arg("lev_min")=0, py::arg("lev_max")=-1,
                                             py::arg("nGrow")=0, py::arg("local")=0, py::arg("remove_negative")=true)
-        .def("SortParticlesByCell", &ParticleContainerType::SortParticlesByCell)
-        .def("SortParticlesByBin", &ParticleContainerType::SortParticlesByBin)
+        .def("sort_particles_by_cell", &ParticleContainerType::SortParticlesByCell)
+        .def("sort_particles_by_bin", &ParticleContainerType::SortParticlesByBin)
         .def("OK", &ParticleContainerType::OK, py::arg("lev_min") = 0, py::arg("lev_max") = -1, py::arg("nGrow")=0)
-        .def("ByteSpread",&ParticleContainerType::ByteSpread)
-        .def("PrintCapacity", &ParticleContainerType::PrintCapacity)
-        .def("ShrinkToFit", &ParticleContainerType::ShrinkToFit)
+        .def("print_capacity", &ParticleContainerType::PrintCapacity)
+        .def("shrink_t_fit", &ParticleContainerType::ShrinkToFit)
         // Long NumberOfParticlesAtLevel (int level, bool only_valid = true, bool only_local = false) const;
-        .def("NumberOfParticlesAtLevel", &ParticleContainerType::NumberOfParticlesAtLevel,
+        .def("number_of_particles_at_level", &ParticleContainerType::NumberOfParticlesAtLevel,
             py::arg("level"), py::arg("only_valid")=true, py::arg("only_local")=false)
         // Vector<Long> NumberOfParticlesInGrid  (int level, bool only_valid = true, bool only_local = false) const;
-        .def("NumberOfParticlesInGrid", &ParticleContainerType::NumberOfParticlesInGrid,
+        .def("number_of_particles_in_grid", &ParticleContainerType::NumberOfParticlesInGrid,
             py::arg("level"), py::arg("only_valid")=true, py::arg("only_local")=false)
             // .def("DefineAndReturnParticleTile",
             //     py::overload_cast<int, int, int>
             //     (&ParticleContainerType::DefineAndReturnParticleTile))
                 // Long TotalNumberOfParticles (bool only_valid=true, bool only_local=false) const;
-        .def("TotalNumberOfParticles", &ParticleContainerType::TotalNumberOfParticles,
+        .def("total_number_of_particles", &ParticleContainerType::TotalNumberOfParticles,
             py::arg("only_valid")=true, py::arg("only_local")=false)
-        .def("RemoveParticlesAtLevel", &ParticleContainerType::RemoveParticlesAtLevel)
-        .def("RemoveParticlesNotAtFinestLevel", &ParticleContainerType::RemoveParticlesNotAtFinestLevel)
+        .def("remove_particles_at_level", &ParticleContainerType::RemoveParticlesAtLevel)
+        .def("remove_particles_not_at_finestLevel", &ParticleContainerType::RemoveParticlesNotAtFinestLevel)
         // void CreateVirtualParticles (int level, AoS& virts) const;
         //.def("CreateVirtualParticles", py::overload_cast<int, AoS&>(&ParticleContainerType::CreateVirtualParticles, py::const_),
         //    py::arg("level"), py::arg("virts"))
@@ -277,12 +279,12 @@ void make_ParticleContainer_and_Iterators (py::module &m, std::string allocstr)
         //     py::arg("level"), py::arg("ngrow"), py::arg("ghosts"))
         //.def("CreateGhostParticles", py::overload_cast<int, int, ParticleTileType&>(&ParticleContainerType::CreateGhostParticles, py::const_),
         //     py::arg("level"), py::arg("ngrow"), py::arg("ghosts")) // TODO pure SoA
-        //.def("AddParticlesAtLevel", py::overload_cast<AoS&, int, int>(&ParticleContainerType::AddParticlesAtLevel),
+        //.def("add_particles_at_level", py::overload_cast<AoS&, int, int>(&ParticleContainerType::AddParticlesAtLevel),
         //    py::arg("particles"), py::arg("level"), py::arg("ngrow")=0)
-        .def("AddParticlesAtLevel", py::overload_cast<ParticleTileType&, int, int>(&ParticleContainerType::AddParticlesAtLevel),
+        .def("add_particles_at_level", py::overload_cast<ParticleTileType&, int, int>(&ParticleContainerType::AddParticlesAtLevel),
             py::arg("particles"), py::arg("level"), py::arg("ngrow")=0)
 
-        .def("clearParticles", &ParticleContainerType::clearParticles)
+        .def("clear_particles", &ParticleContainerType::clearParticles)
         // template <class PCType,
         //           std::enable_if_t<IsParticleContainer<PCType>::value, int> foo = 0>
         // void copyParticles (const PCType& other, bool local=false);
@@ -327,8 +329,8 @@ void make_ParticleContainer_and_Iterators (py::module &m, std::string allocstr)
         // void WritePlotFilePre ();
 
         // void WritePlotFilePost ();
-        //.def("GetParticles", py::overload_cast<>(&ParticleContainerType::GetParticles), py::return_value_policy::reference_internal)
-        .def("GetParticles", py::overload_cast<int>(&ParticleContainerType::GetParticles), py::return_value_policy::reference_internal, py::arg("level"))
+        //.def("get_particles", py::overload_cast<>(&ParticleContainerType::GetParticles), py::return_value_policy::reference_internal)
+        .def("get_particles", py::overload_cast<int>(&ParticleContainerType::GetParticles), py::return_value_policy::reference_internal, py::arg("level"))
         // .def("ParticlesAt", py::overload_cast<int,int,int>(&ParticleContainerType::ParticlesAt),
         //     py::return_value_policy::reference_internal)
         // .def("ParticlesAt", py::overload_cast<int,int,int>(&ParticleContainerType::ParticlesAt,py::const_))
@@ -381,15 +383,15 @@ void make_ParticleContainer_and_Iterators (py::module &m, std::string allocstr)
     ;
 
     py_pc
-        .def("InitRandom", py::overload_cast<Long, ULong, const ParticleInitData&, bool, RealBox>(&ParticleContainerType::InitRandom))
+        .def("init_random", py::overload_cast<Long, ULong, const ParticleInitData&, bool, RealBox>(&ParticleContainerType::InitRandom))
     ;
 
     // TODO for pure SoA
     // depends on https://github.com/AMReX-Codes/amrex/pull/3280
     if constexpr (!T_ParticleType::is_soa_particle) {
         py_pc
-            .def("InitRandomPerBox", py::overload_cast<Long, ULong, const ParticleInitData&>(&ParticleContainerType::InitRandomPerBox))
-            .def("InitOnePerCell", &ParticleContainerType::InitOnePerCell)
+            .def("init_random_per_box", py::overload_cast<Long, ULong, const ParticleInitData&>(&ParticleContainerType::InitRandomPerBox))
+            .def("init_one_per_cell", &ParticleContainerType::InitOnePerCell)
         ;
     }
 

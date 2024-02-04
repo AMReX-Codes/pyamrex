@@ -17,36 +17,36 @@ def test_soa_init():
     print("num real components", soa.num_real_comps)
     print("num int components", soa.num_int_comps)
     assert soa.num_real_comps == 3 and soa.num_int_comps == 4
-    print("num particles", soa.numParticles())
-    print("num real particles", soa.numRealParticles())
-    print("num totalparticles", soa.numTotalParticles())
-    print("num Neighbors", soa.getNumNeighbors())
-    print("soa size", soa.size())
-    assert soa.numParticles() == soa.numRealParticles() == 0
-    assert soa.size() == soa.numTotalParticles() == 0
-    assert soa.getNumNeighbors() == 0
+    print("num particles", soa.num_particles)
+    print("num real particles", soa.num_real_particles)
+    print("num totalparticles", soa.num_total_particles)
+    print("num Neighbors", soa.get_num_neighbors())
+    print("soa size", soa.size)
+    assert soa.num_particles == soa.num_real_particles == 0
+    assert soa.size == soa.num_total_particles == 0
+    assert soa.get_num_neighbors() == 0
 
     soa.resize(5)
     print("--test resize --")
-    print("num particles", soa.numParticles())
-    print("num real particles", soa.numRealParticles())
-    print("num totalparticles", soa.numTotalParticles())
-    print("num Neighbors", soa.getNumNeighbors())
-    print("soa size", soa.size())
-    assert soa.numParticles() == soa.numRealParticles() == 5
-    assert soa.size() == soa.numTotalParticles() == 5
-    assert soa.getNumNeighbors() == 0
+    print("num particles", soa.num_particles)
+    print("num real particles", soa.num_real_particles)
+    print("num totalparticles", soa.num_total_particles)
+    print("num Neighbors", soa.get_num_neighbors())
+    print("soa size", soa.size)
+    assert soa.num_particles == soa.num_real_particles == 5
+    assert soa.size == soa.num_total_particles == 5
+    assert soa.get_num_neighbors() == 0
 
-    soa.setNumNeighbors(3)
+    soa.set_num_neighbors(3)
     print("--test set neighbor num--")
-    print("num particles", soa.numParticles())
-    print("num real particles", soa.numRealParticles())
-    print("num totalparticles", soa.numTotalParticles())
-    print("num Neighbors", soa.getNumNeighbors())
-    print("soa size", soa.size())
-    assert soa.numParticles() == soa.numRealParticles() == 5
-    assert soa.size() == soa.numTotalParticles() == 8
-    assert soa.getNumNeighbors() == 3
+    print("num particles", soa.num_particles)
+    print("num real particles", soa.num_real_particles)
+    print("num totalparticles", soa.num_total_particles)
+    print("num Neighbors", soa.get_num_neighbors())
+    print("soa size", soa.size)
+    assert soa.num_particles == soa.num_real_particles == 5
+    assert soa.size == soa.num_total_particles == 8
+    assert soa.get_num_neighbors() == 3
 
 
 def test_soa_from_tile():
@@ -58,18 +58,18 @@ def test_soa_from_tile():
     pt.push_back(p)
     pt.push_back(sp)
 
-    soa = pt.GetStructOfArrays()
-    print("num particles", soa.numParticles())
-    print("num real particles", soa.numRealParticles())
-    print("num totalparticles", soa.numTotalParticles())
-    print("num Neighbors", soa.getNumNeighbors())
-    print("soa size", soa.size())
-    assert soa.numParticles() == soa.size() == 2
-    assert soa.numTotalParticles() == soa.numRealParticles() == 2
-    assert soa.getNumNeighbors() == 0
+    soa = pt.get_struct_of_arrays()
+    print("num particles", soa.num_particles)
+    print("num real particles", soa.num_real_particles)
+    print("num totalparticles", soa.num_total_particles)
+    print("num Neighbors", soa.get_num_neighbors())
+    print("soa size", soa.size)
+    assert soa.num_particles == soa.size == 2
+    assert soa.num_total_particles == soa.num_real_particles == 2
+    assert soa.get_num_neighbors() == 0
 
-    real_arrays = soa.GetRealData()
-    int_arrays = soa.GetIntData()
+    real_arrays = soa.get_real_data()
+    int_arrays = soa.get_int_data()
     print(real_arrays)
     assert np.isclose(real_arrays[0][1], 9) and np.isclose(real_arrays[1][1], 10)
     assert isinstance(int_arrays[0][0], int)
@@ -77,7 +77,7 @@ def test_soa_from_tile():
 
     real_arrays[1][0] = -1.2
 
-    ra1 = soa.GetRealData()
+    ra1 = soa.get_real_data()
     print(real_arrays)
     print(ra1)
     for ii, arr in enumerate(real_arrays):
@@ -86,7 +86,7 @@ def test_soa_from_tile():
     print("soa int test")
     iarr_np = int_arrays[0].to_numpy()
     iarr_np[0] = -3
-    ia1 = soa.GetIntData()
+    ia1 = soa.get_int_data()
     ia1_np = ia1[0].to_numpy()
     print(iarr_np)
     print(ia1_np)
