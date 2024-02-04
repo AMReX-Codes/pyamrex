@@ -360,8 +360,8 @@ def test_mfab_dtoh_copy(mfab_device):
             self.mfab = amr.MultiFab(
                 mfab_device.box_array(),
                 mfab_device.dm(),
-                mfab_device.n_comp(),
-                mfab_device.n_grow_vect(),
+                mfab_device.n_comp,
+                mfab_device.n_grow_vect,
                 amr.MFInfo().set_arena(amr.The_Pinned_Arena()),
             )
             return self.mfab
@@ -386,7 +386,7 @@ def test_mfab_dtoh_copy(mfab_device):
         amr.htod_memcpy(mfab_device, mfab_host)
 
         # assert all are 11.0 on device
-        for n in range(mfab_device.n_comp()):
+        for n in range(mfab_device.n_comp):
             assert mfab_device.min(comp=n) == dev_val
             assert mfab_device.max(comp=n) == dev_val
 
