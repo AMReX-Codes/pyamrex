@@ -9,7 +9,6 @@
 # Authors: Revathi Jambunathan, Edoardo Zoni, Olga Shapoval, David Grote, Axel Huebl
 
 import amrex.space3d as amr
-from mpi4py import MPI
 
 def load_cupy():
     if amr.Config.have_gpu:
