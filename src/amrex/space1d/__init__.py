@@ -48,6 +48,7 @@ from ..Array4 import register_Array4_extension
 from ..ArrayOfStructs import register_AoS_extension
 from ..MultiFab import register_MultiFab_extension
 from ..PODVector import register_PODVector_extension
+from ..ParticleComponentNames import soa_int_comps, soa_real_comps  # noqa
 from ..ParticleContainer import register_ParticleContainer_extension
 from ..StructOfArrays import register_SoA_extension
 

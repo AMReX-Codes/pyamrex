@@ -72,6 +72,10 @@ macro(find_amrex)
         # https://amrex-codes.github.io/amrex/docs_html/BuildingAMReX.html#importing-amrex-into-your-cmake-project
         find_package(AMReX 24.02 CONFIG REQUIRED COMPONENTS PARTICLES PIC)
         message(STATUS "AMReX: Found version '${AMReX_VERSION}'")
+
+        if(AMReX_GPU_BACKEND STREQUAL CUDA)
+            enable_language(CUDA)
+        endif()
     endif()
 endmacro()
 

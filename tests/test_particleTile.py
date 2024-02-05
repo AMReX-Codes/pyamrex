@@ -17,20 +17,20 @@ def test_ptile_data():
 def test_ptile_funs():
     pt = amr.ParticleTile_1_1_2_1_default()
 
-    assert pt.empty() and pt.size() == 0
-    assert pt.numParticles() == pt.numRealParticles() == pt.numNeighborParticles() == 0
-    assert pt.numTotalParticles() == pt.getNumNeighbors() == 0
+    assert pt.empty and pt.size == 0
+    assert pt.num_particles == pt.num_real_particles == pt.num_neighbor_particles == 0
+    assert pt.num_total_particles == pt.get_num_neighbors() == 0
 
-    pt.setNumNeighbors(3)
-    assert pt.numParticles() == 0 == pt.numRealParticles()
-    assert pt.numNeighborParticles() == pt.getNumNeighbors() == 3
-    assert pt.numTotalParticles() == 3
+    pt.set_num_neighbors(3)
+    assert pt.num_particles == 0 == pt.num_real_particles
+    assert pt.num_neighbor_particles == pt.get_num_neighbors() == 3
+    assert pt.num_total_particles == 3
 
     pt.resize(5)
-    assert not pt.empty() and pt.size() == 5
-    assert pt.numParticles() == 2 == pt.numRealParticles()
-    assert pt.numNeighborParticles() == pt.getNumNeighbors() == 3
-    assert pt.numTotalParticles() == 5
+    assert not pt.empty and pt.size == 5
+    assert pt.num_particles == 2 == pt.num_real_particles
+    assert pt.num_neighbor_particles == pt.get_num_neighbors() == 3
+    assert pt.num_total_particles == 5
 
 
 ################
@@ -41,18 +41,18 @@ def test_ptile_pushback_ptiledata():
     pt.push_back(p)
     pt.push_back(sp)
 
-    print("num particles", pt.numParticles())
-    print("num real particles", pt.numRealParticles())
-    print("num neighbor particles", pt.numNeighborParticles())
-    print("num totalparticles", pt.numTotalParticles())
-    print("num Neighbors", pt.getNumNeighbors())
-    print("tile is empty?", pt.empty())
-    print("tile size", pt.size())
-    assert not pt.empty()
-    assert pt.numParticles() == pt.numRealParticles() == pt.numTotalParticles() == 2
-    assert pt.numNeighborParticles() == pt.getNumNeighbors() == 0
+    print("num particles", pt.num_particles)
+    print("num real particles", pt.num_real_particles)
+    print("num neighbor particles", pt.num_neighbor_particles)
+    print("num totalparticles", pt.num_total_particles)
+    print("num Neighbors", pt.get_num_neighbors())
+    print("tile is empty?", pt.empty)
+    print("tile size", pt.size)
+    assert not pt.empty
+    assert pt.num_particles == pt.num_real_particles == pt.num_total_particles == 2
+    assert pt.num_neighbor_particles == pt.get_num_neighbors() == 0
 
-    td = pt.getParticleTileData()
+    td = pt.get_particle_tile_data()
     assert (
         np.isclose(td[0].get_rdata(0), 4.0)
         and np.isclose(td[1].get_rdata(2), 10.0)
@@ -68,7 +68,7 @@ def test_ptile_access():
     pt.push_back(sp1)
     sp1.x = 2.0
     sp1.z = 3.0
-    td = pt.getParticleTileData()
+    td = pt.get_particle_tile_data()
     td[0] = sp1
     sp2 = amr.Particle_3_2()
     sp2.x = 5.0
@@ -91,8 +91,8 @@ def test_ptile_soa():
     pt.push_back_int([12])
     pt.push_back_int(0, 3, 31)
 
-    rdata = pt.GetStructOfArrays().GetRealData()
-    idata = pt.GetStructOfArrays().GetIntData()
+    rdata = pt.get_struct_of_arrays().get_real_data()
+    idata = pt.get_struct_of_arrays().get_int_data()
     print("rdata: ", rdata)
 
     ar0 = np.array(rdata[0], copy=False)
@@ -133,15 +133,15 @@ def test_ptile_aos_3d():
     p3.z = 20
     pt.push_back(p3)
     pt.resize(3)
-    aos = np.array(pt.GetArrayOfStructs())
+    aos = np.array(pt.get_array_of_structs())
     print(aos)
     assert np.isclose(aos[0]["x"], 3.0) and np.isclose(aos[0]["y"], 0)
     assert np.isclose(aos[2][0], 0.0) and np.isclose(aos[2][2], 20)
 
 
 def test_ptile_aos():
-    cpuids = np.array([100, 100, 100, 100, 100], dtype=np.uint64)
-    ids = amr.unpack_ids(cpuids)
-    cpus = amr.unpack_cpus(cpuids)
+    idcpu = np.array([100, 100, 100, 100, 100], dtype=np.uint64)
+    ids = amr.unpack_ids(idcpu)
+    cpus = amr.unpack_cpus(idcpu)
     assert np.array_equal(ids, np.array([0, 0, 0, 0, 0]))
     assert np.array_equal(cpus, np.array([100, 100, 100, 100, 100]))
