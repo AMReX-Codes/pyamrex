@@ -115,6 +115,10 @@ foreach(D IN LISTS AMReX_SPACEDIM)
         $<BUILD_INTERFACE:${pyAMReX_SOURCE_DIR}/src>
     )
 
+    target_include_directories(pyAMReX_${D}d PRIVATE
+        "/home/bsiddani/miniconda3/envs/pyamrex-cpu-mpich-dev/lib/python3.12/site-packages/mpi4py/include"
+    )
+
     # if we include <AMReX_buildInfo.H> we will need to call:
     generate_buildinfo(pyAMReX_${D}d "${pyAMReX_SOURCE_DIR}")
     target_link_libraries(pyAMReX_${D}d PRIVATE buildInfo::pyAMReX_${D}d)

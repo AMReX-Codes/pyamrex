@@ -9,14 +9,17 @@
 #include <AMReX_FArrayBox.H>
 #include <AMReX_FabArray.H>
 #include <AMReX_MPMD.H>
+#include <AMReX_ParallelDescriptor.H>
 
 #ifdef AMREX_USE_MPI
+#include <mpi.h>
+#include <mpi4py/mpi4py.h>
 
 void init_MPMD(py::module &m) {
     using namespace amrex;
 
     // Several functions here are copied from AMReX.cpp
-    m.def("MPMD_Initialize",
+    m.def("MPMD_Initialize_without_split",
           [](const py::list args) {
               Vector<std::string> cargs{"amrex"};
               Vector<char*> argv;
@@ -33,9 +36,16 @@ void init_MPMD(py::module &m) {
               //       https://stackoverflow.com/a/39096006/2719194
               argv.push_back(NULL);
               char** tmp = argv.data();
-
-              return MPMD::Initialize(argc, tmp);
+              MPMD::Initialize_without_split(argc, tmp);
           }, py::return_value_policy::reference);
+
+    // Following https://gitlab.com/robertodr/pybind11-mpi4py/-/blob/main/src/pb11mpi.cpp
+    // initialize mpi4py's C-API
+    if (import_mpi4py() < 0) {
+      // mpi4py calls the Python C API
+      // we let pybind11 give us the detailed traceback
+      throw py::error_already_set();
+    }
 
     // This is AMReX::Initialize when MPMD exists 
     m.def("initialize_when_MPMD",
@@ -57,9 +67,9 @@ void init_MPMD(py::module &m) {
               char** tmp = argv.data();
 
               const bool build_parm_parse = (cargs.size() > 1);
-              MPI_Comm app_comm = app_comm_py.cast<MPI_Comm>();
+              MPI_Comm* app_comm = PyMPIComm_Get(app_comm_py.ptr());
 
-              return Initialize(argc, tmp, build_parm_parse,app_comm);
+              return Initialize(argc, tmp, build_parm_parse,*app_comm);
           }, py::return_value_policy::reference);
 
     constexpr auto run_gc = []() {
@@ -80,6 +90,7 @@ void init_MPMD(py::module &m) {
     m.def("MPMD_Initialized",&MPMD::Initialized);
     m.def("MPMD_MyProc",&MPMD::MyProc);
     m.def("MPMD_NProcs",&MPMD::NProcs);
+    m.def("MPMD_AppNum",&MPMD::AppNum);
     m.def("MPMD_MyProgId",&MPMD::MyProgId);
 
     // Binding MPMD::Copier class
