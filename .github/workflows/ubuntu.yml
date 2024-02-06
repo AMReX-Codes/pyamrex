@@ -39,6 +39,8 @@ jobs:
         export CCACHE_MAXSIZE=800M
         ccache -z
 
+        export CMAKE_BUILD_PARALLEL_LEVEL=4
+
         python3 -m pip install -U pip setuptools wheel pytest
         AMREX_MPI=ON python3 -m pip install -v .
         python3 -c "import amrex.space1d as amr; print(amr.__version__)"
@@ -88,7 +90,7 @@ jobs:
               -DBUILD_SHARED_LIBS=ON      \
               -DAMReX_MPI=ON              \
               -DAMReX_SPACEDIM="1;2;3"
-        cmake --build build --target pip_install -j 2
+        cmake --build build --target pip_install -j 4
 
         ccache -s
         du -hs ~/.cache/ccache
@@ -126,6 +128,8 @@ jobs:
         export CCACHE_COMPRESSLEVEL=10
         export CCACHE_MAXSIZE=500M
         ccache -z
+
+        export CMAKE_BUILD_PARALLEL_LEVEL=4
 
         export CC=$(which clang-6.0)
         export CXX=$(which clang++-6.0)
@@ -169,6 +173,8 @@ jobs:
         export CCACHE_COMPRESSLEVEL=10
         export CCACHE_MAXSIZE=300M
         ccache -z
+
+        export CMAKE_BUILD_PARALLEL_LEVEL=4
 
         python3 -m pip install -U pip
         python3 -m pip install -U pandas pytest
@@ -228,7 +234,7 @@ jobs:
             -DAMReX_CUDA_ARCH=8.0       \
             -DAMReX_CUDA_ERROR_CROSS_EXECUTION_SPACE_CALL=ON \
             -DAMReX_CUDA_ERROR_CAPTURE_THIS=ON
-        cmake --build build --target pip_install -j 2
+        cmake --build build --target pip_install -j 4
 
         ccache -s
         du -hs ~/.cache/ccache
