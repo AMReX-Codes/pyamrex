@@ -10001,6 +10001,52 @@ class StructOfArrays_2_1_arena:
 
     def resize(self, arg0: int) -> None: ...
     def set_num_neighbors(self, arg0: int) -> None: ...
+    def soa_int_comps(self, num_comps):
+        """
+
+        Name the int components in SoA.
+
+        Parameters
+        ----------
+        self : SoA Type
+          maybe unused, depending on implementation
+        num_comps : int
+          number of components to generate names for.
+
+        Returns
+        -------
+        A list of length num_comps with values "i1", "i2", "i3", ...
+
+        """
+
+    def soa_real_comps(self, num_comps, spacedim=3, rotate=True):
+        """
+
+        Name the ParticleReal components in SoA.
+
+        Parameters
+        ----------
+        self : SoA Type
+          maybe unused, depending on implementation
+        num_comps : int
+          number of components to generate names for.
+        spacedim : int
+          AMReX dimensionality
+        rotate : bool = True
+          start with "x", "y", "z", "a", "b", ...
+
+        Returns
+        -------
+        A list of length num_comps with values
+        rotate=True (for pure SoA layout):
+          3D: "x", "y", "z", "a", "b", ... "w", "r0", "r1", ...
+          2D: "x", "y", "a", "b", ... "w", "r0", "r1", ...
+          1D: "x", "a", "b", ... "w", "r0", "r1", ...
+        rotate=False (for legacy layout):
+          1D-3D: "a", "b", ... "w", "r0", "r1", ...
+
+        """
+
     def to_cupy(self, copy=False):
         """
 
@@ -10125,6 +10171,52 @@ class StructOfArrays_2_1_default:
 
     def resize(self, arg0: int) -> None: ...
     def set_num_neighbors(self, arg0: int) -> None: ...
+    def soa_int_comps(self, num_comps):
+        """
+
+        Name the int components in SoA.
+
+        Parameters
+        ----------
+        self : SoA Type
+          maybe unused, depending on implementation
+        num_comps : int
+          number of components to generate names for.
+
+        Returns
+        -------
+        A list of length num_comps with values "i1", "i2", "i3", ...
+
+        """
+
+    def soa_real_comps(self, num_comps, spacedim=3, rotate=True):
+        """
+
+        Name the ParticleReal components in SoA.
+
+        Parameters
+        ----------
+        self : SoA Type
+          maybe unused, depending on implementation
+        num_comps : int
+          number of components to generate names for.
+        spacedim : int
+          AMReX dimensionality
+        rotate : bool = True
+          start with "x", "y", "z", "a", "b", ...
+
+        Returns
+        -------
+        A list of length num_comps with values
+        rotate=True (for pure SoA layout):
+          3D: "x", "y", "z", "a", "b", ... "w", "r0", "r1", ...
+          2D: "x", "y", "a", "b", ... "w", "r0", "r1", ...
+          1D: "x", "a", "b", ... "w", "r0", "r1", ...
+        rotate=False (for legacy layout):
+          1D-3D: "a", "b", ... "w", "r0", "r1", ...
+
+        """
+
     def to_cupy(self, copy=False):
         """
 
@@ -10249,6 +10341,52 @@ class StructOfArrays_2_1_pinned:
 
     def resize(self, arg0: int) -> None: ...
     def set_num_neighbors(self, arg0: int) -> None: ...
+    def soa_int_comps(self, num_comps):
+        """
+
+        Name the int components in SoA.
+
+        Parameters
+        ----------
+        self : SoA Type
+          maybe unused, depending on implementation
+        num_comps : int
+          number of components to generate names for.
+
+        Returns
+        -------
+        A list of length num_comps with values "i1", "i2", "i3", ...
+
+        """
+
+    def soa_real_comps(self, num_comps, spacedim=3, rotate=True):
+        """
+
+        Name the ParticleReal components in SoA.
+
+        Parameters
+        ----------
+        self : SoA Type
+          maybe unused, depending on implementation
+        num_comps : int
+          number of components to generate names for.
+        spacedim : int
+          AMReX dimensionality
+        rotate : bool = True
+          start with "x", "y", "z", "a", "b", ...
+
+        Returns
+        -------
+        A list of length num_comps with values
+        rotate=True (for pure SoA layout):
+          3D: "x", "y", "z", "a", "b", ... "w", "r0", "r1", ...
+          2D: "x", "y", "a", "b", ... "w", "r0", "r1", ...
+          1D: "x", "a", "b", ... "w", "r0", "r1", ...
+        rotate=False (for legacy layout):
+          1D-3D: "a", "b", ... "w", "r0", "r1", ...
+
+        """
+
     def to_cupy(self, copy=False):
         """
 
@@ -10373,6 +10511,52 @@ class StructOfArrays_37_1_arena:
 
     def resize(self, arg0: int) -> None: ...
     def set_num_neighbors(self, arg0: int) -> None: ...
+    def soa_int_comps(self, num_comps):
+        """
+
+        Name the int components in SoA.
+
+        Parameters
+        ----------
+        self : SoA Type
+          maybe unused, depending on implementation
+        num_comps : int
+          number of components to generate names for.
+
+        Returns
+        -------
+        A list of length num_comps with values "i1", "i2", "i3", ...
+
+        """
+
+    def soa_real_comps(self, num_comps, spacedim=3, rotate=True):
+        """
+
+        Name the ParticleReal components in SoA.
+
+        Parameters
+        ----------
+        self : SoA Type
+          maybe unused, depending on implementation
+        num_comps : int
+          number of components to generate names for.
+        spacedim : int
+          AMReX dimensionality
+        rotate : bool = True
+          start with "x", "y", "z", "a", "b", ...
+
+        Returns
+        -------
+        A list of length num_comps with values
+        rotate=True (for pure SoA layout):
+          3D: "x", "y", "z", "a", "b", ... "w", "r0", "r1", ...
+          2D: "x", "y", "a", "b", ... "w", "r0", "r1", ...
+          1D: "x", "a", "b", ... "w", "r0", "r1", ...
+        rotate=False (for legacy layout):
+          1D-3D: "a", "b", ... "w", "r0", "r1", ...
+
+        """
+
     def to_cupy(self, copy=False):
         """
 
@@ -10497,6 +10681,52 @@ class StructOfArrays_37_1_default:
 
     def resize(self, arg0: int) -> None: ...
     def set_num_neighbors(self, arg0: int) -> None: ...
+    def soa_int_comps(self, num_comps):
+        """
+
+        Name the int components in SoA.
+
+        Parameters
+        ----------
+        self : SoA Type
+          maybe unused, depending on implementation
+        num_comps : int
+          number of components to generate names for.
+
+        Returns
+        -------
+        A list of length num_comps with values "i1", "i2", "i3", ...
+
+        """
+
+    def soa_real_comps(self, num_comps, spacedim=3, rotate=True):
+        """
+
+        Name the ParticleReal components in SoA.
+
+        Parameters
+        ----------
+        self : SoA Type
+          maybe unused, depending on implementation
+        num_comps : int
+          number of components to generate names for.
+        spacedim : int
+          AMReX dimensionality
+        rotate : bool = True
+          start with "x", "y", "z", "a", "b", ...
+
+        Returns
+        -------
+        A list of length num_comps with values
+        rotate=True (for pure SoA layout):
+          3D: "x", "y", "z", "a", "b", ... "w", "r0", "r1", ...
+          2D: "x", "y", "a", "b", ... "w", "r0", "r1", ...
+          1D: "x", "a", "b", ... "w", "r0", "r1", ...
+        rotate=False (for legacy layout):
+          1D-3D: "a", "b", ... "w", "r0", "r1", ...
+
+        """
+
     def to_cupy(self, copy=False):
         """
 
@@ -10621,6 +10851,52 @@ class StructOfArrays_37_1_pinned:
 
     def resize(self, arg0: int) -> None: ...
     def set_num_neighbors(self, arg0: int) -> None: ...
+    def soa_int_comps(self, num_comps):
+        """
+
+        Name the int components in SoA.
+
+        Parameters
+        ----------
+        self : SoA Type
+          maybe unused, depending on implementation
+        num_comps : int
+          number of components to generate names for.
+
+        Returns
+        -------
+        A list of length num_comps with values "i1", "i2", "i3", ...
+
+        """
+
+    def soa_real_comps(self, num_comps, spacedim=3, rotate=True):
+        """
+
+        Name the ParticleReal components in SoA.
+
+        Parameters
+        ----------
+        self : SoA Type
+          maybe unused, depending on implementation
+        num_comps : int
+          number of components to generate names for.
+        spacedim : int
+          AMReX dimensionality
+        rotate : bool = True
+          start with "x", "y", "z", "a", "b", ...
+
+        Returns
+        -------
+        A list of length num_comps with values
+        rotate=True (for pure SoA layout):
+          3D: "x", "y", "z", "a", "b", ... "w", "r0", "r1", ...
+          2D: "x", "y", "a", "b", ... "w", "r0", "r1", ...
+          1D: "x", "a", "b", ... "w", "r0", "r1", ...
+        rotate=False (for legacy layout):
+          1D-3D: "a", "b", ... "w", "r0", "r1", ...
+
+        """
+
     def to_cupy(self, copy=False):
         """
 
@@ -10745,6 +11021,52 @@ class StructOfArrays_4_0_arena:
 
     def resize(self, arg0: int) -> None: ...
     def set_num_neighbors(self, arg0: int) -> None: ...
+    def soa_int_comps(self, num_comps):
+        """
+
+        Name the int components in SoA.
+
+        Parameters
+        ----------
+        self : SoA Type
+          maybe unused, depending on implementation
+        num_comps : int
+          number of components to generate names for.
+
+        Returns
+        -------
+        A list of length num_comps with values "i1", "i2", "i3", ...
+
+        """
+
+    def soa_real_comps(self, num_comps, spacedim=3, rotate=True):
+        """
+
+        Name the ParticleReal components in SoA.
+
+        Parameters
+        ----------
+        self : SoA Type
+          maybe unused, depending on implementation
+        num_comps : int
+          number of components to generate names for.
+        spacedim : int
+          AMReX dimensionality
+        rotate : bool = True
+          start with "x", "y", "z", "a", "b", ...
+
+        Returns
+        -------
+        A list of length num_comps with values
+        rotate=True (for pure SoA layout):
+          3D: "x", "y", "z", "a", "b", ... "w", "r0", "r1", ...
+          2D: "x", "y", "a", "b", ... "w", "r0", "r1", ...
+          1D: "x", "a", "b", ... "w", "r0", "r1", ...
+        rotate=False (for legacy layout):
+          1D-3D: "a", "b", ... "w", "r0", "r1", ...
+
+        """
+
     def to_cupy(self, copy=False):
         """
 
@@ -10869,6 +11191,52 @@ class StructOfArrays_4_0_default:
 
     def resize(self, arg0: int) -> None: ...
     def set_num_neighbors(self, arg0: int) -> None: ...
+    def soa_int_comps(self, num_comps):
+        """
+
+        Name the int components in SoA.
+
+        Parameters
+        ----------
+        self : SoA Type
+          maybe unused, depending on implementation
+        num_comps : int
+          number of components to generate names for.
+
+        Returns
+        -------
+        A list of length num_comps with values "i1", "i2", "i3", ...
+
+        """
+
+    def soa_real_comps(self, num_comps, spacedim=3, rotate=True):
+        """
+
+        Name the ParticleReal components in SoA.
+
+        Parameters
+        ----------
+        self : SoA Type
+          maybe unused, depending on implementation
+        num_comps : int
+          number of components to generate names for.
+        spacedim : int
+          AMReX dimensionality
+        rotate : bool = True
+          start with "x", "y", "z", "a", "b", ...
+
+        Returns
+        -------
+        A list of length num_comps with values
+        rotate=True (for pure SoA layout):
+          3D: "x", "y", "z", "a", "b", ... "w", "r0", "r1", ...
+          2D: "x", "y", "a", "b", ... "w", "r0", "r1", ...
+          1D: "x", "a", "b", ... "w", "r0", "r1", ...
+        rotate=False (for legacy layout):
+          1D-3D: "a", "b", ... "w", "r0", "r1", ...
+
+        """
+
     def to_cupy(self, copy=False):
         """
 
@@ -10993,6 +11361,52 @@ class StructOfArrays_4_0_pinned:
 
     def resize(self, arg0: int) -> None: ...
     def set_num_neighbors(self, arg0: int) -> None: ...
+    def soa_int_comps(self, num_comps):
+        """
+
+        Name the int components in SoA.
+
+        Parameters
+        ----------
+        self : SoA Type
+          maybe unused, depending on implementation
+        num_comps : int
+          number of components to generate names for.
+
+        Returns
+        -------
+        A list of length num_comps with values "i1", "i2", "i3", ...
+
+        """
+
+    def soa_real_comps(self, num_comps, spacedim=3, rotate=True):
+        """
+
+        Name the ParticleReal components in SoA.
+
+        Parameters
+        ----------
+        self : SoA Type
+          maybe unused, depending on implementation
+        num_comps : int
+          number of components to generate names for.
+        spacedim : int
+          AMReX dimensionality
+        rotate : bool = True
+          start with "x", "y", "z", "a", "b", ...
+
+        Returns
+        -------
+        A list of length num_comps with values
+        rotate=True (for pure SoA layout):
+          3D: "x", "y", "z", "a", "b", ... "w", "r0", "r1", ...
+          2D: "x", "y", "a", "b", ... "w", "r0", "r1", ...
+          1D: "x", "a", "b", ... "w", "r0", "r1", ...
+        rotate=False (for legacy layout):
+          1D-3D: "a", "b", ... "w", "r0", "r1", ...
+
+        """
+
     def to_cupy(self, copy=False):
         """
 
@@ -11117,6 +11531,52 @@ class StructOfArrays_5_0_arena:
 
     def resize(self, arg0: int) -> None: ...
     def set_num_neighbors(self, arg0: int) -> None: ...
+    def soa_int_comps(self, num_comps):
+        """
+
+        Name the int components in SoA.
+
+        Parameters
+        ----------
+        self : SoA Type
+          maybe unused, depending on implementation
+        num_comps : int
+          number of components to generate names for.
+
+        Returns
+        -------
+        A list of length num_comps with values "i1", "i2", "i3", ...
+
+        """
+
+    def soa_real_comps(self, num_comps, spacedim=3, rotate=True):
+        """
+
+        Name the ParticleReal components in SoA.
+
+        Parameters
+        ----------
+        self : SoA Type
+          maybe unused, depending on implementation
+        num_comps : int
+          number of components to generate names for.
+        spacedim : int
+          AMReX dimensionality
+        rotate : bool = True
+          start with "x", "y", "z", "a", "b", ...
+
+        Returns
+        -------
+        A list of length num_comps with values
+        rotate=True (for pure SoA layout):
+          3D: "x", "y", "z", "a", "b", ... "w", "r0", "r1", ...
+          2D: "x", "y", "a", "b", ... "w", "r0", "r1", ...
+          1D: "x", "a", "b", ... "w", "r0", "r1", ...
+        rotate=False (for legacy layout):
+          1D-3D: "a", "b", ... "w", "r0", "r1", ...
+
+        """
+
     def to_cupy(self, copy=False):
         """
 
@@ -11241,6 +11701,52 @@ class StructOfArrays_5_0_default:
 
     def resize(self, arg0: int) -> None: ...
     def set_num_neighbors(self, arg0: int) -> None: ...
+    def soa_int_comps(self, num_comps):
+        """
+
+        Name the int components in SoA.
+
+        Parameters
+        ----------
+        self : SoA Type
+          maybe unused, depending on implementation
+        num_comps : int
+          number of components to generate names for.
+
+        Returns
+        -------
+        A list of length num_comps with values "i1", "i2", "i3", ...
+
+        """
+
+    def soa_real_comps(self, num_comps, spacedim=3, rotate=True):
+        """
+
+        Name the ParticleReal components in SoA.
+
+        Parameters
+        ----------
+        self : SoA Type
+          maybe unused, depending on implementation
+        num_comps : int
+          number of components to generate names for.
+        spacedim : int
+          AMReX dimensionality
+        rotate : bool = True
+          start with "x", "y", "z", "a", "b", ...
+
+        Returns
+        -------
+        A list of length num_comps with values
+        rotate=True (for pure SoA layout):
+          3D: "x", "y", "z", "a", "b", ... "w", "r0", "r1", ...
+          2D: "x", "y", "a", "b", ... "w", "r0", "r1", ...
+          1D: "x", "a", "b", ... "w", "r0", "r1", ...
+        rotate=False (for legacy layout):
+          1D-3D: "a", "b", ... "w", "r0", "r1", ...
+
+        """
+
     def to_cupy(self, copy=False):
         """
 
@@ -11365,6 +11871,52 @@ class StructOfArrays_5_0_pinned:
 
     def resize(self, arg0: int) -> None: ...
     def set_num_neighbors(self, arg0: int) -> None: ...
+    def soa_int_comps(self, num_comps):
+        """
+
+        Name the int components in SoA.
+
+        Parameters
+        ----------
+        self : SoA Type
+          maybe unused, depending on implementation
+        num_comps : int
+          number of components to generate names for.
+
+        Returns
+        -------
+        A list of length num_comps with values "i1", "i2", "i3", ...
+
+        """
+
+    def soa_real_comps(self, num_comps, spacedim=3, rotate=True):
+        """
+
+        Name the ParticleReal components in SoA.
+
+        Parameters
+        ----------
+        self : SoA Type
+          maybe unused, depending on implementation
+        num_comps : int
+          number of components to generate names for.
+        spacedim : int
+          AMReX dimensionality
+        rotate : bool = True
+          start with "x", "y", "z", "a", "b", ...
+
+        Returns
+        -------
+        A list of length num_comps with values
+        rotate=True (for pure SoA layout):
+          3D: "x", "y", "z", "a", "b", ... "w", "r0", "r1", ...
+          2D: "x", "y", "a", "b", ... "w", "r0", "r1", ...
+          1D: "x", "a", "b", ... "w", "r0", "r1", ...
+        rotate=False (for legacy layout):
+          1D-3D: "a", "b", ... "w", "r0", "r1", ...
+
+        """
+
     def to_cupy(self, copy=False):
         """
 
@@ -11494,6 +12046,52 @@ class StructOfArrays_7_0_idcpu_arena:
 
     def resize(self, arg0: int) -> None: ...
     def set_num_neighbors(self, arg0: int) -> None: ...
+    def soa_int_comps(self, num_comps):
+        """
+
+        Name the int components in SoA.
+
+        Parameters
+        ----------
+        self : SoA Type
+          maybe unused, depending on implementation
+        num_comps : int
+          number of components to generate names for.
+
+        Returns
+        -------
+        A list of length num_comps with values "i1", "i2", "i3", ...
+
+        """
+
+    def soa_real_comps(self, num_comps, spacedim=3, rotate=True):
+        """
+
+        Name the ParticleReal components in SoA.
+
+        Parameters
+        ----------
+        self : SoA Type
+          maybe unused, depending on implementation
+        num_comps : int
+          number of components to generate names for.
+        spacedim : int
+          AMReX dimensionality
+        rotate : bool = True
+          start with "x", "y", "z", "a", "b", ...
+
+        Returns
+        -------
+        A list of length num_comps with values
+        rotate=True (for pure SoA layout):
+          3D: "x", "y", "z", "a", "b", ... "w", "r0", "r1", ...
+          2D: "x", "y", "a", "b", ... "w", "r0", "r1", ...
+          1D: "x", "a", "b", ... "w", "r0", "r1", ...
+        rotate=False (for legacy layout):
+          1D-3D: "a", "b", ... "w", "r0", "r1", ...
+
+        """
+
     def to_cupy(self, copy=False):
         """
 
@@ -11623,6 +12221,52 @@ class StructOfArrays_7_0_idcpu_default:
 
     def resize(self, arg0: int) -> None: ...
     def set_num_neighbors(self, arg0: int) -> None: ...
+    def soa_int_comps(self, num_comps):
+        """
+
+        Name the int components in SoA.
+
+        Parameters
+        ----------
+        self : SoA Type
+          maybe unused, depending on implementation
+        num_comps : int
+          number of components to generate names for.
+
+        Returns
+        -------
+        A list of length num_comps with values "i1", "i2", "i3", ...
+
+        """
+
+    def soa_real_comps(self, num_comps, spacedim=3, rotate=True):
+        """
+
+        Name the ParticleReal components in SoA.
+
+        Parameters
+        ----------
+        self : SoA Type
+          maybe unused, depending on implementation
+        num_comps : int
+          number of components to generate names for.
+        spacedim : int
+          AMReX dimensionality
+        rotate : bool = True
+          start with "x", "y", "z", "a", "b", ...
+
+        Returns
+        -------
+        A list of length num_comps with values
+        rotate=True (for pure SoA layout):
+          3D: "x", "y", "z", "a", "b", ... "w", "r0", "r1", ...
+          2D: "x", "y", "a", "b", ... "w", "r0", "r1", ...
+          1D: "x", "a", "b", ... "w", "r0", "r1", ...
+        rotate=False (for legacy layout):
+          1D-3D: "a", "b", ... "w", "r0", "r1", ...
+
+        """
+
     def to_cupy(self, copy=False):
         """
 
@@ -11752,6 +12396,52 @@ class StructOfArrays_7_0_idcpu_pinned:
 
     def resize(self, arg0: int) -> None: ...
     def set_num_neighbors(self, arg0: int) -> None: ...
+    def soa_int_comps(self, num_comps):
+        """
+
+        Name the int components in SoA.
+
+        Parameters
+        ----------
+        self : SoA Type
+          maybe unused, depending on implementation
+        num_comps : int
+          number of components to generate names for.
+
+        Returns
+        -------
+        A list of length num_comps with values "i1", "i2", "i3", ...
+
+        """
+
+    def soa_real_comps(self, num_comps, spacedim=3, rotate=True):
+        """
+
+        Name the ParticleReal components in SoA.
+
+        Parameters
+        ----------
+        self : SoA Type
+          maybe unused, depending on implementation
+        num_comps : int
+          number of components to generate names for.
+        spacedim : int
+          AMReX dimensionality
+        rotate : bool = True
+          start with "x", "y", "z", "a", "b", ...
+
+        Returns
+        -------
+        A list of length num_comps with values
+        rotate=True (for pure SoA layout):
+          3D: "x", "y", "z", "a", "b", ... "w", "r0", "r1", ...
+          2D: "x", "y", "a", "b", ... "w", "r0", "r1", ...
+          1D: "x", "a", "b", ... "w", "r0", "r1", ...
+        rotate=False (for legacy layout):
+          1D-3D: "a", "b", ... "w", "r0", "r1", ...
+
+        """
+
     def to_cupy(self, copy=False):
         """
 
@@ -11881,6 +12571,52 @@ class StructOfArrays_8_0_idcpu_arena:
 
     def resize(self, arg0: int) -> None: ...
     def set_num_neighbors(self, arg0: int) -> None: ...
+    def soa_int_comps(self, num_comps):
+        """
+
+        Name the int components in SoA.
+
+        Parameters
+        ----------
+        self : SoA Type
+          maybe unused, depending on implementation
+        num_comps : int
+          number of components to generate names for.
+
+        Returns
+        -------
+        A list of length num_comps with values "i1", "i2", "i3", ...
+
+        """
+
+    def soa_real_comps(self, num_comps, spacedim=3, rotate=True):
+        """
+
+        Name the ParticleReal components in SoA.
+
+        Parameters
+        ----------
+        self : SoA Type
+          maybe unused, depending on implementation
+        num_comps : int
+          number of components to generate names for.
+        spacedim : int
+          AMReX dimensionality
+        rotate : bool = True
+          start with "x", "y", "z", "a", "b", ...
+
+        Returns
+        -------
+        A list of length num_comps with values
+        rotate=True (for pure SoA layout):
+          3D: "x", "y", "z", "a", "b", ... "w", "r0", "r1", ...
+          2D: "x", "y", "a", "b", ... "w", "r0", "r1", ...
+          1D: "x", "a", "b", ... "w", "r0", "r1", ...
+        rotate=False (for legacy layout):
+          1D-3D: "a", "b", ... "w", "r0", "r1", ...
+
+        """
+
     def to_cupy(self, copy=False):
         """
 
@@ -12010,6 +12746,52 @@ class StructOfArrays_8_0_idcpu_default:
 
     def resize(self, arg0: int) -> None: ...
     def set_num_neighbors(self, arg0: int) -> None: ...
+    def soa_int_comps(self, num_comps):
+        """
+
+        Name the int components in SoA.
+
+        Parameters
+        ----------
+        self : SoA Type
+          maybe unused, depending on implementation
+        num_comps : int
+          number of components to generate names for.
+
+        Returns
+        -------
+        A list of length num_comps with values "i1", "i2", "i3", ...
+
+        """
+
+    def soa_real_comps(self, num_comps, spacedim=3, rotate=True):
+        """
+
+        Name the ParticleReal components in SoA.
+
+        Parameters
+        ----------
+        self : SoA Type
+          maybe unused, depending on implementation
+        num_comps : int
+          number of components to generate names for.
+        spacedim : int
+          AMReX dimensionality
+        rotate : bool = True
+          start with "x", "y", "z", "a", "b", ...
+
+        Returns
+        -------
+        A list of length num_comps with values
+        rotate=True (for pure SoA layout):
+          3D: "x", "y", "z", "a", "b", ... "w", "r0", "r1", ...
+          2D: "x", "y", "a", "b", ... "w", "r0", "r1", ...
+          1D: "x", "a", "b", ... "w", "r0", "r1", ...
+        rotate=False (for legacy layout):
+          1D-3D: "a", "b", ... "w", "r0", "r1", ...
+
+        """
+
     def to_cupy(self, copy=False):
         """
 
@@ -12139,6 +12921,52 @@ class StructOfArrays_8_0_idcpu_pinned:
 
     def resize(self, arg0: int) -> None: ...
     def set_num_neighbors(self, arg0: int) -> None: ...
+    def soa_int_comps(self, num_comps):
+        """
+
+        Name the int components in SoA.
+
+        Parameters
+        ----------
+        self : SoA Type
+          maybe unused, depending on implementation
+        num_comps : int
+          number of components to generate names for.
+
+        Returns
+        -------
+        A list of length num_comps with values "i1", "i2", "i3", ...
+
+        """
+
+    def soa_real_comps(self, num_comps, spacedim=3, rotate=True):
+        """
+
+        Name the ParticleReal components in SoA.
+
+        Parameters
+        ----------
+        self : SoA Type
+          maybe unused, depending on implementation
+        num_comps : int
+          number of components to generate names for.
+        spacedim : int
+          AMReX dimensionality
+        rotate : bool = True
+          start with "x", "y", "z", "a", "b", ...
+
+        Returns
+        -------
+        A list of length num_comps with values
+        rotate=True (for pure SoA layout):
+          3D: "x", "y", "z", "a", "b", ... "w", "r0", "r1", ...
+          2D: "x", "y", "a", "b", ... "w", "r0", "r1", ...
+          1D: "x", "a", "b", ... "w", "r0", "r1", ...
+        rotate=False (for legacy layout):
+          1D-3D: "a", "b", ... "w", "r0", "r1", ...
+
+        """
+
     def to_cupy(self, copy=False):
         """
 
