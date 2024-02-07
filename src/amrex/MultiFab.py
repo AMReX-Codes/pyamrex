@@ -6,6 +6,8 @@ Authors: Axel Huebl
 License: BSD-3-Clause-LBNL
 """
 
+from .Iterator import next
+
 
 def mf_to_numpy(amr, self, copy=False, order="F"):
     """
@@ -92,7 +94,15 @@ def mf_to_cupy(self, copy=False, order="F"):
 def register_MultiFab_extension(amr):
     """MultiFab helper methods"""
 
+    # register member functions for the MFIter type
+    amr.MFIter.__next__ = next
+
+    # FabArrayBase: iterate as data access in Box index space
+    amr.FabArrayBase.__iter__ = lambda fab: amr.MFIter(fab)
+
     # register member functions for the MultiFab type
+    amr.MultiFab.__iter__ = lambda mfab: amr.MFIter(mfab)
+
     amr.MultiFab.to_numpy = lambda self, copy=False, order="F": mf_to_numpy(
         amr, self, copy, order
     )
