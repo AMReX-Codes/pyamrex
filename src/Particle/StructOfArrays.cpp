@@ -26,7 +26,7 @@ void make_StructOfArrays(py::module &m, std::string allocstr)
         soa_name += "_idcpu";
     soa_name += "_" + allocstr;
 
-    py::class_<SOAType> py_SoA(m, soa_name.c_str());
+    py::class_<SOAType> py_SoA(m, soa_name.c_str(), py::dynamic_attr());
     py_SoA
         .def(py::init())
         .def("define", &SOAType::define)
