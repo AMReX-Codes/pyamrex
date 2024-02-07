@@ -17,7 +17,7 @@ jobs:
         python-version: '3.x'
     - name: Build & Install
       run: |
-        export CMAKE_BUILD_PARALLEL_LEVEL=4
+        set "CMAKE_BUILD_PARALLEL_LEVEL=4"
 
         python3 -m pip install -U pip
         python3 -m pip install -U pandas pytest
