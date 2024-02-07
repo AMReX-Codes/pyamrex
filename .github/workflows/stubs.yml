@@ -21,7 +21,7 @@ jobs:
       CC: gcc
       CXX: g++
       CXXFLAGS: "-O1"
-      OMP_NUM_THREAD: 2
+      OMP_NUM_THREAD: 4
 
     steps:
     - uses: actions/checkout@v4
@@ -64,7 +64,7 @@ jobs:
         python3 -m pip install -U pip setuptools wheel
         python3 -m pip install -U pip mpi4py pytest pybind11-stubgen pre-commit
         cmake -S . -B build -DAMReX_SPACEDIM="1;2;3" -DpyAMReX_IPO=OFF
-        cmake --build build -j 2 --target pip_install
+        cmake --build build -j 4 --target pip_install
 
         ccache -s
         du -hs ~/.cache/ccache
@@ -81,7 +81,7 @@ jobs:
 
     - name: Update Install
       run: |
-        cmake --build build -j 2 --target pip_install
+        cmake --build build -j 4 --target pip_install
 
     - name: Unit tests
       run: |
