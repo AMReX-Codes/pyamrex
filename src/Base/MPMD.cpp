@@ -18,6 +18,14 @@
 void init_MPMD(py::module &m) {
     using namespace amrex;
 
+    // Following https://gitlab.com/robertodr/pybind11-mpi4py/-/blob/main/src/pb11mpi.cpp
+    // initialize mpi4py's C-API
+    if (import_mpi4py() < 0) {
+      // mpi4py calls the Python C API
+      // we let pybind11 give us the detailed traceback
+      throw py::error_already_set();
+    }
+
     // Several functions here are copied from AMReX.cpp
     m.def("MPMD_Initialize_without_split",
           [](const py::list args) {
@@ -38,14 +46,6 @@ void init_MPMD(py::module &m) {
               char** tmp = argv.data();
               MPMD::Initialize_without_split(argc, tmp);
           }, py::return_value_policy::reference);
-
-    // Following https://gitlab.com/robertodr/pybind11-mpi4py/-/blob/main/src/pb11mpi.cpp
-    // initialize mpi4py's C-API
-    if (import_mpi4py() < 0) {
-      // mpi4py calls the Python C API
-      // we let pybind11 give us the detailed traceback
-      throw py::error_already_set();
-    }
 
     // This is AMReX::Initialize when MPMD exists 
     m.def("initialize_when_MPMD",

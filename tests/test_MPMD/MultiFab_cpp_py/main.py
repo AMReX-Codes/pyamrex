@@ -9,6 +9,10 @@
 # Authors: Revathi Jambunathan, Edoardo Zoni, Olga Shapoval, David Grote, Axel Huebl
 
 import amrex.space3d as amr
+import mpi4py
+mpi4py.rc.initialize = False  # do not initialize MPI automatically
+mpi4py.rc.finalize = False    # do not finalize MPI automatically
+from mpi4py import MPI
 
 def load_cupy():
     if amr.Config.have_gpu:
@@ -31,8 +35,11 @@ def load_cupy():
         amr.Print("Note: found and will use numpy")
     return xp
 
-# MPI-split related
-app_comm_py = amr.MPMD_Initialize([])
+# Initialize MPMD without the Split
+amr.MPMD_Initialize_without_split([])
+
+# Leverage MPI from mpi4py to perform communication split
+app_comm_py = MPI.COMM_WORLD.Split(amr.MPMD_AppNum(),amr.MPMD_MyProc())
 
 # Initialize AMReX
 amr.initialize_when_MPMD([],app_comm_py)

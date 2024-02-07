@@ -9,9 +9,6 @@
 # Authors: Revathi Jambunathan, Edoardo Zoni, Olga Shapoval, David Grote, Axel Huebl
 
 import amrex.space3d as amr
-import mpi4py
-mpi4py.rc.initialize = False  # do not initialize MPI automatically
-mpi4py.rc.finalize = False    # do not finalize MPI automatically
 from mpi4py import MPI
 
 def load_cupy():
@@ -35,11 +32,8 @@ def load_cupy():
         amr.Print("Note: found and will use numpy")
     return xp
 
-# Initialize MPMD without the Split
-amr.MPMD_Initialize_without_split([])
-
-# Leverage MPI from mpi4py to perform communication split
-app_comm_py = MPI.COMM_WORLD.Split(amr.MPMD_AppNum(),amr.MPMD_MyProc())
+# Get MPI.COMM_WORLD from mpi4py
+app_comm_py = MPI.COMM_WORLD
 
 # Initialize AMReX
 amr.initialize_when_MPMD([],app_comm_py)
@@ -115,10 +109,6 @@ for mfi in mf:
     mf_array[:, :, :, 0] = 1. + xp.exp(-rsquared)
     mf_array[:, :, :, 1] = 10. + xp.exp(-rsquared)
 
-# Let us send this populated MultiFab to the empty MultiFab on cpp side
-copr = amr.MPMD_Copier(ba,dm)
-copr.send(mf,0,ncomp)
-
 # Plot MultiFab data
 plotfile = amr.concatenate(root="plt_py_", num=1, mindigits=3)
 varnames = amr.Vector_string(["comp0","comp1"])
@@ -126,6 +116,3 @@ amr.write_single_level_plotfile(plotfile, mf, varnames, geom, time=0., level_ste
 
 # Finalize AMReX
 amr.finalize()
-
-# Finalize AMReX::MPMD
-amr.MPMD_Finalize()

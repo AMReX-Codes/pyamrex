@@ -13,6 +13,7 @@ import mpi4py
 mpi4py.rc.initialize = False  # do not initialize MPI automatically
 mpi4py.rc.finalize = False    # do not finalize MPI automatically
 from mpi4py import MPI
+from lammps import lammps
 
 def load_cupy():
     if amr.Config.have_gpu:
@@ -42,7 +43,8 @@ amr.MPMD_Initialize_without_split([])
 app_comm_py = MPI.COMM_WORLD.Split(amr.MPMD_AppNum(),amr.MPMD_MyProc())
 
 # Initialize AMReX
-amr.initialize_when_MPMD([],app_comm_py)
+amr.initialize_when_MPMD([],
+     app_comm_py)
 
 # CPU/GPU logic
 xp = load_cupy()
@@ -95,34 +97,38 @@ geom = amr.Geometry(domain, real_box, coord, is_per)
 # Calculate cell sizes
 dx = geom.data().CellSize() # dx[0]=dx dx[1]=dy dx[2]=dz
 
-# Fill a MultiFab with data
-for mfi in mf:
-    bx = mfi.validbox()
-    # Preferred way to fill array using fast ranged operations:
-    # - xp.array is indexed in reversed order (n,z,y,x),
-    #   .T creates a view into the AMReX (x,y,z,n) order
-    # - indices are local (range from 0 to box size)
-    mf_array = xp.array(mf.array(mfi), copy=False).T
-    x = (xp.arange(bx.small_end[0], bx.big_end[0]+1)+0.5)*dx[0]
-    y = (xp.arange(bx.small_end[1], bx.big_end[1]+1)+0.5)*dx[1]
-    z = (xp.arange(bx.small_end[2], bx.big_end[2]+1)+0.5)*dx[2]
-    v = (x[xp.newaxis,xp.newaxis,:]
-       + y[xp.newaxis,:,xp.newaxis]*0.1
-       + z[:,xp.newaxis,xp.newaxis]*0.01)
-    rsquared = ((z[xp.newaxis, xp.newaxis,          :] - 0.5)**2
-              + (y[xp.newaxis,          :, xp.newaxis] - 0.5)**2
-              + (x[         :, xp.newaxis, xp.newaxis] - 0.5)**2) / 0.01
-    mf_array[:, :, :, 0] = 1. + xp.exp(-rsquared)
-    mf_array[:, :, :, 1] = 10. + xp.exp(-rsquared)
-
-# Let us send this populated MultiFab to the empty MultiFab on cpp side
+# Let us populate the MultiFab through receiving it from cpp
 copr = amr.MPMD_Copier(ba,dm)
-copr.send(mf,0,ncomp)
+#print(copr)
+copr.recv(mf,0,ncomp)
+
+# Fill a MultiFab with data
+#for mfi in mf:
+#    bx = mfi.validbox()
+#    # Preferred way to fill array using fast ranged operations:
+#    # - xp.array is indexed in reversed order (n,z,y,x),
+#    #   .T creates a view into the AMReX (x,y,z,n) order
+#    # - indices are local (range from 0 to box size)
+#    mf_array = xp.array(mf.array(mfi), copy=False).T
+#    x = (xp.arange(bx.small_end[0], bx.big_end[0]+1)+0.5)*dx[0]
+#    y = (xp.arange(bx.small_end[1], bx.big_end[1]+1)+0.5)*dx[1]
+#    z = (xp.arange(bx.small_end[2], bx.big_end[2]+1)+0.5)*dx[2]
+#    v = (x[xp.newaxis,xp.newaxis,:]
+#       + y[xp.newaxis,:,xp.newaxis]*0.1
+#       + z[:,xp.newaxis,xp.newaxis]*0.01)
+#    rsquared = ((z[xp.newaxis, xp.newaxis,          :] - 0.5)**2
+#              + (y[xp.newaxis,          :, xp.newaxis] - 0.5)**2
+#              + (x[         :, xp.newaxis, xp.newaxis] - 0.5)**2) / 0.01
+#    mf_array[:, :, :, 0] = 1. + xp.exp(-rsquared)
 
 # Plot MultiFab data
 plotfile = amr.concatenate(root="plt_py_", num=1, mindigits=3)
 varnames = amr.Vector_string(["comp0","comp1"])
 amr.write_single_level_plotfile(plotfile, mf, varnames, geom, time=0., level_step=0)
+
+# Run LAMMPS ONLY on the split communicator
+lmp = lammps(comm=app_comm_py)
+lmp.file("in.lj")
 
 # Finalize AMReX
 amr.finalize()
