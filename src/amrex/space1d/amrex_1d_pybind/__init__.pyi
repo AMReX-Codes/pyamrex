@@ -4056,7 +4056,8 @@ class FArrayBox(BaseFab_Real):
     def __repr__(self) -> str: ...
 
 class FabArrayBase:
-    def __iter__(self) -> MFIter: ...
+    @staticmethod
+    def __iter__(fab): ...
     def is_nodal(self, arg0: int) -> bool: ...
     @property
     def is_all_cell_centered(self) -> bool: ...
@@ -4556,9 +4557,29 @@ class MFIter:
     def __init__(self, arg0: FabArrayBase) -> None: ...
     @typing.overload
     def __init__(self, arg0: MultiFab) -> None: ...
-    def __next__(self) -> MFIter: ...
+    def __next__(self):
+        """
+        This is a helper function for the C++ equivalent of void operator++()
+
+            In Python, iterators always are called with __next__, even for the
+            first access. This means we need to handle the first iterator element
+            explicitly, otherwise we will jump directly to the 2nd element. We do
+            this the same way as pybind11 does this, via a little state:
+              https://github.com/AMReX-Codes/pyamrex/pull/50
+              https://github.com/AMReX-Codes/pyamrex/pull/262
+              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+
+            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+
+            self: the current iterator
+            returns: the updated iterator
+
+        """
+
     def __repr__(self) -> str: ...
+    def _incr(self) -> None: ...
     def fabbox(self) -> Box: ...
+    def finalize(self) -> None: ...
     @typing.overload
     def grownnodaltilebox(self, int: int = -1, ng: int = -1000000) -> Box: ...
     @typing.overload
@@ -4580,6 +4601,8 @@ class MFIter:
     def length(self) -> int: ...
 
 class MultiFab(FabArray_FArrayBox):
+    @staticmethod
+    def __iter__(mfab): ...
     @staticmethod
     @typing.overload
     def add(
@@ -5669,12 +5692,34 @@ class ParConstIterBase_1_1_2_1_arena(MFIter):
     def __init__(
         self, particle_container: ParticleContainer_1_1_2_1_arena, level: int
     ) -> None: ...
-    def __iter__(self) -> ParConstIterBase_1_1_2_1_arena: ...
-    def __next__(self) -> ParConstIterBase_1_1_2_1_arena: ...
+    def __iter__(self): ...
+    def __next__(self):
+        """
+        This is a helper function for the C++ equivalent of void operator++()
+
+            In Python, iterators always are called with __next__, even for the
+            first access. This means we need to handle the first iterator element
+            explicitly, otherwise we will jump directly to the 2nd element. We do
+            this the same way as pybind11 does this, via a little state:
+              https://github.com/AMReX-Codes/pyamrex/pull/50
+              https://github.com/AMReX-Codes/pyamrex/pull/262
+              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+
+            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+
+            self: the current iterator
+            returns: the updated iterator
+
+        """
+
+    def _incr(self) -> None: ...
     def aos(self) -> ArrayOfStructs_1_1_arena: ...
+    def finalize(self) -> None: ...
     def geom(self, level: int) -> Geometry: ...
     def particle_tile(self) -> ParticleTile_1_1_2_1_arena: ...
     def soa(self) -> StructOfArrays_2_1_arena: ...
+    @property
+    def is_valid(self) -> bool: ...
     @property
     def level(self) -> int: ...
     @property
@@ -5696,12 +5741,34 @@ class ParConstIterBase_1_1_2_1_default(MFIter):
     def __init__(
         self, particle_container: ParticleContainer_1_1_2_1_default, level: int
     ) -> None: ...
-    def __iter__(self) -> ParConstIterBase_1_1_2_1_default: ...
-    def __next__(self) -> ParConstIterBase_1_1_2_1_default: ...
+    def __iter__(self): ...
+    def __next__(self):
+        """
+        This is a helper function for the C++ equivalent of void operator++()
+
+            In Python, iterators always are called with __next__, even for the
+            first access. This means we need to handle the first iterator element
+            explicitly, otherwise we will jump directly to the 2nd element. We do
+            this the same way as pybind11 does this, via a little state:
+              https://github.com/AMReX-Codes/pyamrex/pull/50
+              https://github.com/AMReX-Codes/pyamrex/pull/262
+              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+
+            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+
+            self: the current iterator
+            returns: the updated iterator
+
+        """
+
+    def _incr(self) -> None: ...
     def aos(self) -> ArrayOfStructs_1_1_default: ...
+    def finalize(self) -> None: ...
     def geom(self, level: int) -> Geometry: ...
     def particle_tile(self) -> ParticleTile_1_1_2_1_default: ...
     def soa(self) -> StructOfArrays_2_1_default: ...
+    @property
+    def is_valid(self) -> bool: ...
     @property
     def level(self) -> int: ...
     @property
@@ -5723,12 +5790,34 @@ class ParConstIterBase_1_1_2_1_pinned(MFIter):
     def __init__(
         self, particle_container: ParticleContainer_1_1_2_1_pinned, level: int
     ) -> None: ...
-    def __iter__(self) -> ParConstIterBase_1_1_2_1_pinned: ...
-    def __next__(self) -> ParConstIterBase_1_1_2_1_pinned: ...
+    def __iter__(self): ...
+    def __next__(self):
+        """
+        This is a helper function for the C++ equivalent of void operator++()
+
+            In Python, iterators always are called with __next__, even for the
+            first access. This means we need to handle the first iterator element
+            explicitly, otherwise we will jump directly to the 2nd element. We do
+            this the same way as pybind11 does this, via a little state:
+              https://github.com/AMReX-Codes/pyamrex/pull/50
+              https://github.com/AMReX-Codes/pyamrex/pull/262
+              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+
+            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+
+            self: the current iterator
+            returns: the updated iterator
+
+        """
+
+    def _incr(self) -> None: ...
     def aos(self) -> ArrayOfStructs_1_1_pinned: ...
+    def finalize(self) -> None: ...
     def geom(self, level: int) -> Geometry: ...
     def particle_tile(self) -> ParticleTile_1_1_2_1_pinned: ...
     def soa(self) -> StructOfArrays_2_1_pinned: ...
+    @property
+    def is_valid(self) -> bool: ...
     @property
     def level(self) -> int: ...
     @property
@@ -5750,11 +5839,33 @@ class ParConstIterBase_pureSoA_5_0_arena(MFIter):
     def __init__(
         self, particle_container: ParticleContainer_pureSoA_5_0_arena, level: int
     ) -> None: ...
-    def __iter__(self) -> ParConstIterBase_pureSoA_5_0_arena: ...
-    def __next__(self) -> ParConstIterBase_pureSoA_5_0_arena: ...
+    def __iter__(self): ...
+    def __next__(self):
+        """
+        This is a helper function for the C++ equivalent of void operator++()
+
+            In Python, iterators always are called with __next__, even for the
+            first access. This means we need to handle the first iterator element
+            explicitly, otherwise we will jump directly to the 2nd element. We do
+            this the same way as pybind11 does this, via a little state:
+              https://github.com/AMReX-Codes/pyamrex/pull/50
+              https://github.com/AMReX-Codes/pyamrex/pull/262
+              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+
+            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+
+            self: the current iterator
+            returns: the updated iterator
+
+        """
+
+    def _incr(self) -> None: ...
+    def finalize(self) -> None: ...
     def geom(self, level: int) -> Geometry: ...
     def particle_tile(self) -> ParticleTile_pureSoA_0_0_5_0_arena: ...
     def soa(self) -> StructOfArrays_5_0_idcpu_arena: ...
+    @property
+    def is_valid(self) -> bool: ...
     @property
     def level(self) -> int: ...
     @property
@@ -5776,11 +5887,33 @@ class ParConstIterBase_pureSoA_5_0_default(MFIter):
     def __init__(
         self, particle_container: ParticleContainer_pureSoA_5_0_default, level: int
     ) -> None: ...
-    def __iter__(self) -> ParConstIterBase_pureSoA_5_0_default: ...
-    def __next__(self) -> ParConstIterBase_pureSoA_5_0_default: ...
+    def __iter__(self): ...
+    def __next__(self):
+        """
+        This is a helper function for the C++ equivalent of void operator++()
+
+            In Python, iterators always are called with __next__, even for the
+            first access. This means we need to handle the first iterator element
+            explicitly, otherwise we will jump directly to the 2nd element. We do
+            this the same way as pybind11 does this, via a little state:
+              https://github.com/AMReX-Codes/pyamrex/pull/50
+              https://github.com/AMReX-Codes/pyamrex/pull/262
+              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+
+            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+
+            self: the current iterator
+            returns: the updated iterator
+
+        """
+
+    def _incr(self) -> None: ...
+    def finalize(self) -> None: ...
     def geom(self, level: int) -> Geometry: ...
     def particle_tile(self) -> ParticleTile_pureSoA_0_0_5_0_default: ...
     def soa(self) -> StructOfArrays_5_0_idcpu_default: ...
+    @property
+    def is_valid(self) -> bool: ...
     @property
     def level(self) -> int: ...
     @property
@@ -5802,11 +5935,33 @@ class ParConstIterBase_pureSoA_5_0_pinned(MFIter):
     def __init__(
         self, particle_container: ParticleContainer_pureSoA_5_0_pinned, level: int
     ) -> None: ...
-    def __iter__(self) -> ParConstIterBase_pureSoA_5_0_pinned: ...
-    def __next__(self) -> ParConstIterBase_pureSoA_5_0_pinned: ...
+    def __iter__(self): ...
+    def __next__(self):
+        """
+        This is a helper function for the C++ equivalent of void operator++()
+
+            In Python, iterators always are called with __next__, even for the
+            first access. This means we need to handle the first iterator element
+            explicitly, otherwise we will jump directly to the 2nd element. We do
+            this the same way as pybind11 does this, via a little state:
+              https://github.com/AMReX-Codes/pyamrex/pull/50
+              https://github.com/AMReX-Codes/pyamrex/pull/262
+              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+
+            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+
+            self: the current iterator
+            returns: the updated iterator
+
+        """
+
+    def _incr(self) -> None: ...
+    def finalize(self) -> None: ...
     def geom(self, level: int) -> Geometry: ...
     def particle_tile(self) -> ParticleTile_pureSoA_0_0_5_0_pinned: ...
     def soa(self) -> StructOfArrays_5_0_idcpu_pinned: ...
+    @property
+    def is_valid(self) -> bool: ...
     @property
     def level(self) -> int: ...
     @property
@@ -5828,11 +5983,33 @@ class ParConstIterBase_pureSoA_8_0_arena(MFIter):
     def __init__(
         self, particle_container: ParticleContainer_pureSoA_8_0_arena, level: int
     ) -> None: ...
-    def __iter__(self) -> ParConstIterBase_pureSoA_8_0_arena: ...
-    def __next__(self) -> ParConstIterBase_pureSoA_8_0_arena: ...
+    def __iter__(self): ...
+    def __next__(self):
+        """
+        This is a helper function for the C++ equivalent of void operator++()
+
+            In Python, iterators always are called with __next__, even for the
+            first access. This means we need to handle the first iterator element
+            explicitly, otherwise we will jump directly to the 2nd element. We do
+            this the same way as pybind11 does this, via a little state:
+              https://github.com/AMReX-Codes/pyamrex/pull/50
+              https://github.com/AMReX-Codes/pyamrex/pull/262
+              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+
+            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+
+            self: the current iterator
+            returns: the updated iterator
+
+        """
+
+    def _incr(self) -> None: ...
+    def finalize(self) -> None: ...
     def geom(self, level: int) -> Geometry: ...
     def particle_tile(self) -> ParticleTile_pureSoA_0_0_8_0_arena: ...
     def soa(self) -> StructOfArrays_8_0_idcpu_arena: ...
+    @property
+    def is_valid(self) -> bool: ...
     @property
     def level(self) -> int: ...
     @property
@@ -5854,11 +6031,33 @@ class ParConstIterBase_pureSoA_8_0_default(MFIter):
     def __init__(
         self, particle_container: ParticleContainer_pureSoA_8_0_default, level: int
     ) -> None: ...
-    def __iter__(self) -> ParConstIterBase_pureSoA_8_0_default: ...
-    def __next__(self) -> ParConstIterBase_pureSoA_8_0_default: ...
+    def __iter__(self): ...
+    def __next__(self):
+        """
+        This is a helper function for the C++ equivalent of void operator++()
+
+            In Python, iterators always are called with __next__, even for the
+            first access. This means we need to handle the first iterator element
+            explicitly, otherwise we will jump directly to the 2nd element. We do
+            this the same way as pybind11 does this, via a little state:
+              https://github.com/AMReX-Codes/pyamrex/pull/50
+              https://github.com/AMReX-Codes/pyamrex/pull/262
+              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+
+            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+
+            self: the current iterator
+            returns: the updated iterator
+
+        """
+
+    def _incr(self) -> None: ...
+    def finalize(self) -> None: ...
     def geom(self, level: int) -> Geometry: ...
     def particle_tile(self) -> ParticleTile_pureSoA_0_0_8_0_default: ...
     def soa(self) -> StructOfArrays_8_0_idcpu_default: ...
+    @property
+    def is_valid(self) -> bool: ...
     @property
     def level(self) -> int: ...
     @property
@@ -5880,11 +6079,33 @@ class ParConstIterBase_pureSoA_8_0_pinned(MFIter):
     def __init__(
         self, particle_container: ParticleContainer_pureSoA_8_0_pinned, level: int
     ) -> None: ...
-    def __iter__(self) -> ParConstIterBase_pureSoA_8_0_pinned: ...
-    def __next__(self) -> ParConstIterBase_pureSoA_8_0_pinned: ...
+    def __iter__(self): ...
+    def __next__(self):
+        """
+        This is a helper function for the C++ equivalent of void operator++()
+
+            In Python, iterators always are called with __next__, even for the
+            first access. This means we need to handle the first iterator element
+            explicitly, otherwise we will jump directly to the 2nd element. We do
+            this the same way as pybind11 does this, via a little state:
+              https://github.com/AMReX-Codes/pyamrex/pull/50
+              https://github.com/AMReX-Codes/pyamrex/pull/262
+              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+
+            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+
+            self: the current iterator
+            returns: the updated iterator
+
+        """
+
+    def _incr(self) -> None: ...
+    def finalize(self) -> None: ...
     def geom(self, level: int) -> Geometry: ...
     def particle_tile(self) -> ParticleTile_pureSoA_0_0_8_0_pinned: ...
     def soa(self) -> StructOfArrays_8_0_idcpu_pinned: ...
+    @property
+    def is_valid(self) -> bool: ...
     @property
     def level(self) -> int: ...
     @property
@@ -5906,6 +6127,26 @@ class ParConstIter_1_1_2_1_arena(ParConstIterBase_1_1_2_1_arena):
     def __init__(
         self, particle_container: ParticleContainer_1_1_2_1_arena, level: int
     ) -> None: ...
+    def __iter__(self): ...
+    def __next__(self):
+        """
+        This is a helper function for the C++ equivalent of void operator++()
+
+            In Python, iterators always are called with __next__, even for the
+            first access. This means we need to handle the first iterator element
+            explicitly, otherwise we will jump directly to the 2nd element. We do
+            this the same way as pybind11 does this, via a little state:
+              https://github.com/AMReX-Codes/pyamrex/pull/50
+              https://github.com/AMReX-Codes/pyamrex/pull/262
+              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+
+            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+
+            self: the current iterator
+            returns: the updated iterator
+
+        """
+
     def __repr__(self) -> str: ...
 
 class ParConstIter_1_1_2_1_default(ParConstIterBase_1_1_2_1_default):
@@ -5913,6 +6154,26 @@ class ParConstIter_1_1_2_1_default(ParConstIterBase_1_1_2_1_default):
     def __init__(
         self, particle_container: ParticleContainer_1_1_2_1_default, level: int
     ) -> None: ...
+    def __iter__(self): ...
+    def __next__(self):
+        """
+        This is a helper function for the C++ equivalent of void operator++()
+
+            In Python, iterators always are called with __next__, even for the
+            first access. This means we need to handle the first iterator element
+            explicitly, otherwise we will jump directly to the 2nd element. We do
+            this the same way as pybind11 does this, via a little state:
+              https://github.com/AMReX-Codes/pyamrex/pull/50
+              https://github.com/AMReX-Codes/pyamrex/pull/262
+              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+
+            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+
+            self: the current iterator
+            returns: the updated iterator
+
+        """
+
     def __repr__(self) -> str: ...
 
 class ParConstIter_1_1_2_1_pinned(ParConstIterBase_1_1_2_1_pinned):
@@ -5920,6 +6181,26 @@ class ParConstIter_1_1_2_1_pinned(ParConstIterBase_1_1_2_1_pinned):
     def __init__(
         self, particle_container: ParticleContainer_1_1_2_1_pinned, level: int
     ) -> None: ...
+    def __iter__(self): ...
+    def __next__(self):
+        """
+        This is a helper function for the C++ equivalent of void operator++()
+
+            In Python, iterators always are called with __next__, even for the
+            first access. This means we need to handle the first iterator element
+            explicitly, otherwise we will jump directly to the 2nd element. We do
+            this the same way as pybind11 does this, via a little state:
+              https://github.com/AMReX-Codes/pyamrex/pull/50
+              https://github.com/AMReX-Codes/pyamrex/pull/262
+              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+
+            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+
+            self: the current iterator
+            returns: the updated iterator
+
+        """
+
     def __repr__(self) -> str: ...
 
 class ParConstIter_pureSoA_5_0_arena(ParConstIterBase_pureSoA_5_0_arena):
@@ -5927,6 +6208,26 @@ class ParConstIter_pureSoA_5_0_arena(ParConstIterBase_pureSoA_5_0_arena):
     def __init__(
         self, particle_container: ParticleContainer_pureSoA_5_0_arena, level: int
     ) -> None: ...
+    def __iter__(self): ...
+    def __next__(self):
+        """
+        This is a helper function for the C++ equivalent of void operator++()
+
+            In Python, iterators always are called with __next__, even for the
+            first access. This means we need to handle the first iterator element
+            explicitly, otherwise we will jump directly to the 2nd element. We do
+            this the same way as pybind11 does this, via a little state:
+              https://github.com/AMReX-Codes/pyamrex/pull/50
+              https://github.com/AMReX-Codes/pyamrex/pull/262
+              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+
+            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+
+            self: the current iterator
+            returns: the updated iterator
+
+        """
+
     def __repr__(self) -> str: ...
 
 class ParConstIter_pureSoA_5_0_default(ParConstIterBase_pureSoA_5_0_default):
@@ -5934,6 +6235,26 @@ class ParConstIter_pureSoA_5_0_default(ParConstIterBase_pureSoA_5_0_default):
     def __init__(
         self, particle_container: ParticleContainer_pureSoA_5_0_default, level: int
     ) -> None: ...
+    def __iter__(self): ...
+    def __next__(self):
+        """
+        This is a helper function for the C++ equivalent of void operator++()
+
+            In Python, iterators always are called with __next__, even for the
+            first access. This means we need to handle the first iterator element
+            explicitly, otherwise we will jump directly to the 2nd element. We do
+            this the same way as pybind11 does this, via a little state:
+              https://github.com/AMReX-Codes/pyamrex/pull/50
+              https://github.com/AMReX-Codes/pyamrex/pull/262
+              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+
+            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+
+            self: the current iterator
+            returns: the updated iterator
+
+        """
+
     def __repr__(self) -> str: ...
 
 class ParConstIter_pureSoA_5_0_pinned(ParConstIterBase_pureSoA_5_0_pinned):
@@ -5941,6 +6262,26 @@ class ParConstIter_pureSoA_5_0_pinned(ParConstIterBase_pureSoA_5_0_pinned):
     def __init__(
         self, particle_container: ParticleContainer_pureSoA_5_0_pinned, level: int
     ) -> None: ...
+    def __iter__(self): ...
+    def __next__(self):
+        """
+        This is a helper function for the C++ equivalent of void operator++()
+
+            In Python, iterators always are called with __next__, even for the
+            first access. This means we need to handle the first iterator element
+            explicitly, otherwise we will jump directly to the 2nd element. We do
+            this the same way as pybind11 does this, via a little state:
+              https://github.com/AMReX-Codes/pyamrex/pull/50
+              https://github.com/AMReX-Codes/pyamrex/pull/262
+              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+
+            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+
+            self: the current iterator
+            returns: the updated iterator
+
+        """
+
     def __repr__(self) -> str: ...
 
 class ParConstIter_pureSoA_8_0_arena(ParConstIterBase_pureSoA_8_0_arena):
@@ -5948,6 +6289,26 @@ class ParConstIter_pureSoA_8_0_arena(ParConstIterBase_pureSoA_8_0_arena):
     def __init__(
         self, particle_container: ParticleContainer_pureSoA_8_0_arena, level: int
     ) -> None: ...
+    def __iter__(self): ...
+    def __next__(self):
+        """
+        This is a helper function for the C++ equivalent of void operator++()
+
+            In Python, iterators always are called with __next__, even for the
+            first access. This means we need to handle the first iterator element
+            explicitly, otherwise we will jump directly to the 2nd element. We do
+            this the same way as pybind11 does this, via a little state:
+              https://github.com/AMReX-Codes/pyamrex/pull/50
+              https://github.com/AMReX-Codes/pyamrex/pull/262
+              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+
+            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+
+            self: the current iterator
+            returns: the updated iterator
+
+        """
+
     def __repr__(self) -> str: ...
 
 class ParConstIter_pureSoA_8_0_default(ParConstIterBase_pureSoA_8_0_default):
@@ -5955,6 +6316,26 @@ class ParConstIter_pureSoA_8_0_default(ParConstIterBase_pureSoA_8_0_default):
     def __init__(
         self, particle_container: ParticleContainer_pureSoA_8_0_default, level: int
     ) -> None: ...
+    def __iter__(self): ...
+    def __next__(self):
+        """
+        This is a helper function for the C++ equivalent of void operator++()
+
+            In Python, iterators always are called with __next__, even for the
+            first access. This means we need to handle the first iterator element
+            explicitly, otherwise we will jump directly to the 2nd element. We do
+            this the same way as pybind11 does this, via a little state:
+              https://github.com/AMReX-Codes/pyamrex/pull/50
+              https://github.com/AMReX-Codes/pyamrex/pull/262
+              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+
+            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+
+            self: the current iterator
+            returns: the updated iterator
+
+        """
+
     def __repr__(self) -> str: ...
 
 class ParConstIter_pureSoA_8_0_pinned(ParConstIterBase_pureSoA_8_0_pinned):
@@ -5962,6 +6343,26 @@ class ParConstIter_pureSoA_8_0_pinned(ParConstIterBase_pureSoA_8_0_pinned):
     def __init__(
         self, particle_container: ParticleContainer_pureSoA_8_0_pinned, level: int
     ) -> None: ...
+    def __iter__(self): ...
+    def __next__(self):
+        """
+        This is a helper function for the C++ equivalent of void operator++()
+
+            In Python, iterators always are called with __next__, even for the
+            first access. This means we need to handle the first iterator element
+            explicitly, otherwise we will jump directly to the 2nd element. We do
+            this the same way as pybind11 does this, via a little state:
+              https://github.com/AMReX-Codes/pyamrex/pull/50
+              https://github.com/AMReX-Codes/pyamrex/pull/262
+              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+
+            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+
+            self: the current iterator
+            returns: the updated iterator
+
+        """
+
     def __repr__(self) -> str: ...
 
 class ParIterBase_1_1_2_1_arena(MFIter):
@@ -5969,12 +6370,34 @@ class ParIterBase_1_1_2_1_arena(MFIter):
     def __init__(
         self, particle_container: ParticleContainer_1_1_2_1_arena, level: int
     ) -> None: ...
-    def __iter__(self) -> ParIterBase_1_1_2_1_arena: ...
-    def __next__(self) -> ParIterBase_1_1_2_1_arena: ...
+    def __iter__(self): ...
+    def __next__(self):
+        """
+        This is a helper function for the C++ equivalent of void operator++()
+
+            In Python, iterators always are called with __next__, even for the
+            first access. This means we need to handle the first iterator element
+            explicitly, otherwise we will jump directly to the 2nd element. We do
+            this the same way as pybind11 does this, via a little state:
+              https://github.com/AMReX-Codes/pyamrex/pull/50
+              https://github.com/AMReX-Codes/pyamrex/pull/262
+              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+
+            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+
+            self: the current iterator
+            returns: the updated iterator
+
+        """
+
+    def _incr(self) -> None: ...
     def aos(self) -> ArrayOfStructs_1_1_arena: ...
+    def finalize(self) -> None: ...
     def geom(self, level: int) -> Geometry: ...
     def particle_tile(self) -> ParticleTile_1_1_2_1_arena: ...
     def soa(self) -> StructOfArrays_2_1_arena: ...
+    @property
+    def is_valid(self) -> bool: ...
     @property
     def level(self) -> int: ...
     @property
@@ -5996,12 +6419,34 @@ class ParIterBase_1_1_2_1_default(MFIter):
     def __init__(
         self, particle_container: ParticleContainer_1_1_2_1_default, level: int
     ) -> None: ...
-    def __iter__(self) -> ParIterBase_1_1_2_1_default: ...
-    def __next__(self) -> ParIterBase_1_1_2_1_default: ...
+    def __iter__(self): ...
+    def __next__(self):
+        """
+        This is a helper function for the C++ equivalent of void operator++()
+
+            In Python, iterators always are called with __next__, even for the
+            first access. This means we need to handle the first iterator element
+            explicitly, otherwise we will jump directly to the 2nd element. We do
+            this the same way as pybind11 does this, via a little state:
+              https://github.com/AMReX-Codes/pyamrex/pull/50
+              https://github.com/AMReX-Codes/pyamrex/pull/262
+              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+
+            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+
+            self: the current iterator
+            returns: the updated iterator
+
+        """
+
+    def _incr(self) -> None: ...
     def aos(self) -> ArrayOfStructs_1_1_default: ...
+    def finalize(self) -> None: ...
     def geom(self, level: int) -> Geometry: ...
     def particle_tile(self) -> ParticleTile_1_1_2_1_default: ...
     def soa(self) -> StructOfArrays_2_1_default: ...
+    @property
+    def is_valid(self) -> bool: ...
     @property
     def level(self) -> int: ...
     @property
@@ -6023,12 +6468,34 @@ class ParIterBase_1_1_2_1_pinned(MFIter):
     def __init__(
         self, particle_container: ParticleContainer_1_1_2_1_pinned, level: int
     ) -> None: ...
-    def __iter__(self) -> ParIterBase_1_1_2_1_pinned: ...
-    def __next__(self) -> ParIterBase_1_1_2_1_pinned: ...
+    def __iter__(self): ...
+    def __next__(self):
+        """
+        This is a helper function for the C++ equivalent of void operator++()
+
+            In Python, iterators always are called with __next__, even for the
+            first access. This means we need to handle the first iterator element
+            explicitly, otherwise we will jump directly to the 2nd element. We do
+            this the same way as pybind11 does this, via a little state:
+              https://github.com/AMReX-Codes/pyamrex/pull/50
+              https://github.com/AMReX-Codes/pyamrex/pull/262
+              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+
+            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+
+            self: the current iterator
+            returns: the updated iterator
+
+        """
+
+    def _incr(self) -> None: ...
     def aos(self) -> ArrayOfStructs_1_1_pinned: ...
+    def finalize(self) -> None: ...
     def geom(self, level: int) -> Geometry: ...
     def particle_tile(self) -> ParticleTile_1_1_2_1_pinned: ...
     def soa(self) -> StructOfArrays_2_1_pinned: ...
+    @property
+    def is_valid(self) -> bool: ...
     @property
     def level(self) -> int: ...
     @property
@@ -6050,11 +6517,33 @@ class ParIterBase_pureSoA_5_0_arena(MFIter):
     def __init__(
         self, particle_container: ParticleContainer_pureSoA_5_0_arena, level: int
     ) -> None: ...
-    def __iter__(self) -> ParIterBase_pureSoA_5_0_arena: ...
-    def __next__(self) -> ParIterBase_pureSoA_5_0_arena: ...
+    def __iter__(self): ...
+    def __next__(self):
+        """
+        This is a helper function for the C++ equivalent of void operator++()
+
+            In Python, iterators always are called with __next__, even for the
+            first access. This means we need to handle the first iterator element
+            explicitly, otherwise we will jump directly to the 2nd element. We do
+            this the same way as pybind11 does this, via a little state:
+              https://github.com/AMReX-Codes/pyamrex/pull/50
+              https://github.com/AMReX-Codes/pyamrex/pull/262
+              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+
+            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+
+            self: the current iterator
+            returns: the updated iterator
+
+        """
+
+    def _incr(self) -> None: ...
+    def finalize(self) -> None: ...
     def geom(self, level: int) -> Geometry: ...
     def particle_tile(self) -> ParticleTile_pureSoA_0_0_5_0_arena: ...
     def soa(self) -> StructOfArrays_5_0_idcpu_arena: ...
+    @property
+    def is_valid(self) -> bool: ...
     @property
     def level(self) -> int: ...
     @property
@@ -6076,11 +6565,33 @@ class ParIterBase_pureSoA_5_0_default(MFIter):
     def __init__(
         self, particle_container: ParticleContainer_pureSoA_5_0_default, level: int
     ) -> None: ...
-    def __iter__(self) -> ParIterBase_pureSoA_5_0_default: ...
-    def __next__(self) -> ParIterBase_pureSoA_5_0_default: ...
+    def __iter__(self): ...
+    def __next__(self):
+        """
+        This is a helper function for the C++ equivalent of void operator++()
+
+            In Python, iterators always are called with __next__, even for the
+            first access. This means we need to handle the first iterator element
+            explicitly, otherwise we will jump directly to the 2nd element. We do
+            this the same way as pybind11 does this, via a little state:
+              https://github.com/AMReX-Codes/pyamrex/pull/50
+              https://github.com/AMReX-Codes/pyamrex/pull/262
+              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+
+            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+
+            self: the current iterator
+            returns: the updated iterator
+
+        """
+
+    def _incr(self) -> None: ...
+    def finalize(self) -> None: ...
     def geom(self, level: int) -> Geometry: ...
     def particle_tile(self) -> ParticleTile_pureSoA_0_0_5_0_default: ...
     def soa(self) -> StructOfArrays_5_0_idcpu_default: ...
+    @property
+    def is_valid(self) -> bool: ...
     @property
     def level(self) -> int: ...
     @property
@@ -6102,11 +6613,33 @@ class ParIterBase_pureSoA_5_0_pinned(MFIter):
     def __init__(
         self, particle_container: ParticleContainer_pureSoA_5_0_pinned, level: int
     ) -> None: ...
-    def __iter__(self) -> ParIterBase_pureSoA_5_0_pinned: ...
-    def __next__(self) -> ParIterBase_pureSoA_5_0_pinned: ...
+    def __iter__(self): ...
+    def __next__(self):
+        """
+        This is a helper function for the C++ equivalent of void operator++()
+
+            In Python, iterators always are called with __next__, even for the
+            first access. This means we need to handle the first iterator element
+            explicitly, otherwise we will jump directly to the 2nd element. We do
+            this the same way as pybind11 does this, via a little state:
+              https://github.com/AMReX-Codes/pyamrex/pull/50
+              https://github.com/AMReX-Codes/pyamrex/pull/262
+              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+
+            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+
+            self: the current iterator
+            returns: the updated iterator
+
+        """
+
+    def _incr(self) -> None: ...
+    def finalize(self) -> None: ...
     def geom(self, level: int) -> Geometry: ...
     def particle_tile(self) -> ParticleTile_pureSoA_0_0_5_0_pinned: ...
     def soa(self) -> StructOfArrays_5_0_idcpu_pinned: ...
+    @property
+    def is_valid(self) -> bool: ...
     @property
     def level(self) -> int: ...
     @property
@@ -6128,11 +6661,33 @@ class ParIterBase_pureSoA_8_0_arena(MFIter):
     def __init__(
         self, particle_container: ParticleContainer_pureSoA_8_0_arena, level: int
     ) -> None: ...
-    def __iter__(self) -> ParIterBase_pureSoA_8_0_arena: ...
-    def __next__(self) -> ParIterBase_pureSoA_8_0_arena: ...
+    def __iter__(self): ...
+    def __next__(self):
+        """
+        This is a helper function for the C++ equivalent of void operator++()
+
+            In Python, iterators always are called with __next__, even for the
+            first access. This means we need to handle the first iterator element
+            explicitly, otherwise we will jump directly to the 2nd element. We do
+            this the same way as pybind11 does this, via a little state:
+              https://github.com/AMReX-Codes/pyamrex/pull/50
+              https://github.com/AMReX-Codes/pyamrex/pull/262
+              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+
+            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+
+            self: the current iterator
+            returns: the updated iterator
+
+        """
+
+    def _incr(self) -> None: ...
+    def finalize(self) -> None: ...
     def geom(self, level: int) -> Geometry: ...
     def particle_tile(self) -> ParticleTile_pureSoA_0_0_8_0_arena: ...
     def soa(self) -> StructOfArrays_8_0_idcpu_arena: ...
+    @property
+    def is_valid(self) -> bool: ...
     @property
     def level(self) -> int: ...
     @property
@@ -6154,11 +6709,33 @@ class ParIterBase_pureSoA_8_0_default(MFIter):
     def __init__(
         self, particle_container: ParticleContainer_pureSoA_8_0_default, level: int
     ) -> None: ...
-    def __iter__(self) -> ParIterBase_pureSoA_8_0_default: ...
-    def __next__(self) -> ParIterBase_pureSoA_8_0_default: ...
+    def __iter__(self): ...
+    def __next__(self):
+        """
+        This is a helper function for the C++ equivalent of void operator++()
+
+            In Python, iterators always are called with __next__, even for the
+            first access. This means we need to handle the first iterator element
+            explicitly, otherwise we will jump directly to the 2nd element. We do
+            this the same way as pybind11 does this, via a little state:
+              https://github.com/AMReX-Codes/pyamrex/pull/50
+              https://github.com/AMReX-Codes/pyamrex/pull/262
+              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+
+            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+
+            self: the current iterator
+            returns: the updated iterator
+
+        """
+
+    def _incr(self) -> None: ...
+    def finalize(self) -> None: ...
     def geom(self, level: int) -> Geometry: ...
     def particle_tile(self) -> ParticleTile_pureSoA_0_0_8_0_default: ...
     def soa(self) -> StructOfArrays_8_0_idcpu_default: ...
+    @property
+    def is_valid(self) -> bool: ...
     @property
     def level(self) -> int: ...
     @property
@@ -6180,11 +6757,33 @@ class ParIterBase_pureSoA_8_0_pinned(MFIter):
     def __init__(
         self, particle_container: ParticleContainer_pureSoA_8_0_pinned, level: int
     ) -> None: ...
-    def __iter__(self) -> ParIterBase_pureSoA_8_0_pinned: ...
-    def __next__(self) -> ParIterBase_pureSoA_8_0_pinned: ...
+    def __iter__(self): ...
+    def __next__(self):
+        """
+        This is a helper function for the C++ equivalent of void operator++()
+
+            In Python, iterators always are called with __next__, even for the
+            first access. This means we need to handle the first iterator element
+            explicitly, otherwise we will jump directly to the 2nd element. We do
+            this the same way as pybind11 does this, via a little state:
+              https://github.com/AMReX-Codes/pyamrex/pull/50
+              https://github.com/AMReX-Codes/pyamrex/pull/262
+              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+
+            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+
+            self: the current iterator
+            returns: the updated iterator
+
+        """
+
+    def _incr(self) -> None: ...
+    def finalize(self) -> None: ...
     def geom(self, level: int) -> Geometry: ...
     def particle_tile(self) -> ParticleTile_pureSoA_0_0_8_0_pinned: ...
     def soa(self) -> StructOfArrays_8_0_idcpu_pinned: ...
+    @property
+    def is_valid(self) -> bool: ...
     @property
     def level(self) -> int: ...
     @property
@@ -6206,6 +6805,26 @@ class ParIter_1_1_2_1_arena(ParIterBase_1_1_2_1_arena):
     def __init__(
         self, particle_container: ParticleContainer_1_1_2_1_arena, level: int
     ) -> None: ...
+    def __iter__(self): ...
+    def __next__(self):
+        """
+        This is a helper function for the C++ equivalent of void operator++()
+
+            In Python, iterators always are called with __next__, even for the
+            first access. This means we need to handle the first iterator element
+            explicitly, otherwise we will jump directly to the 2nd element. We do
+            this the same way as pybind11 does this, via a little state:
+              https://github.com/AMReX-Codes/pyamrex/pull/50
+              https://github.com/AMReX-Codes/pyamrex/pull/262
+              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+
+            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+
+            self: the current iterator
+            returns: the updated iterator
+
+        """
+
     def __repr__(self) -> str: ...
 
 class ParIter_1_1_2_1_default(ParIterBase_1_1_2_1_default):
@@ -6213,6 +6832,26 @@ class ParIter_1_1_2_1_default(ParIterBase_1_1_2_1_default):
     def __init__(
         self, particle_container: ParticleContainer_1_1_2_1_default, level: int
     ) -> None: ...
+    def __iter__(self): ...
+    def __next__(self):
+        """
+        This is a helper function for the C++ equivalent of void operator++()
+
+            In Python, iterators always are called with __next__, even for the
+            first access. This means we need to handle the first iterator element
+            explicitly, otherwise we will jump directly to the 2nd element. We do
+            this the same way as pybind11 does this, via a little state:
+              https://github.com/AMReX-Codes/pyamrex/pull/50
+              https://github.com/AMReX-Codes/pyamrex/pull/262
+              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+
+            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+
+            self: the current iterator
+            returns: the updated iterator
+
+        """
+
     def __repr__(self) -> str: ...
 
 class ParIter_1_1_2_1_pinned(ParIterBase_1_1_2_1_pinned):
@@ -6220,6 +6859,26 @@ class ParIter_1_1_2_1_pinned(ParIterBase_1_1_2_1_pinned):
     def __init__(
         self, particle_container: ParticleContainer_1_1_2_1_pinned, level: int
     ) -> None: ...
+    def __iter__(self): ...
+    def __next__(self):
+        """
+        This is a helper function for the C++ equivalent of void operator++()
+
+            In Python, iterators always are called with __next__, even for the
+            first access. This means we need to handle the first iterator element
+            explicitly, otherwise we will jump directly to the 2nd element. We do
+            this the same way as pybind11 does this, via a little state:
+              https://github.com/AMReX-Codes/pyamrex/pull/50
+              https://github.com/AMReX-Codes/pyamrex/pull/262
+              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+
+            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+
+            self: the current iterator
+            returns: the updated iterator
+
+        """
+
     def __repr__(self) -> str: ...
 
 class ParIter_pureSoA_5_0_arena(ParIterBase_pureSoA_5_0_arena):
@@ -6227,6 +6886,26 @@ class ParIter_pureSoA_5_0_arena(ParIterBase_pureSoA_5_0_arena):
     def __init__(
         self, particle_container: ParticleContainer_pureSoA_5_0_arena, level: int
     ) -> None: ...
+    def __iter__(self): ...
+    def __next__(self):
+        """
+        This is a helper function for the C++ equivalent of void operator++()
+
+            In Python, iterators always are called with __next__, even for the
+            first access. This means we need to handle the first iterator element
+            explicitly, otherwise we will jump directly to the 2nd element. We do
+            this the same way as pybind11 does this, via a little state:
+              https://github.com/AMReX-Codes/pyamrex/pull/50
+              https://github.com/AMReX-Codes/pyamrex/pull/262
+              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+
+            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+
+            self: the current iterator
+            returns: the updated iterator
+
+        """
+
     def __repr__(self) -> str: ...
 
 class ParIter_pureSoA_5_0_default(ParIterBase_pureSoA_5_0_default):
@@ -6234,6 +6913,26 @@ class ParIter_pureSoA_5_0_default(ParIterBase_pureSoA_5_0_default):
     def __init__(
         self, particle_container: ParticleContainer_pureSoA_5_0_default, level: int
     ) -> None: ...
+    def __iter__(self): ...
+    def __next__(self):
+        """
+        This is a helper function for the C++ equivalent of void operator++()
+
+            In Python, iterators always are called with __next__, even for the
+            first access. This means we need to handle the first iterator element
+            explicitly, otherwise we will jump directly to the 2nd element. We do
+            this the same way as pybind11 does this, via a little state:
+              https://github.com/AMReX-Codes/pyamrex/pull/50
+              https://github.com/AMReX-Codes/pyamrex/pull/262
+              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+
+            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+
+            self: the current iterator
+            returns: the updated iterator
+
+        """
+
     def __repr__(self) -> str: ...
 
 class ParIter_pureSoA_5_0_pinned(ParIterBase_pureSoA_5_0_pinned):
@@ -6241,6 +6940,26 @@ class ParIter_pureSoA_5_0_pinned(ParIterBase_pureSoA_5_0_pinned):
     def __init__(
         self, particle_container: ParticleContainer_pureSoA_5_0_pinned, level: int
     ) -> None: ...
+    def __iter__(self): ...
+    def __next__(self):
+        """
+        This is a helper function for the C++ equivalent of void operator++()
+
+            In Python, iterators always are called with __next__, even for the
+            first access. This means we need to handle the first iterator element
+            explicitly, otherwise we will jump directly to the 2nd element. We do
+            this the same way as pybind11 does this, via a little state:
+              https://github.com/AMReX-Codes/pyamrex/pull/50
+              https://github.com/AMReX-Codes/pyamrex/pull/262
+              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+
+            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+
+            self: the current iterator
+            returns: the updated iterator
+
+        """
+
     def __repr__(self) -> str: ...
 
 class ParIter_pureSoA_8_0_arena(ParIterBase_pureSoA_8_0_arena):
@@ -6248,6 +6967,26 @@ class ParIter_pureSoA_8_0_arena(ParIterBase_pureSoA_8_0_arena):
     def __init__(
         self, particle_container: ParticleContainer_pureSoA_8_0_arena, level: int
     ) -> None: ...
+    def __iter__(self): ...
+    def __next__(self):
+        """
+        This is a helper function for the C++ equivalent of void operator++()
+
+            In Python, iterators always are called with __next__, even for the
+            first access. This means we need to handle the first iterator element
+            explicitly, otherwise we will jump directly to the 2nd element. We do
+            this the same way as pybind11 does this, via a little state:
+              https://github.com/AMReX-Codes/pyamrex/pull/50
+              https://github.com/AMReX-Codes/pyamrex/pull/262
+              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+
+            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+
+            self: the current iterator
+            returns: the updated iterator
+
+        """
+
     def __repr__(self) -> str: ...
 
 class ParIter_pureSoA_8_0_default(ParIterBase_pureSoA_8_0_default):
@@ -6255,6 +6994,26 @@ class ParIter_pureSoA_8_0_default(ParIterBase_pureSoA_8_0_default):
     def __init__(
         self, particle_container: ParticleContainer_pureSoA_8_0_default, level: int
     ) -> None: ...
+    def __iter__(self): ...
+    def __next__(self):
+        """
+        This is a helper function for the C++ equivalent of void operator++()
+
+            In Python, iterators always are called with __next__, even for the
+            first access. This means we need to handle the first iterator element
+            explicitly, otherwise we will jump directly to the 2nd element. We do
+            this the same way as pybind11 does this, via a little state:
+              https://github.com/AMReX-Codes/pyamrex/pull/50
+              https://github.com/AMReX-Codes/pyamrex/pull/262
+              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+
+            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+
+            self: the current iterator
+            returns: the updated iterator
+
+        """
+
     def __repr__(self) -> str: ...
 
 class ParIter_pureSoA_8_0_pinned(ParIterBase_pureSoA_8_0_pinned):
@@ -6262,6 +7021,26 @@ class ParIter_pureSoA_8_0_pinned(ParIterBase_pureSoA_8_0_pinned):
     def __init__(
         self, particle_container: ParticleContainer_pureSoA_8_0_pinned, level: int
     ) -> None: ...
+    def __iter__(self): ...
+    def __next__(self):
+        """
+        This is a helper function for the C++ equivalent of void operator++()
+
+            In Python, iterators always are called with __next__, even for the
+            first access. This means we need to handle the first iterator element
+            explicitly, otherwise we will jump directly to the 2nd element. We do
+            this the same way as pybind11 does this, via a little state:
+              https://github.com/AMReX-Codes/pyamrex/pull/50
+              https://github.com/AMReX-Codes/pyamrex/pull/262
+              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+
+            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+
+            self: the current iterator
+            returns: the updated iterator
+
+        """
+
     def __repr__(self) -> str: ...
 
 class ParmParse:
