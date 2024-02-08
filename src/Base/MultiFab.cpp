@@ -5,8 +5,6 @@
  */
 #include "pyAMReX.H"
 
-#include "Base/Iterator.H"
-
 #include <AMReX_BoxArray.H>
 #include <AMReX_DistributionMapping.H>
 #include <AMReX_FArrayBox.H>
@@ -60,20 +58,26 @@ void init_MultiFab(py::module &m)
                  return r;
              }
         )
-        .def(py::init< FabArrayBase const & >())
+        .def(py::init< FabArrayBase const & >(),
+            // while the created iterator (argument 1: this) exists,
+            // keep the FabArrayBase (argument 2) alive
+             py::keep_alive<1, 2>()
+        )
         //.def(py::init< FabArrayBase const &, MFItInfo const & >())
 
-        .def(py::init< MultiFab const & >())
+        .def(py::init< MultiFab const & >(),
+            // while the created iterator (argument 1: this) exists,
+            // keep the MultiFab (argument 2) alive
+            py::keep_alive<1, 2>()
+        )
         //.def(py::init< MultiFab const &, MFItInfo const & >())
 
         //.def(py::init< iMultiFab const & >())
         //.def(py::init< iMultiFab const &, MFItInfo const & >())
 
-        // eq. to void operator++()
-        .def("__next__",
-             &pyAMReX::iterator_next<MFIter>,
-             py::return_value_policy::reference_internal
-        )
+        // helpers for iteration __next__
+        .def("_incr", &MFIter::operator++)
+        .def("finalize", &MFIter::Finalize)
 
         .def("tilebox", py::overload_cast< >(&MFIter::tilebox, py::const_))
         .def("tilebox", py::overload_cast< IntVect const & >(&MFIter::tilebox, py::const_))
@@ -114,16 +118,6 @@ void init_MultiFab(py::module &m)
         .def_property_readonly("size", &FabArrayBase::size)
 
         .def_property_readonly("n_grow_vect", &FabArrayBase::nGrowVect)
-
-        /* data access in Box index space */
-        .def("__iter__",
-             [](FabArrayBase& fab) {
-                 return MFIter(fab);
-             },
-             // while the returned iterator (argument 0) exists,
-             // keep the FabArrayBase (argument 1; usually a MultiFab) alive
-             py::keep_alive<0, 1>()
-        )
     ;
 
     py_FabArray_FArrayBox

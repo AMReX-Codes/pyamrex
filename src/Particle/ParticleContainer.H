@@ -7,8 +7,6 @@
 
 #include "pyAMReX.H"
 
-#include "Base/Iterator.H"
-
 #include <AMReX_BoxArray.H>
 #include <AMReX_GpuAllocators.H>
 #include <AMReX_IntVect.H>
@@ -56,10 +54,14 @@ void make_Base_Iterators (py::module &m, std::string allocstr)
     std::string particle_it_base_name = std::string("Par");
     if (is_const) particle_it_base_name += "Const";
     particle_it_base_name += "IterBase_" + suffix + "_" + allocstr;
-    auto py_it_base = py::class_<iterator_base, MFIter>(m, particle_it_base_name.c_str())
+    auto py_it_base = py::class_<iterator_base, MFIter>(m, particle_it_base_name.c_str(), py::dynamic_attr())
         .def(py::init<container&, int>(),
+            // while the created iterator (argument 1: this) exists,
+            // keep the ParticleContainer (argument 2) alive
+            py::keep_alive<1, 2>(),
             py::arg("particle_container"), py::arg("level"))
         //.def(py::init<container&, int, MFItInfo&>(),
+        //     py::keep_alive<1, 2>(),
         //     py::arg("particle_container"), py::arg("level"), py::arg("info"))
 
         .def("particle_tile", &iterator_base::GetParticleTile,
@@ -75,19 +77,12 @@ void make_Base_Iterators (py::module &m, std::string allocstr)
         .def_property_readonly("num_neighbor_particles", &iterator_base::numNeighborParticles)
         .def_property_readonly("level", &iterator_base::GetLevel)
         .def_property_readonly("pair_index", &iterator_base::GetPairIndex)
+        .def_property_readonly("is_valid", &iterator_base::isValid)
         .def("geom", &iterator_base::Geom, py::arg("level"))
 
-        // eq. to void operator++()
-        .def("__next__",
-             &pyAMReX::iterator_next<iterator_base>,
-             py::return_value_policy::reference_internal
-        )
-        .def("__iter__",
-             [](iterator_base & it) -> iterator_base & {
-                 return it;
-             },
-             py::return_value_policy::reference_internal
-        )
+        // helpers for iteration __next__
+        .def("_incr", &iterator_base::operator++)
+        .def("finalize", &iterator_base::Finalize)
     ;
 
     // only legacy particle has an AoS data structure for positions and id+cpu

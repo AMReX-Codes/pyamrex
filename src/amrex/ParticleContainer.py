@@ -6,6 +6,8 @@ Authors: Axel Huebl
 License: BSD-3-Clause-LBNL
 """
 
+from .Iterator import next
+
 
 def pc_to_df(self, local=True, comm=None, root_rank=0):
     """
@@ -115,6 +117,19 @@ def register_ParticleContainer_extension(amr):
     """ParticleContainer helper methods"""
     import inspect
     import sys
+
+    # register member functions for every Par(Const)Iter* type
+    for _, ParIter_type in inspect.getmembers(
+        sys.modules[amr.__name__],
+        lambda member: inspect.isclass(member)
+        and member.__module__ == amr.__name__
+        and (
+            member.__name__.startswith("ParIter")
+            or member.__name__.startswith("ParConstIter")
+        ),
+    ):
+        ParIter_type.__next__ = next
+        ParIter_type.__iter__ = lambda self: self
 
     # register member functions for every ParticleContainer_* type
     for _, ParticleContainer_type in inspect.getmembers(
