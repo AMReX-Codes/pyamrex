@@ -26,6 +26,12 @@ This test checks if a `MultiFab` populated in the **cpp** code can be *sent* to 
 ### MultiFab_py_cpp
 This test checks if a `MultiFab` populated in the **python** script can be *sent* to an empty `MultiFab` in **cpp** code.
 
+### MultiFab_two_way
+This test deals with a two component MultiFab. The first component is populated on **cpp** side and
+ the second component is populated on the **python** side.
+The **cpp** code sends the first component to the **python** script.
+This is followed by a receive of the second component by the **cpp** code from the **python** script.
+
 ### lammps_tests/bench
 This test checks if the pythonic version of [LAMMPS](https://docs.lammps.org/Python_launch.html#running-lammps-and-python-in-parallel-with-mpi)
 can run **ONLY** on the resources provided to the python script.

@@ -1,6 +1,1 @@
-*
-
-!.gitignore
-!main.*
-!GNUmakefile
-!in.lj
+log.*
