@@ -341,7 +341,7 @@ if(pyAMReX_BUILD_TESTING)
     )
 
     # limit threads
-    set_property(TEST pytest.AMReX APPEND PROPERTY ENVIRONMENT "OMP_NUM_THREADS=2")
+    set_property(TEST pytest.AMReX APPEND PROPERTY ENVIRONMENT "OMP_NUM_THREADS=3")
 
     # set PYTHONPATH and PATH (for .dll files)
     pyamrex_test_set_pythonpath(pytest.AMReX)

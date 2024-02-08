@@ -55,7 +55,7 @@ jobs:
             -DAMReX_GPU_BACKEND=HIP      \
             -DAMReX_AMD_ARCH=gfx900      \
             -DAMReX_SPACEDIM="1;2;3"
-        cmake --build build --target pip_install -j 2
+        cmake --build build --target pip_install -j 4
 
         ccache -s
         du -hs ~/.cache/ccache
