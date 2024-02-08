@@ -81,7 +81,7 @@ void make_PODVector(py::module &m, std::string typestr, std::string allocstr)
             );
             Gpu::streamSynchronize();
             return h_data;
-        })
+        }, py::return_value_policy::move)
 
         // front
         // back
