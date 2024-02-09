@@ -35,3 +35,19 @@ This is followed by a receive of the second component by the **cpp** code from t
 ### lammps_tests/bench
 This test checks if the pythonic version of [LAMMPS](https://docs.lammps.org/Python_launch.html#running-lammps-and-python-in-parallel-with-mpi)
 can run **ONLY** on the resources provided to the python script.
+
+### pytorch_tests/ddp_cpu
+This test builds on top of **MultiFab_two_way** case.
+In addition to *MultiFab* data transfer it creates a 
+[torch.distributed process group](https://pytorch.org/docs/stable/distributed.html#torch.distributed.init_process_group)
+on the resources allocated to the python script. The test then creates a PyTorch Tensor which is only populated on
+rank 0 and broadcasts it to all involved python processes.
+
+Please note that the order of applications matters for this case. Why? See **rank** Parameter description
+[here](https://pytorch.org/docs/stable/distributed.html#torch.distributed.init_process_group)
+
+Execution:
+
+`mpirun -np 4 python main.py : -np 8 main.ccp_executable`
+
+**This test was only performed on a single node and it involves communication of CPU based PyTorch Tensors.**
