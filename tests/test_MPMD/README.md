@@ -43,11 +43,4 @@ In addition to *MultiFab* data transfer it creates a
 on the resources allocated to the python script. The test then creates a PyTorch Tensor which is only populated on
 rank 0 and broadcasts it to all involved python processes.
 
-Please note that the order of applications matters for this case. Why? See **rank** Parameter description
-[here](https://pytorch.org/docs/stable/distributed.html#torch.distributed.init_process_group)
-
-Execution:
-
-`mpirun -np 4 python main.py : -np 8 main.ccp_executable`
-
 **This test was only performed on a single node and it involves communication of CPU based PyTorch Tensors.**
