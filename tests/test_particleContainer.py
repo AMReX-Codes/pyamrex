@@ -353,6 +353,7 @@ def test_per_cell(empty_particle_container, std_geometry, std_particle):
 def test_soa_pc_numpy(soa_particle_container, Npart):
     """Used in docs/source/usage/compute.rst"""
     pc = soa_particle_container
+    assert pc.number_of_particles_at_level(0) == Npart
 
     class Config:
         have_gpu = False
@@ -396,6 +397,7 @@ def test_soa_pc_numpy(soa_particle_container, Npart):
 def test_pc_numpy(particle_container, Npart):
     """Used in docs/source/usage/compute.rst"""
     pc = particle_container
+    assert pc.number_of_particles_at_level(0) == Npart
 
     class Config:
         have_gpu = False
