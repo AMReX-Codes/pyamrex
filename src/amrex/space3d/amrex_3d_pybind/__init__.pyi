@@ -7239,6 +7239,7 @@ class ParticleContainer_1_1_2_1_arena:
     def total_number_of_particles(
         self, only_valid: bool = True, only_local: bool = False
     ) -> int: ...
+    def write_plotfile(self, dir: str, name: str) -> None: ...
     @property
     def byte_spread(
         self,
@@ -7397,6 +7398,7 @@ class ParticleContainer_1_1_2_1_default:
     def total_number_of_particles(
         self, only_valid: bool = True, only_local: bool = False
     ) -> int: ...
+    def write_plotfile(self, dir: str, name: str) -> None: ...
     @property
     def byte_spread(
         self,
@@ -7555,6 +7557,7 @@ class ParticleContainer_1_1_2_1_pinned:
     def total_number_of_particles(
         self, only_valid: bool = True, only_local: bool = False
     ) -> int: ...
+    def write_plotfile(self, dir: str, name: str) -> None: ...
     @property
     def byte_spread(
         self,
@@ -7707,6 +7710,7 @@ class ParticleContainer_pureSoA_7_0_arena:
     def total_number_of_particles(
         self, only_valid: bool = True, only_local: bool = False
     ) -> int: ...
+    def write_plotfile(self, dir: str, name: str) -> None: ...
     @property
     def byte_spread(
         self,
@@ -7862,6 +7866,7 @@ class ParticleContainer_pureSoA_7_0_default:
     def total_number_of_particles(
         self, only_valid: bool = True, only_local: bool = False
     ) -> int: ...
+    def write_plotfile(self, dir: str, name: str) -> None: ...
     @property
     def byte_spread(
         self,
@@ -8014,6 +8019,7 @@ class ParticleContainer_pureSoA_7_0_pinned:
     def total_number_of_particles(
         self, only_valid: bool = True, only_local: bool = False
     ) -> int: ...
+    def write_plotfile(self, dir: str, name: str) -> None: ...
     @property
     def byte_spread(
         self,
@@ -8166,6 +8172,7 @@ class ParticleContainer_pureSoA_8_0_arena:
     def total_number_of_particles(
         self, only_valid: bool = True, only_local: bool = False
     ) -> int: ...
+    def write_plotfile(self, dir: str, name: str) -> None: ...
     @property
     def byte_spread(
         self,
@@ -8321,6 +8328,7 @@ class ParticleContainer_pureSoA_8_0_default:
     def total_number_of_particles(
         self, only_valid: bool = True, only_local: bool = False
     ) -> int: ...
+    def write_plotfile(self, dir: str, name: str) -> None: ...
     @property
     def byte_spread(
         self,
@@ -8473,6 +8481,7 @@ class ParticleContainer_pureSoA_8_0_pinned:
     def total_number_of_particles(
         self, only_valid: bool = True, only_local: bool = False
     ) -> int: ...
+    def write_plotfile(self, dir: str, name: str) -> None: ...
     @property
     def byte_spread(
         self,
