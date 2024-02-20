@@ -303,7 +303,14 @@ void make_ParticleContainer_and_Iterators (py::module &m, std::string allocstr)
         // void CheckpointPost ();
         // void Restart (const std::string& dir, const std::string& file);
         // void Restart (const std::string& dir, const std::string& file, bool is_checkpoint);
-        // void WritePlotFile (const std::string& dir, const std::string& name) const;
+
+        .def("write_plotfile",
+             //py::overload_cast<std::string const &, std::string const &>(&ParticleContainerType::WritePlotFile, py::const_),
+             [](ParticleContainerType const & pc, std::string const & dir, std::string const & name){
+                return pc.WritePlotFile(dir, name);
+             },
+             py::arg("dir"), py::arg("name")
+        )
         // template <class F, typename std::enable_if<!std::is_same<F, Vector<std::string>&>::value>::type* = nullptr>
         // void WritePlotFile (const std::string& dir, const std::string& name, F&& f) const;
         // void WritePlotFile (const std::string& dir, const std::string& name,
