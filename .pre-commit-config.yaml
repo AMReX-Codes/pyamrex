@@ -50,7 +50,7 @@ repos:
 
 # Changes tabs to spaces
 - repo: https://github.com/Lucas-C/pre-commit-hooks
-  rev: v1.5.4
+  rev: v1.5.5
   hooks:
   - id: remove-tabs
 #    exclude: 'Make.WarpX|Make.package|Makefile|GNUmake'
@@ -102,7 +102,7 @@ repos:
 # Python: Ruff linter
 #   https://docs.astral.sh/ruff/
 - repo: https://github.com/astral-sh/ruff-pre-commit
-  rev: v0.2.1
+  rev: v0.2.2
   hooks:
     - id: ruff
       args: [--fix, --exit-non-zero-on-fix]
