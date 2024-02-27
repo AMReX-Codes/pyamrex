@@ -90,7 +90,6 @@ CMake Option                    Default & Values                             Des
 ``AMReX_PRECISION``             SINGLE/**DOUBLE**                            Precision of AMReX Real type
 ``AMReX_SPACEDIM``              ``3``                                        Dimension(s) of AMReX as a ``;``-separated list
 ``AMReX_BUILD_SHARED_LIBS``     ON/**OFF**                                   Build AMReX library as shared (required for app extensions)
-``pyAMReX_IPO``                 **ON**/OFF                                   Compile with interprocedural/link optimization (IPO/LTO)
 ``pyAMReX_INSTALL``             **ON**/OFF                                   Enable install targets for pyAMReX
 ``PYINSTALLOPTIONS``            *None*                                       Additional options for ``pip install``, e.g., ``-v --user``
 ``Python_EXECUTABLE``           (newest found)                               Path to Python executable
@@ -109,6 +108,7 @@ CMake Option                  Default & Values                               Des
 ============================= ============================================== ===========================================================
 ``BUILD_SHARED_LIBS``         ON/**OFF**                                     Build shared libraries for dependencies
 ``pyAMReX_CCACHE``            **ON**/OFF                                     Search and use CCache to speed up rebuilds.
+``pyAMReX_IPO``               **ON**/OFF                                     Compile with interprocedural/link optimization (IPO/LTO)
 ``pyAMReX_amrex_src``         *None*                                         Path to AMReX source directory (preferred if set)
 ``pyAMReX_amrex_repo``        ``https://github.com/AMReX-Codes/amrex.git``   Repository URI to pull and build AMReX from
 ``pyAMReX_amrex_branch``      *we set and maintain a compatible commit*      Repository branch for ``pyAMReX_amrex_repo``

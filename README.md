@@ -4,9 +4,9 @@
 ![Python3 API: Beta][dev-beta]
 [![Documentation Status](https://readthedocs.org/projects/pyamrex/badge/?version=latest)](https://pyamrex.readthedocs.io)
 [![Discussions](https://img.shields.io/badge/chat-discussions-turquoise.svg)](https://github.com/AMReX-Codes/pyamrex/discussions)  
-![linux](https://github.com/AMReX-Codes/pyamrex/workflows/linux/badge.svg?branch=development)
-![macos](https://github.com/AMReX-Codes/pyamrex/workflows/macos/badge.svg?branch=development)
-![windows](https://github.com/AMReX-Codes/pyamrex/workflows/windows/badge.svg?branch=development)  
+![Linux](https://github.com/AMReX-Codes/pyamrex/actions/workflows/ubuntu.yml/badge.svg?branch=development)
+![macOS](https://github.com/AMReX-Codes/pyamrex/actions/workflows/macos.yml/badge.svg?branch=development)
+![Windows](https://github.com/AMReX-Codes/pyamrex/actions/workflows/windows.yml/badge.svg?branch=development)  
 [![License pyAMReX](https://img.shields.io/badge/license-BSD--3--Clause--LBNL-blue.svg)](https://spdx.org/licenses/BSD-3-Clause-LBNL.html)
 [![DOI (source)](https://img.shields.io/badge/DOI%20(source)-10.5281/zenodo.8408733-blue.svg)](https://doi.org/10.5281/zenodo.8408733)
 
@@ -179,6 +179,7 @@ If you are using the pip-driven install, selected [AMReX CMake options](https://
 | `PYBIND11_INTERNAL`          | **ON**/OFF                                 | Needs a pre-installed pybind11 library if set to `OFF`       |
 | `CMAKE_BUILD_PARALLEL_LEVEL` | 2                                          | Number of parallel build threads                             |
 | `PYAMREX_LIBDIR`             | *None*                                     | If set, search for pre-built a pyAMReX library               |
+| `PYAMREX_CCACHE`             | **ON**/OFF                                 | Search and use CCache to speed up rebuilds                   |
 | `PYAMREX_IPO`                | **ON**/OFF                                 | Compile with interprocedural/link optimization (IPO/LTO)     |
 | `PYINSTALLOPTIONS`           | *None*                                     | Additional options for ``pip install``, e.g., ``-v --user``  |
 
@@ -187,6 +188,7 @@ Furthermore, pyAMReX adds a few selected CMake build options:
 | CMake Option                 | Default & Values                           | Description                                                   |
 |------------------------------|--------------------------------------------|---------------------------------------------------------------|
 | `AMReX_SPACEDIM`             | **3**, use `"1;2;3"` for all               | Dimension(s) of AMReX as a ``;``-separated list               |
+| `pyAMReX_CCACHE`             | **ON**/OFF                                 | Search and use CCache to speed up rebuilds                    |
 | `pyAMReX_IPO`                | **ON**/OFF                                 | Compile with interprocedural/link optimization (IPO/LTO)      |
 | `pyAMReX_INSTALL`            | **ON**/OFF                                 | Enable install targets for pyAMReX                            |
 | `pyAMReX_amrex_src`          | *None*                                     | Absolute path to AMReX source directory (preferred if set)    |
