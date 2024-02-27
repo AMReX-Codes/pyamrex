@@ -6,7 +6,7 @@
 [![Discussions](https://img.shields.io/badge/chat-discussions-turquoise.svg)](https://github.com/AMReX-Codes/pyamrex/discussions)  
 ![Linux](https://github.com/AMReX-Codes/pyamrex/actions/workflows/ubuntu.yml/badge.svg?branch=development)
 ![macOS](https://github.com/AMReX-Codes/pyamrex/actions/workflows/macos.yml/badge.svg?branch=development)
-![Windows](https://github.com/AMReX-Codes/pyamrex/actions/workflows/windows.yml/badge.svg?branch=development)
+![Windows](https://github.com/AMReX-Codes/pyamrex/actions/workflows/windows.yml/badge.svg?branch=development)  
 [![License pyAMReX](https://img.shields.io/badge/license-BSD--3--Clause--LBNL-blue.svg)](https://spdx.org/licenses/BSD-3-Clause-LBNL.html)
 [![DOI (source)](https://img.shields.io/badge/DOI%20(source)-10.5281/zenodo.8408733-blue.svg)](https://doi.org/10.5281/zenodo.8408733)
 
