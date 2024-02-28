@@ -116,7 +116,7 @@ foreach(D IN LISTS AMReX_SPACEDIM)
     )
 
     if(${AMReX_MPI})
-      execute_process(COMMAND 
+      execute_process(COMMAND
         ${Python_EXECUTABLE} -c "import mpi4py; print( mpi4py.get_include() )"
         OUTPUT_VARIABLE MPI4PY_INCLUDE
         OUTPUT_STRIP_TRAILING_WHITESPACE

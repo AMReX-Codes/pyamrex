@@ -47,7 +47,7 @@ void init_MPMD(py::module &m) {
               MPMD::Initialize_without_split(argc, tmp);
           }, py::return_value_policy::reference);
 
-    // This is AMReX::Initialize when MPMD exists 
+    // This is AMReX::Initialize when MPMD exists
     m.def("initialize_when_MPMD",
           [](const py::list args, py::object app_comm_py) {
               Vector<std::string> cargs{"amrex"};
