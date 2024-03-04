@@ -30,11 +30,24 @@ The field data can have more than one component (in the slowest varying index), 
 
 This is how to iterate and potentially compute for all blocks assigned to a local process in pyAMReX:
 
-.. literalinclude:: ../../../tests/test_multifab.py
-   :language: python3
-   :dedent: 4
-   :start-after: # Manual: Compute Mfab START
-   :end-before: # Manual: Compute Mfab END
+.. tab-set::
+
+   .. tab-item:: Simple
+
+      .. literalinclude:: ../../../tests/test_multifab.py
+         :language: python3
+         :dedent: 4
+         :start-after: # Manual: Compute Mfab Simple START
+         :end-before: # Manual: Compute Mfab Simple END
+
+   .. tab-item:: Detailed
+
+      .. literalinclude:: ../../../tests/test_multifab.py
+         :language: python3
+         :dedent: 4
+         :start-after: # Manual: Compute Mfab Detailed START
+         :end-before: # Manual: Compute Mfab Detailed END
+
 
 For a complete physics example that uses CPU/GPU agnostic Python code for computation on fields, see:
 
@@ -69,19 +82,31 @@ Here is the general structure for computing on particles:
 
    .. tab-item:: Modern (pure SoA) Layout
 
-      .. literalinclude:: ../../../tests/test_particleContainer.py
-         :language: python3
-         :dedent: 4
-         :start-after: # Manual: Pure SoA Compute PC START
-         :end-before: # Manual: Pure SoA Compute PC END
+      .. tab-set::
+
+         .. tab-item:: Simple: Pandas (read-only)
+
+            .. literalinclude:: ../../../tests/test_particleContainer.py
+               :language: python3
+               :dedent: 4
+               :start-after: # Manual: Pure SoA Compute PC Pandas START
+               :end-before: # Manual: Pure SoA Compute PC Pandas END
+
+         .. tab-item:: Detailed (read and write)
+
+            .. literalinclude:: ../../../tests/test_particleContainer.py
+               :language: python3
+               :dedent: 4
+               :start-after: # Manual: Pure SoA Compute PC Detailed START
+               :end-before: # Manual: Pure SoA Compute PC Detailed END
 
    .. tab-item:: Legacy (AoS + SoA) Layout
 
       .. literalinclude:: ../../../tests/test_particleContainer.py
          :language: python3
          :dedent: 4
-         :start-after: # Manual: Legacy Compute PC START
-         :end-before: # Manual: Legacy Compute PC END
+         :start-after: # Manual: Legacy Compute PC Detailed START
+         :end-before: # Manual: Legacy Compute PC Detailed END
 
 For many small CPU and GPU examples on how to compute on particles, see the following test cases:
 
