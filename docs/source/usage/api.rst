@@ -212,19 +212,19 @@ Additional runtime attributes (Real or Int) are always in SoA memory layout.
 
 ``amrex::StructOfArrays<NReal, NInt, Allocator>`` is implemented for many numbers of Real and Int arguments, and allocators, e.g.,
 
-.. autoclass:: amrex.space3d.StructOfArrays_8_0_default
+.. autoclass:: amrex.space3d.StructOfArrays_8_0_idcpu_default
    :members:
    :undoc-members:
 
 ``amrex::ParticleTile<T_ParticleType, NArrayReal, NArrayInt, Allocator>`` is implemented for both legacy (AoS+SoA) and pure SoA particle types, many number of Real and Int arguments, and allocators, e.g.,
 
-.. autoclass:: amrex.space3d.ParticleTile_0_0_8_0_default
+.. autoclass:: amrex.space3d.ParticleTile_pureSoA_0_0_8_0_default
    :members:
    :undoc-members:
 
 ``amrex::ParticleTileData<T_ParticleType, NArrayReal>`` is implemented for both legacy (AoS+SoA) and pure SoA particle types, many number of Real and Int arguments, e.g.,
 
-.. autoclass:: amrex.space3d.ParticleTileData_0_0_8_0
+.. autoclass:: amrex.space3d.ParticleTileData_pureSoA_0_0_8_0
    :members:
    :undoc-members:
 
