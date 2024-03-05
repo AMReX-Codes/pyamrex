@@ -10987,16 +10987,12 @@ class Particle_0_0:
     @typing.overload
     def set_idata(self, arg0: int, arg1: int) -> None: ...
     @typing.overload
-    def set_idata(self, arg0: IntVect) -> None: ...
-    @typing.overload
     def set_idata(
         self,
         arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(0)],
     ) -> None: ...
     @typing.overload
     def set_rdata(self, arg0: int, arg1: float) -> None: ...
-    @typing.overload
-    def set_rdata(self, arg0: RealVect) -> None: ...
     @typing.overload
     def set_rdata(
         self,
@@ -11054,16 +11050,12 @@ class Particle_1_1:
     @typing.overload
     def set_idata(self, arg0: int, arg1: int) -> None: ...
     @typing.overload
-    def set_idata(self, arg0: IntVect) -> None: ...
-    @typing.overload
     def set_idata(
         self,
         arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(1)],
     ) -> None: ...
     @typing.overload
     def set_rdata(self, arg0: int, arg1: float) -> None: ...
-    @typing.overload
-    def set_rdata(self, arg0: RealVect) -> None: ...
     @typing.overload
     def set_rdata(
         self,
@@ -11121,16 +11113,12 @@ class Particle_2_1:
     @typing.overload
     def set_idata(self, arg0: int, arg1: int) -> None: ...
     @typing.overload
-    def set_idata(self, arg0: IntVect) -> None: ...
-    @typing.overload
     def set_idata(
         self,
         arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(1)],
     ) -> None: ...
     @typing.overload
     def set_rdata(self, arg0: int, arg1: float) -> None: ...
-    @typing.overload
-    def set_rdata(self, arg0: RealVect) -> None: ...
     @typing.overload
     def set_rdata(
         self,
@@ -11188,16 +11176,12 @@ class Particle_37_1:
     @typing.overload
     def set_idata(self, arg0: int, arg1: int) -> None: ...
     @typing.overload
-    def set_idata(self, arg0: IntVect) -> None: ...
-    @typing.overload
     def set_idata(
         self,
         arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(1)],
     ) -> None: ...
     @typing.overload
     def set_rdata(self, arg0: int, arg1: float) -> None: ...
-    @typing.overload
-    def set_rdata(self, arg0: RealVect) -> None: ...
     @typing.overload
     def set_rdata(
         self,
@@ -11255,16 +11239,12 @@ class Particle_3_2:
     @typing.overload
     def set_idata(self, arg0: int, arg1: int) -> None: ...
     @typing.overload
-    def set_idata(self, arg0: IntVect) -> None: ...
-    @typing.overload
     def set_idata(
         self,
         arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(2)],
     ) -> None: ...
     @typing.overload
     def set_rdata(self, arg0: int, arg1: float) -> None: ...
-    @typing.overload
-    def set_rdata(self, arg0: RealVect) -> None: ...
     @typing.overload
     def set_rdata(
         self,
@@ -11320,16 +11300,12 @@ class Particle_4_0:
     @typing.overload
     def set_idata(self, arg0: int, arg1: int) -> None: ...
     @typing.overload
-    def set_idata(self, arg0: IntVect) -> None: ...
-    @typing.overload
     def set_idata(
         self,
         arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(0)],
     ) -> None: ...
     @typing.overload
     def set_rdata(self, arg0: int, arg1: float) -> None: ...
-    @typing.overload
-    def set_rdata(self, arg0: RealVect) -> None: ...
     @typing.overload
     def set_rdata(
         self,
@@ -11385,16 +11361,12 @@ class Particle_5_0:
     @typing.overload
     def set_idata(self, arg0: int, arg1: int) -> None: ...
     @typing.overload
-    def set_idata(self, arg0: IntVect) -> None: ...
-    @typing.overload
     def set_idata(
         self,
         arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(0)],
     ) -> None: ...
     @typing.overload
     def set_rdata(self, arg0: int, arg1: float) -> None: ...
-    @typing.overload
-    def set_rdata(self, arg0: RealVect) -> None: ...
     @typing.overload
     def set_rdata(
         self,
@@ -11450,16 +11422,12 @@ class Particle_6_0:
     @typing.overload
     def set_idata(self, arg0: int, arg1: int) -> None: ...
     @typing.overload
-    def set_idata(self, arg0: IntVect) -> None: ...
-    @typing.overload
     def set_idata(
         self,
         arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(0)],
     ) -> None: ...
     @typing.overload
     def set_rdata(self, arg0: int, arg1: float) -> None: ...
-    @typing.overload
-    def set_rdata(self, arg0: RealVect) -> None: ...
     @typing.overload
     def set_rdata(
         self,
@@ -11515,16 +11483,12 @@ class Particle_7_0:
     @typing.overload
     def set_idata(self, arg0: int, arg1: int) -> None: ...
     @typing.overload
-    def set_idata(self, arg0: IntVect) -> None: ...
-    @typing.overload
     def set_idata(
         self,
         arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(0)],
     ) -> None: ...
     @typing.overload
     def set_rdata(self, arg0: int, arg1: float) -> None: ...
-    @typing.overload
-    def set_rdata(self, arg0: RealVect) -> None: ...
     @typing.overload
     def set_rdata(
         self,
@@ -11580,16 +11544,12 @@ class Particle_8_0:
     @typing.overload
     def set_idata(self, arg0: int, arg1: int) -> None: ...
     @typing.overload
-    def set_idata(self, arg0: IntVect) -> None: ...
-    @typing.overload
     def set_idata(
         self,
         arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(0)],
     ) -> None: ...
     @typing.overload
     def set_rdata(self, arg0: int, arg1: float) -> None: ...
-    @typing.overload
-    def set_rdata(self, arg0: RealVect) -> None: ...
     @typing.overload
     def set_rdata(
         self,
