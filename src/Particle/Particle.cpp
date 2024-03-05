@@ -212,16 +212,6 @@ void make_Particle(py::module &m)
                 }
             }
         )
-        .def("set_rdata", [](ParticleType &p, const RealVect & vals) {
-                if constexpr (T_NReal > 0) {
-                    for (int ii=0; ii < T_NReal; ii++) {
-                        p.m_rdata[ii] = vals[ii];
-                    }
-                } else {
-                    amrex::ignore_unused(vals);
-                }
-            }
-        )
         .def("set_rdata", [](ParticleType &p, const std::array<Real, T_NReal>& vals) {
                 if constexpr (T_NReal > 0) {
                     for (int ii=0; ii < T_NReal; ii++) {
@@ -265,16 +255,6 @@ void make_Particle(py::module &m)
                     p.m_idata[index] = val;
                 } else {
                     amrex::ignore_unused(index, val);
-                }
-            }
-        )
-        .def("set_idata", [](ParticleType &p, const IntVect & vals) {
-                if constexpr (T_NInt > 0) {
-                    for (int ii=0; ii < T_NInt; ii++) {
-                        p.m_idata[ii] = vals[ii];
-                    }
-                } else {
-                    amrex::ignore_unused(vals);
                 }
             }
         )
