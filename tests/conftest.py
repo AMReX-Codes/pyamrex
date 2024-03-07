@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import itertools
-import os
+from pathlib import Path
 
 import pytest
 
@@ -21,7 +21,7 @@ if amr.Config.have_mpi:
     from mpi4py import MPI  # noqa
 
 # base path for input files
-basepath = os.getcwd()
+basepath = Path(__file__).parent
 
 
 @pytest.fixture(autouse=True, scope="function")
