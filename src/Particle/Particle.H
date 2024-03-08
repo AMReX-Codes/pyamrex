@@ -3,6 +3,8 @@
  * Authors: Ryan Sandberg
  * License: BSD-3-Clause-LBNL
  */
+#pragma once
+
 #include "pyAMReX.H"
 
 #include <AMReX_Config.H>
@@ -16,25 +18,11 @@
 #include <string>
 #include <sstream>
 #include <stdexcept>
+#include <unordered_set>
 #include <utility>
 #include <cmath>
 #include <regex>
 
-
-struct PIdx
-{
-    enum RealValues { // Particle Attributes for sample particle struct-of-arrays
-          w = 0,
-          vx, vy, vz,
-          Ex, Ey, Ez,
-          nRealAttribs
-    };
-
-    enum IntValues {
-        nIntAttribs
-    };
-
-};
 
 namespace
 {
@@ -50,6 +38,17 @@ namespace
 template <int T_NReal, int T_NInt=0>
 void make_Particle(py::module &m)
 {
+    // For legacy AoS + SoA particles, we register a particle and superparticle.
+    // The latter adds the SoA attributes. Avoid to double-register those types.
+    /*
+    static std::unordered_set<std::array<int, 2>> registered;
+    std::array<int, 2> const this_p = {T_NReal, T_NInt}
+    if (auto search = registered.find(this_p); search != registered.end()) {
+        return;
+    }
+    registered.insert(this_p);
+    */
+
     using namespace amrex;
 
     using ParticleType = Particle<T_NReal, T_NInt>;
@@ -280,35 +279,4 @@ void make_Particle(py::module &m)
         .def_property("z", [](ParticleType &p){ return p.pos(2);}, [](ParticleType &p, Real val){ p.m_pos[2] = val; })
 #endif
     ;
-}
-
-
-
-void init_Particle(py::module& m) {
-
-    // TODO: we might need to move all or most of the defines in here into a
-    //       test/example submodule, so they do not collide with downstream projects
-    py::class_<PIdx> pidx(m, "PIdx");
-    py::enum_<PIdx::RealValues>(pidx, "RealValues")
-        .value("w", PIdx::RealValues::w)
-        .value("vx", PIdx::RealValues::vx)
-        .value("vy", PIdx::RealValues::vy)
-        .value("vz", PIdx::RealValues::vz)
-        .value("Ex", PIdx::RealValues::Ex)
-        .value("Ey", PIdx::RealValues::Ey)
-        .value("Ez", PIdx::RealValues::Ez)
-    ;
-    py::enum_<PIdx::IntValues>(pidx, "IntValues")
-    ;
-    make_Particle< PIdx::nRealAttribs, PIdx::nIntAttribs > (m);
-    make_Particle< 0, 0 > (m);
-    make_Particle< 1, 1 > (m);
-    make_Particle< 2, 1 > (m);
-    make_Particle< 3, 2 > (m);
-    make_Particle< 4, 0 > (m);  // HiPACE++ 22.07
-    make_Particle< 5, 0 > (m);  // ImpactX 22.07
-    make_Particle< 6, 0 > (m);  // WarpX 24.03+
-    //make_Particle< 7, 0 > (m);  // WarpX 24.03+
-    make_Particle< 8, 0 > (m);  // ImpactX 24.03+
-    make_Particle< 37, 1> (m);  // HiPACE++ 22.07
 }
