@@ -234,7 +234,7 @@ jobs:
             -DAMReX_CUDA_ARCH=8.0       \
             -DAMReX_CUDA_ERROR_CROSS_EXECUTION_SPACE_CALL=ON \
             -DAMReX_CUDA_ERROR_CAPTURE_THIS=ON
-        cmake --build build --target pip_install -j 3
+        cmake --build build --target pip_install -j 2
 
         ccache -s
         du -hs ~/.cache/ccache
