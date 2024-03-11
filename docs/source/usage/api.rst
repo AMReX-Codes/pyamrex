@@ -218,19 +218,19 @@ Additional runtime attributes (Real or Int) are always in SoA memory layout.
 
 ``amrex::ParticleTile<T_ParticleType, NArrayReal, NArrayInt, Allocator>`` is implemented for both legacy (AoS+SoA) and pure SoA particle types, many number of Real and Int arguments, and allocators, e.g.,
 
-.. autoclass:: amrex.space3d.ParticleTile_pureSoA_0_0_8_0_default
+.. autoclass:: amrex.space3d.ParticleTile_pureSoA_8_0_default
    :members:
    :undoc-members:
 
 ``amrex::ParticleTileData<T_ParticleType, NArrayReal>`` is implemented for both legacy (AoS+SoA) and pure SoA particle types, many number of Real and Int arguments, e.g.,
 
-.. autoclass:: amrex.space3d.ParticleTileData_pureSoA_0_0_8_0
+.. autoclass:: amrex.space3d.ParticleTileData_pureSoA_8_0
    :members:
    :undoc-members:
 
 ``amrex::ParticleContainer_impl<ParticleType, T_NArrayReal, T_NArrayInt, Allocator>`` is implemented for both legacy (AoS+SoA) and pure SoA particle types, many number of Real and Int arguments, and allocators, e.g.,
 
-.. autoclass:: amrex.space3d.ParticleContainer_1_1_2_1_default
+.. autoclass:: amrex.space3d.ParticleContainer_2_1_3_1_default
    :members:
    :undoc-members:
 
@@ -246,7 +246,7 @@ Likewise for other classes accessible and usable on particle containers:
 
 .. autoclass:: amrex.space3d.ParConstIter_pureSoA_8_0_default
 
-.. autoclass:: amrex.space3d.ParticleInitType_1_1_2_1
+.. autoclass:: amrex.space3d.ParticleInitType_2_1_3_1
    :members:
    :undoc-members:
 
@@ -262,12 +262,12 @@ This is for the legacy, AoS + SoA particle containers only:
 
 ``amrex::ArrayOfStructs<T_ParticleType, Allocator>`` is implemented for many numbers of extra Real and Int arguments, and allocators, e.g.,
 
-.. autoclass:: amrex.space3d.ArrayOfStructs_0_0_default
+.. autoclass:: amrex.space3d.ArrayOfStructs_2_1_default
    :members:
    :undoc-members:
 
 ``amrex::Particle<T_NReal, T_NInt>`` is implemented for many numbers of extra Real and Int arguments, e.g.,
 
-.. autoclass:: amrex.space3d.Particle_0_0
+.. autoclass:: amrex.space3d.Particle_2_1
    :members:
    :undoc-members:
