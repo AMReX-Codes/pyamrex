@@ -11,39 +11,64 @@ import amrex.space3d as amr
 def test_mfab_numpy(mfab):
     """Used in docs/source/usage/compute.rst"""
 
-    # Manual: Compute Mfab START
-    # finest active MR level, get from a simulation's AmrMesh object, e.g.:
+    class Config:
+        have_gpu = False
+
+    # Manual: Compute Mfab Detailed START
+    # finest active MR level, get from a
+    # simulation's AmrMesh object, e.g.:
     # finest_level = sim.finest_level
     finest_level = 0  # no MR
 
-    # iterate over every mesh-refinement levels
+    # iterate over mesh-refinement levels
     for lev in range(finest_level + 1):
-        # get an existing MultiFab, e.g., from a simulation:
-        # mfab = sim.get_field(lev=lev)  # code-specific getter function
+        # get an existing MultiFab, e.g.,
+        # from a simulation:
+        # mfab = sim.get_field(lev=lev)
+        # Config = sim.extension.Config
 
         # grow (aka guard/ghost/halo) regions
         ngv = mfab.n_grow_vect
 
         # get every local block of the field
         for mfi in mfab:
-            # global index space box, including guards
+            # global index box w/ guards
             bx = mfi.tilebox().grow(ngv)
-            print(bx)  # note: global index space of this block
+            print(bx)
 
-            # numpy representation: non-copying view, including the
-            # guard/ghost region
-            field_np = mfab.array(mfi).to_numpy()
+            # numpy representation: non-
+            # copying view, w/ guard/ghost
+            field = (
+                mfab.array(mfi).to_cupy()
+                if Config.have_gpu
+                else mfab.array(mfi).to_numpy()
+            )
 
-            # notes on indexing in field_np:
+            # notes on indexing in field:
             # - numpy uses locally zero-based indexing
             # - layout is F_CONTIGUOUS by default, just like AMReX
 
-            # notes:
-            # Only the next lines are the "HOT LOOP" of the computation.
-            # For efficiency, use numpy array operation for speed on CPUs.
-            # For GPUs use .to_cupy() above and compute with cupy or numba.
-            field_np[()] = 42.0
-    # Manual: Compute Mfab END
+            field[()] = 42.0
+    # Manual: Compute Mfab Detailed END
+
+    # Manual: Compute Mfab Simple START
+    # finest active MR level, get from a
+    # simulation's AmrMesh object, e.g.:
+    # finest_level = sim.finest_level
+    finest_level = 0  # no MR
+
+    # iterate over mesh-refinement levels
+    for lev in range(finest_level + 1):
+        # get an existing MultiFab, e.g.,
+        # from a simulation:
+        # mfab = sim.get_field(lev=lev)
+        # Config = sim.extension.Config
+
+        field_list = mfab.to_cupy() if Config.have_gpu else mfab.to_numpy()
+
+        for field in field_list:
+            field[()] = 42.0
+    # Manual: Compute Mfab Simple END
 
 
 def test_mfab_loop(mfab):
