@@ -74,12 +74,6 @@ __all__ = [
     "Array4_ulonglong_const",
     "Array4_ushort",
     "Array4_ushort_const",
-    "ArrayOfStructs_0_0_arena",
-    "ArrayOfStructs_0_0_default",
-    "ArrayOfStructs_0_0_pinned",
-    "ArrayOfStructs_1_1_arena",
-    "ArrayOfStructs_1_1_default",
-    "ArrayOfStructs_1_1_pinned",
     "ArrayOfStructs_2_1_arena",
     "ArrayOfStructs_2_1_default",
     "ArrayOfStructs_2_1_pinned",
@@ -101,7 +95,6 @@ __all__ = [
     "MFInfo",
     "MFIter",
     "MultiFab",
-    "PIdx",
     "PODVector_int_arena",
     "PODVector_int_pinned",
     "PODVector_int_std",
@@ -111,36 +104,48 @@ __all__ = [
     "PODVector_uint64_arena",
     "PODVector_uint64_pinned",
     "PODVector_uint64_std",
-    "ParConstIterBase_1_1_2_1_arena",
-    "ParConstIterBase_1_1_2_1_default",
-    "ParConstIterBase_1_1_2_1_pinned",
+    "ParConstIterBase_2_1_3_1_arena",
+    "ParConstIterBase_2_1_3_1_default",
+    "ParConstIterBase_2_1_3_1_pinned",
+    "ParConstIterBase_pureSoA_1_0_arena",
+    "ParConstIterBase_pureSoA_1_0_default",
+    "ParConstIterBase_pureSoA_1_0_pinned",
     "ParConstIterBase_pureSoA_5_0_arena",
     "ParConstIterBase_pureSoA_5_0_default",
     "ParConstIterBase_pureSoA_5_0_pinned",
     "ParConstIterBase_pureSoA_8_0_arena",
     "ParConstIterBase_pureSoA_8_0_default",
     "ParConstIterBase_pureSoA_8_0_pinned",
-    "ParConstIter_1_1_2_1_arena",
-    "ParConstIter_1_1_2_1_default",
-    "ParConstIter_1_1_2_1_pinned",
+    "ParConstIter_2_1_3_1_arena",
+    "ParConstIter_2_1_3_1_default",
+    "ParConstIter_2_1_3_1_pinned",
+    "ParConstIter_pureSoA_1_0_arena",
+    "ParConstIter_pureSoA_1_0_default",
+    "ParConstIter_pureSoA_1_0_pinned",
     "ParConstIter_pureSoA_5_0_arena",
     "ParConstIter_pureSoA_5_0_default",
     "ParConstIter_pureSoA_5_0_pinned",
     "ParConstIter_pureSoA_8_0_arena",
     "ParConstIter_pureSoA_8_0_default",
     "ParConstIter_pureSoA_8_0_pinned",
-    "ParIterBase_1_1_2_1_arena",
-    "ParIterBase_1_1_2_1_default",
-    "ParIterBase_1_1_2_1_pinned",
+    "ParIterBase_2_1_3_1_arena",
+    "ParIterBase_2_1_3_1_default",
+    "ParIterBase_2_1_3_1_pinned",
+    "ParIterBase_pureSoA_1_0_arena",
+    "ParIterBase_pureSoA_1_0_default",
+    "ParIterBase_pureSoA_1_0_pinned",
     "ParIterBase_pureSoA_5_0_arena",
     "ParIterBase_pureSoA_5_0_default",
     "ParIterBase_pureSoA_5_0_pinned",
     "ParIterBase_pureSoA_8_0_arena",
     "ParIterBase_pureSoA_8_0_default",
     "ParIterBase_pureSoA_8_0_pinned",
-    "ParIter_1_1_2_1_arena",
-    "ParIter_1_1_2_1_default",
-    "ParIter_1_1_2_1_pinned",
+    "ParIter_2_1_3_1_arena",
+    "ParIter_2_1_3_1_default",
+    "ParIter_2_1_3_1_pinned",
+    "ParIter_pureSoA_1_0_arena",
+    "ParIter_pureSoA_1_0_default",
+    "ParIter_pureSoA_1_0_pinned",
     "ParIter_pureSoA_5_0_arena",
     "ParIter_pureSoA_5_0_default",
     "ParIter_pureSoA_5_0_pinned",
@@ -149,70 +154,55 @@ __all__ = [
     "ParIter_pureSoA_8_0_pinned",
     "ParallelDescriptor",
     "ParmParse",
-    "ParticleContainer_1_1_2_1_arena",
-    "ParticleContainer_1_1_2_1_default",
-    "ParticleContainer_1_1_2_1_pinned",
+    "ParticleContainer_2_1_3_1_arena",
+    "ParticleContainer_2_1_3_1_default",
+    "ParticleContainer_2_1_3_1_pinned",
+    "ParticleContainer_pureSoA_1_0_arena",
+    "ParticleContainer_pureSoA_1_0_default",
+    "ParticleContainer_pureSoA_1_0_pinned",
     "ParticleContainer_pureSoA_5_0_arena",
     "ParticleContainer_pureSoA_5_0_default",
     "ParticleContainer_pureSoA_5_0_pinned",
     "ParticleContainer_pureSoA_8_0_arena",
     "ParticleContainer_pureSoA_8_0_default",
     "ParticleContainer_pureSoA_8_0_pinned",
-    "ParticleInitType_1_1_2_1",
+    "ParticleInitType_2_1_3_1",
+    "ParticleInitType_pureSoA_1_0",
     "ParticleInitType_pureSoA_5_0",
     "ParticleInitType_pureSoA_8_0",
-    "ParticleTileData_0_0_37_1",
-    "ParticleTileData_0_0_4_0",
-    "ParticleTileData_0_0_5_0",
-    "ParticleTileData_1_1_2_1",
-    "ParticleTileData_pureSoA_0_0_5_0",
-    "ParticleTileData_pureSoA_0_0_8_0",
-    "ParticleTile_0_0_37_1_arena",
-    "ParticleTile_0_0_37_1_default",
-    "ParticleTile_0_0_37_1_pinned",
-    "ParticleTile_0_0_4_0_arena",
-    "ParticleTile_0_0_4_0_default",
-    "ParticleTile_0_0_4_0_pinned",
-    "ParticleTile_0_0_5_0_arena",
-    "ParticleTile_0_0_5_0_default",
-    "ParticleTile_0_0_5_0_pinned",
-    "ParticleTile_1_1_2_1_arena",
-    "ParticleTile_1_1_2_1_default",
-    "ParticleTile_1_1_2_1_pinned",
-    "ParticleTile_pureSoA_0_0_5_0_arena",
-    "ParticleTile_pureSoA_0_0_5_0_default",
-    "ParticleTile_pureSoA_0_0_5_0_pinned",
-    "ParticleTile_pureSoA_0_0_8_0_arena",
-    "ParticleTile_pureSoA_0_0_8_0_default",
-    "ParticleTile_pureSoA_0_0_8_0_pinned",
-    "Particle_0_0",
-    "Particle_1_1",
+    "ParticleTileData_2_1_3_1",
+    "ParticleTileData_pureSoA_1_0",
+    "ParticleTileData_pureSoA_5_0",
+    "ParticleTileData_pureSoA_8_0",
+    "ParticleTile_2_1_3_1_arena",
+    "ParticleTile_2_1_3_1_default",
+    "ParticleTile_2_1_3_1_pinned",
+    "ParticleTile_pureSoA_1_0_arena",
+    "ParticleTile_pureSoA_1_0_default",
+    "ParticleTile_pureSoA_1_0_pinned",
+    "ParticleTile_pureSoA_5_0_arena",
+    "ParticleTile_pureSoA_5_0_default",
+    "ParticleTile_pureSoA_5_0_pinned",
+    "ParticleTile_pureSoA_8_0_arena",
+    "ParticleTile_pureSoA_8_0_default",
+    "ParticleTile_pureSoA_8_0_pinned",
+    "Particle_1_0",
     "Particle_2_1",
-    "Particle_37_1",
-    "Particle_3_2",
-    "Particle_4_0",
     "Particle_5_0",
-    "Particle_6_0",
-    "Particle_7_0",
+    "Particle_5_2",
     "Particle_8_0",
     "Periodicity",
     "RealBox",
     "RealVect",
-    "StructOfArrays_2_1_arena",
-    "StructOfArrays_2_1_default",
-    "StructOfArrays_2_1_pinned",
-    "StructOfArrays_37_1_arena",
-    "StructOfArrays_37_1_default",
-    "StructOfArrays_37_1_pinned",
-    "StructOfArrays_4_0_arena",
-    "StructOfArrays_4_0_default",
-    "StructOfArrays_4_0_pinned",
-    "StructOfArrays_5_0_arena",
-    "StructOfArrays_5_0_default",
+    "StructOfArrays_1_0_idcpu_arena",
+    "StructOfArrays_1_0_idcpu_default",
+    "StructOfArrays_1_0_idcpu_pinned",
+    "StructOfArrays_3_1_arena",
+    "StructOfArrays_3_1_default",
+    "StructOfArrays_3_1_pinned",
     "StructOfArrays_5_0_idcpu_arena",
     "StructOfArrays_5_0_idcpu_default",
     "StructOfArrays_5_0_idcpu_pinned",
-    "StructOfArrays_5_0_pinned",
     "StructOfArrays_8_0_idcpu_arena",
     "StructOfArrays_8_0_idcpu_default",
     "StructOfArrays_8_0_idcpu_pinned",
@@ -3061,456 +3051,6 @@ class Array4_ushort_const:
     @property
     def size(self) -> int: ...
 
-class ArrayOfStructs_0_0_arena:
-    @staticmethod
-    def test_sizes() -> None: ...
-    def __getitem__(self, arg0: int) -> Particle_0_0: ...
-    def __init__(self) -> None: ...
-    def __setitem__(self, arg0: int, arg1: Particle_0_0) -> None: ...
-    def back(self) -> Particle_0_0:
-        """
-        get back member.  Problem!!!!! this is perfo
-        """
-
-    @typing.overload
-    def empty(self) -> bool: ...
-    @typing.overload
-    def empty(self) -> bool: ...
-    def getNumNeighbors(self) -> int: ...
-    def numNeighborParticles(self) -> int: ...
-    def numParticles(self) -> int: ...
-    def numRealParticles(self) -> int: ...
-    def numTotalParticles(self) -> int: ...
-    def pop_back(self) -> None: ...
-    def push_back(self, arg0: Particle_0_0) -> None: ...
-    def setNumNeighbors(self, arg0: int) -> None: ...
-    def size(self) -> int: ...
-    def to_cupy(self, copy=False):
-        """
-
-        Provide Cupy views into a ArrayOfStructs.
-
-        Parameters
-        ----------
-        self : amrex.ArrayOfStructs_*
-            An ArrayOfStructs class in pyAMReX
-        copy : bool, optional
-            Copy the data if true, otherwise create a view (default).
-
-        Returns
-        -------
-        namedtuple
-            A tuple with real and int components that are each lists
-            of 1D numpy arrays.
-
-        Raises
-        ------
-        ImportError
-            Raises an exception if cupy is not installed
-
-        """
-
-    def to_host(self) -> ArrayOfStructs_0_0_pinned: ...
-    def to_numpy(self, copy=False):
-        """
-
-        Provide Numpy views into a ArrayOfStructs.
-
-        Parameters
-        ----------
-        self : amrex.ArrayOfStructs_*
-            An ArrayOfStructs class in pyAMReX
-        copy : bool, optional
-            Copy the data if true, otherwise create a view (default).
-
-        Returns
-        -------
-        namedtuple
-            A tuple with real and int components that are each lists
-            of 1D numpy arrays.
-
-        """
-
-    @property
-    def __array_interface__(self) -> dict: ...
-    @property
-    def __cuda_array_interface__(self) -> dict: ...
-
-class ArrayOfStructs_0_0_default:
-    @staticmethod
-    def test_sizes() -> None: ...
-    def __getitem__(self, arg0: int) -> Particle_0_0: ...
-    def __init__(self) -> None: ...
-    def __setitem__(self, arg0: int, arg1: Particle_0_0) -> None: ...
-    def back(self) -> Particle_0_0:
-        """
-        get back member.  Problem!!!!! this is perfo
-        """
-
-    @typing.overload
-    def empty(self) -> bool: ...
-    @typing.overload
-    def empty(self) -> bool: ...
-    def getNumNeighbors(self) -> int: ...
-    def numNeighborParticles(self) -> int: ...
-    def numParticles(self) -> int: ...
-    def numRealParticles(self) -> int: ...
-    def numTotalParticles(self) -> int: ...
-    def pop_back(self) -> None: ...
-    def push_back(self, arg0: Particle_0_0) -> None: ...
-    def setNumNeighbors(self, arg0: int) -> None: ...
-    def size(self) -> int: ...
-    def to_cupy(self, copy=False):
-        """
-
-        Provide Cupy views into a ArrayOfStructs.
-
-        Parameters
-        ----------
-        self : amrex.ArrayOfStructs_*
-            An ArrayOfStructs class in pyAMReX
-        copy : bool, optional
-            Copy the data if true, otherwise create a view (default).
-
-        Returns
-        -------
-        namedtuple
-            A tuple with real and int components that are each lists
-            of 1D numpy arrays.
-
-        Raises
-        ------
-        ImportError
-            Raises an exception if cupy is not installed
-
-        """
-
-    def to_host(self) -> ArrayOfStructs_0_0_pinned: ...
-    def to_numpy(self, copy=False):
-        """
-
-        Provide Numpy views into a ArrayOfStructs.
-
-        Parameters
-        ----------
-        self : amrex.ArrayOfStructs_*
-            An ArrayOfStructs class in pyAMReX
-        copy : bool, optional
-            Copy the data if true, otherwise create a view (default).
-
-        Returns
-        -------
-        namedtuple
-            A tuple with real and int components that are each lists
-            of 1D numpy arrays.
-
-        """
-
-    @property
-    def __array_interface__(self) -> dict: ...
-    @property
-    def __cuda_array_interface__(self) -> dict: ...
-
-class ArrayOfStructs_0_0_pinned:
-    @staticmethod
-    def test_sizes() -> None: ...
-    def __getitem__(self, arg0: int) -> Particle_0_0: ...
-    def __init__(self) -> None: ...
-    def __setitem__(self, arg0: int, arg1: Particle_0_0) -> None: ...
-    def back(self) -> Particle_0_0:
-        """
-        get back member.  Problem!!!!! this is perfo
-        """
-
-    @typing.overload
-    def empty(self) -> bool: ...
-    @typing.overload
-    def empty(self) -> bool: ...
-    def getNumNeighbors(self) -> int: ...
-    def numNeighborParticles(self) -> int: ...
-    def numParticles(self) -> int: ...
-    def numRealParticles(self) -> int: ...
-    def numTotalParticles(self) -> int: ...
-    def pop_back(self) -> None: ...
-    def push_back(self, arg0: Particle_0_0) -> None: ...
-    def setNumNeighbors(self, arg0: int) -> None: ...
-    def size(self) -> int: ...
-    def to_cupy(self, copy=False):
-        """
-
-        Provide Cupy views into a ArrayOfStructs.
-
-        Parameters
-        ----------
-        self : amrex.ArrayOfStructs_*
-            An ArrayOfStructs class in pyAMReX
-        copy : bool, optional
-            Copy the data if true, otherwise create a view (default).
-
-        Returns
-        -------
-        namedtuple
-            A tuple with real and int components that are each lists
-            of 1D numpy arrays.
-
-        Raises
-        ------
-        ImportError
-            Raises an exception if cupy is not installed
-
-        """
-
-    def to_host(self) -> ArrayOfStructs_0_0_pinned: ...
-    def to_numpy(self, copy=False):
-        """
-
-        Provide Numpy views into a ArrayOfStructs.
-
-        Parameters
-        ----------
-        self : amrex.ArrayOfStructs_*
-            An ArrayOfStructs class in pyAMReX
-        copy : bool, optional
-            Copy the data if true, otherwise create a view (default).
-
-        Returns
-        -------
-        namedtuple
-            A tuple with real and int components that are each lists
-            of 1D numpy arrays.
-
-        """
-
-    @property
-    def __array_interface__(self) -> dict: ...
-    @property
-    def __cuda_array_interface__(self) -> dict: ...
-
-class ArrayOfStructs_1_1_arena:
-    @staticmethod
-    def test_sizes() -> None: ...
-    def __getitem__(self, arg0: int) -> Particle_1_1: ...
-    def __init__(self) -> None: ...
-    def __setitem__(self, arg0: int, arg1: Particle_1_1) -> None: ...
-    def back(self) -> Particle_1_1:
-        """
-        get back member.  Problem!!!!! this is perfo
-        """
-
-    @typing.overload
-    def empty(self) -> bool: ...
-    @typing.overload
-    def empty(self) -> bool: ...
-    def getNumNeighbors(self) -> int: ...
-    def numNeighborParticles(self) -> int: ...
-    def numParticles(self) -> int: ...
-    def numRealParticles(self) -> int: ...
-    def numTotalParticles(self) -> int: ...
-    def pop_back(self) -> None: ...
-    def push_back(self, arg0: Particle_1_1) -> None: ...
-    def setNumNeighbors(self, arg0: int) -> None: ...
-    def size(self) -> int: ...
-    def to_cupy(self, copy=False):
-        """
-
-        Provide Cupy views into a ArrayOfStructs.
-
-        Parameters
-        ----------
-        self : amrex.ArrayOfStructs_*
-            An ArrayOfStructs class in pyAMReX
-        copy : bool, optional
-            Copy the data if true, otherwise create a view (default).
-
-        Returns
-        -------
-        namedtuple
-            A tuple with real and int components that are each lists
-            of 1D numpy arrays.
-
-        Raises
-        ------
-        ImportError
-            Raises an exception if cupy is not installed
-
-        """
-
-    def to_host(self) -> ArrayOfStructs_1_1_pinned: ...
-    def to_numpy(self, copy=False):
-        """
-
-        Provide Numpy views into a ArrayOfStructs.
-
-        Parameters
-        ----------
-        self : amrex.ArrayOfStructs_*
-            An ArrayOfStructs class in pyAMReX
-        copy : bool, optional
-            Copy the data if true, otherwise create a view (default).
-
-        Returns
-        -------
-        namedtuple
-            A tuple with real and int components that are each lists
-            of 1D numpy arrays.
-
-        """
-
-    @property
-    def __array_interface__(self) -> dict: ...
-    @property
-    def __cuda_array_interface__(self) -> dict: ...
-
-class ArrayOfStructs_1_1_default:
-    @staticmethod
-    def test_sizes() -> None: ...
-    def __getitem__(self, arg0: int) -> Particle_1_1: ...
-    def __init__(self) -> None: ...
-    def __setitem__(self, arg0: int, arg1: Particle_1_1) -> None: ...
-    def back(self) -> Particle_1_1:
-        """
-        get back member.  Problem!!!!! this is perfo
-        """
-
-    @typing.overload
-    def empty(self) -> bool: ...
-    @typing.overload
-    def empty(self) -> bool: ...
-    def getNumNeighbors(self) -> int: ...
-    def numNeighborParticles(self) -> int: ...
-    def numParticles(self) -> int: ...
-    def numRealParticles(self) -> int: ...
-    def numTotalParticles(self) -> int: ...
-    def pop_back(self) -> None: ...
-    def push_back(self, arg0: Particle_1_1) -> None: ...
-    def setNumNeighbors(self, arg0: int) -> None: ...
-    def size(self) -> int: ...
-    def to_cupy(self, copy=False):
-        """
-
-        Provide Cupy views into a ArrayOfStructs.
-
-        Parameters
-        ----------
-        self : amrex.ArrayOfStructs_*
-            An ArrayOfStructs class in pyAMReX
-        copy : bool, optional
-            Copy the data if true, otherwise create a view (default).
-
-        Returns
-        -------
-        namedtuple
-            A tuple with real and int components that are each lists
-            of 1D numpy arrays.
-
-        Raises
-        ------
-        ImportError
-            Raises an exception if cupy is not installed
-
-        """
-
-    def to_host(self) -> ArrayOfStructs_1_1_pinned: ...
-    def to_numpy(self, copy=False):
-        """
-
-        Provide Numpy views into a ArrayOfStructs.
-
-        Parameters
-        ----------
-        self : amrex.ArrayOfStructs_*
-            An ArrayOfStructs class in pyAMReX
-        copy : bool, optional
-            Copy the data if true, otherwise create a view (default).
-
-        Returns
-        -------
-        namedtuple
-            A tuple with real and int components that are each lists
-            of 1D numpy arrays.
-
-        """
-
-    @property
-    def __array_interface__(self) -> dict: ...
-    @property
-    def __cuda_array_interface__(self) -> dict: ...
-
-class ArrayOfStructs_1_1_pinned:
-    @staticmethod
-    def test_sizes() -> None: ...
-    def __getitem__(self, arg0: int) -> Particle_1_1: ...
-    def __init__(self) -> None: ...
-    def __setitem__(self, arg0: int, arg1: Particle_1_1) -> None: ...
-    def back(self) -> Particle_1_1:
-        """
-        get back member.  Problem!!!!! this is perfo
-        """
-
-    @typing.overload
-    def empty(self) -> bool: ...
-    @typing.overload
-    def empty(self) -> bool: ...
-    def getNumNeighbors(self) -> int: ...
-    def numNeighborParticles(self) -> int: ...
-    def numParticles(self) -> int: ...
-    def numRealParticles(self) -> int: ...
-    def numTotalParticles(self) -> int: ...
-    def pop_back(self) -> None: ...
-    def push_back(self, arg0: Particle_1_1) -> None: ...
-    def setNumNeighbors(self, arg0: int) -> None: ...
-    def size(self) -> int: ...
-    def to_cupy(self, copy=False):
-        """
-
-        Provide Cupy views into a ArrayOfStructs.
-
-        Parameters
-        ----------
-        self : amrex.ArrayOfStructs_*
-            An ArrayOfStructs class in pyAMReX
-        copy : bool, optional
-            Copy the data if true, otherwise create a view (default).
-
-        Returns
-        -------
-        namedtuple
-            A tuple with real and int components that are each lists
-            of 1D numpy arrays.
-
-        Raises
-        ------
-        ImportError
-            Raises an exception if cupy is not installed
-
-        """
-
-    def to_host(self) -> ArrayOfStructs_1_1_pinned: ...
-    def to_numpy(self, copy=False):
-        """
-
-        Provide Numpy views into a ArrayOfStructs.
-
-        Parameters
-        ----------
-        self : amrex.ArrayOfStructs_*
-            An ArrayOfStructs class in pyAMReX
-        copy : bool, optional
-            Copy the data if true, otherwise create a view (default).
-
-        Returns
-        -------
-        namedtuple
-            A tuple with real and int components that are each lists
-            of 1D numpy arrays.
-
-        """
-
-    @property
-    def __array_interface__(self) -> dict: ...
-    @property
-    def __cuda_array_interface__(self) -> dict: ...
-
 class ArrayOfStructs_2_1_arena:
     @staticmethod
     def test_sizes() -> None: ...
@@ -4995,72 +4535,6 @@ class MultiFab(FabArray_FArrayBox):
     @property
     def n_grow_vect(self) -> IntVect: ...
 
-class PIdx:
-    class IntValues:
-        """
-        Members:
-        """
-
-        __members__: typing.ClassVar[dict] = {}
-        def __eq__(self, other: typing.Any) -> bool: ...
-        def __getstate__(self) -> int: ...
-        def __hash__(self) -> int: ...
-        def __index__(self) -> int: ...
-        def __init__(self, value: int) -> None: ...
-        def __int__(self) -> int: ...
-        def __ne__(self, other: typing.Any) -> bool: ...
-        def __repr__(self) -> str: ...
-        def __setstate__(self, state: int) -> None: ...
-        def __str__(self) -> str: ...
-        @property
-        def name(self) -> str: ...
-        @property
-        def value(self) -> int: ...
-
-    class RealValues:
-        """
-        Members:
-
-          w
-
-          vx
-
-          vy
-
-          vz
-
-          Ex
-
-          Ey
-
-          Ez
-        """
-
-        Ex: typing.ClassVar[PIdx.RealValues]  # value = <RealValues.Ex: 4>
-        Ey: typing.ClassVar[PIdx.RealValues]  # value = <RealValues.Ey: 5>
-        Ez: typing.ClassVar[PIdx.RealValues]  # value = <RealValues.Ez: 6>
-        __members__: typing.ClassVar[
-            dict[str, PIdx.RealValues]
-        ]  # value = {'w': <RealValues.w: 0>, 'vx': <RealValues.vx: 1>, 'vy': <RealValues.vy: 2>, 'vz': <RealValues.vz: 3>, 'Ex': <RealValues.Ex: 4>, 'Ey': <RealValues.Ey: 5>, 'Ez': <RealValues.Ez: 6>}
-        vx: typing.ClassVar[PIdx.RealValues]  # value = <RealValues.vx: 1>
-        vy: typing.ClassVar[PIdx.RealValues]  # value = <RealValues.vy: 2>
-        vz: typing.ClassVar[PIdx.RealValues]  # value = <RealValues.vz: 3>
-        w: typing.ClassVar[PIdx.RealValues]  # value = <RealValues.w: 0>
-        def __eq__(self, other: typing.Any) -> bool: ...
-        def __getstate__(self) -> int: ...
-        def __hash__(self) -> int: ...
-        def __index__(self) -> int: ...
-        def __init__(self, value: int) -> None: ...
-        def __int__(self) -> int: ...
-        def __ne__(self, other: typing.Any) -> bool: ...
-        def __repr__(self) -> str: ...
-        def __setstate__(self, state: int) -> None: ...
-        def __str__(self) -> str: ...
-        @property
-        def name(self) -> str: ...
-        @property
-        def value(self) -> int: ...
-
 class PODVector_int_arena:
     def __getitem__(self, arg0: int) -> int: ...
     @typing.overload
@@ -5709,10 +5183,10 @@ class PODVector_uint64_std:
     @property
     def __cuda_array_interface__(self) -> dict: ...
 
-class ParConstIterBase_1_1_2_1_arena(MFIter):
+class ParConstIterBase_2_1_3_1_arena(MFIter):
     is_soa_particle: typing.ClassVar[bool] = False
     def __init__(
-        self, particle_container: ParticleContainer_1_1_2_1_arena, level: int
+        self, particle_container: ParticleContainer_2_1_3_1_arena, level: int
     ) -> None: ...
     def __iter__(self): ...
     def __next__(self):
@@ -5735,11 +5209,11 @@ class ParConstIterBase_1_1_2_1_arena(MFIter):
         """
 
     def _incr(self) -> None: ...
-    def aos(self) -> ArrayOfStructs_1_1_arena: ...
+    def aos(self) -> ArrayOfStructs_2_1_arena: ...
     def finalize(self) -> None: ...
     def geom(self, level: int) -> Geometry: ...
-    def particle_tile(self) -> ParticleTile_1_1_2_1_arena: ...
-    def soa(self) -> StructOfArrays_2_1_arena: ...
+    def particle_tile(self) -> ParticleTile_2_1_3_1_arena: ...
+    def soa(self) -> StructOfArrays_3_1_arena: ...
     @property
     def is_valid(self) -> bool: ...
     @property
@@ -5758,10 +5232,10 @@ class ParConstIterBase_1_1_2_1_arena(MFIter):
         the number of particles on this tile
         """
 
-class ParConstIterBase_1_1_2_1_default(MFIter):
+class ParConstIterBase_2_1_3_1_default(MFIter):
     is_soa_particle: typing.ClassVar[bool] = False
     def __init__(
-        self, particle_container: ParticleContainer_1_1_2_1_default, level: int
+        self, particle_container: ParticleContainer_2_1_3_1_default, level: int
     ) -> None: ...
     def __iter__(self): ...
     def __next__(self):
@@ -5784,11 +5258,11 @@ class ParConstIterBase_1_1_2_1_default(MFIter):
         """
 
     def _incr(self) -> None: ...
-    def aos(self) -> ArrayOfStructs_1_1_default: ...
+    def aos(self) -> ArrayOfStructs_2_1_default: ...
     def finalize(self) -> None: ...
     def geom(self, level: int) -> Geometry: ...
-    def particle_tile(self) -> ParticleTile_1_1_2_1_default: ...
-    def soa(self) -> StructOfArrays_2_1_default: ...
+    def particle_tile(self) -> ParticleTile_2_1_3_1_default: ...
+    def soa(self) -> StructOfArrays_3_1_default: ...
     @property
     def is_valid(self) -> bool: ...
     @property
@@ -5807,10 +5281,10 @@ class ParConstIterBase_1_1_2_1_default(MFIter):
         the number of particles on this tile
         """
 
-class ParConstIterBase_1_1_2_1_pinned(MFIter):
+class ParConstIterBase_2_1_3_1_pinned(MFIter):
     is_soa_particle: typing.ClassVar[bool] = False
     def __init__(
-        self, particle_container: ParticleContainer_1_1_2_1_pinned, level: int
+        self, particle_container: ParticleContainer_2_1_3_1_pinned, level: int
     ) -> None: ...
     def __iter__(self): ...
     def __next__(self):
@@ -5833,11 +5307,155 @@ class ParConstIterBase_1_1_2_1_pinned(MFIter):
         """
 
     def _incr(self) -> None: ...
-    def aos(self) -> ArrayOfStructs_1_1_pinned: ...
+    def aos(self) -> ArrayOfStructs_2_1_pinned: ...
     def finalize(self) -> None: ...
     def geom(self, level: int) -> Geometry: ...
-    def particle_tile(self) -> ParticleTile_1_1_2_1_pinned: ...
-    def soa(self) -> StructOfArrays_2_1_pinned: ...
+    def particle_tile(self) -> ParticleTile_2_1_3_1_pinned: ...
+    def soa(self) -> StructOfArrays_3_1_pinned: ...
+    @property
+    def is_valid(self) -> bool: ...
+    @property
+    def level(self) -> int: ...
+    @property
+    def num_neighbor_particles(self) -> int: ...
+    @property
+    def num_particles(self) -> int: ...
+    @property
+    def num_real_particles(self) -> int: ...
+    @property
+    def pair_index(self) -> tuple[int, int]: ...
+    @property
+    def size(self) -> int:
+        """
+        the number of particles on this tile
+        """
+
+class ParConstIterBase_pureSoA_1_0_arena(MFIter):
+    is_soa_particle: typing.ClassVar[bool] = True
+    def __init__(
+        self, particle_container: ParticleContainer_pureSoA_1_0_arena, level: int
+    ) -> None: ...
+    def __iter__(self): ...
+    def __next__(self):
+        """
+        This is a helper function for the C++ equivalent of void operator++()
+
+            In Python, iterators always are called with __next__, even for the
+            first access. This means we need to handle the first iterator element
+            explicitly, otherwise we will jump directly to the 2nd element. We do
+            this the same way as pybind11 does this, via a little state:
+              https://github.com/AMReX-Codes/pyamrex/pull/50
+              https://github.com/AMReX-Codes/pyamrex/pull/262
+              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+
+            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+
+            self: the current iterator
+            returns: the updated iterator
+
+        """
+
+    def _incr(self) -> None: ...
+    def finalize(self) -> None: ...
+    def geom(self, level: int) -> Geometry: ...
+    def particle_tile(self) -> ParticleTile_pureSoA_1_0_arena: ...
+    def soa(self) -> StructOfArrays_1_0_idcpu_arena: ...
+    @property
+    def is_valid(self) -> bool: ...
+    @property
+    def level(self) -> int: ...
+    @property
+    def num_neighbor_particles(self) -> int: ...
+    @property
+    def num_particles(self) -> int: ...
+    @property
+    def num_real_particles(self) -> int: ...
+    @property
+    def pair_index(self) -> tuple[int, int]: ...
+    @property
+    def size(self) -> int:
+        """
+        the number of particles on this tile
+        """
+
+class ParConstIterBase_pureSoA_1_0_default(MFIter):
+    is_soa_particle: typing.ClassVar[bool] = True
+    def __init__(
+        self, particle_container: ParticleContainer_pureSoA_1_0_default, level: int
+    ) -> None: ...
+    def __iter__(self): ...
+    def __next__(self):
+        """
+        This is a helper function for the C++ equivalent of void operator++()
+
+            In Python, iterators always are called with __next__, even for the
+            first access. This means we need to handle the first iterator element
+            explicitly, otherwise we will jump directly to the 2nd element. We do
+            this the same way as pybind11 does this, via a little state:
+              https://github.com/AMReX-Codes/pyamrex/pull/50
+              https://github.com/AMReX-Codes/pyamrex/pull/262
+              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+
+            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+
+            self: the current iterator
+            returns: the updated iterator
+
+        """
+
+    def _incr(self) -> None: ...
+    def finalize(self) -> None: ...
+    def geom(self, level: int) -> Geometry: ...
+    def particle_tile(self) -> ParticleTile_pureSoA_1_0_default: ...
+    def soa(self) -> StructOfArrays_1_0_idcpu_default: ...
+    @property
+    def is_valid(self) -> bool: ...
+    @property
+    def level(self) -> int: ...
+    @property
+    def num_neighbor_particles(self) -> int: ...
+    @property
+    def num_particles(self) -> int: ...
+    @property
+    def num_real_particles(self) -> int: ...
+    @property
+    def pair_index(self) -> tuple[int, int]: ...
+    @property
+    def size(self) -> int:
+        """
+        the number of particles on this tile
+        """
+
+class ParConstIterBase_pureSoA_1_0_pinned(MFIter):
+    is_soa_particle: typing.ClassVar[bool] = True
+    def __init__(
+        self, particle_container: ParticleContainer_pureSoA_1_0_pinned, level: int
+    ) -> None: ...
+    def __iter__(self): ...
+    def __next__(self):
+        """
+        This is a helper function for the C++ equivalent of void operator++()
+
+            In Python, iterators always are called with __next__, even for the
+            first access. This means we need to handle the first iterator element
+            explicitly, otherwise we will jump directly to the 2nd element. We do
+            this the same way as pybind11 does this, via a little state:
+              https://github.com/AMReX-Codes/pyamrex/pull/50
+              https://github.com/AMReX-Codes/pyamrex/pull/262
+              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+
+            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+
+            self: the current iterator
+            returns: the updated iterator
+
+        """
+
+    def _incr(self) -> None: ...
+    def finalize(self) -> None: ...
+    def geom(self, level: int) -> Geometry: ...
+    def particle_tile(self) -> ParticleTile_pureSoA_1_0_pinned: ...
+    def soa(self) -> StructOfArrays_1_0_idcpu_pinned: ...
     @property
     def is_valid(self) -> bool: ...
     @property
@@ -5884,7 +5502,7 @@ class ParConstIterBase_pureSoA_5_0_arena(MFIter):
     def _incr(self) -> None: ...
     def finalize(self) -> None: ...
     def geom(self, level: int) -> Geometry: ...
-    def particle_tile(self) -> ParticleTile_pureSoA_0_0_5_0_arena: ...
+    def particle_tile(self) -> ParticleTile_pureSoA_5_0_arena: ...
     def soa(self) -> StructOfArrays_5_0_idcpu_arena: ...
     @property
     def is_valid(self) -> bool: ...
@@ -5932,7 +5550,7 @@ class ParConstIterBase_pureSoA_5_0_default(MFIter):
     def _incr(self) -> None: ...
     def finalize(self) -> None: ...
     def geom(self, level: int) -> Geometry: ...
-    def particle_tile(self) -> ParticleTile_pureSoA_0_0_5_0_default: ...
+    def particle_tile(self) -> ParticleTile_pureSoA_5_0_default: ...
     def soa(self) -> StructOfArrays_5_0_idcpu_default: ...
     @property
     def is_valid(self) -> bool: ...
@@ -5980,7 +5598,7 @@ class ParConstIterBase_pureSoA_5_0_pinned(MFIter):
     def _incr(self) -> None: ...
     def finalize(self) -> None: ...
     def geom(self, level: int) -> Geometry: ...
-    def particle_tile(self) -> ParticleTile_pureSoA_0_0_5_0_pinned: ...
+    def particle_tile(self) -> ParticleTile_pureSoA_5_0_pinned: ...
     def soa(self) -> StructOfArrays_5_0_idcpu_pinned: ...
     @property
     def is_valid(self) -> bool: ...
@@ -6028,7 +5646,7 @@ class ParConstIterBase_pureSoA_8_0_arena(MFIter):
     def _incr(self) -> None: ...
     def finalize(self) -> None: ...
     def geom(self, level: int) -> Geometry: ...
-    def particle_tile(self) -> ParticleTile_pureSoA_0_0_8_0_arena: ...
+    def particle_tile(self) -> ParticleTile_pureSoA_8_0_arena: ...
     def soa(self) -> StructOfArrays_8_0_idcpu_arena: ...
     @property
     def is_valid(self) -> bool: ...
@@ -6076,7 +5694,7 @@ class ParConstIterBase_pureSoA_8_0_default(MFIter):
     def _incr(self) -> None: ...
     def finalize(self) -> None: ...
     def geom(self, level: int) -> Geometry: ...
-    def particle_tile(self) -> ParticleTile_pureSoA_0_0_8_0_default: ...
+    def particle_tile(self) -> ParticleTile_pureSoA_8_0_default: ...
     def soa(self) -> StructOfArrays_8_0_idcpu_default: ...
     @property
     def is_valid(self) -> bool: ...
@@ -6124,7 +5742,7 @@ class ParConstIterBase_pureSoA_8_0_pinned(MFIter):
     def _incr(self) -> None: ...
     def finalize(self) -> None: ...
     def geom(self, level: int) -> Geometry: ...
-    def particle_tile(self) -> ParticleTile_pureSoA_0_0_8_0_pinned: ...
+    def particle_tile(self) -> ParticleTile_pureSoA_8_0_pinned: ...
     def soa(self) -> StructOfArrays_8_0_idcpu_pinned: ...
     @property
     def is_valid(self) -> bool: ...
@@ -6144,10 +5762,10 @@ class ParConstIterBase_pureSoA_8_0_pinned(MFIter):
         the number of particles on this tile
         """
 
-class ParConstIter_1_1_2_1_arena(ParConstIterBase_1_1_2_1_arena):
+class ParConstIter_2_1_3_1_arena(ParConstIterBase_2_1_3_1_arena):
     is_soa_particle: typing.ClassVar[bool] = False
     def __init__(
-        self, particle_container: ParticleContainer_1_1_2_1_arena, level: int
+        self, particle_container: ParticleContainer_2_1_3_1_arena, level: int
     ) -> None: ...
     def __iter__(self): ...
     def __next__(self):
@@ -6171,10 +5789,10 @@ class ParConstIter_1_1_2_1_arena(ParConstIterBase_1_1_2_1_arena):
 
     def __repr__(self) -> str: ...
 
-class ParConstIter_1_1_2_1_default(ParConstIterBase_1_1_2_1_default):
+class ParConstIter_2_1_3_1_default(ParConstIterBase_2_1_3_1_default):
     is_soa_particle: typing.ClassVar[bool] = False
     def __init__(
-        self, particle_container: ParticleContainer_1_1_2_1_default, level: int
+        self, particle_container: ParticleContainer_2_1_3_1_default, level: int
     ) -> None: ...
     def __iter__(self): ...
     def __next__(self):
@@ -6198,10 +5816,91 @@ class ParConstIter_1_1_2_1_default(ParConstIterBase_1_1_2_1_default):
 
     def __repr__(self) -> str: ...
 
-class ParConstIter_1_1_2_1_pinned(ParConstIterBase_1_1_2_1_pinned):
+class ParConstIter_2_1_3_1_pinned(ParConstIterBase_2_1_3_1_pinned):
     is_soa_particle: typing.ClassVar[bool] = False
     def __init__(
-        self, particle_container: ParticleContainer_1_1_2_1_pinned, level: int
+        self, particle_container: ParticleContainer_2_1_3_1_pinned, level: int
+    ) -> None: ...
+    def __iter__(self): ...
+    def __next__(self):
+        """
+        This is a helper function for the C++ equivalent of void operator++()
+
+            In Python, iterators always are called with __next__, even for the
+            first access. This means we need to handle the first iterator element
+            explicitly, otherwise we will jump directly to the 2nd element. We do
+            this the same way as pybind11 does this, via a little state:
+              https://github.com/AMReX-Codes/pyamrex/pull/50
+              https://github.com/AMReX-Codes/pyamrex/pull/262
+              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+
+            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+
+            self: the current iterator
+            returns: the updated iterator
+
+        """
+
+    def __repr__(self) -> str: ...
+
+class ParConstIter_pureSoA_1_0_arena(ParConstIterBase_pureSoA_1_0_arena):
+    is_soa_particle: typing.ClassVar[bool] = True
+    def __init__(
+        self, particle_container: ParticleContainer_pureSoA_1_0_arena, level: int
+    ) -> None: ...
+    def __iter__(self): ...
+    def __next__(self):
+        """
+        This is a helper function for the C++ equivalent of void operator++()
+
+            In Python, iterators always are called with __next__, even for the
+            first access. This means we need to handle the first iterator element
+            explicitly, otherwise we will jump directly to the 2nd element. We do
+            this the same way as pybind11 does this, via a little state:
+              https://github.com/AMReX-Codes/pyamrex/pull/50
+              https://github.com/AMReX-Codes/pyamrex/pull/262
+              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+
+            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+
+            self: the current iterator
+            returns: the updated iterator
+
+        """
+
+    def __repr__(self) -> str: ...
+
+class ParConstIter_pureSoA_1_0_default(ParConstIterBase_pureSoA_1_0_default):
+    is_soa_particle: typing.ClassVar[bool] = True
+    def __init__(
+        self, particle_container: ParticleContainer_pureSoA_1_0_default, level: int
+    ) -> None: ...
+    def __iter__(self): ...
+    def __next__(self):
+        """
+        This is a helper function for the C++ equivalent of void operator++()
+
+            In Python, iterators always are called with __next__, even for the
+            first access. This means we need to handle the first iterator element
+            explicitly, otherwise we will jump directly to the 2nd element. We do
+            this the same way as pybind11 does this, via a little state:
+              https://github.com/AMReX-Codes/pyamrex/pull/50
+              https://github.com/AMReX-Codes/pyamrex/pull/262
+              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+
+            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+
+            self: the current iterator
+            returns: the updated iterator
+
+        """
+
+    def __repr__(self) -> str: ...
+
+class ParConstIter_pureSoA_1_0_pinned(ParConstIterBase_pureSoA_1_0_pinned):
+    is_soa_particle: typing.ClassVar[bool] = True
+    def __init__(
+        self, particle_container: ParticleContainer_pureSoA_1_0_pinned, level: int
     ) -> None: ...
     def __iter__(self): ...
     def __next__(self):
@@ -6387,10 +6086,10 @@ class ParConstIter_pureSoA_8_0_pinned(ParConstIterBase_pureSoA_8_0_pinned):
 
     def __repr__(self) -> str: ...
 
-class ParIterBase_1_1_2_1_arena(MFIter):
+class ParIterBase_2_1_3_1_arena(MFIter):
     is_soa_particle: typing.ClassVar[bool] = False
     def __init__(
-        self, particle_container: ParticleContainer_1_1_2_1_arena, level: int
+        self, particle_container: ParticleContainer_2_1_3_1_arena, level: int
     ) -> None: ...
     def __iter__(self): ...
     def __next__(self):
@@ -6413,11 +6112,11 @@ class ParIterBase_1_1_2_1_arena(MFIter):
         """
 
     def _incr(self) -> None: ...
-    def aos(self) -> ArrayOfStructs_1_1_arena: ...
+    def aos(self) -> ArrayOfStructs_2_1_arena: ...
     def finalize(self) -> None: ...
     def geom(self, level: int) -> Geometry: ...
-    def particle_tile(self) -> ParticleTile_1_1_2_1_arena: ...
-    def soa(self) -> StructOfArrays_2_1_arena: ...
+    def particle_tile(self) -> ParticleTile_2_1_3_1_arena: ...
+    def soa(self) -> StructOfArrays_3_1_arena: ...
     @property
     def is_valid(self) -> bool: ...
     @property
@@ -6436,10 +6135,10 @@ class ParIterBase_1_1_2_1_arena(MFIter):
         the number of particles on this tile
         """
 
-class ParIterBase_1_1_2_1_default(MFIter):
+class ParIterBase_2_1_3_1_default(MFIter):
     is_soa_particle: typing.ClassVar[bool] = False
     def __init__(
-        self, particle_container: ParticleContainer_1_1_2_1_default, level: int
+        self, particle_container: ParticleContainer_2_1_3_1_default, level: int
     ) -> None: ...
     def __iter__(self): ...
     def __next__(self):
@@ -6462,11 +6161,11 @@ class ParIterBase_1_1_2_1_default(MFIter):
         """
 
     def _incr(self) -> None: ...
-    def aos(self) -> ArrayOfStructs_1_1_default: ...
+    def aos(self) -> ArrayOfStructs_2_1_default: ...
     def finalize(self) -> None: ...
     def geom(self, level: int) -> Geometry: ...
-    def particle_tile(self) -> ParticleTile_1_1_2_1_default: ...
-    def soa(self) -> StructOfArrays_2_1_default: ...
+    def particle_tile(self) -> ParticleTile_2_1_3_1_default: ...
+    def soa(self) -> StructOfArrays_3_1_default: ...
     @property
     def is_valid(self) -> bool: ...
     @property
@@ -6485,10 +6184,10 @@ class ParIterBase_1_1_2_1_default(MFIter):
         the number of particles on this tile
         """
 
-class ParIterBase_1_1_2_1_pinned(MFIter):
+class ParIterBase_2_1_3_1_pinned(MFIter):
     is_soa_particle: typing.ClassVar[bool] = False
     def __init__(
-        self, particle_container: ParticleContainer_1_1_2_1_pinned, level: int
+        self, particle_container: ParticleContainer_2_1_3_1_pinned, level: int
     ) -> None: ...
     def __iter__(self): ...
     def __next__(self):
@@ -6511,11 +6210,155 @@ class ParIterBase_1_1_2_1_pinned(MFIter):
         """
 
     def _incr(self) -> None: ...
-    def aos(self) -> ArrayOfStructs_1_1_pinned: ...
+    def aos(self) -> ArrayOfStructs_2_1_pinned: ...
     def finalize(self) -> None: ...
     def geom(self, level: int) -> Geometry: ...
-    def particle_tile(self) -> ParticleTile_1_1_2_1_pinned: ...
-    def soa(self) -> StructOfArrays_2_1_pinned: ...
+    def particle_tile(self) -> ParticleTile_2_1_3_1_pinned: ...
+    def soa(self) -> StructOfArrays_3_1_pinned: ...
+    @property
+    def is_valid(self) -> bool: ...
+    @property
+    def level(self) -> int: ...
+    @property
+    def num_neighbor_particles(self) -> int: ...
+    @property
+    def num_particles(self) -> int: ...
+    @property
+    def num_real_particles(self) -> int: ...
+    @property
+    def pair_index(self) -> tuple[int, int]: ...
+    @property
+    def size(self) -> int:
+        """
+        the number of particles on this tile
+        """
+
+class ParIterBase_pureSoA_1_0_arena(MFIter):
+    is_soa_particle: typing.ClassVar[bool] = True
+    def __init__(
+        self, particle_container: ParticleContainer_pureSoA_1_0_arena, level: int
+    ) -> None: ...
+    def __iter__(self): ...
+    def __next__(self):
+        """
+        This is a helper function for the C++ equivalent of void operator++()
+
+            In Python, iterators always are called with __next__, even for the
+            first access. This means we need to handle the first iterator element
+            explicitly, otherwise we will jump directly to the 2nd element. We do
+            this the same way as pybind11 does this, via a little state:
+              https://github.com/AMReX-Codes/pyamrex/pull/50
+              https://github.com/AMReX-Codes/pyamrex/pull/262
+              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+
+            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+
+            self: the current iterator
+            returns: the updated iterator
+
+        """
+
+    def _incr(self) -> None: ...
+    def finalize(self) -> None: ...
+    def geom(self, level: int) -> Geometry: ...
+    def particle_tile(self) -> ParticleTile_pureSoA_1_0_arena: ...
+    def soa(self) -> StructOfArrays_1_0_idcpu_arena: ...
+    @property
+    def is_valid(self) -> bool: ...
+    @property
+    def level(self) -> int: ...
+    @property
+    def num_neighbor_particles(self) -> int: ...
+    @property
+    def num_particles(self) -> int: ...
+    @property
+    def num_real_particles(self) -> int: ...
+    @property
+    def pair_index(self) -> tuple[int, int]: ...
+    @property
+    def size(self) -> int:
+        """
+        the number of particles on this tile
+        """
+
+class ParIterBase_pureSoA_1_0_default(MFIter):
+    is_soa_particle: typing.ClassVar[bool] = True
+    def __init__(
+        self, particle_container: ParticleContainer_pureSoA_1_0_default, level: int
+    ) -> None: ...
+    def __iter__(self): ...
+    def __next__(self):
+        """
+        This is a helper function for the C++ equivalent of void operator++()
+
+            In Python, iterators always are called with __next__, even for the
+            first access. This means we need to handle the first iterator element
+            explicitly, otherwise we will jump directly to the 2nd element. We do
+            this the same way as pybind11 does this, via a little state:
+              https://github.com/AMReX-Codes/pyamrex/pull/50
+              https://github.com/AMReX-Codes/pyamrex/pull/262
+              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+
+            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+
+            self: the current iterator
+            returns: the updated iterator
+
+        """
+
+    def _incr(self) -> None: ...
+    def finalize(self) -> None: ...
+    def geom(self, level: int) -> Geometry: ...
+    def particle_tile(self) -> ParticleTile_pureSoA_1_0_default: ...
+    def soa(self) -> StructOfArrays_1_0_idcpu_default: ...
+    @property
+    def is_valid(self) -> bool: ...
+    @property
+    def level(self) -> int: ...
+    @property
+    def num_neighbor_particles(self) -> int: ...
+    @property
+    def num_particles(self) -> int: ...
+    @property
+    def num_real_particles(self) -> int: ...
+    @property
+    def pair_index(self) -> tuple[int, int]: ...
+    @property
+    def size(self) -> int:
+        """
+        the number of particles on this tile
+        """
+
+class ParIterBase_pureSoA_1_0_pinned(MFIter):
+    is_soa_particle: typing.ClassVar[bool] = True
+    def __init__(
+        self, particle_container: ParticleContainer_pureSoA_1_0_pinned, level: int
+    ) -> None: ...
+    def __iter__(self): ...
+    def __next__(self):
+        """
+        This is a helper function for the C++ equivalent of void operator++()
+
+            In Python, iterators always are called with __next__, even for the
+            first access. This means we need to handle the first iterator element
+            explicitly, otherwise we will jump directly to the 2nd element. We do
+            this the same way as pybind11 does this, via a little state:
+              https://github.com/AMReX-Codes/pyamrex/pull/50
+              https://github.com/AMReX-Codes/pyamrex/pull/262
+              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+
+            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+
+            self: the current iterator
+            returns: the updated iterator
+
+        """
+
+    def _incr(self) -> None: ...
+    def finalize(self) -> None: ...
+    def geom(self, level: int) -> Geometry: ...
+    def particle_tile(self) -> ParticleTile_pureSoA_1_0_pinned: ...
+    def soa(self) -> StructOfArrays_1_0_idcpu_pinned: ...
     @property
     def is_valid(self) -> bool: ...
     @property
@@ -6562,7 +6405,7 @@ class ParIterBase_pureSoA_5_0_arena(MFIter):
     def _incr(self) -> None: ...
     def finalize(self) -> None: ...
     def geom(self, level: int) -> Geometry: ...
-    def particle_tile(self) -> ParticleTile_pureSoA_0_0_5_0_arena: ...
+    def particle_tile(self) -> ParticleTile_pureSoA_5_0_arena: ...
     def soa(self) -> StructOfArrays_5_0_idcpu_arena: ...
     @property
     def is_valid(self) -> bool: ...
@@ -6610,7 +6453,7 @@ class ParIterBase_pureSoA_5_0_default(MFIter):
     def _incr(self) -> None: ...
     def finalize(self) -> None: ...
     def geom(self, level: int) -> Geometry: ...
-    def particle_tile(self) -> ParticleTile_pureSoA_0_0_5_0_default: ...
+    def particle_tile(self) -> ParticleTile_pureSoA_5_0_default: ...
     def soa(self) -> StructOfArrays_5_0_idcpu_default: ...
     @property
     def is_valid(self) -> bool: ...
@@ -6658,7 +6501,7 @@ class ParIterBase_pureSoA_5_0_pinned(MFIter):
     def _incr(self) -> None: ...
     def finalize(self) -> None: ...
     def geom(self, level: int) -> Geometry: ...
-    def particle_tile(self) -> ParticleTile_pureSoA_0_0_5_0_pinned: ...
+    def particle_tile(self) -> ParticleTile_pureSoA_5_0_pinned: ...
     def soa(self) -> StructOfArrays_5_0_idcpu_pinned: ...
     @property
     def is_valid(self) -> bool: ...
@@ -6706,7 +6549,7 @@ class ParIterBase_pureSoA_8_0_arena(MFIter):
     def _incr(self) -> None: ...
     def finalize(self) -> None: ...
     def geom(self, level: int) -> Geometry: ...
-    def particle_tile(self) -> ParticleTile_pureSoA_0_0_8_0_arena: ...
+    def particle_tile(self) -> ParticleTile_pureSoA_8_0_arena: ...
     def soa(self) -> StructOfArrays_8_0_idcpu_arena: ...
     @property
     def is_valid(self) -> bool: ...
@@ -6754,7 +6597,7 @@ class ParIterBase_pureSoA_8_0_default(MFIter):
     def _incr(self) -> None: ...
     def finalize(self) -> None: ...
     def geom(self, level: int) -> Geometry: ...
-    def particle_tile(self) -> ParticleTile_pureSoA_0_0_8_0_default: ...
+    def particle_tile(self) -> ParticleTile_pureSoA_8_0_default: ...
     def soa(self) -> StructOfArrays_8_0_idcpu_default: ...
     @property
     def is_valid(self) -> bool: ...
@@ -6802,7 +6645,7 @@ class ParIterBase_pureSoA_8_0_pinned(MFIter):
     def _incr(self) -> None: ...
     def finalize(self) -> None: ...
     def geom(self, level: int) -> Geometry: ...
-    def particle_tile(self) -> ParticleTile_pureSoA_0_0_8_0_pinned: ...
+    def particle_tile(self) -> ParticleTile_pureSoA_8_0_pinned: ...
     def soa(self) -> StructOfArrays_8_0_idcpu_pinned: ...
     @property
     def is_valid(self) -> bool: ...
@@ -6822,10 +6665,10 @@ class ParIterBase_pureSoA_8_0_pinned(MFIter):
         the number of particles on this tile
         """
 
-class ParIter_1_1_2_1_arena(ParIterBase_1_1_2_1_arena):
+class ParIter_2_1_3_1_arena(ParIterBase_2_1_3_1_arena):
     is_soa_particle: typing.ClassVar[bool] = False
     def __init__(
-        self, particle_container: ParticleContainer_1_1_2_1_arena, level: int
+        self, particle_container: ParticleContainer_2_1_3_1_arena, level: int
     ) -> None: ...
     def __iter__(self): ...
     def __next__(self):
@@ -6849,10 +6692,10 @@ class ParIter_1_1_2_1_arena(ParIterBase_1_1_2_1_arena):
 
     def __repr__(self) -> str: ...
 
-class ParIter_1_1_2_1_default(ParIterBase_1_1_2_1_default):
+class ParIter_2_1_3_1_default(ParIterBase_2_1_3_1_default):
     is_soa_particle: typing.ClassVar[bool] = False
     def __init__(
-        self, particle_container: ParticleContainer_1_1_2_1_default, level: int
+        self, particle_container: ParticleContainer_2_1_3_1_default, level: int
     ) -> None: ...
     def __iter__(self): ...
     def __next__(self):
@@ -6876,10 +6719,91 @@ class ParIter_1_1_2_1_default(ParIterBase_1_1_2_1_default):
 
     def __repr__(self) -> str: ...
 
-class ParIter_1_1_2_1_pinned(ParIterBase_1_1_2_1_pinned):
+class ParIter_2_1_3_1_pinned(ParIterBase_2_1_3_1_pinned):
     is_soa_particle: typing.ClassVar[bool] = False
     def __init__(
-        self, particle_container: ParticleContainer_1_1_2_1_pinned, level: int
+        self, particle_container: ParticleContainer_2_1_3_1_pinned, level: int
+    ) -> None: ...
+    def __iter__(self): ...
+    def __next__(self):
+        """
+        This is a helper function for the C++ equivalent of void operator++()
+
+            In Python, iterators always are called with __next__, even for the
+            first access. This means we need to handle the first iterator element
+            explicitly, otherwise we will jump directly to the 2nd element. We do
+            this the same way as pybind11 does this, via a little state:
+              https://github.com/AMReX-Codes/pyamrex/pull/50
+              https://github.com/AMReX-Codes/pyamrex/pull/262
+              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+
+            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+
+            self: the current iterator
+            returns: the updated iterator
+
+        """
+
+    def __repr__(self) -> str: ...
+
+class ParIter_pureSoA_1_0_arena(ParIterBase_pureSoA_1_0_arena):
+    is_soa_particle: typing.ClassVar[bool] = True
+    def __init__(
+        self, particle_container: ParticleContainer_pureSoA_1_0_arena, level: int
+    ) -> None: ...
+    def __iter__(self): ...
+    def __next__(self):
+        """
+        This is a helper function for the C++ equivalent of void operator++()
+
+            In Python, iterators always are called with __next__, even for the
+            first access. This means we need to handle the first iterator element
+            explicitly, otherwise we will jump directly to the 2nd element. We do
+            this the same way as pybind11 does this, via a little state:
+              https://github.com/AMReX-Codes/pyamrex/pull/50
+              https://github.com/AMReX-Codes/pyamrex/pull/262
+              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+
+            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+
+            self: the current iterator
+            returns: the updated iterator
+
+        """
+
+    def __repr__(self) -> str: ...
+
+class ParIter_pureSoA_1_0_default(ParIterBase_pureSoA_1_0_default):
+    is_soa_particle: typing.ClassVar[bool] = True
+    def __init__(
+        self, particle_container: ParticleContainer_pureSoA_1_0_default, level: int
+    ) -> None: ...
+    def __iter__(self): ...
+    def __next__(self):
+        """
+        This is a helper function for the C++ equivalent of void operator++()
+
+            In Python, iterators always are called with __next__, even for the
+            first access. This means we need to handle the first iterator element
+            explicitly, otherwise we will jump directly to the 2nd element. We do
+            this the same way as pybind11 does this, via a little state:
+              https://github.com/AMReX-Codes/pyamrex/pull/50
+              https://github.com/AMReX-Codes/pyamrex/pull/262
+              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+
+            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+
+            self: the current iterator
+            returns: the updated iterator
+
+        """
+
+    def __repr__(self) -> str: ...
+
+class ParIter_pureSoA_1_0_pinned(ParIterBase_pureSoA_1_0_pinned):
+    is_soa_particle: typing.ClassVar[bool] = True
+    def __init__(
+        self, particle_container: ParticleContainer_pureSoA_1_0_pinned, level: int
     ) -> None: ...
     def __iter__(self): ...
     def __next__(self):
@@ -7126,14 +7050,14 @@ class ParmParse:
 
     def remove(self, arg0: str) -> int: ...
 
-class ParticleContainer_1_1_2_1_arena:
+class ParticleContainer_2_1_3_1_arena:
     is_soa_particle: typing.ClassVar[bool] = False
     num_array_int: typing.ClassVar[int] = 1
-    num_array_real: typing.ClassVar[int] = 2
+    num_array_real: typing.ClassVar[int] = 3
     num_struct_int: typing.ClassVar[int] = 1
-    num_struct_real: typing.ClassVar[int] = 1
-    const_iterator = ParConstIter_1_1_2_1_arena
-    iterator = ParIter_1_1_2_1_arena
+    num_struct_real: typing.ClassVar[int] = 2
+    const_iterator = ParConstIter_2_1_3_1_arena
+    iterator = ParIter_2_1_3_1_arena
     @typing.overload
     def Define(
         self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray
@@ -7178,26 +7102,26 @@ class ParticleContainer_1_1_2_1_arena:
         arg3: Vector_IntVect,
     ) -> None: ...
     def add_particles_at_level(
-        self, particles: ParticleTile_1_1_2_1_arena, level: int, ngrow: int = 0
+        self, particles: ParticleTile_2_1_3_1_arena, level: int, ngrow: int = 0
     ) -> None: ...
     def clear_particles(self) -> None: ...
     def get_particles(
         self, level: int
-    ) -> dict[tuple[int, int], ParticleTile_1_1_2_1_arena]: ...
+    ) -> dict[tuple[int, int], ParticleTile_2_1_3_1_arena]: ...
     def increment(self, arg0: MultiFab, arg1: int) -> None: ...
     def init_one_per_cell(
-        self, arg0: float, arg1: float, arg2: float, arg3: ParticleInitType_1_1_2_1
+        self, arg0: float, arg1: float, arg2: float, arg3: ParticleInitType_2_1_3_1
     ) -> None: ...
     def init_random(
         self,
         arg0: int,
         arg1: int,
-        arg2: ParticleInitType_1_1_2_1,
+        arg2: ParticleInitType_2_1_3_1,
         arg3: bool,
         arg4: RealBox,
     ) -> None: ...
     def init_random_per_box(
-        self, arg0: int, arg1: int, arg2: ParticleInitType_1_1_2_1
+        self, arg0: int, arg1: int, arg2: ParticleInitType_2_1_3_1
     ) -> None: ...
     def num_local_tiles_at_level(self, arg0: int) -> int: ...
     def number_of_particles_at_level(
@@ -7285,14 +7209,14 @@ class ParticleContainer_1_1_2_1_arena:
         The number of runtime Real components in SoA
         """
 
-class ParticleContainer_1_1_2_1_default:
+class ParticleContainer_2_1_3_1_default:
     is_soa_particle: typing.ClassVar[bool] = False
     num_array_int: typing.ClassVar[int] = 1
-    num_array_real: typing.ClassVar[int] = 2
+    num_array_real: typing.ClassVar[int] = 3
     num_struct_int: typing.ClassVar[int] = 1
-    num_struct_real: typing.ClassVar[int] = 1
-    const_iterator = ParConstIter_1_1_2_1_default
-    iterator = ParIter_1_1_2_1_default
+    num_struct_real: typing.ClassVar[int] = 2
+    const_iterator = ParConstIter_2_1_3_1_default
+    iterator = ParIter_2_1_3_1_default
     @typing.overload
     def Define(
         self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray
@@ -7337,26 +7261,26 @@ class ParticleContainer_1_1_2_1_default:
         arg3: Vector_IntVect,
     ) -> None: ...
     def add_particles_at_level(
-        self, particles: ParticleTile_1_1_2_1_default, level: int, ngrow: int = 0
+        self, particles: ParticleTile_2_1_3_1_default, level: int, ngrow: int = 0
     ) -> None: ...
     def clear_particles(self) -> None: ...
     def get_particles(
         self, level: int
-    ) -> dict[tuple[int, int], ParticleTile_1_1_2_1_default]: ...
+    ) -> dict[tuple[int, int], ParticleTile_2_1_3_1_default]: ...
     def increment(self, arg0: MultiFab, arg1: int) -> None: ...
     def init_one_per_cell(
-        self, arg0: float, arg1: float, arg2: float, arg3: ParticleInitType_1_1_2_1
+        self, arg0: float, arg1: float, arg2: float, arg3: ParticleInitType_2_1_3_1
     ) -> None: ...
     def init_random(
         self,
         arg0: int,
         arg1: int,
-        arg2: ParticleInitType_1_1_2_1,
+        arg2: ParticleInitType_2_1_3_1,
         arg3: bool,
         arg4: RealBox,
     ) -> None: ...
     def init_random_per_box(
-        self, arg0: int, arg1: int, arg2: ParticleInitType_1_1_2_1
+        self, arg0: int, arg1: int, arg2: ParticleInitType_2_1_3_1
     ) -> None: ...
     def num_local_tiles_at_level(self, arg0: int) -> int: ...
     def number_of_particles_at_level(
@@ -7444,14 +7368,14 @@ class ParticleContainer_1_1_2_1_default:
         The number of runtime Real components in SoA
         """
 
-class ParticleContainer_1_1_2_1_pinned:
+class ParticleContainer_2_1_3_1_pinned:
     is_soa_particle: typing.ClassVar[bool] = False
     num_array_int: typing.ClassVar[int] = 1
-    num_array_real: typing.ClassVar[int] = 2
+    num_array_real: typing.ClassVar[int] = 3
     num_struct_int: typing.ClassVar[int] = 1
-    num_struct_real: typing.ClassVar[int] = 1
-    const_iterator = ParConstIter_1_1_2_1_pinned
-    iterator = ParIter_1_1_2_1_pinned
+    num_struct_real: typing.ClassVar[int] = 2
+    const_iterator = ParConstIter_2_1_3_1_pinned
+    iterator = ParIter_2_1_3_1_pinned
     @typing.overload
     def Define(
         self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray
@@ -7496,26 +7420,485 @@ class ParticleContainer_1_1_2_1_pinned:
         arg3: Vector_IntVect,
     ) -> None: ...
     def add_particles_at_level(
-        self, particles: ParticleTile_1_1_2_1_pinned, level: int, ngrow: int = 0
+        self, particles: ParticleTile_2_1_3_1_pinned, level: int, ngrow: int = 0
     ) -> None: ...
     def clear_particles(self) -> None: ...
     def get_particles(
         self, level: int
-    ) -> dict[tuple[int, int], ParticleTile_1_1_2_1_pinned]: ...
+    ) -> dict[tuple[int, int], ParticleTile_2_1_3_1_pinned]: ...
     def increment(self, arg0: MultiFab, arg1: int) -> None: ...
     def init_one_per_cell(
-        self, arg0: float, arg1: float, arg2: float, arg3: ParticleInitType_1_1_2_1
+        self, arg0: float, arg1: float, arg2: float, arg3: ParticleInitType_2_1_3_1
     ) -> None: ...
     def init_random(
         self,
         arg0: int,
         arg1: int,
-        arg2: ParticleInitType_1_1_2_1,
+        arg2: ParticleInitType_2_1_3_1,
         arg3: bool,
         arg4: RealBox,
     ) -> None: ...
     def init_random_per_box(
-        self, arg0: int, arg1: int, arg2: ParticleInitType_1_1_2_1
+        self, arg0: int, arg1: int, arg2: ParticleInitType_2_1_3_1
+    ) -> None: ...
+    def num_local_tiles_at_level(self, arg0: int) -> int: ...
+    def number_of_particles_at_level(
+        self, level: int, only_valid: bool = True, only_local: bool = False
+    ) -> int: ...
+    def number_of_particles_in_grid(
+        self, level: int, only_valid: bool = True, only_local: bool = False
+    ) -> Vector_Long: ...
+    def print_capacity(
+        self,
+    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)]: ...
+    def redistribute(
+        self,
+        lev_min: int = 0,
+        lev_max: int = -1,
+        nGrow: int = 0,
+        local: int = 0,
+        remove_negative: bool = True,
+    ) -> None: ...
+    def remove_particles_at_level(self, arg0: int) -> None: ...
+    def remove_particles_not_at_finestLevel(self) -> None: ...
+    def reserve_data(self) -> None: ...
+    def resize_data(self) -> None: ...
+    def shrink_t_fit(self) -> None: ...
+    def sort_particles_by_bin(self, arg0: IntVect) -> None: ...
+    def sort_particles_by_cell(self) -> None: ...
+    def to_df(self, local=True, comm=None, root_rank=0):
+        """
+
+        Copy all particles into a pandas.DataFrame
+
+        Parameters
+        ----------
+        self : amrex.ParticleContainer_*
+            A ParticleContainer class in pyAMReX
+        local : bool
+            MPI rank-local particles only
+        comm : MPI Communicator
+            if local is False, this defaults to mpi4py.MPI.COMM_WORLD
+        root_rank : MPI root rank to gather to
+            if local is False, this defaults to 0
+
+        Returns
+        -------
+        A concatenated pandas.DataFrame with particles from all levels.
+
+        Returns None if no particles were found.
+        If local=False, then all ranks but the root_rank will return None.
+
+        """
+
+    def total_number_of_particles(
+        self, only_valid: bool = True, only_local: bool = False
+    ) -> int: ...
+    def write_plotfile(self, dir: str, name: str) -> None: ...
+    @property
+    def byte_spread(
+        self,
+    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)]: ...
+    @property
+    def finest_level(self) -> int: ...
+    @property
+    def num_int_comps(self) -> int:
+        """
+        The number of compile-time and runtime int components in SoA
+        """
+
+    @property
+    def num_position_components(self) -> int: ...
+    @property
+    def num_real_comps(self) -> int:
+        """
+        The number of compile-time and runtime Real components in SoA
+        """
+
+    @property
+    def num_runtime_int_comps(self) -> int:
+        """
+        The number of runtime Int components in SoA
+        """
+
+    @property
+    def num_runtime_real_comps(self) -> int:
+        """
+        The number of runtime Real components in SoA
+        """
+
+class ParticleContainer_pureSoA_1_0_arena:
+    is_soa_particle: typing.ClassVar[bool] = True
+    num_array_int: typing.ClassVar[int] = 0
+    num_array_real: typing.ClassVar[int] = 1
+    num_struct_int: typing.ClassVar[int] = 0
+    num_struct_real: typing.ClassVar[int] = 0
+    const_iterator = ParConstIter_pureSoA_1_0_arena
+    iterator = ParIter_pureSoA_1_0_arena
+    @typing.overload
+    def Define(
+        self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray
+    ) -> None: ...
+    @typing.overload
+    def Define(
+        self,
+        arg0: Vector_Geometry,
+        arg1: Vector_DistributionMapping,
+        arg2: Vector_BoxArray,
+        arg3: Vector_int,
+    ) -> None: ...
+    @typing.overload
+    def Define(
+        self,
+        arg0: Vector_Geometry,
+        arg1: Vector_DistributionMapping,
+        arg2: Vector_BoxArray,
+        arg3: Vector_IntVect,
+    ) -> None: ...
+    def OK(self, lev_min: int = 0, lev_max: int = -1, nGrow: int = 0) -> bool: ...
+    @typing.overload
+    def __init__(self) -> None: ...
+    @typing.overload
+    def __init__(
+        self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray
+    ) -> None: ...
+    @typing.overload
+    def __init__(
+        self,
+        arg0: Vector_Geometry,
+        arg1: Vector_DistributionMapping,
+        arg2: Vector_BoxArray,
+        arg3: Vector_int,
+    ) -> None: ...
+    @typing.overload
+    def __init__(
+        self,
+        arg0: Vector_Geometry,
+        arg1: Vector_DistributionMapping,
+        arg2: Vector_BoxArray,
+        arg3: Vector_IntVect,
+    ) -> None: ...
+    def add_particles_at_level(
+        self, particles: ParticleTile_pureSoA_1_0_arena, level: int, ngrow: int = 0
+    ) -> None: ...
+    def clear_particles(self) -> None: ...
+    def get_particles(
+        self, level: int
+    ) -> dict[tuple[int, int], ParticleTile_pureSoA_1_0_arena]: ...
+    def increment(self, arg0: MultiFab, arg1: int) -> None: ...
+    def init_random(
+        self,
+        arg0: int,
+        arg1: int,
+        arg2: ParticleInitType_pureSoA_1_0,
+        arg3: bool,
+        arg4: RealBox,
+    ) -> None: ...
+    def num_local_tiles_at_level(self, arg0: int) -> int: ...
+    def number_of_particles_at_level(
+        self, level: int, only_valid: bool = True, only_local: bool = False
+    ) -> int: ...
+    def number_of_particles_in_grid(
+        self, level: int, only_valid: bool = True, only_local: bool = False
+    ) -> Vector_Long: ...
+    def print_capacity(
+        self,
+    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)]: ...
+    def redistribute(
+        self,
+        lev_min: int = 0,
+        lev_max: int = -1,
+        nGrow: int = 0,
+        local: int = 0,
+        remove_negative: bool = True,
+    ) -> None: ...
+    def remove_particles_at_level(self, arg0: int) -> None: ...
+    def remove_particles_not_at_finestLevel(self) -> None: ...
+    def reserve_data(self) -> None: ...
+    def resize_data(self) -> None: ...
+    def shrink_t_fit(self) -> None: ...
+    def sort_particles_by_bin(self, arg0: IntVect) -> None: ...
+    def sort_particles_by_cell(self) -> None: ...
+    def to_df(self, local=True, comm=None, root_rank=0):
+        """
+
+        Copy all particles into a pandas.DataFrame
+
+        Parameters
+        ----------
+        self : amrex.ParticleContainer_*
+            A ParticleContainer class in pyAMReX
+        local : bool
+            MPI rank-local particles only
+        comm : MPI Communicator
+            if local is False, this defaults to mpi4py.MPI.COMM_WORLD
+        root_rank : MPI root rank to gather to
+            if local is False, this defaults to 0
+
+        Returns
+        -------
+        A concatenated pandas.DataFrame with particles from all levels.
+
+        Returns None if no particles were found.
+        If local=False, then all ranks but the root_rank will return None.
+
+        """
+
+    def total_number_of_particles(
+        self, only_valid: bool = True, only_local: bool = False
+    ) -> int: ...
+    def write_plotfile(self, dir: str, name: str) -> None: ...
+    @property
+    def byte_spread(
+        self,
+    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)]: ...
+    @property
+    def finest_level(self) -> int: ...
+    @property
+    def num_int_comps(self) -> int:
+        """
+        The number of compile-time and runtime int components in SoA
+        """
+
+    @property
+    def num_position_components(self) -> int: ...
+    @property
+    def num_real_comps(self) -> int:
+        """
+        The number of compile-time and runtime Real components in SoA
+        """
+
+    @property
+    def num_runtime_int_comps(self) -> int:
+        """
+        The number of runtime Int components in SoA
+        """
+
+    @property
+    def num_runtime_real_comps(self) -> int:
+        """
+        The number of runtime Real components in SoA
+        """
+
+class ParticleContainer_pureSoA_1_0_default:
+    is_soa_particle: typing.ClassVar[bool] = True
+    num_array_int: typing.ClassVar[int] = 0
+    num_array_real: typing.ClassVar[int] = 1
+    num_struct_int: typing.ClassVar[int] = 0
+    num_struct_real: typing.ClassVar[int] = 0
+    const_iterator = ParConstIter_pureSoA_1_0_default
+    iterator = ParIter_pureSoA_1_0_default
+    @typing.overload
+    def Define(
+        self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray
+    ) -> None: ...
+    @typing.overload
+    def Define(
+        self,
+        arg0: Vector_Geometry,
+        arg1: Vector_DistributionMapping,
+        arg2: Vector_BoxArray,
+        arg3: Vector_int,
+    ) -> None: ...
+    @typing.overload
+    def Define(
+        self,
+        arg0: Vector_Geometry,
+        arg1: Vector_DistributionMapping,
+        arg2: Vector_BoxArray,
+        arg3: Vector_IntVect,
+    ) -> None: ...
+    def OK(self, lev_min: int = 0, lev_max: int = -1, nGrow: int = 0) -> bool: ...
+    @typing.overload
+    def __init__(self) -> None: ...
+    @typing.overload
+    def __init__(
+        self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray
+    ) -> None: ...
+    @typing.overload
+    def __init__(
+        self,
+        arg0: Vector_Geometry,
+        arg1: Vector_DistributionMapping,
+        arg2: Vector_BoxArray,
+        arg3: Vector_int,
+    ) -> None: ...
+    @typing.overload
+    def __init__(
+        self,
+        arg0: Vector_Geometry,
+        arg1: Vector_DistributionMapping,
+        arg2: Vector_BoxArray,
+        arg3: Vector_IntVect,
+    ) -> None: ...
+    def add_particles_at_level(
+        self, particles: ParticleTile_pureSoA_1_0_default, level: int, ngrow: int = 0
+    ) -> None: ...
+    def clear_particles(self) -> None: ...
+    def get_particles(
+        self, level: int
+    ) -> dict[tuple[int, int], ParticleTile_pureSoA_1_0_default]: ...
+    def increment(self, arg0: MultiFab, arg1: int) -> None: ...
+    def init_random(
+        self,
+        arg0: int,
+        arg1: int,
+        arg2: ParticleInitType_pureSoA_1_0,
+        arg3: bool,
+        arg4: RealBox,
+    ) -> None: ...
+    def num_local_tiles_at_level(self, arg0: int) -> int: ...
+    def number_of_particles_at_level(
+        self, level: int, only_valid: bool = True, only_local: bool = False
+    ) -> int: ...
+    def number_of_particles_in_grid(
+        self, level: int, only_valid: bool = True, only_local: bool = False
+    ) -> Vector_Long: ...
+    def print_capacity(
+        self,
+    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)]: ...
+    def redistribute(
+        self,
+        lev_min: int = 0,
+        lev_max: int = -1,
+        nGrow: int = 0,
+        local: int = 0,
+        remove_negative: bool = True,
+    ) -> None: ...
+    def remove_particles_at_level(self, arg0: int) -> None: ...
+    def remove_particles_not_at_finestLevel(self) -> None: ...
+    def reserve_data(self) -> None: ...
+    def resize_data(self) -> None: ...
+    def shrink_t_fit(self) -> None: ...
+    def sort_particles_by_bin(self, arg0: IntVect) -> None: ...
+    def sort_particles_by_cell(self) -> None: ...
+    def to_df(self, local=True, comm=None, root_rank=0):
+        """
+
+        Copy all particles into a pandas.DataFrame
+
+        Parameters
+        ----------
+        self : amrex.ParticleContainer_*
+            A ParticleContainer class in pyAMReX
+        local : bool
+            MPI rank-local particles only
+        comm : MPI Communicator
+            if local is False, this defaults to mpi4py.MPI.COMM_WORLD
+        root_rank : MPI root rank to gather to
+            if local is False, this defaults to 0
+
+        Returns
+        -------
+        A concatenated pandas.DataFrame with particles from all levels.
+
+        Returns None if no particles were found.
+        If local=False, then all ranks but the root_rank will return None.
+
+        """
+
+    def total_number_of_particles(
+        self, only_valid: bool = True, only_local: bool = False
+    ) -> int: ...
+    def write_plotfile(self, dir: str, name: str) -> None: ...
+    @property
+    def byte_spread(
+        self,
+    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)]: ...
+    @property
+    def finest_level(self) -> int: ...
+    @property
+    def num_int_comps(self) -> int:
+        """
+        The number of compile-time and runtime int components in SoA
+        """
+
+    @property
+    def num_position_components(self) -> int: ...
+    @property
+    def num_real_comps(self) -> int:
+        """
+        The number of compile-time and runtime Real components in SoA
+        """
+
+    @property
+    def num_runtime_int_comps(self) -> int:
+        """
+        The number of runtime Int components in SoA
+        """
+
+    @property
+    def num_runtime_real_comps(self) -> int:
+        """
+        The number of runtime Real components in SoA
+        """
+
+class ParticleContainer_pureSoA_1_0_pinned:
+    is_soa_particle: typing.ClassVar[bool] = True
+    num_array_int: typing.ClassVar[int] = 0
+    num_array_real: typing.ClassVar[int] = 1
+    num_struct_int: typing.ClassVar[int] = 0
+    num_struct_real: typing.ClassVar[int] = 0
+    const_iterator = ParConstIter_pureSoA_1_0_pinned
+    iterator = ParIter_pureSoA_1_0_pinned
+    @typing.overload
+    def Define(
+        self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray
+    ) -> None: ...
+    @typing.overload
+    def Define(
+        self,
+        arg0: Vector_Geometry,
+        arg1: Vector_DistributionMapping,
+        arg2: Vector_BoxArray,
+        arg3: Vector_int,
+    ) -> None: ...
+    @typing.overload
+    def Define(
+        self,
+        arg0: Vector_Geometry,
+        arg1: Vector_DistributionMapping,
+        arg2: Vector_BoxArray,
+        arg3: Vector_IntVect,
+    ) -> None: ...
+    def OK(self, lev_min: int = 0, lev_max: int = -1, nGrow: int = 0) -> bool: ...
+    @typing.overload
+    def __init__(self) -> None: ...
+    @typing.overload
+    def __init__(
+        self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray
+    ) -> None: ...
+    @typing.overload
+    def __init__(
+        self,
+        arg0: Vector_Geometry,
+        arg1: Vector_DistributionMapping,
+        arg2: Vector_BoxArray,
+        arg3: Vector_int,
+    ) -> None: ...
+    @typing.overload
+    def __init__(
+        self,
+        arg0: Vector_Geometry,
+        arg1: Vector_DistributionMapping,
+        arg2: Vector_BoxArray,
+        arg3: Vector_IntVect,
+    ) -> None: ...
+    def add_particles_at_level(
+        self, particles: ParticleTile_pureSoA_1_0_pinned, level: int, ngrow: int = 0
+    ) -> None: ...
+    def clear_particles(self) -> None: ...
+    def get_particles(
+        self, level: int
+    ) -> dict[tuple[int, int], ParticleTile_pureSoA_1_0_pinned]: ...
+    def increment(self, arg0: MultiFab, arg1: int) -> None: ...
+    def init_random(
+        self,
+        arg0: int,
+        arg1: int,
+        arg2: ParticleInitType_pureSoA_1_0,
+        arg3: bool,
+        arg4: RealBox,
     ) -> None: ...
     def num_local_tiles_at_level(self, arg0: int) -> int: ...
     def number_of_particles_at_level(
@@ -7655,12 +8038,12 @@ class ParticleContainer_pureSoA_5_0_arena:
         arg3: Vector_IntVect,
     ) -> None: ...
     def add_particles_at_level(
-        self, particles: ParticleTile_pureSoA_0_0_5_0_arena, level: int, ngrow: int = 0
+        self, particles: ParticleTile_pureSoA_5_0_arena, level: int, ngrow: int = 0
     ) -> None: ...
     def clear_particles(self) -> None: ...
     def get_particles(
         self, level: int
-    ) -> dict[tuple[int, int], ParticleTile_pureSoA_0_0_5_0_arena]: ...
+    ) -> dict[tuple[int, int], ParticleTile_pureSoA_5_0_arena]: ...
     def increment(self, arg0: MultiFab, arg1: int) -> None: ...
     def init_random(
         self,
@@ -7808,15 +8191,12 @@ class ParticleContainer_pureSoA_5_0_default:
         arg3: Vector_IntVect,
     ) -> None: ...
     def add_particles_at_level(
-        self,
-        particles: ParticleTile_pureSoA_0_0_5_0_default,
-        level: int,
-        ngrow: int = 0,
+        self, particles: ParticleTile_pureSoA_5_0_default, level: int, ngrow: int = 0
     ) -> None: ...
     def clear_particles(self) -> None: ...
     def get_particles(
         self, level: int
-    ) -> dict[tuple[int, int], ParticleTile_pureSoA_0_0_5_0_default]: ...
+    ) -> dict[tuple[int, int], ParticleTile_pureSoA_5_0_default]: ...
     def increment(self, arg0: MultiFab, arg1: int) -> None: ...
     def init_random(
         self,
@@ -7964,12 +8344,12 @@ class ParticleContainer_pureSoA_5_0_pinned:
         arg3: Vector_IntVect,
     ) -> None: ...
     def add_particles_at_level(
-        self, particles: ParticleTile_pureSoA_0_0_5_0_pinned, level: int, ngrow: int = 0
+        self, particles: ParticleTile_pureSoA_5_0_pinned, level: int, ngrow: int = 0
     ) -> None: ...
     def clear_particles(self) -> None: ...
     def get_particles(
         self, level: int
-    ) -> dict[tuple[int, int], ParticleTile_pureSoA_0_0_5_0_pinned]: ...
+    ) -> dict[tuple[int, int], ParticleTile_pureSoA_5_0_pinned]: ...
     def increment(self, arg0: MultiFab, arg1: int) -> None: ...
     def init_random(
         self,
@@ -8117,12 +8497,12 @@ class ParticleContainer_pureSoA_8_0_arena:
         arg3: Vector_IntVect,
     ) -> None: ...
     def add_particles_at_level(
-        self, particles: ParticleTile_pureSoA_0_0_8_0_arena, level: int, ngrow: int = 0
+        self, particles: ParticleTile_pureSoA_8_0_arena, level: int, ngrow: int = 0
     ) -> None: ...
     def clear_particles(self) -> None: ...
     def get_particles(
         self, level: int
-    ) -> dict[tuple[int, int], ParticleTile_pureSoA_0_0_8_0_arena]: ...
+    ) -> dict[tuple[int, int], ParticleTile_pureSoA_8_0_arena]: ...
     def increment(self, arg0: MultiFab, arg1: int) -> None: ...
     def init_random(
         self,
@@ -8270,15 +8650,12 @@ class ParticleContainer_pureSoA_8_0_default:
         arg3: Vector_IntVect,
     ) -> None: ...
     def add_particles_at_level(
-        self,
-        particles: ParticleTile_pureSoA_0_0_8_0_default,
-        level: int,
-        ngrow: int = 0,
+        self, particles: ParticleTile_pureSoA_8_0_default, level: int, ngrow: int = 0
     ) -> None: ...
     def clear_particles(self) -> None: ...
     def get_particles(
         self, level: int
-    ) -> dict[tuple[int, int], ParticleTile_pureSoA_0_0_8_0_default]: ...
+    ) -> dict[tuple[int, int], ParticleTile_pureSoA_8_0_default]: ...
     def increment(self, arg0: MultiFab, arg1: int) -> None: ...
     def init_random(
         self,
@@ -8426,12 +8803,12 @@ class ParticleContainer_pureSoA_8_0_pinned:
         arg3: Vector_IntVect,
     ) -> None: ...
     def add_particles_at_level(
-        self, particles: ParticleTile_pureSoA_0_0_8_0_pinned, level: int, ngrow: int = 0
+        self, particles: ParticleTile_pureSoA_8_0_pinned, level: int, ngrow: int = 0
     ) -> None: ...
     def clear_particles(self) -> None: ...
     def get_particles(
         self, level: int
-    ) -> dict[tuple[int, int], ParticleTile_pureSoA_0_0_8_0_pinned]: ...
+    ) -> dict[tuple[int, int], ParticleTile_pureSoA_8_0_pinned]: ...
     def increment(self, arg0: MultiFab, arg1: int) -> None: ...
     def init_random(
         self,
@@ -8527,7 +8904,7 @@ class ParticleContainer_pureSoA_8_0_pinned:
         The number of runtime Real components in SoA
         """
 
-class ParticleInitType_1_1_2_1:
+class ParticleInitType_2_1_3_1:
     is_soa_particle: typing.ClassVar[bool] = False
     int_array_data: typing.Annotated[
         list[int], pybind11_stubgen.typing_ext.FixedSize(1)
@@ -8536,9 +8913,19 @@ class ParticleInitType_1_1_2_1:
         list[int], pybind11_stubgen.typing_ext.FixedSize(1)
     ]
     real_array_data: typing.Annotated[
-        list[float], pybind11_stubgen.typing_ext.FixedSize(2)
+        list[float], pybind11_stubgen.typing_ext.FixedSize(3)
     ]
     real_struct_data: typing.Annotated[
+        list[float], pybind11_stubgen.typing_ext.FixedSize(2)
+    ]
+    def __init__(self) -> None: ...
+
+class ParticleInitType_pureSoA_1_0:
+    is_soa_particle: typing.ClassVar[bool] = True
+    int_array_data: typing.Annotated[
+        list[int], pybind11_stubgen.typing_ext.FixedSize(0)
+    ]
+    real_array_data: typing.Annotated[
         list[float], pybind11_stubgen.typing_ext.FixedSize(1)
     ]
     def __init__(self) -> None: ...
@@ -8563,12 +8950,12 @@ class ParticleInitType_pureSoA_8_0:
     ]
     def __init__(self) -> None: ...
 
-class ParticleTileData_0_0_37_1:
-    def __getitem__(self, arg0: int) -> Particle_37_1: ...
+class ParticleTileData_2_1_3_1:
+    def __getitem__(self, arg0: int) -> Particle_5_2: ...
     def __init__(self) -> None: ...
-    def __setitem__(self, arg0: int, arg1: Particle_37_1) -> None: ...
-    def get_super_particle(self, arg0: int) -> Particle_37_1: ...
-    def set_super_particle(self, arg0: Particle_37_1, arg1: int) -> None: ...
+    def __setitem__(self, arg0: int, arg1: Particle_5_2) -> None: ...
+    def get_super_particle(self, arg0: int) -> Particle_5_2: ...
+    def set_super_particle(self, arg0: Particle_5_2, arg1: int) -> None: ...
     @property
     def m_num_runtime_int(self) -> int: ...
     @property
@@ -8576,12 +8963,12 @@ class ParticleTileData_0_0_37_1:
     @property
     def m_size(self) -> int: ...
 
-class ParticleTileData_0_0_4_0:
-    def __getitem__(self, arg0: int) -> Particle_4_0: ...
+class ParticleTileData_pureSoA_1_0:
+    def __getitem__(self, arg0: int) -> Particle_1_0: ...
     def __init__(self) -> None: ...
-    def __setitem__(self, arg0: int, arg1: Particle_4_0) -> None: ...
-    def get_super_particle(self, arg0: int) -> Particle_4_0: ...
-    def set_super_particle(self, arg0: Particle_4_0, arg1: int) -> None: ...
+    def __setitem__(self, arg0: int, arg1: Particle_1_0) -> None: ...
+    def get_super_particle(self, arg0: int) -> Particle_1_0: ...
+    def set_super_particle(self, arg0: Particle_1_0, arg1: int) -> None: ...
     @property
     def m_num_runtime_int(self) -> int: ...
     @property
@@ -8589,7 +8976,7 @@ class ParticleTileData_0_0_4_0:
     @property
     def m_size(self) -> int: ...
 
-class ParticleTileData_0_0_5_0:
+class ParticleTileData_pureSoA_5_0:
     def __getitem__(self, arg0: int) -> Particle_5_0: ...
     def __init__(self) -> None: ...
     def __setitem__(self, arg0: int, arg1: Particle_5_0) -> None: ...
@@ -8602,33 +8989,7 @@ class ParticleTileData_0_0_5_0:
     @property
     def m_size(self) -> int: ...
 
-class ParticleTileData_1_1_2_1:
-    def __getitem__(self, arg0: int) -> Particle_3_2: ...
-    def __init__(self) -> None: ...
-    def __setitem__(self, arg0: int, arg1: Particle_3_2) -> None: ...
-    def get_super_particle(self, arg0: int) -> Particle_3_2: ...
-    def set_super_particle(self, arg0: Particle_3_2, arg1: int) -> None: ...
-    @property
-    def m_num_runtime_int(self) -> int: ...
-    @property
-    def m_num_runtime_real(self) -> int: ...
-    @property
-    def m_size(self) -> int: ...
-
-class ParticleTileData_pureSoA_0_0_5_0:
-    def __getitem__(self, arg0: int) -> Particle_5_0: ...
-    def __init__(self) -> None: ...
-    def __setitem__(self, arg0: int, arg1: Particle_5_0) -> None: ...
-    def get_super_particle(self, arg0: int) -> Particle_5_0: ...
-    def set_super_particle(self, arg0: Particle_5_0, arg1: int) -> None: ...
-    @property
-    def m_num_runtime_int(self) -> int: ...
-    @property
-    def m_num_runtime_real(self) -> int: ...
-    @property
-    def m_size(self) -> int: ...
-
-class ParticleTileData_pureSoA_0_0_8_0:
+class ParticleTileData_pureSoA_8_0:
     def __getitem__(self, arg0: int) -> Particle_8_0: ...
     def __init__(self) -> None: ...
     def __setitem__(self, arg0: int, arg1: Particle_8_0) -> None: ...
@@ -8641,26 +9002,26 @@ class ParticleTileData_pureSoA_0_0_8_0:
     @property
     def m_size(self) -> int: ...
 
-class ParticleTile_0_0_37_1_arena:
+class ParticleTile_2_1_3_1_arena:
     NAI: typing.ClassVar[int] = 1
-    NAR: typing.ClassVar[int] = 37
-    def __getitem__(self, arg0: int) -> Particle_37_1: ...
+    NAR: typing.ClassVar[int] = 3
+    def __getitem__(self, arg0: int) -> Particle_5_2: ...
     def __init__(self) -> None: ...
-    def __setitem__(self, arg0: int, arg1: Particle_37_1) -> None: ...
+    def __setitem__(self, arg0: int, arg1: Particle_5_2) -> None: ...
     def capacity(self) -> int: ...
     def define(self, arg0: int, arg1: int) -> None: ...
-    def get_array_of_structs(self) -> ArrayOfStructs_0_0_arena: ...
+    def get_array_of_structs(self) -> ArrayOfStructs_2_1_arena: ...
     def get_num_neighbors(self) -> int: ...
-    def get_particle_tile_data(self) -> ParticleTileData_0_0_37_1: ...
-    def get_struct_of_arrays(self) -> StructOfArrays_37_1_arena: ...
+    def get_particle_tile_data(self) -> ParticleTileData_2_1_3_1: ...
+    def get_struct_of_arrays(self) -> StructOfArrays_3_1_arena: ...
     @typing.overload
-    def push_back(self, arg0: Particle_0_0) -> None:
+    def push_back(self, arg0: Particle_2_1) -> None:
         """
         Add one particle to this tile.
         """
 
     @typing.overload
-    def push_back(self, arg0: Particle_37_1) -> None:
+    def push_back(self, arg0: Particle_5_2) -> None:
         """
         Add one particle to this tile.
         """
@@ -8679,14 +9040,14 @@ class ParticleTile_0_0_37_1_arena:
     @typing.overload
     def push_back_real(
         self,
-        arg0: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(37)],
+        arg0: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(3)],
     ) -> None: ...
     @typing.overload
     def push_back_real(self, arg0: int, arg1: int, arg2: float) -> None: ...
     def resize(self, arg0: int) -> None: ...
     def set_num_neighbors(self, arg0: int) -> None: ...
     def shrink_to_fit(self) -> None: ...
-    def swap(self, arg0: ParticleTile_0_0_37_1_arena) -> None: ...
+    def swap(self, arg0: ParticleTile_2_1_3_1_arena) -> None: ...
     @property
     def empty(self) -> bool: ...
     @property
@@ -8708,26 +9069,26 @@ class ParticleTile_0_0_37_1_arena:
     @property
     def size(self) -> int: ...
 
-class ParticleTile_0_0_37_1_default:
+class ParticleTile_2_1_3_1_default:
     NAI: typing.ClassVar[int] = 1
-    NAR: typing.ClassVar[int] = 37
-    def __getitem__(self, arg0: int) -> Particle_37_1: ...
+    NAR: typing.ClassVar[int] = 3
+    def __getitem__(self, arg0: int) -> Particle_5_2: ...
     def __init__(self) -> None: ...
-    def __setitem__(self, arg0: int, arg1: Particle_37_1) -> None: ...
+    def __setitem__(self, arg0: int, arg1: Particle_5_2) -> None: ...
     def capacity(self) -> int: ...
     def define(self, arg0: int, arg1: int) -> None: ...
-    def get_array_of_structs(self) -> ArrayOfStructs_0_0_default: ...
+    def get_array_of_structs(self) -> ArrayOfStructs_2_1_default: ...
     def get_num_neighbors(self) -> int: ...
-    def get_particle_tile_data(self) -> ParticleTileData_0_0_37_1: ...
-    def get_struct_of_arrays(self) -> StructOfArrays_37_1_default: ...
+    def get_particle_tile_data(self) -> ParticleTileData_2_1_3_1: ...
+    def get_struct_of_arrays(self) -> StructOfArrays_3_1_default: ...
     @typing.overload
-    def push_back(self, arg0: Particle_0_0) -> None:
+    def push_back(self, arg0: Particle_2_1) -> None:
         """
         Add one particle to this tile.
         """
 
     @typing.overload
-    def push_back(self, arg0: Particle_37_1) -> None:
+    def push_back(self, arg0: Particle_5_2) -> None:
         """
         Add one particle to this tile.
         """
@@ -8746,14 +9107,14 @@ class ParticleTile_0_0_37_1_default:
     @typing.overload
     def push_back_real(
         self,
-        arg0: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(37)],
+        arg0: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(3)],
     ) -> None: ...
     @typing.overload
     def push_back_real(self, arg0: int, arg1: int, arg2: float) -> None: ...
     def resize(self, arg0: int) -> None: ...
     def set_num_neighbors(self, arg0: int) -> None: ...
     def shrink_to_fit(self) -> None: ...
-    def swap(self, arg0: ParticleTile_0_0_37_1_default) -> None: ...
+    def swap(self, arg0: ParticleTile_2_1_3_1_default) -> None: ...
     @property
     def empty(self) -> bool: ...
     @property
@@ -8775,26 +9136,26 @@ class ParticleTile_0_0_37_1_default:
     @property
     def size(self) -> int: ...
 
-class ParticleTile_0_0_37_1_pinned:
+class ParticleTile_2_1_3_1_pinned:
     NAI: typing.ClassVar[int] = 1
-    NAR: typing.ClassVar[int] = 37
-    def __getitem__(self, arg0: int) -> Particle_37_1: ...
+    NAR: typing.ClassVar[int] = 3
+    def __getitem__(self, arg0: int) -> Particle_5_2: ...
     def __init__(self) -> None: ...
-    def __setitem__(self, arg0: int, arg1: Particle_37_1) -> None: ...
+    def __setitem__(self, arg0: int, arg1: Particle_5_2) -> None: ...
     def capacity(self) -> int: ...
     def define(self, arg0: int, arg1: int) -> None: ...
-    def get_array_of_structs(self) -> ArrayOfStructs_0_0_pinned: ...
+    def get_array_of_structs(self) -> ArrayOfStructs_2_1_pinned: ...
     def get_num_neighbors(self) -> int: ...
-    def get_particle_tile_data(self) -> ParticleTileData_0_0_37_1: ...
-    def get_struct_of_arrays(self) -> StructOfArrays_37_1_pinned: ...
+    def get_particle_tile_data(self) -> ParticleTileData_2_1_3_1: ...
+    def get_struct_of_arrays(self) -> StructOfArrays_3_1_pinned: ...
     @typing.overload
-    def push_back(self, arg0: Particle_0_0) -> None:
+    def push_back(self, arg0: Particle_2_1) -> None:
         """
         Add one particle to this tile.
         """
 
     @typing.overload
-    def push_back(self, arg0: Particle_37_1) -> None:
+    def push_back(self, arg0: Particle_5_2) -> None:
         """
         Add one particle to this tile.
         """
@@ -8813,14 +9174,14 @@ class ParticleTile_0_0_37_1_pinned:
     @typing.overload
     def push_back_real(
         self,
-        arg0: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(37)],
+        arg0: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(3)],
     ) -> None: ...
     @typing.overload
     def push_back_real(self, arg0: int, arg1: int, arg2: float) -> None: ...
     def resize(self, arg0: int) -> None: ...
     def set_num_neighbors(self, arg0: int) -> None: ...
     def shrink_to_fit(self) -> None: ...
-    def swap(self, arg0: ParticleTile_0_0_37_1_pinned) -> None: ...
+    def swap(self, arg0: ParticleTile_2_1_3_1_pinned) -> None: ...
     @property
     def empty(self) -> bool: ...
     @property
@@ -8842,26 +9203,18 @@ class ParticleTile_0_0_37_1_pinned:
     @property
     def size(self) -> int: ...
 
-class ParticleTile_0_0_4_0_arena:
+class ParticleTile_pureSoA_1_0_arena:
     NAI: typing.ClassVar[int] = 0
-    NAR: typing.ClassVar[int] = 4
-    def __getitem__(self, arg0: int) -> Particle_4_0: ...
+    NAR: typing.ClassVar[int] = 1
+    def __getitem__(self, arg0: int) -> Particle_1_0: ...
     def __init__(self) -> None: ...
-    def __setitem__(self, arg0: int, arg1: Particle_4_0) -> None: ...
+    def __setitem__(self, arg0: int, arg1: Particle_1_0) -> None: ...
     def capacity(self) -> int: ...
     def define(self, arg0: int, arg1: int) -> None: ...
-    def get_array_of_structs(self) -> ArrayOfStructs_0_0_arena: ...
     def get_num_neighbors(self) -> int: ...
-    def get_particle_tile_data(self) -> ParticleTileData_0_0_4_0: ...
-    def get_struct_of_arrays(self) -> StructOfArrays_4_0_arena: ...
-    @typing.overload
-    def push_back(self, arg0: Particle_0_0) -> None:
-        """
-        Add one particle to this tile.
-        """
-
-    @typing.overload
-    def push_back(self, arg0: Particle_4_0) -> None:
+    def get_particle_tile_data(self) -> ParticleTileData_pureSoA_1_0: ...
+    def get_struct_of_arrays(self) -> StructOfArrays_1_0_idcpu_arena: ...
+    def push_back(self, arg0: Particle_1_0) -> None:
         """
         Add one particle to this tile.
         """
@@ -8880,14 +9233,14 @@ class ParticleTile_0_0_4_0_arena:
     @typing.overload
     def push_back_real(
         self,
-        arg0: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(4)],
+        arg0: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(1)],
     ) -> None: ...
     @typing.overload
     def push_back_real(self, arg0: int, arg1: int, arg2: float) -> None: ...
     def resize(self, arg0: int) -> None: ...
     def set_num_neighbors(self, arg0: int) -> None: ...
     def shrink_to_fit(self) -> None: ...
-    def swap(self, arg0: ParticleTile_0_0_4_0_arena) -> None: ...
+    def swap(self, arg0: ParticleTile_pureSoA_1_0_arena) -> None: ...
     @property
     def empty(self) -> bool: ...
     @property
@@ -8909,26 +9262,18 @@ class ParticleTile_0_0_4_0_arena:
     @property
     def size(self) -> int: ...
 
-class ParticleTile_0_0_4_0_default:
+class ParticleTile_pureSoA_1_0_default:
     NAI: typing.ClassVar[int] = 0
-    NAR: typing.ClassVar[int] = 4
-    def __getitem__(self, arg0: int) -> Particle_4_0: ...
+    NAR: typing.ClassVar[int] = 1
+    def __getitem__(self, arg0: int) -> Particle_1_0: ...
     def __init__(self) -> None: ...
-    def __setitem__(self, arg0: int, arg1: Particle_4_0) -> None: ...
+    def __setitem__(self, arg0: int, arg1: Particle_1_0) -> None: ...
     def capacity(self) -> int: ...
     def define(self, arg0: int, arg1: int) -> None: ...
-    def get_array_of_structs(self) -> ArrayOfStructs_0_0_default: ...
     def get_num_neighbors(self) -> int: ...
-    def get_particle_tile_data(self) -> ParticleTileData_0_0_4_0: ...
-    def get_struct_of_arrays(self) -> StructOfArrays_4_0_default: ...
-    @typing.overload
-    def push_back(self, arg0: Particle_0_0) -> None:
-        """
-        Add one particle to this tile.
-        """
-
-    @typing.overload
-    def push_back(self, arg0: Particle_4_0) -> None:
+    def get_particle_tile_data(self) -> ParticleTileData_pureSoA_1_0: ...
+    def get_struct_of_arrays(self) -> StructOfArrays_1_0_idcpu_default: ...
+    def push_back(self, arg0: Particle_1_0) -> None:
         """
         Add one particle to this tile.
         """
@@ -8947,14 +9292,14 @@ class ParticleTile_0_0_4_0_default:
     @typing.overload
     def push_back_real(
         self,
-        arg0: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(4)],
+        arg0: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(1)],
     ) -> None: ...
     @typing.overload
     def push_back_real(self, arg0: int, arg1: int, arg2: float) -> None: ...
     def resize(self, arg0: int) -> None: ...
     def set_num_neighbors(self, arg0: int) -> None: ...
     def shrink_to_fit(self) -> None: ...
-    def swap(self, arg0: ParticleTile_0_0_4_0_default) -> None: ...
+    def swap(self, arg0: ParticleTile_pureSoA_1_0_default) -> None: ...
     @property
     def empty(self) -> bool: ...
     @property
@@ -8976,26 +9321,18 @@ class ParticleTile_0_0_4_0_default:
     @property
     def size(self) -> int: ...
 
-class ParticleTile_0_0_4_0_pinned:
+class ParticleTile_pureSoA_1_0_pinned:
     NAI: typing.ClassVar[int] = 0
-    NAR: typing.ClassVar[int] = 4
-    def __getitem__(self, arg0: int) -> Particle_4_0: ...
+    NAR: typing.ClassVar[int] = 1
+    def __getitem__(self, arg0: int) -> Particle_1_0: ...
     def __init__(self) -> None: ...
-    def __setitem__(self, arg0: int, arg1: Particle_4_0) -> None: ...
+    def __setitem__(self, arg0: int, arg1: Particle_1_0) -> None: ...
     def capacity(self) -> int: ...
     def define(self, arg0: int, arg1: int) -> None: ...
-    def get_array_of_structs(self) -> ArrayOfStructs_0_0_pinned: ...
     def get_num_neighbors(self) -> int: ...
-    def get_particle_tile_data(self) -> ParticleTileData_0_0_4_0: ...
-    def get_struct_of_arrays(self) -> StructOfArrays_4_0_pinned: ...
-    @typing.overload
-    def push_back(self, arg0: Particle_0_0) -> None:
-        """
-        Add one particle to this tile.
-        """
-
-    @typing.overload
-    def push_back(self, arg0: Particle_4_0) -> None:
+    def get_particle_tile_data(self) -> ParticleTileData_pureSoA_1_0: ...
+    def get_struct_of_arrays(self) -> StructOfArrays_1_0_idcpu_pinned: ...
+    def push_back(self, arg0: Particle_1_0) -> None:
         """
         Add one particle to this tile.
         """
@@ -9014,14 +9351,14 @@ class ParticleTile_0_0_4_0_pinned:
     @typing.overload
     def push_back_real(
         self,
-        arg0: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(4)],
+        arg0: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(1)],
     ) -> None: ...
     @typing.overload
     def push_back_real(self, arg0: int, arg1: int, arg2: float) -> None: ...
     def resize(self, arg0: int) -> None: ...
     def set_num_neighbors(self, arg0: int) -> None: ...
     def shrink_to_fit(self) -> None: ...
-    def swap(self, arg0: ParticleTile_0_0_4_0_pinned) -> None: ...
+    def swap(self, arg0: ParticleTile_pureSoA_1_0_pinned) -> None: ...
     @property
     def empty(self) -> bool: ...
     @property
@@ -9043,409 +9380,7 @@ class ParticleTile_0_0_4_0_pinned:
     @property
     def size(self) -> int: ...
 
-class ParticleTile_0_0_5_0_arena:
-    NAI: typing.ClassVar[int] = 0
-    NAR: typing.ClassVar[int] = 5
-    def __getitem__(self, arg0: int) -> Particle_5_0: ...
-    def __init__(self) -> None: ...
-    def __setitem__(self, arg0: int, arg1: Particle_5_0) -> None: ...
-    def capacity(self) -> int: ...
-    def define(self, arg0: int, arg1: int) -> None: ...
-    def get_array_of_structs(self) -> ArrayOfStructs_0_0_arena: ...
-    def get_num_neighbors(self) -> int: ...
-    def get_particle_tile_data(self) -> ParticleTileData_0_0_5_0: ...
-    def get_struct_of_arrays(self) -> StructOfArrays_5_0_arena: ...
-    @typing.overload
-    def push_back(self, arg0: Particle_0_0) -> None:
-        """
-        Add one particle to this tile.
-        """
-
-    @typing.overload
-    def push_back(self, arg0: Particle_5_0) -> None:
-        """
-        Add one particle to this tile.
-        """
-
-    @typing.overload
-    def push_back_int(self, arg0: int, arg1: int) -> None: ...
-    @typing.overload
-    def push_back_int(
-        self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(0)],
-    ) -> None: ...
-    @typing.overload
-    def push_back_int(self, arg0: int, arg1: int, arg2: int) -> None: ...
-    @typing.overload
-    def push_back_real(self, arg0: int, arg1: float) -> None: ...
-    @typing.overload
-    def push_back_real(
-        self,
-        arg0: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(5)],
-    ) -> None: ...
-    @typing.overload
-    def push_back_real(self, arg0: int, arg1: int, arg2: float) -> None: ...
-    def resize(self, arg0: int) -> None: ...
-    def set_num_neighbors(self, arg0: int) -> None: ...
-    def shrink_to_fit(self) -> None: ...
-    def swap(self, arg0: ParticleTile_0_0_5_0_arena) -> None: ...
-    @property
-    def empty(self) -> bool: ...
-    @property
-    def num_int_comps(self) -> int: ...
-    @property
-    def num_neighbor_particles(self) -> int: ...
-    @property
-    def num_particles(self) -> int: ...
-    @property
-    def num_real_comps(self) -> int: ...
-    @property
-    def num_real_particles(self) -> int: ...
-    @property
-    def num_runtime_int_comps(self) -> int: ...
-    @property
-    def num_runtime_real_comps(self) -> int: ...
-    @property
-    def num_total_particles(self) -> int: ...
-    @property
-    def size(self) -> int: ...
-
-class ParticleTile_0_0_5_0_default:
-    NAI: typing.ClassVar[int] = 0
-    NAR: typing.ClassVar[int] = 5
-    def __getitem__(self, arg0: int) -> Particle_5_0: ...
-    def __init__(self) -> None: ...
-    def __setitem__(self, arg0: int, arg1: Particle_5_0) -> None: ...
-    def capacity(self) -> int: ...
-    def define(self, arg0: int, arg1: int) -> None: ...
-    def get_array_of_structs(self) -> ArrayOfStructs_0_0_default: ...
-    def get_num_neighbors(self) -> int: ...
-    def get_particle_tile_data(self) -> ParticleTileData_0_0_5_0: ...
-    def get_struct_of_arrays(self) -> StructOfArrays_5_0_default: ...
-    @typing.overload
-    def push_back(self, arg0: Particle_0_0) -> None:
-        """
-        Add one particle to this tile.
-        """
-
-    @typing.overload
-    def push_back(self, arg0: Particle_5_0) -> None:
-        """
-        Add one particle to this tile.
-        """
-
-    @typing.overload
-    def push_back_int(self, arg0: int, arg1: int) -> None: ...
-    @typing.overload
-    def push_back_int(
-        self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(0)],
-    ) -> None: ...
-    @typing.overload
-    def push_back_int(self, arg0: int, arg1: int, arg2: int) -> None: ...
-    @typing.overload
-    def push_back_real(self, arg0: int, arg1: float) -> None: ...
-    @typing.overload
-    def push_back_real(
-        self,
-        arg0: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(5)],
-    ) -> None: ...
-    @typing.overload
-    def push_back_real(self, arg0: int, arg1: int, arg2: float) -> None: ...
-    def resize(self, arg0: int) -> None: ...
-    def set_num_neighbors(self, arg0: int) -> None: ...
-    def shrink_to_fit(self) -> None: ...
-    def swap(self, arg0: ParticleTile_0_0_5_0_default) -> None: ...
-    @property
-    def empty(self) -> bool: ...
-    @property
-    def num_int_comps(self) -> int: ...
-    @property
-    def num_neighbor_particles(self) -> int: ...
-    @property
-    def num_particles(self) -> int: ...
-    @property
-    def num_real_comps(self) -> int: ...
-    @property
-    def num_real_particles(self) -> int: ...
-    @property
-    def num_runtime_int_comps(self) -> int: ...
-    @property
-    def num_runtime_real_comps(self) -> int: ...
-    @property
-    def num_total_particles(self) -> int: ...
-    @property
-    def size(self) -> int: ...
-
-class ParticleTile_0_0_5_0_pinned:
-    NAI: typing.ClassVar[int] = 0
-    NAR: typing.ClassVar[int] = 5
-    def __getitem__(self, arg0: int) -> Particle_5_0: ...
-    def __init__(self) -> None: ...
-    def __setitem__(self, arg0: int, arg1: Particle_5_0) -> None: ...
-    def capacity(self) -> int: ...
-    def define(self, arg0: int, arg1: int) -> None: ...
-    def get_array_of_structs(self) -> ArrayOfStructs_0_0_pinned: ...
-    def get_num_neighbors(self) -> int: ...
-    def get_particle_tile_data(self) -> ParticleTileData_0_0_5_0: ...
-    def get_struct_of_arrays(self) -> StructOfArrays_5_0_pinned: ...
-    @typing.overload
-    def push_back(self, arg0: Particle_0_0) -> None:
-        """
-        Add one particle to this tile.
-        """
-
-    @typing.overload
-    def push_back(self, arg0: Particle_5_0) -> None:
-        """
-        Add one particle to this tile.
-        """
-
-    @typing.overload
-    def push_back_int(self, arg0: int, arg1: int) -> None: ...
-    @typing.overload
-    def push_back_int(
-        self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(0)],
-    ) -> None: ...
-    @typing.overload
-    def push_back_int(self, arg0: int, arg1: int, arg2: int) -> None: ...
-    @typing.overload
-    def push_back_real(self, arg0: int, arg1: float) -> None: ...
-    @typing.overload
-    def push_back_real(
-        self,
-        arg0: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(5)],
-    ) -> None: ...
-    @typing.overload
-    def push_back_real(self, arg0: int, arg1: int, arg2: float) -> None: ...
-    def resize(self, arg0: int) -> None: ...
-    def set_num_neighbors(self, arg0: int) -> None: ...
-    def shrink_to_fit(self) -> None: ...
-    def swap(self, arg0: ParticleTile_0_0_5_0_pinned) -> None: ...
-    @property
-    def empty(self) -> bool: ...
-    @property
-    def num_int_comps(self) -> int: ...
-    @property
-    def num_neighbor_particles(self) -> int: ...
-    @property
-    def num_particles(self) -> int: ...
-    @property
-    def num_real_comps(self) -> int: ...
-    @property
-    def num_real_particles(self) -> int: ...
-    @property
-    def num_runtime_int_comps(self) -> int: ...
-    @property
-    def num_runtime_real_comps(self) -> int: ...
-    @property
-    def num_total_particles(self) -> int: ...
-    @property
-    def size(self) -> int: ...
-
-class ParticleTile_1_1_2_1_arena:
-    NAI: typing.ClassVar[int] = 1
-    NAR: typing.ClassVar[int] = 2
-    def __getitem__(self, arg0: int) -> Particle_3_2: ...
-    def __init__(self) -> None: ...
-    def __setitem__(self, arg0: int, arg1: Particle_3_2) -> None: ...
-    def capacity(self) -> int: ...
-    def define(self, arg0: int, arg1: int) -> None: ...
-    def get_array_of_structs(self) -> ArrayOfStructs_1_1_arena: ...
-    def get_num_neighbors(self) -> int: ...
-    def get_particle_tile_data(self) -> ParticleTileData_1_1_2_1: ...
-    def get_struct_of_arrays(self) -> StructOfArrays_2_1_arena: ...
-    @typing.overload
-    def push_back(self, arg0: Particle_1_1) -> None:
-        """
-        Add one particle to this tile.
-        """
-
-    @typing.overload
-    def push_back(self, arg0: Particle_3_2) -> None:
-        """
-        Add one particle to this tile.
-        """
-
-    @typing.overload
-    def push_back_int(self, arg0: int, arg1: int) -> None: ...
-    @typing.overload
-    def push_back_int(
-        self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(1)],
-    ) -> None: ...
-    @typing.overload
-    def push_back_int(self, arg0: int, arg1: int, arg2: int) -> None: ...
-    @typing.overload
-    def push_back_real(self, arg0: int, arg1: float) -> None: ...
-    @typing.overload
-    def push_back_real(
-        self,
-        arg0: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(2)],
-    ) -> None: ...
-    @typing.overload
-    def push_back_real(self, arg0: int, arg1: int, arg2: float) -> None: ...
-    def resize(self, arg0: int) -> None: ...
-    def set_num_neighbors(self, arg0: int) -> None: ...
-    def shrink_to_fit(self) -> None: ...
-    def swap(self, arg0: ParticleTile_1_1_2_1_arena) -> None: ...
-    @property
-    def empty(self) -> bool: ...
-    @property
-    def num_int_comps(self) -> int: ...
-    @property
-    def num_neighbor_particles(self) -> int: ...
-    @property
-    def num_particles(self) -> int: ...
-    @property
-    def num_real_comps(self) -> int: ...
-    @property
-    def num_real_particles(self) -> int: ...
-    @property
-    def num_runtime_int_comps(self) -> int: ...
-    @property
-    def num_runtime_real_comps(self) -> int: ...
-    @property
-    def num_total_particles(self) -> int: ...
-    @property
-    def size(self) -> int: ...
-
-class ParticleTile_1_1_2_1_default:
-    NAI: typing.ClassVar[int] = 1
-    NAR: typing.ClassVar[int] = 2
-    def __getitem__(self, arg0: int) -> Particle_3_2: ...
-    def __init__(self) -> None: ...
-    def __setitem__(self, arg0: int, arg1: Particle_3_2) -> None: ...
-    def capacity(self) -> int: ...
-    def define(self, arg0: int, arg1: int) -> None: ...
-    def get_array_of_structs(self) -> ArrayOfStructs_1_1_default: ...
-    def get_num_neighbors(self) -> int: ...
-    def get_particle_tile_data(self) -> ParticleTileData_1_1_2_1: ...
-    def get_struct_of_arrays(self) -> StructOfArrays_2_1_default: ...
-    @typing.overload
-    def push_back(self, arg0: Particle_1_1) -> None:
-        """
-        Add one particle to this tile.
-        """
-
-    @typing.overload
-    def push_back(self, arg0: Particle_3_2) -> None:
-        """
-        Add one particle to this tile.
-        """
-
-    @typing.overload
-    def push_back_int(self, arg0: int, arg1: int) -> None: ...
-    @typing.overload
-    def push_back_int(
-        self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(1)],
-    ) -> None: ...
-    @typing.overload
-    def push_back_int(self, arg0: int, arg1: int, arg2: int) -> None: ...
-    @typing.overload
-    def push_back_real(self, arg0: int, arg1: float) -> None: ...
-    @typing.overload
-    def push_back_real(
-        self,
-        arg0: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(2)],
-    ) -> None: ...
-    @typing.overload
-    def push_back_real(self, arg0: int, arg1: int, arg2: float) -> None: ...
-    def resize(self, arg0: int) -> None: ...
-    def set_num_neighbors(self, arg0: int) -> None: ...
-    def shrink_to_fit(self) -> None: ...
-    def swap(self, arg0: ParticleTile_1_1_2_1_default) -> None: ...
-    @property
-    def empty(self) -> bool: ...
-    @property
-    def num_int_comps(self) -> int: ...
-    @property
-    def num_neighbor_particles(self) -> int: ...
-    @property
-    def num_particles(self) -> int: ...
-    @property
-    def num_real_comps(self) -> int: ...
-    @property
-    def num_real_particles(self) -> int: ...
-    @property
-    def num_runtime_int_comps(self) -> int: ...
-    @property
-    def num_runtime_real_comps(self) -> int: ...
-    @property
-    def num_total_particles(self) -> int: ...
-    @property
-    def size(self) -> int: ...
-
-class ParticleTile_1_1_2_1_pinned:
-    NAI: typing.ClassVar[int] = 1
-    NAR: typing.ClassVar[int] = 2
-    def __getitem__(self, arg0: int) -> Particle_3_2: ...
-    def __init__(self) -> None: ...
-    def __setitem__(self, arg0: int, arg1: Particle_3_2) -> None: ...
-    def capacity(self) -> int: ...
-    def define(self, arg0: int, arg1: int) -> None: ...
-    def get_array_of_structs(self) -> ArrayOfStructs_1_1_pinned: ...
-    def get_num_neighbors(self) -> int: ...
-    def get_particle_tile_data(self) -> ParticleTileData_1_1_2_1: ...
-    def get_struct_of_arrays(self) -> StructOfArrays_2_1_pinned: ...
-    @typing.overload
-    def push_back(self, arg0: Particle_1_1) -> None:
-        """
-        Add one particle to this tile.
-        """
-
-    @typing.overload
-    def push_back(self, arg0: Particle_3_2) -> None:
-        """
-        Add one particle to this tile.
-        """
-
-    @typing.overload
-    def push_back_int(self, arg0: int, arg1: int) -> None: ...
-    @typing.overload
-    def push_back_int(
-        self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(1)],
-    ) -> None: ...
-    @typing.overload
-    def push_back_int(self, arg0: int, arg1: int, arg2: int) -> None: ...
-    @typing.overload
-    def push_back_real(self, arg0: int, arg1: float) -> None: ...
-    @typing.overload
-    def push_back_real(
-        self,
-        arg0: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(2)],
-    ) -> None: ...
-    @typing.overload
-    def push_back_real(self, arg0: int, arg1: int, arg2: float) -> None: ...
-    def resize(self, arg0: int) -> None: ...
-    def set_num_neighbors(self, arg0: int) -> None: ...
-    def shrink_to_fit(self) -> None: ...
-    def swap(self, arg0: ParticleTile_1_1_2_1_pinned) -> None: ...
-    @property
-    def empty(self) -> bool: ...
-    @property
-    def num_int_comps(self) -> int: ...
-    @property
-    def num_neighbor_particles(self) -> int: ...
-    @property
-    def num_particles(self) -> int: ...
-    @property
-    def num_real_comps(self) -> int: ...
-    @property
-    def num_real_particles(self) -> int: ...
-    @property
-    def num_runtime_int_comps(self) -> int: ...
-    @property
-    def num_runtime_real_comps(self) -> int: ...
-    @property
-    def num_total_particles(self) -> int: ...
-    @property
-    def size(self) -> int: ...
-
-class ParticleTile_pureSoA_0_0_5_0_arena:
+class ParticleTile_pureSoA_5_0_arena:
     NAI: typing.ClassVar[int] = 0
     NAR: typing.ClassVar[int] = 5
     def __getitem__(self, arg0: int) -> Particle_5_0: ...
@@ -9454,7 +9389,7 @@ class ParticleTile_pureSoA_0_0_5_0_arena:
     def capacity(self) -> int: ...
     def define(self, arg0: int, arg1: int) -> None: ...
     def get_num_neighbors(self) -> int: ...
-    def get_particle_tile_data(self) -> ParticleTileData_pureSoA_0_0_5_0: ...
+    def get_particle_tile_data(self) -> ParticleTileData_pureSoA_5_0: ...
     def get_struct_of_arrays(self) -> StructOfArrays_5_0_idcpu_arena: ...
     def push_back(self, arg0: Particle_5_0) -> None:
         """
@@ -9482,7 +9417,7 @@ class ParticleTile_pureSoA_0_0_5_0_arena:
     def resize(self, arg0: int) -> None: ...
     def set_num_neighbors(self, arg0: int) -> None: ...
     def shrink_to_fit(self) -> None: ...
-    def swap(self, arg0: ParticleTile_pureSoA_0_0_5_0_arena) -> None: ...
+    def swap(self, arg0: ParticleTile_pureSoA_5_0_arena) -> None: ...
     @property
     def empty(self) -> bool: ...
     @property
@@ -9504,7 +9439,7 @@ class ParticleTile_pureSoA_0_0_5_0_arena:
     @property
     def size(self) -> int: ...
 
-class ParticleTile_pureSoA_0_0_5_0_default:
+class ParticleTile_pureSoA_5_0_default:
     NAI: typing.ClassVar[int] = 0
     NAR: typing.ClassVar[int] = 5
     def __getitem__(self, arg0: int) -> Particle_5_0: ...
@@ -9513,7 +9448,7 @@ class ParticleTile_pureSoA_0_0_5_0_default:
     def capacity(self) -> int: ...
     def define(self, arg0: int, arg1: int) -> None: ...
     def get_num_neighbors(self) -> int: ...
-    def get_particle_tile_data(self) -> ParticleTileData_pureSoA_0_0_5_0: ...
+    def get_particle_tile_data(self) -> ParticleTileData_pureSoA_5_0: ...
     def get_struct_of_arrays(self) -> StructOfArrays_5_0_idcpu_default: ...
     def push_back(self, arg0: Particle_5_0) -> None:
         """
@@ -9541,7 +9476,7 @@ class ParticleTile_pureSoA_0_0_5_0_default:
     def resize(self, arg0: int) -> None: ...
     def set_num_neighbors(self, arg0: int) -> None: ...
     def shrink_to_fit(self) -> None: ...
-    def swap(self, arg0: ParticleTile_pureSoA_0_0_5_0_default) -> None: ...
+    def swap(self, arg0: ParticleTile_pureSoA_5_0_default) -> None: ...
     @property
     def empty(self) -> bool: ...
     @property
@@ -9563,7 +9498,7 @@ class ParticleTile_pureSoA_0_0_5_0_default:
     @property
     def size(self) -> int: ...
 
-class ParticleTile_pureSoA_0_0_5_0_pinned:
+class ParticleTile_pureSoA_5_0_pinned:
     NAI: typing.ClassVar[int] = 0
     NAR: typing.ClassVar[int] = 5
     def __getitem__(self, arg0: int) -> Particle_5_0: ...
@@ -9572,7 +9507,7 @@ class ParticleTile_pureSoA_0_0_5_0_pinned:
     def capacity(self) -> int: ...
     def define(self, arg0: int, arg1: int) -> None: ...
     def get_num_neighbors(self) -> int: ...
-    def get_particle_tile_data(self) -> ParticleTileData_pureSoA_0_0_5_0: ...
+    def get_particle_tile_data(self) -> ParticleTileData_pureSoA_5_0: ...
     def get_struct_of_arrays(self) -> StructOfArrays_5_0_idcpu_pinned: ...
     def push_back(self, arg0: Particle_5_0) -> None:
         """
@@ -9600,7 +9535,7 @@ class ParticleTile_pureSoA_0_0_5_0_pinned:
     def resize(self, arg0: int) -> None: ...
     def set_num_neighbors(self, arg0: int) -> None: ...
     def shrink_to_fit(self) -> None: ...
-    def swap(self, arg0: ParticleTile_pureSoA_0_0_5_0_pinned) -> None: ...
+    def swap(self, arg0: ParticleTile_pureSoA_5_0_pinned) -> None: ...
     @property
     def empty(self) -> bool: ...
     @property
@@ -9622,7 +9557,7 @@ class ParticleTile_pureSoA_0_0_5_0_pinned:
     @property
     def size(self) -> int: ...
 
-class ParticleTile_pureSoA_0_0_8_0_arena:
+class ParticleTile_pureSoA_8_0_arena:
     NAI: typing.ClassVar[int] = 0
     NAR: typing.ClassVar[int] = 8
     def __getitem__(self, arg0: int) -> Particle_8_0: ...
@@ -9631,7 +9566,7 @@ class ParticleTile_pureSoA_0_0_8_0_arena:
     def capacity(self) -> int: ...
     def define(self, arg0: int, arg1: int) -> None: ...
     def get_num_neighbors(self) -> int: ...
-    def get_particle_tile_data(self) -> ParticleTileData_pureSoA_0_0_8_0: ...
+    def get_particle_tile_data(self) -> ParticleTileData_pureSoA_8_0: ...
     def get_struct_of_arrays(self) -> StructOfArrays_8_0_idcpu_arena: ...
     def push_back(self, arg0: Particle_8_0) -> None:
         """
@@ -9659,7 +9594,7 @@ class ParticleTile_pureSoA_0_0_8_0_arena:
     def resize(self, arg0: int) -> None: ...
     def set_num_neighbors(self, arg0: int) -> None: ...
     def shrink_to_fit(self) -> None: ...
-    def swap(self, arg0: ParticleTile_pureSoA_0_0_8_0_arena) -> None: ...
+    def swap(self, arg0: ParticleTile_pureSoA_8_0_arena) -> None: ...
     @property
     def empty(self) -> bool: ...
     @property
@@ -9681,7 +9616,7 @@ class ParticleTile_pureSoA_0_0_8_0_arena:
     @property
     def size(self) -> int: ...
 
-class ParticleTile_pureSoA_0_0_8_0_default:
+class ParticleTile_pureSoA_8_0_default:
     NAI: typing.ClassVar[int] = 0
     NAR: typing.ClassVar[int] = 8
     def __getitem__(self, arg0: int) -> Particle_8_0: ...
@@ -9690,7 +9625,7 @@ class ParticleTile_pureSoA_0_0_8_0_default:
     def capacity(self) -> int: ...
     def define(self, arg0: int, arg1: int) -> None: ...
     def get_num_neighbors(self) -> int: ...
-    def get_particle_tile_data(self) -> ParticleTileData_pureSoA_0_0_8_0: ...
+    def get_particle_tile_data(self) -> ParticleTileData_pureSoA_8_0: ...
     def get_struct_of_arrays(self) -> StructOfArrays_8_0_idcpu_default: ...
     def push_back(self, arg0: Particle_8_0) -> None:
         """
@@ -9718,7 +9653,7 @@ class ParticleTile_pureSoA_0_0_8_0_default:
     def resize(self, arg0: int) -> None: ...
     def set_num_neighbors(self, arg0: int) -> None: ...
     def shrink_to_fit(self) -> None: ...
-    def swap(self, arg0: ParticleTile_pureSoA_0_0_8_0_default) -> None: ...
+    def swap(self, arg0: ParticleTile_pureSoA_8_0_default) -> None: ...
     @property
     def empty(self) -> bool: ...
     @property
@@ -9740,7 +9675,7 @@ class ParticleTile_pureSoA_0_0_8_0_default:
     @property
     def size(self) -> int: ...
 
-class ParticleTile_pureSoA_0_0_8_0_pinned:
+class ParticleTile_pureSoA_8_0_pinned:
     NAI: typing.ClassVar[int] = 0
     NAR: typing.ClassVar[int] = 8
     def __getitem__(self, arg0: int) -> Particle_8_0: ...
@@ -9749,7 +9684,7 @@ class ParticleTile_pureSoA_0_0_8_0_pinned:
     def capacity(self) -> int: ...
     def define(self, arg0: int, arg1: int) -> None: ...
     def get_num_neighbors(self) -> int: ...
-    def get_particle_tile_data(self) -> ParticleTileData_pureSoA_0_0_8_0: ...
+    def get_particle_tile_data(self) -> ParticleTileData_pureSoA_8_0: ...
     def get_struct_of_arrays(self) -> StructOfArrays_8_0_idcpu_pinned: ...
     def push_back(self, arg0: Particle_8_0) -> None:
         """
@@ -9777,7 +9712,7 @@ class ParticleTile_pureSoA_0_0_8_0_pinned:
     def resize(self, arg0: int) -> None: ...
     def set_num_neighbors(self, arg0: int) -> None: ...
     def shrink_to_fit(self) -> None: ...
-    def swap(self, arg0: ParticleTile_pureSoA_0_0_8_0_pinned) -> None: ...
+    def swap(self, arg0: ParticleTile_pureSoA_8_0_pinned) -> None: ...
     @property
     def empty(self) -> bool: ...
     @property
@@ -9799,9 +9734,9 @@ class ParticleTile_pureSoA_0_0_8_0_pinned:
     @property
     def size(self) -> int: ...
 
-class Particle_0_0:
+class Particle_1_0:
     NInt: typing.ClassVar[int] = 0
-    NReal: typing.ClassVar[int] = 0
+    NReal: typing.ClassVar[int] = 1
     x: float
     @typing.overload
     def NextID(self) -> int: ...
@@ -9824,66 +9759,6 @@ class Particle_0_0:
     def get_idata(self, arg0: int) -> None: ...
     @typing.overload
     def get_idata(self) -> None: ...
-    @typing.overload
-    def get_rdata(self, arg0: int) -> None: ...
-    @typing.overload
-    def get_rdata(self) -> None: ...
-    def id(self) -> int: ...
-    @typing.overload
-    def pos(self, arg0: int) -> float: ...
-    @typing.overload
-    def pos(self) -> RealVect: ...
-    @typing.overload
-    def setPos(self, arg0: int, arg1: float) -> None: ...
-    @typing.overload
-    def setPos(self, arg0: RealVect) -> None: ...
-    @typing.overload
-    def setPos(
-        self,
-        arg0: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(1)],
-    ) -> None: ...
-    @typing.overload
-    def set_idata(self, arg0: int, arg1: int) -> None: ...
-    @typing.overload
-    def set_idata(
-        self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(0)],
-    ) -> None: ...
-    @typing.overload
-    def set_rdata(self, arg0: int, arg1: float) -> None: ...
-    @typing.overload
-    def set_rdata(
-        self,
-        arg0: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(0)],
-    ) -> None: ...
-
-class Particle_1_1:
-    NInt: typing.ClassVar[int] = 1
-    NReal: typing.ClassVar[int] = 1
-    x: float
-    @typing.overload
-    def NextID(self) -> int: ...
-    @typing.overload
-    def NextID(self, arg0: int) -> None: ...
-    @typing.overload
-    def __init__(self) -> None: ...
-    @typing.overload
-    def __init__(self, arg0: float) -> None: ...
-    @typing.overload
-    def __init__(self, arg0: float, *args) -> None: ...
-    @typing.overload
-    def __init__(self, arg0: float, **kwargs) -> None: ...
-    @typing.overload
-    def __init__(self, **kwargs) -> None: ...
-    def __repr__(self) -> str: ...
-    def __str__(self) -> str: ...
-    def cpu(self) -> int: ...
-    @typing.overload
-    def get_idata(self, arg0: int) -> int: ...
-    @typing.overload
-    def get_idata(
-        self,
-    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(1)]: ...
     @typing.overload
     def get_rdata(self, arg0: int) -> float: ...
     @typing.overload
@@ -9909,7 +9784,7 @@ class Particle_1_1:
     @typing.overload
     def set_idata(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(1)],
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(0)],
     ) -> None: ...
     @typing.overload
     def set_rdata(self, arg0: int, arg1: float) -> None: ...
@@ -9981,190 +9856,6 @@ class Particle_2_1:
         arg0: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(2)],
     ) -> None: ...
 
-class Particle_37_1:
-    NInt: typing.ClassVar[int] = 1
-    NReal: typing.ClassVar[int] = 37
-    x: float
-    @typing.overload
-    def NextID(self) -> int: ...
-    @typing.overload
-    def NextID(self, arg0: int) -> None: ...
-    @typing.overload
-    def __init__(self) -> None: ...
-    @typing.overload
-    def __init__(self, arg0: float) -> None: ...
-    @typing.overload
-    def __init__(self, arg0: float, *args) -> None: ...
-    @typing.overload
-    def __init__(self, arg0: float, **kwargs) -> None: ...
-    @typing.overload
-    def __init__(self, **kwargs) -> None: ...
-    def __repr__(self) -> str: ...
-    def __str__(self) -> str: ...
-    def cpu(self) -> int: ...
-    @typing.overload
-    def get_idata(self, arg0: int) -> int: ...
-    @typing.overload
-    def get_idata(
-        self,
-    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(1)]: ...
-    @typing.overload
-    def get_rdata(self, arg0: int) -> float: ...
-    @typing.overload
-    def get_rdata(
-        self,
-    ) -> typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(37)]: ...
-    def id(self) -> int: ...
-    @typing.overload
-    def pos(self, arg0: int) -> float: ...
-    @typing.overload
-    def pos(self) -> RealVect: ...
-    @typing.overload
-    def setPos(self, arg0: int, arg1: float) -> None: ...
-    @typing.overload
-    def setPos(self, arg0: RealVect) -> None: ...
-    @typing.overload
-    def setPos(
-        self,
-        arg0: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(1)],
-    ) -> None: ...
-    @typing.overload
-    def set_idata(self, arg0: int, arg1: int) -> None: ...
-    @typing.overload
-    def set_idata(
-        self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(1)],
-    ) -> None: ...
-    @typing.overload
-    def set_rdata(self, arg0: int, arg1: float) -> None: ...
-    @typing.overload
-    def set_rdata(
-        self,
-        arg0: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(37)],
-    ) -> None: ...
-
-class Particle_3_2:
-    NInt: typing.ClassVar[int] = 2
-    NReal: typing.ClassVar[int] = 3
-    x: float
-    @typing.overload
-    def NextID(self) -> int: ...
-    @typing.overload
-    def NextID(self, arg0: int) -> None: ...
-    @typing.overload
-    def __init__(self) -> None: ...
-    @typing.overload
-    def __init__(self, arg0: float) -> None: ...
-    @typing.overload
-    def __init__(self, arg0: float, *args) -> None: ...
-    @typing.overload
-    def __init__(self, arg0: float, **kwargs) -> None: ...
-    @typing.overload
-    def __init__(self, **kwargs) -> None: ...
-    def __repr__(self) -> str: ...
-    def __str__(self) -> str: ...
-    def cpu(self) -> int: ...
-    @typing.overload
-    def get_idata(self, arg0: int) -> int: ...
-    @typing.overload
-    def get_idata(
-        self,
-    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(2)]: ...
-    @typing.overload
-    def get_rdata(self, arg0: int) -> float: ...
-    @typing.overload
-    def get_rdata(
-        self,
-    ) -> typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(3)]: ...
-    def id(self) -> int: ...
-    @typing.overload
-    def pos(self, arg0: int) -> float: ...
-    @typing.overload
-    def pos(self) -> RealVect: ...
-    @typing.overload
-    def setPos(self, arg0: int, arg1: float) -> None: ...
-    @typing.overload
-    def setPos(self, arg0: RealVect) -> None: ...
-    @typing.overload
-    def setPos(
-        self,
-        arg0: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(1)],
-    ) -> None: ...
-    @typing.overload
-    def set_idata(self, arg0: int, arg1: int) -> None: ...
-    @typing.overload
-    def set_idata(
-        self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(2)],
-    ) -> None: ...
-    @typing.overload
-    def set_rdata(self, arg0: int, arg1: float) -> None: ...
-    @typing.overload
-    def set_rdata(
-        self,
-        arg0: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(3)],
-    ) -> None: ...
-
-class Particle_4_0:
-    NInt: typing.ClassVar[int] = 0
-    NReal: typing.ClassVar[int] = 4
-    x: float
-    @typing.overload
-    def NextID(self) -> int: ...
-    @typing.overload
-    def NextID(self, arg0: int) -> None: ...
-    @typing.overload
-    def __init__(self) -> None: ...
-    @typing.overload
-    def __init__(self, arg0: float) -> None: ...
-    @typing.overload
-    def __init__(self, arg0: float, *args) -> None: ...
-    @typing.overload
-    def __init__(self, arg0: float, **kwargs) -> None: ...
-    @typing.overload
-    def __init__(self, **kwargs) -> None: ...
-    def __repr__(self) -> str: ...
-    def __str__(self) -> str: ...
-    def cpu(self) -> int: ...
-    @typing.overload
-    def get_idata(self, arg0: int) -> None: ...
-    @typing.overload
-    def get_idata(self) -> None: ...
-    @typing.overload
-    def get_rdata(self, arg0: int) -> float: ...
-    @typing.overload
-    def get_rdata(
-        self,
-    ) -> typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(4)]: ...
-    def id(self) -> int: ...
-    @typing.overload
-    def pos(self, arg0: int) -> float: ...
-    @typing.overload
-    def pos(self) -> RealVect: ...
-    @typing.overload
-    def setPos(self, arg0: int, arg1: float) -> None: ...
-    @typing.overload
-    def setPos(self, arg0: RealVect) -> None: ...
-    @typing.overload
-    def setPos(
-        self,
-        arg0: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(1)],
-    ) -> None: ...
-    @typing.overload
-    def set_idata(self, arg0: int, arg1: int) -> None: ...
-    @typing.overload
-    def set_idata(
-        self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(0)],
-    ) -> None: ...
-    @typing.overload
-    def set_rdata(self, arg0: int, arg1: float) -> None: ...
-    @typing.overload
-    def set_rdata(
-        self,
-        arg0: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(4)],
-    ) -> None: ...
-
 class Particle_5_0:
     NInt: typing.ClassVar[int] = 0
     NReal: typing.ClassVar[int] = 5
@@ -10225,9 +9916,9 @@ class Particle_5_0:
         arg0: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(5)],
     ) -> None: ...
 
-class Particle_6_0:
-    NInt: typing.ClassVar[int] = 0
-    NReal: typing.ClassVar[int] = 6
+class Particle_5_2:
+    NInt: typing.ClassVar[int] = 2
+    NReal: typing.ClassVar[int] = 5
     x: float
     @typing.overload
     def NextID(self) -> int: ...
@@ -10247,15 +9938,17 @@ class Particle_6_0:
     def __str__(self) -> str: ...
     def cpu(self) -> int: ...
     @typing.overload
-    def get_idata(self, arg0: int) -> None: ...
+    def get_idata(self, arg0: int) -> int: ...
     @typing.overload
-    def get_idata(self) -> None: ...
+    def get_idata(
+        self,
+    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(2)]: ...
     @typing.overload
     def get_rdata(self, arg0: int) -> float: ...
     @typing.overload
     def get_rdata(
         self,
-    ) -> typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(6)]: ...
+    ) -> typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(5)]: ...
     def id(self) -> int: ...
     @typing.overload
     def pos(self, arg0: int) -> float: ...
@@ -10275,74 +9968,14 @@ class Particle_6_0:
     @typing.overload
     def set_idata(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(0)],
+        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(2)],
     ) -> None: ...
     @typing.overload
     def set_rdata(self, arg0: int, arg1: float) -> None: ...
     @typing.overload
     def set_rdata(
         self,
-        arg0: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(6)],
-    ) -> None: ...
-
-class Particle_7_0:
-    NInt: typing.ClassVar[int] = 0
-    NReal: typing.ClassVar[int] = 7
-    x: float
-    @typing.overload
-    def NextID(self) -> int: ...
-    @typing.overload
-    def NextID(self, arg0: int) -> None: ...
-    @typing.overload
-    def __init__(self) -> None: ...
-    @typing.overload
-    def __init__(self, arg0: float) -> None: ...
-    @typing.overload
-    def __init__(self, arg0: float, *args) -> None: ...
-    @typing.overload
-    def __init__(self, arg0: float, **kwargs) -> None: ...
-    @typing.overload
-    def __init__(self, **kwargs) -> None: ...
-    def __repr__(self) -> str: ...
-    def __str__(self) -> str: ...
-    def cpu(self) -> int: ...
-    @typing.overload
-    def get_idata(self, arg0: int) -> None: ...
-    @typing.overload
-    def get_idata(self) -> None: ...
-    @typing.overload
-    def get_rdata(self, arg0: int) -> float: ...
-    @typing.overload
-    def get_rdata(
-        self,
-    ) -> typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(7)]: ...
-    def id(self) -> int: ...
-    @typing.overload
-    def pos(self, arg0: int) -> float: ...
-    @typing.overload
-    def pos(self) -> RealVect: ...
-    @typing.overload
-    def setPos(self, arg0: int, arg1: float) -> None: ...
-    @typing.overload
-    def setPos(self, arg0: RealVect) -> None: ...
-    @typing.overload
-    def setPos(
-        self,
-        arg0: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(1)],
-    ) -> None: ...
-    @typing.overload
-    def set_idata(self, arg0: int, arg1: int) -> None: ...
-    @typing.overload
-    def set_idata(
-        self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(0)],
-    ) -> None: ...
-    @typing.overload
-    def set_rdata(self, arg0: int, arg1: float) -> None: ...
-    @typing.overload
-    def set_rdata(
-        self,
-        arg0: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(7)],
+        arg0: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(5)],
     ) -> None: ...
 
 class Particle_8_0:
@@ -10684,7 +10317,7 @@ class RealVect:
         Length or 2-Norm of this vector
         """
 
-class StructOfArrays_2_1_arena:
+class StructOfArrays_1_0_idcpu_arena:
     def __init__(self) -> None: ...
     def __len__(self) -> int:
         """
@@ -10692,1026 +10325,11 @@ class StructOfArrays_2_1_arena:
         """
 
     def define(self, arg0: int, arg1: int) -> None: ...
-    @typing.overload
-    def get_int_data(
-        self,
-    ) -> typing.Annotated[
-        list[PODVector_int_arena], pybind11_stubgen.typing_ext.FixedSize(1)
-    ]:
+    def get_idcpu_data(self) -> PODVector_uint64_arena:
         """
-        Get access to the particle Int Arrays (only compile-time components)
+        Get access to a particle IdCPU component Array
         """
 
-    @typing.overload
-    def get_int_data(self, index: int) -> PODVector_int_arena:
-        """
-        Get access to a particle Real component Array (compile-time and runtime component)
-        """
-
-    def get_num_neighbors(self) -> int: ...
-    @typing.overload
-    def get_real_data(
-        self,
-    ) -> typing.Annotated[
-        list[PODVector_real_arena], pybind11_stubgen.typing_ext.FixedSize(2)
-    ]:
-        """
-        Get access to the particle Real Arrays (only compile-time components)
-        """
-
-    @typing.overload
-    def get_real_data(self, index: int) -> PODVector_real_arena:
-        """
-        Get access to a particle Real component Array (compile-time and runtime component)
-        """
-
-    def resize(self, arg0: int) -> None: ...
-    def set_num_neighbors(self, arg0: int) -> None: ...
-    def soa_int_comps(self, num_comps):
-        """
-
-        Name the int components in SoA.
-
-        Parameters
-        ----------
-        self : SoA Type
-          maybe unused, depending on implementation
-        num_comps : int
-          number of components to generate names for.
-
-        Returns
-        -------
-        A list of length num_comps with values "i1", "i2", "i3", ...
-
-        """
-
-    def soa_real_comps(self, num_comps, spacedim=3, rotate=True):
-        """
-
-        Name the ParticleReal components in SoA.
-
-        Parameters
-        ----------
-        self : SoA Type
-          maybe unused, depending on implementation
-        num_comps : int
-          number of components to generate names for.
-        spacedim : int
-          AMReX dimensionality
-        rotate : bool = True
-          start with "x", "y", "z", "a", "b", ...
-
-        Returns
-        -------
-        A list of length num_comps with values
-        rotate=True (for pure SoA layout):
-        - 3D: "x", "y", "z", "a", "b", ... "w", "r0", "r1", ...
-        - 2D: "x", "y", "a", "b", ... "w", "r0", "r1", ...
-        - 1D: "x", "a", "b", ... "w", "r0", "r1", ...
-        rotate=False (for legacy layout):
-        - 1D-3D: "a", "b", ... "w", "r0", "r1", ...
-
-        """
-
-    def to_cupy(self, copy=False):
-        """
-
-        Provide Cupy views into a StructOfArrays.
-
-        Parameters
-        ----------
-        self : amrex.StructOfArrays_*
-            A StructOfArrays class in pyAMReX
-        copy : bool, optional
-            Copy the data if true, otherwise create a view (default).
-
-        Returns
-        -------
-        namedtuple
-            A tuple with real and int components that are each dicts
-            of 1D numpy arrays. The dictionary key order is the same as
-            in the C++ component order.
-            For pure SoA particle layouts, an additional component idcpu
-            with global particle indices is populated.
-
-        Raises
-        ------
-        ImportError
-            Raises an exception if cupy is not installed
-
-        """
-
-    def to_numpy(self, copy=False):
-        """
-
-        Provide Numpy views into a StructOfArrays.
-
-        Parameters
-        ----------
-        self : amrex.StructOfArrays_*
-            A StructOfArrays class in pyAMReX
-        copy : bool, optional
-            Copy the data if true, otherwise create a view (default).
-
-        Returns
-        -------
-        namedtuple
-            A tuple with real and int components that are each dicts
-            of 1D numpy arrays. The dictionary key order is the same as
-            in the C++ component order.
-            For pure SoA particle layouts, an additional component idcpu
-            with global particle indices is populated.
-
-        """
-
-    @property
-    def has_idcpu(self) -> bool:
-        """
-        In pure SoA particle layout, idcpu is an array in the SoA
-        """
-
-    @property
-    def num_int_comps(self) -> int:
-        """
-        Get the number of compile-time + runtime Int components
-        """
-
-    @property
-    def num_particles(self) -> int: ...
-    @property
-    def num_real_comps(self) -> int:
-        """
-        Get the number of compile-time + runtime Real components
-        """
-
-    @property
-    def num_real_particles(self) -> int: ...
-    @property
-    def num_total_particles(self) -> int: ...
-    @property
-    def size(self) -> int:
-        """
-        Get the number of particles
-        """
-
-class StructOfArrays_2_1_default:
-    def __init__(self) -> None: ...
-    def __len__(self) -> int:
-        """
-        Get the number of particles
-        """
-
-    def define(self, arg0: int, arg1: int) -> None: ...
-    @typing.overload
-    def get_int_data(
-        self,
-    ) -> typing.Annotated[
-        list[PODVector_int_std], pybind11_stubgen.typing_ext.FixedSize(1)
-    ]:
-        """
-        Get access to the particle Int Arrays (only compile-time components)
-        """
-
-    @typing.overload
-    def get_int_data(self, index: int) -> PODVector_int_std:
-        """
-        Get access to a particle Real component Array (compile-time and runtime component)
-        """
-
-    def get_num_neighbors(self) -> int: ...
-    @typing.overload
-    def get_real_data(
-        self,
-    ) -> typing.Annotated[
-        list[PODVector_real_std], pybind11_stubgen.typing_ext.FixedSize(2)
-    ]:
-        """
-        Get access to the particle Real Arrays (only compile-time components)
-        """
-
-    @typing.overload
-    def get_real_data(self, index: int) -> PODVector_real_std:
-        """
-        Get access to a particle Real component Array (compile-time and runtime component)
-        """
-
-    def resize(self, arg0: int) -> None: ...
-    def set_num_neighbors(self, arg0: int) -> None: ...
-    def soa_int_comps(self, num_comps):
-        """
-
-        Name the int components in SoA.
-
-        Parameters
-        ----------
-        self : SoA Type
-          maybe unused, depending on implementation
-        num_comps : int
-          number of components to generate names for.
-
-        Returns
-        -------
-        A list of length num_comps with values "i1", "i2", "i3", ...
-
-        """
-
-    def soa_real_comps(self, num_comps, spacedim=3, rotate=True):
-        """
-
-        Name the ParticleReal components in SoA.
-
-        Parameters
-        ----------
-        self : SoA Type
-          maybe unused, depending on implementation
-        num_comps : int
-          number of components to generate names for.
-        spacedim : int
-          AMReX dimensionality
-        rotate : bool = True
-          start with "x", "y", "z", "a", "b", ...
-
-        Returns
-        -------
-        A list of length num_comps with values
-        rotate=True (for pure SoA layout):
-        - 3D: "x", "y", "z", "a", "b", ... "w", "r0", "r1", ...
-        - 2D: "x", "y", "a", "b", ... "w", "r0", "r1", ...
-        - 1D: "x", "a", "b", ... "w", "r0", "r1", ...
-        rotate=False (for legacy layout):
-        - 1D-3D: "a", "b", ... "w", "r0", "r1", ...
-
-        """
-
-    def to_cupy(self, copy=False):
-        """
-
-        Provide Cupy views into a StructOfArrays.
-
-        Parameters
-        ----------
-        self : amrex.StructOfArrays_*
-            A StructOfArrays class in pyAMReX
-        copy : bool, optional
-            Copy the data if true, otherwise create a view (default).
-
-        Returns
-        -------
-        namedtuple
-            A tuple with real and int components that are each dicts
-            of 1D numpy arrays. The dictionary key order is the same as
-            in the C++ component order.
-            For pure SoA particle layouts, an additional component idcpu
-            with global particle indices is populated.
-
-        Raises
-        ------
-        ImportError
-            Raises an exception if cupy is not installed
-
-        """
-
-    def to_numpy(self, copy=False):
-        """
-
-        Provide Numpy views into a StructOfArrays.
-
-        Parameters
-        ----------
-        self : amrex.StructOfArrays_*
-            A StructOfArrays class in pyAMReX
-        copy : bool, optional
-            Copy the data if true, otherwise create a view (default).
-
-        Returns
-        -------
-        namedtuple
-            A tuple with real and int components that are each dicts
-            of 1D numpy arrays. The dictionary key order is the same as
-            in the C++ component order.
-            For pure SoA particle layouts, an additional component idcpu
-            with global particle indices is populated.
-
-        """
-
-    @property
-    def has_idcpu(self) -> bool:
-        """
-        In pure SoA particle layout, idcpu is an array in the SoA
-        """
-
-    @property
-    def num_int_comps(self) -> int:
-        """
-        Get the number of compile-time + runtime Int components
-        """
-
-    @property
-    def num_particles(self) -> int: ...
-    @property
-    def num_real_comps(self) -> int:
-        """
-        Get the number of compile-time + runtime Real components
-        """
-
-    @property
-    def num_real_particles(self) -> int: ...
-    @property
-    def num_total_particles(self) -> int: ...
-    @property
-    def size(self) -> int:
-        """
-        Get the number of particles
-        """
-
-class StructOfArrays_2_1_pinned:
-    def __init__(self) -> None: ...
-    def __len__(self) -> int:
-        """
-        Get the number of particles
-        """
-
-    def define(self, arg0: int, arg1: int) -> None: ...
-    @typing.overload
-    def get_int_data(
-        self,
-    ) -> typing.Annotated[
-        list[PODVector_int_pinned], pybind11_stubgen.typing_ext.FixedSize(1)
-    ]:
-        """
-        Get access to the particle Int Arrays (only compile-time components)
-        """
-
-    @typing.overload
-    def get_int_data(self, index: int) -> PODVector_int_pinned:
-        """
-        Get access to a particle Real component Array (compile-time and runtime component)
-        """
-
-    def get_num_neighbors(self) -> int: ...
-    @typing.overload
-    def get_real_data(
-        self,
-    ) -> typing.Annotated[
-        list[PODVector_real_pinned], pybind11_stubgen.typing_ext.FixedSize(2)
-    ]:
-        """
-        Get access to the particle Real Arrays (only compile-time components)
-        """
-
-    @typing.overload
-    def get_real_data(self, index: int) -> PODVector_real_pinned:
-        """
-        Get access to a particle Real component Array (compile-time and runtime component)
-        """
-
-    def resize(self, arg0: int) -> None: ...
-    def set_num_neighbors(self, arg0: int) -> None: ...
-    def soa_int_comps(self, num_comps):
-        """
-
-        Name the int components in SoA.
-
-        Parameters
-        ----------
-        self : SoA Type
-          maybe unused, depending on implementation
-        num_comps : int
-          number of components to generate names for.
-
-        Returns
-        -------
-        A list of length num_comps with values "i1", "i2", "i3", ...
-
-        """
-
-    def soa_real_comps(self, num_comps, spacedim=3, rotate=True):
-        """
-
-        Name the ParticleReal components in SoA.
-
-        Parameters
-        ----------
-        self : SoA Type
-          maybe unused, depending on implementation
-        num_comps : int
-          number of components to generate names for.
-        spacedim : int
-          AMReX dimensionality
-        rotate : bool = True
-          start with "x", "y", "z", "a", "b", ...
-
-        Returns
-        -------
-        A list of length num_comps with values
-        rotate=True (for pure SoA layout):
-        - 3D: "x", "y", "z", "a", "b", ... "w", "r0", "r1", ...
-        - 2D: "x", "y", "a", "b", ... "w", "r0", "r1", ...
-        - 1D: "x", "a", "b", ... "w", "r0", "r1", ...
-        rotate=False (for legacy layout):
-        - 1D-3D: "a", "b", ... "w", "r0", "r1", ...
-
-        """
-
-    def to_cupy(self, copy=False):
-        """
-
-        Provide Cupy views into a StructOfArrays.
-
-        Parameters
-        ----------
-        self : amrex.StructOfArrays_*
-            A StructOfArrays class in pyAMReX
-        copy : bool, optional
-            Copy the data if true, otherwise create a view (default).
-
-        Returns
-        -------
-        namedtuple
-            A tuple with real and int components that are each dicts
-            of 1D numpy arrays. The dictionary key order is the same as
-            in the C++ component order.
-            For pure SoA particle layouts, an additional component idcpu
-            with global particle indices is populated.
-
-        Raises
-        ------
-        ImportError
-            Raises an exception if cupy is not installed
-
-        """
-
-    def to_numpy(self, copy=False):
-        """
-
-        Provide Numpy views into a StructOfArrays.
-
-        Parameters
-        ----------
-        self : amrex.StructOfArrays_*
-            A StructOfArrays class in pyAMReX
-        copy : bool, optional
-            Copy the data if true, otherwise create a view (default).
-
-        Returns
-        -------
-        namedtuple
-            A tuple with real and int components that are each dicts
-            of 1D numpy arrays. The dictionary key order is the same as
-            in the C++ component order.
-            For pure SoA particle layouts, an additional component idcpu
-            with global particle indices is populated.
-
-        """
-
-    @property
-    def has_idcpu(self) -> bool:
-        """
-        In pure SoA particle layout, idcpu is an array in the SoA
-        """
-
-    @property
-    def num_int_comps(self) -> int:
-        """
-        Get the number of compile-time + runtime Int components
-        """
-
-    @property
-    def num_particles(self) -> int: ...
-    @property
-    def num_real_comps(self) -> int:
-        """
-        Get the number of compile-time + runtime Real components
-        """
-
-    @property
-    def num_real_particles(self) -> int: ...
-    @property
-    def num_total_particles(self) -> int: ...
-    @property
-    def size(self) -> int:
-        """
-        Get the number of particles
-        """
-
-class StructOfArrays_37_1_arena:
-    def __init__(self) -> None: ...
-    def __len__(self) -> int:
-        """
-        Get the number of particles
-        """
-
-    def define(self, arg0: int, arg1: int) -> None: ...
-    @typing.overload
-    def get_int_data(
-        self,
-    ) -> typing.Annotated[
-        list[PODVector_int_arena], pybind11_stubgen.typing_ext.FixedSize(1)
-    ]:
-        """
-        Get access to the particle Int Arrays (only compile-time components)
-        """
-
-    @typing.overload
-    def get_int_data(self, index: int) -> PODVector_int_arena:
-        """
-        Get access to a particle Real component Array (compile-time and runtime component)
-        """
-
-    def get_num_neighbors(self) -> int: ...
-    @typing.overload
-    def get_real_data(
-        self,
-    ) -> typing.Annotated[
-        list[PODVector_real_arena], pybind11_stubgen.typing_ext.FixedSize(37)
-    ]:
-        """
-        Get access to the particle Real Arrays (only compile-time components)
-        """
-
-    @typing.overload
-    def get_real_data(self, index: int) -> PODVector_real_arena:
-        """
-        Get access to a particle Real component Array (compile-time and runtime component)
-        """
-
-    def resize(self, arg0: int) -> None: ...
-    def set_num_neighbors(self, arg0: int) -> None: ...
-    def soa_int_comps(self, num_comps):
-        """
-
-        Name the int components in SoA.
-
-        Parameters
-        ----------
-        self : SoA Type
-          maybe unused, depending on implementation
-        num_comps : int
-          number of components to generate names for.
-
-        Returns
-        -------
-        A list of length num_comps with values "i1", "i2", "i3", ...
-
-        """
-
-    def soa_real_comps(self, num_comps, spacedim=3, rotate=True):
-        """
-
-        Name the ParticleReal components in SoA.
-
-        Parameters
-        ----------
-        self : SoA Type
-          maybe unused, depending on implementation
-        num_comps : int
-          number of components to generate names for.
-        spacedim : int
-          AMReX dimensionality
-        rotate : bool = True
-          start with "x", "y", "z", "a", "b", ...
-
-        Returns
-        -------
-        A list of length num_comps with values
-        rotate=True (for pure SoA layout):
-        - 3D: "x", "y", "z", "a", "b", ... "w", "r0", "r1", ...
-        - 2D: "x", "y", "a", "b", ... "w", "r0", "r1", ...
-        - 1D: "x", "a", "b", ... "w", "r0", "r1", ...
-        rotate=False (for legacy layout):
-        - 1D-3D: "a", "b", ... "w", "r0", "r1", ...
-
-        """
-
-    def to_cupy(self, copy=False):
-        """
-
-        Provide Cupy views into a StructOfArrays.
-
-        Parameters
-        ----------
-        self : amrex.StructOfArrays_*
-            A StructOfArrays class in pyAMReX
-        copy : bool, optional
-            Copy the data if true, otherwise create a view (default).
-
-        Returns
-        -------
-        namedtuple
-            A tuple with real and int components that are each dicts
-            of 1D numpy arrays. The dictionary key order is the same as
-            in the C++ component order.
-            For pure SoA particle layouts, an additional component idcpu
-            with global particle indices is populated.
-
-        Raises
-        ------
-        ImportError
-            Raises an exception if cupy is not installed
-
-        """
-
-    def to_numpy(self, copy=False):
-        """
-
-        Provide Numpy views into a StructOfArrays.
-
-        Parameters
-        ----------
-        self : amrex.StructOfArrays_*
-            A StructOfArrays class in pyAMReX
-        copy : bool, optional
-            Copy the data if true, otherwise create a view (default).
-
-        Returns
-        -------
-        namedtuple
-            A tuple with real and int components that are each dicts
-            of 1D numpy arrays. The dictionary key order is the same as
-            in the C++ component order.
-            For pure SoA particle layouts, an additional component idcpu
-            with global particle indices is populated.
-
-        """
-
-    @property
-    def has_idcpu(self) -> bool:
-        """
-        In pure SoA particle layout, idcpu is an array in the SoA
-        """
-
-    @property
-    def num_int_comps(self) -> int:
-        """
-        Get the number of compile-time + runtime Int components
-        """
-
-    @property
-    def num_particles(self) -> int: ...
-    @property
-    def num_real_comps(self) -> int:
-        """
-        Get the number of compile-time + runtime Real components
-        """
-
-    @property
-    def num_real_particles(self) -> int: ...
-    @property
-    def num_total_particles(self) -> int: ...
-    @property
-    def size(self) -> int:
-        """
-        Get the number of particles
-        """
-
-class StructOfArrays_37_1_default:
-    def __init__(self) -> None: ...
-    def __len__(self) -> int:
-        """
-        Get the number of particles
-        """
-
-    def define(self, arg0: int, arg1: int) -> None: ...
-    @typing.overload
-    def get_int_data(
-        self,
-    ) -> typing.Annotated[
-        list[PODVector_int_std], pybind11_stubgen.typing_ext.FixedSize(1)
-    ]:
-        """
-        Get access to the particle Int Arrays (only compile-time components)
-        """
-
-    @typing.overload
-    def get_int_data(self, index: int) -> PODVector_int_std:
-        """
-        Get access to a particle Real component Array (compile-time and runtime component)
-        """
-
-    def get_num_neighbors(self) -> int: ...
-    @typing.overload
-    def get_real_data(
-        self,
-    ) -> typing.Annotated[
-        list[PODVector_real_std], pybind11_stubgen.typing_ext.FixedSize(37)
-    ]:
-        """
-        Get access to the particle Real Arrays (only compile-time components)
-        """
-
-    @typing.overload
-    def get_real_data(self, index: int) -> PODVector_real_std:
-        """
-        Get access to a particle Real component Array (compile-time and runtime component)
-        """
-
-    def resize(self, arg0: int) -> None: ...
-    def set_num_neighbors(self, arg0: int) -> None: ...
-    def soa_int_comps(self, num_comps):
-        """
-
-        Name the int components in SoA.
-
-        Parameters
-        ----------
-        self : SoA Type
-          maybe unused, depending on implementation
-        num_comps : int
-          number of components to generate names for.
-
-        Returns
-        -------
-        A list of length num_comps with values "i1", "i2", "i3", ...
-
-        """
-
-    def soa_real_comps(self, num_comps, spacedim=3, rotate=True):
-        """
-
-        Name the ParticleReal components in SoA.
-
-        Parameters
-        ----------
-        self : SoA Type
-          maybe unused, depending on implementation
-        num_comps : int
-          number of components to generate names for.
-        spacedim : int
-          AMReX dimensionality
-        rotate : bool = True
-          start with "x", "y", "z", "a", "b", ...
-
-        Returns
-        -------
-        A list of length num_comps with values
-        rotate=True (for pure SoA layout):
-        - 3D: "x", "y", "z", "a", "b", ... "w", "r0", "r1", ...
-        - 2D: "x", "y", "a", "b", ... "w", "r0", "r1", ...
-        - 1D: "x", "a", "b", ... "w", "r0", "r1", ...
-        rotate=False (for legacy layout):
-        - 1D-3D: "a", "b", ... "w", "r0", "r1", ...
-
-        """
-
-    def to_cupy(self, copy=False):
-        """
-
-        Provide Cupy views into a StructOfArrays.
-
-        Parameters
-        ----------
-        self : amrex.StructOfArrays_*
-            A StructOfArrays class in pyAMReX
-        copy : bool, optional
-            Copy the data if true, otherwise create a view (default).
-
-        Returns
-        -------
-        namedtuple
-            A tuple with real and int components that are each dicts
-            of 1D numpy arrays. The dictionary key order is the same as
-            in the C++ component order.
-            For pure SoA particle layouts, an additional component idcpu
-            with global particle indices is populated.
-
-        Raises
-        ------
-        ImportError
-            Raises an exception if cupy is not installed
-
-        """
-
-    def to_numpy(self, copy=False):
-        """
-
-        Provide Numpy views into a StructOfArrays.
-
-        Parameters
-        ----------
-        self : amrex.StructOfArrays_*
-            A StructOfArrays class in pyAMReX
-        copy : bool, optional
-            Copy the data if true, otherwise create a view (default).
-
-        Returns
-        -------
-        namedtuple
-            A tuple with real and int components that are each dicts
-            of 1D numpy arrays. The dictionary key order is the same as
-            in the C++ component order.
-            For pure SoA particle layouts, an additional component idcpu
-            with global particle indices is populated.
-
-        """
-
-    @property
-    def has_idcpu(self) -> bool:
-        """
-        In pure SoA particle layout, idcpu is an array in the SoA
-        """
-
-    @property
-    def num_int_comps(self) -> int:
-        """
-        Get the number of compile-time + runtime Int components
-        """
-
-    @property
-    def num_particles(self) -> int: ...
-    @property
-    def num_real_comps(self) -> int:
-        """
-        Get the number of compile-time + runtime Real components
-        """
-
-    @property
-    def num_real_particles(self) -> int: ...
-    @property
-    def num_total_particles(self) -> int: ...
-    @property
-    def size(self) -> int:
-        """
-        Get the number of particles
-        """
-
-class StructOfArrays_37_1_pinned:
-    def __init__(self) -> None: ...
-    def __len__(self) -> int:
-        """
-        Get the number of particles
-        """
-
-    def define(self, arg0: int, arg1: int) -> None: ...
-    @typing.overload
-    def get_int_data(
-        self,
-    ) -> typing.Annotated[
-        list[PODVector_int_pinned], pybind11_stubgen.typing_ext.FixedSize(1)
-    ]:
-        """
-        Get access to the particle Int Arrays (only compile-time components)
-        """
-
-    @typing.overload
-    def get_int_data(self, index: int) -> PODVector_int_pinned:
-        """
-        Get access to a particle Real component Array (compile-time and runtime component)
-        """
-
-    def get_num_neighbors(self) -> int: ...
-    @typing.overload
-    def get_real_data(
-        self,
-    ) -> typing.Annotated[
-        list[PODVector_real_pinned], pybind11_stubgen.typing_ext.FixedSize(37)
-    ]:
-        """
-        Get access to the particle Real Arrays (only compile-time components)
-        """
-
-    @typing.overload
-    def get_real_data(self, index: int) -> PODVector_real_pinned:
-        """
-        Get access to a particle Real component Array (compile-time and runtime component)
-        """
-
-    def resize(self, arg0: int) -> None: ...
-    def set_num_neighbors(self, arg0: int) -> None: ...
-    def soa_int_comps(self, num_comps):
-        """
-
-        Name the int components in SoA.
-
-        Parameters
-        ----------
-        self : SoA Type
-          maybe unused, depending on implementation
-        num_comps : int
-          number of components to generate names for.
-
-        Returns
-        -------
-        A list of length num_comps with values "i1", "i2", "i3", ...
-
-        """
-
-    def soa_real_comps(self, num_comps, spacedim=3, rotate=True):
-        """
-
-        Name the ParticleReal components in SoA.
-
-        Parameters
-        ----------
-        self : SoA Type
-          maybe unused, depending on implementation
-        num_comps : int
-          number of components to generate names for.
-        spacedim : int
-          AMReX dimensionality
-        rotate : bool = True
-          start with "x", "y", "z", "a", "b", ...
-
-        Returns
-        -------
-        A list of length num_comps with values
-        rotate=True (for pure SoA layout):
-        - 3D: "x", "y", "z", "a", "b", ... "w", "r0", "r1", ...
-        - 2D: "x", "y", "a", "b", ... "w", "r0", "r1", ...
-        - 1D: "x", "a", "b", ... "w", "r0", "r1", ...
-        rotate=False (for legacy layout):
-        - 1D-3D: "a", "b", ... "w", "r0", "r1", ...
-
-        """
-
-    def to_cupy(self, copy=False):
-        """
-
-        Provide Cupy views into a StructOfArrays.
-
-        Parameters
-        ----------
-        self : amrex.StructOfArrays_*
-            A StructOfArrays class in pyAMReX
-        copy : bool, optional
-            Copy the data if true, otherwise create a view (default).
-
-        Returns
-        -------
-        namedtuple
-            A tuple with real and int components that are each dicts
-            of 1D numpy arrays. The dictionary key order is the same as
-            in the C++ component order.
-            For pure SoA particle layouts, an additional component idcpu
-            with global particle indices is populated.
-
-        Raises
-        ------
-        ImportError
-            Raises an exception if cupy is not installed
-
-        """
-
-    def to_numpy(self, copy=False):
-        """
-
-        Provide Numpy views into a StructOfArrays.
-
-        Parameters
-        ----------
-        self : amrex.StructOfArrays_*
-            A StructOfArrays class in pyAMReX
-        copy : bool, optional
-            Copy the data if true, otherwise create a view (default).
-
-        Returns
-        -------
-        namedtuple
-            A tuple with real and int components that are each dicts
-            of 1D numpy arrays. The dictionary key order is the same as
-            in the C++ component order.
-            For pure SoA particle layouts, an additional component idcpu
-            with global particle indices is populated.
-
-        """
-
-    @property
-    def has_idcpu(self) -> bool:
-        """
-        In pure SoA particle layout, idcpu is an array in the SoA
-        """
-
-    @property
-    def num_int_comps(self) -> int:
-        """
-        Get the number of compile-time + runtime Int components
-        """
-
-    @property
-    def num_particles(self) -> int: ...
-    @property
-    def num_real_comps(self) -> int:
-        """
-        Get the number of compile-time + runtime Real components
-        """
-
-    @property
-    def num_real_particles(self) -> int: ...
-    @property
-    def num_total_particles(self) -> int: ...
-    @property
-    def size(self) -> int:
-        """
-        Get the number of particles
-        """
-
-class StructOfArrays_4_0_arena:
-    def __init__(self) -> None: ...
-    def __len__(self) -> int:
-        """
-        Get the number of particles
-        """
-
-    def define(self, arg0: int, arg1: int) -> None: ...
     @typing.overload
     def get_int_data(
         self,
@@ -11733,7 +10351,7 @@ class StructOfArrays_4_0_arena:
     def get_real_data(
         self,
     ) -> typing.Annotated[
-        list[PODVector_real_arena], pybind11_stubgen.typing_ext.FixedSize(4)
+        list[PODVector_real_arena], pybind11_stubgen.typing_ext.FixedSize(1)
     ]:
         """
         Get access to the particle Real Arrays (only compile-time components)
@@ -11874,7 +10492,7 @@ class StructOfArrays_4_0_arena:
         Get the number of particles
         """
 
-class StructOfArrays_4_0_default:
+class StructOfArrays_1_0_idcpu_default:
     def __init__(self) -> None: ...
     def __len__(self) -> int:
         """
@@ -11882,6 +10500,11 @@ class StructOfArrays_4_0_default:
         """
 
     def define(self, arg0: int, arg1: int) -> None: ...
+    def get_idcpu_data(self) -> PODVector_uint64_std:
+        """
+        Get access to a particle IdCPU component Array
+        """
+
     @typing.overload
     def get_int_data(
         self,
@@ -11903,7 +10526,7 @@ class StructOfArrays_4_0_default:
     def get_real_data(
         self,
     ) -> typing.Annotated[
-        list[PODVector_real_std], pybind11_stubgen.typing_ext.FixedSize(4)
+        list[PODVector_real_std], pybind11_stubgen.typing_ext.FixedSize(1)
     ]:
         """
         Get access to the particle Real Arrays (only compile-time components)
@@ -12044,7 +10667,7 @@ class StructOfArrays_4_0_default:
         Get the number of particles
         """
 
-class StructOfArrays_4_0_pinned:
+class StructOfArrays_1_0_idcpu_pinned:
     def __init__(self) -> None: ...
     def __len__(self) -> int:
         """
@@ -12052,6 +10675,11 @@ class StructOfArrays_4_0_pinned:
         """
 
     def define(self, arg0: int, arg1: int) -> None: ...
+    def get_idcpu_data(self) -> PODVector_uint64_pinned:
+        """
+        Get access to a particle IdCPU component Array
+        """
+
     @typing.overload
     def get_int_data(
         self,
@@ -12073,7 +10701,7 @@ class StructOfArrays_4_0_pinned:
     def get_real_data(
         self,
     ) -> typing.Annotated[
-        list[PODVector_real_pinned], pybind11_stubgen.typing_ext.FixedSize(4)
+        list[PODVector_real_pinned], pybind11_stubgen.typing_ext.FixedSize(1)
     ]:
         """
         Get access to the particle Real Arrays (only compile-time components)
@@ -12214,7 +10842,7 @@ class StructOfArrays_4_0_pinned:
         Get the number of particles
         """
 
-class StructOfArrays_5_0_arena:
+class StructOfArrays_3_1_arena:
     def __init__(self) -> None: ...
     def __len__(self) -> int:
         """
@@ -12226,7 +10854,7 @@ class StructOfArrays_5_0_arena:
     def get_int_data(
         self,
     ) -> typing.Annotated[
-        list[PODVector_int_arena], pybind11_stubgen.typing_ext.FixedSize(0)
+        list[PODVector_int_arena], pybind11_stubgen.typing_ext.FixedSize(1)
     ]:
         """
         Get access to the particle Int Arrays (only compile-time components)
@@ -12243,7 +10871,7 @@ class StructOfArrays_5_0_arena:
     def get_real_data(
         self,
     ) -> typing.Annotated[
-        list[PODVector_real_arena], pybind11_stubgen.typing_ext.FixedSize(5)
+        list[PODVector_real_arena], pybind11_stubgen.typing_ext.FixedSize(3)
     ]:
         """
         Get access to the particle Real Arrays (only compile-time components)
@@ -12384,7 +11012,7 @@ class StructOfArrays_5_0_arena:
         Get the number of particles
         """
 
-class StructOfArrays_5_0_default:
+class StructOfArrays_3_1_default:
     def __init__(self) -> None: ...
     def __len__(self) -> int:
         """
@@ -12396,7 +11024,7 @@ class StructOfArrays_5_0_default:
     def get_int_data(
         self,
     ) -> typing.Annotated[
-        list[PODVector_int_std], pybind11_stubgen.typing_ext.FixedSize(0)
+        list[PODVector_int_std], pybind11_stubgen.typing_ext.FixedSize(1)
     ]:
         """
         Get access to the particle Int Arrays (only compile-time components)
@@ -12413,7 +11041,7 @@ class StructOfArrays_5_0_default:
     def get_real_data(
         self,
     ) -> typing.Annotated[
-        list[PODVector_real_std], pybind11_stubgen.typing_ext.FixedSize(5)
+        list[PODVector_real_std], pybind11_stubgen.typing_ext.FixedSize(3)
     ]:
         """
         Get access to the particle Real Arrays (only compile-time components)
@@ -12421,6 +11049,176 @@ class StructOfArrays_5_0_default:
 
     @typing.overload
     def get_real_data(self, index: int) -> PODVector_real_std:
+        """
+        Get access to a particle Real component Array (compile-time and runtime component)
+        """
+
+    def resize(self, arg0: int) -> None: ...
+    def set_num_neighbors(self, arg0: int) -> None: ...
+    def soa_int_comps(self, num_comps):
+        """
+
+        Name the int components in SoA.
+
+        Parameters
+        ----------
+        self : SoA Type
+          maybe unused, depending on implementation
+        num_comps : int
+          number of components to generate names for.
+
+        Returns
+        -------
+        A list of length num_comps with values "i1", "i2", "i3", ...
+
+        """
+
+    def soa_real_comps(self, num_comps, spacedim=3, rotate=True):
+        """
+
+        Name the ParticleReal components in SoA.
+
+        Parameters
+        ----------
+        self : SoA Type
+          maybe unused, depending on implementation
+        num_comps : int
+          number of components to generate names for.
+        spacedim : int
+          AMReX dimensionality
+        rotate : bool = True
+          start with "x", "y", "z", "a", "b", ...
+
+        Returns
+        -------
+        A list of length num_comps with values
+        rotate=True (for pure SoA layout):
+        - 3D: "x", "y", "z", "a", "b", ... "w", "r0", "r1", ...
+        - 2D: "x", "y", "a", "b", ... "w", "r0", "r1", ...
+        - 1D: "x", "a", "b", ... "w", "r0", "r1", ...
+        rotate=False (for legacy layout):
+        - 1D-3D: "a", "b", ... "w", "r0", "r1", ...
+
+        """
+
+    def to_cupy(self, copy=False):
+        """
+
+        Provide Cupy views into a StructOfArrays.
+
+        Parameters
+        ----------
+        self : amrex.StructOfArrays_*
+            A StructOfArrays class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        namedtuple
+            A tuple with real and int components that are each dicts
+            of 1D numpy arrays. The dictionary key order is the same as
+            in the C++ component order.
+            For pure SoA particle layouts, an additional component idcpu
+            with global particle indices is populated.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if cupy is not installed
+
+        """
+
+    def to_numpy(self, copy=False):
+        """
+
+        Provide Numpy views into a StructOfArrays.
+
+        Parameters
+        ----------
+        self : amrex.StructOfArrays_*
+            A StructOfArrays class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        namedtuple
+            A tuple with real and int components that are each dicts
+            of 1D numpy arrays. The dictionary key order is the same as
+            in the C++ component order.
+            For pure SoA particle layouts, an additional component idcpu
+            with global particle indices is populated.
+
+        """
+
+    @property
+    def has_idcpu(self) -> bool:
+        """
+        In pure SoA particle layout, idcpu is an array in the SoA
+        """
+
+    @property
+    def num_int_comps(self) -> int:
+        """
+        Get the number of compile-time + runtime Int components
+        """
+
+    @property
+    def num_particles(self) -> int: ...
+    @property
+    def num_real_comps(self) -> int:
+        """
+        Get the number of compile-time + runtime Real components
+        """
+
+    @property
+    def num_real_particles(self) -> int: ...
+    @property
+    def num_total_particles(self) -> int: ...
+    @property
+    def size(self) -> int:
+        """
+        Get the number of particles
+        """
+
+class StructOfArrays_3_1_pinned:
+    def __init__(self) -> None: ...
+    def __len__(self) -> int:
+        """
+        Get the number of particles
+        """
+
+    def define(self, arg0: int, arg1: int) -> None: ...
+    @typing.overload
+    def get_int_data(
+        self,
+    ) -> typing.Annotated[
+        list[PODVector_int_pinned], pybind11_stubgen.typing_ext.FixedSize(1)
+    ]:
+        """
+        Get access to the particle Int Arrays (only compile-time components)
+        """
+
+    @typing.overload
+    def get_int_data(self, index: int) -> PODVector_int_pinned:
+        """
+        Get access to a particle Real component Array (compile-time and runtime component)
+        """
+
+    def get_num_neighbors(self) -> int: ...
+    @typing.overload
+    def get_real_data(
+        self,
+    ) -> typing.Annotated[
+        list[PODVector_real_pinned], pybind11_stubgen.typing_ext.FixedSize(3)
+    ]:
+        """
+        Get access to the particle Real Arrays (only compile-time components)
+        """
+
+    @typing.overload
+    def get_real_data(self, index: int) -> PODVector_real_pinned:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
@@ -12917,176 +11715,6 @@ class StructOfArrays_5_0_idcpu_pinned:
         Get access to a particle IdCPU component Array
         """
 
-    @typing.overload
-    def get_int_data(
-        self,
-    ) -> typing.Annotated[
-        list[PODVector_int_pinned], pybind11_stubgen.typing_ext.FixedSize(0)
-    ]:
-        """
-        Get access to the particle Int Arrays (only compile-time components)
-        """
-
-    @typing.overload
-    def get_int_data(self, index: int) -> PODVector_int_pinned:
-        """
-        Get access to a particle Real component Array (compile-time and runtime component)
-        """
-
-    def get_num_neighbors(self) -> int: ...
-    @typing.overload
-    def get_real_data(
-        self,
-    ) -> typing.Annotated[
-        list[PODVector_real_pinned], pybind11_stubgen.typing_ext.FixedSize(5)
-    ]:
-        """
-        Get access to the particle Real Arrays (only compile-time components)
-        """
-
-    @typing.overload
-    def get_real_data(self, index: int) -> PODVector_real_pinned:
-        """
-        Get access to a particle Real component Array (compile-time and runtime component)
-        """
-
-    def resize(self, arg0: int) -> None: ...
-    def set_num_neighbors(self, arg0: int) -> None: ...
-    def soa_int_comps(self, num_comps):
-        """
-
-        Name the int components in SoA.
-
-        Parameters
-        ----------
-        self : SoA Type
-          maybe unused, depending on implementation
-        num_comps : int
-          number of components to generate names for.
-
-        Returns
-        -------
-        A list of length num_comps with values "i1", "i2", "i3", ...
-
-        """
-
-    def soa_real_comps(self, num_comps, spacedim=3, rotate=True):
-        """
-
-        Name the ParticleReal components in SoA.
-
-        Parameters
-        ----------
-        self : SoA Type
-          maybe unused, depending on implementation
-        num_comps : int
-          number of components to generate names for.
-        spacedim : int
-          AMReX dimensionality
-        rotate : bool = True
-          start with "x", "y", "z", "a", "b", ...
-
-        Returns
-        -------
-        A list of length num_comps with values
-        rotate=True (for pure SoA layout):
-        - 3D: "x", "y", "z", "a", "b", ... "w", "r0", "r1", ...
-        - 2D: "x", "y", "a", "b", ... "w", "r0", "r1", ...
-        - 1D: "x", "a", "b", ... "w", "r0", "r1", ...
-        rotate=False (for legacy layout):
-        - 1D-3D: "a", "b", ... "w", "r0", "r1", ...
-
-        """
-
-    def to_cupy(self, copy=False):
-        """
-
-        Provide Cupy views into a StructOfArrays.
-
-        Parameters
-        ----------
-        self : amrex.StructOfArrays_*
-            A StructOfArrays class in pyAMReX
-        copy : bool, optional
-            Copy the data if true, otherwise create a view (default).
-
-        Returns
-        -------
-        namedtuple
-            A tuple with real and int components that are each dicts
-            of 1D numpy arrays. The dictionary key order is the same as
-            in the C++ component order.
-            For pure SoA particle layouts, an additional component idcpu
-            with global particle indices is populated.
-
-        Raises
-        ------
-        ImportError
-            Raises an exception if cupy is not installed
-
-        """
-
-    def to_numpy(self, copy=False):
-        """
-
-        Provide Numpy views into a StructOfArrays.
-
-        Parameters
-        ----------
-        self : amrex.StructOfArrays_*
-            A StructOfArrays class in pyAMReX
-        copy : bool, optional
-            Copy the data if true, otherwise create a view (default).
-
-        Returns
-        -------
-        namedtuple
-            A tuple with real and int components that are each dicts
-            of 1D numpy arrays. The dictionary key order is the same as
-            in the C++ component order.
-            For pure SoA particle layouts, an additional component idcpu
-            with global particle indices is populated.
-
-        """
-
-    @property
-    def has_idcpu(self) -> bool:
-        """
-        In pure SoA particle layout, idcpu is an array in the SoA
-        """
-
-    @property
-    def num_int_comps(self) -> int:
-        """
-        Get the number of compile-time + runtime Int components
-        """
-
-    @property
-    def num_particles(self) -> int: ...
-    @property
-    def num_real_comps(self) -> int:
-        """
-        Get the number of compile-time + runtime Real components
-        """
-
-    @property
-    def num_real_particles(self) -> int: ...
-    @property
-    def num_total_particles(self) -> int: ...
-    @property
-    def size(self) -> int:
-        """
-        Get the number of particles
-        """
-
-class StructOfArrays_5_0_pinned:
-    def __init__(self) -> None: ...
-    def __len__(self) -> int:
-        """
-        Get the number of particles
-        """
-
-    def define(self, arg0: int, arg1: int) -> None: ...
     @typing.overload
     def get_int_data(
         self,
