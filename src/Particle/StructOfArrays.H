@@ -1,8 +1,10 @@
 /* Copyright 2022 The AMReX Community
  *
- * Authors: Ryan Sandberg
+ * Authors: Ryan Sandberg, Axel Huebl
  * License: BSD-3-Clause-LBNL
  */
+#pragma once
+
 #include "pyAMReX.H"
 
 #include <AMReX_GpuAllocators.H>
@@ -98,20 +100,4 @@ void make_StructOfArrays(py::module &m)
     make_StructOfArrays<NReal, NInt, amrex::ManagedArenaAllocator, use64BitIdCpu>(m, "managed");
     make_StructOfArrays<NReal, NInt, amrex::AsyncArenaAllocator, use64BitIdCpu>(m, "async");
 #endif
-}
-
-void init_StructOfArrays(py::module& m) {
-    make_StructOfArrays< 2, 1>(m);
-    make_StructOfArrays< 4, 0>(m);  // HiPACE++ 22.08 - 24.02
-    make_StructOfArrays< 5, 0>(m);  // ImpactX 22.07 - 24.02
-#if AMREX_SPACEDIM == 1
-    make_StructOfArrays< 5, 0, true>(m);  // WarpX 24.03+ 1D
-#elif AMREX_SPACEDIM == 2
-    make_StructOfArrays< 6, 0, true>(m);  // WarpX 24.03+ 2D
-    make_StructOfArrays< 7, 0, true>(m);  // WarpX 24.03+ RZ
-#elif AMREX_SPACEDIM == 3
-    make_StructOfArrays< 7, 0, true>(m);  // WarpX 24.03+ 3D
-#endif
-    make_StructOfArrays< 8, 0, true>(m);  // ImpactX 24.03+
-    make_StructOfArrays<37, 1>(m);  // HiPACE++ 22.09 - 24.02
 }

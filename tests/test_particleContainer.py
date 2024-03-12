@@ -15,7 +15,7 @@ def Npart():
 
 @pytest.fixture(scope="function")
 def empty_particle_container(std_geometry, distmap, boxarr):
-    pc = amr.ParticleContainer_1_1_2_1_default(std_geometry, distmap, boxarr)
+    pc = amr.ParticleContainer_2_1_3_1_default(std_geometry, distmap, boxarr)
     return pc
 
 
@@ -27,21 +27,21 @@ def empty_soa_particle_container(std_geometry, distmap, boxarr):
 
 @pytest.fixture(scope="function")
 def std_particle():
-    myt = amr.ParticleInitType_1_1_2_1()
-    myt.real_struct_data = [0.5]
+    myt = amr.ParticleInitType_2_1_3_1()
+    myt.real_struct_data = [0.5, 0.6]
     myt.int_struct_data = [5]
-    myt.real_array_data = [0.5, 0.2]
+    myt.real_array_data = [0.5, 0.2, 0.3]
     myt.int_array_data = [1]
     return myt
 
 
 @pytest.fixture(scope="function")
 def particle_container(Npart, std_geometry, distmap, boxarr, std_real_box):
-    pc = amr.ParticleContainer_1_1_2_1_default(std_geometry, distmap, boxarr)
-    myt = amr.ParticleInitType_1_1_2_1()
-    myt.real_struct_data = [0.5]
+    pc = amr.ParticleContainer_2_1_3_1_default(std_geometry, distmap, boxarr)
+    myt = amr.ParticleInitType_2_1_3_1()
+    myt.real_struct_data = [0.5, 0.6]
     myt.int_struct_data = [5]
-    myt.real_array_data = [0.5, 0.2]
+    myt.real_array_data = [0.5, 0.2, 0.3]
     myt.int_array_data = [1]
 
     iseed = 1
@@ -62,20 +62,20 @@ def soa_particle_container(Npart, std_geometry, distmap, boxarr, std_real_box):
 
 
 def test_particleInitType():
-    myt = amr.ParticleInitType_1_1_2_1()
+    myt = amr.ParticleInitType_2_1_3_1()
     print(myt.real_struct_data)
     print(myt.int_struct_data)
     print(myt.real_array_data)
     print(myt.int_array_data)
 
-    myt.real_struct_data = [0.5]
+    myt.real_struct_data = [0.5, 0.7]
     myt.int_struct_data = [5]
-    myt.real_array_data = [0.5, 0.2]
+    myt.real_array_data = [0.5, 0.2, 0.4]
     myt.int_array_data = [1]
 
-    assert np.allclose(myt.real_struct_data, [0.5])
+    assert np.allclose(myt.real_struct_data, [0.5, 0.7])
     assert np.allclose(myt.int_struct_data, [5])
-    assert np.allclose(myt.real_array_data, [0.5, 0.2])
+    assert np.allclose(myt.real_array_data, [0.5, 0.2, 0.4])
     assert np.allclose(myt.int_array_data, [1])
 
 
@@ -83,15 +83,15 @@ def test_n_particles(particle_container, Npart):
     pc = particle_container
     assert pc.OK()
     assert (
-        pc.num_struct_real == amr.ParticleContainer_1_1_2_1_default.num_struct_real == 1
+        pc.num_struct_real == amr.ParticleContainer_2_1_3_1_default.num_struct_real == 2
     )
     assert (
-        pc.num_struct_int == amr.ParticleContainer_1_1_2_1_default.num_struct_int == 1
+        pc.num_struct_int == amr.ParticleContainer_2_1_3_1_default.num_struct_int == 1
     )
     assert (
-        pc.num_array_real == amr.ParticleContainer_1_1_2_1_default.num_array_real == 2
+        pc.num_array_real == amr.ParticleContainer_2_1_3_1_default.num_array_real == 3
     )
-    assert pc.num_array_int == amr.ParticleContainer_1_1_2_1_default.num_array_int == 1
+    assert pc.num_array_int == amr.ParticleContainer_2_1_3_1_default.num_array_int == 1
     assert (
         pc.number_of_particles_at_level(0)
         == np.sum(pc.number_of_particles_in_grid(0))
@@ -100,7 +100,7 @@ def test_n_particles(particle_container, Npart):
 
 
 def test_pc_init():
-    pc = amr.ParticleContainer_1_1_2_1_default()
+    pc = amr.ParticleContainer_2_1_3_1_default()
 
     print("bytespread", pc.byte_spread)
     print("capacity", pc.print_capacity())
@@ -122,15 +122,15 @@ def test_pc_init():
     pc.Define(gm, dm, ba)
     assert pc.OK()
     assert (
-        pc.num_struct_real == amr.ParticleContainer_1_1_2_1_default.num_struct_real == 1
+        pc.num_struct_real == amr.ParticleContainer_2_1_3_1_default.num_struct_real == 2
     )
     assert (
-        pc.num_struct_int == amr.ParticleContainer_1_1_2_1_default.num_struct_int == 1
+        pc.num_struct_int == amr.ParticleContainer_2_1_3_1_default.num_struct_int == 1
     )
     assert (
-        pc.num_array_real == amr.ParticleContainer_1_1_2_1_default.num_array_real == 2
+        pc.num_array_real == amr.ParticleContainer_2_1_3_1_default.num_array_real == 3
     )
-    assert pc.num_array_int == amr.ParticleContainer_1_1_2_1_default.num_array_int == 1
+    assert pc.num_array_int == amr.ParticleContainer_2_1_3_1_default.num_array_int == 1
 
     print("bytespread", pc.byte_spread)
     print("capacity", pc.print_capacity())
@@ -142,10 +142,10 @@ def test_pc_init():
     print("add a particle to each grid")
     Npart_grid = 1
     iseed = 1
-    myt = amr.ParticleInitType_1_1_2_1()
-    myt.real_struct_data = [0.5]
+    myt = amr.ParticleInitType_2_1_3_1()
+    myt.real_struct_data = [0.5, 0.4]
     myt.int_struct_data = [5]
-    myt.real_array_data = [0.5, 0.2]
+    myt.real_array_data = [0.5, 0.2, 0.4]
     myt.int_array_data = [1]
     pc.init_random_per_box(Npart_grid, iseed, myt)
     ngrid = ba.size

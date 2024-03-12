@@ -7,6 +7,11 @@
 
 #include "pyAMReX.H"
 
+#include "Particle.H"
+#include "ArrayOfStructs.H"
+#include "StructOfArrays.H"
+#include "ParticleTile.H"
+
 #include <AMReX_BoxArray.H>
 #include <AMReX_GpuAllocators.H>
 #include <AMReX_IntVect.H>
@@ -416,6 +421,26 @@ void make_ParticleContainer_and_Iterators (py::module &m, std::string allocstr)
 template <typename T_ParticleType, int T_NArrayReal=0, int T_NArrayInt=0>
 void make_ParticleContainer_and_Iterators (py::module &m)
 {
+    if constexpr (T_ParticleType::is_soa_particle) {
+        make_Particle<T_NArrayReal, T_NArrayInt>(m);
+        make_StructOfArrays<T_NArrayReal, T_NArrayInt, true> (m);
+    } else {
+
+        make_Particle<  // particle
+            T_ParticleType::NReal,
+            T_ParticleType::NInt
+        >(m);
+        make_Particle<  // superparticle
+            T_ParticleType::NReal + T_NArrayReal,
+            T_ParticleType::NInt  + T_NArrayInt
+        >(m);
+
+        make_ArrayOfStructs<T_ParticleType::NReal, T_ParticleType::NInt> (m);
+        make_StructOfArrays<T_NArrayReal, T_NArrayInt> (m);
+    }
+
+    make_ParticleTile<T_ParticleType, T_NArrayReal, T_NArrayInt> (m);
+
     make_ParticleInitData<T_ParticleType, T_NArrayReal, T_NArrayInt>(m);
 
     // first, because used as copy target in methods in containers with other allocators

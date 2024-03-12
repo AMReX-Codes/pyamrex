@@ -8,14 +8,14 @@ import amrex.space3d as amr
 
 ##########
 def test_ptile_data():
-    ptd = amr.ParticleTileData_1_1_2_1()
+    ptd = amr.ParticleTileData_2_1_3_1()
     assert ptd.m_size == 0
     assert ptd.m_num_runtime_real == 0
     assert ptd.m_num_runtime_int == 0
 
 
 def test_ptile_funs():
-    pt = amr.ParticleTile_1_1_2_1_default()
+    pt = amr.ParticleTile_2_1_3_1_default()
 
     assert pt.empty and pt.size == 0
     assert pt.num_particles == pt.num_real_particles == pt.num_neighbor_particles == 0
@@ -35,9 +35,9 @@ def test_ptile_funs():
 
 ################
 def test_ptile_pushback_ptiledata():
-    pt = amr.ParticleTile_1_1_2_1_default()
-    p = amr.Particle_1_1(1.0, 2.0, 3, 4.0, 5)
-    sp = amr.Particle_3_2(5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11, 12)
+    pt = amr.ParticleTile_2_1_3_1_default()
+    p = amr.Particle_2_1(1.0, 2.0, 3.0, 4.0, 5.0, 6)
+    sp = amr.Particle_5_2(5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 11, 12)
     pt.push_back(p)
     pt.push_back(sp)
 
@@ -62,15 +62,15 @@ def test_ptile_pushback_ptiledata():
 
 @pytest.mark.skipif(amr.Config.spacedim != 3, reason="Requires AMREX_SPACEDIM = 3")
 def test_ptile_access():
-    pt = amr.ParticleTile_1_1_2_1_default()
-    sp1 = amr.Particle_3_2()
+    pt = amr.ParticleTile_2_1_3_1_default()
+    sp1 = amr.Particle_5_2()
     pt.push_back(sp1)
     pt.push_back(sp1)
     sp1.x = 2.0
     sp1.z = 3.0
     td = pt.get_particle_tile_data()
     td[0] = sp1
-    sp2 = amr.Particle_3_2()
+    sp2 = amr.Particle_5_2()
     sp2.x = 5.0
     sp2.y = 4.5
     pt[1] = sp2
@@ -81,10 +81,10 @@ def test_ptile_access():
 
 
 def test_ptile_soa():
-    pt = amr.ParticleTile_1_1_2_1_default()
+    pt = amr.ParticleTile_2_1_3_1_default()
 
-    pt.push_back_real(1, 2.1)
-    pt.push_back_real([1.1, 1.3])
+    pt.push_back_real(1, 2, 2.1)
+    pt.push_back_real([1.1, 1.3, 1.5])
     pt.push_back_real(1, 3, 3.14)
 
     pt.push_back_int(0, 10)
@@ -114,22 +114,22 @@ def test_ptile_soa():
     print("-------")
     # np.array(rdata[0])
     assert np.allclose(ar0, np.array([1.1]))
-    assert np.allclose(ar1, np.array([2.1, 1.3, 3.14, 3.14, 3.14]))
+    assert np.allclose(ar1, np.array([2.1, 2.1, 1.3, 3.14, 3.14, 3.14]))
     assert np.allclose(ir0, np.array([-66, 12, 31, 31, 31]))
 
 
 @pytest.mark.skipif(amr.Config.spacedim != 3, reason="Requires AMREX_SPACEDIM = 3")
 def test_ptile_aos_3d():
-    pt = amr.ParticleTile_1_1_2_1_default()
-    p1 = amr.Particle_1_1()
-    p2 = amr.Particle_1_1()
+    pt = amr.ParticleTile_2_1_3_1_default()
+    p1 = amr.Particle_2_1()
+    p2 = amr.Particle_2_1()
     p1.x = 3.0
     p2.x = 4.0
     p2.y = 8
     pt.push_back(p1)
 
     pt.push_back(p2)
-    p3 = amr.Particle_1_1()
+    p3 = amr.Particle_2_1()
     p3.z = 20
     pt.push_back(p3)
     pt.resize(3)

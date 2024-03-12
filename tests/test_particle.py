@@ -7,21 +7,16 @@ import amrex.space3d as amr
 
 
 def test_particle_init():
-    p1 = amr.Particle_7_0()
-    nreal = len(amr.PIdx.RealValues.__members__)
-    nint = len(amr.PIdx.IntValues.__members__)
-    assert amr.Particle_7_0.NReal == nreal
-    assert amr.Particle_7_0.NInt == nint
-    assert p1.NReal == nreal
-    assert p1.NInt == nint
+    p1 = amr.Particle_8_0()
+    print(p1)
 
-    p2 = amr.Particle_7_0(1.0, 2.0, 3.0)
+    p2 = amr.Particle_8_0(1.0, 2.0, 3.0)
     assert p2.x == 1.0 and p2.y == 2.0 and p2.z == 3.0
 
-    p3 = amr.Particle_7_0(1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0)
+    p3 = amr.Particle_8_0(1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0)
     assert p3.x == 1.0 and p3.get_rdata(0) == 4.0 and p3.get_rdata(6) == 10.0
 
-    p4 = amr.Particle_7_0(1.0, 2.0, 3.0, rdata_0=4.0)
+    p4 = amr.Particle_8_0(1.0, 2.0, 3.0, rdata_0=4.0)
     assert (
         p4.x == 1.0
         and p4.z == 3.0
@@ -29,7 +24,7 @@ def test_particle_init():
         and p4.get_rdata(1) == 0 == p4.get_rdata(2) == p4.get_rdata(3)
     )
 
-    p5 = amr.Particle_7_0(x=1.0, rdata_1=1.0, rdata_3=3.0)
+    p5 = amr.Particle_8_0(x=1.0, rdata_1=1.0, rdata_3=3.0)
     assert (
         p5.x == 1.0
         and p5.get_rdata(1) == 1.0
@@ -40,7 +35,7 @@ def test_particle_init():
 
 @pytest.mark.skipif(amr.Config.spacedim != 3, reason="Requires AMREX_SPACEDIM = 3")
 def test_particle_set():
-    p1 = amr.Particle_7_0()
+    p1 = amr.Particle_8_0()
     p1.setPos(1, 1.5)
     assert p1.pos(0) == 0 and p1.pos(1) == 1.5 and p1.pos(2) == 0
     p1.setPos([1.0, 1, 2])

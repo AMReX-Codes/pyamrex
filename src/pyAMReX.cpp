@@ -31,10 +31,6 @@ void init_AmrMesh(py::module &);
 void init_MultiFab(py::module &);
 void init_ParallelDescriptor(py::module &);
 void init_ParmParse(py::module &);
-void init_Particle(py::module &);
-void init_StructOfArrays(py::module &);
-void init_ArrayOfStructs(py::module &);
-void init_ParticleTile(py::module &);
 void init_ParticleContainer(py::module &);
 void init_Periodicity(py::module &);
 void init_PlotFileUtil(py::module &);
@@ -109,11 +105,7 @@ PYBIND11_MODULE(amrex_3d_pybind, m) {
     init_FArrayBox(m);
     init_MultiFab(m);
     init_ParallelDescriptor(m);
-    init_Particle(m);
     init_PODVector(m);
-    init_StructOfArrays(m);
-    init_ArrayOfStructs(m);
-    init_ParticleTile(m);
 
     init_ParticleContainer(m);
     init_AmrMesh(m);
