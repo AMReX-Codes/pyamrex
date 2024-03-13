@@ -201,8 +201,22 @@ void make_ParticleContainer_and_Iterators (py::module &m, std::string allocstr)
         .def_property_readonly("num_runtime_int_comps", &ParticleContainerType::NumRuntimeIntComps,
             "The number of runtime Int components in SoA")
 
+
         .def_property_readonly("num_position_components", [](const py::object&){ return AMREX_SPACEDIM; })
         .def_property_readonly("byte_spread", &ParticleContainerType::ByteSpread)
+
+        // runtime components
+        .def("add_real_comp", &ParticleContainerType::template AddRealComp<bool>,
+             py::arg("communicate")=true, "add a new runtime component with type Real")
+        .def("add_int_comp", &ParticleContainerType::template AddIntComp<bool>,
+             py::arg("communicate")=true, "add a new runtime component with type Int")
+
+        .def("resize_runtime_real_comp", &ParticleContainerType::ResizeRuntimeRealComp,
+            py::arg("new_size"), py::arg("communicate"),
+            "Resize the Real runtime components (SoA)")
+        .def("resize_runtime_int_comp", &ParticleContainerType::ResizeRuntimeIntComp,
+             py::arg("new_size"), py::arg("communicate"),
+             "Resize the Int runtime components (SoA)")
 
         .def_property_readonly("finest_level", &ParticleContainerBase::finestLevel)
 
