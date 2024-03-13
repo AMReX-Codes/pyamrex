@@ -17,3 +17,7 @@ select = ['F', 'B']
 # https://docs.astral.sh/ruff/
 select = ["E4", "E7", "E9", "F"]
 ignore = ["E402"]
+
+
+[tool.isort]
+profile = "black"
