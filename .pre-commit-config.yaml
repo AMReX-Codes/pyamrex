@@ -85,6 +85,7 @@ repos:
   hooks:
   - id: isort
     name: isort (python)
+    args: ['--profile black']
 
 # Python Formatting
 - repo: https://github.com/psf/black
@@ -102,7 +103,7 @@ repos:
 # Python: Ruff linter
 #   https://docs.astral.sh/ruff/
 - repo: https://github.com/astral-sh/ruff-pre-commit
-  rev: v0.2.2
+  rev: v0.3.2
   hooks:
     - id: ruff
       args: [--fix, --exit-non-zero-on-fix]
