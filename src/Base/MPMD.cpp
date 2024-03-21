@@ -13,18 +13,25 @@
 
 #ifdef AMREX_USE_MPI
 #include <mpi.h>
-#include <mpi4py/mpi4py.h>
+
+
+/** mpi4py communicator wrapper
+ *
+ * refs:
+ * - https://github.com/mpi4py/mpi4py/blob/3.0.0/src/mpi4py/libmpi.pxd#L35-L36
+ * - https://github.com/mpi4py/mpi4py/blob/3.0.0/src/mpi4py/MPI.pxd#L100-L105
+ * - installed: include/mpi4py/mpi4py.MPI.h
+ */
+struct pyAMReX_PyMPICommObject
+{
+    PyObject_HEAD MPI_Comm ob_mpi;
+    unsigned int flags;
+};
+using pyAMReX_PyMPIIntracommObject = pyAMReX_PyMPICommObject;
+
 
 void init_MPMD(py::module &m) {
     using namespace amrex;
-
-    // Following https://gitlab.com/robertodr/pybind11-mpi4py/-/blob/main/src/pb11mpi.cpp
-    // initialize mpi4py's C-API
-    if (import_mpi4py() < 0) {
-      // mpi4py calls the Python C API
-      // we let pybind11 give us the detailed traceback
-      throw py::error_already_set();
-    }
 
     // Several functions here are copied from AMReX.cpp
     m.def("MPMD_Initialize_without_split",
@@ -67,9 +74,65 @@ void init_MPMD(py::module &m) {
               char** tmp = argv.data();
 
               const bool build_parm_parse = (cargs.size() > 1);
-              MPI_Comm* app_comm = PyMPIComm_Get(app_comm_py.ptr());
 
-              return Initialize(argc, tmp, build_parm_parse,*app_comm);
+              //! TODO perform mpi4py import test and check min-version
+              //!       careful: double MPI_Init risk? only import mpi4py.MPI?
+              //!       required C-API init? probably just checks:
+              //! refs:
+              //! -
+              //! https://bitbucket.org/mpi4py/mpi4py/src/3.0.0/demo/wrap-c/helloworld.c
+              //! - installed: include/mpi4py/mpi4py.MPI_api.h
+              // if( import_mpi4py() < 0 ) { here be dragons }
+
+              if (app_comm_py.ptr() == Py_None)
+                  throw std::runtime_error(
+                      "MPMD: MPI communicator cannot be None.");
+              if (app_comm_py.ptr() == nullptr)
+                  throw std::runtime_error(
+                      "MPMD: MPI communicator is a nullptr.");
+
+              // check type string to see if this is mpi4py
+              //   __str__ (pretty)
+              //   __repr__ (unambiguous)
+              //   mpi4py: <mpi4py.MPI.Intracomm object at 0x7f998e6e28d0>
+              //   pyMPI:  ... (TODO)
+              py::str const comm_pystr = py::repr(app_comm_py);
+              std::string const comm_str = comm_pystr.cast<std::string>();
+              if (comm_str.substr(0, 12) != std::string("<mpi4py.MPI."))
+                  throw std::runtime_error(
+                      "MPMD: comm is not an mpi4py communicator: " +
+                      comm_str);
+              // only checks same layout, e.g. an `int` in `PyObject` could
+              // pass this
+              if (!py::isinstance<py::class_<pyAMReX_PyMPIIntracommObject> >(
+                      app_comm_py.get_type()))
+                  // TODO add mpi4py version from above import check to error
+                  // message
+                  throw std::runtime_error(
+                      "MPMD: comm has unexpected type layout in " +
+                      comm_str +
+                      " (Mismatched MPI at compile vs. runtime? "
+                      "Breaking mpi4py release?)");
+
+              // todo other possible implementations:
+              // - pyMPI (inactive since 2008?): import mpi; mpi.WORLD
+
+              // reimplementation of mpi4py's:
+              // MPI_Comm* mpiCommPtr = PyMPIComm_Get(app_comm_py.ptr());
+              MPI_Comm *mpiCommPtr =
+                  &((pyAMReX_PyMPIIntracommObject *)(app_comm_py.ptr()))->ob_mpi;
+
+              if (PyErr_Occurred())
+                  throw std::runtime_error(
+                      "MPMD: MPI communicator access error.");
+              if (mpiCommPtr == nullptr)
+              {
+                  throw std::runtime_error(
+                      "MPMD: MPI communicator cast failed. "
+                      "(Mismatched MPI at compile vs. runtime?)");
+              }
+
+              return Initialize(argc, tmp, build_parm_parse, *mpiCommPtr);
           }, py::return_value_policy::reference);
 
     constexpr auto run_gc = []() {

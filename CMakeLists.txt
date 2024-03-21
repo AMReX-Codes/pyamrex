@@ -115,15 +115,6 @@ foreach(D IN LISTS AMReX_SPACEDIM)
         $<BUILD_INTERFACE:${pyAMReX_SOURCE_DIR}/src>
     )
 
-    if(${AMReX_MPI})
-      execute_process(COMMAND
-        ${Python_EXECUTABLE} -c "import mpi4py; print( mpi4py.get_include() )"
-        OUTPUT_VARIABLE MPI4PY_INCLUDE
-        OUTPUT_STRIP_TRAILING_WHITESPACE
-      )
-      target_include_directories(pyAMReX_${D}d PRIVATE "${MPI4PY_INCLUDE}")
-    endif()
-
     # if we include <AMReX_buildInfo.H> we will need to call:
     generate_buildinfo(pyAMReX_${D}d "${pyAMReX_SOURCE_DIR}")
     target_link_libraries(pyAMReX_${D}d PRIVATE buildInfo::pyAMReX_${D}d)
