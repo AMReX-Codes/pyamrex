@@ -369,9 +369,6 @@ void init_MultiFab(py::module &m)
         .def_static("divide", py::overload_cast< MultiFab &, MultiFab const &, int, int, int, int >(&MultiFab::Divide))
         .def_static("divide", py::overload_cast< MultiFab &, MultiFab const &, int, int, int, IntVect const & >(&MultiFab::Divide))
 
-        .def_static("copy", py::overload_cast< MultiFab &, MultiFab const &, int, int, int, int >(&MultiFab::Copy), py::arg("dst"), py::arg("src"), py::arg("srccomp"), py::arg("dstcomp"), py::arg("numcomp"), py::arg("nghost"))
-        .def_static("copy", py::overload_cast< MultiFab &, MultiFab const &, int, int, int, IntVect const & >(&MultiFab::Copy), py::arg("dst"), py::arg("src"), py::arg("srccomp"), py::arg("dstcomp"), py::arg("numcomp"), py::arg("nghost"))
-
         .def_static("swap", py::overload_cast< MultiFab &, MultiFab &, int, int, int, int >(&MultiFab::Swap))
         .def_static("swap", py::overload_cast< MultiFab &, MultiFab &, int, int, int, IntVect const & >(&MultiFab::Swap))
 
@@ -421,4 +418,8 @@ void init_MultiFab(py::module &m)
         .def_static("initialize", &MultiFab::Initialize )
         .def_static("finalize", &MultiFab::Finalize )
     ;
+
+
+    m.def("copy_mfab", py::overload_cast< MultiFab &, MultiFab const &, int, int, int, int >(&MultiFab::Copy), py::arg("dst"), py::arg("src"), py::arg("srccomp"), py::arg("dstcomp"), py::arg("numcomp"), py::arg("nghost"))
+     .def("copy_mfab", py::overload_cast< MultiFab &, MultiFab const &, int, int, int, IntVect const & >(&MultiFab::Copy), py::arg("dst"), py::arg("src"), py::arg("srccomp"), py::arg("dstcomp"), py::arg("numcomp"), py::arg("nghost"));
 }
