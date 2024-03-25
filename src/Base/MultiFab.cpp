@@ -125,6 +125,8 @@ void init_MultiFab(py::module &m)
         .def("clear", &FabArray<FArrayBox>::clear)
         .def("ok", &FabArray<FArrayBox>::ok)
 
+        .def_property_readonly("arena", &FabArray<FArrayBox>::arena)
+
         //.def("array", py::overload_cast< const MFIter& >(&FabArray<FArrayBox>::array))
         //.def("const_array", &FabArray<FArrayBox>::const_array)
         .def("array", [](FabArray<FArrayBox> & fa, MFIter const & mfi)

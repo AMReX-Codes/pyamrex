@@ -93,20 +93,24 @@ def mf_to_cupy(self, copy=False, order="F"):
 
 def copy_multifab(amr, self):
     """
-    TODO
+    Create a copy of this MultiFab, using the same Arena.
 
     Parameters
     ----------
     self : amrex.MultiFab
         A MultiFab class in pyAMReX
+
+    Returns
+    -------
+    amrex.MultiFab
+        A copy of this MultiFab.
     """
-    #mfinfo = self.MFInfo()
     mf = amr.MultiFab(
         self.box_array(),
         self.dm(),
         self.n_comp,
         self.n_grow_vect,
-        amr.MFInfo().set_arena(amr.The_Device_Arena()),  # TODO: use same Arena as used by self
+        amr.MFInfo().set_arena(self.arena),
     )
     amr.copy_mfab(
         dst=mf,
@@ -114,7 +118,7 @@ def copy_multifab(amr, self):
         srccomp=0,
         dstcomp=0,
         numcomp=self.n_comp,
-        nghost=self.n_grow_vect
+        nghost=self.n_grow_vect,
     )
     return mf
 
@@ -139,3 +143,4 @@ def register_MultiFab_extension(amr):
     amr.MultiFab.to_cupy = mf_to_cupy
 
     amr.MultiFab.copy = lambda self: copy_multifab(amr, self)
+    amr.MultiFab.copy.__doc__ = copy_multifab.__doc__
