@@ -43,6 +43,7 @@ def mf_to_numpy(amr, self, copy=False, order="F"):
             self.n_comp,
             self.n_grow_vect,
             amr.MFInfo().set_arena(amr.The_Pinned_Arena()),
+            self.factory,
         )
         amr.dtoh_memcpy(mf, self)
 
@@ -91,6 +92,39 @@ def mf_to_cupy(self, copy=False, order="F"):
     return views
 
 
+def copy_multifab(amr, self):
+    """
+    Create a copy of this MultiFab, using the same Arena.
+
+    Parameters
+    ----------
+    self : amrex.MultiFab
+        A MultiFab class in pyAMReX
+
+    Returns
+    -------
+    amrex.MultiFab
+        A copy of this MultiFab.
+    """
+    mf = amr.MultiFab(
+        self.box_array(),
+        self.dm(),
+        self.n_comp,
+        self.n_grow_vect,
+        amr.MFInfo().set_arena(self.arena),
+        self.factory,
+    )
+    amr.copy_mfab(
+        dst=mf,
+        src=self,
+        srccomp=0,
+        dstcomp=0,
+        numcomp=self.n_comp,
+        nghost=self.n_grow_vect,
+    )
+    return mf
+
+
 def register_MultiFab_extension(amr):
     """MultiFab helper methods"""
 
@@ -109,3 +143,6 @@ def register_MultiFab_extension(amr):
     amr.MultiFab.to_numpy.__doc__ = mf_to_numpy.__doc__
 
     amr.MultiFab.to_cupy = mf_to_cupy
+
+    amr.MultiFab.copy = lambda self: copy_multifab(amr, self)
+    amr.MultiFab.copy.__doc__ = copy_multifab.__doc__

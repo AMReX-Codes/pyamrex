@@ -431,3 +431,22 @@ def test_mfab_dtoh_copy(mfab_device):
 
         local_boxes_device = mfab_device.to_cupy()
         assert max([cp.max(box) for box in local_boxes_device]) == dev_val
+
+
+def test_mfab_copy(mfab):
+    # write to mfab
+    mfab.set_val(42.0)
+    for i in range(mfab.num_comp):
+        np.testing.assert_allclose(mfab.max(i), 42.0)
+
+    # copy
+    new_mfab = mfab.copy()
+
+    # write to old mfab
+    mfab.set_val(1.0)
+    for i in range(mfab.num_comp):
+        np.testing.assert_allclose(mfab.max(i), 1.0)
+
+    # check new mfab is the original data
+    for i in range(new_mfab.num_comp):
+        np.testing.assert_allclose(new_mfab.max(i), 42.0)
