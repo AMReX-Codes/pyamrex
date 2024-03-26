@@ -88,6 +88,7 @@ __all__ = [
     "FArrayBox",
     "FabArrayBase",
     "FabArray_FArrayBox",
+    "FabFactory_FArrayBox",
     "Geometry",
     "GeometryData",
     "IndexType",
@@ -224,6 +225,7 @@ __all__ = [
     "begin",
     "coarsen",
     "concatenate",
+    "copy_mfab",
     "dtoh_memcpy",
     "end",
     "finalize",
@@ -3705,6 +3707,15 @@ class FabArray_FArrayBox(FabArrayBase):
     def sum_boundary(
         self, arg0: int, arg1: int, arg2: IntVect, arg3: Periodicity
     ) -> None: ...
+    @property
+    def arena(self) -> Arena: ...
+    @property
+    def factory(self) -> FabFactory_FArrayBox: ...
+    @property
+    def has_EB_fab_factory(self) -> bool: ...
+
+class FabFactory_FArrayBox:
+    pass
 
 class Geometry(CoordSys):
     @typing.overload
@@ -4210,26 +4221,6 @@ class MultiFab(FabArray_FArrayBox):
     ) -> None: ...
     @staticmethod
     @typing.overload
-    def copy(
-        dst: MultiFab,
-        src: MultiFab,
-        srccomp: int,
-        dstcomp: int,
-        numcomp: int,
-        nghost: int,
-    ) -> None: ...
-    @staticmethod
-    @typing.overload
-    def copy(
-        dst: MultiFab,
-        src: MultiFab,
-        srccomp: int,
-        dstcomp: int,
-        numcomp: int,
-        nghost: IntVect,
-    ) -> None: ...
-    @staticmethod
-    @typing.overload
     def divide(
         arg0: MultiFab, arg1: MultiFab, arg2: int, arg3: int, arg4: int, arg5: int
     ) -> None: ...
@@ -4336,6 +4327,16 @@ class MultiFab(FabArray_FArrayBox):
     ) -> None: ...
     @typing.overload
     def __init__(
+        self,
+        arg0: BoxArray,
+        arg1: DistributionMapping,
+        arg2: int,
+        arg3: int,
+        arg4: MFInfo,
+        arg5: FabFactory_FArrayBox,
+    ) -> None: ...
+    @typing.overload
+    def __init__(
         self, arg0: BoxArray, arg1: DistributionMapping, arg2: int, arg3: IntVect
     ) -> None: ...
     @typing.overload
@@ -4346,6 +4347,16 @@ class MultiFab(FabArray_FArrayBox):
         arg2: int,
         arg3: IntVect,
         arg4: MFInfo,
+    ) -> None: ...
+    @typing.overload
+    def __init__(
+        self,
+        arg0: BoxArray,
+        arg1: DistributionMapping,
+        arg2: int,
+        arg3: IntVect,
+        arg4: MFInfo,
+        arg5: FabFactory_FArrayBox,
     ) -> None: ...
     def __repr__(self) -> str: ...
     @typing.overload
@@ -4366,6 +4377,23 @@ class MultiFab(FabArray_FArrayBox):
     def contains_nan(self, arg0: int, arg1: int, arg2: int, arg3: bool) -> bool: ...
     @typing.overload
     def contains_nan(self, arg0: int, arg1: int, arg2: IntVect, arg3: bool) -> bool: ...
+    def copy(self):
+        """
+
+        Create a copy of this MultiFab, using the same Arena.
+
+        Parameters
+        ----------
+        self : amrex.MultiFab
+            A MultiFab class in pyAMReX
+
+        Returns
+        -------
+        amrex.MultiFab
+            A copy of this MultiFab.
+
+        """
+
     def divi(self, arg0: MultiFab, arg1: int, arg2: int, arg3: int) -> None: ...
     def dm(self: FabArrayBase) -> DistributionMapping: ...
     @typing.overload
@@ -13427,6 +13455,19 @@ def concatenate(root: str, num: int, mindigits: int = 5) -> str:
     Builds plotfile name
     """
 
+@typing.overload
+def copy_mfab(
+    dst: MultiFab, src: MultiFab, srccomp: int, dstcomp: int, numcomp: int, nghost: int
+) -> None: ...
+@typing.overload
+def copy_mfab(
+    dst: MultiFab,
+    src: MultiFab,
+    srccomp: int,
+    dstcomp: int,
+    numcomp: int,
+    nghost: IntVect,
+) -> None: ...
 @typing.overload
 def dtoh_memcpy(dest: FabArray_FArrayBox, src: FabArray_FArrayBox) -> None: ...
 @typing.overload
