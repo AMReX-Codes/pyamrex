@@ -10,6 +10,7 @@
 #include <AMReX_FArrayBox.H>
 #include <AMReX_FabArray.H>
 #include <AMReX_FabArrayBase.H>
+#include <AMReX_FabFactory.H>
 #include <AMReX_MultiFab.H>
 
 #include <memory>
@@ -35,6 +36,8 @@ void init_MultiFab(py::module &m)
     py::class_< FabArrayBase > py_FabArrayBase(m, "FabArrayBase");
     py::class_< FabArray<FArrayBox>, FabArrayBase > py_FabArray_FArrayBox(m, "FabArray_FArrayBox");
     py::class_< MultiFab, FabArray<FArrayBox> > py_MultiFab(m, "MultiFab");
+
+    py::class_< FabFactory<FArrayBox> >(m, "FabFactory_FArrayBox");
 
     py::class_< MFInfo >(m, "MFInfo")
         .def_readwrite("alloc", &MFInfo::alloc)
@@ -126,6 +129,8 @@ void init_MultiFab(py::module &m)
         .def("ok", &FabArray<FArrayBox>::ok)
 
         .def_property_readonly("arena", &FabArray<FArrayBox>::arena)
+        .def_property_readonly("has_EB_fab_factory", &FabArray<FArrayBox>::hasEBFabFactory)
+        .def_property_readonly("factory", &FabArray<FArrayBox>::Factory)
 
         //.def("array", py::overload_cast< const MFIter& >(&FabArray<FArrayBox>::array))
         //.def("const_array", &FabArray<FArrayBox>::const_array)
@@ -193,17 +198,17 @@ void init_MultiFab(py::module &m)
         .def(py::init< const BoxArray&, const DistributionMapping&, int, int >())
         .def(py::init< const BoxArray&, const DistributionMapping&, int, int,
                        MFInfo const & >())
-        //.def(py::init< const BoxArray&, const DistributionMapping&, int, int,
-        //               MFInfo const &, FabFactory<FArrayBox> const & >())
+        .def(py::init< const BoxArray&, const DistributionMapping&, int, int,
+                       MFInfo const &, FabFactory<FArrayBox> const & >())
 
         .def(py::init< const BoxArray&, const DistributionMapping&, int,
                        IntVect const& >())
         .def(py::init< const BoxArray&, const DistributionMapping&, int,
                        IntVect const&,
                        MFInfo const& >())
-        //.def(py::init< const BoxArray&, const DistributionMapping&, int,
-        //               IntVect const&,
-        //               MFInfo const&, FabFactory<FArrayBox> const & >())
+        .def(py::init< const BoxArray&, const DistributionMapping&, int,
+                       IntVect const&,
+                       MFInfo const&, FabFactory<FArrayBox> const & >())
 
         //.def(py::init< MultiFab const&, MakeType, int, int >())
 

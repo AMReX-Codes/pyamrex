@@ -43,6 +43,7 @@ def mf_to_numpy(amr, self, copy=False, order="F"):
             self.n_comp,
             self.n_grow_vect,
             amr.MFInfo().set_arena(amr.The_Pinned_Arena()),
+            self.factory,
         )
         amr.dtoh_memcpy(mf, self)
 
@@ -111,6 +112,7 @@ def copy_multifab(amr, self):
         self.n_comp,
         self.n_grow_vect,
         amr.MFInfo().set_arena(self.arena),
+        self.factory,
     )
     amr.copy_mfab(
         dst=mf,
