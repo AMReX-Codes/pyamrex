@@ -114,7 +114,6 @@ def soa_to_numpy(self, copy=False):
         real_comp_names = self.soa_real_comps(self.num_real_comps, rotate=False)
 
     for idx_real in range(self.num_real_comps):
-        print(idx_real, real_comp_names[idx_real], self.get_real_data(idx_real).size())
         soa_view.real[real_comp_names[idx_real]] = self.get_real_data(
             idx_real
         ).to_numpy(copy=copy)

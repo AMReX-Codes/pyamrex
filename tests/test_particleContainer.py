@@ -52,11 +52,6 @@ def particle_container(Npart, std_geometry, distmap, boxarr, std_real_box):
     pc.add_int_comp(True)
     pc.add_int_comp(True)
 
-    #   can be removed after
-    #     https://github.com/AMReX-Codes/amrex/pull/3615
-    pc.resize_runtime_real_comp(1, True)
-    pc.resize_runtime_int_comp(2, True)
-
     # assign some values to runtime components
     for lvl in range(pc.finest_level + 1):
         for pti in pc.iterator(pc, level=lvl):
@@ -82,11 +77,6 @@ def soa_particle_container(Npart, std_geometry, distmap, boxarr, std_real_box):
     pc.add_real_comp(True)
     pc.add_int_comp(True)
     pc.add_int_comp(True)
-
-    #   can be removed after
-    #     https://github.com/AMReX-Codes/amrex/pull/3615
-    pc.resize_runtime_real_comp(1, True)
-    pc.resize_runtime_int_comp(2, True)
 
     # assign some values to runtime components
     for lvl in range(pc.finest_level + 1):
@@ -454,7 +444,7 @@ def test_pc_df(particle_container, Npart):
     print(df.columns)
     print(df)
 
-    assert len(df.columns) == 12
+    assert len(df.columns) == 14
 
 
 @pytest.mark.skipif(
@@ -545,4 +535,4 @@ def test_pc_df_mpi(particle_container, Npart):
         print(df.columns)
         print(df)
 
-        assert len(df.columns) == 12
+        assert len(df.columns) == 14
