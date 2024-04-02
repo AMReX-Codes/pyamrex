@@ -3489,7 +3489,7 @@ class BoxArray:
     def size(self) -> int: ...
 
 class Config:
-    amrex_version: typing.ClassVar[str] = "24.03"
+    amrex_version: typing.ClassVar[str] = "24.03-48-g47347f785f5c"
     gpu_backend = None
     have_gpu: typing.ClassVar[bool] = False
     have_mpi: typing.ClassVar[bool] = True
@@ -4574,6 +4574,11 @@ class PODVector_int_arena:
     def __len__(self) -> int: ...
     def __repr__(self) -> str: ...
     def __setitem__(self, arg0: int, arg1: int) -> None: ...
+    def assign(self, value: int) -> None:
+        """
+        assign the same value to every element
+        """
+
     def capacity(self) -> int: ...
     def clear(self) -> None: ...
     def empty(self) -> bool: ...
@@ -4646,6 +4651,11 @@ class PODVector_int_pinned:
     def __len__(self) -> int: ...
     def __repr__(self) -> str: ...
     def __setitem__(self, arg0: int, arg1: int) -> None: ...
+    def assign(self, value: int) -> None:
+        """
+        assign the same value to every element
+        """
+
     def capacity(self) -> int: ...
     def clear(self) -> None: ...
     def empty(self) -> bool: ...
@@ -4718,6 +4728,11 @@ class PODVector_int_std:
     def __len__(self) -> int: ...
     def __repr__(self) -> str: ...
     def __setitem__(self, arg0: int, arg1: int) -> None: ...
+    def assign(self, value: int) -> None:
+        """
+        assign the same value to every element
+        """
+
     def capacity(self) -> int: ...
     def clear(self) -> None: ...
     def empty(self) -> bool: ...
@@ -4790,6 +4805,11 @@ class PODVector_real_arena:
     def __len__(self) -> int: ...
     def __repr__(self) -> str: ...
     def __setitem__(self, arg0: int, arg1: float) -> None: ...
+    def assign(self, value: float) -> None:
+        """
+        assign the same value to every element
+        """
+
     def capacity(self) -> int: ...
     def clear(self) -> None: ...
     def empty(self) -> bool: ...
@@ -4862,6 +4882,11 @@ class PODVector_real_pinned:
     def __len__(self) -> int: ...
     def __repr__(self) -> str: ...
     def __setitem__(self, arg0: int, arg1: float) -> None: ...
+    def assign(self, value: float) -> None:
+        """
+        assign the same value to every element
+        """
+
     def capacity(self) -> int: ...
     def clear(self) -> None: ...
     def empty(self) -> bool: ...
@@ -4934,6 +4959,11 @@ class PODVector_real_std:
     def __len__(self) -> int: ...
     def __repr__(self) -> str: ...
     def __setitem__(self, arg0: int, arg1: float) -> None: ...
+    def assign(self, value: float) -> None:
+        """
+        assign the same value to every element
+        """
+
     def capacity(self) -> int: ...
     def clear(self) -> None: ...
     def empty(self) -> bool: ...
@@ -5006,6 +5036,11 @@ class PODVector_uint64_arena:
     def __len__(self) -> int: ...
     def __repr__(self) -> str: ...
     def __setitem__(self, arg0: int, arg1: int) -> None: ...
+    def assign(self, value: int) -> None:
+        """
+        assign the same value to every element
+        """
+
     def capacity(self) -> int: ...
     def clear(self) -> None: ...
     def empty(self) -> bool: ...
@@ -5078,6 +5113,11 @@ class PODVector_uint64_pinned:
     def __len__(self) -> int: ...
     def __repr__(self) -> str: ...
     def __setitem__(self, arg0: int, arg1: int) -> None: ...
+    def assign(self, value: int) -> None:
+        """
+        assign the same value to every element
+        """
+
     def capacity(self) -> int: ...
     def clear(self) -> None: ...
     def empty(self) -> bool: ...
@@ -5150,6 +5190,11 @@ class PODVector_uint64_std:
     def __len__(self) -> int: ...
     def __repr__(self) -> str: ...
     def __setitem__(self, arg0: int, arg1: int) -> None: ...
+    def assign(self, value: int) -> None:
+        """
+        assign the same value to every element
+        """
+
     def capacity(self) -> int: ...
     def clear(self) -> None: ...
     def empty(self) -> bool: ...
@@ -7129,9 +7174,19 @@ class ParticleContainer_2_1_3_1_arena:
         arg2: Vector_BoxArray,
         arg3: Vector_IntVect,
     ) -> None: ...
+    def add_int_comp(self, communicate: bool = True) -> None:
+        """
+        add a new runtime component with type Int
+        """
+
     def add_particles_at_level(
         self, particles: ParticleTile_2_1_3_1_arena, level: int, ngrow: int = 0
     ) -> None: ...
+    def add_real_comp(self, communicate: bool = True) -> None:
+        """
+        add a new runtime component with type Real
+        """
+
     def clear_particles(self) -> None: ...
     def get_particles(
         self, level: int
@@ -7288,9 +7343,19 @@ class ParticleContainer_2_1_3_1_default:
         arg2: Vector_BoxArray,
         arg3: Vector_IntVect,
     ) -> None: ...
+    def add_int_comp(self, communicate: bool = True) -> None:
+        """
+        add a new runtime component with type Int
+        """
+
     def add_particles_at_level(
         self, particles: ParticleTile_2_1_3_1_default, level: int, ngrow: int = 0
     ) -> None: ...
+    def add_real_comp(self, communicate: bool = True) -> None:
+        """
+        add a new runtime component with type Real
+        """
+
     def clear_particles(self) -> None: ...
     def get_particles(
         self, level: int
@@ -7447,9 +7512,19 @@ class ParticleContainer_2_1_3_1_pinned:
         arg2: Vector_BoxArray,
         arg3: Vector_IntVect,
     ) -> None: ...
+    def add_int_comp(self, communicate: bool = True) -> None:
+        """
+        add a new runtime component with type Int
+        """
+
     def add_particles_at_level(
         self, particles: ParticleTile_2_1_3_1_pinned, level: int, ngrow: int = 0
     ) -> None: ...
+    def add_real_comp(self, communicate: bool = True) -> None:
+        """
+        add a new runtime component with type Real
+        """
+
     def clear_particles(self) -> None: ...
     def get_particles(
         self, level: int
@@ -7606,9 +7681,19 @@ class ParticleContainer_pureSoA_1_0_arena:
         arg2: Vector_BoxArray,
         arg3: Vector_IntVect,
     ) -> None: ...
+    def add_int_comp(self, communicate: bool = True) -> None:
+        """
+        add a new runtime component with type Int
+        """
+
     def add_particles_at_level(
         self, particles: ParticleTile_pureSoA_1_0_arena, level: int, ngrow: int = 0
     ) -> None: ...
+    def add_real_comp(self, communicate: bool = True) -> None:
+        """
+        add a new runtime component with type Real
+        """
+
     def clear_particles(self) -> None: ...
     def get_particles(
         self, level: int
@@ -7759,9 +7844,19 @@ class ParticleContainer_pureSoA_1_0_default:
         arg2: Vector_BoxArray,
         arg3: Vector_IntVect,
     ) -> None: ...
+    def add_int_comp(self, communicate: bool = True) -> None:
+        """
+        add a new runtime component with type Int
+        """
+
     def add_particles_at_level(
         self, particles: ParticleTile_pureSoA_1_0_default, level: int, ngrow: int = 0
     ) -> None: ...
+    def add_real_comp(self, communicate: bool = True) -> None:
+        """
+        add a new runtime component with type Real
+        """
+
     def clear_particles(self) -> None: ...
     def get_particles(
         self, level: int
@@ -7912,9 +8007,19 @@ class ParticleContainer_pureSoA_1_0_pinned:
         arg2: Vector_BoxArray,
         arg3: Vector_IntVect,
     ) -> None: ...
+    def add_int_comp(self, communicate: bool = True) -> None:
+        """
+        add a new runtime component with type Int
+        """
+
     def add_particles_at_level(
         self, particles: ParticleTile_pureSoA_1_0_pinned, level: int, ngrow: int = 0
     ) -> None: ...
+    def add_real_comp(self, communicate: bool = True) -> None:
+        """
+        add a new runtime component with type Real
+        """
+
     def clear_particles(self) -> None: ...
     def get_particles(
         self, level: int
@@ -8065,9 +8170,19 @@ class ParticleContainer_pureSoA_5_0_arena:
         arg2: Vector_BoxArray,
         arg3: Vector_IntVect,
     ) -> None: ...
+    def add_int_comp(self, communicate: bool = True) -> None:
+        """
+        add a new runtime component with type Int
+        """
+
     def add_particles_at_level(
         self, particles: ParticleTile_pureSoA_5_0_arena, level: int, ngrow: int = 0
     ) -> None: ...
+    def add_real_comp(self, communicate: bool = True) -> None:
+        """
+        add a new runtime component with type Real
+        """
+
     def clear_particles(self) -> None: ...
     def get_particles(
         self, level: int
@@ -8218,9 +8333,19 @@ class ParticleContainer_pureSoA_5_0_default:
         arg2: Vector_BoxArray,
         arg3: Vector_IntVect,
     ) -> None: ...
+    def add_int_comp(self, communicate: bool = True) -> None:
+        """
+        add a new runtime component with type Int
+        """
+
     def add_particles_at_level(
         self, particles: ParticleTile_pureSoA_5_0_default, level: int, ngrow: int = 0
     ) -> None: ...
+    def add_real_comp(self, communicate: bool = True) -> None:
+        """
+        add a new runtime component with type Real
+        """
+
     def clear_particles(self) -> None: ...
     def get_particles(
         self, level: int
@@ -8371,9 +8496,19 @@ class ParticleContainer_pureSoA_5_0_pinned:
         arg2: Vector_BoxArray,
         arg3: Vector_IntVect,
     ) -> None: ...
+    def add_int_comp(self, communicate: bool = True) -> None:
+        """
+        add a new runtime component with type Int
+        """
+
     def add_particles_at_level(
         self, particles: ParticleTile_pureSoA_5_0_pinned, level: int, ngrow: int = 0
     ) -> None: ...
+    def add_real_comp(self, communicate: bool = True) -> None:
+        """
+        add a new runtime component with type Real
+        """
+
     def clear_particles(self) -> None: ...
     def get_particles(
         self, level: int
@@ -8524,9 +8659,19 @@ class ParticleContainer_pureSoA_8_0_arena:
         arg2: Vector_BoxArray,
         arg3: Vector_IntVect,
     ) -> None: ...
+    def add_int_comp(self, communicate: bool = True) -> None:
+        """
+        add a new runtime component with type Int
+        """
+
     def add_particles_at_level(
         self, particles: ParticleTile_pureSoA_8_0_arena, level: int, ngrow: int = 0
     ) -> None: ...
+    def add_real_comp(self, communicate: bool = True) -> None:
+        """
+        add a new runtime component with type Real
+        """
+
     def clear_particles(self) -> None: ...
     def get_particles(
         self, level: int
@@ -8677,9 +8822,19 @@ class ParticleContainer_pureSoA_8_0_default:
         arg2: Vector_BoxArray,
         arg3: Vector_IntVect,
     ) -> None: ...
+    def add_int_comp(self, communicate: bool = True) -> None:
+        """
+        add a new runtime component with type Int
+        """
+
     def add_particles_at_level(
         self, particles: ParticleTile_pureSoA_8_0_default, level: int, ngrow: int = 0
     ) -> None: ...
+    def add_real_comp(self, communicate: bool = True) -> None:
+        """
+        add a new runtime component with type Real
+        """
+
     def clear_particles(self) -> None: ...
     def get_particles(
         self, level: int
@@ -8830,9 +8985,19 @@ class ParticleContainer_pureSoA_8_0_pinned:
         arg2: Vector_BoxArray,
         arg3: Vector_IntVect,
     ) -> None: ...
+    def add_int_comp(self, communicate: bool = True) -> None:
+        """
+        add a new runtime component with type Int
+        """
+
     def add_particles_at_level(
         self, particles: ParticleTile_pureSoA_8_0_pinned, level: int, ngrow: int = 0
     ) -> None: ...
+    def add_real_comp(self, communicate: bool = True) -> None:
+        """
+        add a new runtime component with type Real
+        """
+
     def clear_particles(self) -> None: ...
     def get_particles(
         self, level: int
@@ -13661,4 +13826,4 @@ __author__: str = (
     "Axel Huebl, Ryan T. Sandberg, Shreyas Ananthan, David P. Grote, Revathi Jambunathan, Edoardo Zoni, Remi Lehe, Andrew Myers, Weiqun Zhang"
 )
 __license__: str = "BSD-3-Clause-LBNL"
-__version__: str = "24.03"
+__version__: str = "24.03-48-g47347f785f5c"

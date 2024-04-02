@@ -46,6 +46,20 @@ def particle_container(Npart, std_geometry, distmap, boxarr, std_real_box):
 
     iseed = 1
     pc.init_random(Npart, iseed, myt, False, std_real_box)
+
+    # add runtime components: 1 real 2 int
+    pc.add_real_comp(True)
+    pc.add_int_comp(True)
+    pc.add_int_comp(True)
+
+    # assign some values to runtime components
+    for lvl in range(pc.finest_level + 1):
+        for pti in pc.iterator(pc, level=lvl):
+            soa = pti.soa()
+            soa.get_real_data(2).assign(1.2345)
+            soa.get_int_data(1).assign(42)
+            soa.get_int_data(2).assign(33)
+
     return pc
 
 
@@ -58,6 +72,20 @@ def soa_particle_container(Npart, std_geometry, distmap, boxarr, std_real_box):
 
     iseed = 1
     pc.init_random(Npart, iseed, myt, False, std_real_box)
+
+    # add runtime components: 1 real 2 int
+    pc.add_real_comp(True)
+    pc.add_int_comp(True)
+    pc.add_int_comp(True)
+
+    # assign some values to runtime components
+    for lvl in range(pc.finest_level + 1):
+        for pti in pc.iterator(pc, level=lvl):
+            soa = pti.soa()
+            soa.get_real_data(8).assign(1.2345)
+            soa.get_int_data(0).assign(42)
+            soa.get_int_data(1).assign(33)
+
     return pc
 
 
@@ -315,6 +343,7 @@ def test_per_cell(empty_particle_container, std_geometry, std_particle):
 def test_soa_pc_numpy(soa_particle_container, Npart):
     """Used in docs/source/usage/compute.rst"""
     pc = soa_particle_container
+    assert pc.number_of_particles_at_level(0) == Npart
 
     class Config:
         have_gpu = False
@@ -358,6 +387,7 @@ def test_soa_pc_numpy(soa_particle_container, Npart):
 def test_pc_numpy(particle_container, Npart):
     """Used in docs/source/usage/compute.rst"""
     pc = particle_container
+    assert pc.number_of_particles_at_level(0) == Npart
 
     class Config:
         have_gpu = False
@@ -413,6 +443,8 @@ def test_pc_df(particle_container, Npart):
     df = pc.to_df()
     print(df.columns)
     print(df)
+
+    assert len(df.columns) == 14
 
 
 @pytest.mark.skipif(
@@ -502,3 +534,5 @@ def test_pc_df_mpi(particle_container, Npart):
         # only rank 0
         print(df.columns)
         print(df)
+
+        assert len(df.columns) == 14
