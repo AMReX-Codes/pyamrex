@@ -116,11 +116,15 @@ void init_MultiFab(py::module &m)
         .def("is_nodal",
              py::overload_cast< int >(&FabArrayBase::is_nodal, py::const_))
 
-        .def_property_readonly("nComp", &FabArrayBase::nComp)
-        .def_property_readonly("num_comp", &FabArrayBase::nComp)
-        .def_property_readonly("size", &FabArrayBase::size)
+        .def_property_readonly("nComp", &FabArrayBase::nComp,
+            "Return number of variables (aka components) associated with each point.")
+        .def_property_readonly("num_comp", &FabArrayBase::nComp,
+            "Return number of variables (aka components) associated with each point.")
+        .def_property_readonly("size", &FabArrayBase::size,
+            "Return the number of FABs in the FabArray.")
 
-        .def_property_readonly("n_grow_vect", &FabArrayBase::nGrowVect)
+        .def_property_readonly("n_grow_vect", &FabArrayBase::nGrowVect,
+            "Return the grow factor (per direction) that defines the region of definition.")
     ;
 
     py_FabArray_FArrayBox
@@ -128,7 +132,8 @@ void init_MultiFab(py::module &m)
         .def("clear", &FabArray<FArrayBox>::clear)
         .def("ok", &FabArray<FArrayBox>::ok)
 
-        .def_property_readonly("arena", &FabArray<FArrayBox>::arena)
+        .def_property_readonly("arena", &FabArray<FArrayBox>::arena,
+            "Provides access to the Arena this FabArray was build with.")
         .def_property_readonly("has_EB_fab_factory", &FabArray<FArrayBox>::hasEBFabFactory)
         .def_property_readonly("factory", &FabArray<FArrayBox>::Factory)
 
@@ -145,43 +150,198 @@ void init_MultiFab(py::module &m)
             py::keep_alive<0, 1>()
         )
 
-        .def_static("saxpy", py::overload_cast< FabArray<FArrayBox> &, Real, FabArray<FArrayBox> const &, int, int, int, IntVect const & >(&FabArray<FArrayBox>::template Saxpy<FArrayBox>)
+        /* setters */
+        .def("set_val",
+            py::overload_cast< amrex::Real >(&FabArray<FArrayBox>::setVal<FArrayBox>),
+            py::arg("val"),
+            "Set all components in the entire region of each FAB to val."
         )
-        .def_static("xpay", py::overload_cast< FabArray<FArrayBox> &, Real, FabArray<FArrayBox> const &, int, int, int, IntVect const & >(&FabArray<FArrayBox>::template Xpay<FArrayBox>))
-        .def_static("lin_comb", py::overload_cast< FabArray<FArrayBox> &, Real, FabArray<FArrayBox> const &, int, Real, FabArray<FArrayBox> const &, int, int, int, IntVect const & >(&FabArray<FArrayBox>::template LinComb<FArrayBox>))
+        .def("set_val",
+             py::overload_cast< amrex::Real, int, int, int >(&FabArray<FArrayBox>::setVal<FArrayBox>),
+             py::arg("val"), py::arg("comp"), py::arg("num_comp"), py::arg("nghost")=0,
+             "Set the value of num_comp components in the valid region of\n"
+             "each FAB in the FabArray, starting at component comp to val.\n"
+             "Also set the value of nghost boundary cells."
+        )
+        .def("set_val",
+             py::overload_cast< amrex::Real, int, int, IntVect const & >(&FabArray<FArrayBox>::setVal<FArrayBox>),
+             py::arg("val"), py::arg("comp"), py::arg("num_comp"), py::arg("nghost"),
+             "Set the value of num_comp components in the valid region of\n"
+             "each FAB in the FabArray, starting at component comp to val.\n"
+             "Also set the value of nghost boundary cells."
+        )
+            .def("set_val",
+                 py::overload_cast< amrex::Real, Box const &, int, int, int >(&FabArray<FArrayBox>::setVal<FArrayBox>),
+                 py::arg("val"), py::arg("region"), py::arg("comp"), py::arg("num_comp"), py::arg("nghost")=0,
+                 "Set the value of num_comp components in the valid region of\n"
+                 "each FAB in the FabArray, starting at component comp, as well\n"
+                 "as nghost boundary cells, to val, provided they also intersect\n"
+                 "with the Box region."
+            )
+            .def("set_val",
+                 py::overload_cast< amrex::Real, Box const &, int, int, IntVect const & >(&FabArray<FArrayBox>::setVal<FArrayBox>),
+                 py::arg("val"), py::arg("region"), py::arg("comp"), py::arg("num_comp"), py::arg("nghost"),
+                 "Set the value of num_comp components in the valid region of\n"
+                 "each FAB in the FabArray, starting at component comp, as well\n"
+                 "as nghost boundary cells, to val, provided they also intersect\n"
+                 "with the Box region."
+            )
 
-        .def("sum", py::overload_cast< int, IntVect const&, bool >(&FabArray<FArrayBox>::template sum<FArrayBox>, py::const_))
-        .def("sum_boundary", py::overload_cast< Periodicity const & >(&FabArray<FArrayBox>::SumBoundary))
-        .def("sum_boundary", py::overload_cast< int, int, Periodicity const & >(&FabArray<FArrayBox>::SumBoundary))
-        .def("sum_boundary", py::overload_cast< int, int, IntVect const&, Periodicity const & >(&FabArray<FArrayBox>::SumBoundary))
+        .def("abs", py::overload_cast< int, int, int >(&FabArray<FArrayBox>::abs<FArrayBox>),
+            py::arg("comp"), py::arg("ncomp"), py::arg("nghost")=0
+        )
+        .def("abs", py::overload_cast< int, int, IntVect const & >(&FabArray<FArrayBox>::abs<FArrayBox>),
+             py::arg("comp"), py::arg("ncomp"), py::arg("nghost")
+        )
 
-        .def("fill_boundary", py::overload_cast< bool >(&FabArray<FArrayBox>::template FillBoundary<Real>), py::arg("cross")=false)
-        .def("fill_boundary", py::overload_cast< Periodicity const &, bool >(&FabArray<FArrayBox>::template FillBoundary<Real>), py::arg("period"), py::arg("cross")=false)
-        .def("fill_boundary", py::overload_cast< IntVect const &, Periodicity const &, bool >(&FabArray<FArrayBox>::template FillBoundary<Real>), py::arg("nghost"), py::arg("period"), py::arg("cross")=false)
-        .def("fill_boundary", py::overload_cast< int, int, bool >(&FabArray<FArrayBox>::template FillBoundary<Real>), py::arg("scomp"), py::arg("ncomp"), py::arg("cross")=false)
-        .def("fill_boundary", py::overload_cast< int, int, Periodicity const &, bool >(&FabArray<FArrayBox>::template FillBoundary<Real>), py::arg("scomp"), py::arg("ncomp"), py::arg("period"), py::arg("cross")=false)
-        .def("fill_boundary", py::overload_cast< int, int, IntVect const &, Periodicity const &, bool >(&FabArray<FArrayBox>::template FillBoundary<Real>),  py::arg("scomp"), py::arg("ncomp"), py::arg("nghost"), py::arg("period"), py::arg("cross")=false)
+        .def_static("saxpy",
+            py::overload_cast< FabArray<FArrayBox> &, Real, FabArray<FArrayBox> const &, int, int, int, IntVect const & >(&FabArray<FArrayBox>::template Saxpy<FArrayBox>),
+            py::arg("y"), py::arg("a"), py::arg("x"), py::arg("xcomp"), py::arg("ycomp"), py::arg("ncomp"), py::arg("nghost"),
+            "y += a*x"
+        )
+        .def_static("xpay",
+            py::overload_cast< FabArray<FArrayBox> &, Real, FabArray<FArrayBox> const &, int, int, int, IntVect const & >(&FabArray<FArrayBox>::template Xpay<FArrayBox>),
+            py::arg("y"), py::arg("a"), py::arg("x"), py::arg("xcomp"), py::arg("ycomp"), py::arg("ncomp"), py::arg("nghost"),
+            "y = x + a*y"
+        )
+        .def_static("lin_comb",
+            py::overload_cast< FabArray<FArrayBox> &, Real, FabArray<FArrayBox> const &, int, Real, FabArray<FArrayBox> const &, int, int, int, IntVect const & >(&FabArray<FArrayBox>::template LinComb<FArrayBox>),
+            py::arg("dst"),
+            py::arg("a"), py::arg("x"), py::arg("xcomp"),
+            py::arg("b"), py::arg("y"), py::arg("ycomp"),
+            py::arg("dstcomp"), py::arg("numcomp"), py::arg("nghost"),
+            "dst = a*x + b*y"
+        )
 
-        /* Syncs */
-        .def("override_sync", py::overload_cast< Periodicity const & >(&FabArray<FArrayBox>::OverrideSync))
+        .def("sum",
+             py::overload_cast< int, IntVect const&, bool >(&FabArray<FArrayBox>::template sum<FArrayBox>, py::const_),
+             py::arg("comp"), py::arg("nghost"), py::arg("local"),
+             "Returns the sum of component \"comp\""
+        )
+        .def("sum_boundary",
+            py::overload_cast< Periodicity const & >(&FabArray<FArrayBox>::SumBoundary),
+            py::arg("period"),
+            "Sum values in overlapped cells.  The destination is limited to valid cells."
+        )
+        .def("sum_boundary", py::overload_cast< int, int, Periodicity const & >(&FabArray<FArrayBox>::SumBoundary),
+             py::arg("scomp"), py::arg("ncomp"), py::arg("period"),
+             "Sum values in overlapped cells.  The destination is limited to valid cells."
+        )
+        .def("sum_boundary", py::overload_cast< int, int, IntVect const&, Periodicity const & >(&FabArray<FArrayBox>::SumBoundary),
+             py::arg("scomp"), py::arg("ncomp"), py::arg("nghost"), py::arg("period"),
+             "Sum values in overlapped cells.  The destination is limited to valid cells."
+        )
+        .def("sum_boundary", py::overload_cast< int, int, IntVect const&, IntVect const&, Periodicity const & >(&FabArray<FArrayBox>::SumBoundary),
+             py::arg("scomp"), py::arg("ncomp"), py::arg("nghost"), py::arg("dst_nghost"), py::arg("period"),
+             "Sum values in overlapped cells.  The destination is limited to valid cells."
+        )
+    ;
+
+    constexpr auto doc_fabarray_fillb = R"(Copy on intersection within a FabArray.
+
+    Data is copied from valid regions to intersecting regions of definition.
+    The purpose is to fill in the boundary regions of each FAB in the FabArray.
+    If cross=true, corner cells are not filled. If the length of periodic is provided,
+    periodic boundaries are also filled.
+
+    If scomp is provided, this only copies ncomp components starting at scomp.
+
+    Note that FabArray itself does not contains any periodicity information.
+    FillBoundary expects that its cell-centered version of its BoxArray is non-overlapping.)";
+
+    py_FabArray_FArrayBox
+        .def("fill_boundary",
+            py::overload_cast< bool >(&FabArray<FArrayBox>::template FillBoundary<Real>),
+            py::arg("cross")=false,
+            doc_fabarray_fillb
+        )
+        .def("fill_boundary",
+            py::overload_cast< Periodicity const &, bool >(&FabArray<FArrayBox>::template FillBoundary<Real>),
+            py::arg("period"),
+            py::arg("cross")=false,
+            doc_fabarray_fillb
+        )
+        .def("fill_boundary",
+            py::overload_cast< IntVect const &, Periodicity const &, bool >(&FabArray<FArrayBox>::template FillBoundary<Real>),
+            py::arg("nghost"),
+            py::arg("period"),
+            py::arg("cross")=false,
+            doc_fabarray_fillb
+        )
+        .def("fill_boundary",
+            py::overload_cast< int, int, bool >(&FabArray<FArrayBox>::template FillBoundary<Real>),
+            py::arg("scomp"),
+            py::arg("ncomp"),
+            py::arg("cross")=false,
+            doc_fabarray_fillb
+        )
+        .def("fill_boundary",
+            py::overload_cast< int, int, Periodicity const &, bool >(&FabArray<FArrayBox>::template FillBoundary<Real>),
+            py::arg("scomp"),
+            py::arg("ncomp"),
+            py::arg("period"),
+            py::arg("cross")=false,
+            doc_fabarray_fillb
+        )
+        .def("fill_boundary",
+            py::overload_cast< int, int, IntVect const &, Periodicity const &, bool >(&FabArray<FArrayBox>::template FillBoundary<Real>),
+            py::arg("scomp"),
+            py::arg("ncomp"),
+            py::arg("nghost"),
+            py::arg("period"),
+            py::arg("cross")=false,
+            doc_fabarray_fillb
+        )
+    ;
+
+    constexpr auto doc_fabarray_osync = R"(Synchronize nodal data.
+
+    The synchronization will override valid regions by the intersecting valid regions with a higher precedence.
+    The smaller the global box index is, the higher precedence the box has.
+    With periodic boundaries, for cells in the same box, those near the lower corner have higher precedence than those near the upper corner.
+
+    Parameters
+    ----------
+    scomp :
+      starting component
+    ncomp :
+      number of components
+    period :
+      periodic length if it's non-zero)";
+
+    py_FabArray_FArrayBox
+        .def("override_sync",
+            py::overload_cast< Periodicity const & >(&FabArray<FArrayBox>::OverrideSync),
+            py::arg("period"),
+            doc_fabarray_osync
+        )
+        .def("override_sync",
+             py::overload_cast< int, int, Periodicity const & >(&FabArray<FArrayBox>::OverrideSync),
+             py::arg("scomp"), py::arg("ncomp"), py::arg("period"),
+             doc_fabarray_osync
+        )
     ;
 
     m.def("htod_memcpy",
           py::overload_cast< FabArray<FArrayBox> &, FabArray<FArrayBox> const & >(&htod_memcpy<FArrayBox>),
-          py::arg("dest"), py::arg("src")
+          py::arg("dest"), py::arg("src"),
+          "Copy from a host to device FabArray."
     );
     m.def("htod_memcpy",
           py::overload_cast< FabArray<FArrayBox> &, FabArray<FArrayBox> const &, int, int, int >(&htod_memcpy<FArrayBox>),
-          py::arg("dest"), py::arg("src"), py::arg("scomp"), py::arg("dcomp"), py::arg("ncomp")
+          py::arg("dest"), py::arg("src"), py::arg("scomp"), py::arg("dcomp"), py::arg("ncomp"),
+          "Copy from a host to device FabArray for a specific (number of) component(s)."
     );
 
     m.def("dtoh_memcpy",
           py::overload_cast< FabArray<FArrayBox> &, FabArray<FArrayBox> const & >(&dtoh_memcpy<FArrayBox>),
-          py::arg("dest"), py::arg("src")
+          py::arg("dest"), py::arg("src"),
+          "Copy from a device to host FabArray."
     );
     m.def("dtoh_memcpy",
           py::overload_cast< FabArray<FArrayBox> &, FabArray<FArrayBox> const &, int, int, int >(&dtoh_memcpy<FArrayBox>),
-          py::arg("dest"), py::arg("src"), py::arg("scomp"), py::arg("dcomp"), py::arg("ncomp")
+          py::arg("dest"), py::arg("src"), py::arg("scomp"), py::arg("dcomp"), py::arg("ncomp"),
+          "Copy from a device to host FabArray for a specific (number of) component(s)."
     );
 
     py_MultiFab
@@ -193,22 +353,67 @@ void init_MultiFab(py::module &m)
         )
 
         /* Constructors */
-        .def(py::init< >())
-        //.def(py::init< MultiFab && >())
-        .def(py::init< const BoxArray&, const DistributionMapping&, int, int >())
-        .def(py::init< const BoxArray&, const DistributionMapping&, int, int,
-                       MFInfo const & >())
-        .def(py::init< const BoxArray&, const DistributionMapping&, int, int,
-                       MFInfo const &, FabFactory<FArrayBox> const & >())
+        .def(py::init< >(),
+            R"(Constructs an empty MultiFab.
 
-        .def(py::init< const BoxArray&, const DistributionMapping&, int,
-                       IntVect const& >())
-        .def(py::init< const BoxArray&, const DistributionMapping&, int,
-                       IntVect const&,
-                       MFInfo const& >())
-        .def(py::init< const BoxArray&, const DistributionMapping&, int,
-                       IntVect const&,
-                       MFInfo const&, FabFactory<FArrayBox> const & >())
+            Data can be defined at a later time using the define member functions
+            inherited from FabArray.)"
+        )
+        .def(py::init< Arena* >(),
+            py::arg("a"),
+            R"(Constructs an empty MultiFab.
+
+            Data can be defined at a later time using the define member functions.
+            If ``define`` is called later with a nullptr as MFInfo's arena, the
+            default Arena ``a`` will be used.  If the arena in MFInfo is not a
+            nullptr, the MFInfo's arena will be used.)"
+        )
+    ;
+
+    constexpr auto doc_mf_init = R"(Constructs a MultiFab.
+
+    The size of the FArrayBox is given by the Box grown by \p ngrow, and
+    the number of components is given by \p ncomp. If \p info is set to
+    not allocating memory, then no FArrayBoxes are allocated at
+    this time but can be defined later.
+
+    Parameters
+    ----------
+    bxs :
+      a valid region
+    dm :
+      a DistribuionMapping
+    ncomp :
+      number of components
+    ngrow :
+      number of cells the region grows
+    info :
+      MultiFab info, including allocation Arena
+    factory :
+      FArrayBoxFactory for embedded boundaries)";
+
+    py_MultiFab
+        .def(py::init< const BoxArray&, const DistributionMapping&, int, int,
+                       MFInfo const &, FabFactory<FArrayBox> const & >(),
+            py::arg("bxs"), py::arg("dm"), py::arg("ncomp"), py::arg("ngrow"),
+            py::arg("info"), py::arg("factory"),
+            doc_mf_init
+        )
+        .def(py::init< const BoxArray&, const DistributionMapping&, int, int>(),
+             py::arg("bxs"), py::arg("dm"), py::arg("ncomp"), py::arg("ngrow"),
+             doc_mf_init
+        )
+
+        .def(py::init< const BoxArray&, const DistributionMapping&, int, IntVect const&,
+                       MFInfo const&, FabFactory<FArrayBox> const & >(),
+             py::arg("bxs"), py::arg("dm"), py::arg("ncomp"), py::arg("ngrow"),
+             py::arg("info"), py::arg("factory"),
+             doc_mf_init
+        )
+        .def(py::init< const BoxArray&, const DistributionMapping&, int, IntVect const&>(),
+             py::arg("bxs"), py::arg("dm"), py::arg("ncomp"), py::arg("ngrow"),
+             doc_mf_init
+        )
 
         //.def(py::init< MultiFab const&, MakeType, int, int >())
 
@@ -222,32 +427,6 @@ void init_MultiFab(py::module &m)
         //                       IntVect const&, MFInfo const &, FabFactory<FArrayBox> const &
         //>(&MultiFab::define))
 
-        /* setters */
-        //.def("set_val",
-        //     py::overload_cast< Real >(&MultiFab::setVal))
-        .def("set_val",
-             [](MultiFab & mf, Real val) { mf.setVal(val); }
-        )
-        .def("set_val",
-            [](MultiFab & mf, Real val, int comp, int num_comp) {
-                mf.setVal(val, comp, num_comp);
-            }
-        )
-        //.def("set_val",
-        //     py::overload_cast< Real, int, int, int >(&MultiFab::setVal))
-        .def("set_val",
-             [](MultiFab & mf, Real val, int comp, int ncomp, int nghost) {
-                mf.setVal(val, comp, ncomp, nghost);
-            }
-        )
-        //.def("set_val",
-        //     py::overload_cast< Real, int, int, IntVect const & >(&MultiFab::setVal))
-        .def("set_val",
-             [](MultiFab & mf, Real val, int comp, int ncomp, IntVect const & nghost) {
-                 mf.setVal(val, comp, ncomp, nghost);
-             }
-        )
-
         /* sizes, etc. */
         .def("min",
              [](MultiFab const & mf, int comp, int nghost, bool local) {
@@ -256,7 +435,7 @@ void init_MultiFab(py::module &m)
                  return mf.min(comp, nghost, local); },
              py::arg("comp") = 0, py::arg("nghost") = 0, py::arg("local") = false,
              "Returns the minimum value of the specfied component of the MultiFab."
-             )
+        )
         .def("min",
              [](MultiFab const & mf, Box const & region, int comp, int nghost, bool local) {
                  check_comp(mf, comp, "min");
@@ -264,7 +443,7 @@ void init_MultiFab(py::module &m)
                  return mf.min(region, comp, nghost, local); },
              py::arg("region"), py::arg("comp") = 0, py::arg("nghost") = 0, py::arg("local") = false,
              "Returns the minimum value of the specfied component of the MultiFab over the region."
-             )
+        )
 
         .def("max",
              [](MultiFab const & mf, int comp, int nghost, bool local) {
@@ -273,7 +452,7 @@ void init_MultiFab(py::module &m)
                  return mf.max(comp, nghost, local); },
              py::arg("comp") = 0, py::arg("nghost") = 0, py::arg("local") = false,
              "Returns the maximum value of the specfied component of the MultiFab."
-             )
+        )
         .def("max",
              [](MultiFab const & mf, Box const & region, int comp, int nghost, bool local) {
                  check_comp(mf, comp, "max");
@@ -321,90 +500,330 @@ void init_MultiFab(py::module &m)
              "skips non-unique points that are owned by multiple boxes."
         )
 
-        .def("abs",
-            [](MultiFab & mf, int comp, int num_comp) { mf.abs(comp, num_comp); })
-        //.def("abs", py::overload_cast< int, int, int >(&MultiFab::abs))
-        .def("abs",
-             [](MultiFab & mf, int comp, int num_comp, int nghost) { mf.abs(comp, num_comp, nghost); })
+        .def("plus",
+            py::overload_cast< Real, int >(&MultiFab::plus),
+            py::arg("val"), py::arg("nghost")=0,
+            "Adds the scalar value val to the value of each cell in the\n"
+            "valid region of each component of the MultiFab.  The value\n"
+            "of nghost specifies the number of cells in the boundary\n"
+            "region that should be modified."
+        )
+        .def("plus",
+             py::overload_cast< Real, int, int, int >(&MultiFab::plus),
+             py::arg("val"), py::arg("comp"), py::arg("num_comp"), py::arg("nghost")=0,
+             "Adds the scalar value \\p val to the value of each cell in the\n"
+             "specified subregion of the MultiFab.\n\n"
+             "The subregion consists of the \\p num_comp components starting at component \\p comp.\n"
+             "The value of nghost specifies the number of cells in the\n"
+             "boundary region of each FArrayBox in the subregion that should\n"
+             "be modified."
+        )
+        .def("plus",
+             py::overload_cast< Real, const Box&, int >(&MultiFab::plus),
+             py::arg("val"), py::arg("region"), py::arg("nghost")=0,
+             "Adds the scalar value val to the value of each cell in the\n"
+             "valid region of each component of the MultiFab, that also\n"
+             "intersects the Box region.  The value of nghost specifies the\n"
+             "number of cells in the boundary region of each FArrayBox in\n"
+             "the subregion that should be modified."
+        )
+        .def("plus",
+             py::overload_cast< Real, const Box&, int, int, int >(&MultiFab::plus),
+             py::arg("val"), py::arg("region"), py::arg("comp"), py::arg("num_comp"), py::arg("nghost")=0,
+             "Identical to the previous version of plus(), with the\n"
+             "restriction that the subregion is further constrained to\n"
+             "the intersection with Box region."
+        )
+        .def("plus",
+            py::overload_cast< MultiFab const &, int, int, int >(&MultiFab::plus),
+            py::arg("mf"), py::arg("strt_comp"), py::arg("num_comp"), py::arg("nghost")=0,
+            "This function adds the values of the cells in mf to the corresponding\n"
+            "cells of this MultiFab.  mf is required to have the same BoxArray or\n"
+            "\"valid region\" as this MultiFab.  The addition is done only to num_comp\n"
+            "components, starting with component number strt_comp.  The parameter\n"
+            "nghost specifies the number of boundary cells that will be modified.\n"
+            "If nghost == 0, only the valid region of each FArrayBox will be\n"
+            "modified."
+        )
 
-        .def("plus", py::overload_cast< Real, int >(&MultiFab::plus))
-        .def("plus", [](MultiFab & mf, Real val, int comp, int num_comp) {
-             mf.plus(val, comp, num_comp); })
-        .def("plus", py::overload_cast< Real, int, int, int >(&MultiFab::plus))
-        .def("plus", py::overload_cast< Real, Box const &, int >(&MultiFab::plus))
-        .def("plus", py::overload_cast< Real, Box const &, int, int, int >(&MultiFab::plus))
-        .def("plus", py::overload_cast< MultiFab const &, int, int, int >(&MultiFab::plus))
-
-        .def("minus", py::overload_cast< MultiFab const &, int, int, int >(&MultiFab::minus))
+        .def("minus",
+            py::overload_cast< MultiFab const &, int, int, int >(&MultiFab::minus),
+            py::arg("mf"), py::arg("strt_comp"), py::arg("num_comp"), py::arg("nghost")=0,
+            "This function subtracts the values of the cells in mf from the\n"
+            "corresponding cells of this MultiFab.  mf is required to have the\n"
+            "same BoxArray or \"valid region\" as this MultiFab.  The subtraction is\n"
+            "done only to num_comp components, starting with component number\n"
+            "strt_comp.  The parameter nghost specifies the number of boundary\n"
+            "cells that will be modified.  If nghost == 0, only the valid region of\n"
+            "each FArrayBox will be modified."
+        )
 
         // renamed: ImportError: overloading a method with both static and instance methods is not supported
-        .def("divi", py::overload_cast< MultiFab const &, int, int, int >(&MultiFab::divide))
+        .def("divi",
+            py::overload_cast< MultiFab const &, int, int, int >(&MultiFab::divide),
+            py::arg("mf"), py::arg("strt_comp"), py::arg("num_comp"), py::arg("nghost")=0,
+            "This function divides the values of the cells in mf from the\n"
+            "corresponding cells of this MultiFab.  mf is required to have the\n"
+            "same BoxArray or \"valid region\" as this MultiFab.  The division is\n"
+            "done only to num_comp components, starting with component number\n"
+            "strt_comp.  The parameter nghost specifies the number of boundary\n"
+            "cells that will be modified.  If nghost == 0, only the valid region of\n"
+            "each FArrayBox will be modified.  Note, nothing is done to protect\n"
+            "against divide by zero."
+        )
 
-        .def("mult", py::overload_cast< Real, int >(&MultiFab::mult))
-        .def("mult", [](MultiFab & mf, Real val, int comp, int num_comp) {
-             mf.mult(val, comp, num_comp); })
-        .def("mult", py::overload_cast< Real, int, int, int >(&MultiFab::mult))
-        .def("mult", py::overload_cast< Real, Box const &, int >(&MultiFab::mult))
-        .def("mult", py::overload_cast< Real, Box const &, int, int, int >(&MultiFab::mult))
+        .def("mult",
+            py::overload_cast< Real, int >(&MultiFab::mult),
+            py::arg("val"), py::arg("nghost")=0,
+            "Scales the value of each cell in the valid region of each\n"
+            "component of the MultiFab by the scalar val (a[i] <- a[i]*val).\n"
+            "The value of nghost specifies the number of cells in the\n"
+            "boundary region that should be modified."
+        )
+        .def("mult",
+            py::overload_cast< Real, int, int, int >(&MultiFab::mult),
+            py::arg("val"), py::arg("comp"), py::arg("num_comp"), py::arg("nghost")=0,
+            "Scales the value of each cell in the specified subregion of the\n"
+            "MultiFab by the scalar val (a[i] <- a[i]*val). The subregion\n"
+            "consists of the num_comp components starting at component comp.\n"
+            "The value of nghost specifies the number of cells in the\n"
+            "boundary region of each FArrayBox in the subregion that should\n"
+            "be modified."
+        )
+        .def("mult",
+            py::overload_cast< Real, Box const &, int, int, int >(&MultiFab::mult),
+            py::arg("val"), py::arg("region"), py::arg("comp"), py::arg("num_comp"), py::arg("nghost")=0,
+            "Identical to the previous version of mult(), with the\n"
+            "restriction that the subregion is further constrained to the\n"
+            "intersection with Box region.  The value of nghost specifies the\n"
+            "number of cells in the boundary region of each FArrayBox in\n"
+            "the subregion that should be modified."
+        )
+        .def("mult",
+             py::overload_cast< Real, Box const &, int >(&MultiFab::mult),
+             py::arg("val"), py::arg("region"), py::arg("nghost")=0,
+             "Scales the value of each cell in the valid region of each\n"
+             "component of the MultiFab by the scalar val (a[i] <- a[i]*val),\n"
+             "that also intersects the Box region.  The value of nghost\n"
+             "specifies the number of cells in the boundary region of each\n"
+             "FArrayBox in the subregion that should be modified."
+        )
 
-        .def("invert", py::overload_cast< Real, int >(&MultiFab::invert))
-        .def("invert", [](MultiFab & mf, Real val, int comp, int num_comp) {
-             mf.invert(val, comp, num_comp); })
-        .def("invert", py::overload_cast< Real, int, int, int >(&MultiFab::invert))
-        .def("invert", py::overload_cast< Real, Box const &, int >(&MultiFab::invert))
-        .def("invert", py::overload_cast< Real, Box const &, int, int, int >(&MultiFab::invert))
+        .def("invert",
+            py::overload_cast< Real, int >(&MultiFab::invert),
+            py::arg("numerator"), py::arg("nghost"),
+            "Replaces the value of each cell in the specified subregion of\n"
+            "the MultiFab with its reciprocal multiplied by the value of\n"
+            "numerator.  The value of nghost specifies the number of cells\n"
+            "in the boundary region that should be modified."
+        )
+        .def("invert",
+            py::overload_cast< Real, int, int, int >(&MultiFab::invert),
+            py::arg("numerator"), py::arg("comp"), py::arg("num_comp"), py::arg("nghost")=0,
+            "Replaces the value of each cell in the specified subregion of\n"
+            "the MultiFab with its reciprocal multiplied by the value of\n"
+            "numerator. The subregion consists of the num_comp components\n"
+            "starting at component comp.  The value of nghost specifies the\n"
+            "number of cells in the boundary region of each FArrayBox in the\n"
+            "subregion that should be modified."
+        )
+        .def("invert",
+            py::overload_cast< Real, Box const &, int >(&MultiFab::invert),
+            py::arg("numerator"), py::arg("region"), py::arg("nghost"),
+            "Scales the value of each cell in the valid region of each\n"
+            "component of the MultiFab by the scalar val (a[i] <- a[i]*val),\n"
+            "that also intersects the Box region.  The value of nghost\n"
+            "specifies the number of cells in the boundary region of each\n"
+            "FArrayBox in the subregion that should be modified."
+        )
+        .def("invert",
+            py::overload_cast< Real, Box const &, int, int, int >(&MultiFab::invert),
+            py::arg("numerator"), py::arg("region"), py::arg("comp"), py::arg("num_comp"), py::arg("nghost")=0,
+            "Identical to the previous version of invert(), with the\n"
+            "restriction that the subregion is further constrained to the\n"
+            "intersection with Box region.  The value of nghost specifies the\n"
+            "number of cells in the boundary region of each FArrayBox in the\n"
+            "subregion that should be modified."
+        )
 
-        .def("negate", py::overload_cast< int >(&MultiFab::negate))
-        .def("negate", py::overload_cast< int, int, int >(&MultiFab::negate))
-        .def("negate", py::overload_cast< Box const &, int >(&MultiFab::negate))
-        .def("negate", py::overload_cast< Box const &, int, int, int >(&MultiFab::negate))
+        .def("negate",
+            py::overload_cast< int >(&MultiFab::negate),
+            py::arg("nghost")=0,
+            "Negates the value of each cell in the valid region of\n"
+            "the MultiFab.  The value of nghost specifies the number of\n"
+            "cells in the boundary region that should be modified."
+        )
+        .def("negate",
+            py::overload_cast< int, int, int >(&MultiFab::negate),
+            py::arg("comp"), py::arg("num_comp"), py::arg("nghost")=0,
+            "Negates the value of each cell in the specified subregion of\n"
+            "the MultiFab.  The subregion consists of the num_comp\n"
+            "components starting at component comp.  The value of nghost\n"
+            "specifies the number of cells in the boundary region of each\n"
+            "FArrayBox in the subregion that should be modified."
+        )
+        .def("negate",
+            py::overload_cast< Box const &, int >(&MultiFab::negate),
+            py::arg("region"), py::arg("nghost")=0,
+            "Negates the value of each cell in the valid region of\n"
+            "the MultiFab that also intersects the Box region.  The value\n"
+            "of nghost specifies the number of cells in the boundary region\n"
+            "that should be modified."
+        )
+        .def("negate",
+            py::overload_cast< Box const &, int, int, int >(&MultiFab::negate),
+            py::arg("region"), py::arg("comp"), py::arg("num_comp"), py::arg("nghost")=0,
+            "Identical to the previous version of negate(), with the\n"
+            "restriction that the subregion is further constrained to\n"
+            "the intersection with Box region."
+        )
 
         /* static (standalone) simple math functions */
-        .def_static("dot", py::overload_cast< MultiFab const &, int, MultiFab const &, int, int, int, bool >(&MultiFab::Dot))
-        .def_static("dot", py::overload_cast< MultiFab const &, int, int, int, bool >(&MultiFab::Dot))
+        .def_static("dot",
+            py::overload_cast< MultiFab const &, int, MultiFab const &, int, int, int, bool >(&MultiFab::Dot),
+            py::arg("x"), py::arg("xcomp"),
+            py::arg("y"), py::arg("ycomp"),
+            py::arg("numcomp"), py::arg("nghost"), py::arg("local")=false,
+            "Returns the dot product of two MultiFabs."
+        )
+        .def_static("dot",
+            py::overload_cast< MultiFab const &, int, int, int, bool >(&MultiFab::Dot),
+            py::arg("x"), py::arg("xcomp"),
+            py::arg("numcomp"), py::arg("nghost"), py::arg("local")=false,
+            "Returns the dot product of a MultiFab with itself."
+        )
         //.def_static("dot", py::overload_cast< iMultiFab const&, const MultiFab&, int, MultiFab const&, int, int, int, bool >(&MultiFab::Dot))
 
-        .def_static("add", py::overload_cast< MultiFab &, MultiFab const &, int, int, int, int >(&MultiFab::Add))
-        .def_static("add", py::overload_cast< MultiFab &, MultiFab const &, int, int, int, IntVect const & >(&MultiFab::Add))
+        .def_static("add",
+            py::overload_cast< MultiFab &, MultiFab const &, int, int, int, int >(&MultiFab::Add),
+            py::arg("dst"), py::arg("src"), py::arg("srccomp"), py::arg("dstcomp"), py::arg("numcomp"), py::arg("nghost"),
+            "Add src to dst including nghost ghost cells.\n"
+            "The two MultiFabs MUST have the same underlying BoxArray."
+        )
+        .def_static("add",
+            py::overload_cast< MultiFab &, MultiFab const &, int, int, int, IntVect const & >(&MultiFab::Add),
+            py::arg("dst"), py::arg("src"), py::arg("srccomp"), py::arg("dstcomp"), py::arg("numcomp"), py::arg("nghost"),
+            "Add src to dst including nghost ghost cells.\n"
+            "The two MultiFabs MUST have the same underlying BoxArray."
+        )
 
-        .def_static("subtract", py::overload_cast< MultiFab &, MultiFab const &, int, int, int, int >(&MultiFab::Subtract))
-        .def_static("subtract", py::overload_cast< MultiFab &, MultiFab const &, int, int, int, IntVect const & >(&MultiFab::Subtract))
+        .def_static("subtract",
+            py::overload_cast< MultiFab &, MultiFab const &, int, int, int, int >(&MultiFab::Subtract),
+            py::arg("dst"), py::arg("src"), py::arg("srccomp"), py::arg("dstcomp"), py::arg("numcomp"), py::arg("nghost"),
+            "Subtract src from dst including nghost ghost cells.\n"
+            "The two MultiFabs MUST have the same underlying BoxArray."
+        )
+        .def_static("subtract",
+            py::overload_cast< MultiFab &, MultiFab const &, int, int, int, IntVect const & >(&MultiFab::Subtract),
+            py::arg("dst"), py::arg("src"), py::arg("srccomp"), py::arg("dstcomp"), py::arg("numcomp"), py::arg("nghost"),
+            "Subtract src from dst including nghost ghost cells.\n"
+            "The two MultiFabs MUST have the same underlying BoxArray."
+        )
 
-        .def_static("multiply", py::overload_cast< MultiFab &, MultiFab const &, int, int, int, int >(&MultiFab::Multiply))
-        .def_static("multiply", py::overload_cast< MultiFab &, MultiFab const &, int, int, int, IntVect const & >(&MultiFab::Multiply))
+        .def_static("multiply",
+            py::overload_cast< MultiFab &, MultiFab const &, int, int, int, int >(&MultiFab::Multiply),
+            py::arg("dst"), py::arg("src"), py::arg("srccomp"), py::arg("dstcomp"), py::arg("numcomp"), py::arg("nghost"),
+            "Multiply dst by src including nghost ghost cells.\n"
+            "The two MultiFabs MUST have the same underlying BoxArray."
+        )
+        .def_static("multiply",
+            py::overload_cast< MultiFab &, MultiFab const &, int, int, int, IntVect const & >(&MultiFab::Multiply),
+            py::arg("dst"), py::arg("src"), py::arg("srccomp"), py::arg("dstcomp"), py::arg("numcomp"), py::arg("nghost"),
+            "Multiply dst by src including nghost ghost cells.\n"
+            "The two MultiFabs MUST have the same underlying BoxArray."
+        )
 
-        .def_static("divide", py::overload_cast< MultiFab &, MultiFab const &, int, int, int, int >(&MultiFab::Divide))
-        .def_static("divide", py::overload_cast< MultiFab &, MultiFab const &, int, int, int, IntVect const & >(&MultiFab::Divide))
+        .def_static("divide",
+            py::overload_cast< MultiFab &, MultiFab const &, int, int, int, int >(&MultiFab::Divide),
+            py::arg("dst"), py::arg("src"), py::arg("srccomp"), py::arg("dstcomp"), py::arg("numcomp"), py::arg("nghost"),
+            "Divide dst by src including nghost ghost cells.\n"
+            "The two MultiFabs MUST have the same underlying BoxArray."
+        )
+        .def_static("divide",
+            py::overload_cast< MultiFab &, MultiFab const &, int, int, int, IntVect const & >(&MultiFab::Divide),
+            py::arg("dst"), py::arg("src"), py::arg("srccomp"), py::arg("dstcomp"), py::arg("numcomp"), py::arg("nghost"),
+            "Divide dst by src including nghost ghost cells.\n"
+            "The two MultiFabs MUST have the same underlying BoxArray."
+        )
 
-        .def_static("swap", py::overload_cast< MultiFab &, MultiFab &, int, int, int, int >(&MultiFab::Swap))
-        .def_static("swap", py::overload_cast< MultiFab &, MultiFab &, int, int, int, IntVect const & >(&MultiFab::Swap))
+        .def_static("swap",
+            py::overload_cast< MultiFab &, MultiFab &, int, int, int, int >(&MultiFab::Swap),
+            py::arg("dst"), py::arg("src"), py::arg("srccomp"), py::arg("dstcomp"), py::arg("numcomp"), py::arg("nghost"),
+            "Swap from src to dst including nghost ghost cells.\n"
+            "The two MultiFabs MUST have the same underlying BoxArray.\n"
+            "The swap is local."
+        )
+        .def_static("swap",
+            py::overload_cast< MultiFab &, MultiFab &, int, int, int, IntVect const & >(&MultiFab::Swap),
+            py::arg("dst"), py::arg("src"), py::arg("srccomp"), py::arg("dstcomp"), py::arg("numcomp"), py::arg("nghost"),
+            "Swap from src to dst including nghost ghost cells.\n"
+            "The two MultiFabs MUST have the same underlying BoxArray.\n"
+            "The swap is local."
+        )
 
         .def_static("saxpy",
-                    // py::overload_cast< MultiFab &, Real, MultiFab const &, int, int, int, int >(&MultiFab::Saxpy)
-                    static_cast<void (*)(MultiFab &, Real, MultiFab const &, int, int, int, int)>(&MultiFab::Saxpy)
+            // py::overload_cast< MultiFab &, Real, MultiFab const &, int, int, int, int >(&MultiFab::Saxpy)
+            static_cast<void (*)(MultiFab &, Real, MultiFab const &, int, int, int, int)>(&MultiFab::Saxpy),
+            py::arg("dst"), py::arg("a"), py::arg("src"), py::arg("srccomp"), py::arg("dstcomp"), py::arg("numcomp"), py::arg("nghost"),
+            "dst += a*src"
         )
 
         .def_static("xpay",
-                    // py::overload_cast< MultiFab &, Real, MultiFab const &, int, int, int, int >(&MultiFab::Xpay)
-                    static_cast<void (*)(MultiFab &, Real, MultiFab const &, int, int, int, int)>(&MultiFab::Xpay)
+            // py::overload_cast< MultiFab &, Real, MultiFab const &, int, int, int, int >(&MultiFab::Xpay)
+            static_cast<void (*)(MultiFab &, Real, MultiFab const &, int, int, int, int)>(&MultiFab::Xpay),
+            py::arg("dst"), py::arg("a"), py::arg("src"), py::arg("srccomp"), py::arg("dstcomp"), py::arg("numcomp"), py::arg("nghost"),
+            "dst = src + a*dst"
         )
 
         .def_static("lin_comb",
-                    // py::overload_cast< MultiFab &, Real, MultiFab const &, int, Real, MultiFab const &, int, int, int, int >(&MultiFab::LinComb)
-                    static_cast<void (*)(MultiFab &, Real, MultiFab const &, int, Real, MultiFab const &, int, int, int, int)>(&MultiFab::LinComb)
+            // py::overload_cast< MultiFab &, Real, MultiFab const &, int, Real, MultiFab const &, int, int, int, int >(&MultiFab::LinComb)
+            static_cast<void (*)(MultiFab &, Real, MultiFab const &, int, Real, MultiFab const &, int, int, int, int)>(&MultiFab::LinComb),
+            py::arg("dst"),
+            py::arg("a"), py::arg("x"), py::arg("x_comp"),
+            py::arg("b"), py::arg("y"), py::arg("y_comp"),
+            py::arg("dstcomp"), py::arg("numcomp"), py::arg("nghost"),
+            "dst = a*x + b*y"
         )
 
-        .def_static("add_product", py::overload_cast< MultiFab &, MultiFab const &, int, MultiFab const &, int, int, int, int >(&MultiFab::AddProduct))
-        .def_static("add_product", py::overload_cast< MultiFab &, MultiFab const &, int, MultiFab const &, int, int, int, IntVect const & >(&MultiFab::AddProduct))
+        .def_static("add_product",
+            py::overload_cast< MultiFab &, MultiFab const &, int, MultiFab const &, int, int, int, int >(&MultiFab::AddProduct),
+            py::arg("dst"),
+            py::arg("src1"), py::arg("comp1"),
+            py::arg("src2"), py::arg("comp2"),
+            py::arg("dstcomp"), py::arg("numcomp"), py::arg("nghost"),
+            "dst += src1*src2"
+        )
+        .def_static("add_product",
+            py::overload_cast< MultiFab &, MultiFab const &, int, MultiFab const &, int, int, int, IntVect const & >(&MultiFab::AddProduct),
+            "dst += src1*src2"
+        )
 
         /* simple data validity checks */
-        .def("contains_nan", py::overload_cast< bool >(&MultiFab::contains_nan, py::const_))
-        .def("contains_nan", py::overload_cast< int, int, int, bool >(&MultiFab::contains_nan, py::const_))
-        .def("contains_nan", py::overload_cast< int, int, IntVect const &, bool >(&MultiFab::contains_nan, py::const_))
+        .def("contains_nan",
+            py::overload_cast< bool >(&MultiFab::contains_nan, py::const_),
+            py::arg("local")=false
+        )
+        .def("contains_nan",
+            py::overload_cast< int, int, int, bool >(&MultiFab::contains_nan, py::const_),
+            py::arg("scomp"), py::arg("ncomp"), py::arg("ngrow")=0, py::arg("local")=false
+        )
+        .def("contains_nan",
+            py::overload_cast< int, int, IntVect const &, bool >(&MultiFab::contains_nan, py::const_),
+            py::arg("scomp"), py::arg("ncomp"), py::arg("ngrow"), py::arg("local")=false
+        )
 
-        .def("contains_inf", py::overload_cast< bool >(&MultiFab::contains_inf, py::const_))
-        .def("contains_inf", py::overload_cast< int, int, int, bool >(&MultiFab::contains_inf, py::const_))
-        .def("contains_inf", py::overload_cast< int, int, IntVect const &, bool >(&MultiFab::contains_inf, py::const_))
+        .def("contains_inf",
+            py::overload_cast< bool >(&MultiFab::contains_inf, py::const_),
+            py::arg("local")=false
+        )
+        .def("contains_inf",
+            py::overload_cast< int, int, int, bool >(&MultiFab::contains_inf, py::const_),
+            py::arg("scomp"), py::arg("ncomp"), py::arg("ngrow")=0, py::arg("local")=false
+        )
+        .def("contains_inf",
+            py::overload_cast< int, int, IntVect const &, bool >(&MultiFab::contains_inf, py::const_),
+            py::arg("scomp"), py::arg("ncomp"), py::arg("ngrow"), py::arg("local")=false
+        )
 
         .def("box_array", &MultiFab::boxArray)
         .def("dm", &MultiFab::DistributionMap)
@@ -422,8 +841,8 @@ void init_MultiFab(py::module &m)
         //.def("override_sync", py::overload_cast< iMultiFab const &, Periodicity const & >(&MultiFab::OverrideSync))
 
         /* Init & Finalize */
-        .def_static("initialize", &MultiFab::Initialize )
-        .def_static("finalize", &MultiFab::Finalize )
+        .def_static("initialize", &MultiFab::Initialize)
+        .def_static("finalize", &MultiFab::Finalize)
     ;
 
 
