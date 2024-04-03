@@ -391,6 +391,8 @@ class Array4_cdouble:
 
         Provide a Cupy view into an Array4.
 
+        This includes ngrow guard cells of the box.
+
         Note on the order of indices:
         By default, this is as in AMReX in Fortran contiguous order, indexing as
         x,y,z. This has performance implications for use in external libraries such
@@ -424,6 +426,8 @@ class Array4_cdouble:
         """
 
         Provide a Numpy view into an Array4.
+
+        This includes ngrow guard cells of the box.
 
         Note on the order of indices:
         By default, this is as in AMReX in Fortran contiguous order, indexing as
@@ -489,6 +493,8 @@ class Array4_cdouble_const:
 
         Provide a Cupy view into an Array4.
 
+        This includes ngrow guard cells of the box.
+
         Note on the order of indices:
         By default, this is as in AMReX in Fortran contiguous order, indexing as
         x,y,z. This has performance implications for use in external libraries such
@@ -522,6 +528,8 @@ class Array4_cdouble_const:
         """
 
         Provide a Numpy view into an Array4.
+
+        This includes ngrow guard cells of the box.
 
         Note on the order of indices:
         By default, this is as in AMReX in Fortran contiguous order, indexing as
@@ -601,6 +609,8 @@ class Array4_cfloat:
 
         Provide a Cupy view into an Array4.
 
+        This includes ngrow guard cells of the box.
+
         Note on the order of indices:
         By default, this is as in AMReX in Fortran contiguous order, indexing as
         x,y,z. This has performance implications for use in external libraries such
@@ -634,6 +644,8 @@ class Array4_cfloat:
         """
 
         Provide a Numpy view into an Array4.
+
+        This includes ngrow guard cells of the box.
 
         Note on the order of indices:
         By default, this is as in AMReX in Fortran contiguous order, indexing as
@@ -699,6 +711,8 @@ class Array4_cfloat_const:
 
         Provide a Cupy view into an Array4.
 
+        This includes ngrow guard cells of the box.
+
         Note on the order of indices:
         By default, this is as in AMReX in Fortran contiguous order, indexing as
         x,y,z. This has performance implications for use in external libraries such
@@ -732,6 +746,8 @@ class Array4_cfloat_const:
         """
 
         Provide a Numpy view into an Array4.
+
+        This includes ngrow guard cells of the box.
 
         Note on the order of indices:
         By default, this is as in AMReX in Fortran contiguous order, indexing as
@@ -811,6 +827,8 @@ class Array4_double:
 
         Provide a Cupy view into an Array4.
 
+        This includes ngrow guard cells of the box.
+
         Note on the order of indices:
         By default, this is as in AMReX in Fortran contiguous order, indexing as
         x,y,z. This has performance implications for use in external libraries such
@@ -844,6 +862,8 @@ class Array4_double:
         """
 
         Provide a Numpy view into an Array4.
+
+        This includes ngrow guard cells of the box.
 
         Note on the order of indices:
         By default, this is as in AMReX in Fortran contiguous order, indexing as
@@ -909,6 +929,8 @@ class Array4_double_const:
 
         Provide a Cupy view into an Array4.
 
+        This includes ngrow guard cells of the box.
+
         Note on the order of indices:
         By default, this is as in AMReX in Fortran contiguous order, indexing as
         x,y,z. This has performance implications for use in external libraries such
@@ -942,6 +964,8 @@ class Array4_double_const:
         """
 
         Provide a Numpy view into an Array4.
+
+        This includes ngrow guard cells of the box.
 
         Note on the order of indices:
         By default, this is as in AMReX in Fortran contiguous order, indexing as
@@ -1021,6 +1045,8 @@ class Array4_float:
 
         Provide a Cupy view into an Array4.
 
+        This includes ngrow guard cells of the box.
+
         Note on the order of indices:
         By default, this is as in AMReX in Fortran contiguous order, indexing as
         x,y,z. This has performance implications for use in external libraries such
@@ -1054,6 +1080,8 @@ class Array4_float:
         """
 
         Provide a Numpy view into an Array4.
+
+        This includes ngrow guard cells of the box.
 
         Note on the order of indices:
         By default, this is as in AMReX in Fortran contiguous order, indexing as
@@ -1119,6 +1147,8 @@ class Array4_float_const:
 
         Provide a Cupy view into an Array4.
 
+        This includes ngrow guard cells of the box.
+
         Note on the order of indices:
         By default, this is as in AMReX in Fortran contiguous order, indexing as
         x,y,z. This has performance implications for use in external libraries such
@@ -1152,6 +1182,8 @@ class Array4_float_const:
         """
 
         Provide a Numpy view into an Array4.
+
+        This includes ngrow guard cells of the box.
 
         Note on the order of indices:
         By default, this is as in AMReX in Fortran contiguous order, indexing as
@@ -1231,6 +1263,8 @@ class Array4_int:
 
         Provide a Cupy view into an Array4.
 
+        This includes ngrow guard cells of the box.
+
         Note on the order of indices:
         By default, this is as in AMReX in Fortran contiguous order, indexing as
         x,y,z. This has performance implications for use in external libraries such
@@ -1264,6 +1298,8 @@ class Array4_int:
         """
 
         Provide a Numpy view into an Array4.
+
+        This includes ngrow guard cells of the box.
 
         Note on the order of indices:
         By default, this is as in AMReX in Fortran contiguous order, indexing as
@@ -1329,6 +1365,8 @@ class Array4_int_const:
 
         Provide a Cupy view into an Array4.
 
+        This includes ngrow guard cells of the box.
+
         Note on the order of indices:
         By default, this is as in AMReX in Fortran contiguous order, indexing as
         x,y,z. This has performance implications for use in external libraries such
@@ -1362,6 +1400,8 @@ class Array4_int_const:
         """
 
         Provide a Numpy view into an Array4.
+
+        This includes ngrow guard cells of the box.
 
         Note on the order of indices:
         By default, this is as in AMReX in Fortran contiguous order, indexing as
@@ -1441,6 +1481,8 @@ class Array4_long:
 
         Provide a Cupy view into an Array4.
 
+        This includes ngrow guard cells of the box.
+
         Note on the order of indices:
         By default, this is as in AMReX in Fortran contiguous order, indexing as
         x,y,z. This has performance implications for use in external libraries such
@@ -1474,6 +1516,8 @@ class Array4_long:
         """
 
         Provide a Numpy view into an Array4.
+
+        This includes ngrow guard cells of the box.
 
         Note on the order of indices:
         By default, this is as in AMReX in Fortran contiguous order, indexing as
@@ -1539,6 +1583,8 @@ class Array4_long_const:
 
         Provide a Cupy view into an Array4.
 
+        This includes ngrow guard cells of the box.
+
         Note on the order of indices:
         By default, this is as in AMReX in Fortran contiguous order, indexing as
         x,y,z. This has performance implications for use in external libraries such
@@ -1572,6 +1618,8 @@ class Array4_long_const:
         """
 
         Provide a Numpy view into an Array4.
+
+        This includes ngrow guard cells of the box.
 
         Note on the order of indices:
         By default, this is as in AMReX in Fortran contiguous order, indexing as
@@ -1651,6 +1699,8 @@ class Array4_longdouble:
 
         Provide a Cupy view into an Array4.
 
+        This includes ngrow guard cells of the box.
+
         Note on the order of indices:
         By default, this is as in AMReX in Fortran contiguous order, indexing as
         x,y,z. This has performance implications for use in external libraries such
@@ -1684,6 +1734,8 @@ class Array4_longdouble:
         """
 
         Provide a Numpy view into an Array4.
+
+        This includes ngrow guard cells of the box.
 
         Note on the order of indices:
         By default, this is as in AMReX in Fortran contiguous order, indexing as
@@ -1749,6 +1801,8 @@ class Array4_longdouble_const:
 
         Provide a Cupy view into an Array4.
 
+        This includes ngrow guard cells of the box.
+
         Note on the order of indices:
         By default, this is as in AMReX in Fortran contiguous order, indexing as
         x,y,z. This has performance implications for use in external libraries such
@@ -1782,6 +1836,8 @@ class Array4_longdouble_const:
         """
 
         Provide a Numpy view into an Array4.
+
+        This includes ngrow guard cells of the box.
 
         Note on the order of indices:
         By default, this is as in AMReX in Fortran contiguous order, indexing as
@@ -1861,6 +1917,8 @@ class Array4_longlong:
 
         Provide a Cupy view into an Array4.
 
+        This includes ngrow guard cells of the box.
+
         Note on the order of indices:
         By default, this is as in AMReX in Fortran contiguous order, indexing as
         x,y,z. This has performance implications for use in external libraries such
@@ -1894,6 +1952,8 @@ class Array4_longlong:
         """
 
         Provide a Numpy view into an Array4.
+
+        This includes ngrow guard cells of the box.
 
         Note on the order of indices:
         By default, this is as in AMReX in Fortran contiguous order, indexing as
@@ -1959,6 +2019,8 @@ class Array4_longlong_const:
 
         Provide a Cupy view into an Array4.
 
+        This includes ngrow guard cells of the box.
+
         Note on the order of indices:
         By default, this is as in AMReX in Fortran contiguous order, indexing as
         x,y,z. This has performance implications for use in external libraries such
@@ -1992,6 +2054,8 @@ class Array4_longlong_const:
         """
 
         Provide a Numpy view into an Array4.
+
+        This includes ngrow guard cells of the box.
 
         Note on the order of indices:
         By default, this is as in AMReX in Fortran contiguous order, indexing as
@@ -2071,6 +2135,8 @@ class Array4_short:
 
         Provide a Cupy view into an Array4.
 
+        This includes ngrow guard cells of the box.
+
         Note on the order of indices:
         By default, this is as in AMReX in Fortran contiguous order, indexing as
         x,y,z. This has performance implications for use in external libraries such
@@ -2104,6 +2170,8 @@ class Array4_short:
         """
 
         Provide a Numpy view into an Array4.
+
+        This includes ngrow guard cells of the box.
 
         Note on the order of indices:
         By default, this is as in AMReX in Fortran contiguous order, indexing as
@@ -2169,6 +2237,8 @@ class Array4_short_const:
 
         Provide a Cupy view into an Array4.
 
+        This includes ngrow guard cells of the box.
+
         Note on the order of indices:
         By default, this is as in AMReX in Fortran contiguous order, indexing as
         x,y,z. This has performance implications for use in external libraries such
@@ -2202,6 +2272,8 @@ class Array4_short_const:
         """
 
         Provide a Numpy view into an Array4.
+
+        This includes ngrow guard cells of the box.
 
         Note on the order of indices:
         By default, this is as in AMReX in Fortran contiguous order, indexing as
@@ -2281,6 +2353,8 @@ class Array4_uint:
 
         Provide a Cupy view into an Array4.
 
+        This includes ngrow guard cells of the box.
+
         Note on the order of indices:
         By default, this is as in AMReX in Fortran contiguous order, indexing as
         x,y,z. This has performance implications for use in external libraries such
@@ -2314,6 +2388,8 @@ class Array4_uint:
         """
 
         Provide a Numpy view into an Array4.
+
+        This includes ngrow guard cells of the box.
 
         Note on the order of indices:
         By default, this is as in AMReX in Fortran contiguous order, indexing as
@@ -2379,6 +2455,8 @@ class Array4_uint_const:
 
         Provide a Cupy view into an Array4.
 
+        This includes ngrow guard cells of the box.
+
         Note on the order of indices:
         By default, this is as in AMReX in Fortran contiguous order, indexing as
         x,y,z. This has performance implications for use in external libraries such
@@ -2412,6 +2490,8 @@ class Array4_uint_const:
         """
 
         Provide a Numpy view into an Array4.
+
+        This includes ngrow guard cells of the box.
 
         Note on the order of indices:
         By default, this is as in AMReX in Fortran contiguous order, indexing as
@@ -2491,6 +2571,8 @@ class Array4_ulong:
 
         Provide a Cupy view into an Array4.
 
+        This includes ngrow guard cells of the box.
+
         Note on the order of indices:
         By default, this is as in AMReX in Fortran contiguous order, indexing as
         x,y,z. This has performance implications for use in external libraries such
@@ -2524,6 +2606,8 @@ class Array4_ulong:
         """
 
         Provide a Numpy view into an Array4.
+
+        This includes ngrow guard cells of the box.
 
         Note on the order of indices:
         By default, this is as in AMReX in Fortran contiguous order, indexing as
@@ -2589,6 +2673,8 @@ class Array4_ulong_const:
 
         Provide a Cupy view into an Array4.
 
+        This includes ngrow guard cells of the box.
+
         Note on the order of indices:
         By default, this is as in AMReX in Fortran contiguous order, indexing as
         x,y,z. This has performance implications for use in external libraries such
@@ -2622,6 +2708,8 @@ class Array4_ulong_const:
         """
 
         Provide a Numpy view into an Array4.
+
+        This includes ngrow guard cells of the box.
 
         Note on the order of indices:
         By default, this is as in AMReX in Fortran contiguous order, indexing as
@@ -2701,6 +2789,8 @@ class Array4_ulonglong:
 
         Provide a Cupy view into an Array4.
 
+        This includes ngrow guard cells of the box.
+
         Note on the order of indices:
         By default, this is as in AMReX in Fortran contiguous order, indexing as
         x,y,z. This has performance implications for use in external libraries such
@@ -2734,6 +2824,8 @@ class Array4_ulonglong:
         """
 
         Provide a Numpy view into an Array4.
+
+        This includes ngrow guard cells of the box.
 
         Note on the order of indices:
         By default, this is as in AMReX in Fortran contiguous order, indexing as
@@ -2799,6 +2891,8 @@ class Array4_ulonglong_const:
 
         Provide a Cupy view into an Array4.
 
+        This includes ngrow guard cells of the box.
+
         Note on the order of indices:
         By default, this is as in AMReX in Fortran contiguous order, indexing as
         x,y,z. This has performance implications for use in external libraries such
@@ -2832,6 +2926,8 @@ class Array4_ulonglong_const:
         """
 
         Provide a Numpy view into an Array4.
+
+        This includes ngrow guard cells of the box.
 
         Note on the order of indices:
         By default, this is as in AMReX in Fortran contiguous order, indexing as
@@ -2911,6 +3007,8 @@ class Array4_ushort:
 
         Provide a Cupy view into an Array4.
 
+        This includes ngrow guard cells of the box.
+
         Note on the order of indices:
         By default, this is as in AMReX in Fortran contiguous order, indexing as
         x,y,z. This has performance implications for use in external libraries such
@@ -2944,6 +3042,8 @@ class Array4_ushort:
         """
 
         Provide a Numpy view into an Array4.
+
+        This includes ngrow guard cells of the box.
 
         Note on the order of indices:
         By default, this is as in AMReX in Fortran contiguous order, indexing as
@@ -3009,6 +3109,8 @@ class Array4_ushort_const:
 
         Provide a Cupy view into an Array4.
 
+        This includes ngrow guard cells of the box.
+
         Note on the order of indices:
         By default, this is as in AMReX in Fortran contiguous order, indexing as
         x,y,z. This has performance implications for use in external libraries such
@@ -3042,6 +3144,8 @@ class Array4_ushort_const:
         """
 
         Provide a Numpy view into an Array4.
+
+        This includes ngrow guard cells of the box.
 
         Note on the order of indices:
         By default, this is as in AMReX in Fortran contiguous order, indexing as
@@ -3652,65 +3756,166 @@ class FabArrayBase:
     @property
     def is_all_nodal(self) -> bool: ...
     @property
-    def nComp(self) -> int: ...
+    def nComp(self) -> int:
+        """
+        Return number of variables (aka components) associated with each point.
+        """
+
     @property
-    def n_grow_vect(self) -> IntVect: ...
+    def n_grow_vect(self) -> IntVect:
+        """
+        Return the grow factor (per direction) that defines the region of definition.
+        """
+
     @property
-    def num_comp(self) -> int: ...
+    def num_comp(self) -> int:
+        """
+        Return number of variables (aka components) associated with each point.
+        """
+
     @property
-    def size(self) -> int: ...
+    def size(self) -> int:
+        """
+        Return the number of FABs in the FabArray.
+        """
 
 class FabArray_FArrayBox(FabArrayBase):
     @staticmethod
     def lin_comb(
-        arg0: FabArray_FArrayBox,
-        arg1: float,
-        arg2: FabArray_FArrayBox,
-        arg3: int,
-        arg4: float,
-        arg5: FabArray_FArrayBox,
-        arg6: int,
-        arg7: int,
-        arg8: int,
-        arg9: IntVect,
-    ) -> None: ...
+        dst: FabArray_FArrayBox,
+        a: float,
+        x: FabArray_FArrayBox,
+        xcomp: int,
+        b: float,
+        y: FabArray_FArrayBox,
+        ycomp: int,
+        dstcomp: int,
+        numcomp: int,
+        nghost: IntVect,
+    ) -> None:
+        """
+        dst = a*x + b*y
+        """
+
     @staticmethod
     def saxpy(
-        arg0: FabArray_FArrayBox,
-        arg1: float,
-        arg2: FabArray_FArrayBox,
-        arg3: int,
-        arg4: int,
-        arg5: int,
-        arg6: IntVect,
-    ) -> None: ...
+        y: FabArray_FArrayBox,
+        a: float,
+        x: FabArray_FArrayBox,
+        xcomp: int,
+        ycomp: int,
+        ncomp: int,
+        nghost: IntVect,
+    ) -> None:
+        """
+        y += a*x
+        """
+
     @staticmethod
     def xpay(
-        arg0: FabArray_FArrayBox,
-        arg1: float,
-        arg2: FabArray_FArrayBox,
-        arg3: int,
-        arg4: int,
-        arg5: int,
-        arg6: IntVect,
-    ) -> None: ...
+        y: FabArray_FArrayBox,
+        a: float,
+        x: FabArray_FArrayBox,
+        xcomp: int,
+        ycomp: int,
+        ncomp: int,
+        nghost: IntVect,
+    ) -> None:
+        """
+        y = x + a*y
+        """
+
+    @typing.overload
+    def abs(self, comp: int, ncomp: int, nghost: int = 0) -> None: ...
+    @typing.overload
+    def abs(self, comp: int, ncomp: int, nghost: IntVect) -> None: ...
     def array(self, arg0: MFIter) -> Array4_double: ...
     def clear(self) -> None: ...
     def const_array(self, arg0: MFIter) -> Array4_double_const: ...
     @typing.overload
-    def fill_boundary(self, cross: bool = False) -> None: ...
+    def fill_boundary(self, cross: bool = False) -> None:
+        """
+        Copy on intersection within a FabArray.
+
+            Data is copied from valid regions to intersecting regions of definition.
+            The purpose is to fill in the boundary regions of each FAB in the FabArray.
+            If cross=true, corner cells are not filled. If the length of periodic is provided,
+            periodic boundaries are also filled.
+
+            If scomp is provided, this only copies ncomp components starting at scomp.
+
+            Note that FabArray itself does not contains any periodicity information.
+            FillBoundary expects that its cell-centered version of its BoxArray is non-overlapping.
+        """
+
     @typing.overload
-    def fill_boundary(self, period: Periodicity, cross: bool = False) -> None: ...
+    def fill_boundary(self, period: Periodicity, cross: bool = False) -> None:
+        """
+        Copy on intersection within a FabArray.
+
+            Data is copied from valid regions to intersecting regions of definition.
+            The purpose is to fill in the boundary regions of each FAB in the FabArray.
+            If cross=true, corner cells are not filled. If the length of periodic is provided,
+            periodic boundaries are also filled.
+
+            If scomp is provided, this only copies ncomp components starting at scomp.
+
+            Note that FabArray itself does not contains any periodicity information.
+            FillBoundary expects that its cell-centered version of its BoxArray is non-overlapping.
+        """
+
     @typing.overload
     def fill_boundary(
         self, nghost: IntVect, period: Periodicity, cross: bool = False
-    ) -> None: ...
+    ) -> None:
+        """
+        Copy on intersection within a FabArray.
+
+            Data is copied from valid regions to intersecting regions of definition.
+            The purpose is to fill in the boundary regions of each FAB in the FabArray.
+            If cross=true, corner cells are not filled. If the length of periodic is provided,
+            periodic boundaries are also filled.
+
+            If scomp is provided, this only copies ncomp components starting at scomp.
+
+            Note that FabArray itself does not contains any periodicity information.
+            FillBoundary expects that its cell-centered version of its BoxArray is non-overlapping.
+        """
+
     @typing.overload
-    def fill_boundary(self, scomp: int, ncomp: int, cross: bool = False) -> None: ...
+    def fill_boundary(self, scomp: int, ncomp: int, cross: bool = False) -> None:
+        """
+        Copy on intersection within a FabArray.
+
+            Data is copied from valid regions to intersecting regions of definition.
+            The purpose is to fill in the boundary regions of each FAB in the FabArray.
+            If cross=true, corner cells are not filled. If the length of periodic is provided,
+            periodic boundaries are also filled.
+
+            If scomp is provided, this only copies ncomp components starting at scomp.
+
+            Note that FabArray itself does not contains any periodicity information.
+            FillBoundary expects that its cell-centered version of its BoxArray is non-overlapping.
+        """
+
     @typing.overload
     def fill_boundary(
         self, scomp: int, ncomp: int, period: Periodicity, cross: bool = False
-    ) -> None: ...
+    ) -> None:
+        """
+        Copy on intersection within a FabArray.
+
+            Data is copied from valid regions to intersecting regions of definition.
+            The purpose is to fill in the boundary regions of each FAB in the FabArray.
+            If cross=true, corner cells are not filled. If the length of periodic is provided,
+            periodic boundaries are also filled.
+
+            If scomp is provided, this only copies ncomp components starting at scomp.
+
+            Note that FabArray itself does not contains any periodicity information.
+            FillBoundary expects that its cell-centered version of its BoxArray is non-overlapping.
+        """
+
     @typing.overload
     def fill_boundary(
         self,
@@ -3719,20 +3924,148 @@ class FabArray_FArrayBox(FabArrayBase):
         nghost: IntVect,
         period: Periodicity,
         cross: bool = False,
-    ) -> None: ...
+    ) -> None:
+        """
+        Copy on intersection within a FabArray.
+
+            Data is copied from valid regions to intersecting regions of definition.
+            The purpose is to fill in the boundary regions of each FAB in the FabArray.
+            If cross=true, corner cells are not filled. If the length of periodic is provided,
+            periodic boundaries are also filled.
+
+            If scomp is provided, this only copies ncomp components starting at scomp.
+
+            Note that FabArray itself does not contains any periodicity information.
+            FillBoundary expects that its cell-centered version of its BoxArray is non-overlapping.
+        """
+
     def ok(self) -> bool: ...
-    def override_sync(self, arg0: Periodicity) -> None: ...
-    def sum(self, arg0: int, arg1: IntVect, arg2: bool) -> float: ...
     @typing.overload
-    def sum_boundary(self, arg0: Periodicity) -> None: ...
+    def override_sync(self, period: Periodicity) -> None:
+        """
+        Synchronize nodal data.
+
+            The synchronization will override valid regions by the intersecting valid regions with a higher precedence.
+            The smaller the global box index is, the higher precedence the box has.
+            With periodic boundaries, for cells in the same box, those near the lower corner have higher precedence than those near the upper corner.
+
+            Parameters
+            ----------
+            scomp :
+              starting component
+            ncomp :
+              number of components
+            period :
+              periodic length if it's non-zero
+        """
+
     @typing.overload
-    def sum_boundary(self, arg0: int, arg1: int, arg2: Periodicity) -> None: ...
+    def override_sync(self, scomp: int, ncomp: int, period: Periodicity) -> None:
+        """
+        Synchronize nodal data.
+
+            The synchronization will override valid regions by the intersecting valid regions with a higher precedence.
+            The smaller the global box index is, the higher precedence the box has.
+            With periodic boundaries, for cells in the same box, those near the lower corner have higher precedence than those near the upper corner.
+
+            Parameters
+            ----------
+            scomp :
+              starting component
+            ncomp :
+              number of components
+            period :
+              periodic length if it's non-zero
+        """
+
+    @typing.overload
+    def set_val(self, val: float) -> None:
+        """
+        Set all components in the entire region of each FAB to val.
+        """
+
+    @typing.overload
+    def set_val(self, val: float, comp: int, num_comp: int, nghost: int = 0) -> None:
+        """
+        Set the value of num_comp components in the valid region of
+        each FAB in the FabArray, starting at component comp to val.
+        Also set the value of nghost boundary cells.
+        """
+
+    @typing.overload
+    def set_val(self, val: float, comp: int, num_comp: int, nghost: IntVect) -> None:
+        """
+        Set the value of num_comp components in the valid region of
+        each FAB in the FabArray, starting at component comp to val.
+        Also set the value of nghost boundary cells.
+        """
+
+    @typing.overload
+    def set_val(
+        self, val: float, region: Box, comp: int, num_comp: int, nghost: int = 0
+    ) -> None:
+        """
+        Set the value of num_comp components in the valid region of
+        each FAB in the FabArray, starting at component comp, as well
+        as nghost boundary cells, to val, provided they also intersect
+        with the Box region.
+        """
+
+    @typing.overload
+    def set_val(
+        self, val: float, region: Box, comp: int, num_comp: int, nghost: IntVect
+    ) -> None:
+        """
+        Set the value of num_comp components in the valid region of
+        each FAB in the FabArray, starting at component comp, as well
+        as nghost boundary cells, to val, provided they also intersect
+        with the Box region.
+        """
+
+    def sum(self, comp: int, nghost: IntVect, local: bool) -> float:
+        """
+        Returns the sum of component "comp"
+        """
+
+    @typing.overload
+    def sum_boundary(self, period: Periodicity) -> None:
+        """
+        Sum values in overlapped cells.  The destination is limited to valid cells.
+        """
+
+    @typing.overload
+    def sum_boundary(self, scomp: int, ncomp: int, period: Periodicity) -> None:
+        """
+        Sum values in overlapped cells.  The destination is limited to valid cells.
+        """
+
     @typing.overload
     def sum_boundary(
-        self, arg0: int, arg1: int, arg2: IntVect, arg3: Periodicity
-    ) -> None: ...
+        self, scomp: int, ncomp: int, nghost: IntVect, period: Periodicity
+    ) -> None:
+        """
+        Sum values in overlapped cells.  The destination is limited to valid cells.
+        """
+
+    @typing.overload
+    def sum_boundary(
+        self,
+        scomp: int,
+        ncomp: int,
+        nghost: IntVect,
+        dst_nghost: IntVect,
+        period: Periodicity,
+    ) -> None:
+        """
+        Sum values in overlapped cells.  The destination is limited to valid cells.
+        """
+
     @property
-    def arena(self) -> Arena: ...
+    def arena(self) -> Arena:
+        """
+        Provides access to the Arena this FabArray was build with.
+        """
+
     @property
     def factory(self) -> FabFactory_FArrayBox: ...
     @property
@@ -4209,25 +4542,49 @@ class MultiFab(FabArray_FArrayBox):
     @staticmethod
     @typing.overload
     def add(
-        arg0: MultiFab, arg1: MultiFab, arg2: int, arg3: int, arg4: int, arg5: int
-    ) -> None: ...
+        dst: MultiFab,
+        src: MultiFab,
+        srccomp: int,
+        dstcomp: int,
+        numcomp: int,
+        nghost: int,
+    ) -> None:
+        """
+        Add src to dst including nghost ghost cells.
+        The two MultiFabs MUST have the same underlying BoxArray.
+        """
+
     @staticmethod
     @typing.overload
     def add(
-        arg0: MultiFab, arg1: MultiFab, arg2: int, arg3: int, arg4: int, arg5: IntVect
-    ) -> None: ...
+        dst: MultiFab,
+        src: MultiFab,
+        srccomp: int,
+        dstcomp: int,
+        numcomp: int,
+        nghost: IntVect,
+    ) -> None:
+        """
+        Add src to dst including nghost ghost cells.
+        The two MultiFabs MUST have the same underlying BoxArray.
+        """
+
     @staticmethod
     @typing.overload
     def add_product(
-        arg0: MultiFab,
-        arg1: MultiFab,
-        arg2: int,
-        arg3: MultiFab,
-        arg4: int,
-        arg5: int,
-        arg6: int,
-        arg7: int,
-    ) -> None: ...
+        dst: MultiFab,
+        src1: MultiFab,
+        comp1: int,
+        src2: MultiFab,
+        comp2: int,
+        dstcomp: int,
+        numcomp: int,
+        nghost: int,
+    ) -> None:
+        """
+        dst += src1*src2
+        """
+
     @staticmethod
     @typing.overload
     def add_product(
@@ -4239,165 +4596,373 @@ class MultiFab(FabArray_FArrayBox):
         arg5: int,
         arg6: int,
         arg7: IntVect,
-    ) -> None: ...
+    ) -> None:
+        """
+        dst += src1*src2
+        """
+
     @staticmethod
     @typing.overload
     def divide(
-        arg0: MultiFab, arg1: MultiFab, arg2: int, arg3: int, arg4: int, arg5: int
-    ) -> None: ...
+        dst: MultiFab,
+        src: MultiFab,
+        srccomp: int,
+        dstcomp: int,
+        numcomp: int,
+        nghost: int,
+    ) -> None:
+        """
+        Divide dst by src including nghost ghost cells.
+        The two MultiFabs MUST have the same underlying BoxArray.
+        """
+
     @staticmethod
     @typing.overload
     def divide(
-        arg0: MultiFab, arg1: MultiFab, arg2: int, arg3: int, arg4: int, arg5: IntVect
-    ) -> None: ...
+        dst: MultiFab,
+        src: MultiFab,
+        srccomp: int,
+        dstcomp: int,
+        numcomp: int,
+        nghost: IntVect,
+    ) -> None:
+        """
+        Divide dst by src including nghost ghost cells.
+        The two MultiFabs MUST have the same underlying BoxArray.
+        """
+
     @staticmethod
     @typing.overload
     def dot(
-        arg0: MultiFab,
-        arg1: int,
-        arg2: MultiFab,
-        arg3: int,
-        arg4: int,
-        arg5: int,
-        arg6: bool,
-    ) -> float: ...
+        x: MultiFab,
+        xcomp: int,
+        y: MultiFab,
+        ycomp: int,
+        numcomp: int,
+        nghost: int,
+        local: bool = False,
+    ) -> float:
+        """
+        Returns the dot product of two MultiFabs.
+        """
+
     @staticmethod
     @typing.overload
-    def dot(arg0: MultiFab, arg1: int, arg2: int, arg3: int, arg4: bool) -> float: ...
+    def dot(
+        x: MultiFab, xcomp: int, numcomp: int, nghost: int, local: bool = False
+    ) -> float:
+        """
+        Returns the dot product of a MultiFab with itself.
+        """
+
     @staticmethod
     def finalize() -> None: ...
     @staticmethod
     def initialize() -> None: ...
     @staticmethod
     def lin_comb(
-        arg0: MultiFab,
-        arg1: float,
-        arg2: MultiFab,
-        arg3: int,
-        arg4: float,
-        arg5: MultiFab,
-        arg6: int,
-        arg7: int,
-        arg8: int,
-        arg9: int,
-    ) -> None: ...
+        dst: MultiFab,
+        a: float,
+        x: MultiFab,
+        x_comp: int,
+        b: float,
+        y: MultiFab,
+        y_comp: int,
+        dstcomp: int,
+        numcomp: int,
+        nghost: int,
+    ) -> None:
+        """
+        dst = a*x + b*y
+        """
+
     @staticmethod
     @typing.overload
     def multiply(
-        arg0: MultiFab, arg1: MultiFab, arg2: int, arg3: int, arg4: int, arg5: int
-    ) -> None: ...
+        dst: MultiFab,
+        src: MultiFab,
+        srccomp: int,
+        dstcomp: int,
+        numcomp: int,
+        nghost: int,
+    ) -> None:
+        """
+        Multiply dst by src including nghost ghost cells.
+        The two MultiFabs MUST have the same underlying BoxArray.
+        """
+
     @staticmethod
     @typing.overload
     def multiply(
-        arg0: MultiFab, arg1: MultiFab, arg2: int, arg3: int, arg4: int, arg5: IntVect
-    ) -> None: ...
+        dst: MultiFab,
+        src: MultiFab,
+        srccomp: int,
+        dstcomp: int,
+        numcomp: int,
+        nghost: IntVect,
+    ) -> None:
+        """
+        Multiply dst by src including nghost ghost cells.
+        The two MultiFabs MUST have the same underlying BoxArray.
+        """
+
     @staticmethod
     def saxpy(
-        arg0: MultiFab,
-        arg1: float,
-        arg2: MultiFab,
-        arg3: int,
-        arg4: int,
-        arg5: int,
-        arg6: int,
-    ) -> None: ...
+        dst: MultiFab,
+        a: float,
+        src: MultiFab,
+        srccomp: int,
+        dstcomp: int,
+        numcomp: int,
+        nghost: int,
+    ) -> None:
+        """
+        dst += a*src
+        """
+
     @staticmethod
     @typing.overload
     def subtract(
-        arg0: MultiFab, arg1: MultiFab, arg2: int, arg3: int, arg4: int, arg5: int
-    ) -> None: ...
+        dst: MultiFab,
+        src: MultiFab,
+        srccomp: int,
+        dstcomp: int,
+        numcomp: int,
+        nghost: int,
+    ) -> None:
+        """
+        Subtract src from dst including nghost ghost cells.
+        The two MultiFabs MUST have the same underlying BoxArray.
+        """
+
     @staticmethod
     @typing.overload
     def subtract(
-        arg0: MultiFab, arg1: MultiFab, arg2: int, arg3: int, arg4: int, arg5: IntVect
-    ) -> None: ...
+        dst: MultiFab,
+        src: MultiFab,
+        srccomp: int,
+        dstcomp: int,
+        numcomp: int,
+        nghost: IntVect,
+    ) -> None:
+        """
+        Subtract src from dst including nghost ghost cells.
+        The two MultiFabs MUST have the same underlying BoxArray.
+        """
+
     @staticmethod
     @typing.overload
     def swap(
-        arg0: MultiFab, arg1: MultiFab, arg2: int, arg3: int, arg4: int, arg5: int
-    ) -> None: ...
+        dst: MultiFab,
+        src: MultiFab,
+        srccomp: int,
+        dstcomp: int,
+        numcomp: int,
+        nghost: int,
+    ) -> None:
+        """
+        Swap from src to dst including nghost ghost cells.
+        The two MultiFabs MUST have the same underlying BoxArray.
+        The swap is local.
+        """
+
     @staticmethod
     @typing.overload
     def swap(
-        arg0: MultiFab, arg1: MultiFab, arg2: int, arg3: int, arg4: int, arg5: IntVect
-    ) -> None: ...
+        dst: MultiFab,
+        src: MultiFab,
+        srccomp: int,
+        dstcomp: int,
+        numcomp: int,
+        nghost: IntVect,
+    ) -> None:
+        """
+        Swap from src to dst including nghost ghost cells.
+        The two MultiFabs MUST have the same underlying BoxArray.
+        The swap is local.
+        """
+
     @staticmethod
     def xpay(
-        arg0: MultiFab,
-        arg1: float,
-        arg2: MultiFab,
-        arg3: int,
-        arg4: int,
-        arg5: int,
-        arg6: int,
-    ) -> None: ...
+        dst: MultiFab,
+        a: float,
+        src: MultiFab,
+        srccomp: int,
+        dstcomp: int,
+        numcomp: int,
+        nghost: int,
+    ) -> None:
+        """
+        dst = src + a*dst
+        """
+
     @typing.overload
-    def __init__(self) -> None: ...
+    def __init__(self) -> None:
+        """
+        Constructs an empty MultiFab.
+
+                    Data can be defined at a later time using the define member functions
+                    inherited from FabArray.
+        """
+
     @typing.overload
-    def __init__(
-        self, arg0: BoxArray, arg1: DistributionMapping, arg2: int, arg3: int
-    ) -> None: ...
-    @typing.overload
-    def __init__(
-        self,
-        arg0: BoxArray,
-        arg1: DistributionMapping,
-        arg2: int,
-        arg3: int,
-        arg4: MFInfo,
-    ) -> None: ...
-    @typing.overload
-    def __init__(
-        self,
-        arg0: BoxArray,
-        arg1: DistributionMapping,
-        arg2: int,
-        arg3: int,
-        arg4: MFInfo,
-        arg5: FabFactory_FArrayBox,
-    ) -> None: ...
-    @typing.overload
-    def __init__(
-        self, arg0: BoxArray, arg1: DistributionMapping, arg2: int, arg3: IntVect
-    ) -> None: ...
+    def __init__(self, a: Arena) -> None:
+        """
+        Constructs an empty MultiFab.
+
+                    Data can be defined at a later time using the define member functions.
+                    If ``define`` is called later with a nullptr as MFInfo's arena, the
+                    default Arena ``a`` will be used.  If the arena in MFInfo is not a
+                    nullptr, the MFInfo's arena will be used.
+        """
+
     @typing.overload
     def __init__(
         self,
-        arg0: BoxArray,
-        arg1: DistributionMapping,
-        arg2: int,
-        arg3: IntVect,
-        arg4: MFInfo,
-    ) -> None: ...
+        bxs: BoxArray,
+        dm: DistributionMapping,
+        ncomp: int,
+        ngrow: int,
+        info: MFInfo,
+        factory: FabFactory_FArrayBox,
+    ) -> None:
+        """
+        Constructs a MultiFab.
+
+            The size of the FArrayBox is given by the Box grown by \\p ngrow, and
+            the number of components is given by \\p ncomp. If \\p info is set to
+            not allocating memory, then no FArrayBoxes are allocated at
+            this time but can be defined later.
+
+            Parameters
+            ----------
+            bxs :
+              a valid region
+            dm :
+              a DistribuionMapping
+            ncomp :
+              number of components
+            ngrow :
+              number of cells the region grows
+            info :
+              MultiFab info, including allocation Arena
+            factory :
+              FArrayBoxFactory for embedded boundaries
+        """
+
+    @typing.overload
+    def __init__(
+        self, bxs: BoxArray, dm: DistributionMapping, ncomp: int, ngrow: int
+    ) -> None:
+        """
+        Constructs a MultiFab.
+
+            The size of the FArrayBox is given by the Box grown by \\p ngrow, and
+            the number of components is given by \\p ncomp. If \\p info is set to
+            not allocating memory, then no FArrayBoxes are allocated at
+            this time but can be defined later.
+
+            Parameters
+            ----------
+            bxs :
+              a valid region
+            dm :
+              a DistribuionMapping
+            ncomp :
+              number of components
+            ngrow :
+              number of cells the region grows
+            info :
+              MultiFab info, including allocation Arena
+            factory :
+              FArrayBoxFactory for embedded boundaries
+        """
+
     @typing.overload
     def __init__(
         self,
-        arg0: BoxArray,
-        arg1: DistributionMapping,
-        arg2: int,
-        arg3: IntVect,
-        arg4: MFInfo,
-        arg5: FabFactory_FArrayBox,
-    ) -> None: ...
+        bxs: BoxArray,
+        dm: DistributionMapping,
+        ncomp: int,
+        ngrow: IntVect,
+        info: MFInfo,
+        factory: FabFactory_FArrayBox,
+    ) -> None:
+        """
+        Constructs a MultiFab.
+
+            The size of the FArrayBox is given by the Box grown by \\p ngrow, and
+            the number of components is given by \\p ncomp. If \\p info is set to
+            not allocating memory, then no FArrayBoxes are allocated at
+            this time but can be defined later.
+
+            Parameters
+            ----------
+            bxs :
+              a valid region
+            dm :
+              a DistribuionMapping
+            ncomp :
+              number of components
+            ngrow :
+              number of cells the region grows
+            info :
+              MultiFab info, including allocation Arena
+            factory :
+              FArrayBoxFactory for embedded boundaries
+        """
+
+    @typing.overload
+    def __init__(
+        self, bxs: BoxArray, dm: DistributionMapping, ncomp: int, ngrow: IntVect
+    ) -> None:
+        """
+        Constructs a MultiFab.
+
+            The size of the FArrayBox is given by the Box grown by \\p ngrow, and
+            the number of components is given by \\p ncomp. If \\p info is set to
+            not allocating memory, then no FArrayBoxes are allocated at
+            this time but can be defined later.
+
+            Parameters
+            ----------
+            bxs :
+              a valid region
+            dm :
+              a DistribuionMapping
+            ncomp :
+              number of components
+            ngrow :
+              number of cells the region grows
+            info :
+              MultiFab info, including allocation Arena
+            factory :
+              FArrayBoxFactory for embedded boundaries
+        """
+
     def __repr__(self) -> str: ...
-    @typing.overload
-    def abs(self, arg0: int, arg1: int) -> None: ...
-    @typing.overload
-    def abs(self, arg0: int, arg1: int, arg2: int) -> None: ...
     def average_sync(self, arg0: Periodicity) -> None: ...
     def box_array(self: FabArrayBase) -> BoxArray: ...
     @typing.overload
-    def contains_inf(self, arg0: bool) -> bool: ...
+    def contains_inf(self, local: bool = False) -> bool: ...
     @typing.overload
-    def contains_inf(self, arg0: int, arg1: int, arg2: int, arg3: bool) -> bool: ...
+    def contains_inf(
+        self, scomp: int, ncomp: int, ngrow: int = 0, local: bool = False
+    ) -> bool: ...
     @typing.overload
-    def contains_inf(self, arg0: int, arg1: int, arg2: IntVect, arg3: bool) -> bool: ...
+    def contains_inf(
+        self, scomp: int, ncomp: int, ngrow: IntVect, local: bool = False
+    ) -> bool: ...
     @typing.overload
-    def contains_nan(self, arg0: bool) -> bool: ...
+    def contains_nan(self, local: bool = False) -> bool: ...
     @typing.overload
-    def contains_nan(self, arg0: int, arg1: int, arg2: int, arg3: bool) -> bool: ...
+    def contains_nan(
+        self, scomp: int, ncomp: int, ngrow: int = 0, local: bool = False
+    ) -> bool: ...
     @typing.overload
-    def contains_nan(self, arg0: int, arg1: int, arg2: IntVect, arg3: bool) -> bool: ...
+    def contains_nan(
+        self, scomp: int, ncomp: int, ngrow: IntVect, local: bool = False
+    ) -> bool: ...
     def copy(self):
         """
 
@@ -4415,20 +4980,65 @@ class MultiFab(FabArray_FArrayBox):
 
         """
 
-    def divi(self, arg0: MultiFab, arg1: int, arg2: int, arg3: int) -> None: ...
+    def divi(
+        self, mf: MultiFab, strt_comp: int, num_comp: int, nghost: int = 0
+    ) -> None:
+        """
+        This function divides the values of the cells in mf from the
+        corresponding cells of this MultiFab.  mf is required to have the
+        same BoxArray or "valid region" as this MultiFab.  The division is
+        done only to num_comp components, starting with component number
+        strt_comp.  The parameter nghost specifies the number of boundary
+        cells that will be modified.  If nghost == 0, only the valid region of
+        each FArrayBox will be modified.  Note, nothing is done to protect
+        against divide by zero.
+        """
+
     def dm(self: FabArrayBase) -> DistributionMapping: ...
     @typing.overload
-    def invert(self, arg0: float, arg1: int) -> None: ...
-    @typing.overload
-    def invert(self, arg0: float, arg1: int, arg2: int) -> None: ...
-    @typing.overload
-    def invert(self, arg0: float, arg1: int, arg2: int, arg3: int) -> None: ...
-    @typing.overload
-    def invert(self, arg0: float, arg1: Box, arg2: int) -> None: ...
+    def invert(self, numerator: float, nghost: int) -> None:
+        """
+        Replaces the value of each cell in the specified subregion of
+        the MultiFab with its reciprocal multiplied by the value of
+        numerator.  The value of nghost specifies the number of cells
+        in the boundary region that should be modified.
+        """
+
     @typing.overload
     def invert(
-        self, arg0: float, arg1: Box, arg2: int, arg3: int, arg4: int
-    ) -> None: ...
+        self, numerator: float, comp: int, num_comp: int, nghost: int = 0
+    ) -> None:
+        """
+        Replaces the value of each cell in the specified subregion of
+        the MultiFab with its reciprocal multiplied by the value of
+        numerator. The subregion consists of the num_comp components
+        starting at component comp.  The value of nghost specifies the
+        number of cells in the boundary region of each FArrayBox in the
+        subregion that should be modified.
+        """
+
+    @typing.overload
+    def invert(self, numerator: float, region: Box, nghost: int) -> None:
+        """
+        Scales the value of each cell in the valid region of each
+        component of the MultiFab by the scalar val (a[i] <- a[i]*val),
+        that also intersects the Box region.  The value of nghost
+        specifies the number of cells in the boundary region of each
+        FArrayBox in the subregion that should be modified.
+        """
+
+    @typing.overload
+    def invert(
+        self, numerator: float, region: Box, comp: int, num_comp: int, nghost: int = 0
+    ) -> None:
+        """
+        Identical to the previous version of invert(), with the
+        restriction that the subregion is further constrained to the
+        intersection with Box region.  The value of nghost specifies the
+        number of cells in the boundary region of each FArrayBox in the
+        subregion that should be modified.
+        """
+
     @typing.overload
     def max(self, comp: int = 0, nghost: int = 0, local: bool = False) -> float:
         """
@@ -4459,25 +5069,96 @@ class MultiFab(FabArray_FArrayBox):
         """
 
     def minIndex(self, arg0: int, arg1: int) -> IntVect: ...
-    def minus(self, arg0: MultiFab, arg1: int, arg2: int, arg3: int) -> None: ...
+    def minus(
+        self, mf: MultiFab, strt_comp: int, num_comp: int, nghost: int = 0
+    ) -> None:
+        """
+        This function subtracts the values of the cells in mf from the
+        corresponding cells of this MultiFab.  mf is required to have the
+        same BoxArray or "valid region" as this MultiFab.  The subtraction is
+        done only to num_comp components, starting with component number
+        strt_comp.  The parameter nghost specifies the number of boundary
+        cells that will be modified.  If nghost == 0, only the valid region of
+        each FArrayBox will be modified.
+        """
+
     @typing.overload
-    def mult(self, arg0: float, arg1: int) -> None: ...
+    def mult(self, val: float, nghost: int = 0) -> None:
+        """
+        Scales the value of each cell in the valid region of each
+        component of the MultiFab by the scalar val (a[i] <- a[i]*val).
+        The value of nghost specifies the number of cells in the
+        boundary region that should be modified.
+        """
+
     @typing.overload
-    def mult(self, arg0: float, arg1: int, arg2: int) -> None: ...
+    def mult(self, val: float, comp: int, num_comp: int, nghost: int = 0) -> None:
+        """
+        Scales the value of each cell in the specified subregion of the
+        MultiFab by the scalar val (a[i] <- a[i]*val). The subregion
+        consists of the num_comp components starting at component comp.
+        The value of nghost specifies the number of cells in the
+        boundary region of each FArrayBox in the subregion that should
+        be modified.
+        """
+
     @typing.overload
-    def mult(self, arg0: float, arg1: int, arg2: int, arg3: int) -> None: ...
+    def mult(
+        self, val: float, region: Box, comp: int, num_comp: int, nghost: int = 0
+    ) -> None:
+        """
+        Identical to the previous version of mult(), with the
+        restriction that the subregion is further constrained to the
+        intersection with Box region.  The value of nghost specifies the
+        number of cells in the boundary region of each FArrayBox in
+        the subregion that should be modified.
+        """
+
     @typing.overload
-    def mult(self, arg0: float, arg1: Box, arg2: int) -> None: ...
+    def mult(self, val: float, region: Box, nghost: int = 0) -> None:
+        """
+        Scales the value of each cell in the valid region of each
+        component of the MultiFab by the scalar val (a[i] <- a[i]*val),
+        that also intersects the Box region.  The value of nghost
+        specifies the number of cells in the boundary region of each
+        FArrayBox in the subregion that should be modified.
+        """
+
     @typing.overload
-    def mult(self, arg0: float, arg1: Box, arg2: int, arg3: int, arg4: int) -> None: ...
+    def negate(self, nghost: int = 0) -> None:
+        """
+        Negates the value of each cell in the valid region of
+        the MultiFab.  The value of nghost specifies the number of
+        cells in the boundary region that should be modified.
+        """
+
     @typing.overload
-    def negate(self, arg0: int) -> None: ...
+    def negate(self, comp: int, num_comp: int, nghost: int = 0) -> None:
+        """
+        Negates the value of each cell in the specified subregion of
+        the MultiFab.  The subregion consists of the num_comp
+        components starting at component comp.  The value of nghost
+        specifies the number of cells in the boundary region of each
+        FArrayBox in the subregion that should be modified.
+        """
+
     @typing.overload
-    def negate(self, arg0: int, arg1: int, arg2: int) -> None: ...
+    def negate(self, region: Box, nghost: int = 0) -> None:
+        """
+        Negates the value of each cell in the valid region of
+        the MultiFab that also intersects the Box region.  The value
+        of nghost specifies the number of cells in the boundary region
+        that should be modified.
+        """
+
     @typing.overload
-    def negate(self, arg0: Box, arg1: int) -> None: ...
-    @typing.overload
-    def negate(self, arg0: Box, arg1: int, arg2: int, arg3: int) -> None: ...
+    def negate(self, region: Box, comp: int, num_comp: int, nghost: int = 0) -> None:
+        """
+        Identical to the previous version of negate(), with the
+        restriction that the subregion is further constrained to
+        the intersection with Box region.
+        """
+
     def norm0(self, arg0: int, arg1: int, arg2: bool, arg3: bool) -> float: ...
     @typing.overload
     def norm1(self, arg0: int, arg1: Periodicity, arg2: bool) -> float: ...
@@ -4493,25 +5174,60 @@ class MultiFab(FabArray_FArrayBox):
     def norm2(self, arg0: Vector_int) -> Vector_Real: ...
     def norminf(self, arg0: int, arg1: int, arg2: bool, arg3: bool) -> float: ...
     @typing.overload
-    def plus(self, arg0: float, arg1: int) -> None: ...
+    def plus(self, val: float, nghost: int = 0) -> None:
+        """
+        Adds the scalar value val to the value of each cell in the
+        valid region of each component of the MultiFab.  The value
+        of nghost specifies the number of cells in the boundary
+        region that should be modified.
+        """
+
     @typing.overload
-    def plus(self, arg0: float, arg1: int, arg2: int) -> None: ...
+    def plus(self, val: float, comp: int, num_comp: int, nghost: int = 0) -> None:
+        """
+        Adds the scalar value \\p val to the value of each cell in the
+        specified subregion of the MultiFab.
+
+        The subregion consists of the \\p num_comp components starting at component \\p comp.
+        The value of nghost specifies the number of cells in the
+        boundary region of each FArrayBox in the subregion that should
+        be modified.
+        """
+
     @typing.overload
-    def plus(self, arg0: float, arg1: int, arg2: int, arg3: int) -> None: ...
+    def plus(self, val: float, region: Box, nghost: int = 0) -> None:
+        """
+        Adds the scalar value val to the value of each cell in the
+        valid region of each component of the MultiFab, that also
+        intersects the Box region.  The value of nghost specifies the
+        number of cells in the boundary region of each FArrayBox in
+        the subregion that should be modified.
+        """
+
     @typing.overload
-    def plus(self, arg0: float, arg1: Box, arg2: int) -> None: ...
+    def plus(
+        self, val: float, region: Box, comp: int, num_comp: int, nghost: int = 0
+    ) -> None:
+        """
+        Identical to the previous version of plus(), with the
+        restriction that the subregion is further constrained to
+        the intersection with Box region.
+        """
+
     @typing.overload
-    def plus(self, arg0: float, arg1: Box, arg2: int, arg3: int, arg4: int) -> None: ...
-    @typing.overload
-    def plus(self, arg0: MultiFab, arg1: int, arg2: int, arg3: int) -> None: ...
-    @typing.overload
-    def set_val(self, arg0: float) -> None: ...
-    @typing.overload
-    def set_val(self, arg0: float, arg1: int, arg2: int) -> None: ...
-    @typing.overload
-    def set_val(self, arg0: float, arg1: int, arg2: int, arg3: int) -> None: ...
-    @typing.overload
-    def set_val(self, arg0: float, arg1: int, arg2: int, arg3: IntVect) -> None: ...
+    def plus(
+        self, mf: MultiFab, strt_comp: int, num_comp: int, nghost: int = 0
+    ) -> None:
+        """
+        This function adds the values of the cells in mf to the corresponding
+        cells of this MultiFab.  mf is required to have the same BoxArray or
+        "valid region" as this MultiFab.  The addition is done only to num_comp
+        components, starting with component number strt_comp.  The parameter
+        nghost specifies the number of boundary cells that will be modified.
+        If nghost == 0, only the valid region of each FArrayBox will be
+        modified.
+        """
+
     def sum(self, comp: int = 0, local: bool = False) -> float:
         """
         Returns the sum of component 'comp' over the MultiFab -- no ghost cells are included.
@@ -4528,6 +5244,8 @@ class MultiFab(FabArray_FArrayBox):
         """
 
         Provide a Cupy view into a MultiFab.
+
+        This includes ngrow guard cells of each box.
 
         Note on the order of indices:
         By default, this is as in AMReX in Fortran contiguous order, indexing as
@@ -4562,6 +5280,8 @@ class MultiFab(FabArray_FArrayBox):
         """
 
         Provide a Numpy view into a MultiFab.
+
+        This includes ngrow guard cells of each box.
 
         Note on the order of indices:
         By default, this is as in AMReX in Fortran contiguous order, indexing as
@@ -15362,7 +16082,11 @@ def copy_mfab(
     nghost: IntVect,
 ) -> None: ...
 @typing.overload
-def dtoh_memcpy(dest: FabArray_FArrayBox, src: FabArray_FArrayBox) -> None: ...
+def dtoh_memcpy(dest: FabArray_FArrayBox, src: FabArray_FArrayBox) -> None:
+    """
+    Copy from a device to host FabArray.
+    """
+
 @typing.overload
 def dtoh_memcpy(
     dest: FabArray_FArrayBox,
@@ -15370,14 +16094,22 @@ def dtoh_memcpy(
     scomp: int,
     dcomp: int,
     ncomp: int,
-) -> None: ...
+) -> None:
+    """
+    Copy from a device to host FabArray for a specific (number of) component(s).
+    """
+
 def end(arg0: Box) -> Dim3: ...
 @typing.overload
 def finalize() -> None: ...
 @typing.overload
 def finalize(arg0: AMReX) -> None: ...
 @typing.overload
-def htod_memcpy(dest: FabArray_FArrayBox, src: FabArray_FArrayBox) -> None: ...
+def htod_memcpy(dest: FabArray_FArrayBox, src: FabArray_FArrayBox) -> None:
+    """
+    Copy from a host to device FabArray.
+    """
+
 @typing.overload
 def htod_memcpy(
     dest: FabArray_FArrayBox,
@@ -15385,7 +16117,11 @@ def htod_memcpy(
     scomp: int,
     dcomp: int,
     ncomp: int,
-) -> None: ...
+) -> None:
+    """
+    Copy from a host to device FabArray for a specific (number of) component(s).
+    """
+
 def initialize(arg0: list) -> AMReX:
     """
     Initialize AMReX library
