@@ -11,6 +11,8 @@ def array4_to_numpy(self, copy=False, order="F"):
     """
     Provide a Numpy view into an Array4.
 
+    This includes ngrow guard cells of the box.
+
     Note on the order of indices:
     By default, this is as in AMReX in Fortran contiguous order, indexing as
     x,y,z. This has performance implications for use in external libraries such
@@ -51,6 +53,8 @@ def array4_to_numpy(self, copy=False, order="F"):
 def array4_to_cupy(self, copy=False, order="F"):
     """
     Provide a Cupy view into an Array4.
+
+    This includes ngrow guard cells of the box.
 
     Note on the order of indices:
     By default, this is as in AMReX in Fortran contiguous order, indexing as

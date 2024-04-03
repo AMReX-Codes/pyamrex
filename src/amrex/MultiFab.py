@@ -13,6 +13,8 @@ def mf_to_numpy(amr, self, copy=False, order="F"):
     """
     Provide a Numpy view into a MultiFab.
 
+    This includes ngrow guard cells of each box.
+
     Note on the order of indices:
     By default, this is as in AMReX in Fortran contiguous order, indexing as
     x,y,z. This has performance implications for use in external libraries such
@@ -57,6 +59,8 @@ def mf_to_numpy(amr, self, copy=False, order="F"):
 def mf_to_cupy(self, copy=False, order="F"):
     """
     Provide a Cupy view into a MultiFab.
+
+    This includes ngrow guard cells of each box.
 
     Note on the order of indices:
     By default, this is as in AMReX in Fortran contiguous order, indexing as
