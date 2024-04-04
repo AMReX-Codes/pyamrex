@@ -9,7 +9,7 @@ License: BSD-3-Clause-LBNL
 
 def aos_to_numpy(self, copy=False):
     """
-    Provide Numpy views into a ArrayOfStructs.
+    Provide NumPy views into a ArrayOfStructs.
 
     Parameters
     ----------
@@ -22,7 +22,7 @@ def aos_to_numpy(self, copy=False):
     -------
     namedtuple
         A tuple with real and int components that are each lists
-        of 1D numpy arrays.
+        of 1D NumPy arrays.
     """
     import numpy as np
 
@@ -42,7 +42,7 @@ def aos_to_numpy(self, copy=False):
 
 def aos_to_cupy(self, copy=False):
     """
-    Provide Cupy views into a ArrayOfStructs.
+    Provide CuPy views into a ArrayOfStructs.
 
     Parameters
     ----------
@@ -55,7 +55,7 @@ def aos_to_cupy(self, copy=False):
     -------
     namedtuple
         A tuple with real and int components that are each lists
-        of 1D numpy arrays.
+        of 1D NumPy arrays.
 
     Raises
     ------
@@ -68,6 +68,32 @@ def aos_to_cupy(self, copy=False):
         raise ValueError("AoS is empty.")
 
     return cp.array(self, copy=copy)
+
+
+def aos_to_xp(self, copy=False):
+    """
+    Provide NumPy or CuPy views into a ArrayOfStructs, depending on amr.Config.have_gpu .
+
+    This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
+    https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
+
+    Parameters
+    ----------
+    self : amrex.ArrayOfStructs_*
+        An ArrayOfStructs class in pyAMReX
+    copy : bool, optional
+        Copy the data if true, otherwise create a view (default).
+
+    Returns
+    -------
+    namedtuple
+        A tuple with real and int components that are each lists
+        of 1D NumPy or CuPy arrays.
+    """
+    import inspect
+
+    amr = inspect.getmodule(self)
+    return self.to_cupy(copy) if amr.Config.have_gpu else self.to_numpy(copy)
 
 
 def register_AoS_extension(amr):
@@ -84,3 +110,4 @@ def register_AoS_extension(amr):
     ):
         AoS_type.to_numpy = aos_to_numpy
         AoS_type.to_cupy = aos_to_cupy
+        AoS_type.to_xp = aos_to_xp
