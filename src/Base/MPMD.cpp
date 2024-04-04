@@ -14,7 +14,6 @@
 #ifdef AMREX_USE_MPI
 #include <mpi.h>
 
-
 /** mpi4py communicator wrapper
  *
  * refs:
@@ -52,11 +51,11 @@ void init_MPMD(py::module &m) {
               argv.push_back(NULL);
               char** tmp = argv.data();
               MPMD::Initialize_without_split(argc, tmp);
-          }, py::return_value_policy::reference);
+          });
 
     // This is AMReX::Initialize when MPMD exists
     m.def("initialize_when_MPMD",
-          [](const py::list args, py::object app_comm_py) {
+          [](const py::list args, py::object &app_comm_py) {
               Vector<std::string> cargs{"amrex"};
               Vector<char*> argv;
 
@@ -159,12 +158,21 @@ void init_MPMD(py::module &m) {
 
     // Binding MPMD::Copier class
     py::class_< MPMD::Copier >(m, "MPMD_Copier")
-        //! Construct an MPMD::Copier
-        .def(py::init< BoxArray const&, DistributionMapping const& >())
+        //! Construct an MPMD::Copier without BoxArray and DistributionMApping
+        .def(py::init <bool>())
+        //! Construct an MPMD::Copier with BoxArray and DistributionMApping
+        .def(py::init< BoxArray const&, DistributionMapping const&,bool>(),
+             py::arg("ba"),py::arg("dm"),py::arg("send_ba")=false)
         // Copier function to send data
         .def("send",&MPMD::Copier::send<FArrayBox>)
         // Copier function to receive data
         .def("recv",&MPMD::Copier::recv<FArrayBox>)
+        // Copier's BoxArray
+        .def("box_array",&MPMD::Copier::boxArray,
+                py::return_value_policy::reference_internal)
+        // Copier's DistributionMapping
+        .def("distribution_map",&MPMD::Copier::DistributionMap,
+                py::return_value_policy::reference_internal)
     ;
 
 }
