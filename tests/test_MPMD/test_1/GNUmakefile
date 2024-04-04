@@ -1,8 +1,8 @@
 AMREX_HOME ?= ../../../../amrex
 
-DEBUG	= TRUE
+DEBUG   = TRUE
 
-DIM	= 3
+DIM = 3
 
 COMP    = gcc
 
