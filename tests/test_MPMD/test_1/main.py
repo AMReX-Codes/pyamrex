@@ -70,7 +70,6 @@ copr.recv(mf, 0, 1)
 
 # Fill the second MultiFab component based on the first component
 for mfi in mf:
-    bx = mfi.validbox()
     # Preferred way to fill array using fast ranged operations:
     # - xp.array is indexed in reversed order (n,z,y,x),
     #   .T creates a view into the AMReX (x,y,z,n) order
