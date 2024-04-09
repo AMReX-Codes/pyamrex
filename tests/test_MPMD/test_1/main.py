@@ -8,8 +8,10 @@
 # License: BSD-3-Clause-LBNL
 # Authors: Bhargav Sriram Siddani, Revathi Jambunathan, Edoardo Zoni, Olga Shapoval, David Grote, Axel Huebl
 
-import amrex.space3d as amr
 from mpi4py import MPI
+
+import amrex.space3d as amr
+
 
 def load_cupy():
     if amr.Config.have_gpu:
