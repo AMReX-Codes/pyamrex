@@ -81,8 +81,8 @@ void init_MPMD(py::module &m) {
               //! -
               //! https://bitbucket.org/mpi4py/mpi4py/src/3.0.0/demo/wrap-c/helloworld.c
               //! - installed: include/mpi4py/mpi4py.MPI_api.h
-              auto m_mpi4py = py::module::import("mpi4py");
-              amrex::ignore_unused(m_mpi4py);
+              //auto m_mpi4py = py::module::import("mpi4py");
+              //amrex::ignore_unused(m_mpi4py);
 
               if (app_comm_py.ptr() == Py_None)
                   throw std::runtime_error(
