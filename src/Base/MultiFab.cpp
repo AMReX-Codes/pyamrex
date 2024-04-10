@@ -52,6 +52,27 @@ void init_MultiFab(py::module &m)
         .def("set_tag", [](MFInfo & info, std::string tag) { info.SetTag(std::move(tag)); })
     ;
 
+    py::class_< MFItInfo >(m, "MFItInfo")
+        .def_readwrite("do_tiling", &MFItInfo::do_tiling)
+        .def_readwrite("dynamic", &MFItInfo::dynamic)
+        .def_readwrite("device_sync", &MFItInfo::device_sync)
+        .def_readwrite("num_streams", &MFItInfo::num_streams)
+        .def_readwrite("tilesize", &MFItInfo::tilesize)
+
+        .def(py::init< >())
+
+        .def("enable_tiling", &MFItInfo::EnableTiling,
+             py::arg("ts") /*=FabArrayBase::mfiter_tile_size*/ )
+        .def("set_dynamic", &MFItInfo::SetDynamic,
+             py::arg("f"))
+        .def("disable_device_sync", &MFItInfo::DisableDeviceSync)
+        .def("set_device_sync", &MFItInfo::SetDeviceSync,
+             py::arg("f"))
+        .def("set_num_streams", &MFItInfo::SetNumStreams,
+             py::arg("n"))
+        .def("use_default_stream", &MFItInfo::UseDefaultStream)
+    ;
+
     py::class_< MFIter >(m, "MFIter", py::dynamic_attr())
         .def("__repr__",
              [](MFIter const & mfi) {
@@ -66,14 +87,14 @@ void init_MultiFab(py::module &m)
             // keep the FabArrayBase (argument 2) alive
              py::keep_alive<1, 2>()
         )
-        //.def(py::init< FabArrayBase const &, MFItInfo const & >())
+        .def(py::init< FabArrayBase const &, MFItInfo const & >())
 
         .def(py::init< MultiFab const & >(),
             // while the created iterator (argument 1: this) exists,
             // keep the MultiFab (argument 2) alive
             py::keep_alive<1, 2>()
         )
-        //.def(py::init< MultiFab const &, MFItInfo const & >())
+        .def(py::init< MultiFab const &, MFItInfo const & >())
 
         //.def(py::init< iMultiFab const & >())
         //.def(py::init< iMultiFab const &, MFItInfo const & >())
