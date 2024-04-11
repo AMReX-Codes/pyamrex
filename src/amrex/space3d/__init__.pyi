@@ -475,4 +475,4 @@ __author__: str = (
     "Axel Huebl, Ryan T. Sandberg, Shreyas Ananthan, David P. Grote, Revathi Jambunathan, Edoardo Zoni, Remi Lehe, Andrew Myers, Weiqun Zhang"
 )
 __license__: str = "BSD-3-Clause-LBNL"
-__version__: str = "24.04"
+__version__: str = "24.04-14-g6c6247554f27"

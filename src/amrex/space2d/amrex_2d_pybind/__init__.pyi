@@ -3618,7 +3618,7 @@ class BoxArray:
     def size(self) -> int: ...
 
 class Config:
-    amrex_version: typing.ClassVar[str] = "24.04"
+    amrex_version: typing.ClassVar[str] = "24.04-14-g6c6247554f27"
     gpu_backend = None
     have_gpu: typing.ClassVar[bool] = False
     have_mpi: typing.ClassVar[bool] = True
@@ -5247,16 +5247,30 @@ class MultiFab(FabArray_FArrayBox):
         modified.
         """
 
+    @typing.overload
     def sum(self, comp: int = 0, local: bool = False) -> float:
         """
         Returns the sum of component 'comp' over the MultiFab -- no ghost cells are included.
         """
 
+    @typing.overload
+    def sum(self, region: Box, comp: int = 0, local: bool = False) -> float:
+        """
+        Returns the sum of component 'comp' in the given 'region'. -- no ghost cells are included.
+        """
+
+    @typing.overload
     def sum_unique(
         self, comp: int = 0, local: bool = False, period: Periodicity = ...
     ) -> float:
         """
         Same as sum with local=false, but for non-cell-centered data, thisskips non-unique points that are owned by multiple boxes.
+        """
+
+    @typing.overload
+    def sum_unique(self, region: Box, comp: int = 0, local: bool = False) -> float:
+        """
+        Returns the unique sum of component `comp` in the given region. Non-unique points owned by multiple boxes in the MultiFab areonly added once. No ghost cells are included. This function does not takeperiodicity into account in the determination of uniqueness of points.
         """
 
     def to_cupy(self, copy=False, order="F"):
@@ -16343,4 +16357,4 @@ __author__: str = (
     "Axel Huebl, Ryan T. Sandberg, Shreyas Ananthan, David P. Grote, Revathi Jambunathan, Edoardo Zoni, Remi Lehe, Andrew Myers, Weiqun Zhang"
 )
 __license__: str = "BSD-3-Clause-LBNL"
-__version__: str = "24.04"
+__version__: str = "24.04-14-g6c6247554f27"
