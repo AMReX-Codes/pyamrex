@@ -191,22 +191,22 @@ void init_MultiFab(py::module &m)
              "each FAB in the FabArray, starting at component comp to val.\n"
              "Also set the value of nghost boundary cells."
         )
-            .def("set_val",
-                 py::overload_cast< amrex::Real, Box const &, int, int, int >(&FabArray<FArrayBox>::setVal<FArrayBox>),
-                 py::arg("val"), py::arg("region"), py::arg("comp"), py::arg("num_comp"), py::arg("nghost")=0,
-                 "Set the value of num_comp components in the valid region of\n"
-                 "each FAB in the FabArray, starting at component comp, as well\n"
-                 "as nghost boundary cells, to val, provided they also intersect\n"
-                 "with the Box region."
-            )
-            .def("set_val",
-                 py::overload_cast< amrex::Real, Box const &, int, int, IntVect const & >(&FabArray<FArrayBox>::setVal<FArrayBox>),
-                 py::arg("val"), py::arg("region"), py::arg("comp"), py::arg("num_comp"), py::arg("nghost"),
-                 "Set the value of num_comp components in the valid region of\n"
-                 "each FAB in the FabArray, starting at component comp, as well\n"
-                 "as nghost boundary cells, to val, provided they also intersect\n"
-                 "with the Box region."
-            )
+        .def("set_val",
+             py::overload_cast< amrex::Real, Box const &, int, int, int >(&FabArray<FArrayBox>::setVal<FArrayBox>),
+             py::arg("val"), py::arg("region"), py::arg("comp"), py::arg("num_comp"), py::arg("nghost")=0,
+             "Set the value of num_comp components in the valid region of\n"
+             "each FAB in the FabArray, starting at component comp, as well\n"
+             "as nghost boundary cells, to val, provided they also intersect\n"
+             "with the Box region."
+        )
+        .def("set_val",
+             py::overload_cast< amrex::Real, Box const &, int, int, IntVect const & >(&FabArray<FArrayBox>::setVal<FArrayBox>),
+             py::arg("val"), py::arg("region"), py::arg("comp"), py::arg("num_comp"), py::arg("nghost"),
+             "Set the value of num_comp components in the valid region of\n"
+             "each FAB in the FabArray, starting at component comp, as well\n"
+             "as nghost boundary cells, to val, provided they also intersect\n"
+             "with the Box region."
+        )
 
         .def("abs", py::overload_cast< int, int, int >(&FabArray<FArrayBox>::abs<FArrayBox>),
             py::arg("comp"), py::arg("ncomp"), py::arg("nghost")=0
@@ -509,10 +509,16 @@ void init_MultiFab(py::module &m)
         /* simple math */
 
         .def("sum",
-             //py::overload_cast< int, bool >(&MultiFab::sum, py::const_),
+             // py::overload_cast< int, bool >(&MultiFab::sum, py::const_),
              [](MultiFab const & mf, int comp , bool local) { return mf.sum(comp, local); },
              py::arg("comp") = 0, py::arg("local") = false,
              "Returns the sum of component 'comp' over the MultiFab -- no ghost cells are included."
+        )
+        .def("sum",
+             // py::overload_cast< Box const &, int, bool >(&MultiFab::sum, py::const_),
+             [](MultiFab const & mf, Box const & region, int comp , bool local) { return mf.sum(region, comp, local); },
+             py::arg("region"), py::arg("comp") = 0, py::arg("local") = false,
+             "Returns the sum of component 'comp' in the given 'region'. -- no ghost cells are included."
         )
         .def("sum_unique",
              py::overload_cast< int, bool, Periodicity const& >(&MultiFab::sum_unique, py::const_),
@@ -524,7 +530,7 @@ void init_MultiFab(py::module &m)
         )
         .def("sum_unique",
              py::overload_cast< Box const&, int, bool >(&MultiFab::sum_unique, py::const_),
-             py::arg("box"),
+             py::arg("region"),
              py::arg("comp") = 0,
              py::arg("local") = false,
              "Returns the unique sum of component `comp` in the given "
