@@ -507,18 +507,30 @@ void init_MultiFab(py::module &m)
         .def("norm2", py::overload_cast< Vector<int> const & >(&MultiFab::norm2, py::const_))
 
         /* simple math */
+
         .def("sum",
              //py::overload_cast< int, bool >(&MultiFab::sum, py::const_),
              [](MultiFab const & mf, int comp , bool local) { return mf.sum(comp, local); },
              py::arg("comp") = 0, py::arg("local") = false,
              "Returns the sum of component 'comp' over the MultiFab -- no ghost cells are included."
         )
-        .def("sum_unique", &MultiFab::sum_unique,
+        .def("sum_unique",
+             py::overload_cast< int, bool, Periodicity const& >(&MultiFab::sum_unique, py::const_),
              py::arg("comp") = 0,
              py::arg("local") = false,
              py::arg_v("period", Periodicity::NonPeriodic(), "Periodicity.non_periodic()"),
              "Same as sum with local=false, but for non-cell-centered data, this"
              "skips non-unique points that are owned by multiple boxes."
+        )
+        .def("sum_unique",
+             py::overload_cast< Box const&, int, bool >(&MultiFab::sum_unique, py::const_),
+             py::arg("box"),
+             py::arg("comp") = 0,
+             py::arg("local") = false,
+             "Returns the unique sum of component `comp` in the given "
+             "region. Non-unique points owned by multiple boxes in the MultiFab are"
+             "only added once. No ghost cells are included. This function does not take"
+             "periodicity into account in the determination of uniqueness of points."
         )
 
         .def("plus",
