@@ -81,8 +81,14 @@ Base
 
 .. autofunction:: amrex.space3d.AlmostEqual
 
-Index Types
-"""""""""""
+Indexing: Box, IntVect and IndexType
+""""""""""""""""""""""""""""""""""""
+
+`Corresponding AMReX documentation <https://amrex-codes.github.io/amrex/docs_html/Basics.html#box-intvect-and-indextype>`__.
+
+.. autoclass:: amrex.space3d.IntVect
+   :members:
+   :undoc-members:
 
 .. autoclass:: amrex.space3d.Box
    :members:
@@ -106,10 +112,6 @@ Index Types
 
 Vectors
 """""""
-
-.. autoclass:: amrex.space3d.IntVect
-   :members:
-   :undoc-members:
 
 .. autoclass:: amrex.space3d.RealVect
    :members:
