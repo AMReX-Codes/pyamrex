@@ -104,18 +104,23 @@ void init_Box(py::module &m) {
              py::arg("small"), py::arg("big"), py::arg("t")
         )
 
-        .def_property_readonly("lo_vect", [](Box const & bx){ return bx.smallEnd(); })
-        .def_property_readonly("hi_vect", [](Box const & bx){ return bx.bigEnd(); })
-        .def_property_readonly("small_end", [](Box const & bx){ return bx.smallEnd(); })
-        .def_property_readonly("big_end", [](Box const & bx){ return bx.bigEnd(); })
-        /*
+        .def_property("lo_vect",
+            [](Box const & bx){ return bx.smallEnd(); },
+            [](Box & bx, IntVect const & bg){ bx.setSmall(bg); }
+        )
+        .def_property("hi_vect",
+            [](Box const & bx){ return bx.bigEnd(); },
+            [](Box & bx, IntVect const & bg){ bx.setBig(bg); }
+        )
         .def_property("small_end",
-            py::overload_cast<>(&Box::smallEnd, py::const_),
-            py::overload_cast< IntVect const & >(&Box::setSmall))
+            [](Box const & bx){ return bx.smallEnd(); },
+            [](Box & bx, IntVect const & bg){ bx.setSmall(bg); }
+        )
         .def_property("big_end",
-            &Box::bigEnd,
-            &Box::setBig)
-        */
+            [](Box const & bx){ return bx.bigEnd(); },
+            [](Box & bx, IntVect const & bg){ bx.setBig(bg); }
+        )
+
         .def_property("type",
             py::overload_cast<>(&Box::type, py::const_),
             &Box::setType)

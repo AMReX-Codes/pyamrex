@@ -11,6 +11,18 @@ def box():
     return amr.Box((0, 0, 0), (127, 127, 127))
 
 
+def test_box_setget(box):
+    print(box.length())
+    print(box.numPts())
+    assert box.numPts() == 128 * 128 * 128
+
+    box.small_end = amr.IntVect(3)
+    assert box.numPts() == 125 * 125 * 125
+
+    box.big_end = amr.IntVect(40)
+    assert box.numPts() == 38 * 38 * 38
+
+
 def test_length(box):
     print(box.length())
     assert box.length() == amr.IntVect(128, 128, 128)
