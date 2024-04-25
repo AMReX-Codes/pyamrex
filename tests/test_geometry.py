@@ -75,7 +75,7 @@ def test_probDomain(box, real_box):
     lo = [0, -1, 1]
     hi = [1, 0, 2]
     rb = amr.RealBox(lo, hi)
-    gm.ProbDomain(rb)
+    gm.prob_domain = rb
     assert (
         np.isclose(gm.ProbLo(0), lo[0])
         and np.isclose(gm.ProbLo(1), lo[1])
@@ -105,8 +105,8 @@ def test_domain(box, real_box):
     gm.define(box, real_box, coord, is_periodic)
     assert gm.ok()
 
-    gm.Domain(bx)
-    assert gm.Domain().small_end == bx.small_end and gm.Domain().big_end == bx.big_end
+    gm.domain = bx
+    assert gm.domain.small_end == bx.small_end and gm.domain.big_end == bx.big_end
 
 
 @pytest.mark.skipif(amr.Config.spacedim != 3, reason="Requires AMREX_SPACEDIM = 3")
@@ -130,7 +130,7 @@ def test_periodic_queries(box, real_box):
 @pytest.mark.skipif(amr.Config.spacedim != 3, reason="Requires AMREX_SPACEDIM = 3")
 def test_periodicity(geometry):
     gm = geometry
-    bx = gm.Domain()
+    bx = gm.domain
 
     for _non_periodic_coord in [0, 1]:
         error_thrown = False
@@ -166,8 +166,8 @@ def test_data(geometry, box, real_box):
     geometry_data = geometry.data()
     gd = geometry_data
 
-    assert gd.domain.small_end == box.small_end == gd.Domain().small_end
-    assert gd.domain.big_end == box.big_end == gd.Domain().big_end
+    assert gd.domain.small_end == box.small_end == gd.domain.small_end
+    assert gd.domain.big_end == box.big_end == gd.domain.big_end
 
     assert amr.AlmostEqual(gd.prob_domain, real_box)
     assert np.allclose(real_box.lo(), gd.prob_domain.lo())
@@ -219,14 +219,14 @@ def test_coarsen_refine(geometry):
     gmc = amr.Geometry(bx, rb, 1, [0, 0, 1])
     cv = amr.IntVect(2, 2, 1)
     gmc.coarsen(cv)
-    assert gmc.Domain().small_end == amr.IntVect(-1, -1, -3)
-    assert gmc.Domain().big_end == amr.IntVect(2, 2, 6)
+    assert gmc.domain.small_end == amr.IntVect(-1, -1, -3)
+    assert gmc.domain.big_end == amr.IntVect(2, 2, 6)
 
     gmr = amr.Geometry(bx, rb, 1, [0, 0, 1])
     rv = amr.IntVect(2, 2, 3)
     gmr.refine(rv)
-    assert gmr.Domain().small_end == amr.IntVect(-2, -4, -9)
-    assert gmr.Domain().big_end == amr.IntVect(9, 11, 20)
+    assert gmr.domain.small_end == amr.IntVect(-2, -4, -9)
+    assert gmr.domain.big_end == amr.IntVect(9, 11, 20)
 
 
 @pytest.mark.skipif(amr.Config.spacedim != 3, reason="Requires AMREX_SPACEDIM = 3")

@@ -330,7 +330,7 @@ def test_per_cell(empty_particle_container, std_geometry, std_particle):
         real_arrays = pt.get_struct_of_arrays().get_real_data()
         sum_1 += np.sum(real_arrays[1])
     print(sum_1)
-    ncells = std_geometry.Domain().numPts()
+    ncells = std_geometry.domain.numPts()
     print("ncells from box", ncells)
     print("NumberOfParticles", pc.number_of_particles_at_level(0))
     assert (
