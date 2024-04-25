@@ -240,30 +240,21 @@ def test_mfab_ops(boxarr, distmap, nghost):
     src.set_val(30.0, 2, 1)
     dst.set_val(0.0, 0, 1)
 
-    # dst.add(src, 2, 0, 1, nghost)
-    # dst.subtract(src, 1, 0, 1, nghost)
-    # dst.multiply(src, 0, 0, 1, nghost)
-    # dst.divide(src, 1, 0, 1, nghost)
-
-    dst.add(dst, src, 2, 0, 1, nghost)
-    dst.subtract(dst, src, 1, 0, 1, nghost)
-    dst.multiply(dst, src, 0, 0, 1, nghost)
-    dst.divide(dst, src, 1, 0, 1, nghost)
+    dst.add(src, 2, 0, 1, nghost)
+    dst.subtract(src, 1, 0, 1, nghost)
+    dst.multiply(src, 0, 0, 1, nghost)
+    dst.divide(src, 1, 0, 1, nghost)
 
     print(dst.min(0))
     np.testing.assert_allclose(dst.min(0), 5.0)
     np.testing.assert_allclose(dst.max(0), 5.0)
 
-    # dst.xpay(2.0, src, 0, 0, 1, nghost)
-    # dst.saxpy(2.0, src, 1, 0, 1, nghost)
-    dst.xpay(dst, 2.0, src, 0, 0, 1, nghost)
-    dst.saxpy(dst, 2.0, src, 1, 0, 1, nghost)
+    dst.xpay(2.0, src, 0, 0, 1, nghost)
+    dst.saxpy(2.0, src, 1, 0, 1, nghost)
     np.testing.assert_allclose(dst.min(0), 60.0)
     np.testing.assert_allclose(dst.max(0), 60.0)
 
-    # dst.lin_comb(6.0, src, 1,
-    #             1.0, src, 2, 0, 1, nghost)
-    dst.lin_comb(dst, 6.0, src, 1, 1.0, src, 2, 0, 1, nghost)
+    dst.lin_comb(6.0, src, 1, 1.0, src, 2, 0, 1, nghost)
     np.testing.assert_allclose(dst.min(0), 150.0)
     np.testing.assert_allclose(dst.max(0), 150.0)
 
