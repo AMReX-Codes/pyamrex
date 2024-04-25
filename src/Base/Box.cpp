@@ -133,13 +133,15 @@ void init_Box(py::module &m) {
             "Return IntVect of lengths of the Box")
         .def("length",
             py::overload_cast<int>(&Box::length, py::const_),
+            py::arg("dir"),
             "Return the length of the Box in given direction.")
         .def("numPts", &Box::numPts,
              "Return the number of points in the Box.")
 
         .def_property_readonly("is_empty", &Box::isEmpty)
         .def_property_readonly("ok", &Box::ok)
-        .def_property_readonly("cell_centered", &Box::cellCentered)
+        .def_property_readonly("cell_centered", &Box::cellCentered,
+            "Returns true if Box is cell-centered in all indexing directions.")
         .def_property_readonly("num_pts", &Box::numPts)
         .def_property_readonly("d_num_pts", &Box::d_numPts)
         .def_property_readonly("volume", &Box::volume)
@@ -147,12 +149,26 @@ void init_Box(py::module &m) {
         .def_property_readonly("is_square", &Box::isSquare)
 
         .def("contains",
-            py::overload_cast< IntVect const & >(&Box::contains, py::const_))
+            py::overload_cast< IntVect const & >(&Box::contains, py::const_),
+            py::arg("p"),
+            "Returns true if argument is contained within Box."
+        )
         .def("strictly_contains",
-            py::overload_cast< IntVect const & >(&Box::strictly_contains, py::const_))
-        .def("intersects", &Box::intersects)
-        .def("same_size", &Box::sameSize)
-        .def("same_type", &Box::sameType)
+            py::overload_cast< IntVect const & >(&Box::strictly_contains, py::const_),
+            py::arg("p"),
+            "Returns true if argument is strictly contained within Box."
+        )
+        .def("intersects", &Box::intersects, py::arg("b"),
+            "Returns true if Boxes have non-null intersections.\n"
+            "It is an error if the Boxes have different types."
+        )
+        .def("same_size", &Box::sameSize, py::arg("b"),
+            "Returns true is Boxes same size, ie translates of each other,.\n"
+            "It is an error if they have different types."
+        )
+        .def("same_type", &Box::sameType, py::arg("b"),
+            "Returns true if Boxes have same type."
+        )
         .def("normalize", &Box::normalize)
         // longside
         // shortside
@@ -161,7 +177,16 @@ void init_Box(py::module &m) {
         // atOffset3d
         // setRange
         // shiftHalf
-        .def("shift", [](Box & bx, IntVect const& iv) { return bx.shift(iv); })
+        .def("shift",
+             py::overload_cast< int, int >(&Box::shift),
+             py::arg("dir"), py::arg("nzones"),
+             "Shift this Box nzones indexing positions in coordinate direction dir."
+        )
+        .def("shift",
+            py::overload_cast< IntVect const & >(&Box::shift),
+            py::arg("iv"),
+            "Equivalent to b.shift(0,iv[0]).shift(1,iv[1]) ..."
+        )
 
         .def(py::self + IntVect())
         .def(py::self - IntVect())
@@ -169,60 +194,97 @@ void init_Box(py::module &m) {
         .def(py::self -= IntVect())
 
         .def("convert",
-             py::overload_cast< IndexType >(&Box::convert))
+             py::overload_cast< IndexType >(&Box::convert),
+             py::arg("typ"),
+             "Convert the Box from the current type into the\n"
+             "argument type.  This may change the Box coordinates:\n"
+             "type CELL -> NODE : increase coordinate by one on high end\n"
+             "type NODE -> CELL : reduce coordinate by one on high end\n"
+             "other type mappings make no change."
+        )
         .def("convert",
-             py::overload_cast< IntVect const & >(&Box::convert))
+             py::overload_cast< IntVect const & >(&Box::convert),
+             py::arg("typ"),
+             "Convert the Box from the current type into the\n"
+             "argument type.  This may change the Box coordinates:\n"
+             "type CELL -> NODE : increase coordinate by one on high end\n"
+             "type NODE -> CELL : reduce coordinate by one on high end\n"
+             "other type mappings make no change."
+        )
 
         .def("grow",
              py::overload_cast< int >(&Box::grow),
-             py::arg("n_cell")
+             py::arg("n_cell"),
+             "Grow Box in all directions by given amount.\n"
+             "NOTE: n_cell negative shrinks the Box by that number of cells."
         )
         .def("grow",
              py::overload_cast< IntVect const & >(&Box::grow),
-             py::arg("n_cells")
+             py::arg("n_cells"),
+             "Grow Box in each direction by specified amount."
         )
         .def("grow",
              py::overload_cast< int, int >(&Box::grow),
-             py::arg("idir"), py::arg("n_cell")
+             py::arg("idir"), py::arg("n_cell"),
+             "Grow the Box on the low and high end by n_cell cells\n"
+             "in direction idir."
         )
         .def("grow",
              py::overload_cast< Direction, int >(&Box::grow),
              py::arg("d"), py::arg("n_cell")
         )
+        /* TODO: Bind Orientation class first
+        .def("grow",
+             py::overload_cast< Orientation, int >(&Box::grow),
+             py::arg("face"), py::arg("n_cell")=1,
+             "Grow in the direction of the given face."
+        )
+        */
         .def("grow_low",
              py::overload_cast< int, int >(&Box::growLo),
-             py::arg("idir"), py::arg("n_cell")
+             py::arg("idir"), py::arg("n_cell")=1,
+             "Grow the Box on the low end by n_cell cells in direction idir.\n"
+             "NOTE: n_cell negative shrinks the Box by that number of cells."
         )
         .def("grow_low",
              py::overload_cast< Direction, int >(&Box::growLo),
-             py::arg("d"), py::arg("n_cell")
+             py::arg("d"), py::arg("n_cell")=1
         )
         .def("grow_high",
              py::overload_cast< int, int >(&Box::growHi),
-             py::arg("idir"), py::arg("n_cell")
+             py::arg("idir"), py::arg("n_cell")=1,
+             "Grow the Box on the high end by n_cell cells in\n"
+             "direction idir.  NOTE: n_cell negative shrinks the Box by that\n"
+             "number of cells."
         )
         .def("grow_high",
              py::overload_cast< Direction, int >(&Box::growHi),
-             py::arg("d"), py::arg("n_cell")
+             py::arg("d"), py::arg("n_cell")=1
         )
 
         .def("surrounding_nodes",
-             py::overload_cast< >(&Box::surroundingNodes))
+             py::overload_cast< >(&Box::surroundingNodes),
+             "Convert to NODE type in all directions.")
         .def("surrounding_nodes",
              py::overload_cast< int >(&Box::surroundingNodes),
-             py::arg("dir"))
+             py::arg("dir"),
+             "Convert to NODE type in given direction.")
         .def("surrounding_nodes",
              py::overload_cast< Direction >(&Box::surroundingNodes),
-             py::arg("d"))
+             py::arg("d"),
+             "Convert to NODE type in given direction.")
 
         .def("enclosed_cells",
-             py::overload_cast< >(&Box::enclosedCells))
+             py::overload_cast< >(&Box::enclosedCells),
+             "Convert to CELL type in all directions.")
         .def("enclosed_cells",
              py::overload_cast< int >(&Box::enclosedCells),
-             py::arg("dir"))
+             py::arg("dir"),
+             "Convert to CELL type in given direction.")
         .def("enclosed_cells",
              py::overload_cast< Direction >(&Box::enclosedCells),
-             py::arg("d"))
+             py::arg("d"),
+             "Convert to CELL type in given direction.")
 
         .def("make_slab",
              &Box::makeSlab,
@@ -243,14 +305,20 @@ void init_Box(py::module &m) {
                  auto box_iter = Box3DConstIter(bx);
                  return py::make_iterator(box_iter.begin(), box_iter.end());
              },
-            // Essential: keep object alive while iterator exists
+             // Essential: keep object alive while iterator exists
              py::keep_alive<0, 1>()
         )
 
         .def("lbound", [](Box const &, Box const & other){ return lbound(other); })
         .def("ubound", [](Box const &, Box const & other){ return ubound(other); })
-        .def("begin", [](Box const &, Box const & other){ return begin(other); })
-        .def("end", [](Box const &, Box const & other){ return end(other); })
+        .def("begin",
+            [](Box const &, Box const & other){ return begin(other); },
+            py::arg("box")
+        )
+        .def("end",
+            [](Box const &, Box const & other){ return end(other); },
+            py::arg("box")
+        )
         // already an attribute
         //.def("length", [](Box const &, Box const & other){ return length(other); })
     ;
