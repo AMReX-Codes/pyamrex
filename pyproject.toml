@@ -20,4 +20,5 @@ ignore = ["E402"]
 
 
 [tool.isort]
+known_first_party = ["amrex"]
 profile = "black"
