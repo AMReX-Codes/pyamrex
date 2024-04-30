@@ -46,7 +46,17 @@ You can also add an acknowledgement, e.g.,
 Further pyAMReX References
 **************************
 
+- Myers A, Zhang W, Almgren A, Antoun T, Bell J, Huebl A, Sinn A.
+  **AMReX and pyAMReX: Looking Beyond ECP**.
+  *submitted for review*, 2024.
+  `arXiv:2403.12179 <https://arxiv.org/abs/2403.12179>`__
+
 Works using pyAMReX:
+
+- Sandberg R T, Lehe R, Mitchell C E, Garten M, Myers A, Qiang J, Vay J-L and Huebl A.
+  **Synthesizing Particle-in-Cell Simulations Through Learning and GPU Computing for Hybrid Particle Accelerator Beamlines**.
+  Proc. of Platform for Advanced Scientific Computing (PASC'24), *in print*, 2024.
+  `arXiv:2402.17248 <http://arxiv.org/abs/2402.17248>`__
 
 - Huebl A et al.,
   **Exascale and ML Models for Accelerator Simulations**.

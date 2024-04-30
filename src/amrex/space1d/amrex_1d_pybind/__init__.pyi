@@ -3458,36 +3458,98 @@ class Box:
     def __iter__(self) -> typing.Iterator[IntVect]: ...
     def __repr__(self) -> str: ...
     def __sub__(self, arg0: IntVect) -> Box: ...
-    def begin(self, arg0: Box) -> Dim3: ...
-    def contains(self, arg0: IntVect) -> bool: ...
+    def begin(self, box: Box) -> Dim3: ...
+    def contains(self, p: IntVect) -> bool:
+        """
+        Returns true if argument is contained within Box.
+        """
+
     @typing.overload
-    def convert(self, arg0: IndexType) -> Box: ...
+    def convert(self, typ: IndexType) -> Box:
+        """
+        Convert the Box from the current type into the
+        argument type.  This may change the Box coordinates:
+        type CELL -> NODE : increase coordinate by one on high end
+        type NODE -> CELL : reduce coordinate by one on high end
+        other type mappings make no change.
+        """
+
     @typing.overload
-    def convert(self, arg0: IntVect) -> Box: ...
+    def convert(self, typ: IntVect) -> Box:
+        """
+        Convert the Box from the current type into the
+        argument type.  This may change the Box coordinates:
+        type CELL -> NODE : increase coordinate by one on high end
+        type NODE -> CELL : reduce coordinate by one on high end
+        other type mappings make no change.
+        """
+
     @typing.overload
-    def enclosed_cells(self) -> Box: ...
+    def enclosed_cells(self) -> Box:
+        """
+        Convert to CELL type in all directions.
+        """
+
     @typing.overload
-    def enclosed_cells(self, dir: int) -> Box: ...
+    def enclosed_cells(self, dir: int) -> Box:
+        """
+        Convert to CELL type in given direction.
+        """
+
     @typing.overload
-    def enclosed_cells(self, d: Direction) -> Box: ...
-    def end(self, arg0: Box) -> Dim3: ...
+    def enclosed_cells(self, d: Direction) -> Box:
+        """
+        Convert to CELL type in given direction.
+        """
+
+    def end(self, box: Box) -> Dim3: ...
     @typing.overload
-    def grow(self, n_cell: int) -> Box: ...
+    def grow(self, n_cell: int) -> Box:
+        """
+        Grow Box in all directions by given amount.
+        NOTE: n_cell negative shrinks the Box by that number of cells.
+        """
+
     @typing.overload
-    def grow(self, n_cells: IntVect) -> Box: ...
+    def grow(self, n_cells: IntVect) -> Box:
+        """
+        Grow Box in each direction by specified amount.
+        """
+
     @typing.overload
-    def grow(self, idir: int, n_cell: int) -> Box: ...
+    def grow(self, idir: int, n_cell: int) -> Box:
+        """
+        Grow the Box on the low and high end by n_cell cells
+        in direction idir.
+        """
+
     @typing.overload
     def grow(self, d: Direction, n_cell: int) -> Box: ...
     @typing.overload
-    def grow_high(self, idir: int, n_cell: int) -> Box: ...
+    def grow_high(self, idir: int, n_cell: int = 1) -> Box:
+        """
+        Grow the Box on the high end by n_cell cells in
+        direction idir.  NOTE: n_cell negative shrinks the Box by that
+        number of cells.
+        """
+
     @typing.overload
-    def grow_high(self, d: Direction, n_cell: int) -> Box: ...
+    def grow_high(self, d: Direction, n_cell: int = 1) -> Box: ...
     @typing.overload
-    def grow_low(self, idir: int, n_cell: int) -> Box: ...
+    def grow_low(self, idir: int, n_cell: int = 1) -> Box:
+        """
+        Grow the Box on the low end by n_cell cells in direction idir.
+        NOTE: n_cell negative shrinks the Box by that number of cells.
+        """
+
     @typing.overload
-    def grow_low(self, d: Direction, n_cell: int) -> Box: ...
-    def intersects(self, arg0: Box) -> bool: ...
+    def grow_low(self, d: Direction, n_cell: int = 1) -> Box: ...
+    def intersects(self, b: Box) -> bool:
+        """
+        Returns true if Boxes have non-null intersections.
+        It is an error if the Boxes have different types.
+        """
+
     def lbound(self, arg0: Box) -> Dim3: ...
     @typing.overload
     def length(self) -> IntVect:
@@ -3496,7 +3558,7 @@ class Box:
         """
 
     @typing.overload
-    def length(self, arg0: int) -> int:
+    def length(self, dir: int) -> int:
         """
         Return the length of the Box in given direction.
         """
@@ -3508,19 +3570,59 @@ class Box:
         Return the number of points in the Box.
         """
 
-    def same_size(self, arg0: Box) -> bool: ...
-    def same_type(self, arg0: Box) -> bool: ...
-    def shift(self, arg0: IntVect) -> Box: ...
-    def strictly_contains(self, arg0: IntVect) -> bool: ...
+    def same_size(self, b: Box) -> bool:
+        """
+        Returns true is Boxes same size, ie translates of each other,.
+        It is an error if they have different types.
+        """
+
+    def same_type(self, b: Box) -> bool:
+        """
+        Returns true if Boxes have same type.
+        """
+
     @typing.overload
-    def surrounding_nodes(self) -> Box: ...
+    def shift(self, dir: int, nzones: int) -> Box:
+        """
+        Shift this Box nzones indexing positions in coordinate direction dir.
+        """
+
     @typing.overload
-    def surrounding_nodes(self, dir: int) -> Box: ...
+    def shift(self, iv: IntVect) -> Box:
+        """
+        Equivalent to b.shift(0,iv[0]).shift(1,iv[1]) ...
+        """
+
+    def strictly_contains(self, p: IntVect) -> bool:
+        """
+        Returns true if argument is strictly contained within Box.
+        """
+
     @typing.overload
-    def surrounding_nodes(self, d: Direction) -> Box: ...
+    def surrounding_nodes(self) -> Box:
+        """
+        Convert to NODE type in all directions.
+        """
+
+    @typing.overload
+    def surrounding_nodes(self, dir: int) -> Box:
+        """
+        Convert to NODE type in given direction.
+        """
+
+    @typing.overload
+    def surrounding_nodes(self, d: Direction) -> Box:
+        """
+        Convert to NODE type in given direction.
+        """
+
     def ubound(self, arg0: Box) -> Dim3: ...
     @property
-    def cell_centered(self) -> bool: ...
+    def cell_centered(self) -> bool:
+        """
+        Returns true if Box is cell-centered in all indexing directions.
+        """
+
     @property
     def d_num_pts(self) -> float: ...
     @property
@@ -4049,23 +4151,7 @@ class FabFactory_FArrayBox:
 
 class Geometry(CoordSys):
     @typing.overload
-    def Domain(self) -> Box:
-        """
-        Return rectangular domain
-        """
-
-    @typing.overload
-    def Domain(self, arg0: Box) -> None: ...
-    @typing.overload
-    def ProbDomain(self) -> RealBox:
-        """
-        Return problem domain
-        """
-
-    @typing.overload
-    def ProbDomain(self, arg0: RealBox) -> None: ...
-    @typing.overload
-    def ProbHi(self, arg0: int) -> float:
+    def ProbHi(self, dir: int) -> float:
         """
         Get the hi end of the problem domain in specified direction
         """
@@ -4084,7 +4170,7 @@ class Geometry(CoordSys):
         """
 
     @typing.overload
-    def ProbLo(self, arg0: int) -> float:
+    def ProbLo(self, dir: int) -> float:
         """
         Get the lo end of the problem domain in specified direction
         """
@@ -4131,7 +4217,7 @@ class Geometry(CoordSys):
     ) -> None: ...
     def __repr__(self) -> str: ...
     def __str__(self) -> str: ...
-    def coarsen(self, arg0: IntVect) -> None: ...
+    def coarsen(self, rr: IntVect) -> None: ...
     def data(self) -> GeometryData:
         """
         Returns non-static copy of geometry's stored data
@@ -4139,24 +4225,24 @@ class Geometry(CoordSys):
 
     def define(
         self,
-        arg0: Box,
-        arg1: RealBox,
-        arg2: int,
-        arg3: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(1)],
+        dom: Box,
+        rb: RealBox,
+        coord: int,
+        is_per: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(1)],
     ) -> None:
         """
         Set geometry
         """
 
     @typing.overload
-    def growNonPeriodicDomain(self, arg0: IntVect) -> Box: ...
+    def growNonPeriodicDomain(self, ngrow: IntVect) -> Box: ...
     @typing.overload
-    def growNonPeriodicDomain(self, arg0: int) -> Box: ...
+    def growNonPeriodicDomain(self, ngrow: int) -> Box: ...
     @typing.overload
-    def growPeriodicDomain(self, arg0: IntVect) -> Box: ...
+    def growPeriodicDomain(self, ngrow: IntVect) -> Box: ...
     @typing.overload
-    def growPeriodicDomain(self, arg0: int) -> Box: ...
-    def insideRoundOffDomain(self, arg0: float) -> bool:
+    def growPeriodicDomain(self, ngrow: int) -> Box: ...
+    def insideRoundOffDomain(self, x: float) -> bool:
         """
         Returns true if a point is inside the roundoff domain. All particles with positions inside the roundoff domain are sure to be mapped to cells inside the Domain() box. Note that the same need not be true for all points inside ProbDomain()
         """
@@ -4185,12 +4271,12 @@ class Geometry(CoordSys):
         Return list indicating whether domain is periodic in each direction
         """
 
-    def outsideRoundOffDomain(self, arg0: float) -> bool:
+    def outsideRoundOffDomain(self, x: float) -> bool:
         """
         Returns true if a point is outside the roundoff domain. All particles with positions inside the roundoff domain are sure to be mapped to cells inside the Domain() box. Note that the same need not be true for all points inside ProbDomain()
         """
 
-    def period(self, arg0: int) -> int:
+    def period(self, dir: int) -> int:
         """
         Return the period in the specified direction
         """
@@ -4198,16 +4284,37 @@ class Geometry(CoordSys):
     @typing.overload
     def periodicity(self) -> Periodicity: ...
     @typing.overload
-    def periodicity(self, arg0: Box) -> Periodicity:
+    def periodicity(self, b: Box) -> Periodicity:
         """
         Return Periodicity object with lengths determined by input Box
         """
 
-    def refine(self, arg0: IntVect) -> None: ...
+    def refine(self, rr: IntVect) -> None: ...
     def setPeriodicity(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(1)],
-    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(1)]: ...
+        period: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(1)],
+    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(1)]:
+        """
+        Set periodicity flags and return the old flags.
+        Note that, unlike Periodicity class, the flags are just boolean.
+        """
+
+    @property
+    def domain(self) -> Box:
+        """
+        The rectangular domain (index space).
+        """
+
+    @domain.setter
+    def domain(self, arg1: Box) -> None: ...
+    @property
+    def prob_domain(self) -> RealBox:
+        """
+        The problem domain (real).
+        """
+
+    @prob_domain.setter
+    def prob_domain(self, arg1: RealBox) -> None: ...
 
 class GeometryData:
     @typing.overload
@@ -4279,19 +4386,38 @@ class GeometryData:
         """
 
     @property
-    def coord(self) -> int: ...
+    def coord(self) -> int:
+        """
+        The Coordinates type.
+        """
+
     @property
-    def domain(self) -> Box: ...
+    def domain(self) -> Box:
+        """
+        The index domain.
+        """
+
     @property
     def dx(
         self,
-    ) -> typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(1)]: ...
+    ) -> typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(1)]:
+        """
+        The cellsize for each coordinate direction.
+        """
+
     @property
     def is_periodic(
         self,
-    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(1)]: ...
+    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(1)]:
+        """
+        Returns whether the domain is periodic in each coordinate direction.
+        """
+
     @property
-    def prob_domain(self) -> RealBox: ...
+    def prob_domain(self) -> RealBox:
+        """
+        The problem domain (real).
+        """
 
 class IndexType:
     class CellIndex:
