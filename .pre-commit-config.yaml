@@ -85,11 +85,11 @@ repos:
   hooks:
   - id: isort
     name: isort (python)
-    args: ['--profile black']
+    args: ["--profile", "black", "--filter-files"]
 
 # Python Formatting
 - repo: https://github.com/psf/black
-  rev: 24.4.0 # Keep in sync with blacken-docs
+  rev: 24.4.2 # Keep in sync with blacken-docs
   hooks:
   - id: black
 - repo: https://github.com/asottile/blacken-docs
@@ -97,13 +97,13 @@ repos:
   hooks:
   - id: blacken-docs
     additional_dependencies:
-    - black==24.4.0 # keep in sync with black hook
+    - black==24.4.2 # keep in sync with black hook
   # TODO: black-jupyter
 
 # Python: Ruff linter
 #   https://docs.astral.sh/ruff/
 - repo: https://github.com/astral-sh/ruff-pre-commit
-  rev: v0.4.1
+  rev: v0.4.2
   hooks:
     - id: ruff
       args: [--fix, --exit-non-zero-on-fix]
