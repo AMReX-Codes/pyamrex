@@ -38,7 +38,9 @@ void init_PODVector(py::module &);
 void init_Utility(py::module &);
 void init_Vector(py::module &);
 void init_Version(py::module &);
-
+#ifdef AMREX_USE_MPI
+void init_MPMD(py::module &);
+#endif
 
 #if AMREX_SPACEDIM == 1
 PYBIND11_MODULE(amrex_1d_pybind, m) {
@@ -108,6 +110,9 @@ PYBIND11_MODULE(amrex_3d_pybind, m) {
     init_ParticleContainer(m);
     init_AmrMesh(m);
 
+#ifdef AMREX_USE_MPI
+    init_MPMD(m);
+#endif
     // Wrappers around standalone functions
     init_PlotFileUtil(m);
     init_Utility(m);

@@ -33,5 +33,6 @@ foreach(D IN LISTS AMReX_SPACEDIM)
         Utility.cpp
         Vector.cpp
         Version.cpp
+        MPMD.cpp
     )
 endforeach()
