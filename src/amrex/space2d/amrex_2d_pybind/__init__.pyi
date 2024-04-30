@@ -96,6 +96,14 @@ __all__ = [
     "MFInfo",
     "MFItInfo",
     "MFIter",
+    "MPMD_AppNum",
+    "MPMD_Copier",
+    "MPMD_Finalize",
+    "MPMD_Initialize_without_split",
+    "MPMD_Initialized",
+    "MPMD_MyProc",
+    "MPMD_MyProgId",
+    "MPMD_NProcs",
     "MultiFab",
     "PODVector_int_arena",
     "PODVector_int_pinned",
@@ -256,6 +264,7 @@ __all__ = [
     "finalize",
     "htod_memcpy",
     "initialize",
+    "initialize_when_MPMD",
     "initialized",
     "lbound",
     "length",
@@ -4676,6 +4685,18 @@ class MFIter:
     def is_valid(self) -> bool: ...
     @property
     def length(self) -> int: ...
+
+class MPMD_Copier:
+    @typing.overload
+    def __init__(self, arg0: bool) -> None: ...
+    @typing.overload
+    def __init__(
+        self, ba: BoxArray, dm: DistributionMapping, send_ba: bool = False
+    ) -> None: ...
+    def box_array(self) -> BoxArray: ...
+    def distribution_map(self) -> DistributionMapping: ...
+    def recv(self, arg0: FabArray_FArrayBox, arg1: int, arg2: int) -> None: ...
+    def send(self, arg0: FabArray_FArrayBox, arg1: int, arg2: int) -> None: ...
 
 class MultiFab(FabArray_FArrayBox):
     @staticmethod
@@ -16205,6 +16226,13 @@ def AlmostEqual(rb1: RealBox, rb2: RealBox, eps: float = 0.0) -> bool:
     Determine if two boxes are equal to within a tolerance
     """
 
+def MPMD_AppNum() -> int: ...
+def MPMD_Finalize() -> None: ...
+def MPMD_Initialize_without_split(arg0: list) -> None: ...
+def MPMD_Initialized() -> bool: ...
+def MPMD_MyProc() -> int: ...
+def MPMD_MyProgId() -> int: ...
+def MPMD_NProcs() -> int: ...
 def The_Arena() -> Arena: ...
 def The_Async_Arena() -> Arena: ...
 def The_Cpu_Arena() -> Arena: ...
@@ -16282,6 +16310,7 @@ def initialize(arg0: list) -> AMReX:
     Initialize AMReX library
     """
 
+def initialize_when_MPMD(arg0: list, arg1: typing.Any) -> AMReX: ...
 def initialized() -> bool:
     """
     Returns true if there are any currently-active and initialized AMReX instances (i.e. one for which amrex::Initialize has been called, and amrex::Finalize has not). Otherwise false.
