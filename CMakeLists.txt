@@ -125,13 +125,6 @@ add_subdirectory(src)
 
 # set source language, properties, etc.
 foreach(D IN LISTS AMReX_SPACEDIM)
-    # C++ properties: at least a C++17 capable compiler is needed
-    target_compile_features(pyAMReX_${D}d PUBLIC cxx_std_17)
-    set_target_properties(pyAMReX_${D}d PROPERTIES
-        CXX_EXTENSIONS OFF
-        CXX_STANDARD_REQUIRED ON
-    )
-
     # link dependencies
     target_link_libraries(pyAMReX_${D}d PUBLIC AMReX::amrex_${D}d)
     target_link_libraries(pyAMReX_${D}d PRIVATE pybind11::module pybind11::windows_extras)
@@ -181,6 +174,7 @@ foreach(D IN LISTS AMReX_SPACEDIM)
         pybind11_strip(pyAMReX_${D}d)
     endif()
 
+    # C++ properties: at least a C++17 capable compiler is needed
     # AMReX helper function: propagate CUDA specific target & source properties
     if(AMReX_GPU_BACKEND STREQUAL CUDA)
         setup_target_for_cuda_compilation(pyAMReX_${D}d)
@@ -188,6 +182,12 @@ foreach(D IN LISTS AMReX_SPACEDIM)
         set_target_properties(pyAMReX_${D}d PROPERTIES
             CUDA_EXTENSIONS OFF
             CUDA_STANDARD_REQUIRED ON
+        )
+    else()
+        target_compile_features(pyAMReX_${D}d PUBLIC cxx_std_17)
+        set_target_properties(pyAMReX_${D}d PROPERTIES
+            CXX_EXTENSIONS OFF
+            CXX_STANDARD_REQUIRED ON
         )
     endif()
 endforeach()
