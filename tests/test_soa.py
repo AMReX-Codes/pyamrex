@@ -50,7 +50,11 @@ def test_soa_init():
 
 
 def test_soa_from_tile():
-    pt = amr.ParticleTile_2_1_3_1_default()
+    pt = (
+        amr.ParticleTile_2_1_3_1_managed()
+        if amr.Config.have_gpu
+        else amr.ParticleTile_2_1_3_1_default()
+    )
     p = amr.Particle_2_1(1.0, 2.0, 3, rdata_0=4.0, rdata_1=5.0, rdata_2=6.0, idata_1=5)
     sp = amr.Particle_5_2(1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9, 10)
     pt.push_back(p)

@@ -11,9 +11,6 @@ import amrex.space3d as amr
 def test_mfab_numpy(mfab):
     """Used in docs/source/usage/compute.rst"""
 
-    class Config:
-        have_gpu = False
-
     # Manual: Compute Mfab Detailed START
     # finest active MR level, get from a
     # simulation's AmrMesh object, e.g.:
@@ -36,13 +33,9 @@ def test_mfab_numpy(mfab):
             bx = mfi.tilebox().grow(ngv)
             print(bx)
 
-            # numpy representation: non-
+            # numpy/cupy representation: non-
             # copying view, w/ guard/ghost
-            field = (
-                mfab.array(mfi).to_cupy()
-                if Config.have_gpu
-                else mfab.array(mfi).to_numpy()
-            )
+            field = mfab.array(mfi).to_xp()
 
             # notes on indexing in field:
             # - numpy uses locally zero-based indexing
@@ -64,14 +57,15 @@ def test_mfab_numpy(mfab):
         # mfab = sim.get_field(lev=lev)
         # Config = sim.extension.Config
 
-        field_list = mfab.to_cupy() if Config.have_gpu else mfab.to_numpy()
+        field_list = mfab.to_xp()
 
         for field in field_list:
             field[()] = 42.0
     # Manual: Compute Mfab Simple END
 
 
-def test_mfab_loop(mfab):
+@pytest.mark.skipif(amr.Config.have_gpu, reason="This test only runs on CPU")
+def test_mfab_loop_slow(mfab):
     ngv = mfab.n_grow_vect
     print(f"\n  mfab={mfab}, mfab.n_grow_vect={ngv}")
 
@@ -102,11 +96,8 @@ def test_mfab_loop(mfab):
                 # print(i,j,k)
                 marr[i, j, k] = 10.0 * i
 
-        # note: offset from index space in numpy
-        #   in numpy, we start indices from zero, not small_end
-
-        # numpy representation: non-copying view, including the
-        # guard/ghost region
+        # numpy representation: non-copying view, zero-indexed,
+        # includes the guard/ghost region
         marr_np = marr.to_numpy()
 
         # check the values at start/end are the same: first component
@@ -119,12 +110,7 @@ def test_mfab_loop(mfab):
             assert marr_np[0, 0, 0, n] == marr[small_end_comp]
             assert marr_np[-1, -1, -1, n] == marr[big_end_comp]
 
-        # now we do some faster assignments, using range based access
-        #   this should fail as out-of-bounds, but does not
-        #     does Numpy not check array access for non-owned views?
-        # marr_np[24:200, :, :, :] = 42.
-
-        #   all components and all indices set at once to 42
+        # all components and all indices set at once to 42
         marr_np[()] = 42.0
 
         # values in start & end still match?
@@ -136,8 +122,46 @@ def test_mfab_loop(mfab):
             for i, j, k in bx:
                 assert marr[i, j, k, n] == 42.0
 
-        # separate test: cupy assignment & reading
-        #   TODO
+
+def test_mfab_loop(mfab):
+    ngv = mfab.n_grow_vect
+    print(f"\n  mfab={mfab}, mfab.n_grow_vect={ngv}")
+
+    for mfi in mfab:
+        bx = mfi.tilebox().grow(ngv)
+        marr = mfab.array(mfi)
+
+        # note: offset from index space in numpy
+        #   in numpy, we start indices from zero, not small_end
+
+        # numpy/cupy representation: non-copying view, including the
+        # guard/ghost region
+        marr_xp = marr.to_xp()
+
+        marr_xp[()] = (
+            10.0  # TODO: fill with index value or so as in test_mfab_loop_slow
+        )
+
+        def iv2s(iv, comp):
+            return tuple(iv) + (comp,)
+
+        # check the values at start/end are the same: first component
+        for n in range(mfab.num_comp):
+            assert marr_xp[0, 0, 0, n] == 10.0
+            assert marr_xp[-1, -1, -1, n] == marr_xp[iv2s(bx.big_end - bx.small_end, n)]
+
+        # now we do some faster assignments, using range based access
+        #   This should fail as out-of-bounds, but does not.
+        #   Does NumPy/CuPy not check array access for non-owned views?
+        # marr_xp[24:200, :, :, :] = 42.
+
+        #   all components and all indices set at once to 42
+        marr_xp[()] = 42.0
+
+        # values in start & end still match?
+        for n in range(mfab.num_comp):
+            assert marr_xp[0, 0, 0, n] == 42.0
+            assert marr_xp[-1, -1, -1, n] == marr_xp[iv2s(bx.big_end - bx.small_end, n)]
 
 
 def test_mfab_simple(mfab):

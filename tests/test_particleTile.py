@@ -35,7 +35,11 @@ def test_ptile_funs():
 
 ################
 def test_ptile_pushback_ptiledata():
-    pt = amr.ParticleTile_2_1_3_1_default()
+    pt = (
+        amr.ParticleTile_2_1_3_1_managed()
+        if amr.Config.have_gpu
+        else amr.ParticleTile_2_1_3_1_default()
+    )
     p = amr.Particle_2_1(1.0, 2.0, 3.0, 4.0, 5.0, 6)
     sp = amr.Particle_5_2(5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 11, 12)
     pt.push_back(p)
@@ -62,7 +66,11 @@ def test_ptile_pushback_ptiledata():
 
 @pytest.mark.skipif(amr.Config.spacedim != 3, reason="Requires AMREX_SPACEDIM = 3")
 def test_ptile_access():
-    pt = amr.ParticleTile_2_1_3_1_default()
+    pt = (
+        amr.ParticleTile_2_1_3_1_managed()
+        if amr.Config.have_gpu
+        else amr.ParticleTile_2_1_3_1_default()
+    )
     sp1 = amr.Particle_5_2()
     pt.push_back(sp1)
     pt.push_back(sp1)
@@ -81,7 +89,11 @@ def test_ptile_access():
 
 
 def test_ptile_soa():
-    pt = amr.ParticleTile_2_1_3_1_default()
+    pt = (
+        amr.ParticleTile_2_1_3_1_managed()
+        if amr.Config.have_gpu
+        else amr.ParticleTile_2_1_3_1_default()
+    )
 
     pt.push_back_real(1, 2, 2.1)
     pt.push_back_real([1.1, 1.3, 1.5])
@@ -120,7 +132,11 @@ def test_ptile_soa():
 
 @pytest.mark.skipif(amr.Config.spacedim != 3, reason="Requires AMREX_SPACEDIM = 3")
 def test_ptile_aos_3d():
-    pt = amr.ParticleTile_2_1_3_1_default()
+    pt = (
+        amr.ParticleTile_2_1_3_1_managed()
+        if amr.Config.have_gpu
+        else amr.ParticleTile_2_1_3_1_default()
+    )
     p1 = amr.Particle_2_1()
     p2 = amr.Particle_2_1()
     p1.x = 3.0
