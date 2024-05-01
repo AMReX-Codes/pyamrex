@@ -420,11 +420,23 @@ void init_MultiFab(py::module &m)
             py::arg("info"), py::arg("factory"),
             doc_mf_init
         )
+        .def(py::init< const BoxArray&, const DistributionMapping&, int, int,
+                       MFInfo const & >(),
+            py::arg("bxs"), py::arg("dm"), py::arg("ncomp"), py::arg("ngrow"),
+            py::arg("info"),
+            doc_mf_init
+        )
         .def(py::init< const BoxArray&, const DistributionMapping&, int, int>(),
              py::arg("bxs"), py::arg("dm"), py::arg("ncomp"), py::arg("ngrow"),
              doc_mf_init
         )
 
+        .def(py::init< const BoxArray&, const DistributionMapping&, int, IntVect const&,
+                       MFInfo const& >(),
+             py::arg("bxs"), py::arg("dm"), py::arg("ncomp"), py::arg("ngrow"),
+             py::arg("info"),
+             doc_mf_init
+        )
         .def(py::init< const BoxArray&, const DistributionMapping&, int, IntVect const&,
                        MFInfo const&, FabFactory<FArrayBox> const & >(),
              py::arg("bxs"), py::arg("dm"), py::arg("ncomp"), py::arg("ngrow"),
