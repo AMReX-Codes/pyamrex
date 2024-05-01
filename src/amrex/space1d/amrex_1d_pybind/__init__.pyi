@@ -4984,7 +4984,73 @@ class MultiFab(FabArray_FArrayBox):
 
     @typing.overload
     def __init__(
+        self,
+        bxs: BoxArray,
+        dm: DistributionMapping,
+        ncomp: int,
+        ngrow: int,
+        info: MFInfo,
+    ) -> None:
+        """
+        Constructs a MultiFab.
+
+            The size of the FArrayBox is given by the Box grown by \\p ngrow, and
+            the number of components is given by \\p ncomp. If \\p info is set to
+            not allocating memory, then no FArrayBoxes are allocated at
+            this time but can be defined later.
+
+            Parameters
+            ----------
+            bxs :
+              a valid region
+            dm :
+              a DistribuionMapping
+            ncomp :
+              number of components
+            ngrow :
+              number of cells the region grows
+            info :
+              MultiFab info, including allocation Arena
+            factory :
+              FArrayBoxFactory for embedded boundaries
+        """
+
+    @typing.overload
+    def __init__(
         self, bxs: BoxArray, dm: DistributionMapping, ncomp: int, ngrow: int
+    ) -> None:
+        """
+        Constructs a MultiFab.
+
+            The size of the FArrayBox is given by the Box grown by \\p ngrow, and
+            the number of components is given by \\p ncomp. If \\p info is set to
+            not allocating memory, then no FArrayBoxes are allocated at
+            this time but can be defined later.
+
+            Parameters
+            ----------
+            bxs :
+              a valid region
+            dm :
+              a DistribuionMapping
+            ncomp :
+              number of components
+            ngrow :
+              number of cells the region grows
+            info :
+              MultiFab info, including allocation Arena
+            factory :
+              FArrayBoxFactory for embedded boundaries
+        """
+
+    @typing.overload
+    def __init__(
+        self,
+        bxs: BoxArray,
+        dm: DistributionMapping,
+        ncomp: int,
+        ngrow: IntVect,
+        info: MFInfo,
     ) -> None:
         """
         Constructs a MultiFab.
