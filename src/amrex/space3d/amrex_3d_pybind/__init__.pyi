@@ -375,7 +375,7 @@ class Array4_cdouble:
     def to_cupy(self, copy=False, order="F"):
         """
 
-        Provide a Cupy view into an Array4.
+        Provide a CuPy view into an Array4.
 
         This includes ngrow guard cells of the box.
 
@@ -411,7 +411,7 @@ class Array4_cdouble:
     def to_numpy(self, copy=False, order="F"):
         """
 
-        Provide a Numpy view into an Array4.
+        Provide a NumPy view into an Array4.
 
         This includes ngrow guard cells of the box.
 
@@ -434,7 +434,40 @@ class Array4_cdouble:
         Returns
         -------
         np.array
-            A numpy n-dimensional array.
+            A NumPy n-dimensional array.
+
+        """
+
+    def to_xp(self, copy=False, order="F"):
+        """
+
+        Provide a NumPy or CuPy view into an Array4, depending on amr.Config.have_gpu .
+
+        This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
+        https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
+
+        This includes ngrow guard cells of the box.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        xp.array
+            A NumPy or CuPy n-dimensional array.
 
         """
 
@@ -477,7 +510,7 @@ class Array4_cdouble_const:
     def to_cupy(self, copy=False, order="F"):
         """
 
-        Provide a Cupy view into an Array4.
+        Provide a CuPy view into an Array4.
 
         This includes ngrow guard cells of the box.
 
@@ -513,7 +546,7 @@ class Array4_cdouble_const:
     def to_numpy(self, copy=False, order="F"):
         """
 
-        Provide a Numpy view into an Array4.
+        Provide a NumPy view into an Array4.
 
         This includes ngrow guard cells of the box.
 
@@ -536,7 +569,40 @@ class Array4_cdouble_const:
         Returns
         -------
         np.array
-            A numpy n-dimensional array.
+            A NumPy n-dimensional array.
+
+        """
+
+    def to_xp(self, copy=False, order="F"):
+        """
+
+        Provide a NumPy or CuPy view into an Array4, depending on amr.Config.have_gpu .
+
+        This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
+        https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
+
+        This includes ngrow guard cells of the box.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        xp.array
+            A NumPy or CuPy n-dimensional array.
 
         """
 
@@ -593,7 +659,7 @@ class Array4_cfloat:
     def to_cupy(self, copy=False, order="F"):
         """
 
-        Provide a Cupy view into an Array4.
+        Provide a CuPy view into an Array4.
 
         This includes ngrow guard cells of the box.
 
@@ -629,7 +695,7 @@ class Array4_cfloat:
     def to_numpy(self, copy=False, order="F"):
         """
 
-        Provide a Numpy view into an Array4.
+        Provide a NumPy view into an Array4.
 
         This includes ngrow guard cells of the box.
 
@@ -652,7 +718,40 @@ class Array4_cfloat:
         Returns
         -------
         np.array
-            A numpy n-dimensional array.
+            A NumPy n-dimensional array.
+
+        """
+
+    def to_xp(self, copy=False, order="F"):
+        """
+
+        Provide a NumPy or CuPy view into an Array4, depending on amr.Config.have_gpu .
+
+        This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
+        https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
+
+        This includes ngrow guard cells of the box.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        xp.array
+            A NumPy or CuPy n-dimensional array.
 
         """
 
@@ -695,7 +794,7 @@ class Array4_cfloat_const:
     def to_cupy(self, copy=False, order="F"):
         """
 
-        Provide a Cupy view into an Array4.
+        Provide a CuPy view into an Array4.
 
         This includes ngrow guard cells of the box.
 
@@ -731,7 +830,7 @@ class Array4_cfloat_const:
     def to_numpy(self, copy=False, order="F"):
         """
 
-        Provide a Numpy view into an Array4.
+        Provide a NumPy view into an Array4.
 
         This includes ngrow guard cells of the box.
 
@@ -754,7 +853,40 @@ class Array4_cfloat_const:
         Returns
         -------
         np.array
-            A numpy n-dimensional array.
+            A NumPy n-dimensional array.
+
+        """
+
+    def to_xp(self, copy=False, order="F"):
+        """
+
+        Provide a NumPy or CuPy view into an Array4, depending on amr.Config.have_gpu .
+
+        This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
+        https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
+
+        This includes ngrow guard cells of the box.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        xp.array
+            A NumPy or CuPy n-dimensional array.
 
         """
 
@@ -811,7 +943,7 @@ class Array4_double:
     def to_cupy(self, copy=False, order="F"):
         """
 
-        Provide a Cupy view into an Array4.
+        Provide a CuPy view into an Array4.
 
         This includes ngrow guard cells of the box.
 
@@ -847,7 +979,7 @@ class Array4_double:
     def to_numpy(self, copy=False, order="F"):
         """
 
-        Provide a Numpy view into an Array4.
+        Provide a NumPy view into an Array4.
 
         This includes ngrow guard cells of the box.
 
@@ -870,7 +1002,40 @@ class Array4_double:
         Returns
         -------
         np.array
-            A numpy n-dimensional array.
+            A NumPy n-dimensional array.
+
+        """
+
+    def to_xp(self, copy=False, order="F"):
+        """
+
+        Provide a NumPy or CuPy view into an Array4, depending on amr.Config.have_gpu .
+
+        This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
+        https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
+
+        This includes ngrow guard cells of the box.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        xp.array
+            A NumPy or CuPy n-dimensional array.
 
         """
 
@@ -913,7 +1078,7 @@ class Array4_double_const:
     def to_cupy(self, copy=False, order="F"):
         """
 
-        Provide a Cupy view into an Array4.
+        Provide a CuPy view into an Array4.
 
         This includes ngrow guard cells of the box.
 
@@ -949,7 +1114,7 @@ class Array4_double_const:
     def to_numpy(self, copy=False, order="F"):
         """
 
-        Provide a Numpy view into an Array4.
+        Provide a NumPy view into an Array4.
 
         This includes ngrow guard cells of the box.
 
@@ -972,7 +1137,40 @@ class Array4_double_const:
         Returns
         -------
         np.array
-            A numpy n-dimensional array.
+            A NumPy n-dimensional array.
+
+        """
+
+    def to_xp(self, copy=False, order="F"):
+        """
+
+        Provide a NumPy or CuPy view into an Array4, depending on amr.Config.have_gpu .
+
+        This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
+        https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
+
+        This includes ngrow guard cells of the box.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        xp.array
+            A NumPy or CuPy n-dimensional array.
 
         """
 
@@ -1029,7 +1227,7 @@ class Array4_float:
     def to_cupy(self, copy=False, order="F"):
         """
 
-        Provide a Cupy view into an Array4.
+        Provide a CuPy view into an Array4.
 
         This includes ngrow guard cells of the box.
 
@@ -1065,7 +1263,7 @@ class Array4_float:
     def to_numpy(self, copy=False, order="F"):
         """
 
-        Provide a Numpy view into an Array4.
+        Provide a NumPy view into an Array4.
 
         This includes ngrow guard cells of the box.
 
@@ -1088,7 +1286,40 @@ class Array4_float:
         Returns
         -------
         np.array
-            A numpy n-dimensional array.
+            A NumPy n-dimensional array.
+
+        """
+
+    def to_xp(self, copy=False, order="F"):
+        """
+
+        Provide a NumPy or CuPy view into an Array4, depending on amr.Config.have_gpu .
+
+        This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
+        https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
+
+        This includes ngrow guard cells of the box.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        xp.array
+            A NumPy or CuPy n-dimensional array.
 
         """
 
@@ -1131,7 +1362,7 @@ class Array4_float_const:
     def to_cupy(self, copy=False, order="F"):
         """
 
-        Provide a Cupy view into an Array4.
+        Provide a CuPy view into an Array4.
 
         This includes ngrow guard cells of the box.
 
@@ -1167,7 +1398,7 @@ class Array4_float_const:
     def to_numpy(self, copy=False, order="F"):
         """
 
-        Provide a Numpy view into an Array4.
+        Provide a NumPy view into an Array4.
 
         This includes ngrow guard cells of the box.
 
@@ -1190,7 +1421,40 @@ class Array4_float_const:
         Returns
         -------
         np.array
-            A numpy n-dimensional array.
+            A NumPy n-dimensional array.
+
+        """
+
+    def to_xp(self, copy=False, order="F"):
+        """
+
+        Provide a NumPy or CuPy view into an Array4, depending on amr.Config.have_gpu .
+
+        This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
+        https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
+
+        This includes ngrow guard cells of the box.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        xp.array
+            A NumPy or CuPy n-dimensional array.
 
         """
 
@@ -1247,7 +1511,7 @@ class Array4_int:
     def to_cupy(self, copy=False, order="F"):
         """
 
-        Provide a Cupy view into an Array4.
+        Provide a CuPy view into an Array4.
 
         This includes ngrow guard cells of the box.
 
@@ -1283,7 +1547,7 @@ class Array4_int:
     def to_numpy(self, copy=False, order="F"):
         """
 
-        Provide a Numpy view into an Array4.
+        Provide a NumPy view into an Array4.
 
         This includes ngrow guard cells of the box.
 
@@ -1306,7 +1570,40 @@ class Array4_int:
         Returns
         -------
         np.array
-            A numpy n-dimensional array.
+            A NumPy n-dimensional array.
+
+        """
+
+    def to_xp(self, copy=False, order="F"):
+        """
+
+        Provide a NumPy or CuPy view into an Array4, depending on amr.Config.have_gpu .
+
+        This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
+        https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
+
+        This includes ngrow guard cells of the box.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        xp.array
+            A NumPy or CuPy n-dimensional array.
 
         """
 
@@ -1349,7 +1646,7 @@ class Array4_int_const:
     def to_cupy(self, copy=False, order="F"):
         """
 
-        Provide a Cupy view into an Array4.
+        Provide a CuPy view into an Array4.
 
         This includes ngrow guard cells of the box.
 
@@ -1385,7 +1682,7 @@ class Array4_int_const:
     def to_numpy(self, copy=False, order="F"):
         """
 
-        Provide a Numpy view into an Array4.
+        Provide a NumPy view into an Array4.
 
         This includes ngrow guard cells of the box.
 
@@ -1408,7 +1705,40 @@ class Array4_int_const:
         Returns
         -------
         np.array
-            A numpy n-dimensional array.
+            A NumPy n-dimensional array.
+
+        """
+
+    def to_xp(self, copy=False, order="F"):
+        """
+
+        Provide a NumPy or CuPy view into an Array4, depending on amr.Config.have_gpu .
+
+        This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
+        https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
+
+        This includes ngrow guard cells of the box.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        xp.array
+            A NumPy or CuPy n-dimensional array.
 
         """
 
@@ -1465,7 +1795,7 @@ class Array4_long:
     def to_cupy(self, copy=False, order="F"):
         """
 
-        Provide a Cupy view into an Array4.
+        Provide a CuPy view into an Array4.
 
         This includes ngrow guard cells of the box.
 
@@ -1501,7 +1831,7 @@ class Array4_long:
     def to_numpy(self, copy=False, order="F"):
         """
 
-        Provide a Numpy view into an Array4.
+        Provide a NumPy view into an Array4.
 
         This includes ngrow guard cells of the box.
 
@@ -1524,7 +1854,40 @@ class Array4_long:
         Returns
         -------
         np.array
-            A numpy n-dimensional array.
+            A NumPy n-dimensional array.
+
+        """
+
+    def to_xp(self, copy=False, order="F"):
+        """
+
+        Provide a NumPy or CuPy view into an Array4, depending on amr.Config.have_gpu .
+
+        This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
+        https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
+
+        This includes ngrow guard cells of the box.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        xp.array
+            A NumPy or CuPy n-dimensional array.
 
         """
 
@@ -1567,7 +1930,7 @@ class Array4_long_const:
     def to_cupy(self, copy=False, order="F"):
         """
 
-        Provide a Cupy view into an Array4.
+        Provide a CuPy view into an Array4.
 
         This includes ngrow guard cells of the box.
 
@@ -1603,7 +1966,7 @@ class Array4_long_const:
     def to_numpy(self, copy=False, order="F"):
         """
 
-        Provide a Numpy view into an Array4.
+        Provide a NumPy view into an Array4.
 
         This includes ngrow guard cells of the box.
 
@@ -1626,7 +1989,40 @@ class Array4_long_const:
         Returns
         -------
         np.array
-            A numpy n-dimensional array.
+            A NumPy n-dimensional array.
+
+        """
+
+    def to_xp(self, copy=False, order="F"):
+        """
+
+        Provide a NumPy or CuPy view into an Array4, depending on amr.Config.have_gpu .
+
+        This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
+        https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
+
+        This includes ngrow guard cells of the box.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        xp.array
+            A NumPy or CuPy n-dimensional array.
 
         """
 
@@ -1683,7 +2079,7 @@ class Array4_longdouble:
     def to_cupy(self, copy=False, order="F"):
         """
 
-        Provide a Cupy view into an Array4.
+        Provide a CuPy view into an Array4.
 
         This includes ngrow guard cells of the box.
 
@@ -1719,7 +2115,7 @@ class Array4_longdouble:
     def to_numpy(self, copy=False, order="F"):
         """
 
-        Provide a Numpy view into an Array4.
+        Provide a NumPy view into an Array4.
 
         This includes ngrow guard cells of the box.
 
@@ -1742,7 +2138,40 @@ class Array4_longdouble:
         Returns
         -------
         np.array
-            A numpy n-dimensional array.
+            A NumPy n-dimensional array.
+
+        """
+
+    def to_xp(self, copy=False, order="F"):
+        """
+
+        Provide a NumPy or CuPy view into an Array4, depending on amr.Config.have_gpu .
+
+        This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
+        https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
+
+        This includes ngrow guard cells of the box.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        xp.array
+            A NumPy or CuPy n-dimensional array.
 
         """
 
@@ -1785,7 +2214,7 @@ class Array4_longdouble_const:
     def to_cupy(self, copy=False, order="F"):
         """
 
-        Provide a Cupy view into an Array4.
+        Provide a CuPy view into an Array4.
 
         This includes ngrow guard cells of the box.
 
@@ -1821,7 +2250,7 @@ class Array4_longdouble_const:
     def to_numpy(self, copy=False, order="F"):
         """
 
-        Provide a Numpy view into an Array4.
+        Provide a NumPy view into an Array4.
 
         This includes ngrow guard cells of the box.
 
@@ -1844,7 +2273,40 @@ class Array4_longdouble_const:
         Returns
         -------
         np.array
-            A numpy n-dimensional array.
+            A NumPy n-dimensional array.
+
+        """
+
+    def to_xp(self, copy=False, order="F"):
+        """
+
+        Provide a NumPy or CuPy view into an Array4, depending on amr.Config.have_gpu .
+
+        This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
+        https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
+
+        This includes ngrow guard cells of the box.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        xp.array
+            A NumPy or CuPy n-dimensional array.
 
         """
 
@@ -1901,7 +2363,7 @@ class Array4_longlong:
     def to_cupy(self, copy=False, order="F"):
         """
 
-        Provide a Cupy view into an Array4.
+        Provide a CuPy view into an Array4.
 
         This includes ngrow guard cells of the box.
 
@@ -1937,7 +2399,7 @@ class Array4_longlong:
     def to_numpy(self, copy=False, order="F"):
         """
 
-        Provide a Numpy view into an Array4.
+        Provide a NumPy view into an Array4.
 
         This includes ngrow guard cells of the box.
 
@@ -1960,7 +2422,40 @@ class Array4_longlong:
         Returns
         -------
         np.array
-            A numpy n-dimensional array.
+            A NumPy n-dimensional array.
+
+        """
+
+    def to_xp(self, copy=False, order="F"):
+        """
+
+        Provide a NumPy or CuPy view into an Array4, depending on amr.Config.have_gpu .
+
+        This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
+        https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
+
+        This includes ngrow guard cells of the box.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        xp.array
+            A NumPy or CuPy n-dimensional array.
 
         """
 
@@ -2003,7 +2498,7 @@ class Array4_longlong_const:
     def to_cupy(self, copy=False, order="F"):
         """
 
-        Provide a Cupy view into an Array4.
+        Provide a CuPy view into an Array4.
 
         This includes ngrow guard cells of the box.
 
@@ -2039,7 +2534,7 @@ class Array4_longlong_const:
     def to_numpy(self, copy=False, order="F"):
         """
 
-        Provide a Numpy view into an Array4.
+        Provide a NumPy view into an Array4.
 
         This includes ngrow guard cells of the box.
 
@@ -2062,7 +2557,40 @@ class Array4_longlong_const:
         Returns
         -------
         np.array
-            A numpy n-dimensional array.
+            A NumPy n-dimensional array.
+
+        """
+
+    def to_xp(self, copy=False, order="F"):
+        """
+
+        Provide a NumPy or CuPy view into an Array4, depending on amr.Config.have_gpu .
+
+        This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
+        https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
+
+        This includes ngrow guard cells of the box.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        xp.array
+            A NumPy or CuPy n-dimensional array.
 
         """
 
@@ -2119,7 +2647,7 @@ class Array4_short:
     def to_cupy(self, copy=False, order="F"):
         """
 
-        Provide a Cupy view into an Array4.
+        Provide a CuPy view into an Array4.
 
         This includes ngrow guard cells of the box.
 
@@ -2155,7 +2683,7 @@ class Array4_short:
     def to_numpy(self, copy=False, order="F"):
         """
 
-        Provide a Numpy view into an Array4.
+        Provide a NumPy view into an Array4.
 
         This includes ngrow guard cells of the box.
 
@@ -2178,7 +2706,40 @@ class Array4_short:
         Returns
         -------
         np.array
-            A numpy n-dimensional array.
+            A NumPy n-dimensional array.
+
+        """
+
+    def to_xp(self, copy=False, order="F"):
+        """
+
+        Provide a NumPy or CuPy view into an Array4, depending on amr.Config.have_gpu .
+
+        This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
+        https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
+
+        This includes ngrow guard cells of the box.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        xp.array
+            A NumPy or CuPy n-dimensional array.
 
         """
 
@@ -2221,7 +2782,7 @@ class Array4_short_const:
     def to_cupy(self, copy=False, order="F"):
         """
 
-        Provide a Cupy view into an Array4.
+        Provide a CuPy view into an Array4.
 
         This includes ngrow guard cells of the box.
 
@@ -2257,7 +2818,7 @@ class Array4_short_const:
     def to_numpy(self, copy=False, order="F"):
         """
 
-        Provide a Numpy view into an Array4.
+        Provide a NumPy view into an Array4.
 
         This includes ngrow guard cells of the box.
 
@@ -2280,7 +2841,40 @@ class Array4_short_const:
         Returns
         -------
         np.array
-            A numpy n-dimensional array.
+            A NumPy n-dimensional array.
+
+        """
+
+    def to_xp(self, copy=False, order="F"):
+        """
+
+        Provide a NumPy or CuPy view into an Array4, depending on amr.Config.have_gpu .
+
+        This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
+        https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
+
+        This includes ngrow guard cells of the box.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        xp.array
+            A NumPy or CuPy n-dimensional array.
 
         """
 
@@ -2337,7 +2931,7 @@ class Array4_uint:
     def to_cupy(self, copy=False, order="F"):
         """
 
-        Provide a Cupy view into an Array4.
+        Provide a CuPy view into an Array4.
 
         This includes ngrow guard cells of the box.
 
@@ -2373,7 +2967,7 @@ class Array4_uint:
     def to_numpy(self, copy=False, order="F"):
         """
 
-        Provide a Numpy view into an Array4.
+        Provide a NumPy view into an Array4.
 
         This includes ngrow guard cells of the box.
 
@@ -2396,7 +2990,40 @@ class Array4_uint:
         Returns
         -------
         np.array
-            A numpy n-dimensional array.
+            A NumPy n-dimensional array.
+
+        """
+
+    def to_xp(self, copy=False, order="F"):
+        """
+
+        Provide a NumPy or CuPy view into an Array4, depending on amr.Config.have_gpu .
+
+        This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
+        https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
+
+        This includes ngrow guard cells of the box.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        xp.array
+            A NumPy or CuPy n-dimensional array.
 
         """
 
@@ -2439,7 +3066,7 @@ class Array4_uint_const:
     def to_cupy(self, copy=False, order="F"):
         """
 
-        Provide a Cupy view into an Array4.
+        Provide a CuPy view into an Array4.
 
         This includes ngrow guard cells of the box.
 
@@ -2475,7 +3102,7 @@ class Array4_uint_const:
     def to_numpy(self, copy=False, order="F"):
         """
 
-        Provide a Numpy view into an Array4.
+        Provide a NumPy view into an Array4.
 
         This includes ngrow guard cells of the box.
 
@@ -2498,7 +3125,40 @@ class Array4_uint_const:
         Returns
         -------
         np.array
-            A numpy n-dimensional array.
+            A NumPy n-dimensional array.
+
+        """
+
+    def to_xp(self, copy=False, order="F"):
+        """
+
+        Provide a NumPy or CuPy view into an Array4, depending on amr.Config.have_gpu .
+
+        This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
+        https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
+
+        This includes ngrow guard cells of the box.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        xp.array
+            A NumPy or CuPy n-dimensional array.
 
         """
 
@@ -2555,7 +3215,7 @@ class Array4_ulong:
     def to_cupy(self, copy=False, order="F"):
         """
 
-        Provide a Cupy view into an Array4.
+        Provide a CuPy view into an Array4.
 
         This includes ngrow guard cells of the box.
 
@@ -2591,7 +3251,7 @@ class Array4_ulong:
     def to_numpy(self, copy=False, order="F"):
         """
 
-        Provide a Numpy view into an Array4.
+        Provide a NumPy view into an Array4.
 
         This includes ngrow guard cells of the box.
 
@@ -2614,7 +3274,40 @@ class Array4_ulong:
         Returns
         -------
         np.array
-            A numpy n-dimensional array.
+            A NumPy n-dimensional array.
+
+        """
+
+    def to_xp(self, copy=False, order="F"):
+        """
+
+        Provide a NumPy or CuPy view into an Array4, depending on amr.Config.have_gpu .
+
+        This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
+        https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
+
+        This includes ngrow guard cells of the box.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        xp.array
+            A NumPy or CuPy n-dimensional array.
 
         """
 
@@ -2657,7 +3350,7 @@ class Array4_ulong_const:
     def to_cupy(self, copy=False, order="F"):
         """
 
-        Provide a Cupy view into an Array4.
+        Provide a CuPy view into an Array4.
 
         This includes ngrow guard cells of the box.
 
@@ -2693,7 +3386,7 @@ class Array4_ulong_const:
     def to_numpy(self, copy=False, order="F"):
         """
 
-        Provide a Numpy view into an Array4.
+        Provide a NumPy view into an Array4.
 
         This includes ngrow guard cells of the box.
 
@@ -2716,7 +3409,40 @@ class Array4_ulong_const:
         Returns
         -------
         np.array
-            A numpy n-dimensional array.
+            A NumPy n-dimensional array.
+
+        """
+
+    def to_xp(self, copy=False, order="F"):
+        """
+
+        Provide a NumPy or CuPy view into an Array4, depending on amr.Config.have_gpu .
+
+        This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
+        https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
+
+        This includes ngrow guard cells of the box.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        xp.array
+            A NumPy or CuPy n-dimensional array.
 
         """
 
@@ -2773,7 +3499,7 @@ class Array4_ulonglong:
     def to_cupy(self, copy=False, order="F"):
         """
 
-        Provide a Cupy view into an Array4.
+        Provide a CuPy view into an Array4.
 
         This includes ngrow guard cells of the box.
 
@@ -2809,7 +3535,7 @@ class Array4_ulonglong:
     def to_numpy(self, copy=False, order="F"):
         """
 
-        Provide a Numpy view into an Array4.
+        Provide a NumPy view into an Array4.
 
         This includes ngrow guard cells of the box.
 
@@ -2832,7 +3558,40 @@ class Array4_ulonglong:
         Returns
         -------
         np.array
-            A numpy n-dimensional array.
+            A NumPy n-dimensional array.
+
+        """
+
+    def to_xp(self, copy=False, order="F"):
+        """
+
+        Provide a NumPy or CuPy view into an Array4, depending on amr.Config.have_gpu .
+
+        This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
+        https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
+
+        This includes ngrow guard cells of the box.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        xp.array
+            A NumPy or CuPy n-dimensional array.
 
         """
 
@@ -2875,7 +3634,7 @@ class Array4_ulonglong_const:
     def to_cupy(self, copy=False, order="F"):
         """
 
-        Provide a Cupy view into an Array4.
+        Provide a CuPy view into an Array4.
 
         This includes ngrow guard cells of the box.
 
@@ -2911,7 +3670,7 @@ class Array4_ulonglong_const:
     def to_numpy(self, copy=False, order="F"):
         """
 
-        Provide a Numpy view into an Array4.
+        Provide a NumPy view into an Array4.
 
         This includes ngrow guard cells of the box.
 
@@ -2934,7 +3693,40 @@ class Array4_ulonglong_const:
         Returns
         -------
         np.array
-            A numpy n-dimensional array.
+            A NumPy n-dimensional array.
+
+        """
+
+    def to_xp(self, copy=False, order="F"):
+        """
+
+        Provide a NumPy or CuPy view into an Array4, depending on amr.Config.have_gpu .
+
+        This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
+        https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
+
+        This includes ngrow guard cells of the box.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        xp.array
+            A NumPy or CuPy n-dimensional array.
 
         """
 
@@ -2991,7 +3783,7 @@ class Array4_ushort:
     def to_cupy(self, copy=False, order="F"):
         """
 
-        Provide a Cupy view into an Array4.
+        Provide a CuPy view into an Array4.
 
         This includes ngrow guard cells of the box.
 
@@ -3027,7 +3819,7 @@ class Array4_ushort:
     def to_numpy(self, copy=False, order="F"):
         """
 
-        Provide a Numpy view into an Array4.
+        Provide a NumPy view into an Array4.
 
         This includes ngrow guard cells of the box.
 
@@ -3050,7 +3842,40 @@ class Array4_ushort:
         Returns
         -------
         np.array
-            A numpy n-dimensional array.
+            A NumPy n-dimensional array.
+
+        """
+
+    def to_xp(self, copy=False, order="F"):
+        """
+
+        Provide a NumPy or CuPy view into an Array4, depending on amr.Config.have_gpu .
+
+        This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
+        https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
+
+        This includes ngrow guard cells of the box.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        xp.array
+            A NumPy or CuPy n-dimensional array.
 
         """
 
@@ -3093,7 +3918,7 @@ class Array4_ushort_const:
     def to_cupy(self, copy=False, order="F"):
         """
 
-        Provide a Cupy view into an Array4.
+        Provide a CuPy view into an Array4.
 
         This includes ngrow guard cells of the box.
 
@@ -3129,7 +3954,7 @@ class Array4_ushort_const:
     def to_numpy(self, copy=False, order="F"):
         """
 
-        Provide a Numpy view into an Array4.
+        Provide a NumPy view into an Array4.
 
         This includes ngrow guard cells of the box.
 
@@ -3152,7 +3977,40 @@ class Array4_ushort_const:
         Returns
         -------
         np.array
-            A numpy n-dimensional array.
+            A NumPy n-dimensional array.
+
+        """
+
+    def to_xp(self, copy=False, order="F"):
+        """
+
+        Provide a NumPy or CuPy view into an Array4, depending on amr.Config.have_gpu .
+
+        This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
+        https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
+
+        This includes ngrow guard cells of the box.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        xp.array
+            A NumPy or CuPy n-dimensional array.
 
         """
 
@@ -3194,7 +4052,7 @@ class ArrayOfStructs_2_1_arena:
     def to_cupy(self, copy=False):
         """
 
-        Provide Cupy views into a ArrayOfStructs.
+        Provide CuPy views into a ArrayOfStructs.
 
         Parameters
         ----------
@@ -3207,7 +4065,7 @@ class ArrayOfStructs_2_1_arena:
         -------
         namedtuple
             A tuple with real and int components that are each lists
-            of 1D numpy arrays.
+            of 1D NumPy arrays.
 
         Raises
         ------
@@ -3220,7 +4078,7 @@ class ArrayOfStructs_2_1_arena:
     def to_numpy(self, copy=False):
         """
 
-        Provide Numpy views into a ArrayOfStructs.
+        Provide NumPy views into a ArrayOfStructs.
 
         Parameters
         ----------
@@ -3233,7 +4091,30 @@ class ArrayOfStructs_2_1_arena:
         -------
         namedtuple
             A tuple with real and int components that are each lists
-            of 1D numpy arrays.
+            of 1D NumPy arrays.
+
+        """
+
+    def to_xp(self, copy=False):
+        """
+
+        Provide NumPy or CuPy views into a ArrayOfStructs, depending on amr.Config.have_gpu .
+
+        This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
+        https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
+
+        Parameters
+        ----------
+        self : amrex.ArrayOfStructs_*
+            An ArrayOfStructs class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        namedtuple
+            A tuple with real and int components that are each lists
+            of 1D NumPy or CuPy arrays.
 
         """
 
@@ -3269,7 +4150,7 @@ class ArrayOfStructs_2_1_default:
     def to_cupy(self, copy=False):
         """
 
-        Provide Cupy views into a ArrayOfStructs.
+        Provide CuPy views into a ArrayOfStructs.
 
         Parameters
         ----------
@@ -3282,7 +4163,7 @@ class ArrayOfStructs_2_1_default:
         -------
         namedtuple
             A tuple with real and int components that are each lists
-            of 1D numpy arrays.
+            of 1D NumPy arrays.
 
         Raises
         ------
@@ -3295,7 +4176,7 @@ class ArrayOfStructs_2_1_default:
     def to_numpy(self, copy=False):
         """
 
-        Provide Numpy views into a ArrayOfStructs.
+        Provide NumPy views into a ArrayOfStructs.
 
         Parameters
         ----------
@@ -3308,7 +4189,30 @@ class ArrayOfStructs_2_1_default:
         -------
         namedtuple
             A tuple with real and int components that are each lists
-            of 1D numpy arrays.
+            of 1D NumPy arrays.
+
+        """
+
+    def to_xp(self, copy=False):
+        """
+
+        Provide NumPy or CuPy views into a ArrayOfStructs, depending on amr.Config.have_gpu .
+
+        This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
+        https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
+
+        Parameters
+        ----------
+        self : amrex.ArrayOfStructs_*
+            An ArrayOfStructs class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        namedtuple
+            A tuple with real and int components that are each lists
+            of 1D NumPy or CuPy arrays.
 
         """
 
@@ -3344,7 +4248,7 @@ class ArrayOfStructs_2_1_pinned:
     def to_cupy(self, copy=False):
         """
 
-        Provide Cupy views into a ArrayOfStructs.
+        Provide CuPy views into a ArrayOfStructs.
 
         Parameters
         ----------
@@ -3357,7 +4261,7 @@ class ArrayOfStructs_2_1_pinned:
         -------
         namedtuple
             A tuple with real and int components that are each lists
-            of 1D numpy arrays.
+            of 1D NumPy arrays.
 
         Raises
         ------
@@ -3370,7 +4274,7 @@ class ArrayOfStructs_2_1_pinned:
     def to_numpy(self, copy=False):
         """
 
-        Provide Numpy views into a ArrayOfStructs.
+        Provide NumPy views into a ArrayOfStructs.
 
         Parameters
         ----------
@@ -3383,7 +4287,30 @@ class ArrayOfStructs_2_1_pinned:
         -------
         namedtuple
             A tuple with real and int components that are each lists
-            of 1D numpy arrays.
+            of 1D NumPy arrays.
+
+        """
+
+    def to_xp(self, copy=False):
+        """
+
+        Provide NumPy or CuPy views into a ArrayOfStructs, depending on amr.Config.have_gpu .
+
+        This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
+        https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
+
+        Parameters
+        ----------
+        self : amrex.ArrayOfStructs_*
+            An ArrayOfStructs class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        namedtuple
+            A tuple with real and int components that are each lists
+            of 1D NumPy or CuPy arrays.
 
         """
 
@@ -5464,7 +6391,7 @@ class MultiFab(FabArray_FArrayBox):
     def to_cupy(self, copy=False, order="F"):
         """
 
-        Provide a Cupy view into a MultiFab.
+        Provide a CuPy view into a MultiFab.
 
         This includes ngrow guard cells of each box.
 
@@ -5487,7 +6414,7 @@ class MultiFab(FabArray_FArrayBox):
         Returns
         -------
         list of cupy.array
-            A list of cupy n-dimensional arrays, for each local block in the
+            A list of CuPy n-dimensional arrays, for each local block in the
             MultiFab.
 
         Raises
@@ -5500,7 +6427,7 @@ class MultiFab(FabArray_FArrayBox):
     def to_numpy(self, copy=False, order="F"):
         """
 
-        Provide a Numpy view into a MultiFab.
+        Provide a NumPy view into a MultiFab.
 
         This includes ngrow guard cells of each box.
 
@@ -5523,7 +6450,42 @@ class MultiFab(FabArray_FArrayBox):
         Returns
         -------
         list of numpy.array
-            A list of numpy n-dimensional arrays, for each local block in the
+            A list of NumPy n-dimensional arrays, for each local block in the
+            MultiFab.
+
+        """
+
+    def to_xp(self, copy=False, order="F"):
+        """
+
+        Provide a NumPy or CuPy view into a MultiFab,
+        depending on amr.Config.have_gpu .
+
+        This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
+        https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
+
+        This includes ngrow guard cells of each box.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.MultiFab
+            A MultiFab class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        list of xp.array
+            A list of NumPy or CuPy n-dimensional arrays, for each local block in the
             MultiFab.
 
         """
@@ -5565,7 +6527,7 @@ class PODVector_int_arena:
     def to_cupy(self, copy=False):
         """
 
-        Provide a Cupy view into a PODVector (e.g., RealVector, IntVector).
+        Provide a CuPy view into a PODVector (e.g., RealVector, IntVector).
 
         Parameters
         ----------
@@ -5590,7 +6552,7 @@ class PODVector_int_arena:
     def to_numpy(self, copy=False):
         """
 
-        Provide a Numpy view into a PODVector (e.g., RealVector, IntVector).
+        Provide a NumPy view into a PODVector (e.g., RealVector, IntVector).
 
         Parameters
         ----------
@@ -5602,7 +6564,30 @@ class PODVector_int_arena:
         Returns
         -------
         np.array
-            A 1D numpy array.
+            A 1D NumPy array.
+
+        """
+
+    def to_xp(self, copy=False):
+        """
+
+        Provide a NumPy or CuPy view into a PODVector (e.g., RealVector, IntVector),
+        depending on amr.Config.have_gpu .
+
+        This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
+        https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
+
+        Parameters
+        ----------
+        self : amrex.PODVector_*
+            A PODVector class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        xp.array
+            A 1D NumPy or CuPy array.
 
         """
 
@@ -5642,7 +6627,7 @@ class PODVector_int_pinned:
     def to_cupy(self, copy=False):
         """
 
-        Provide a Cupy view into a PODVector (e.g., RealVector, IntVector).
+        Provide a CuPy view into a PODVector (e.g., RealVector, IntVector).
 
         Parameters
         ----------
@@ -5667,7 +6652,7 @@ class PODVector_int_pinned:
     def to_numpy(self, copy=False):
         """
 
-        Provide a Numpy view into a PODVector (e.g., RealVector, IntVector).
+        Provide a NumPy view into a PODVector (e.g., RealVector, IntVector).
 
         Parameters
         ----------
@@ -5679,7 +6664,30 @@ class PODVector_int_pinned:
         Returns
         -------
         np.array
-            A 1D numpy array.
+            A 1D NumPy array.
+
+        """
+
+    def to_xp(self, copy=False):
+        """
+
+        Provide a NumPy or CuPy view into a PODVector (e.g., RealVector, IntVector),
+        depending on amr.Config.have_gpu .
+
+        This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
+        https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
+
+        Parameters
+        ----------
+        self : amrex.PODVector_*
+            A PODVector class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        xp.array
+            A 1D NumPy or CuPy array.
 
         """
 
@@ -5719,7 +6727,7 @@ class PODVector_int_std:
     def to_cupy(self, copy=False):
         """
 
-        Provide a Cupy view into a PODVector (e.g., RealVector, IntVector).
+        Provide a CuPy view into a PODVector (e.g., RealVector, IntVector).
 
         Parameters
         ----------
@@ -5744,7 +6752,7 @@ class PODVector_int_std:
     def to_numpy(self, copy=False):
         """
 
-        Provide a Numpy view into a PODVector (e.g., RealVector, IntVector).
+        Provide a NumPy view into a PODVector (e.g., RealVector, IntVector).
 
         Parameters
         ----------
@@ -5756,7 +6764,30 @@ class PODVector_int_std:
         Returns
         -------
         np.array
-            A 1D numpy array.
+            A 1D NumPy array.
+
+        """
+
+    def to_xp(self, copy=False):
+        """
+
+        Provide a NumPy or CuPy view into a PODVector (e.g., RealVector, IntVector),
+        depending on amr.Config.have_gpu .
+
+        This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
+        https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
+
+        Parameters
+        ----------
+        self : amrex.PODVector_*
+            A PODVector class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        xp.array
+            A 1D NumPy or CuPy array.
 
         """
 
@@ -5796,7 +6827,7 @@ class PODVector_real_arena:
     def to_cupy(self, copy=False):
         """
 
-        Provide a Cupy view into a PODVector (e.g., RealVector, IntVector).
+        Provide a CuPy view into a PODVector (e.g., RealVector, IntVector).
 
         Parameters
         ----------
@@ -5821,7 +6852,7 @@ class PODVector_real_arena:
     def to_numpy(self, copy=False):
         """
 
-        Provide a Numpy view into a PODVector (e.g., RealVector, IntVector).
+        Provide a NumPy view into a PODVector (e.g., RealVector, IntVector).
 
         Parameters
         ----------
@@ -5833,7 +6864,30 @@ class PODVector_real_arena:
         Returns
         -------
         np.array
-            A 1D numpy array.
+            A 1D NumPy array.
+
+        """
+
+    def to_xp(self, copy=False):
+        """
+
+        Provide a NumPy or CuPy view into a PODVector (e.g., RealVector, IntVector),
+        depending on amr.Config.have_gpu .
+
+        This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
+        https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
+
+        Parameters
+        ----------
+        self : amrex.PODVector_*
+            A PODVector class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        xp.array
+            A 1D NumPy or CuPy array.
 
         """
 
@@ -5873,7 +6927,7 @@ class PODVector_real_pinned:
     def to_cupy(self, copy=False):
         """
 
-        Provide a Cupy view into a PODVector (e.g., RealVector, IntVector).
+        Provide a CuPy view into a PODVector (e.g., RealVector, IntVector).
 
         Parameters
         ----------
@@ -5898,7 +6952,7 @@ class PODVector_real_pinned:
     def to_numpy(self, copy=False):
         """
 
-        Provide a Numpy view into a PODVector (e.g., RealVector, IntVector).
+        Provide a NumPy view into a PODVector (e.g., RealVector, IntVector).
 
         Parameters
         ----------
@@ -5910,7 +6964,30 @@ class PODVector_real_pinned:
         Returns
         -------
         np.array
-            A 1D numpy array.
+            A 1D NumPy array.
+
+        """
+
+    def to_xp(self, copy=False):
+        """
+
+        Provide a NumPy or CuPy view into a PODVector (e.g., RealVector, IntVector),
+        depending on amr.Config.have_gpu .
+
+        This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
+        https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
+
+        Parameters
+        ----------
+        self : amrex.PODVector_*
+            A PODVector class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        xp.array
+            A 1D NumPy or CuPy array.
 
         """
 
@@ -5950,7 +7027,7 @@ class PODVector_real_std:
     def to_cupy(self, copy=False):
         """
 
-        Provide a Cupy view into a PODVector (e.g., RealVector, IntVector).
+        Provide a CuPy view into a PODVector (e.g., RealVector, IntVector).
 
         Parameters
         ----------
@@ -5975,7 +7052,7 @@ class PODVector_real_std:
     def to_numpy(self, copy=False):
         """
 
-        Provide a Numpy view into a PODVector (e.g., RealVector, IntVector).
+        Provide a NumPy view into a PODVector (e.g., RealVector, IntVector).
 
         Parameters
         ----------
@@ -5987,7 +7064,30 @@ class PODVector_real_std:
         Returns
         -------
         np.array
-            A 1D numpy array.
+            A 1D NumPy array.
+
+        """
+
+    def to_xp(self, copy=False):
+        """
+
+        Provide a NumPy or CuPy view into a PODVector (e.g., RealVector, IntVector),
+        depending on amr.Config.have_gpu .
+
+        This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
+        https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
+
+        Parameters
+        ----------
+        self : amrex.PODVector_*
+            A PODVector class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        xp.array
+            A 1D NumPy or CuPy array.
 
         """
 
@@ -6027,7 +7127,7 @@ class PODVector_uint64_arena:
     def to_cupy(self, copy=False):
         """
 
-        Provide a Cupy view into a PODVector (e.g., RealVector, IntVector).
+        Provide a CuPy view into a PODVector (e.g., RealVector, IntVector).
 
         Parameters
         ----------
@@ -6052,7 +7152,7 @@ class PODVector_uint64_arena:
     def to_numpy(self, copy=False):
         """
 
-        Provide a Numpy view into a PODVector (e.g., RealVector, IntVector).
+        Provide a NumPy view into a PODVector (e.g., RealVector, IntVector).
 
         Parameters
         ----------
@@ -6064,7 +7164,30 @@ class PODVector_uint64_arena:
         Returns
         -------
         np.array
-            A 1D numpy array.
+            A 1D NumPy array.
+
+        """
+
+    def to_xp(self, copy=False):
+        """
+
+        Provide a NumPy or CuPy view into a PODVector (e.g., RealVector, IntVector),
+        depending on amr.Config.have_gpu .
+
+        This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
+        https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
+
+        Parameters
+        ----------
+        self : amrex.PODVector_*
+            A PODVector class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        xp.array
+            A 1D NumPy or CuPy array.
 
         """
 
@@ -6104,7 +7227,7 @@ class PODVector_uint64_pinned:
     def to_cupy(self, copy=False):
         """
 
-        Provide a Cupy view into a PODVector (e.g., RealVector, IntVector).
+        Provide a CuPy view into a PODVector (e.g., RealVector, IntVector).
 
         Parameters
         ----------
@@ -6129,7 +7252,7 @@ class PODVector_uint64_pinned:
     def to_numpy(self, copy=False):
         """
 
-        Provide a Numpy view into a PODVector (e.g., RealVector, IntVector).
+        Provide a NumPy view into a PODVector (e.g., RealVector, IntVector).
 
         Parameters
         ----------
@@ -6141,7 +7264,30 @@ class PODVector_uint64_pinned:
         Returns
         -------
         np.array
-            A 1D numpy array.
+            A 1D NumPy array.
+
+        """
+
+    def to_xp(self, copy=False):
+        """
+
+        Provide a NumPy or CuPy view into a PODVector (e.g., RealVector, IntVector),
+        depending on amr.Config.have_gpu .
+
+        This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
+        https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
+
+        Parameters
+        ----------
+        self : amrex.PODVector_*
+            A PODVector class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        xp.array
+            A 1D NumPy or CuPy array.
 
         """
 
@@ -6181,7 +7327,7 @@ class PODVector_uint64_std:
     def to_cupy(self, copy=False):
         """
 
-        Provide a Cupy view into a PODVector (e.g., RealVector, IntVector).
+        Provide a CuPy view into a PODVector (e.g., RealVector, IntVector).
 
         Parameters
         ----------
@@ -6206,7 +7352,7 @@ class PODVector_uint64_std:
     def to_numpy(self, copy=False):
         """
 
-        Provide a Numpy view into a PODVector (e.g., RealVector, IntVector).
+        Provide a NumPy view into a PODVector (e.g., RealVector, IntVector).
 
         Parameters
         ----------
@@ -6218,7 +7364,30 @@ class PODVector_uint64_std:
         Returns
         -------
         np.array
-            A 1D numpy array.
+            A 1D NumPy array.
+
+        """
+
+    def to_xp(self, copy=False):
+        """
+
+        Provide a NumPy or CuPy view into a PODVector (e.g., RealVector, IntVector),
+        depending on amr.Config.have_gpu .
+
+        This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
+        https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
+
+        Parameters
+        ----------
+        self : amrex.PODVector_*
+            A PODVector class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        xp.array
+            A 1D NumPy or CuPy array.
 
         """
 
@@ -11603,7 +12772,7 @@ class StructOfArrays_3_0_idcpu_arena:
     def to_cupy(self, copy=False):
         """
 
-        Provide Cupy views into a StructOfArrays.
+        Provide CuPy views into a StructOfArrays.
 
         Parameters
         ----------
@@ -11616,7 +12785,7 @@ class StructOfArrays_3_0_idcpu_arena:
         -------
         namedtuple
             A tuple with real and int components that are each dicts
-            of 1D numpy arrays. The dictionary key order is the same as
+            of 1D NumPy arrays. The dictionary key order is the same as
             in the C++ component order.
             For pure SoA particle layouts, an additional component idcpu
             with global particle indices is populated.
@@ -11631,7 +12800,7 @@ class StructOfArrays_3_0_idcpu_arena:
     def to_numpy(self, copy=False):
         """
 
-        Provide Numpy views into a StructOfArrays.
+        Provide NumPy views into a StructOfArrays.
 
         Parameters
         ----------
@@ -11644,7 +12813,33 @@ class StructOfArrays_3_0_idcpu_arena:
         -------
         namedtuple
             A tuple with real and int components that are each dicts
-            of 1D numpy arrays. The dictionary key order is the same as
+            of 1D NumPy arrays. The dictionary key order is the same as
+            in the C++ component order.
+            For pure SoA particle layouts, an additional component idcpu
+            with global particle indices is populated.
+
+        """
+
+    def to_xp(self, copy=False):
+        """
+
+        Provide NumPy or CuPy views into a StructOfArrays, depending on amr.Config.have_gpu .
+
+        This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
+        https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
+
+        Parameters
+        ----------
+        self : amrex.StructOfArrays_*
+            A StructOfArrays class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        namedtuple
+            A tuple with real and int components that are each dicts
+            of 1D NumPy or CuPy arrays. The dictionary key order is the same as
             in the C++ component order.
             For pure SoA particle layouts, an additional component idcpu
             with global particle indices is populated.
@@ -11778,7 +12973,7 @@ class StructOfArrays_3_0_idcpu_default:
     def to_cupy(self, copy=False):
         """
 
-        Provide Cupy views into a StructOfArrays.
+        Provide CuPy views into a StructOfArrays.
 
         Parameters
         ----------
@@ -11791,7 +12986,7 @@ class StructOfArrays_3_0_idcpu_default:
         -------
         namedtuple
             A tuple with real and int components that are each dicts
-            of 1D numpy arrays. The dictionary key order is the same as
+            of 1D NumPy arrays. The dictionary key order is the same as
             in the C++ component order.
             For pure SoA particle layouts, an additional component idcpu
             with global particle indices is populated.
@@ -11806,7 +13001,7 @@ class StructOfArrays_3_0_idcpu_default:
     def to_numpy(self, copy=False):
         """
 
-        Provide Numpy views into a StructOfArrays.
+        Provide NumPy views into a StructOfArrays.
 
         Parameters
         ----------
@@ -11819,7 +13014,33 @@ class StructOfArrays_3_0_idcpu_default:
         -------
         namedtuple
             A tuple with real and int components that are each dicts
-            of 1D numpy arrays. The dictionary key order is the same as
+            of 1D NumPy arrays. The dictionary key order is the same as
+            in the C++ component order.
+            For pure SoA particle layouts, an additional component idcpu
+            with global particle indices is populated.
+
+        """
+
+    def to_xp(self, copy=False):
+        """
+
+        Provide NumPy or CuPy views into a StructOfArrays, depending on amr.Config.have_gpu .
+
+        This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
+        https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
+
+        Parameters
+        ----------
+        self : amrex.StructOfArrays_*
+            A StructOfArrays class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        namedtuple
+            A tuple with real and int components that are each dicts
+            of 1D NumPy or CuPy arrays. The dictionary key order is the same as
             in the C++ component order.
             For pure SoA particle layouts, an additional component idcpu
             with global particle indices is populated.
@@ -11953,7 +13174,7 @@ class StructOfArrays_3_0_idcpu_pinned:
     def to_cupy(self, copy=False):
         """
 
-        Provide Cupy views into a StructOfArrays.
+        Provide CuPy views into a StructOfArrays.
 
         Parameters
         ----------
@@ -11966,7 +13187,7 @@ class StructOfArrays_3_0_idcpu_pinned:
         -------
         namedtuple
             A tuple with real and int components that are each dicts
-            of 1D numpy arrays. The dictionary key order is the same as
+            of 1D NumPy arrays. The dictionary key order is the same as
             in the C++ component order.
             For pure SoA particle layouts, an additional component idcpu
             with global particle indices is populated.
@@ -11981,7 +13202,7 @@ class StructOfArrays_3_0_idcpu_pinned:
     def to_numpy(self, copy=False):
         """
 
-        Provide Numpy views into a StructOfArrays.
+        Provide NumPy views into a StructOfArrays.
 
         Parameters
         ----------
@@ -11994,7 +13215,33 @@ class StructOfArrays_3_0_idcpu_pinned:
         -------
         namedtuple
             A tuple with real and int components that are each dicts
-            of 1D numpy arrays. The dictionary key order is the same as
+            of 1D NumPy arrays. The dictionary key order is the same as
+            in the C++ component order.
+            For pure SoA particle layouts, an additional component idcpu
+            with global particle indices is populated.
+
+        """
+
+    def to_xp(self, copy=False):
+        """
+
+        Provide NumPy or CuPy views into a StructOfArrays, depending on amr.Config.have_gpu .
+
+        This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
+        https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
+
+        Parameters
+        ----------
+        self : amrex.StructOfArrays_*
+            A StructOfArrays class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        namedtuple
+            A tuple with real and int components that are each dicts
+            of 1D NumPy or CuPy arrays. The dictionary key order is the same as
             in the C++ component order.
             For pure SoA particle layouts, an additional component idcpu
             with global particle indices is populated.
@@ -12123,7 +13370,7 @@ class StructOfArrays_3_1_arena:
     def to_cupy(self, copy=False):
         """
 
-        Provide Cupy views into a StructOfArrays.
+        Provide CuPy views into a StructOfArrays.
 
         Parameters
         ----------
@@ -12136,7 +13383,7 @@ class StructOfArrays_3_1_arena:
         -------
         namedtuple
             A tuple with real and int components that are each dicts
-            of 1D numpy arrays. The dictionary key order is the same as
+            of 1D NumPy arrays. The dictionary key order is the same as
             in the C++ component order.
             For pure SoA particle layouts, an additional component idcpu
             with global particle indices is populated.
@@ -12151,7 +13398,7 @@ class StructOfArrays_3_1_arena:
     def to_numpy(self, copy=False):
         """
 
-        Provide Numpy views into a StructOfArrays.
+        Provide NumPy views into a StructOfArrays.
 
         Parameters
         ----------
@@ -12164,7 +13411,33 @@ class StructOfArrays_3_1_arena:
         -------
         namedtuple
             A tuple with real and int components that are each dicts
-            of 1D numpy arrays. The dictionary key order is the same as
+            of 1D NumPy arrays. The dictionary key order is the same as
+            in the C++ component order.
+            For pure SoA particle layouts, an additional component idcpu
+            with global particle indices is populated.
+
+        """
+
+    def to_xp(self, copy=False):
+        """
+
+        Provide NumPy or CuPy views into a StructOfArrays, depending on amr.Config.have_gpu .
+
+        This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
+        https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
+
+        Parameters
+        ----------
+        self : amrex.StructOfArrays_*
+            A StructOfArrays class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        namedtuple
+            A tuple with real and int components that are each dicts
+            of 1D NumPy or CuPy arrays. The dictionary key order is the same as
             in the C++ component order.
             For pure SoA particle layouts, an additional component idcpu
             with global particle indices is populated.
@@ -12293,7 +13566,7 @@ class StructOfArrays_3_1_default:
     def to_cupy(self, copy=False):
         """
 
-        Provide Cupy views into a StructOfArrays.
+        Provide CuPy views into a StructOfArrays.
 
         Parameters
         ----------
@@ -12306,7 +13579,7 @@ class StructOfArrays_3_1_default:
         -------
         namedtuple
             A tuple with real and int components that are each dicts
-            of 1D numpy arrays. The dictionary key order is the same as
+            of 1D NumPy arrays. The dictionary key order is the same as
             in the C++ component order.
             For pure SoA particle layouts, an additional component idcpu
             with global particle indices is populated.
@@ -12321,7 +13594,7 @@ class StructOfArrays_3_1_default:
     def to_numpy(self, copy=False):
         """
 
-        Provide Numpy views into a StructOfArrays.
+        Provide NumPy views into a StructOfArrays.
 
         Parameters
         ----------
@@ -12334,7 +13607,33 @@ class StructOfArrays_3_1_default:
         -------
         namedtuple
             A tuple with real and int components that are each dicts
-            of 1D numpy arrays. The dictionary key order is the same as
+            of 1D NumPy arrays. The dictionary key order is the same as
+            in the C++ component order.
+            For pure SoA particle layouts, an additional component idcpu
+            with global particle indices is populated.
+
+        """
+
+    def to_xp(self, copy=False):
+        """
+
+        Provide NumPy or CuPy views into a StructOfArrays, depending on amr.Config.have_gpu .
+
+        This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
+        https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
+
+        Parameters
+        ----------
+        self : amrex.StructOfArrays_*
+            A StructOfArrays class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        namedtuple
+            A tuple with real and int components that are each dicts
+            of 1D NumPy or CuPy arrays. The dictionary key order is the same as
             in the C++ component order.
             For pure SoA particle layouts, an additional component idcpu
             with global particle indices is populated.
@@ -12463,7 +13762,7 @@ class StructOfArrays_3_1_pinned:
     def to_cupy(self, copy=False):
         """
 
-        Provide Cupy views into a StructOfArrays.
+        Provide CuPy views into a StructOfArrays.
 
         Parameters
         ----------
@@ -12476,7 +13775,7 @@ class StructOfArrays_3_1_pinned:
         -------
         namedtuple
             A tuple with real and int components that are each dicts
-            of 1D numpy arrays. The dictionary key order is the same as
+            of 1D NumPy arrays. The dictionary key order is the same as
             in the C++ component order.
             For pure SoA particle layouts, an additional component idcpu
             with global particle indices is populated.
@@ -12491,7 +13790,7 @@ class StructOfArrays_3_1_pinned:
     def to_numpy(self, copy=False):
         """
 
-        Provide Numpy views into a StructOfArrays.
+        Provide NumPy views into a StructOfArrays.
 
         Parameters
         ----------
@@ -12504,7 +13803,33 @@ class StructOfArrays_3_1_pinned:
         -------
         namedtuple
             A tuple with real and int components that are each dicts
-            of 1D numpy arrays. The dictionary key order is the same as
+            of 1D NumPy arrays. The dictionary key order is the same as
+            in the C++ component order.
+            For pure SoA particle layouts, an additional component idcpu
+            with global particle indices is populated.
+
+        """
+
+    def to_xp(self, copy=False):
+        """
+
+        Provide NumPy or CuPy views into a StructOfArrays, depending on amr.Config.have_gpu .
+
+        This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
+        https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
+
+        Parameters
+        ----------
+        self : amrex.StructOfArrays_*
+            A StructOfArrays class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        namedtuple
+            A tuple with real and int components that are each dicts
+            of 1D NumPy or CuPy arrays. The dictionary key order is the same as
             in the C++ component order.
             For pure SoA particle layouts, an additional component idcpu
             with global particle indices is populated.
@@ -12638,7 +13963,7 @@ class StructOfArrays_7_0_idcpu_arena:
     def to_cupy(self, copy=False):
         """
 
-        Provide Cupy views into a StructOfArrays.
+        Provide CuPy views into a StructOfArrays.
 
         Parameters
         ----------
@@ -12651,7 +13976,7 @@ class StructOfArrays_7_0_idcpu_arena:
         -------
         namedtuple
             A tuple with real and int components that are each dicts
-            of 1D numpy arrays. The dictionary key order is the same as
+            of 1D NumPy arrays. The dictionary key order is the same as
             in the C++ component order.
             For pure SoA particle layouts, an additional component idcpu
             with global particle indices is populated.
@@ -12666,7 +13991,7 @@ class StructOfArrays_7_0_idcpu_arena:
     def to_numpy(self, copy=False):
         """
 
-        Provide Numpy views into a StructOfArrays.
+        Provide NumPy views into a StructOfArrays.
 
         Parameters
         ----------
@@ -12679,7 +14004,33 @@ class StructOfArrays_7_0_idcpu_arena:
         -------
         namedtuple
             A tuple with real and int components that are each dicts
-            of 1D numpy arrays. The dictionary key order is the same as
+            of 1D NumPy arrays. The dictionary key order is the same as
+            in the C++ component order.
+            For pure SoA particle layouts, an additional component idcpu
+            with global particle indices is populated.
+
+        """
+
+    def to_xp(self, copy=False):
+        """
+
+        Provide NumPy or CuPy views into a StructOfArrays, depending on amr.Config.have_gpu .
+
+        This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
+        https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
+
+        Parameters
+        ----------
+        self : amrex.StructOfArrays_*
+            A StructOfArrays class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        namedtuple
+            A tuple with real and int components that are each dicts
+            of 1D NumPy or CuPy arrays. The dictionary key order is the same as
             in the C++ component order.
             For pure SoA particle layouts, an additional component idcpu
             with global particle indices is populated.
@@ -12813,7 +14164,7 @@ class StructOfArrays_7_0_idcpu_default:
     def to_cupy(self, copy=False):
         """
 
-        Provide Cupy views into a StructOfArrays.
+        Provide CuPy views into a StructOfArrays.
 
         Parameters
         ----------
@@ -12826,7 +14177,7 @@ class StructOfArrays_7_0_idcpu_default:
         -------
         namedtuple
             A tuple with real and int components that are each dicts
-            of 1D numpy arrays. The dictionary key order is the same as
+            of 1D NumPy arrays. The dictionary key order is the same as
             in the C++ component order.
             For pure SoA particle layouts, an additional component idcpu
             with global particle indices is populated.
@@ -12841,7 +14192,7 @@ class StructOfArrays_7_0_idcpu_default:
     def to_numpy(self, copy=False):
         """
 
-        Provide Numpy views into a StructOfArrays.
+        Provide NumPy views into a StructOfArrays.
 
         Parameters
         ----------
@@ -12854,7 +14205,33 @@ class StructOfArrays_7_0_idcpu_default:
         -------
         namedtuple
             A tuple with real and int components that are each dicts
-            of 1D numpy arrays. The dictionary key order is the same as
+            of 1D NumPy arrays. The dictionary key order is the same as
+            in the C++ component order.
+            For pure SoA particle layouts, an additional component idcpu
+            with global particle indices is populated.
+
+        """
+
+    def to_xp(self, copy=False):
+        """
+
+        Provide NumPy or CuPy views into a StructOfArrays, depending on amr.Config.have_gpu .
+
+        This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
+        https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
+
+        Parameters
+        ----------
+        self : amrex.StructOfArrays_*
+            A StructOfArrays class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        namedtuple
+            A tuple with real and int components that are each dicts
+            of 1D NumPy or CuPy arrays. The dictionary key order is the same as
             in the C++ component order.
             For pure SoA particle layouts, an additional component idcpu
             with global particle indices is populated.
@@ -12988,7 +14365,7 @@ class StructOfArrays_7_0_idcpu_pinned:
     def to_cupy(self, copy=False):
         """
 
-        Provide Cupy views into a StructOfArrays.
+        Provide CuPy views into a StructOfArrays.
 
         Parameters
         ----------
@@ -13001,7 +14378,7 @@ class StructOfArrays_7_0_idcpu_pinned:
         -------
         namedtuple
             A tuple with real and int components that are each dicts
-            of 1D numpy arrays. The dictionary key order is the same as
+            of 1D NumPy arrays. The dictionary key order is the same as
             in the C++ component order.
             For pure SoA particle layouts, an additional component idcpu
             with global particle indices is populated.
@@ -13016,7 +14393,7 @@ class StructOfArrays_7_0_idcpu_pinned:
     def to_numpy(self, copy=False):
         """
 
-        Provide Numpy views into a StructOfArrays.
+        Provide NumPy views into a StructOfArrays.
 
         Parameters
         ----------
@@ -13029,7 +14406,33 @@ class StructOfArrays_7_0_idcpu_pinned:
         -------
         namedtuple
             A tuple with real and int components that are each dicts
-            of 1D numpy arrays. The dictionary key order is the same as
+            of 1D NumPy arrays. The dictionary key order is the same as
+            in the C++ component order.
+            For pure SoA particle layouts, an additional component idcpu
+            with global particle indices is populated.
+
+        """
+
+    def to_xp(self, copy=False):
+        """
+
+        Provide NumPy or CuPy views into a StructOfArrays, depending on amr.Config.have_gpu .
+
+        This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
+        https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
+
+        Parameters
+        ----------
+        self : amrex.StructOfArrays_*
+            A StructOfArrays class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        namedtuple
+            A tuple with real and int components that are each dicts
+            of 1D NumPy or CuPy arrays. The dictionary key order is the same as
             in the C++ component order.
             For pure SoA particle layouts, an additional component idcpu
             with global particle indices is populated.
@@ -13163,7 +14566,7 @@ class StructOfArrays_8_0_idcpu_arena:
     def to_cupy(self, copy=False):
         """
 
-        Provide Cupy views into a StructOfArrays.
+        Provide CuPy views into a StructOfArrays.
 
         Parameters
         ----------
@@ -13176,7 +14579,7 @@ class StructOfArrays_8_0_idcpu_arena:
         -------
         namedtuple
             A tuple with real and int components that are each dicts
-            of 1D numpy arrays. The dictionary key order is the same as
+            of 1D NumPy arrays. The dictionary key order is the same as
             in the C++ component order.
             For pure SoA particle layouts, an additional component idcpu
             with global particle indices is populated.
@@ -13191,7 +14594,7 @@ class StructOfArrays_8_0_idcpu_arena:
     def to_numpy(self, copy=False):
         """
 
-        Provide Numpy views into a StructOfArrays.
+        Provide NumPy views into a StructOfArrays.
 
         Parameters
         ----------
@@ -13204,7 +14607,33 @@ class StructOfArrays_8_0_idcpu_arena:
         -------
         namedtuple
             A tuple with real and int components that are each dicts
-            of 1D numpy arrays. The dictionary key order is the same as
+            of 1D NumPy arrays. The dictionary key order is the same as
+            in the C++ component order.
+            For pure SoA particle layouts, an additional component idcpu
+            with global particle indices is populated.
+
+        """
+
+    def to_xp(self, copy=False):
+        """
+
+        Provide NumPy or CuPy views into a StructOfArrays, depending on amr.Config.have_gpu .
+
+        This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
+        https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
+
+        Parameters
+        ----------
+        self : amrex.StructOfArrays_*
+            A StructOfArrays class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        namedtuple
+            A tuple with real and int components that are each dicts
+            of 1D NumPy or CuPy arrays. The dictionary key order is the same as
             in the C++ component order.
             For pure SoA particle layouts, an additional component idcpu
             with global particle indices is populated.
@@ -13338,7 +14767,7 @@ class StructOfArrays_8_0_idcpu_default:
     def to_cupy(self, copy=False):
         """
 
-        Provide Cupy views into a StructOfArrays.
+        Provide CuPy views into a StructOfArrays.
 
         Parameters
         ----------
@@ -13351,7 +14780,7 @@ class StructOfArrays_8_0_idcpu_default:
         -------
         namedtuple
             A tuple with real and int components that are each dicts
-            of 1D numpy arrays. The dictionary key order is the same as
+            of 1D NumPy arrays. The dictionary key order is the same as
             in the C++ component order.
             For pure SoA particle layouts, an additional component idcpu
             with global particle indices is populated.
@@ -13366,7 +14795,7 @@ class StructOfArrays_8_0_idcpu_default:
     def to_numpy(self, copy=False):
         """
 
-        Provide Numpy views into a StructOfArrays.
+        Provide NumPy views into a StructOfArrays.
 
         Parameters
         ----------
@@ -13379,7 +14808,33 @@ class StructOfArrays_8_0_idcpu_default:
         -------
         namedtuple
             A tuple with real and int components that are each dicts
-            of 1D numpy arrays. The dictionary key order is the same as
+            of 1D NumPy arrays. The dictionary key order is the same as
+            in the C++ component order.
+            For pure SoA particle layouts, an additional component idcpu
+            with global particle indices is populated.
+
+        """
+
+    def to_xp(self, copy=False):
+        """
+
+        Provide NumPy or CuPy views into a StructOfArrays, depending on amr.Config.have_gpu .
+
+        This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
+        https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
+
+        Parameters
+        ----------
+        self : amrex.StructOfArrays_*
+            A StructOfArrays class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        namedtuple
+            A tuple with real and int components that are each dicts
+            of 1D NumPy or CuPy arrays. The dictionary key order is the same as
             in the C++ component order.
             For pure SoA particle layouts, an additional component idcpu
             with global particle indices is populated.
@@ -13513,7 +14968,7 @@ class StructOfArrays_8_0_idcpu_pinned:
     def to_cupy(self, copy=False):
         """
 
-        Provide Cupy views into a StructOfArrays.
+        Provide CuPy views into a StructOfArrays.
 
         Parameters
         ----------
@@ -13526,7 +14981,7 @@ class StructOfArrays_8_0_idcpu_pinned:
         -------
         namedtuple
             A tuple with real and int components that are each dicts
-            of 1D numpy arrays. The dictionary key order is the same as
+            of 1D NumPy arrays. The dictionary key order is the same as
             in the C++ component order.
             For pure SoA particle layouts, an additional component idcpu
             with global particle indices is populated.
@@ -13541,7 +14996,7 @@ class StructOfArrays_8_0_idcpu_pinned:
     def to_numpy(self, copy=False):
         """
 
-        Provide Numpy views into a StructOfArrays.
+        Provide NumPy views into a StructOfArrays.
 
         Parameters
         ----------
@@ -13554,7 +15009,33 @@ class StructOfArrays_8_0_idcpu_pinned:
         -------
         namedtuple
             A tuple with real and int components that are each dicts
-            of 1D numpy arrays. The dictionary key order is the same as
+            of 1D NumPy arrays. The dictionary key order is the same as
+            in the C++ component order.
+            For pure SoA particle layouts, an additional component idcpu
+            with global particle indices is populated.
+
+        """
+
+    def to_xp(self, copy=False):
+        """
+
+        Provide NumPy or CuPy views into a StructOfArrays, depending on amr.Config.have_gpu .
+
+        This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
+        https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
+
+        Parameters
+        ----------
+        self : amrex.StructOfArrays_*
+            A StructOfArrays class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        namedtuple
+            A tuple with real and int components that are each dicts
+            of 1D NumPy or CuPy arrays. The dictionary key order is the same as
             in the C++ component order.
             For pure SoA particle layouts, an additional component idcpu
             with global particle indices is populated.
