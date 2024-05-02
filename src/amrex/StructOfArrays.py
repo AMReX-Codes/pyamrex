@@ -165,7 +165,12 @@ def soa_to_cupy(self, copy=False):
     else:
         soa_view = SoA_cp({}, {}, None)
 
-    real_comp_names = self.soa_real_comps(self.num_real_comps)
+    # for the legacy data layout, do not start with x, y, z but with a, b, c, ...
+    if self.has_idcpu:
+        real_comp_names = self.soa_real_comps(self.num_real_comps)
+    else:
+        real_comp_names = self.soa_real_comps(self.num_real_comps, rotate=False)
+
     for idx_real in range(self.num_real_comps):
         soa_view.real[real_comp_names[idx_real]] = self.get_real_data(idx_real).to_cupy(
             copy=copy
@@ -173,12 +178,9 @@ def soa_to_cupy(self, copy=False):
 
     int_comp_names = self.soa_int_comps(self.num_int_comps)
     for idx_int in range(self.num_int_comps):
-        soa_view.int[int_comp_names[idx_real]] = self.get_int_data(idx_int).to_cupy(
+        soa_view.int[int_comp_names[idx_int]] = self.get_int_data(idx_int).to_cupy(
             copy=copy
         )
-
-    if self.has_idcpu:
-        soa_view.idcpu = self.get_idcpu_data().to_cupy(copy=copy)
 
     return soa_view
 
