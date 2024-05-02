@@ -7,7 +7,7 @@ The Python binding pyAMReX bridges the compute in AMReX block-structured codes a
 As such, it includes zero-copy GPU data access for AI/ML, in situ analysis, application coupling by implementing :ref:`standardized data interfaces <developers-implementation>`.
 
 
-CPU: numpy
+CPU: NumPy
 ----------
 
 zero-copy read and write access.
@@ -16,10 +16,10 @@ CPU as well as managed memory CPU/GPU.
 Call ``.to_numpy()`` on data objects of pyAMReX.
 See the optional arguments of this API.
 
-Writing to the created numpy array will also modify the underlying AMReX memory.
+Writing to the created NumPy array will also modify the underlying AMReX memory.
 
 
-GPU: cupy
+GPU: CuPy
 ---------
 
 GPU zero-copy read and write access.
@@ -27,7 +27,19 @@ GPU zero-copy read and write access.
 Call ``.to_cupy()`` on data objects of pyAMReX.
 See the optional arguments of this API.
 
-Writing to the created cupy array will also modify the underlying AMReX memory.
+Writing to the created CuPy array will also modify the underlying AMReX memory.
+
+
+CPU/GPU Agnostic Code: NumPy/CuPy
+---------------------------------
+
+The previous examples can be written in CPU/GPU agnostics manner.
+Either using NumPy (``np``) or CuPy (``cp``), we provide a `common short-hand abbreviation <https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code>`__ named ``xp`` .
+
+Call ``.to_xp()`` on data objects of pyAMReX.
+See the optional arguments of this API.
+
+Writing to the created NumPy/CuPy array will also modify the underlying AMReX memory.
 
 
 GPU: numba

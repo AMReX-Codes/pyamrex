@@ -9,9 +9,9 @@ License: BSD-3-Clause-LBNL
 from .Iterator import next
 
 
-def mf_to_numpy(amr, self, copy=False, order="F"):
+def mf_to_numpy(self, copy=False, order="F"):
     """
-    Provide a Numpy view into a MultiFab.
+    Provide a NumPy view into a MultiFab.
 
     This includes ngrow guard cells of each box.
 
@@ -34,9 +34,13 @@ def mf_to_numpy(amr, self, copy=False, order="F"):
     Returns
     -------
     list of numpy.array
-        A list of numpy n-dimensional arrays, for each local block in the
+        A list of NumPy n-dimensional arrays, for each local block in the
         MultiFab.
     """
+    import inspect
+
+    amr = inspect.getmodule(self)
+
     mf = self
     if copy:
         mf = amr.MultiFab(
@@ -58,7 +62,7 @@ def mf_to_numpy(amr, self, copy=False, order="F"):
 
 def mf_to_cupy(self, copy=False, order="F"):
     """
-    Provide a Cupy view into a MultiFab.
+    Provide a CuPy view into a MultiFab.
 
     This includes ngrow guard cells of each box.
 
@@ -81,7 +85,7 @@ def mf_to_cupy(self, copy=False, order="F"):
     Returns
     -------
     list of cupy.array
-        A list of cupy n-dimensional arrays, for each local block in the
+        A list of CuPy n-dimensional arrays, for each local block in the
         MultiFab.
 
     Raises
@@ -94,6 +98,46 @@ def mf_to_cupy(self, copy=False, order="F"):
         views.append(self.array(mfi).to_cupy(copy, order))
 
     return views
+
+
+def mf_to_xp(self, copy=False, order="F"):
+    """
+    Provide a NumPy or CuPy view into a MultiFab,
+    depending on amr.Config.have_gpu .
+
+    This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
+    https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
+
+    This includes ngrow guard cells of each box.
+
+    Note on the order of indices:
+    By default, this is as in AMReX in Fortran contiguous order, indexing as
+    x,y,z. This has performance implications for use in external libraries such
+    as cupy.
+    The order="C" option will index as z,y,x and perform better with cupy.
+    https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+    Parameters
+    ----------
+    self : amrex.MultiFab
+        A MultiFab class in pyAMReX
+    copy : bool, optional
+        Copy the data if true, otherwise create a view (default).
+    order : string, optional
+        F order (default) or C. C is faster with external libraries.
+
+    Returns
+    -------
+    list of xp.array
+        A list of NumPy or CuPy n-dimensional arrays, for each local block in the
+        MultiFab.
+    """
+    import inspect
+
+    amr = inspect.getmodule(self)
+    return (
+        self.to_cupy(copy, order) if amr.Config.have_gpu else self.to_numpy(copy, order)
+    )
 
 
 def copy_multifab(amr, self):
@@ -141,12 +185,9 @@ def register_MultiFab_extension(amr):
     # register member functions for the MultiFab type
     amr.MultiFab.__iter__ = lambda mfab: amr.MFIter(mfab)
 
-    amr.MultiFab.to_numpy = lambda self, copy=False, order="F": mf_to_numpy(
-        amr, self, copy, order
-    )
-    amr.MultiFab.to_numpy.__doc__ = mf_to_numpy.__doc__
-
+    amr.MultiFab.to_numpy = mf_to_numpy
     amr.MultiFab.to_cupy = mf_to_cupy
+    amr.MultiFab.to_xp = mf_to_xp
 
     amr.MultiFab.copy = lambda self: copy_multifab(amr, self)
     amr.MultiFab.copy.__doc__ = copy_multifab.__doc__

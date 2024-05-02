@@ -15,8 +15,12 @@ def Npart():
 
 @pytest.fixture(scope="function")
 def empty_particle_container(std_geometry, distmap, boxarr):
-    pc = amr.ParticleContainer_2_1_3_1_default(std_geometry, distmap, boxarr)
-    return pc
+    # This fixture includes the legacy AoS layout components, which for CuPy only run on CPU
+    # or require managed memory, see https://github.com/cupy/cupy/issues/2031
+    if amr.Config.have_gpu:
+        return amr.ParticleContainer_2_1_3_1_managed(std_geometry, distmap, boxarr)
+    else:
+        return amr.ParticleContainer_2_1_3_1_default(std_geometry, distmap, boxarr)
 
 
 @pytest.fixture(scope="function")
@@ -37,7 +41,12 @@ def std_particle():
 
 @pytest.fixture(scope="function")
 def particle_container(Npart, std_geometry, distmap, boxarr, std_real_box):
-    pc = amr.ParticleContainer_2_1_3_1_default(std_geometry, distmap, boxarr)
+    # This fixture includes the legacy AoS layout components, which for CuPy only run on CPU
+    # or require managed memory, see https://github.com/cupy/cupy/issues/2031
+    if amr.Config.have_gpu:
+        pc = amr.ParticleContainer_2_1_3_1_managed(std_geometry, distmap, boxarr)
+    else:
+        pc = amr.ParticleContainer_2_1_3_1_default(std_geometry, distmap, boxarr)
     myt = amr.ParticleInitType_2_1_3_1()
     myt.real_struct_data = [0.5, 0.6]
     myt.int_struct_data = [5]
@@ -128,7 +137,13 @@ def test_n_particles(particle_container, Npart):
 
 
 def test_pc_init():
-    pc = amr.ParticleContainer_2_1_3_1_default()
+    # This test only runs on CPU or requires managed memory,
+    # see https://github.com/cupy/cupy/issues/2031
+    pc = (
+        amr.ParticleContainer_2_1_3_1_managed()
+        if amr.Config.have_gpu
+        else amr.ParticleContainer_2_1_3_1_default()
+    )
 
     print("bytespread", pc.byte_spread)
     print("capacity", pc.print_capacity())
@@ -198,6 +213,8 @@ def test_pc_init():
             print(pti.pair_index)
             print(pti.geom(level=lvl))
 
+            # note: cupy does not yet support this
+            # https://github.com/cupy/cupy/issues/2031
             aos = pti.aos()
             aos_arr = aos.to_numpy()
             aos_arr[0]["x"] = 0.30
@@ -358,7 +375,7 @@ def test_soa_pc_numpy(soa_particle_container, Npart):
         # loop local tiles of particles
         for pti in pc.iterator(pc, level=lvl):
             # compile-time and runtime attributes
-            soa = pti.soa().to_cupy() if Config.have_gpu else pti.soa().to_numpy()
+            soa = pti.soa().to_xp()
 
             # print all particle ids in the chunk
             print("idcpu =", soa.idcpu)
@@ -410,7 +427,7 @@ def test_pc_numpy(particle_container, Npart):
             )
 
             # additional compile-time and runtime attributes in SoA format
-            soa = pti.soa().to_cupy() if Config.have_gpu else pti.soa().to_numpy()
+            soa = pti.soa().to_xp()
 
             # notes:
             # Only the next lines are the "HOT LOOP" of the computation.

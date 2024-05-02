@@ -76,7 +76,7 @@ def soa_int_comps(self, num_comps):
 
 def soa_to_numpy(self, copy=False):
     """
-    Provide Numpy views into a StructOfArrays.
+    Provide NumPy views into a StructOfArrays.
 
     Parameters
     ----------
@@ -89,7 +89,7 @@ def soa_to_numpy(self, copy=False):
     -------
     namedtuple
         A tuple with real and int components that are each dicts
-        of 1D numpy arrays. The dictionary key order is the same as
+        of 1D NumPy arrays. The dictionary key order is the same as
         in the C++ component order.
         For pure SoA particle layouts, an additional component idcpu
         with global particle indices is populated.
@@ -129,7 +129,7 @@ def soa_to_numpy(self, copy=False):
 
 def soa_to_cupy(self, copy=False):
     """
-    Provide Cupy views into a StructOfArrays.
+    Provide CuPy views into a StructOfArrays.
 
     Parameters
     ----------
@@ -142,7 +142,7 @@ def soa_to_cupy(self, copy=False):
     -------
     namedtuple
         A tuple with real and int components that are each dicts
-        of 1D numpy arrays. The dictionary key order is the same as
+        of 1D NumPy arrays. The dictionary key order is the same as
         in the C++ component order.
         For pure SoA particle layouts, an additional component idcpu
         with global particle indices is populated.
@@ -185,6 +185,35 @@ def soa_to_cupy(self, copy=False):
     return soa_view
 
 
+def soa_to_xp(self, copy=False):
+    """
+    Provide NumPy or CuPy views into a StructOfArrays, depending on amr.Config.have_gpu .
+
+    This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
+    https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
+
+    Parameters
+    ----------
+    self : amrex.StructOfArrays_*
+        A StructOfArrays class in pyAMReX
+    copy : bool, optional
+        Copy the data if true, otherwise create a view (default).
+
+    Returns
+    -------
+    namedtuple
+        A tuple with real and int components that are each dicts
+        of 1D NumPy or CuPy arrays. The dictionary key order is the same as
+        in the C++ component order.
+        For pure SoA particle layouts, an additional component idcpu
+        with global particle indices is populated.
+    """
+    import inspect
+
+    amr = inspect.getmodule(self)
+    return self.to_cupy(copy) if amr.Config.have_gpu else self.to_numpy(copy)
+
+
 def register_SoA_extension(amr):
     """StructOfArrays helper methods"""
     import inspect
@@ -204,3 +233,4 @@ def register_SoA_extension(amr):
         # converters
         SoA_type.to_numpy = soa_to_numpy
         SoA_type.to_cupy = soa_to_cupy
+        SoA_type.to_xp = soa_to_xp

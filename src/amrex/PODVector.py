@@ -9,7 +9,7 @@ License: BSD-3-Clause-LBNL
 
 def podvector_to_numpy(self, copy=False):
     """
-    Provide a Numpy view into a PODVector (e.g., RealVector, IntVector).
+    Provide a NumPy view into a PODVector (e.g., RealVector, IntVector).
 
     Parameters
     ----------
@@ -21,7 +21,7 @@ def podvector_to_numpy(self, copy=False):
     Returns
     -------
     np.array
-        A 1D numpy array.
+        A 1D NumPy array.
     """
     import numpy as np
 
@@ -41,7 +41,7 @@ def podvector_to_numpy(self, copy=False):
 
 def podvector_to_cupy(self, copy=False):
     """
-    Provide a Cupy view into a PODVector (e.g., RealVector, IntVector).
+    Provide a CuPy view into a PODVector (e.g., RealVector, IntVector).
 
     Parameters
     ----------
@@ -68,6 +68,32 @@ def podvector_to_cupy(self, copy=False):
         raise ValueError("Vector is empty.")
 
 
+def podvector_to_xp(self, copy=False):
+    """
+    Provide a NumPy or CuPy view into a PODVector (e.g., RealVector, IntVector),
+    depending on amr.Config.have_gpu .
+
+    This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
+    https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
+
+    Parameters
+    ----------
+    self : amrex.PODVector_*
+        A PODVector class in pyAMReX
+    copy : bool, optional
+        Copy the data if true, otherwise create a view (default).
+
+    Returns
+    -------
+    xp.array
+        A 1D NumPy or CuPy array.
+    """
+    import inspect
+
+    amr = inspect.getmodule(self)
+    return self.to_cupy(copy) if amr.Config.have_gpu else self.to_numpy(copy)
+
+
 def register_PODVector_extension(amr):
     """PODVector helper methods"""
     import inspect
@@ -82,3 +108,4 @@ def register_PODVector_extension(amr):
     ):
         POD_type.to_numpy = podvector_to_numpy
         POD_type.to_cupy = podvector_to_cupy
+        POD_type.to_xp = podvector_to_xp

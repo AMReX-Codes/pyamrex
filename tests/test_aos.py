@@ -14,7 +14,11 @@ def test_aos_init():
 
 
 def test_aos_push_pop():
-    aos = amr.ArrayOfStructs_2_1_default()
+    aos = (
+        amr.ArrayOfStructs_2_1_managed()
+        if amr.Config.have_gpu
+        else amr.ArrayOfStructs_2_1_default()
+    )
     p1 = amr.Particle_2_1()
     p1.set_rdata([1.5, 2.2])
     p1.set_idata([3])
@@ -49,7 +53,11 @@ def test_aos_push_pop():
 
 
 def test_array_interface():
-    aos = amr.ArrayOfStructs_2_1_default()
+    aos = (
+        amr.ArrayOfStructs_2_1_managed()
+        if amr.Config.have_gpu
+        else amr.ArrayOfStructs_2_1_default()
+    )
     p1 = amr.Particle_2_1()
     p1.setPos([1, 2, 3])
     p1.set_rdata([4.5, 5.2])
