@@ -38,8 +38,8 @@ def amrex_init(tmpdir):
                 "amrex.signal_handling=0",
                 # abort GPU runs if out-of-memory instead of swapping to host RAM
                 # "abort_on_out_of_gpu_memory=1",
-                # the arena for GPU runs defaults to managed
-                "amrex.the_arena_is_managed=1",
+                # avoid managed memory unless explicitly used
+                "amrex.the_arena_is_managed=0",
             ]
         )
         yield
