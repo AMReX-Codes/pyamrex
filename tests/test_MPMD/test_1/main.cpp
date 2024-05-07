@@ -82,7 +82,7 @@ int main(int argc, char* argv[])
         // Global Max
         amrex::ParallelAllReduce::Max<amrex::Real>(glb_max,comm);
         if (glb_max != amrex::Real(0.0)) {
-	    amrex::Abort("There appears to be a mismatch in data-ordering \n");
+        amrex::Abort("There appears to be a mismatch in data-ordering \n");
         }
     }
     amrex::Finalize();

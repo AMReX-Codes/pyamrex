@@ -9,6 +9,7 @@
 # Authors: Bhargav Sriram Siddani, Revathi Jambunathan, Edoardo Zoni, Olga Shapoval, David Grote, Axel Huebl
 
 from mpi4py import MPI
+
 import amrex.space3d as amr
 
 # Initialize amrex::MPMD to establish communication across the two apps
@@ -34,8 +35,8 @@ copr.recv(mf, 0, 1)
 
 # Fill the second MultiFab component based on the first component
 for mfi in mf:
-    # Convert Array4 to numpy/cupy array 
-    mf_array = mf.array(mfi).to_xp(copy=False,order='F')
+    # Convert Array4 to numpy/cupy array
+    mf_array = mf.array(mfi).to_xp(copy=False, order="F")
     mf_array[:, :, :, 1] = 10.0 * mf_array[:, :, :, 0]
 
 # Send ONLY the second MultiFab component to the other (C++) app
