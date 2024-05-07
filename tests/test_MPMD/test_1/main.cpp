@@ -57,16 +57,34 @@ int main(int argc, char* argv[])
                 mf_array(i,j,k,0) = 1.0 + std::exp(-r_squared);
 
             });
-         }
+        }
         // Send ONLY the first populated MultiFab component to the other app
         copr.send(mf,0,1);
         // Receive ONLY the second MultiFab component from the other app
         copr.recv(mf,1,1);
-        //Plot MultiFab Data
-        WriteSingleLevelPlotfile("plt_cpp_001", mf, {"comp0","comp1"}, geom, 0., 0);
+        // Cross-verification
+        for(amrex::MFIter mfi(mf); mfi.isValid(); ++mfi){
+            const amrex::Box& bx = mfi.validbox();
+            const amrex::Array4<amrex::Real>& mf_array = mf.array(mfi);
 
+            amrex::ParallelFor(bx, [=] AMREX_GPU_DEVICE(int i, int j, int k){
+
+                mf_array(i,j,k,1) -= (amrex::Real(10.0)*mf_array(i,j,k,0));
+
+            });
+        }
+        amrex::Real glb_max = amrex::Real(0.0);
+        // Local Max
+        for(amrex::MFIter mfi(mf); mfi.isValid(); ++mfi) {
+            amrex::FArrayBox& fab = mf[mfi];
+            glb_max = amrex::max<amrex::Real>(glb_max,fab.maxabs<amrex::RunOn::Device>(1));
+        }
+        // Global Max
+        amrex::ParallelAllReduce::Max<amrex::Real>(glb_max,comm);
+        if (glb_max != amrex::Real(0.0)) {
+	    amrex::Abort("There appears to be a mismatch in data-ordering \n");
+        }
     }
     amrex::Finalize();
     amrex::MPMD::Finalize();
-
 }
