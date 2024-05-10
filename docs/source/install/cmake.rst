@@ -63,7 +63,7 @@ or by adding arguments with ``-D<OPTION>=<VALUE>`` to the first CMake call, e.g.
 
 .. code-block:: bash
 
-   cmake -S . -B build -DAMREX_GPU_BACKEND=CUDA -DAMREX_MPI=OFF -DAMReX_SPACEDIM="1;2;3"
+   cmake -S . -B build -DAMReX_GPU_BACKEND=CUDA -DAMReX_MPI=OFF -DAMReX_SPACEDIM="1;2;3"
 
 **That's it!**
 
