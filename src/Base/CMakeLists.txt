@@ -33,6 +33,12 @@ foreach(D IN LISTS AMReX_SPACEDIM)
         Utility.cpp
         Vector.cpp
         Version.cpp
-        MPMD.cpp
     )
+
+    if (AMReX_MPI)
+        target_sources(pyAMReX_${D}d
+          PRIVATE
+            MPMD.cpp
+        )
+    endif()
 endforeach()
