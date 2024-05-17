@@ -37,11 +37,12 @@ from __future__ import annotations
 
 import os as os
 
-from amrex.Array4 import register_Array4_extension
-from amrex.ArrayOfStructs import register_AoS_extension
-from amrex.MultiFab import register_MultiFab_extension
-from amrex.ParticleContainer import register_ParticleContainer_extension
-from amrex.PODVector import register_PODVector_extension
+from amrex.extensions.Array4 import register_Array4_extension
+from amrex.extensions.ArrayOfStructs import register_AoS_extension
+from amrex.extensions.MultiFab import register_MultiFab_extension
+from amrex.extensions.ParticleContainer import register_ParticleContainer_extension
+from amrex.extensions.PODVector import register_PODVector_extension
+from amrex.extensions.StructOfArrays import register_SoA_extension
 from amrex.space3d.amrex_3d_pybind import (
     AlmostEqual,
     AMReX,
@@ -253,7 +254,6 @@ from amrex.space3d.amrex_3d_pybind import (
     unpack_ids,
     write_single_level_plotfile,
 )
-from amrex.StructOfArrays import register_SoA_extension
 
 from . import amrex_3d_pybind
 
