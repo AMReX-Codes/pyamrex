@@ -45,12 +45,12 @@ def Print(*args, **kwargs):
         print(*args, **kwargs)
 
 
-from ..Array4 import register_Array4_extension
-from ..ArrayOfStructs import register_AoS_extension
-from ..MultiFab import register_MultiFab_extension
-from ..ParticleContainer import register_ParticleContainer_extension
-from ..PODVector import register_PODVector_extension
-from ..StructOfArrays import register_SoA_extension
+from ..extensions.Array4 import register_Array4_extension
+from ..extensions.ArrayOfStructs import register_AoS_extension
+from ..extensions.MultiFab import register_MultiFab_extension
+from ..extensions.ParticleContainer import register_ParticleContainer_extension
+from ..extensions.PODVector import register_PODVector_extension
+from ..extensions.StructOfArrays import register_SoA_extension
 
 register_Array4_extension(amrex_3d_pybind)
 register_MultiFab_extension(amrex_3d_pybind)
