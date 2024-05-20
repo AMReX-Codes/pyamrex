@@ -23,7 +23,7 @@ void init_PlotFileUtil(py::module &m) {
         py::arg_v("extra_dirs", Vector<std::string>(), "list[str]"));
 
   py::class_<PlotFileData>(m, "PlotFileData")
-      .def(py::init<std::string const &>(), &PlotFileData::())
+      .def(py::init<std::string const &>(), &PlotFileData())
 
       .def("spaceDim", &PlotFileData::spaceDim)
       .def("time", &PlotFileData::time)
