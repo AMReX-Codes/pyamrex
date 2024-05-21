@@ -23,7 +23,8 @@ void init_PlotFileUtil(py::module &m) {
         py::arg_v("extra_dirs", Vector<std::string>(), "list[str]"));
 
   py::class_<PlotFileData>(m, "PlotFileData")
-      .def(py::init<std::string const &>(), &PlotFileData::())
+      // explicitly provide constructor argument types
+      .def(py::init<std::string const&>())
 
       .def("spaceDim", &PlotFileData::spaceDim)
       .def("time", &PlotFileData::time)
@@ -43,10 +44,8 @@ void init_PlotFileUtil(py::module &m) {
       .def("nComp", &PlotFileData::nComp)
       .def("nGrowVect", &PlotFileData::nGrowVect)
 
-      // MultiFab get (int level) noexcept { return m_impl->get(level); }
-      .def("get", &PlotFileData::get)
-
-      // MultiFab get (int level, std::string const& varname) noexcept { return
-      // m_impl->get(level, varname); }
-      .def("get", &PlotFileData::get);
+      // MultiFab get (int level);
+      .def("get", py::overload_cast<int>(&PlotFileData::get))
+      // MultiFab get (int level, std::string const& varname);
+      .def("get", py::overload_cast<int, std::string const&>(&PlotFileData::get));
 }
