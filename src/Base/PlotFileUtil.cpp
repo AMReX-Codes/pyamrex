@@ -33,7 +33,9 @@ void init_PlotFileUtil(py::module &m) {
       .def("levelStep", &PlotFileData::levelStep)
       .def("boxArray", &PlotFileData::boxArray)
       .def("DistributionMap", &PlotFileData::DistributionMap)
-      .def("syncDistributionMap", &PlotFileData::syncDistributionMap)
+      .def("syncDistributionMap", py::overload_cast<PlotFileData const&>(&PlotFileData::syncDistributionMap))
+      .def("syncDistributionMap", py::overload_cast<int, PlotFileData const&>(&PlotFileData::syncDistributionMap))
+
       .def("coordSys", &PlotFileData::coordSys)
       .def("probDomain", &PlotFileData::probDomain)
       .def("probSize", &PlotFileData::probSize)
@@ -44,8 +46,6 @@ void init_PlotFileUtil(py::module &m) {
       .def("nComp", &PlotFileData::nComp)
       .def("nGrowVect", &PlotFileData::nGrowVect)
 
-      // MultiFab get (int level);
       .def("get", py::overload_cast<int>(&PlotFileData::get))
-      // MultiFab get (int level, std::string const& varname);
       .def("get", py::overload_cast<int, std::string const&>(&PlotFileData::get));
 }
