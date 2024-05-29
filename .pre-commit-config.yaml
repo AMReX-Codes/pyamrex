@@ -103,7 +103,7 @@ repos:
 # Python: Ruff linter
 #   https://docs.astral.sh/ruff/
 - repo: https://github.com/astral-sh/ruff-pre-commit
-  rev: v0.4.4
+  rev: v0.4.5
   hooks:
     - id: ruff
       args: [--fix, --exit-non-zero-on-fix]
