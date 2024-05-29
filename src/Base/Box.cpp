@@ -288,7 +288,8 @@ void init_Box(py::module &m) {
 
         .def("make_slab",
              &Box::makeSlab,
-             py::arg("direction"), py::arg("slab_index"))
+             py::arg("direction"), py::arg("slab_index"),
+             "Flatten the box in one direction.")
 
         // minBox
         // chop
