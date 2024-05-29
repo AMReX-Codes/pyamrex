@@ -247,8 +247,10 @@ namespace pyAMReX
                 return h_data;
             }, py::return_value_policy::move)
 
-            .def("contains", &Array4<T>::contains)
-            //.def("__contains__", &Array4<T>::contains)
+            //.def("__contains__", &Array4<T>::contains)  // syntax: "other in b"
+            .def("contains", py::overload_cast<int, int, int>(&Array4<T>::contains, py::const_))
+            .def("contains", py::overload_cast<IntVect const &>(&Array4<T>::contains, py::const_))
+            .def("contains", py::overload_cast<Dim3 const &>(&Array4<T>::contains, py::const_))
 
             // getter
             .def("__getitem__", [](Array4<T> & a4, IntVect const & v){ return a4(v); })
