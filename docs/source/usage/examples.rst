@@ -27,6 +27,8 @@ ImpactX
 
 * `Python examples <https://impactx.readthedocs.io/en/latest/usage/examples.html>`__
 * `Python implementation <https://github.com/ECP-WarpX/impactx/tree/development/src/python>`__
+* Highlight example: `Fully GPU-accelerated PyTorch+ImpactX simulation <https://impactx.readthedocs.io/en/latest/usage/examples/pytorch_surrogate_model/README.html>`__
+
 
 WarpX
 """""
@@ -34,6 +36,7 @@ WarpX
 
 * `Python (PICMI) examples <https://warpx.readthedocs.io/en/latest/usage/examples.html>`__
 * `Python implementation <https://github.com/ECP-WarpX/WarpX/tree/development/Source/Python>`__
+* Detailed workflow: `Extend a WarpX Simulation with Python <https://warpx.readthedocs.io/en/latest/usage/workflows/python_extend.html>`__
 
 
 Standalone
@@ -52,3 +55,5 @@ We ensure the correctness of pyAMReX with `unit tests <https://en.wikipedia.org/
 Our tests are small, plentiful and can be found in the source code, see:
 
 * `tests/ <https://github.com/AMReX-Codes/pyamrex/tree/development/tests>`__
+
+The following sections on :ref:`compute workflows <usage-compute>` go in detail through selected unit tests, too.
