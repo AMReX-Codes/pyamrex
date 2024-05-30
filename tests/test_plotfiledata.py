@@ -42,7 +42,6 @@ def test_plotfiledata_read():
         nboxes = 0
 
         for mfi in mfab_comp:
-            bx = mfi.tilebox()
             marr = mfab_comp.array(mfi)
             # numpy/cupy representation: non-copying view, including the
             # guard/ghost region
@@ -51,5 +50,3 @@ def test_plotfiledata_read():
             nboxes += 1
 
         assert nboxes == 1
-        # print(mfab_comp.min())
-        # print(mfab_comp.max())
