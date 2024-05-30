@@ -26,17 +26,15 @@ def test_plotfiledata_read():
     nComp = plt.nComp()
     nGrowVect = plt.nGrowVect(0)
 
-    # assert(probDomain == amr.Box([0,0,0],[1024-1,256-1,1-1])) # TypeError: unhashable type: 'instancemethod'.
-    print(probDomain)
+    #assert probDomain == amr.Box([0,0,0], [1023,255,0]) # doesn't work
+    assert probDomain.small_end == amr.IntVect(0,0,0)
+    assert probDomain.big_end == amr.IntVect(1023,255,0)
 
     assert probSize == [2.4688e21, 6.172e20, 6.172e20]
     assert probLo == [0.0, 0.0, 0.0]
     assert probHi == [2.4688e21, 6.172e20, 6.172e20]
     assert cellSize == [2.4109375e18, 2.4109375e18, 6.172e20]
-
-    # assert(varNames == amr.Vector_string(['nH', 'nH_cloud', 'nH_wind']))
-    print(varNames)
-
+    assert varNames == amr.Vector_string(['nH_wind', 'nH_cloud', 'nH'])
     assert nComp == 3
     assert nGrowVect == amr.IntVect(0, 0, 0)
 
