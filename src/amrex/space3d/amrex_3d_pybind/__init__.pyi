@@ -4762,7 +4762,7 @@ class BoxArray:
     def size(self) -> int: ...
 
 class Config:
-    amrex_version: typing.ClassVar[str] = "24.05-32-g28b010126a1b"
+    amrex_version: typing.ClassVar[str] = "24.06"
     gpu_backend = None
     have_gpu: typing.ClassVar[bool] = False
     have_mpi: typing.ClassVar[bool] = True
@@ -16461,4 +16461,4 @@ __author__: str = (
     "Axel Huebl, Ryan T. Sandberg, Shreyas Ananthan, David P. Grote, Revathi Jambunathan, Edoardo Zoni, Remi Lehe, Andrew Myers, Weiqun Zhang"
 )
 __license__: str = "BSD-3-Clause-LBNL"
-__version__: str = "24.05-32-g28b010126a1b"
+__version__: str = "24.06"
