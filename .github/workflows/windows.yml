@@ -16,6 +16,10 @@ jobs:
       with:
         python-version: '3.x'
     - name: Build & Install
+      env:
+        # Work-around for windows-latest GH runner issue, see
+        # https://github.com/actions/runner-images/issues/10004
+        CXXFLAGS: "/D_DISABLE_CONSTEXPR_MUTEX_CONSTRUCTOR"
       run: |
         set "CMAKE_BUILD_PARALLEL_LEVEL=4"
 
