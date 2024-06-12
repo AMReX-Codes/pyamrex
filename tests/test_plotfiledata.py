@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 
 import os
-import pytest
 from pathlib import Path
+
+import pytest
 
 import amrex.space3d as amr
 
