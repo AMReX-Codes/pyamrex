@@ -3,6 +3,8 @@
 import os
 from pathlib import Path
 
+import pytest
+
 
 @pytest.mark.skipif(amr.Config.spacedim != 3, reason="Requires AMREX_SPACEDIM = 3")
 def test_plotfiledata_read():
