@@ -93,7 +93,12 @@ from amrex.space2d.amrex_2d_pybind import (
     Geometry,
     GeometryData,
     IndexType,
-    IntVect,
+    IntVect1D,
+)
+from amrex.space2d.amrex_2d_pybind import IntVect2D
+from amrex.space2d.amrex_2d_pybind import IntVect2D as IntVect
+from amrex.space2d.amrex_2d_pybind import (
+    IntVect3D,
     MFInfo,
     MFIter,
     MFItInfo,
@@ -332,6 +337,9 @@ __all__ = [
     "GeometryData",
     "IndexType",
     "IntVect",
+    "IntVect1D",
+    "IntVect2D",
+    "IntVect3D",
     "MFInfo",
     "MFItInfo",
     "MFIter",
@@ -541,4 +549,4 @@ __author__: str = (
     "Axel Huebl, Ryan T. Sandberg, Shreyas Ananthan, David P. Grote, Revathi Jambunathan, Edoardo Zoni, Remi Lehe, Andrew Myers, Weiqun Zhang"
 )
 __license__: str = "BSD-3-Clause-LBNL"
-__version__: str = "24.06"
+__version__: str = "24.06-16-g1f038e767011"
