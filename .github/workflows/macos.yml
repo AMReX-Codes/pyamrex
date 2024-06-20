@@ -18,9 +18,9 @@ jobs:
     - name: Dependencies
       run: .github/workflows/dependencies/dependencies_mac.sh
     - name: Set Up Cache
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
-        path: /Users/runner/Library/Caches/ccache
+        path: ~/Library/Caches/ccache
         key: ccache-${{ github.workflow }}-${{ github.job }}-git-${{ github.sha }}
         restore-keys: |
              ccache-${{ github.workflow }}-${{ github.job }}-git-
@@ -31,6 +31,7 @@ jobs:
         export CCACHE_COMPRESS=1
         export CCACHE_COMPRESSLEVEL=10
         export CCACHE_MAXSIZE=600M
+        export CCACHE_SLOPPINESS=time_macros
         ccache -z
 
         export CMAKE_BUILD_PARALLEL_LEVEL=3
@@ -41,7 +42,7 @@ jobs:
         python3 -c "import amrex.space3d as amr; print(amr.__version__)"
 
         ccache -s
-        du -hs /Users/runner/Library/Caches/ccache
+        du -hs ~/Library/Caches/ccache
 
     - name: Unit tests
       run: |
