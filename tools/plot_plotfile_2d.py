@@ -2,8 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pytest
 
-import amrex.space3d as amr
-
+import amrex.space2d as amr    
 
 def plot_mf(arr, compname, plo, phi):
     plt.plot()
@@ -22,8 +21,6 @@ def plot_mf(arr, compname, plo, phi):
 
 @pytest.mark.skipif(amr.Config.spacedim != 2, reason="Requires AMREX_SPACEDIM = 2")
 def plot_plotfile_2d(filename, level=0):
-    import amrex.space2d as amr
-
     plt = amr.PlotFileData(filename)
     assert level <= plt.finestLevel()
 
@@ -47,8 +44,6 @@ def plot_plotfile_2d(filename, level=0):
 
 if __name__ == "__main__":
     import argparse
-
-    import amrex.space2d as amr
 
     parser = argparse.ArgumentParser(
         "Plots each variable in a 2D plotfile using matplotlib."

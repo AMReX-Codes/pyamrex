@@ -1,22 +1,38 @@
 # -*- coding: utf-8 -*-
 
-import os
-from pathlib import Path
-
 import pytest
+import numpy as np
 
 import amrex.space3d as amr
 
+def write_test_plotfile(filename):
+    """Write single-level plotfile (in order to read it back in)."""
+    import amrex.space3d as amr
+
+    domain_box = amr.Box([0, 0, 0], [31, 31, 31])
+    real_box = amr.RealBox([-0.5, -0.5, -0.5], [0.5, 0.5, 0.5])
+    geom = amr.Geometry(domain_box, real_box, amr.CoordSys.cartesian, [0, 0, 0])
+    
+    ba = amr.BoxArray(domain_box)
+    dm = amr.DistributionMapping(ba, 1)
+    mf = amr.MultiFab(ba, dm, 1, 0)
+    mf.set_val(np.pi)
+
+    time = 1.0
+    level_step = 200
+    var_names = amr.Vector_string(["density"])
+    amr.write_single_level_plotfile(filename, mf, var_names, geom, time, level_step)
 
 @pytest.mark.skipif(amr.Config.spacedim != 3, reason="Requires AMREX_SPACEDIM = 3")
 def test_plotfiledata_read():
     import amrex.space3d as amr
 
-    parent_path = Path(os.path.abspath(__file__)).parent
-    plt = amr.PlotFileData(str(parent_path / "projz04000"))
+    plt_filename = "test_plt00200"
+    write_test_plotfile(plt_filename)
+    plt = amr.PlotFileData(plt_filename)
 
     assert plt.spaceDim() == 3
-    assert plt.time() == 56649980960510.086
+    assert plt.time() == 1.0
     assert plt.finestLevel() == 0
     assert plt.refRatio(0) == 0
     assert plt.coordSys() == amr.CoordSys.cartesian
@@ -30,16 +46,15 @@ def test_plotfiledata_read():
     nComp = plt.nComp()
     nGrowVect = plt.nGrowVect(0)
 
-    # assert probDomain == amr.Box([0,0,0], [1023,255,0]) # doesn't work
     assert probDomain.small_end == amr.IntVect(0, 0, 0)
-    assert probDomain.big_end == amr.IntVect(1023, 255, 0)
+    assert probDomain.big_end == amr.IntVect(31, 31, 31)
 
-    assert probSize == [2.4688e21, 6.172e20, 6.172e20]
-    assert probLo == [0.0, 0.0, 0.0]
-    assert probHi == [2.4688e21, 6.172e20, 6.172e20]
-    assert cellSize == [2.4109375e18, 2.4109375e18, 6.172e20]
-    assert varNames == amr.Vector_string(["nH_wind", "nH_cloud", "nH"])
-    assert nComp == 3
+    assert probSize == [1.0, 1.0, 1.0]
+    assert probLo == [-0.5, -0.5, -0.5]
+    assert probHi == [0.5, 0.5, 0.5]
+    assert cellSize == [1./32., 1./32., 1./32.]
+    assert varNames == amr.Vector_string(["density"])
+    assert nComp == 1
     assert nGrowVect == amr.IntVect(0, 0, 0)
 
     for compname in varNames:
@@ -51,7 +66,8 @@ def test_plotfiledata_read():
             # numpy/cupy representation: non-copying view, including the
             # guard/ghost region
             marr_xp = marr.to_xp()
-            assert marr_xp.shape == (1024, 256, 1, 1)
+            assert marr_xp.shape == (32, 32, 32, 1)
+            assert np.all(marr_xp[:,:,:,:] == np.pi)
             nboxes += 1
 
         assert nboxes == 1
