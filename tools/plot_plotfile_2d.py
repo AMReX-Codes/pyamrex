@@ -2,7 +2,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pytest
 
-import amrex.space2d as amr    
+import amrex.space2d as amr
+
 
 def plot_mf(arr, compname, plo, phi):
     plt.plot()
