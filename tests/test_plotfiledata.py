@@ -8,8 +8,6 @@ import amrex.space3d as amr
 
 def write_test_plotfile(filename):
     """Write single-level plotfile (in order to read it back in)."""
-    import amrex.space3d as amr
-
     domain_box = amr.Box([0, 0, 0], [31, 31, 31])
     real_box = amr.RealBox([-0.5, -0.5, -0.5], [0.5, 0.5, 0.5])
     geom = amr.Geometry(domain_box, real_box, amr.CoordSys.cartesian, [0, 0, 0])
