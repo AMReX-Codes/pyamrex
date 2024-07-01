@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 
-import pytest
 import numpy as np
+import pytest
 
 import amrex.space3d as amr
+
 
 def write_test_plotfile(filename):
     """Write single-level plotfile (in order to read it back in)."""
@@ -12,7 +13,7 @@ def write_test_plotfile(filename):
     domain_box = amr.Box([0, 0, 0], [31, 31, 31])
     real_box = amr.RealBox([-0.5, -0.5, -0.5], [0.5, 0.5, 0.5])
     geom = amr.Geometry(domain_box, real_box, amr.CoordSys.cartesian, [0, 0, 0])
-    
+
     ba = amr.BoxArray(domain_box)
     dm = amr.DistributionMapping(ba, 1)
     mf = amr.MultiFab(ba, dm, 1, 0)
@@ -22,6 +23,7 @@ def write_test_plotfile(filename):
     level_step = 200
     var_names = amr.Vector_string(["density"])
     amr.write_single_level_plotfile(filename, mf, var_names, geom, time, level_step)
+
 
 @pytest.mark.skipif(amr.Config.spacedim != 3, reason="Requires AMREX_SPACEDIM = 3")
 def test_plotfiledata_read():
@@ -51,7 +53,7 @@ def test_plotfiledata_read():
     assert probSize == [1.0, 1.0, 1.0]
     assert probLo == [-0.5, -0.5, -0.5]
     assert probHi == [0.5, 0.5, 0.5]
-    assert cellSize == [1./32., 1./32., 1./32.]
+    assert cellSize == [1.0 / 32.0, 1.0 / 32.0, 1.0 / 32.0]
     assert varNames == amr.Vector_string(["density"])
     assert nComp == 1
     assert nGrowVect == amr.IntVect(0, 0, 0)
@@ -66,7 +68,7 @@ def test_plotfiledata_read():
             # guard/ghost region
             marr_xp = marr.to_xp()
             assert marr_xp.shape == (32, 32, 32, 1)
-            assert np.all(marr_xp[:,:,:,:] == np.pi)
+            assert np.all(marr_xp[:, :, :, :] == np.pi)
             nboxes += 1
 
         assert nboxes == 1
