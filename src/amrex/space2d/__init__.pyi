@@ -220,6 +220,7 @@ from amrex.space2d.amrex_2d_pybind import (
     ParticleTileData_pureSoA_7_0,
     ParticleTileData_pureSoA_8_0,
     Periodicity,
+    PlotFileData,
     PODVector_int_arena,
     PODVector_int_pinned,
     PODVector_int_std,
@@ -470,6 +471,7 @@ __all__ = [
     "Particle_7_0",
     "Particle_8_0",
     "Periodicity",
+    "PlotFileData",
     "Print",
     "RealBox",
     "RealVect",
@@ -549,4 +551,4 @@ __author__: str = (
     "Axel Huebl, Ryan T. Sandberg, Shreyas Ananthan, David P. Grote, Revathi Jambunathan, Edoardo Zoni, Remi Lehe, Andrew Myers, Weiqun Zhang"
 )
 __license__: str = "BSD-3-Clause-LBNL"
-__version__: str = "24.06-16-g1f038e767011"
+__version__: str = "24.07"
