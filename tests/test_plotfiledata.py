@@ -25,8 +25,7 @@ def write_test_plotfile(filename):
 
 @pytest.mark.skipif(amr.Config.spacedim != 3, reason="Requires AMREX_SPACEDIM = 3")
 def test_plotfiledata_read():
-    import amrex.space3d as amr
-
+    """Generate and then read plotfile using PlotFileUtil bindings."""
     plt_filename = "test_plt00200"
     write_test_plotfile(plt_filename)
     plt = amr.PlotFileData(plt_filename)
