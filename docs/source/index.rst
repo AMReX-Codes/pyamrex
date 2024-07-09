@@ -14,7 +14,7 @@ pyAMReX is part of the `AMReX software ecosystem <https://amrex-codes.github.io>
 Contact us
 ^^^^^^^^^^
 
-If you are starting using pyAMReX, or if you have a user question, please pop in our `GitHub discussions page <https://github.com/AMReX-Codes/pyamrex/discussions/landing>`__ and get in touch with the community.
+If you are starting using pyAMReX, or if you have a user question, please pop in our `GitHub discussions page <https://github.com/AMReX-Codes/pyamrex/discussions>`__ and get in touch with the community.
 
 The `pyAMReX GitHub repo <https://github.com/AMReX-Codes/pyamrex>`__ is the main communication platform.
 Have a look at the action icons on the top right of the web page: feel free to watch the repo if you want to receive updates, or to star the repo to support the project.
