@@ -223,6 +223,21 @@ macro(set_cxx_warnings)
 endmacro()
 
 
+# Enables interprocedural optimization for a list of targets
+#
+function(pyamrex_enable_IPO all_targets_list)
+    include(CheckIPOSupported)
+    check_ipo_supported(RESULT is_IPO_available)
+    if(is_IPO_available)
+        foreach(tgt IN ITEMS ${all_targets_list})
+            set_target_properties(${tgt} PROPERTIES INTERPROCEDURAL_OPTIMIZATION TRUE)
+        endforeach()
+    else()
+        message(FATAL_ERROR "Interprocedural optimization is not available, set pyAMReX_IPO=OFF")
+    endif()
+endfunction()
+
+
 # Set an MPI_TEST_EXE variable for test runs which runs num_ranks
 # ranks. On some systems, you might need to use the a specific
 # mpiexec wrapper, e.g. on Summit (ORNL) pass the hint

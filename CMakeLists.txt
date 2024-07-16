@@ -68,9 +68,13 @@ pyamrex_set_default_install_dirs()
 
 # Options and Variants ########################################################
 #
+set(_pyAMReX_IPO_DEFAULT ON)
+if(DEFINED CMAKE_INTERPROCEDURAL_OPTIMIZATION)
+    set(_pyAMReX_IPO_DEFAULT ${CMAKE_INTERPROCEDURAL_OPTIMIZATION})
+endif()
 option(pyAMReX_IPO
     "Compile with interprocedural optimization (IPO) / link-time optimization (LTO)"
-    ON
+    ${_pyAMReX_IPO_DEFAULT}
 )
 option(pyAMReX_INSTALL
     "Enable install targets for pyAMReX"
@@ -135,7 +139,13 @@ foreach(D IN LISTS AMReX_SPACEDIM)
     target_link_libraries(pyAMReX_${D}d PUBLIC AMReX::amrex_${D}d)
     target_link_libraries(pyAMReX_${D}d PRIVATE pybind11::module pybind11::windows_extras)
     if(pyAMReX_IPO)
-        target_link_libraries(pyAMReX_${D}d PRIVATE pybind11::lto)
+        if(DEFINED CMAKE_INTERPROCEDURAL_OPTIMIZATION)
+            pyamrex_enable_IPO(pyAMReX_${D}d)
+        else()
+            # conditionally defined target in pybind11
+            # https://github.com/pybind/pybind11/blob/v2.12.0/tools/pybind11Common.cmake#L397-L403
+            target_link_libraries(pyAMReX_${D}d PRIVATE pybind11::lto)
+        endif()
     endif()
 
     # set Python module properties
