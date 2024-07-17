@@ -42,7 +42,7 @@ jobs:
         export CXX=$(which clang++)
         export CC=$(which clang)
 
-        python3 -m pip install -U pip setuptools wheel
+        python3 -m pip install -U pip importlib_metadata launchpadlib setuptools wheel
         python3 -m pip install -U cmake
 
         # "mpic++ --showme" forgets open-pal in Ubuntu 20.04 + OpenMPI 4.0.3

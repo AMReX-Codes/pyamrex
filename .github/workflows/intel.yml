@@ -9,7 +9,7 @@ concurrency:
 jobs:
   tests-oneapi-sycl:
     name: oneAPI SYCL 3D
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
     - uses: actions/checkout@v4
     - name: Dependencies
@@ -58,7 +58,7 @@ jobs:
 
   tests-icpx:
     name: ICPX
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
     - uses: actions/checkout@v4
     - name: Dependencies
@@ -75,7 +75,8 @@ jobs:
     - name: Build & Install
       # mkl/rng/device/detail/mrg32k3a_impl.hpp has a number of sign-compare error
       # mkl/rng/device/detail/mrg32k3a_impl.hpp has missing braces in array-array initalization
-      env: {CXXFLAGS: "-fno-operator-names -Werror -Wall -Wextra -Wpedantic -Wnull-dereference -Wfloat-conversion -Wshadow -Woverloaded-virtual -Wextra-semi -Wunreachable-code -Wnon-virtual-dtor -Wno-sign-compare -Wno-missing-braces -Wno-error=pass-failed -Wno-tautological-constant-compare"}
+      # /usr/include/c++/12/bits/stl_tempbuf.h has deprecated-declarations in 'get_temporary_buffer<std::pair<long, int>>'
+      env: {CXXFLAGS: "-fno-operator-names -Werror -Wall -Wextra -Wpedantic -Wnull-dereference -Wfloat-conversion -Wshadow -Woverloaded-virtual -Wextra-semi -Wunreachable-code -Wnon-virtual-dtor -Wno-sign-compare -Wno-missing-braces -Wno-error=pass-failed -Wno-tautological-constant-compare -Wno-deprecated-declarations"}
       run: |
         set +e
         source /opt/intel/oneapi/setvars.sh
@@ -150,7 +151,7 @@ jobs:
 
         export CXX=$(which icpc)
         export CC=$(which icc)
-        python3 -m pip install -U pip setuptools wheel
+        python3 -m pip install -U pip importlib_metadata launchpadlib setuptools wheel
         python3 -m pip install -U cmake
         python3 -m pip install -U pytest mpi4py
 
