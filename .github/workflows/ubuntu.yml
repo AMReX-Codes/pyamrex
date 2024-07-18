@@ -222,7 +222,7 @@ jobs:
         export CXX=$(which g++)
         export CUDAHOSTCXX=$(which g++)
 
-        python3 -m pip install -U pip setuptools wheel
+        python3 -m pip install -U pip importlib_metadata launchpadlib setuptools wheel
         python3 -m pip install -U cmake
 
         cmake -S . -B build             \
