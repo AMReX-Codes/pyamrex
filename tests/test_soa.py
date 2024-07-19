@@ -55,8 +55,19 @@ def test_soa_from_tile():
         if amr.Config.have_gpu
         else amr.ParticleTile_2_1_3_1_default()
     )
-    p = amr.Particle_2_1(1.0, 2.0, 3, rdata_0=4.0, rdata_1=5.0, rdata_2=6.0, idata_1=5)
-    sp = amr.Particle_5_2(1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9, 10)
+    p = amr.Particle_5_2(
+        1.0,
+        2.0,
+        3.0,
+        rdata_0=4.0,
+        rdata_1=5.0,
+        rdata_2=6.0,
+        rdata_3=7.0,
+        rdata_4=8.0,
+        idata_0=9,
+        idata_1=10,
+    )
+    sp = amr.Particle_5_2(1.1, 2.1, 3.1, 4.1, 5.1, 6.1, 7.1, 8.1, 9, 10)
     pt.push_back(p)
     pt.push_back(sp)
 
@@ -73,7 +84,7 @@ def test_soa_from_tile():
     real_arrays = soa.get_real_data()
     int_arrays = soa.get_int_data()
     print(real_arrays)
-    assert np.isclose(real_arrays[0][1], 6.0) and np.isclose(real_arrays[1][1], 7.0)
+    assert np.isclose(real_arrays[0][1], 6.1) and np.isclose(real_arrays[1][1], 7.1)
     assert isinstance(int_arrays[0][0], int)
     assert int_arrays[0][1] == 10
 
