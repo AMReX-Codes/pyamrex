@@ -35,8 +35,12 @@ pc = amr.ParticleContainer_16_4_0_0_default(
 )
 pc.restart(plt_file_name, "immbdy_markers")
 
+particles = list()
 for pti in pc.iterator(pc, level=plt.finestLevel()):
     aos = pti.aos()
-    aos_arr = aos.to_numpy()
-    print(aos_arr)
+    for p in aos.to_numpy():
+        particles.append(p)
 
+
+for p in particles:
+    print(p)
