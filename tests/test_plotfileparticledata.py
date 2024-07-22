@@ -24,14 +24,14 @@ print(f"{varNames=}")
 print(f"{nComp=}")
 print(f"{nGrowVect=}")
 
-domain_box   = amr.Box(probDomain.small_end, probDomain.big_end)
-real_box     = amr.RealBox(probLo, probHi)
+domain_box = amr.Box(probDomain.small_end, probDomain.big_end)
+real_box = amr.RealBox(probLo, probHi)
 std_geometry = amr.Geometry(domain_box, real_box, plt.coordSys(), [0, 0, 0])
 
 pc = amr.ParticleContainer_16_4_0_0_default(
     std_geometry,
     plt.DistributionMap(plt.finestLevel()),
-    plt.boxArray(plt.finestLevel())
+    plt.boxArray(plt.finestLevel()),
 )
 pc.restart(plt_file_name, "immbdy_markers")
 
