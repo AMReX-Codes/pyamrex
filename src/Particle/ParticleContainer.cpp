@@ -36,6 +36,7 @@ namespace
 void init_ParticleContainer_HiPACE(py::module& m);
 void init_ParticleContainer_ImpactX(py::module& m);
 void init_ParticleContainer_WarpX(py::module& m);
+void init_ParticleContainer_FHDeX(py::module& m);
 
 void init_ParticleContainer(py::module& m) {
     using namespace amrex;
@@ -59,6 +60,7 @@ void init_ParticleContainer(py::module& m) {
     init_ParticleContainer_HiPACE(m);
     init_ParticleContainer_ImpactX(m);
     init_ParticleContainer_WarpX(m);
+    init_ParticleContainer_FHDeX(m);
 
     // for particle idcpu arrays
     m.def("unpack_ids", py::vectorize(unpack_id));

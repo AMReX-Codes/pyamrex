@@ -5,5 +5,6 @@ foreach(D IN LISTS AMReX_SPACEDIM)
         ParticleContainer_HiPACE.cpp
         ParticleContainer_ImpactX.cpp
         ParticleContainer_WarpX.cpp
+        ParticleContainer_FHDeX.cpp
     )
 endforeach()
