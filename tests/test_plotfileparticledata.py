@@ -15,7 +15,6 @@ class Particle:
     ib_id: int
     idx: int
 
-
 def load_data(plot_file_name):
     plt = amr.PlotFileData(plt_file_name)
 
