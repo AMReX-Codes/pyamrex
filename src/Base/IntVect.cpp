@@ -65,7 +65,8 @@ namespace
         ;
 
         if constexpr (dim >= 1 && dim <=3) {
-            py_iv.def("dim3", &iv_type::template dim3<dim>);
+            py_iv.def("dim3",
+               py::overload_cast<>(&iv_type::template dim3<dim>, py::const_));
         }
 
         py_iv
