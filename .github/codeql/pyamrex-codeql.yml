@@ -1,0 +1,6 @@
+name: "pyAMReX CodeQL config"
+
+# ignore AMReX from superbuild
+# note: not yet suppored, thus doing post-analysis SARIF filtering
+paths-ignore:
+  - build/_deps

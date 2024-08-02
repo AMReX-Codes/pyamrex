@@ -64,13 +64,13 @@ jobs:
                  -DCMAKE_CXX_COMPILER="/usr/local/bin/g++"
 
       - name: Initialize CodeQL
-        uses: github/codeql-action/init@v2
+        uses: github/codeql-action/init@v3
         with:
           languages: ${{ matrix.language }}
           queries: +security-and-quality
 
       - name: Build (py)
-        uses: github/codeql-action/autobuild@v2
+        uses: github/codeql-action/autobuild@v3
         if: ${{ matrix.language == 'python' }}
 
       - name: Build (C++)
@@ -87,11 +87,40 @@ jobs:
           du -hs ~/.cache/ccache
 
           # Make sure CodeQL has something to do
-          touch build/_deps/fetchedamrex-src/Src/Base/AMReX.cpp
+          touch src/pyAMReX.cpp
           export CCACHE_DISABLE=1
           $CMAKE --build build -j 4
 
       - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v2
+        uses: github/codeql-action/analyze@v3
         with:
           category: "/language:${{ matrix.language }}"
+
+      - name: filter-sarif
+        uses: advanced-security/filter-sarif@v1
+        with:
+          patterns: |
+            -build/_deps/*/*
+            -build/_deps/*/*/*
+            -build/_deps/*/*/*/*
+            -build/_deps/*/*/*/*/*
+            -build/_deps/*/*/*/*/*/*
+            -build/_deps/*/*/*/*/*/*/*
+            -build/_deps/*/*/*/*/*/*/*/*
+          input: sarif-results/${{ matrix.language }}.sarif
+          output: sarif-results/${{ matrix.language }}.sarif
+
+  save_pr_number:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Save PR number
+        env:
+          PR_NUMBER: ${{ github.event.number }}
+        run: |
+          echo $PR_NUMBER > pr_number.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pr_number
+          path: pr_number.txt
+          retention-days: 1
