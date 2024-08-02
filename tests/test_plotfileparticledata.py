@@ -1,8 +1,9 @@
-from dataclasses import dataclass
-import numpy as np
 import random
-import pytest
 import shutil
+from dataclasses import dataclass
+
+import numpy as np
+import pytest
 
 # seed RNG to make test reproducible -- comment out this line to generate new
 # random particle positions every time.
@@ -10,6 +11,7 @@ random.seed(1)
 
 # Import and initialize pyAMReX
 import amrex.space3d as amr
+
 if not amr.initialized():
     amr.initialize([])
 
@@ -21,12 +23,12 @@ else:
     PCC = amr.ParticleContainer_16_4_0_0_default
 
 
-
 @dataclass
 class Particle:
     """
     Helper class to work with particle data
     """
+
     x: float
     y: float
     z: float
@@ -46,12 +48,10 @@ def generate_test_particles(n_part):
     Returns a list of test particles scattered throught the domain
     """
     particles = list()
-    generator = lambda: 1-2*random.random()
+    generator = lambda: 1 - 2 * random.random()
 
     for i in range(n_part):
-        particles.append(
-            Particle(x=generator(), y=generator(), z=generator(), idx=i)
-        )
+        particles.append(Particle(x=generator(), y=generator(), z=generator(), idx=i))
 
     return particles
 
@@ -88,9 +88,7 @@ def check_particles_container(pc, reference_particles):
             aos = pti.aos()
             for p in aos.to_numpy(copy=True):
                 ref = reference_particles[p["idata_0"]]
-                assert Particle(
-                    x=p["x"], y=p["y"], z=p["z"], idx=p["idata_0"]
-                ) == ref
+                assert Particle(x=p["x"], y=p["y"], z=p["z"], idx=p["idata_0"]) == ref
 
 
 def write_test_plotfile(filename, reference_part):
@@ -109,9 +107,7 @@ def write_test_plotfile(filename, reference_part):
     time = 1.0
     level_step = 200
     var_names = amr.Vector_string(["density"])
-    amr.write_single_level_plotfile(
-        filename, mf, var_names, geom, time, level_step
-    )
+    amr.write_single_level_plotfile(filename, mf, var_names, geom, time, level_step)
 
     pc = particle_container(reference_part, geom, dm, ba, real_box)
     pc.write_plotfile(filename, "particles")
