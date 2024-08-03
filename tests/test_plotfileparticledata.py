@@ -1,6 +1,6 @@
-import sys
 import random
 import shutil
+import sys
 from dataclasses import dataclass
 
 import numpy as np
@@ -12,6 +12,7 @@ random.seed(1)
 
 # Import and initialize pyAMReX
 import amrex.space3d as amr
+
 # pyAMReX's pytest config uses a fixture that initializes amrex => check for
 # pytest before initializng pyAMReX
 if "pytest" not in sys.modules:
