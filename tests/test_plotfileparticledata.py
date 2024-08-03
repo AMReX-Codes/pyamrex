@@ -1,3 +1,4 @@
+import sys
 import random
 import shutil
 from dataclasses import dataclass
@@ -11,9 +12,11 @@ random.seed(1)
 
 # Import and initialize pyAMReX
 import amrex.space3d as amr
-
-if not amr.initialized():
-    amr.initialize([])
+# pyAMReX's pytest config uses a fixture that initializes amrex => check for
+# pytest before initializng pyAMReX
+if "pytest" not in sys.modules:
+    # guard against double initialization
+    amr.initialized() or amr.initialize([])
 
 # Particle container constructor -- depending on if gpus are available use the
 # GPU-enabled version. This uses the FHDeX Particle Container for the test
