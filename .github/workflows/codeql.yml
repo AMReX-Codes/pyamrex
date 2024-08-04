@@ -91,17 +91,15 @@ jobs:
           export CCACHE_DISABLE=1
           $CMAKE --build build -j 4
 
+          # claim back disk space
+          rm -rf build
+
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3
         with:
           category: "/language:${{ matrix.language }}"
           upload: False
           output: sarif-results
-
-      - name: remove build dir
-        if: ${{ matrix.language == 'cpp' }}
-        run: |
-          rm -rf build
 
       - name: filter-sarif
         uses: advanced-security/filter-sarif@v1
