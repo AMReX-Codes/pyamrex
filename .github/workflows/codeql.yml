@@ -98,6 +98,11 @@ jobs:
           upload: False
           output: sarif-results
 
+      - name: remove build dir
+        if: ${{ matrix.language == 'cpp' }}
+        run: |
+          rm -rf build
+
       - name: filter-sarif
         uses: advanced-security/filter-sarif@v1
         with:
