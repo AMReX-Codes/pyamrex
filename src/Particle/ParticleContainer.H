@@ -315,27 +315,14 @@ void make_ParticleContainer_and_Iterators (py::module &m, std::string allocstr)
 
         // void Restart (const std::string& dir, const std::string& file);
         .def("restart",
-            [](
-                ParticleContainerType & pc,
-                std::string const & dir,
-                std::string const & file
-            ){
-                return pc.Restart(dir, file);
-            },
+            py::overload_cast<std::string const &, std::string const &>(&ParticleContainerType::Restart),
             py::arg("dir"),
             py::arg("file")
         )
 
         // void Restart (const std::string& dir, const std::string& file, bool is_checkpoint);
         .def("restart_checkpoint",
-            [](
-                ParticleContainerType & pc,
-                std::string const & dir,
-                std::string const & file,
-                bool is_checkpoint
-            ){
-                return pc.Restart(dir, file, is_checkpoint);
-            },
+            py::overload_cast<std::string const &, std::string const &, bool>(&ParticleContainerType::Restart),
             py::arg("dir"),
             py::arg("file"),
             py::arg("is_checkpoint")
