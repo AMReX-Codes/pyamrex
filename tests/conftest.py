@@ -27,7 +27,7 @@ basepath = os.getcwd()
 @pytest.fixture(autouse=True, scope="function")
 def amrex_init(tmpdir):
     with tmpdir.as_cwd():
-        amr.initialized() or amr.initialize(
+        amr.initialize(
             [
                 # print AMReX status messages
                 "amrex.verbose=2",

@@ -1,23 +1,13 @@
+# -*- coding: utf-8 -*-
+
 import random
 import shutil
-import sys
 from dataclasses import dataclass
 
 import numpy as np
 import pytest
 
-# seed RNG to make test reproducible -- comment out this line to generate new
-# random particle positions every time.
-random.seed(1)
-
-# Import and initialize pyAMReX
 import amrex.space3d as amr
-
-# pyAMReX's pytest config uses a fixture that initializes amrex => check for
-# pytest before initializng pyAMReX
-if "pytest" not in sys.modules:
-    # guard against double initialization
-    amr.initialized() or amr.initialize([])
 
 # Particle container constructor -- depending on if gpus are available use the
 # GPU-enabled version. This uses the FHDeX Particle Container for the test
@@ -149,6 +139,10 @@ def test_plotfile_particle_data_read():
     Generate and then read a plot file containing particle data. Checks that
     the particle data matches the original particle list.
     """
+    # seed RNG to make test reproducible -- comment out this line to generate new
+    # random particle positions every time.
+    random.seed(1)
+
     plt_file_name = "plt_test"
     # Reference particle lists
     n_part = 15
