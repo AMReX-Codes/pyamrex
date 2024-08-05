@@ -52,7 +52,9 @@ def generate_test_particles(n_part):
     Returns a list of test particles scattered throught the domain
     """
     particles = list()
-    generator = lambda: 1 - 2 * random.random()
+
+    def generator():
+        return 1 - 2 * random.random()
 
     for i in range(n_part):
         particles.append(Particle(x=generator(), y=generator(), z=generator(), idx=i))
