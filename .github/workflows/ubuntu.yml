@@ -55,7 +55,7 @@ jobs:
         mpiexec -np 1 python3 -m pytest tests/
 
   gcc10:
-    name: GNU@10.1
+    name: GNU@10.5 Debug
     runs-on: ubuntu-22.04
     env: {CXXFLAGS: "-Werror -Wno-error=deprecated-declarations -Wshadow -Woverloaded-virtual -Wunreachable-code -fno-operator-names"}
     steps:
@@ -191,7 +191,7 @@ jobs:
         python3 -m pytest tests/
 
   nvcc11:
-    name: CUDA@11.2 GNU@9.3.0
+    name: CUDA@11.2 GNU@9.4.0
     runs-on: ubuntu-20.04
     env: {CXXFLAGS: "-fno-operator-names"}
     steps:
