@@ -83,8 +83,6 @@ def particle_container(Rpart, std_geometry, distmap, boxarr, std_real_box):
     pc.redistribute()
     return pc
 
-    return pc
-
 
 def check_particles_container(pc, reference_particles):
     """
