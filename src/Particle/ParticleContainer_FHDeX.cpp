@@ -1,4 +1,8 @@
-
+/* Copyright 2024 The AMReX Community
+ *
+ * Authors: Johannes Blaschke
+ * License: BSD-3-Clause-LBNL
+ */
 #include "ParticleContainer.H"
 
 #include <AMReX_Particle.H>
