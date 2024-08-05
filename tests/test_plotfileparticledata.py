@@ -81,7 +81,7 @@ def particle_container(Rpart, std_geometry, distmap, boxarr, std_real_box):
             particles_tile_ct += len(aos_numpy)
 
     pc.redistribute()
-    return pc     
+    return pc
 
     return pc
 
