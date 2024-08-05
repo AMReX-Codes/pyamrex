@@ -80,6 +80,9 @@ def particle_container(Rpart, std_geometry, distmap, boxarr, std_real_box):
                 Rpart[i + particles_tile_ct].to_soa(p)
             particles_tile_ct += len(aos_numpy)
 
+    pc.redistribute()
+    return pc     
+
     return pc
 
 
