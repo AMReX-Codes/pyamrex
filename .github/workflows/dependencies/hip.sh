@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Copyright 2022 The ImpactX Community
+# Copyright 2022 The AMReX Community
 #
 # License: BSD-3-Clause-LBNL
 # Authors: Axel Huebl
@@ -32,6 +32,7 @@ echo "deb [arch=amd64] https://repo.radeon.com/rocm/apt/${1-latest} ${UBUNTU_COD
   | sudo tee /etc/apt/sources.list.d/rocm.list
 echo 'export PATH=/opt/rocm/llvm/bin:/opt/rocm/bin:/opt/rocm/profiler/bin:/opt/rocm/opencl/bin:$PATH' \
   | sudo tee -a /etc/profile.d/rocm.sh
+
 # we should not need to export HIP_PATH=/opt/rocm/hip with those installs
 
 sudo apt-get update
@@ -65,3 +66,4 @@ which clang++
 sudo curl -L -o /usr/local/bin/cmake-easyinstall https://raw.githubusercontent.com/ax3l/cmake-easyinstall/main/cmake-easyinstall
 sudo chmod a+x /usr/local/bin/cmake-easyinstall
 export CEI_SUDO="sudo"
+export CEI_TMP="/tmp/cei"
