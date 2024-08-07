@@ -44,6 +44,7 @@ jobs:
           python -m pip install --upgrade numpy
           python -m pip install --upgrade mpi4py
           python -m pip install --upgrade pytest
+          python -m pip cache purge
 
           .github/workflows/dependencies/dependencies_ccache.sh
           sudo ln -s /usr/local/bin/ccache /usr/local/bin/g++
