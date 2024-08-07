@@ -312,8 +312,21 @@ void make_ParticleContainer_and_Iterators (py::module &m, std::string allocstr)
         //                  const Vector<std::string>& int_comp_names = Vector<std::string>()) const
         // void CheckpointPre ();
         // void CheckpointPost ();
+
         // void Restart (const std::string& dir, const std::string& file);
+        .def("restart",
+            py::overload_cast<std::string const &, std::string const &>(&ParticleContainerType::Restart),
+            py::arg("dir"),
+            py::arg("file")
+        )
+
         // void Restart (const std::string& dir, const std::string& file, bool is_checkpoint);
+        .def("restart_checkpoint",
+            py::overload_cast<std::string const &, std::string const &, bool>(&ParticleContainerType::Restart),
+            py::arg("dir"),
+            py::arg("file"),
+            py::arg("is_checkpoint")
+        )
 
         .def("write_plotfile",
              //py::overload_cast<std::string const &, std::string const &>(&ParticleContainerType::WritePlotFile, py::const_),
@@ -436,10 +449,12 @@ void make_ParticleContainer_and_Iterators (py::module &m)
             T_ParticleType::NReal,
             T_ParticleType::NInt
         >(m);
-        make_Particle<  // superparticle
-            T_ParticleType::NReal + T_NArrayReal,
-            T_ParticleType::NInt  + T_NArrayInt
-        >(m);
+        if (T_NArrayReal > 0 || T_NArrayInt > 0) {
+            make_Particle<  // superparticle
+                T_ParticleType::NReal + T_NArrayReal,
+                T_ParticleType::NInt  + T_NArrayInt
+            >(m);
+        }
 
         make_ArrayOfStructs<T_ParticleType::NReal, T_ParticleType::NInt> (m);
         make_StructOfArrays<T_NArrayReal, T_NArrayInt> (m);
