@@ -161,7 +161,7 @@ jobs:
               -DBUILD_SHARED_LIBS=ON      \
               -DAMReX_MPI=ON              \
               -DAMReX_SPACEDIM="1;2;3"
-        cmake --build build --target pip_install -j 4
+        cmake --build build --target pip_install -j 2
 
         ccache -s
         du -hs ~/.cache/ccache
