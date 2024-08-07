@@ -8,8 +8,8 @@ concurrency:
 
 jobs:
   build_hip:
-    name: ROCm HIP 6.2
-    runs-on: ubuntu-22.04
+    name: ROCm HIP 6.1
+    runs-on: ubuntu-20.04
     env:
       CXXFLAGS: "-Werror -Wno-deprecated-declarations -Wno-error=pass-failed"
       CMAKE_GENERATOR: Ninja
@@ -18,7 +18,7 @@ jobs:
     - name: install dependencies
       shell: bash
       run: |
-        .github/workflows/dependencies/hip.sh 6.2
+        .github/workflows/dependencies/hip.sh 6.1
         .github/workflows/dependencies/dependencies_ccache.sh
     - name: Set Up Cache
       uses: actions/cache@v4
@@ -39,11 +39,16 @@ jobs:
         hipcc --version
         which clang
         which clang++
-        export CXX=$(which hipcc)
+        export CXX=$(which clang++)
         export CC=$(which clang)
 
         python3 -m pip install -U pip importlib_metadata launchpadlib setuptools wheel
         python3 -m pip install -U cmake
+
+        # "mpic++ --showme" forgets open-pal in Ubuntu 20.04 + OpenMPI 4.0.3
+        #   https://bugs.launchpad.net/ubuntu/+source/openmpi/+bug/1941786
+        #   https://github.com/open-mpi/ompi/issues/9317
+        export LDFLAGS="-lopen-pal"
 
         cmake -S . -B build              \
             -DCMAKE_VERBOSE_MAKEFILE=ON  \
