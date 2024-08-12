@@ -147,14 +147,13 @@ void init_Box(py::module &m) {
         .def_property_readonly("volume", &Box::volume)
         .def_property_readonly("the_unit_box", &Box::TheUnitBox)
         .def_property_readonly("is_square", &Box::isSquare)
-
         .def("contains",
-            py::overload_cast< IntVect const & >(&Box::contains, py::const_),
+            [](Box const & bx, IntVect const & p){ return bx.contains(p); },
             py::arg("p"),
             "Returns true if argument is contained within Box."
         )
         .def("strictly_contains",
-            py::overload_cast< IntVect const & >(&Box::strictly_contains, py::const_),
+            [](Box const & bx, IntVect const & p){ return bx.strictly_contains(p); },
             py::arg("p"),
             "Returns true if argument is strictly contained within Box."
         )
