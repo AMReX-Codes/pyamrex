@@ -91,8 +91,8 @@ from amrex.space1d.amrex_1d_pybind import FabFactory_FArrayBox
 from amrex.space1d.amrex_1d_pybind import Geometry
 from amrex.space1d.amrex_1d_pybind import GeometryData
 from amrex.space1d.amrex_1d_pybind import IndexType
-from amrex.space1d.amrex_1d_pybind import IntVect1D
 from amrex.space1d.amrex_1d_pybind import IntVect1D as IntVect
+from amrex.space1d.amrex_1d_pybind import IntVect1D
 from amrex.space1d.amrex_1d_pybind import IntVect2D
 from amrex.space1d.amrex_1d_pybind import IntVect3D
 from amrex.space1d.amrex_1d_pybind import MFInfo
@@ -292,4 +292,4 @@ def d_decl(x, y, z):
     """
 __author__: str = 'Axel Huebl, Ryan T. Sandberg, Shreyas Ananthan, David P. Grote, Revathi Jambunathan, Edoardo Zoni, Remi Lehe, Andrew Myers, Weiqun Zhang'
 __license__: str = 'BSD-3-Clause-LBNL'
-__version__: str = '24.08'
+__version__: str = '24.08-12-ge792933f9561'
