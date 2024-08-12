@@ -93,8 +93,8 @@ from amrex.space3d.amrex_3d_pybind import GeometryData
 from amrex.space3d.amrex_3d_pybind import IndexType
 from amrex.space3d.amrex_3d_pybind import IntVect1D
 from amrex.space3d.amrex_3d_pybind import IntVect2D
-from amrex.space3d.amrex_3d_pybind import IntVect3D
 from amrex.space3d.amrex_3d_pybind import IntVect3D as IntVect
+from amrex.space3d.amrex_3d_pybind import IntVect3D
 from amrex.space3d.amrex_3d_pybind import MFInfo
 from amrex.space3d.amrex_3d_pybind import MFItInfo
 from amrex.space3d.amrex_3d_pybind import MFIter
