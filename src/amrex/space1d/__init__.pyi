@@ -91,8 +91,8 @@ from amrex.space1d.amrex_1d_pybind import FabFactory_FArrayBox
 from amrex.space1d.amrex_1d_pybind import Geometry
 from amrex.space1d.amrex_1d_pybind import GeometryData
 from amrex.space1d.amrex_1d_pybind import IndexType
-from amrex.space1d.amrex_1d_pybind import IntVect1D
 from amrex.space1d.amrex_1d_pybind import IntVect1D as IntVect
+from amrex.space1d.amrex_1d_pybind import IntVect1D
 from amrex.space1d.amrex_1d_pybind import IntVect2D
 from amrex.space1d.amrex_1d_pybind import IntVect3D
 from amrex.space1d.amrex_1d_pybind import MFInfo
