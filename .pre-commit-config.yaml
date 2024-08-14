@@ -76,9 +76,12 @@ repos:
 - repo: https://github.com/astral-sh/ruff-pre-commit
   rev: v0.5.6
   hooks:
+    # Run the linter.
     - id: ruff
       args: [--fix, --exit-non-zero-on-fix]
       types_or: [python, jupyter]
+    # Run the formatter.
+    - id: ruff-format
 
 # Jupyter Notebooks: clean up all cell outputs
 - repo: https://github.com/roy-ht/pre-commit-jupyter
