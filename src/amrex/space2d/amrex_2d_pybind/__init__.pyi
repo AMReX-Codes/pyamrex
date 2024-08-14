@@ -376,7 +376,6 @@ class Arena:
         """
         Does the device have enough free memory for allocating this much memory? For CPU builds, this always return true.
         """
-
     @property
     def is_device(self) -> bool: ...
     @property
@@ -466,7 +465,6 @@ class Array4_cdouble:
             Raises an exception if cupy is not installed
 
         """
-
     def to_host(self) -> numpy.ndarray[numpy.complex128]: ...
     def to_numpy(self, copy=False, order="F"):
         """
@@ -497,7 +495,6 @@ class Array4_cdouble:
             A NumPy n-dimensional array.
 
         """
-
     def to_xp(self, copy=False, order="F"):
         """
 
@@ -530,7 +527,6 @@ class Array4_cdouble:
             A NumPy or CuPy n-dimensional array.
 
         """
-
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -606,7 +602,6 @@ class Array4_cdouble_const:
             Raises an exception if cupy is not installed
 
         """
-
     def to_host(self) -> numpy.ndarray[numpy.complex128]: ...
     def to_numpy(self, copy=False, order="F"):
         """
@@ -637,7 +632,6 @@ class Array4_cdouble_const:
             A NumPy n-dimensional array.
 
         """
-
     def to_xp(self, copy=False, order="F"):
         """
 
@@ -670,7 +664,6 @@ class Array4_cdouble_const:
             A NumPy or CuPy n-dimensional array.
 
         """
-
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -760,7 +753,6 @@ class Array4_cfloat:
             Raises an exception if cupy is not installed
 
         """
-
     def to_host(self) -> numpy.ndarray[numpy.complex64]: ...
     def to_numpy(self, copy=False, order="F"):
         """
@@ -791,7 +783,6 @@ class Array4_cfloat:
             A NumPy n-dimensional array.
 
         """
-
     def to_xp(self, copy=False, order="F"):
         """
 
@@ -824,7 +815,6 @@ class Array4_cfloat:
             A NumPy or CuPy n-dimensional array.
 
         """
-
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -900,7 +890,6 @@ class Array4_cfloat_const:
             Raises an exception if cupy is not installed
 
         """
-
     def to_host(self) -> numpy.ndarray[numpy.complex64]: ...
     def to_numpy(self, copy=False, order="F"):
         """
@@ -931,7 +920,6 @@ class Array4_cfloat_const:
             A NumPy n-dimensional array.
 
         """
-
     def to_xp(self, copy=False, order="F"):
         """
 
@@ -964,7 +952,6 @@ class Array4_cfloat_const:
             A NumPy or CuPy n-dimensional array.
 
         """
-
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -1054,7 +1041,6 @@ class Array4_double:
             Raises an exception if cupy is not installed
 
         """
-
     def to_host(self) -> numpy.ndarray[numpy.float64]: ...
     def to_numpy(self, copy=False, order="F"):
         """
@@ -1085,7 +1071,6 @@ class Array4_double:
             A NumPy n-dimensional array.
 
         """
-
     def to_xp(self, copy=False, order="F"):
         """
 
@@ -1118,7 +1103,6 @@ class Array4_double:
             A NumPy or CuPy n-dimensional array.
 
         """
-
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -1194,7 +1178,6 @@ class Array4_double_const:
             Raises an exception if cupy is not installed
 
         """
-
     def to_host(self) -> numpy.ndarray[numpy.float64]: ...
     def to_numpy(self, copy=False, order="F"):
         """
@@ -1225,7 +1208,6 @@ class Array4_double_const:
             A NumPy n-dimensional array.
 
         """
-
     def to_xp(self, copy=False, order="F"):
         """
 
@@ -1258,7 +1240,6 @@ class Array4_double_const:
             A NumPy or CuPy n-dimensional array.
 
         """
-
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -1348,7 +1329,6 @@ class Array4_float:
             Raises an exception if cupy is not installed
 
         """
-
     def to_host(self) -> numpy.ndarray[numpy.float32]: ...
     def to_numpy(self, copy=False, order="F"):
         """
@@ -1379,7 +1359,6 @@ class Array4_float:
             A NumPy n-dimensional array.
 
         """
-
     def to_xp(self, copy=False, order="F"):
         """
 
@@ -1412,7 +1391,6 @@ class Array4_float:
             A NumPy or CuPy n-dimensional array.
 
         """
-
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -1488,7 +1466,6 @@ class Array4_float_const:
             Raises an exception if cupy is not installed
 
         """
-
     def to_host(self) -> numpy.ndarray[numpy.float32]: ...
     def to_numpy(self, copy=False, order="F"):
         """
@@ -1519,7 +1496,6 @@ class Array4_float_const:
             A NumPy n-dimensional array.
 
         """
-
     def to_xp(self, copy=False, order="F"):
         """
 
@@ -1552,7 +1528,6 @@ class Array4_float_const:
             A NumPy or CuPy n-dimensional array.
 
         """
-
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -1642,7 +1617,6 @@ class Array4_int:
             Raises an exception if cupy is not installed
 
         """
-
     def to_host(self) -> numpy.ndarray[numpy.int32]: ...
     def to_numpy(self, copy=False, order="F"):
         """
@@ -1673,7 +1647,6 @@ class Array4_int:
             A NumPy n-dimensional array.
 
         """
-
     def to_xp(self, copy=False, order="F"):
         """
 
@@ -1706,7 +1679,6 @@ class Array4_int:
             A NumPy or CuPy n-dimensional array.
 
         """
-
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -1782,7 +1754,6 @@ class Array4_int_const:
             Raises an exception if cupy is not installed
 
         """
-
     def to_host(self) -> numpy.ndarray[numpy.int32]: ...
     def to_numpy(self, copy=False, order="F"):
         """
@@ -1813,7 +1784,6 @@ class Array4_int_const:
             A NumPy n-dimensional array.
 
         """
-
     def to_xp(self, copy=False, order="F"):
         """
 
@@ -1846,7 +1816,6 @@ class Array4_int_const:
             A NumPy or CuPy n-dimensional array.
 
         """
-
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -1936,7 +1905,6 @@ class Array4_long:
             Raises an exception if cupy is not installed
 
         """
-
     def to_host(self) -> numpy.ndarray[numpy.int64]: ...
     def to_numpy(self, copy=False, order="F"):
         """
@@ -1967,7 +1935,6 @@ class Array4_long:
             A NumPy n-dimensional array.
 
         """
-
     def to_xp(self, copy=False, order="F"):
         """
 
@@ -2000,7 +1967,6 @@ class Array4_long:
             A NumPy or CuPy n-dimensional array.
 
         """
-
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -2076,7 +2042,6 @@ class Array4_long_const:
             Raises an exception if cupy is not installed
 
         """
-
     def to_host(self) -> numpy.ndarray[numpy.int64]: ...
     def to_numpy(self, copy=False, order="F"):
         """
@@ -2107,7 +2072,6 @@ class Array4_long_const:
             A NumPy n-dimensional array.
 
         """
-
     def to_xp(self, copy=False, order="F"):
         """
 
@@ -2140,7 +2104,6 @@ class Array4_long_const:
             A NumPy or CuPy n-dimensional array.
 
         """
-
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -2230,7 +2193,6 @@ class Array4_longdouble:
             Raises an exception if cupy is not installed
 
         """
-
     def to_host(self) -> numpy.ndarray[numpy.longdouble]: ...
     def to_numpy(self, copy=False, order="F"):
         """
@@ -2261,7 +2223,6 @@ class Array4_longdouble:
             A NumPy n-dimensional array.
 
         """
-
     def to_xp(self, copy=False, order="F"):
         """
 
@@ -2294,7 +2255,6 @@ class Array4_longdouble:
             A NumPy or CuPy n-dimensional array.
 
         """
-
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -2370,7 +2330,6 @@ class Array4_longdouble_const:
             Raises an exception if cupy is not installed
 
         """
-
     def to_host(self) -> numpy.ndarray[numpy.longdouble]: ...
     def to_numpy(self, copy=False, order="F"):
         """
@@ -2401,7 +2360,6 @@ class Array4_longdouble_const:
             A NumPy n-dimensional array.
 
         """
-
     def to_xp(self, copy=False, order="F"):
         """
 
@@ -2434,7 +2392,6 @@ class Array4_longdouble_const:
             A NumPy or CuPy n-dimensional array.
 
         """
-
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -2524,7 +2481,6 @@ class Array4_longlong:
             Raises an exception if cupy is not installed
 
         """
-
     def to_host(self) -> numpy.ndarray[numpy.int64]: ...
     def to_numpy(self, copy=False, order="F"):
         """
@@ -2555,7 +2511,6 @@ class Array4_longlong:
             A NumPy n-dimensional array.
 
         """
-
     def to_xp(self, copy=False, order="F"):
         """
 
@@ -2588,7 +2543,6 @@ class Array4_longlong:
             A NumPy or CuPy n-dimensional array.
 
         """
-
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -2664,7 +2618,6 @@ class Array4_longlong_const:
             Raises an exception if cupy is not installed
 
         """
-
     def to_host(self) -> numpy.ndarray[numpy.int64]: ...
     def to_numpy(self, copy=False, order="F"):
         """
@@ -2695,7 +2648,6 @@ class Array4_longlong_const:
             A NumPy n-dimensional array.
 
         """
-
     def to_xp(self, copy=False, order="F"):
         """
 
@@ -2728,7 +2680,6 @@ class Array4_longlong_const:
             A NumPy or CuPy n-dimensional array.
 
         """
-
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -2818,7 +2769,6 @@ class Array4_short:
             Raises an exception if cupy is not installed
 
         """
-
     def to_host(self) -> numpy.ndarray[numpy.int16]: ...
     def to_numpy(self, copy=False, order="F"):
         """
@@ -2849,7 +2799,6 @@ class Array4_short:
             A NumPy n-dimensional array.
 
         """
-
     def to_xp(self, copy=False, order="F"):
         """
 
@@ -2882,7 +2831,6 @@ class Array4_short:
             A NumPy or CuPy n-dimensional array.
 
         """
-
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -2958,7 +2906,6 @@ class Array4_short_const:
             Raises an exception if cupy is not installed
 
         """
-
     def to_host(self) -> numpy.ndarray[numpy.int16]: ...
     def to_numpy(self, copy=False, order="F"):
         """
@@ -2989,7 +2936,6 @@ class Array4_short_const:
             A NumPy n-dimensional array.
 
         """
-
     def to_xp(self, copy=False, order="F"):
         """
 
@@ -3022,7 +2968,6 @@ class Array4_short_const:
             A NumPy or CuPy n-dimensional array.
 
         """
-
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -3112,7 +3057,6 @@ class Array4_uint:
             Raises an exception if cupy is not installed
 
         """
-
     def to_host(self) -> numpy.ndarray[numpy.uint32]: ...
     def to_numpy(self, copy=False, order="F"):
         """
@@ -3143,7 +3087,6 @@ class Array4_uint:
             A NumPy n-dimensional array.
 
         """
-
     def to_xp(self, copy=False, order="F"):
         """
 
@@ -3176,7 +3119,6 @@ class Array4_uint:
             A NumPy or CuPy n-dimensional array.
 
         """
-
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -3252,7 +3194,6 @@ class Array4_uint_const:
             Raises an exception if cupy is not installed
 
         """
-
     def to_host(self) -> numpy.ndarray[numpy.uint32]: ...
     def to_numpy(self, copy=False, order="F"):
         """
@@ -3283,7 +3224,6 @@ class Array4_uint_const:
             A NumPy n-dimensional array.
 
         """
-
     def to_xp(self, copy=False, order="F"):
         """
 
@@ -3316,7 +3256,6 @@ class Array4_uint_const:
             A NumPy or CuPy n-dimensional array.
 
         """
-
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -3406,7 +3345,6 @@ class Array4_ulong:
             Raises an exception if cupy is not installed
 
         """
-
     def to_host(self) -> numpy.ndarray[numpy.uint64]: ...
     def to_numpy(self, copy=False, order="F"):
         """
@@ -3437,7 +3375,6 @@ class Array4_ulong:
             A NumPy n-dimensional array.
 
         """
-
     def to_xp(self, copy=False, order="F"):
         """
 
@@ -3470,7 +3407,6 @@ class Array4_ulong:
             A NumPy or CuPy n-dimensional array.
 
         """
-
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -3546,7 +3482,6 @@ class Array4_ulong_const:
             Raises an exception if cupy is not installed
 
         """
-
     def to_host(self) -> numpy.ndarray[numpy.uint64]: ...
     def to_numpy(self, copy=False, order="F"):
         """
@@ -3577,7 +3512,6 @@ class Array4_ulong_const:
             A NumPy n-dimensional array.
 
         """
-
     def to_xp(self, copy=False, order="F"):
         """
 
@@ -3610,7 +3544,6 @@ class Array4_ulong_const:
             A NumPy or CuPy n-dimensional array.
 
         """
-
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -3700,7 +3633,6 @@ class Array4_ulonglong:
             Raises an exception if cupy is not installed
 
         """
-
     def to_host(self) -> numpy.ndarray[numpy.uint64]: ...
     def to_numpy(self, copy=False, order="F"):
         """
@@ -3731,7 +3663,6 @@ class Array4_ulonglong:
             A NumPy n-dimensional array.
 
         """
-
     def to_xp(self, copy=False, order="F"):
         """
 
@@ -3764,7 +3695,6 @@ class Array4_ulonglong:
             A NumPy or CuPy n-dimensional array.
 
         """
-
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -3840,7 +3770,6 @@ class Array4_ulonglong_const:
             Raises an exception if cupy is not installed
 
         """
-
     def to_host(self) -> numpy.ndarray[numpy.uint64]: ...
     def to_numpy(self, copy=False, order="F"):
         """
@@ -3871,7 +3800,6 @@ class Array4_ulonglong_const:
             A NumPy n-dimensional array.
 
         """
-
     def to_xp(self, copy=False, order="F"):
         """
 
@@ -3904,7 +3832,6 @@ class Array4_ulonglong_const:
             A NumPy or CuPy n-dimensional array.
 
         """
-
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -3994,7 +3921,6 @@ class Array4_ushort:
             Raises an exception if cupy is not installed
 
         """
-
     def to_host(self) -> numpy.ndarray[numpy.uint16]: ...
     def to_numpy(self, copy=False, order="F"):
         """
@@ -4025,7 +3951,6 @@ class Array4_ushort:
             A NumPy n-dimensional array.
 
         """
-
     def to_xp(self, copy=False, order="F"):
         """
 
@@ -4058,7 +3983,6 @@ class Array4_ushort:
             A NumPy or CuPy n-dimensional array.
 
         """
-
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -4134,7 +4058,6 @@ class Array4_ushort_const:
             Raises an exception if cupy is not installed
 
         """
-
     def to_host(self) -> numpy.ndarray[numpy.uint16]: ...
     def to_numpy(self, copy=False, order="F"):
         """
@@ -4165,7 +4088,6 @@ class Array4_ushort_const:
             A NumPy n-dimensional array.
 
         """
-
     def to_xp(self, copy=False, order="F"):
         """
 
@@ -4198,7 +4120,6 @@ class Array4_ushort_const:
             A NumPy or CuPy n-dimensional array.
 
         """
-
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -4220,7 +4141,6 @@ class ArrayOfStructs_16_4_arena:
         """
         get back member.  Problem!!!!! this is perfo
         """
-
     @typing.overload
     def empty(self) -> bool: ...
     @typing.overload
@@ -4258,7 +4178,6 @@ class ArrayOfStructs_16_4_arena:
             Raises an exception if cupy is not installed
 
         """
-
     def to_host(self) -> ArrayOfStructs_16_4_pinned: ...
     def to_numpy(self, copy=False):
         """
@@ -4279,7 +4198,6 @@ class ArrayOfStructs_16_4_arena:
             of 1D NumPy arrays.
 
         """
-
     def to_xp(self, copy=False):
         """
 
@@ -4302,7 +4220,6 @@ class ArrayOfStructs_16_4_arena:
             of 1D NumPy or CuPy arrays.
 
         """
-
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -4318,7 +4235,6 @@ class ArrayOfStructs_16_4_default:
         """
         get back member.  Problem!!!!! this is perfo
         """
-
     @typing.overload
     def empty(self) -> bool: ...
     @typing.overload
@@ -4356,7 +4272,6 @@ class ArrayOfStructs_16_4_default:
             Raises an exception if cupy is not installed
 
         """
-
     def to_host(self) -> ArrayOfStructs_16_4_pinned: ...
     def to_numpy(self, copy=False):
         """
@@ -4377,7 +4292,6 @@ class ArrayOfStructs_16_4_default:
             of 1D NumPy arrays.
 
         """
-
     def to_xp(self, copy=False):
         """
 
@@ -4400,7 +4314,6 @@ class ArrayOfStructs_16_4_default:
             of 1D NumPy or CuPy arrays.
 
         """
-
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -4416,7 +4329,6 @@ class ArrayOfStructs_16_4_pinned:
         """
         get back member.  Problem!!!!! this is perfo
         """
-
     @typing.overload
     def empty(self) -> bool: ...
     @typing.overload
@@ -4454,7 +4366,6 @@ class ArrayOfStructs_16_4_pinned:
             Raises an exception if cupy is not installed
 
         """
-
     def to_host(self) -> ArrayOfStructs_16_4_pinned: ...
     def to_numpy(self, copy=False):
         """
@@ -4475,7 +4386,6 @@ class ArrayOfStructs_16_4_pinned:
             of 1D NumPy arrays.
 
         """
-
     def to_xp(self, copy=False):
         """
 
@@ -4498,7 +4408,6 @@ class ArrayOfStructs_16_4_pinned:
             of 1D NumPy or CuPy arrays.
 
         """
-
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -4514,7 +4423,6 @@ class ArrayOfStructs_2_1_arena:
         """
         get back member.  Problem!!!!! this is perfo
         """
-
     @typing.overload
     def empty(self) -> bool: ...
     @typing.overload
@@ -4552,7 +4460,6 @@ class ArrayOfStructs_2_1_arena:
             Raises an exception if cupy is not installed
 
         """
-
     def to_host(self) -> ArrayOfStructs_2_1_pinned: ...
     def to_numpy(self, copy=False):
         """
@@ -4573,7 +4480,6 @@ class ArrayOfStructs_2_1_arena:
             of 1D NumPy arrays.
 
         """
-
     def to_xp(self, copy=False):
         """
 
@@ -4596,7 +4502,6 @@ class ArrayOfStructs_2_1_arena:
             of 1D NumPy or CuPy arrays.
 
         """
-
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -4612,7 +4517,6 @@ class ArrayOfStructs_2_1_default:
         """
         get back member.  Problem!!!!! this is perfo
         """
-
     @typing.overload
     def empty(self) -> bool: ...
     @typing.overload
@@ -4650,7 +4554,6 @@ class ArrayOfStructs_2_1_default:
             Raises an exception if cupy is not installed
 
         """
-
     def to_host(self) -> ArrayOfStructs_2_1_pinned: ...
     def to_numpy(self, copy=False):
         """
@@ -4671,7 +4574,6 @@ class ArrayOfStructs_2_1_default:
             of 1D NumPy arrays.
 
         """
-
     def to_xp(self, copy=False):
         """
 
@@ -4694,7 +4596,6 @@ class ArrayOfStructs_2_1_default:
             of 1D NumPy or CuPy arrays.
 
         """
-
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -4710,7 +4611,6 @@ class ArrayOfStructs_2_1_pinned:
         """
         get back member.  Problem!!!!! this is perfo
         """
-
     @typing.overload
     def empty(self) -> bool: ...
     @typing.overload
@@ -4748,7 +4648,6 @@ class ArrayOfStructs_2_1_pinned:
             Raises an exception if cupy is not installed
 
         """
-
     def to_host(self) -> ArrayOfStructs_2_1_pinned: ...
     def to_numpy(self, copy=False):
         """
@@ -4769,7 +4668,6 @@ class ArrayOfStructs_2_1_pinned:
             of 1D NumPy arrays.
 
         """
-
     def to_xp(self, copy=False):
         """
 
@@ -4792,7 +4690,6 @@ class ArrayOfStructs_2_1_pinned:
             of 1D NumPy or CuPy arrays.
 
         """
-
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -4878,7 +4775,6 @@ class Box:
         """
         Returns true if argument is contained within Box.
         """
-
     @typing.overload
     def convert(self, typ: IndexType) -> Box:
         """
@@ -4888,7 +4784,6 @@ class Box:
         type NODE -> CELL : reduce coordinate by one on high end
         other type mappings make no change.
         """
-
     @typing.overload
     def convert(self, typ: IntVect2D) -> Box:
         """
@@ -4898,25 +4793,21 @@ class Box:
         type NODE -> CELL : reduce coordinate by one on high end
         other type mappings make no change.
         """
-
     @typing.overload
     def enclosed_cells(self) -> Box:
         """
         Convert to CELL type in all directions.
         """
-
     @typing.overload
     def enclosed_cells(self, dir: int) -> Box:
         """
         Convert to CELL type in given direction.
         """
-
     @typing.overload
     def enclosed_cells(self, d: Direction) -> Box:
         """
         Convert to CELL type in given direction.
         """
-
     def end(self, box: Box) -> Dim3: ...
     @typing.overload
     def grow(self, n_cell: int) -> Box:
@@ -4924,20 +4815,17 @@ class Box:
         Grow Box in all directions by given amount.
         NOTE: n_cell negative shrinks the Box by that number of cells.
         """
-
     @typing.overload
     def grow(self, n_cells: IntVect2D) -> Box:
         """
         Grow Box in each direction by specified amount.
         """
-
     @typing.overload
     def grow(self, idir: int, n_cell: int) -> Box:
         """
         Grow the Box on the low and high end by n_cell cells
         in direction idir.
         """
-
     @typing.overload
     def grow(self, d: Direction, n_cell: int) -> Box: ...
     @typing.overload
@@ -4947,7 +4835,6 @@ class Box:
         direction idir.  NOTE: n_cell negative shrinks the Box by that
         number of cells.
         """
-
     @typing.overload
     def grow_high(self, d: Direction, n_cell: int = 1) -> Box: ...
     @typing.overload
@@ -4956,7 +4843,6 @@ class Box:
         Grow the Box on the low end by n_cell cells in direction idir.
         NOTE: n_cell negative shrinks the Box by that number of cells.
         """
-
     @typing.overload
     def grow_low(self, d: Direction, n_cell: int = 1) -> Box: ...
     def intersects(self, b: Box) -> bool:
@@ -4964,84 +4850,70 @@ class Box:
         Returns true if Boxes have non-null intersections.
         It is an error if the Boxes have different types.
         """
-
     def lbound(self, arg0: Box) -> Dim3: ...
     @typing.overload
     def length(self) -> IntVect2D:
         """
         Return IntVect of lengths of the Box
         """
-
     @typing.overload
     def length(self, dir: int) -> int:
         """
         Return the length of the Box in given direction.
         """
-
     def make_slab(self, direction: int, slab_index: int) -> Box:
         """
         Flatten the box in one direction.
         """
-
     def normalize(self) -> None: ...
     def numPts(self) -> int:
         """
         Return the number of points in the Box.
         """
-
     def same_size(self, b: Box) -> bool:
         """
         Returns true is Boxes same size, ie translates of each other,.
         It is an error if they have different types.
         """
-
     def same_type(self, b: Box) -> bool:
         """
         Returns true if Boxes have same type.
         """
-
     @typing.overload
     def shift(self, dir: int, nzones: int) -> Box:
         """
         Shift this Box nzones indexing positions in coordinate direction dir.
         """
-
     @typing.overload
     def shift(self, iv: IntVect2D) -> Box:
         """
         Equivalent to b.shift(0,iv[0]).shift(1,iv[1]) ...
         """
-
     def strictly_contains(self, p: IntVect2D) -> bool:
         """
         Returns true if argument is strictly contained within Box.
         """
-
     @typing.overload
     def surrounding_nodes(self) -> Box:
         """
         Convert to NODE type in all directions.
         """
-
     @typing.overload
     def surrounding_nodes(self, dir: int) -> Box:
         """
         Convert to NODE type in given direction.
         """
-
     @typing.overload
     def surrounding_nodes(self, d: Direction) -> Box:
         """
         Convert to NODE type in given direction.
         """
-
     def ubound(self, arg0: Box) -> Dim3: ...
     @property
     def cell_centered(self) -> bool:
         """
         Returns true if Box is cell-centered in all indexing directions.
         """
-
     @property
     def d_num_pts(self) -> float: ...
     @property
@@ -5111,7 +4983,7 @@ class BoxArray:
     def size(self) -> int: ...
 
 class Config:
-    amrex_version: typing.ClassVar[str] = "24.08"
+    amrex_version: typing.ClassVar[str] = "24.08-12-ge792933f9561"
     gpu_backend = None
     have_gpu: typing.ClassVar[bool] = False
     have_mpi: typing.ClassVar[bool] = True
@@ -5254,19 +5126,16 @@ class FabArrayBase:
         """
         Return number of variables (aka components) associated with each point.
         """
-
     @property
     def n_grow_vect(self) -> IntVect2D:
         """
         Return the grow factor (per direction) that defines the region of definition.
         """
-
     @property
     def num_comp(self) -> int:
         """
         Return number of variables (aka components) associated with each point.
         """
-
     @property
     def size(self) -> int:
         """
@@ -5290,7 +5159,6 @@ class FabArray_FArrayBox(FabArrayBase):
         """
         dst = a*x + b*y
         """
-
     @staticmethod
     def saxpy(
         y: FabArray_FArrayBox,
@@ -5304,7 +5172,6 @@ class FabArray_FArrayBox(FabArrayBase):
         """
         y += a*x
         """
-
     @staticmethod
     def xpay(
         y: FabArray_FArrayBox,
@@ -5318,7 +5185,6 @@ class FabArray_FArrayBox(FabArrayBase):
         """
         y = x + a*y
         """
-
     @typing.overload
     def abs(self, comp: int, ncomp: int, nghost: int = 0) -> None: ...
     @typing.overload
@@ -5341,7 +5207,6 @@ class FabArray_FArrayBox(FabArrayBase):
             Note that FabArray itself does not contains any periodicity information.
             FillBoundary expects that its cell-centered version of its BoxArray is non-overlapping.
         """
-
     @typing.overload
     def fill_boundary(self, period: Periodicity, cross: bool = False) -> None:
         """
@@ -5357,7 +5222,6 @@ class FabArray_FArrayBox(FabArrayBase):
             Note that FabArray itself does not contains any periodicity information.
             FillBoundary expects that its cell-centered version of its BoxArray is non-overlapping.
         """
-
     @typing.overload
     def fill_boundary(
         self, nghost: IntVect2D, period: Periodicity, cross: bool = False
@@ -5375,7 +5239,6 @@ class FabArray_FArrayBox(FabArrayBase):
             Note that FabArray itself does not contains any periodicity information.
             FillBoundary expects that its cell-centered version of its BoxArray is non-overlapping.
         """
-
     @typing.overload
     def fill_boundary(self, scomp: int, ncomp: int, cross: bool = False) -> None:
         """
@@ -5391,7 +5254,6 @@ class FabArray_FArrayBox(FabArrayBase):
             Note that FabArray itself does not contains any periodicity information.
             FillBoundary expects that its cell-centered version of its BoxArray is non-overlapping.
         """
-
     @typing.overload
     def fill_boundary(
         self, scomp: int, ncomp: int, period: Periodicity, cross: bool = False
@@ -5409,7 +5271,6 @@ class FabArray_FArrayBox(FabArrayBase):
             Note that FabArray itself does not contains any periodicity information.
             FillBoundary expects that its cell-centered version of its BoxArray is non-overlapping.
         """
-
     @typing.overload
     def fill_boundary(
         self,
@@ -5432,7 +5293,6 @@ class FabArray_FArrayBox(FabArrayBase):
             Note that FabArray itself does not contains any periodicity information.
             FillBoundary expects that its cell-centered version of its BoxArray is non-overlapping.
         """
-
     def ok(self) -> bool: ...
     @typing.overload
     def override_sync(self, period: Periodicity) -> None:
@@ -5452,7 +5312,6 @@ class FabArray_FArrayBox(FabArrayBase):
             period :
               periodic length if it's non-zero
         """
-
     @typing.overload
     def override_sync(self, scomp: int, ncomp: int, period: Periodicity) -> None:
         """
@@ -5471,13 +5330,11 @@ class FabArray_FArrayBox(FabArrayBase):
             period :
               periodic length if it's non-zero
         """
-
     @typing.overload
     def set_val(self, val: float) -> None:
         """
         Set all components in the entire region of each FAB to val.
         """
-
     @typing.overload
     def set_val(self, val: float, comp: int, num_comp: int, nghost: int = 0) -> None:
         """
@@ -5485,7 +5342,6 @@ class FabArray_FArrayBox(FabArrayBase):
         each FAB in the FabArray, starting at component comp to val.
         Also set the value of nghost boundary cells.
         """
-
     @typing.overload
     def set_val(self, val: float, comp: int, num_comp: int, nghost: IntVect2D) -> None:
         """
@@ -5493,7 +5349,6 @@ class FabArray_FArrayBox(FabArrayBase):
         each FAB in the FabArray, starting at component comp to val.
         Also set the value of nghost boundary cells.
         """
-
     @typing.overload
     def set_val(
         self, val: float, region: Box, comp: int, num_comp: int, nghost: int = 0
@@ -5504,7 +5359,6 @@ class FabArray_FArrayBox(FabArrayBase):
         as nghost boundary cells, to val, provided they also intersect
         with the Box region.
         """
-
     @typing.overload
     def set_val(
         self, val: float, region: Box, comp: int, num_comp: int, nghost: IntVect2D
@@ -5515,24 +5369,20 @@ class FabArray_FArrayBox(FabArrayBase):
         as nghost boundary cells, to val, provided they also intersect
         with the Box region.
         """
-
     def sum(self, comp: int, nghost: IntVect2D, local: bool) -> float:
         """
         Returns the sum of component "comp"
         """
-
     @typing.overload
     def sum_boundary(self, period: Periodicity) -> None:
         """
         Sum values in overlapped cells.  The destination is limited to valid cells.
         """
-
     @typing.overload
     def sum_boundary(self, scomp: int, ncomp: int, period: Periodicity) -> None:
         """
         Sum values in overlapped cells.  The destination is limited to valid cells.
         """
-
     @typing.overload
     def sum_boundary(
         self, scomp: int, ncomp: int, nghost: IntVect2D, period: Periodicity
@@ -5540,7 +5390,6 @@ class FabArray_FArrayBox(FabArrayBase):
         """
         Sum values in overlapped cells.  The destination is limited to valid cells.
         """
-
     @typing.overload
     def sum_boundary(
         self,
@@ -5553,13 +5402,11 @@ class FabArray_FArrayBox(FabArrayBase):
         """
         Sum values in overlapped cells.  The destination is limited to valid cells.
         """
-
     @property
     def arena(self) -> Arena:
         """
         Provides access to the Arena this FabArray was build with.
         """
-
     @property
     def factory(self) -> FabFactory_FArrayBox: ...
     @property
@@ -5574,7 +5421,6 @@ class Geometry(CoordSys):
         """
         Get the hi end of the problem domain in specified direction
         """
-
     @typing.overload
     def ProbHi(
         self,
@@ -5582,18 +5428,15 @@ class Geometry(CoordSys):
         """
         Get the list of lo ends of the problem domain
         """
-
     def ProbLength(self, arg0: int) -> float:
         """
         length of problem domain in specified dimension
         """
-
     @typing.overload
     def ProbLo(self, dir: int) -> float:
         """
         Get the lo end of the problem domain in specified direction
         """
-
     @typing.overload
     def ProbLo(
         self,
@@ -5601,29 +5444,24 @@ class Geometry(CoordSys):
         """
         Get the list of lo ends of the problem domain
         """
-
     def ProbSize(self) -> float:
         """
         the overall size of the domain
         """
-
     def ResetDefaultCoord(self: int) -> None:
         """
         Reset default coord of Geometry class with an Array of `int`
         """
-
     def ResetDefaultPeriodicity(
         self: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(2)],
     ) -> None:
         """
         Reset default periodicity of Geometry class with an Array of `int`
         """
-
     def ResetDefaultProbDomain(self: RealBox) -> None:
         """
         Reset default problem domain of Geometry class with a `RealBox`
         """
-
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
@@ -5641,7 +5479,6 @@ class Geometry(CoordSys):
         """
         Returns non-static copy of geometry's stored data
         """
-
     def define(
         self,
         dom: Box,
@@ -5652,7 +5489,6 @@ class Geometry(CoordSys):
         """
         Set geometry
         """
-
     @typing.overload
     def growNonPeriodicDomain(self, ngrow: IntVect2D) -> Box: ...
     @typing.overload
@@ -5665,23 +5501,19 @@ class Geometry(CoordSys):
         """
         Returns true if a point is inside the roundoff domain. All particles with positions inside the roundoff domain are sure to be mapped to cells inside the Domain() box. Note that the same need not be true for all points inside ProbDomain()
         """
-
     def isAllPeriodic(self) -> bool:
         """
         Is domain periodic in all directions?
         """
-
     def isAnyPeriodic(self) -> bool:
         """
         Is domain periodic in any direction?
         """
-
     @typing.overload
     def isPeriodic(self, arg0: int) -> bool:
         """
         Is the domain periodic in the specified direction?
         """
-
     @typing.overload
     def isPeriodic(
         self,
@@ -5689,17 +5521,14 @@ class Geometry(CoordSys):
         """
         Return list indicating whether domain is periodic in each direction
         """
-
     def outsideRoundOffDomain(self, x: float, y: float) -> bool:
         """
         Returns true if a point is outside the roundoff domain. All particles with positions inside the roundoff domain are sure to be mapped to cells inside the Domain() box. Note that the same need not be true for all points inside ProbDomain()
         """
-
     def period(self, dir: int) -> int:
         """
         Return the period in the specified direction
         """
-
     @typing.overload
     def periodicity(self) -> Periodicity: ...
     @typing.overload
@@ -5707,7 +5536,6 @@ class Geometry(CoordSys):
         """
         Return Periodicity object with lengths determined by input Box
         """
-
     def refine(self, rr: IntVect2D) -> None: ...
     def setPeriodicity(
         self,
@@ -5717,13 +5545,11 @@ class Geometry(CoordSys):
         Set periodicity flags and return the old flags.
         Note that, unlike Periodicity class, the flags are just boolean.
         """
-
     @property
     def domain(self) -> Box:
         """
         The rectangular domain (index space).
         """
-
     @domain.setter
     def domain(self, arg1: Box) -> None: ...
     @property
@@ -5731,7 +5557,6 @@ class Geometry(CoordSys):
         """
         The problem domain (real).
         """
-
     @prob_domain.setter
     def prob_domain(self, arg1: RealBox) -> None: ...
 
@@ -5743,23 +5568,19 @@ class GeometryData:
         """
         Returns the cellsize for each coordinate direction.
         """
-
     @typing.overload
     def CellSize(self, arg0: int) -> float:
         """
         Returns the cellsize for specified coordinate direction.
         """
-
     def Coord(self) -> int:
         """
         return integer coordinate type
         """
-
     def Domain(self) -> Box:
         """
         Returns our rectangular domain
         """
-
     @typing.overload
     def ProbHi(
         self,
@@ -5767,13 +5588,11 @@ class GeometryData:
         """
         Returns the hi end for each coordinate direction.
         """
-
     @typing.overload
     def ProbHi(self, arg0: int) -> float:
         """
         Returns the hi end of the problem domain in specified dimension.
         """
-
     @typing.overload
     def ProbLo(
         self,
@@ -5781,13 +5600,11 @@ class GeometryData:
         """
         Returns the lo end for each coordinate direction.
         """
-
     @typing.overload
     def ProbLo(self, arg0: int) -> float:
         """
         Returns the lo end of the problem domain in specified dimension.
         """
-
     def __init__(self) -> None: ...
     def __repr__(self) -> str: ...
     @typing.overload
@@ -5797,25 +5614,21 @@ class GeometryData:
         """
         Returns whether the domain is periodic in each direction.
         """
-
     @typing.overload
     def isPeriodic(self, arg0: int) -> int:
         """
         Returns whether the domain is periodic in the given direction.
         """
-
     @property
     def coord(self) -> int:
         """
         The Coordinates type.
         """
-
     @property
     def domain(self) -> Box:
         """
         The index domain.
         """
-
     @property
     def dx(
         self,
@@ -5823,7 +5636,6 @@ class GeometryData:
         """
         The cellsize for each coordinate direction.
         """
-
     @property
     def is_periodic(
         self,
@@ -5831,7 +5643,6 @@ class GeometryData:
         """
         Returns whether the domain is periodic in each coordinate direction.
         """
-
     @property
     def prob_domain(self) -> RealBox:
         """
@@ -6213,7 +6024,6 @@ class MFIter:
             returns: the updated iterator
 
         """
-
     def __repr__(self) -> str: ...
     def _incr(self) -> None: ...
     def fabbox(self) -> Box: ...
@@ -6267,7 +6077,6 @@ class MultiFab(FabArray_FArrayBox):
         Add src to dst including nghost ghost cells.
         The two MultiFabs MUST have the same underlying BoxArray.
         """
-
     @staticmethod
     @typing.overload
     def add(
@@ -6282,7 +6091,6 @@ class MultiFab(FabArray_FArrayBox):
         Add src to dst including nghost ghost cells.
         The two MultiFabs MUST have the same underlying BoxArray.
         """
-
     @staticmethod
     @typing.overload
     def add_product(
@@ -6298,7 +6106,6 @@ class MultiFab(FabArray_FArrayBox):
         """
         dst += src1*src2
         """
-
     @staticmethod
     @typing.overload
     def add_product(
@@ -6314,7 +6121,6 @@ class MultiFab(FabArray_FArrayBox):
         """
         dst += src1*src2
         """
-
     @staticmethod
     @typing.overload
     def divide(
@@ -6329,7 +6135,6 @@ class MultiFab(FabArray_FArrayBox):
         Divide dst by src including nghost ghost cells.
         The two MultiFabs MUST have the same underlying BoxArray.
         """
-
     @staticmethod
     @typing.overload
     def divide(
@@ -6344,7 +6149,6 @@ class MultiFab(FabArray_FArrayBox):
         Divide dst by src including nghost ghost cells.
         The two MultiFabs MUST have the same underlying BoxArray.
         """
-
     @staticmethod
     @typing.overload
     def dot(
@@ -6359,7 +6163,6 @@ class MultiFab(FabArray_FArrayBox):
         """
         Returns the dot product of two MultiFabs.
         """
-
     @staticmethod
     @typing.overload
     def dot(
@@ -6368,7 +6171,6 @@ class MultiFab(FabArray_FArrayBox):
         """
         Returns the dot product of a MultiFab with itself.
         """
-
     @staticmethod
     def finalize() -> None: ...
     @staticmethod
@@ -6389,7 +6191,6 @@ class MultiFab(FabArray_FArrayBox):
         """
         dst = a*x + b*y
         """
-
     @staticmethod
     @typing.overload
     def multiply(
@@ -6404,7 +6205,6 @@ class MultiFab(FabArray_FArrayBox):
         Multiply dst by src including nghost ghost cells.
         The two MultiFabs MUST have the same underlying BoxArray.
         """
-
     @staticmethod
     @typing.overload
     def multiply(
@@ -6419,7 +6219,6 @@ class MultiFab(FabArray_FArrayBox):
         Multiply dst by src including nghost ghost cells.
         The two MultiFabs MUST have the same underlying BoxArray.
         """
-
     @staticmethod
     def saxpy(
         dst: MultiFab,
@@ -6433,7 +6232,6 @@ class MultiFab(FabArray_FArrayBox):
         """
         dst += a*src
         """
-
     @staticmethod
     @typing.overload
     def subtract(
@@ -6448,7 +6246,6 @@ class MultiFab(FabArray_FArrayBox):
         Subtract src from dst including nghost ghost cells.
         The two MultiFabs MUST have the same underlying BoxArray.
         """
-
     @staticmethod
     @typing.overload
     def subtract(
@@ -6463,7 +6260,6 @@ class MultiFab(FabArray_FArrayBox):
         Subtract src from dst including nghost ghost cells.
         The two MultiFabs MUST have the same underlying BoxArray.
         """
-
     @staticmethod
     @typing.overload
     def swap(
@@ -6479,7 +6275,6 @@ class MultiFab(FabArray_FArrayBox):
         The two MultiFabs MUST have the same underlying BoxArray.
         The swap is local.
         """
-
     @staticmethod
     @typing.overload
     def swap(
@@ -6495,7 +6290,6 @@ class MultiFab(FabArray_FArrayBox):
         The two MultiFabs MUST have the same underlying BoxArray.
         The swap is local.
         """
-
     @staticmethod
     def xpay(
         dst: MultiFab,
@@ -6509,7 +6303,6 @@ class MultiFab(FabArray_FArrayBox):
         """
         dst = src + a*dst
         """
-
     @typing.overload
     def __init__(self) -> None:
         """
@@ -6518,7 +6311,6 @@ class MultiFab(FabArray_FArrayBox):
                     Data can be defined at a later time using the define member functions
                     inherited from FabArray.
         """
-
     @typing.overload
     def __init__(self, a: Arena) -> None:
         """
@@ -6529,7 +6321,6 @@ class MultiFab(FabArray_FArrayBox):
                     default Arena ``a`` will be used.  If the arena in MFInfo is not a
                     nullptr, the MFInfo's arena will be used.
         """
-
     @typing.overload
     def __init__(
         self,
@@ -6563,7 +6354,6 @@ class MultiFab(FabArray_FArrayBox):
             factory :
               FArrayBoxFactory for embedded boundaries
         """
-
     @typing.overload
     def __init__(
         self,
@@ -6596,7 +6386,6 @@ class MultiFab(FabArray_FArrayBox):
             factory :
               FArrayBoxFactory for embedded boundaries
         """
-
     @typing.overload
     def __init__(
         self, bxs: BoxArray, dm: DistributionMapping, ncomp: int, ngrow: int
@@ -6624,7 +6413,6 @@ class MultiFab(FabArray_FArrayBox):
             factory :
               FArrayBoxFactory for embedded boundaries
         """
-
     @typing.overload
     def __init__(
         self,
@@ -6657,7 +6445,6 @@ class MultiFab(FabArray_FArrayBox):
             factory :
               FArrayBoxFactory for embedded boundaries
         """
-
     @typing.overload
     def __init__(
         self,
@@ -6691,7 +6478,6 @@ class MultiFab(FabArray_FArrayBox):
             factory :
               FArrayBoxFactory for embedded boundaries
         """
-
     @typing.overload
     def __init__(
         self, bxs: BoxArray, dm: DistributionMapping, ncomp: int, ngrow: IntVect2D
@@ -6719,7 +6505,6 @@ class MultiFab(FabArray_FArrayBox):
             factory :
               FArrayBoxFactory for embedded boundaries
         """
-
     def __repr__(self) -> str: ...
     def average_sync(self, arg0: Periodicity) -> None: ...
     def box_array(self: FabArrayBase) -> BoxArray: ...
@@ -6759,7 +6544,6 @@ class MultiFab(FabArray_FArrayBox):
             A copy of this MultiFab.
 
         """
-
     def divi(
         self, mf: MultiFab, strt_comp: int, num_comp: int, nghost: int = 0
     ) -> None:
@@ -6773,7 +6557,6 @@ class MultiFab(FabArray_FArrayBox):
         each FArrayBox will be modified.  Note, nothing is done to protect
         against divide by zero.
         """
-
     def dm(self: FabArrayBase) -> DistributionMapping: ...
     @typing.overload
     def invert(self, numerator: float, nghost: int) -> None:
@@ -6783,7 +6566,6 @@ class MultiFab(FabArray_FArrayBox):
         numerator.  The value of nghost specifies the number of cells
         in the boundary region that should be modified.
         """
-
     @typing.overload
     def invert(
         self, numerator: float, comp: int, num_comp: int, nghost: int = 0
@@ -6796,7 +6578,6 @@ class MultiFab(FabArray_FArrayBox):
         number of cells in the boundary region of each FArrayBox in the
         subregion that should be modified.
         """
-
     @typing.overload
     def invert(self, numerator: float, region: Box, nghost: int) -> None:
         """
@@ -6806,7 +6587,6 @@ class MultiFab(FabArray_FArrayBox):
         specifies the number of cells in the boundary region of each
         FArrayBox in the subregion that should be modified.
         """
-
     @typing.overload
     def invert(
         self, numerator: float, region: Box, comp: int, num_comp: int, nghost: int = 0
@@ -6818,13 +6598,11 @@ class MultiFab(FabArray_FArrayBox):
         number of cells in the boundary region of each FArrayBox in the
         subregion that should be modified.
         """
-
     @typing.overload
     def max(self, comp: int = 0, nghost: int = 0, local: bool = False) -> float:
         """
         Returns the maximum value of the specfied component of the MultiFab.
         """
-
     @typing.overload
     def max(
         self, region: Box, comp: int = 0, nghost: int = 0, local: bool = False
@@ -6832,14 +6610,12 @@ class MultiFab(FabArray_FArrayBox):
         """
         Returns the maximum value of the specfied component of the MultiFab over the region.
         """
-
     def maxIndex(self, arg0: int, arg1: int) -> IntVect2D: ...
     @typing.overload
     def min(self, comp: int = 0, nghost: int = 0, local: bool = False) -> float:
         """
         Returns the minimum value of the specfied component of the MultiFab.
         """
-
     @typing.overload
     def min(
         self, region: Box, comp: int = 0, nghost: int = 0, local: bool = False
@@ -6847,7 +6623,6 @@ class MultiFab(FabArray_FArrayBox):
         """
         Returns the minimum value of the specfied component of the MultiFab over the region.
         """
-
     def minIndex(self, arg0: int, arg1: int) -> IntVect2D: ...
     def minus(
         self, mf: MultiFab, strt_comp: int, num_comp: int, nghost: int = 0
@@ -6861,7 +6636,6 @@ class MultiFab(FabArray_FArrayBox):
         cells that will be modified.  If nghost == 0, only the valid region of
         each FArrayBox will be modified.
         """
-
     @typing.overload
     def mult(self, val: float, nghost: int = 0) -> None:
         """
@@ -6870,7 +6644,6 @@ class MultiFab(FabArray_FArrayBox):
         The value of nghost specifies the number of cells in the
         boundary region that should be modified.
         """
-
     @typing.overload
     def mult(self, val: float, comp: int, num_comp: int, nghost: int = 0) -> None:
         """
@@ -6881,7 +6654,6 @@ class MultiFab(FabArray_FArrayBox):
         boundary region of each FArrayBox in the subregion that should
         be modified.
         """
-
     @typing.overload
     def mult(
         self, val: float, region: Box, comp: int, num_comp: int, nghost: int = 0
@@ -6893,7 +6665,6 @@ class MultiFab(FabArray_FArrayBox):
         number of cells in the boundary region of each FArrayBox in
         the subregion that should be modified.
         """
-
     @typing.overload
     def mult(self, val: float, region: Box, nghost: int = 0) -> None:
         """
@@ -6903,7 +6674,6 @@ class MultiFab(FabArray_FArrayBox):
         specifies the number of cells in the boundary region of each
         FArrayBox in the subregion that should be modified.
         """
-
     @typing.overload
     def negate(self, nghost: int = 0) -> None:
         """
@@ -6911,7 +6681,6 @@ class MultiFab(FabArray_FArrayBox):
         the MultiFab.  The value of nghost specifies the number of
         cells in the boundary region that should be modified.
         """
-
     @typing.overload
     def negate(self, comp: int, num_comp: int, nghost: int = 0) -> None:
         """
@@ -6921,7 +6690,6 @@ class MultiFab(FabArray_FArrayBox):
         specifies the number of cells in the boundary region of each
         FArrayBox in the subregion that should be modified.
         """
-
     @typing.overload
     def negate(self, region: Box, nghost: int = 0) -> None:
         """
@@ -6930,7 +6698,6 @@ class MultiFab(FabArray_FArrayBox):
         of nghost specifies the number of cells in the boundary region
         that should be modified.
         """
-
     @typing.overload
     def negate(self, region: Box, comp: int, num_comp: int, nghost: int = 0) -> None:
         """
@@ -6938,7 +6705,6 @@ class MultiFab(FabArray_FArrayBox):
         restriction that the subregion is further constrained to
         the intersection with Box region.
         """
-
     def norm0(self, arg0: int, arg1: int, arg2: bool, arg3: bool) -> float: ...
     @typing.overload
     def norm1(self, arg0: int, arg1: Periodicity, arg2: bool) -> float: ...
@@ -6961,7 +6727,6 @@ class MultiFab(FabArray_FArrayBox):
         of nghost specifies the number of cells in the boundary
         region that should be modified.
         """
-
     @typing.overload
     def plus(self, val: float, comp: int, num_comp: int, nghost: int = 0) -> None:
         """
@@ -6973,7 +6738,6 @@ class MultiFab(FabArray_FArrayBox):
         boundary region of each FArrayBox in the subregion that should
         be modified.
         """
-
     @typing.overload
     def plus(self, val: float, region: Box, nghost: int = 0) -> None:
         """
@@ -6983,7 +6747,6 @@ class MultiFab(FabArray_FArrayBox):
         number of cells in the boundary region of each FArrayBox in
         the subregion that should be modified.
         """
-
     @typing.overload
     def plus(
         self, val: float, region: Box, comp: int, num_comp: int, nghost: int = 0
@@ -6993,7 +6756,6 @@ class MultiFab(FabArray_FArrayBox):
         restriction that the subregion is further constrained to
         the intersection with Box region.
         """
-
     @typing.overload
     def plus(
         self, mf: MultiFab, strt_comp: int, num_comp: int, nghost: int = 0
@@ -7007,19 +6769,16 @@ class MultiFab(FabArray_FArrayBox):
         If nghost == 0, only the valid region of each FArrayBox will be
         modified.
         """
-
     @typing.overload
     def sum(self, comp: int = 0, local: bool = False) -> float:
         """
         Returns the sum of component 'comp' over the MultiFab -- no ghost cells are included.
         """
-
     @typing.overload
     def sum(self, region: Box, comp: int = 0, local: bool = False) -> float:
         """
         Returns the sum of component 'comp' in the given 'region'. -- no ghost cells are included.
         """
-
     @typing.overload
     def sum_unique(
         self, comp: int = 0, local: bool = False, period: Periodicity = ...
@@ -7027,13 +6786,11 @@ class MultiFab(FabArray_FArrayBox):
         """
         Same as sum with local=false, but for non-cell-centered data, thisskips non-unique points that are owned by multiple boxes.
         """
-
     @typing.overload
     def sum_unique(self, region: Box, comp: int = 0, local: bool = False) -> float:
         """
         Returns the unique sum of component `comp` in the given region. Non-unique points owned by multiple boxes in the MultiFab areonly added once. No ghost cells are included. This function does not takeperiodicity into account in the determination of uniqueness of points.
         """
-
     def to_cupy(self, copy=False, order="F"):
         """
 
@@ -7069,7 +6826,6 @@ class MultiFab(FabArray_FArrayBox):
             Raises an exception if cupy is not installed
 
         """
-
     def to_numpy(self, copy=False, order="F"):
         """
 
@@ -7100,7 +6856,6 @@ class MultiFab(FabArray_FArrayBox):
             MultiFab.
 
         """
-
     def to_xp(self, copy=False, order="F"):
         """
 
@@ -7135,7 +6890,6 @@ class MultiFab(FabArray_FArrayBox):
             MultiFab.
 
         """
-
     def weighted_sync(self, arg0: MultiFab, arg1: Periodicity) -> None: ...
     @property
     def n_comp(self) -> int: ...
@@ -7157,7 +6911,6 @@ class PODVector_int_arena:
         """
         assign the same value to every element
         """
-
     def capacity(self) -> int: ...
     def clear(self) -> None: ...
     def empty(self) -> bool: ...
@@ -7193,7 +6946,6 @@ class PODVector_int_arena:
             Raises an exception if cupy is not installed
 
         """
-
     def to_host(self) -> PODVector_int_pinned: ...
     def to_numpy(self, copy=False):
         """
@@ -7213,7 +6965,6 @@ class PODVector_int_arena:
             A 1D NumPy array.
 
         """
-
     def to_xp(self, copy=False):
         """
 
@@ -7236,7 +6987,6 @@ class PODVector_int_arena:
             A 1D NumPy or CuPy array.
 
         """
-
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -7257,7 +7007,6 @@ class PODVector_int_pinned:
         """
         assign the same value to every element
         """
-
     def capacity(self) -> int: ...
     def clear(self) -> None: ...
     def empty(self) -> bool: ...
@@ -7293,7 +7042,6 @@ class PODVector_int_pinned:
             Raises an exception if cupy is not installed
 
         """
-
     def to_host(self) -> PODVector_int_pinned: ...
     def to_numpy(self, copy=False):
         """
@@ -7313,7 +7061,6 @@ class PODVector_int_pinned:
             A 1D NumPy array.
 
         """
-
     def to_xp(self, copy=False):
         """
 
@@ -7336,7 +7083,6 @@ class PODVector_int_pinned:
             A 1D NumPy or CuPy array.
 
         """
-
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -7357,7 +7103,6 @@ class PODVector_int_std:
         """
         assign the same value to every element
         """
-
     def capacity(self) -> int: ...
     def clear(self) -> None: ...
     def empty(self) -> bool: ...
@@ -7393,7 +7138,6 @@ class PODVector_int_std:
             Raises an exception if cupy is not installed
 
         """
-
     def to_host(self) -> PODVector_int_pinned: ...
     def to_numpy(self, copy=False):
         """
@@ -7413,7 +7157,6 @@ class PODVector_int_std:
             A 1D NumPy array.
 
         """
-
     def to_xp(self, copy=False):
         """
 
@@ -7436,7 +7179,6 @@ class PODVector_int_std:
             A 1D NumPy or CuPy array.
 
         """
-
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -7457,7 +7199,6 @@ class PODVector_real_arena:
         """
         assign the same value to every element
         """
-
     def capacity(self) -> int: ...
     def clear(self) -> None: ...
     def empty(self) -> bool: ...
@@ -7493,7 +7234,6 @@ class PODVector_real_arena:
             Raises an exception if cupy is not installed
 
         """
-
     def to_host(self) -> PODVector_real_pinned: ...
     def to_numpy(self, copy=False):
         """
@@ -7513,7 +7253,6 @@ class PODVector_real_arena:
             A 1D NumPy array.
 
         """
-
     def to_xp(self, copy=False):
         """
 
@@ -7536,7 +7275,6 @@ class PODVector_real_arena:
             A 1D NumPy or CuPy array.
 
         """
-
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -7557,7 +7295,6 @@ class PODVector_real_pinned:
         """
         assign the same value to every element
         """
-
     def capacity(self) -> int: ...
     def clear(self) -> None: ...
     def empty(self) -> bool: ...
@@ -7593,7 +7330,6 @@ class PODVector_real_pinned:
             Raises an exception if cupy is not installed
 
         """
-
     def to_host(self) -> PODVector_real_pinned: ...
     def to_numpy(self, copy=False):
         """
@@ -7613,7 +7349,6 @@ class PODVector_real_pinned:
             A 1D NumPy array.
 
         """
-
     def to_xp(self, copy=False):
         """
 
@@ -7636,7 +7371,6 @@ class PODVector_real_pinned:
             A 1D NumPy or CuPy array.
 
         """
-
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -7657,7 +7391,6 @@ class PODVector_real_std:
         """
         assign the same value to every element
         """
-
     def capacity(self) -> int: ...
     def clear(self) -> None: ...
     def empty(self) -> bool: ...
@@ -7693,7 +7426,6 @@ class PODVector_real_std:
             Raises an exception if cupy is not installed
 
         """
-
     def to_host(self) -> PODVector_real_pinned: ...
     def to_numpy(self, copy=False):
         """
@@ -7713,7 +7445,6 @@ class PODVector_real_std:
             A 1D NumPy array.
 
         """
-
     def to_xp(self, copy=False):
         """
 
@@ -7736,7 +7467,6 @@ class PODVector_real_std:
             A 1D NumPy or CuPy array.
 
         """
-
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -7757,7 +7487,6 @@ class PODVector_uint64_arena:
         """
         assign the same value to every element
         """
-
     def capacity(self) -> int: ...
     def clear(self) -> None: ...
     def empty(self) -> bool: ...
@@ -7793,7 +7522,6 @@ class PODVector_uint64_arena:
             Raises an exception if cupy is not installed
 
         """
-
     def to_host(self) -> PODVector_uint64_pinned: ...
     def to_numpy(self, copy=False):
         """
@@ -7813,7 +7541,6 @@ class PODVector_uint64_arena:
             A 1D NumPy array.
 
         """
-
     def to_xp(self, copy=False):
         """
 
@@ -7836,7 +7563,6 @@ class PODVector_uint64_arena:
             A 1D NumPy or CuPy array.
 
         """
-
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -7857,7 +7583,6 @@ class PODVector_uint64_pinned:
         """
         assign the same value to every element
         """
-
     def capacity(self) -> int: ...
     def clear(self) -> None: ...
     def empty(self) -> bool: ...
@@ -7893,7 +7618,6 @@ class PODVector_uint64_pinned:
             Raises an exception if cupy is not installed
 
         """
-
     def to_host(self) -> PODVector_uint64_pinned: ...
     def to_numpy(self, copy=False):
         """
@@ -7913,7 +7637,6 @@ class PODVector_uint64_pinned:
             A 1D NumPy array.
 
         """
-
     def to_xp(self, copy=False):
         """
 
@@ -7936,7 +7659,6 @@ class PODVector_uint64_pinned:
             A 1D NumPy or CuPy array.
 
         """
-
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -7957,7 +7679,6 @@ class PODVector_uint64_std:
         """
         assign the same value to every element
         """
-
     def capacity(self) -> int: ...
     def clear(self) -> None: ...
     def empty(self) -> bool: ...
@@ -7993,7 +7714,6 @@ class PODVector_uint64_std:
             Raises an exception if cupy is not installed
 
         """
-
     def to_host(self) -> PODVector_uint64_pinned: ...
     def to_numpy(self, copy=False):
         """
@@ -8013,7 +7733,6 @@ class PODVector_uint64_std:
             A 1D NumPy array.
 
         """
-
     def to_xp(self, copy=False):
         """
 
@@ -8036,7 +7755,6 @@ class PODVector_uint64_std:
             A 1D NumPy or CuPy array.
 
         """
-
     @property
     def __array_interface__(self) -> dict: ...
     @property
@@ -8066,7 +7784,6 @@ class ParConstIterBase_16_4_0_0_arena(MFIter):
             returns: the updated iterator
 
         """
-
     def _incr(self) -> None: ...
     def aos(self) -> ArrayOfStructs_16_4_arena: ...
     def finalize(self) -> None: ...
@@ -8115,7 +7832,6 @@ class ParConstIterBase_16_4_0_0_default(MFIter):
             returns: the updated iterator
 
         """
-
     def _incr(self) -> None: ...
     def aos(self) -> ArrayOfStructs_16_4_default: ...
     def finalize(self) -> None: ...
@@ -8164,7 +7880,6 @@ class ParConstIterBase_16_4_0_0_pinned(MFIter):
             returns: the updated iterator
 
         """
-
     def _incr(self) -> None: ...
     def aos(self) -> ArrayOfStructs_16_4_pinned: ...
     def finalize(self) -> None: ...
@@ -8213,7 +7928,6 @@ class ParConstIterBase_2_1_3_1_arena(MFIter):
             returns: the updated iterator
 
         """
-
     def _incr(self) -> None: ...
     def aos(self) -> ArrayOfStructs_2_1_arena: ...
     def finalize(self) -> None: ...
@@ -8262,7 +7976,6 @@ class ParConstIterBase_2_1_3_1_default(MFIter):
             returns: the updated iterator
 
         """
-
     def _incr(self) -> None: ...
     def aos(self) -> ArrayOfStructs_2_1_default: ...
     def finalize(self) -> None: ...
@@ -8311,7 +8024,6 @@ class ParConstIterBase_2_1_3_1_pinned(MFIter):
             returns: the updated iterator
 
         """
-
     def _incr(self) -> None: ...
     def aos(self) -> ArrayOfStructs_2_1_pinned: ...
     def finalize(self) -> None: ...
@@ -8360,7 +8072,6 @@ class ParConstIterBase_pureSoA_2_0_arena(MFIter):
             returns: the updated iterator
 
         """
-
     def _incr(self) -> None: ...
     def finalize(self) -> None: ...
     def geom(self, level: int) -> Geometry: ...
@@ -8408,7 +8119,6 @@ class ParConstIterBase_pureSoA_2_0_default(MFIter):
             returns: the updated iterator
 
         """
-
     def _incr(self) -> None: ...
     def finalize(self) -> None: ...
     def geom(self, level: int) -> Geometry: ...
@@ -8456,7 +8166,6 @@ class ParConstIterBase_pureSoA_2_0_pinned(MFIter):
             returns: the updated iterator
 
         """
-
     def _incr(self) -> None: ...
     def finalize(self) -> None: ...
     def geom(self, level: int) -> Geometry: ...
@@ -8504,7 +8213,6 @@ class ParConstIterBase_pureSoA_6_0_arena(MFIter):
             returns: the updated iterator
 
         """
-
     def _incr(self) -> None: ...
     def finalize(self) -> None: ...
     def geom(self, level: int) -> Geometry: ...
@@ -8552,7 +8260,6 @@ class ParConstIterBase_pureSoA_6_0_default(MFIter):
             returns: the updated iterator
 
         """
-
     def _incr(self) -> None: ...
     def finalize(self) -> None: ...
     def geom(self, level: int) -> Geometry: ...
@@ -8600,7 +8307,6 @@ class ParConstIterBase_pureSoA_6_0_pinned(MFIter):
             returns: the updated iterator
 
         """
-
     def _incr(self) -> None: ...
     def finalize(self) -> None: ...
     def geom(self, level: int) -> Geometry: ...
@@ -8648,7 +8354,6 @@ class ParConstIterBase_pureSoA_7_0_arena(MFIter):
             returns: the updated iterator
 
         """
-
     def _incr(self) -> None: ...
     def finalize(self) -> None: ...
     def geom(self, level: int) -> Geometry: ...
@@ -8696,7 +8401,6 @@ class ParConstIterBase_pureSoA_7_0_default(MFIter):
             returns: the updated iterator
 
         """
-
     def _incr(self) -> None: ...
     def finalize(self) -> None: ...
     def geom(self, level: int) -> Geometry: ...
@@ -8744,7 +8448,6 @@ class ParConstIterBase_pureSoA_7_0_pinned(MFIter):
             returns: the updated iterator
 
         """
-
     def _incr(self) -> None: ...
     def finalize(self) -> None: ...
     def geom(self, level: int) -> Geometry: ...
@@ -8792,7 +8495,6 @@ class ParConstIterBase_pureSoA_8_0_arena(MFIter):
             returns: the updated iterator
 
         """
-
     def _incr(self) -> None: ...
     def finalize(self) -> None: ...
     def geom(self, level: int) -> Geometry: ...
@@ -8840,7 +8542,6 @@ class ParConstIterBase_pureSoA_8_0_default(MFIter):
             returns: the updated iterator
 
         """
-
     def _incr(self) -> None: ...
     def finalize(self) -> None: ...
     def geom(self, level: int) -> Geometry: ...
@@ -8888,7 +8589,6 @@ class ParConstIterBase_pureSoA_8_0_pinned(MFIter):
             returns: the updated iterator
 
         """
-
     def _incr(self) -> None: ...
     def finalize(self) -> None: ...
     def geom(self, level: int) -> Geometry: ...
@@ -8936,7 +8636,6 @@ class ParConstIter_16_4_0_0_arena(ParConstIterBase_16_4_0_0_arena):
             returns: the updated iterator
 
         """
-
     def __repr__(self) -> str: ...
 
 class ParConstIter_16_4_0_0_default(ParConstIterBase_16_4_0_0_default):
@@ -8963,7 +8662,6 @@ class ParConstIter_16_4_0_0_default(ParConstIterBase_16_4_0_0_default):
             returns: the updated iterator
 
         """
-
     def __repr__(self) -> str: ...
 
 class ParConstIter_16_4_0_0_pinned(ParConstIterBase_16_4_0_0_pinned):
@@ -8990,7 +8688,6 @@ class ParConstIter_16_4_0_0_pinned(ParConstIterBase_16_4_0_0_pinned):
             returns: the updated iterator
 
         """
-
     def __repr__(self) -> str: ...
 
 class ParConstIter_2_1_3_1_arena(ParConstIterBase_2_1_3_1_arena):
@@ -9017,7 +8714,6 @@ class ParConstIter_2_1_3_1_arena(ParConstIterBase_2_1_3_1_arena):
             returns: the updated iterator
 
         """
-
     def __repr__(self) -> str: ...
 
 class ParConstIter_2_1_3_1_default(ParConstIterBase_2_1_3_1_default):
@@ -9044,7 +8740,6 @@ class ParConstIter_2_1_3_1_default(ParConstIterBase_2_1_3_1_default):
             returns: the updated iterator
 
         """
-
     def __repr__(self) -> str: ...
 
 class ParConstIter_2_1_3_1_pinned(ParConstIterBase_2_1_3_1_pinned):
@@ -9071,7 +8766,6 @@ class ParConstIter_2_1_3_1_pinned(ParConstIterBase_2_1_3_1_pinned):
             returns: the updated iterator
 
         """
-
     def __repr__(self) -> str: ...
 
 class ParConstIter_pureSoA_2_0_arena(ParConstIterBase_pureSoA_2_0_arena):
@@ -9098,7 +8792,6 @@ class ParConstIter_pureSoA_2_0_arena(ParConstIterBase_pureSoA_2_0_arena):
             returns: the updated iterator
 
         """
-
     def __repr__(self) -> str: ...
 
 class ParConstIter_pureSoA_2_0_default(ParConstIterBase_pureSoA_2_0_default):
@@ -9125,7 +8818,6 @@ class ParConstIter_pureSoA_2_0_default(ParConstIterBase_pureSoA_2_0_default):
             returns: the updated iterator
 
         """
-
     def __repr__(self) -> str: ...
 
 class ParConstIter_pureSoA_2_0_pinned(ParConstIterBase_pureSoA_2_0_pinned):
@@ -9152,7 +8844,6 @@ class ParConstIter_pureSoA_2_0_pinned(ParConstIterBase_pureSoA_2_0_pinned):
             returns: the updated iterator
 
         """
-
     def __repr__(self) -> str: ...
 
 class ParConstIter_pureSoA_6_0_arena(ParConstIterBase_pureSoA_6_0_arena):
@@ -9179,7 +8870,6 @@ class ParConstIter_pureSoA_6_0_arena(ParConstIterBase_pureSoA_6_0_arena):
             returns: the updated iterator
 
         """
-
     def __repr__(self) -> str: ...
 
 class ParConstIter_pureSoA_6_0_default(ParConstIterBase_pureSoA_6_0_default):
@@ -9206,7 +8896,6 @@ class ParConstIter_pureSoA_6_0_default(ParConstIterBase_pureSoA_6_0_default):
             returns: the updated iterator
 
         """
-
     def __repr__(self) -> str: ...
 
 class ParConstIter_pureSoA_6_0_pinned(ParConstIterBase_pureSoA_6_0_pinned):
@@ -9233,7 +8922,6 @@ class ParConstIter_pureSoA_6_0_pinned(ParConstIterBase_pureSoA_6_0_pinned):
             returns: the updated iterator
 
         """
-
     def __repr__(self) -> str: ...
 
 class ParConstIter_pureSoA_7_0_arena(ParConstIterBase_pureSoA_7_0_arena):
@@ -9260,7 +8948,6 @@ class ParConstIter_pureSoA_7_0_arena(ParConstIterBase_pureSoA_7_0_arena):
             returns: the updated iterator
 
         """
-
     def __repr__(self) -> str: ...
 
 class ParConstIter_pureSoA_7_0_default(ParConstIterBase_pureSoA_7_0_default):
@@ -9287,7 +8974,6 @@ class ParConstIter_pureSoA_7_0_default(ParConstIterBase_pureSoA_7_0_default):
             returns: the updated iterator
 
         """
-
     def __repr__(self) -> str: ...
 
 class ParConstIter_pureSoA_7_0_pinned(ParConstIterBase_pureSoA_7_0_pinned):
@@ -9314,7 +9000,6 @@ class ParConstIter_pureSoA_7_0_pinned(ParConstIterBase_pureSoA_7_0_pinned):
             returns: the updated iterator
 
         """
-
     def __repr__(self) -> str: ...
 
 class ParConstIter_pureSoA_8_0_arena(ParConstIterBase_pureSoA_8_0_arena):
@@ -9341,7 +9026,6 @@ class ParConstIter_pureSoA_8_0_arena(ParConstIterBase_pureSoA_8_0_arena):
             returns: the updated iterator
 
         """
-
     def __repr__(self) -> str: ...
 
 class ParConstIter_pureSoA_8_0_default(ParConstIterBase_pureSoA_8_0_default):
@@ -9368,7 +9052,6 @@ class ParConstIter_pureSoA_8_0_default(ParConstIterBase_pureSoA_8_0_default):
             returns: the updated iterator
 
         """
-
     def __repr__(self) -> str: ...
 
 class ParConstIter_pureSoA_8_0_pinned(ParConstIterBase_pureSoA_8_0_pinned):
@@ -9395,7 +9078,6 @@ class ParConstIter_pureSoA_8_0_pinned(ParConstIterBase_pureSoA_8_0_pinned):
             returns: the updated iterator
 
         """
-
     def __repr__(self) -> str: ...
 
 class ParIterBase_16_4_0_0_arena(MFIter):
@@ -9422,7 +9104,6 @@ class ParIterBase_16_4_0_0_arena(MFIter):
             returns: the updated iterator
 
         """
-
     def _incr(self) -> None: ...
     def aos(self) -> ArrayOfStructs_16_4_arena: ...
     def finalize(self) -> None: ...
@@ -9471,7 +9152,6 @@ class ParIterBase_16_4_0_0_default(MFIter):
             returns: the updated iterator
 
         """
-
     def _incr(self) -> None: ...
     def aos(self) -> ArrayOfStructs_16_4_default: ...
     def finalize(self) -> None: ...
@@ -9520,7 +9200,6 @@ class ParIterBase_16_4_0_0_pinned(MFIter):
             returns: the updated iterator
 
         """
-
     def _incr(self) -> None: ...
     def aos(self) -> ArrayOfStructs_16_4_pinned: ...
     def finalize(self) -> None: ...
@@ -9569,7 +9248,6 @@ class ParIterBase_2_1_3_1_arena(MFIter):
             returns: the updated iterator
 
         """
-
     def _incr(self) -> None: ...
     def aos(self) -> ArrayOfStructs_2_1_arena: ...
     def finalize(self) -> None: ...
@@ -9618,7 +9296,6 @@ class ParIterBase_2_1_3_1_default(MFIter):
             returns: the updated iterator
 
         """
-
     def _incr(self) -> None: ...
     def aos(self) -> ArrayOfStructs_2_1_default: ...
     def finalize(self) -> None: ...
@@ -9667,7 +9344,6 @@ class ParIterBase_2_1_3_1_pinned(MFIter):
             returns: the updated iterator
 
         """
-
     def _incr(self) -> None: ...
     def aos(self) -> ArrayOfStructs_2_1_pinned: ...
     def finalize(self) -> None: ...
@@ -9716,7 +9392,6 @@ class ParIterBase_pureSoA_2_0_arena(MFIter):
             returns: the updated iterator
 
         """
-
     def _incr(self) -> None: ...
     def finalize(self) -> None: ...
     def geom(self, level: int) -> Geometry: ...
@@ -9764,7 +9439,6 @@ class ParIterBase_pureSoA_2_0_default(MFIter):
             returns: the updated iterator
 
         """
-
     def _incr(self) -> None: ...
     def finalize(self) -> None: ...
     def geom(self, level: int) -> Geometry: ...
@@ -9812,7 +9486,6 @@ class ParIterBase_pureSoA_2_0_pinned(MFIter):
             returns: the updated iterator
 
         """
-
     def _incr(self) -> None: ...
     def finalize(self) -> None: ...
     def geom(self, level: int) -> Geometry: ...
@@ -9860,7 +9533,6 @@ class ParIterBase_pureSoA_6_0_arena(MFIter):
             returns: the updated iterator
 
         """
-
     def _incr(self) -> None: ...
     def finalize(self) -> None: ...
     def geom(self, level: int) -> Geometry: ...
@@ -9908,7 +9580,6 @@ class ParIterBase_pureSoA_6_0_default(MFIter):
             returns: the updated iterator
 
         """
-
     def _incr(self) -> None: ...
     def finalize(self) -> None: ...
     def geom(self, level: int) -> Geometry: ...
@@ -9956,7 +9627,6 @@ class ParIterBase_pureSoA_6_0_pinned(MFIter):
             returns: the updated iterator
 
         """
-
     def _incr(self) -> None: ...
     def finalize(self) -> None: ...
     def geom(self, level: int) -> Geometry: ...
@@ -10004,7 +9674,6 @@ class ParIterBase_pureSoA_7_0_arena(MFIter):
             returns: the updated iterator
 
         """
-
     def _incr(self) -> None: ...
     def finalize(self) -> None: ...
     def geom(self, level: int) -> Geometry: ...
@@ -10052,7 +9721,6 @@ class ParIterBase_pureSoA_7_0_default(MFIter):
             returns: the updated iterator
 
         """
-
     def _incr(self) -> None: ...
     def finalize(self) -> None: ...
     def geom(self, level: int) -> Geometry: ...
@@ -10100,7 +9768,6 @@ class ParIterBase_pureSoA_7_0_pinned(MFIter):
             returns: the updated iterator
 
         """
-
     def _incr(self) -> None: ...
     def finalize(self) -> None: ...
     def geom(self, level: int) -> Geometry: ...
@@ -10148,7 +9815,6 @@ class ParIterBase_pureSoA_8_0_arena(MFIter):
             returns: the updated iterator
 
         """
-
     def _incr(self) -> None: ...
     def finalize(self) -> None: ...
     def geom(self, level: int) -> Geometry: ...
@@ -10196,7 +9862,6 @@ class ParIterBase_pureSoA_8_0_default(MFIter):
             returns: the updated iterator
 
         """
-
     def _incr(self) -> None: ...
     def finalize(self) -> None: ...
     def geom(self, level: int) -> Geometry: ...
@@ -10244,7 +9909,6 @@ class ParIterBase_pureSoA_8_0_pinned(MFIter):
             returns: the updated iterator
 
         """
-
     def _incr(self) -> None: ...
     def finalize(self) -> None: ...
     def geom(self, level: int) -> Geometry: ...
@@ -10292,7 +9956,6 @@ class ParIter_16_4_0_0_arena(ParIterBase_16_4_0_0_arena):
             returns: the updated iterator
 
         """
-
     def __repr__(self) -> str: ...
 
 class ParIter_16_4_0_0_default(ParIterBase_16_4_0_0_default):
@@ -10319,7 +9982,6 @@ class ParIter_16_4_0_0_default(ParIterBase_16_4_0_0_default):
             returns: the updated iterator
 
         """
-
     def __repr__(self) -> str: ...
 
 class ParIter_16_4_0_0_pinned(ParIterBase_16_4_0_0_pinned):
@@ -10346,7 +10008,6 @@ class ParIter_16_4_0_0_pinned(ParIterBase_16_4_0_0_pinned):
             returns: the updated iterator
 
         """
-
     def __repr__(self) -> str: ...
 
 class ParIter_2_1_3_1_arena(ParIterBase_2_1_3_1_arena):
@@ -10373,7 +10034,6 @@ class ParIter_2_1_3_1_arena(ParIterBase_2_1_3_1_arena):
             returns: the updated iterator
 
         """
-
     def __repr__(self) -> str: ...
 
 class ParIter_2_1_3_1_default(ParIterBase_2_1_3_1_default):
@@ -10400,7 +10060,6 @@ class ParIter_2_1_3_1_default(ParIterBase_2_1_3_1_default):
             returns: the updated iterator
 
         """
-
     def __repr__(self) -> str: ...
 
 class ParIter_2_1_3_1_pinned(ParIterBase_2_1_3_1_pinned):
@@ -10427,7 +10086,6 @@ class ParIter_2_1_3_1_pinned(ParIterBase_2_1_3_1_pinned):
             returns: the updated iterator
 
         """
-
     def __repr__(self) -> str: ...
 
 class ParIter_pureSoA_2_0_arena(ParIterBase_pureSoA_2_0_arena):
@@ -10454,7 +10112,6 @@ class ParIter_pureSoA_2_0_arena(ParIterBase_pureSoA_2_0_arena):
             returns: the updated iterator
 
         """
-
     def __repr__(self) -> str: ...
 
 class ParIter_pureSoA_2_0_default(ParIterBase_pureSoA_2_0_default):
@@ -10481,7 +10138,6 @@ class ParIter_pureSoA_2_0_default(ParIterBase_pureSoA_2_0_default):
             returns: the updated iterator
 
         """
-
     def __repr__(self) -> str: ...
 
 class ParIter_pureSoA_2_0_pinned(ParIterBase_pureSoA_2_0_pinned):
@@ -10508,7 +10164,6 @@ class ParIter_pureSoA_2_0_pinned(ParIterBase_pureSoA_2_0_pinned):
             returns: the updated iterator
 
         """
-
     def __repr__(self) -> str: ...
 
 class ParIter_pureSoA_6_0_arena(ParIterBase_pureSoA_6_0_arena):
@@ -10535,7 +10190,6 @@ class ParIter_pureSoA_6_0_arena(ParIterBase_pureSoA_6_0_arena):
             returns: the updated iterator
 
         """
-
     def __repr__(self) -> str: ...
 
 class ParIter_pureSoA_6_0_default(ParIterBase_pureSoA_6_0_default):
@@ -10562,7 +10216,6 @@ class ParIter_pureSoA_6_0_default(ParIterBase_pureSoA_6_0_default):
             returns: the updated iterator
 
         """
-
     def __repr__(self) -> str: ...
 
 class ParIter_pureSoA_6_0_pinned(ParIterBase_pureSoA_6_0_pinned):
@@ -10589,7 +10242,6 @@ class ParIter_pureSoA_6_0_pinned(ParIterBase_pureSoA_6_0_pinned):
             returns: the updated iterator
 
         """
-
     def __repr__(self) -> str: ...
 
 class ParIter_pureSoA_7_0_arena(ParIterBase_pureSoA_7_0_arena):
@@ -10616,7 +10268,6 @@ class ParIter_pureSoA_7_0_arena(ParIterBase_pureSoA_7_0_arena):
             returns: the updated iterator
 
         """
-
     def __repr__(self) -> str: ...
 
 class ParIter_pureSoA_7_0_default(ParIterBase_pureSoA_7_0_default):
@@ -10643,7 +10294,6 @@ class ParIter_pureSoA_7_0_default(ParIterBase_pureSoA_7_0_default):
             returns: the updated iterator
 
         """
-
     def __repr__(self) -> str: ...
 
 class ParIter_pureSoA_7_0_pinned(ParIterBase_pureSoA_7_0_pinned):
@@ -10670,7 +10320,6 @@ class ParIter_pureSoA_7_0_pinned(ParIterBase_pureSoA_7_0_pinned):
             returns: the updated iterator
 
         """
-
     def __repr__(self) -> str: ...
 
 class ParIter_pureSoA_8_0_arena(ParIterBase_pureSoA_8_0_arena):
@@ -10697,7 +10346,6 @@ class ParIter_pureSoA_8_0_arena(ParIterBase_pureSoA_8_0_arena):
             returns: the updated iterator
 
         """
-
     def __repr__(self) -> str: ...
 
 class ParIter_pureSoA_8_0_default(ParIterBase_pureSoA_8_0_default):
@@ -10724,7 +10372,6 @@ class ParIter_pureSoA_8_0_default(ParIterBase_pureSoA_8_0_default):
             returns: the updated iterator
 
         """
-
     def __repr__(self) -> str: ...
 
 class ParIter_pureSoA_8_0_pinned(ParIterBase_pureSoA_8_0_pinned):
@@ -10751,7 +10398,6 @@ class ParIter_pureSoA_8_0_pinned(ParIterBase_pureSoA_8_0_pinned):
             returns: the updated iterator
 
         """
-
     def __repr__(self) -> str: ...
 
 class ParmParse:
@@ -10797,22 +10443,18 @@ class ParmParse:
         """
         parses input values
         """
-
     def get_int(self, name: str, ival: int = 0) -> int:
         """
         parses input values
         """
-
     def get_real(self, name: str, ival: int = 0) -> float:
         """
         parses input values
         """
-
     def query_int(self, name: str, ival: int = 0) -> tuple[bool, int]:
         """
         queries input values
         """
-
     def remove(self, arg0: str) -> int: ...
 
 class ParticleContainer_16_4_0_0_arena:
@@ -10870,7 +10512,6 @@ class ParticleContainer_16_4_0_0_arena:
         """
         add a new runtime component with type Int
         """
-
     def add_particles_at_level(
         self, particles: ParticleTile_16_4_0_0_arena, level: int, ngrow: int = 0
     ) -> None: ...
@@ -10878,7 +10519,6 @@ class ParticleContainer_16_4_0_0_arena:
         """
         add a new runtime component with type Real
         """
-
     def clear_particles(self) -> None: ...
     def get_particles(
         self, level: int
@@ -10949,7 +10589,6 @@ class ParticleContainer_16_4_0_0_arena:
         If local=False, then all ranks but the root_rank will return None.
 
         """
-
     def total_number_of_particles(
         self, only_valid: bool = True, only_local: bool = False
     ) -> int: ...
@@ -10965,7 +10604,6 @@ class ParticleContainer_16_4_0_0_arena:
         """
         The number of compile-time and runtime int components in SoA
         """
-
     @property
     def num_position_components(self) -> int: ...
     @property
@@ -10973,13 +10611,11 @@ class ParticleContainer_16_4_0_0_arena:
         """
         The number of compile-time and runtime Real components in SoA
         """
-
     @property
     def num_runtime_int_comps(self) -> int:
         """
         The number of runtime Int components in SoA
         """
-
     @property
     def num_runtime_real_comps(self) -> int:
         """
@@ -11041,7 +10677,6 @@ class ParticleContainer_16_4_0_0_default:
         """
         add a new runtime component with type Int
         """
-
     def add_particles_at_level(
         self, particles: ParticleTile_16_4_0_0_default, level: int, ngrow: int = 0
     ) -> None: ...
@@ -11049,7 +10684,6 @@ class ParticleContainer_16_4_0_0_default:
         """
         add a new runtime component with type Real
         """
-
     def clear_particles(self) -> None: ...
     def get_particles(
         self, level: int
@@ -11120,7 +10754,6 @@ class ParticleContainer_16_4_0_0_default:
         If local=False, then all ranks but the root_rank will return None.
 
         """
-
     def total_number_of_particles(
         self, only_valid: bool = True, only_local: bool = False
     ) -> int: ...
@@ -11136,7 +10769,6 @@ class ParticleContainer_16_4_0_0_default:
         """
         The number of compile-time and runtime int components in SoA
         """
-
     @property
     def num_position_components(self) -> int: ...
     @property
@@ -11144,13 +10776,11 @@ class ParticleContainer_16_4_0_0_default:
         """
         The number of compile-time and runtime Real components in SoA
         """
-
     @property
     def num_runtime_int_comps(self) -> int:
         """
         The number of runtime Int components in SoA
         """
-
     @property
     def num_runtime_real_comps(self) -> int:
         """
@@ -11212,7 +10842,6 @@ class ParticleContainer_16_4_0_0_pinned:
         """
         add a new runtime component with type Int
         """
-
     def add_particles_at_level(
         self, particles: ParticleTile_16_4_0_0_pinned, level: int, ngrow: int = 0
     ) -> None: ...
@@ -11220,7 +10849,6 @@ class ParticleContainer_16_4_0_0_pinned:
         """
         add a new runtime component with type Real
         """
-
     def clear_particles(self) -> None: ...
     def get_particles(
         self, level: int
@@ -11291,7 +10919,6 @@ class ParticleContainer_16_4_0_0_pinned:
         If local=False, then all ranks but the root_rank will return None.
 
         """
-
     def total_number_of_particles(
         self, only_valid: bool = True, only_local: bool = False
     ) -> int: ...
@@ -11307,7 +10934,6 @@ class ParticleContainer_16_4_0_0_pinned:
         """
         The number of compile-time and runtime int components in SoA
         """
-
     @property
     def num_position_components(self) -> int: ...
     @property
@@ -11315,13 +10941,11 @@ class ParticleContainer_16_4_0_0_pinned:
         """
         The number of compile-time and runtime Real components in SoA
         """
-
     @property
     def num_runtime_int_comps(self) -> int:
         """
         The number of runtime Int components in SoA
         """
-
     @property
     def num_runtime_real_comps(self) -> int:
         """
@@ -11383,7 +11007,6 @@ class ParticleContainer_2_1_3_1_arena:
         """
         add a new runtime component with type Int
         """
-
     def add_particles_at_level(
         self, particles: ParticleTile_2_1_3_1_arena, level: int, ngrow: int = 0
     ) -> None: ...
@@ -11391,7 +11014,6 @@ class ParticleContainer_2_1_3_1_arena:
         """
         add a new runtime component with type Real
         """
-
     def clear_particles(self) -> None: ...
     def get_particles(
         self, level: int
@@ -11462,7 +11084,6 @@ class ParticleContainer_2_1_3_1_arena:
         If local=False, then all ranks but the root_rank will return None.
 
         """
-
     def total_number_of_particles(
         self, only_valid: bool = True, only_local: bool = False
     ) -> int: ...
@@ -11478,7 +11099,6 @@ class ParticleContainer_2_1_3_1_arena:
         """
         The number of compile-time and runtime int components in SoA
         """
-
     @property
     def num_position_components(self) -> int: ...
     @property
@@ -11486,13 +11106,11 @@ class ParticleContainer_2_1_3_1_arena:
         """
         The number of compile-time and runtime Real components in SoA
         """
-
     @property
     def num_runtime_int_comps(self) -> int:
         """
         The number of runtime Int components in SoA
         """
-
     @property
     def num_runtime_real_comps(self) -> int:
         """
@@ -11554,7 +11172,6 @@ class ParticleContainer_2_1_3_1_default:
         """
         add a new runtime component with type Int
         """
-
     def add_particles_at_level(
         self, particles: ParticleTile_2_1_3_1_default, level: int, ngrow: int = 0
     ) -> None: ...
@@ -11562,7 +11179,6 @@ class ParticleContainer_2_1_3_1_default:
         """
         add a new runtime component with type Real
         """
-
     def clear_particles(self) -> None: ...
     def get_particles(
         self, level: int
@@ -11633,7 +11249,6 @@ class ParticleContainer_2_1_3_1_default:
         If local=False, then all ranks but the root_rank will return None.
 
         """
-
     def total_number_of_particles(
         self, only_valid: bool = True, only_local: bool = False
     ) -> int: ...
@@ -11649,7 +11264,6 @@ class ParticleContainer_2_1_3_1_default:
         """
         The number of compile-time and runtime int components in SoA
         """
-
     @property
     def num_position_components(self) -> int: ...
     @property
@@ -11657,13 +11271,11 @@ class ParticleContainer_2_1_3_1_default:
         """
         The number of compile-time and runtime Real components in SoA
         """
-
     @property
     def num_runtime_int_comps(self) -> int:
         """
         The number of runtime Int components in SoA
         """
-
     @property
     def num_runtime_real_comps(self) -> int:
         """
@@ -11725,7 +11337,6 @@ class ParticleContainer_2_1_3_1_pinned:
         """
         add a new runtime component with type Int
         """
-
     def add_particles_at_level(
         self, particles: ParticleTile_2_1_3_1_pinned, level: int, ngrow: int = 0
     ) -> None: ...
@@ -11733,7 +11344,6 @@ class ParticleContainer_2_1_3_1_pinned:
         """
         add a new runtime component with type Real
         """
-
     def clear_particles(self) -> None: ...
     def get_particles(
         self, level: int
@@ -11804,7 +11414,6 @@ class ParticleContainer_2_1_3_1_pinned:
         If local=False, then all ranks but the root_rank will return None.
 
         """
-
     def total_number_of_particles(
         self, only_valid: bool = True, only_local: bool = False
     ) -> int: ...
@@ -11820,7 +11429,6 @@ class ParticleContainer_2_1_3_1_pinned:
         """
         The number of compile-time and runtime int components in SoA
         """
-
     @property
     def num_position_components(self) -> int: ...
     @property
@@ -11828,13 +11436,11 @@ class ParticleContainer_2_1_3_1_pinned:
         """
         The number of compile-time and runtime Real components in SoA
         """
-
     @property
     def num_runtime_int_comps(self) -> int:
         """
         The number of runtime Int components in SoA
         """
-
     @property
     def num_runtime_real_comps(self) -> int:
         """
@@ -11896,7 +11502,6 @@ class ParticleContainer_pureSoA_2_0_arena:
         """
         add a new runtime component with type Int
         """
-
     def add_particles_at_level(
         self, particles: ParticleTile_pureSoA_2_0_arena, level: int, ngrow: int = 0
     ) -> None: ...
@@ -11904,7 +11509,6 @@ class ParticleContainer_pureSoA_2_0_arena:
         """
         add a new runtime component with type Real
         """
-
     def clear_particles(self) -> None: ...
     def get_particles(
         self, level: int
@@ -11969,7 +11573,6 @@ class ParticleContainer_pureSoA_2_0_arena:
         If local=False, then all ranks but the root_rank will return None.
 
         """
-
     def total_number_of_particles(
         self, only_valid: bool = True, only_local: bool = False
     ) -> int: ...
@@ -11985,7 +11588,6 @@ class ParticleContainer_pureSoA_2_0_arena:
         """
         The number of compile-time and runtime int components in SoA
         """
-
     @property
     def num_position_components(self) -> int: ...
     @property
@@ -11993,13 +11595,11 @@ class ParticleContainer_pureSoA_2_0_arena:
         """
         The number of compile-time and runtime Real components in SoA
         """
-
     @property
     def num_runtime_int_comps(self) -> int:
         """
         The number of runtime Int components in SoA
         """
-
     @property
     def num_runtime_real_comps(self) -> int:
         """
@@ -12061,7 +11661,6 @@ class ParticleContainer_pureSoA_2_0_default:
         """
         add a new runtime component with type Int
         """
-
     def add_particles_at_level(
         self, particles: ParticleTile_pureSoA_2_0_default, level: int, ngrow: int = 0
     ) -> None: ...
@@ -12069,7 +11668,6 @@ class ParticleContainer_pureSoA_2_0_default:
         """
         add a new runtime component with type Real
         """
-
     def clear_particles(self) -> None: ...
     def get_particles(
         self, level: int
@@ -12134,7 +11732,6 @@ class ParticleContainer_pureSoA_2_0_default:
         If local=False, then all ranks but the root_rank will return None.
 
         """
-
     def total_number_of_particles(
         self, only_valid: bool = True, only_local: bool = False
     ) -> int: ...
@@ -12150,7 +11747,6 @@ class ParticleContainer_pureSoA_2_0_default:
         """
         The number of compile-time and runtime int components in SoA
         """
-
     @property
     def num_position_components(self) -> int: ...
     @property
@@ -12158,13 +11754,11 @@ class ParticleContainer_pureSoA_2_0_default:
         """
         The number of compile-time and runtime Real components in SoA
         """
-
     @property
     def num_runtime_int_comps(self) -> int:
         """
         The number of runtime Int components in SoA
         """
-
     @property
     def num_runtime_real_comps(self) -> int:
         """
@@ -12226,7 +11820,6 @@ class ParticleContainer_pureSoA_2_0_pinned:
         """
         add a new runtime component with type Int
         """
-
     def add_particles_at_level(
         self, particles: ParticleTile_pureSoA_2_0_pinned, level: int, ngrow: int = 0
     ) -> None: ...
@@ -12234,7 +11827,6 @@ class ParticleContainer_pureSoA_2_0_pinned:
         """
         add a new runtime component with type Real
         """
-
     def clear_particles(self) -> None: ...
     def get_particles(
         self, level: int
@@ -12299,7 +11891,6 @@ class ParticleContainer_pureSoA_2_0_pinned:
         If local=False, then all ranks but the root_rank will return None.
 
         """
-
     def total_number_of_particles(
         self, only_valid: bool = True, only_local: bool = False
     ) -> int: ...
@@ -12315,7 +11906,6 @@ class ParticleContainer_pureSoA_2_0_pinned:
         """
         The number of compile-time and runtime int components in SoA
         """
-
     @property
     def num_position_components(self) -> int: ...
     @property
@@ -12323,13 +11913,11 @@ class ParticleContainer_pureSoA_2_0_pinned:
         """
         The number of compile-time and runtime Real components in SoA
         """
-
     @property
     def num_runtime_int_comps(self) -> int:
         """
         The number of runtime Int components in SoA
         """
-
     @property
     def num_runtime_real_comps(self) -> int:
         """
@@ -12391,7 +11979,6 @@ class ParticleContainer_pureSoA_6_0_arena:
         """
         add a new runtime component with type Int
         """
-
     def add_particles_at_level(
         self, particles: ParticleTile_pureSoA_6_0_arena, level: int, ngrow: int = 0
     ) -> None: ...
@@ -12399,7 +11986,6 @@ class ParticleContainer_pureSoA_6_0_arena:
         """
         add a new runtime component with type Real
         """
-
     def clear_particles(self) -> None: ...
     def get_particles(
         self, level: int
@@ -12464,7 +12050,6 @@ class ParticleContainer_pureSoA_6_0_arena:
         If local=False, then all ranks but the root_rank will return None.
 
         """
-
     def total_number_of_particles(
         self, only_valid: bool = True, only_local: bool = False
     ) -> int: ...
@@ -12480,7 +12065,6 @@ class ParticleContainer_pureSoA_6_0_arena:
         """
         The number of compile-time and runtime int components in SoA
         """
-
     @property
     def num_position_components(self) -> int: ...
     @property
@@ -12488,13 +12072,11 @@ class ParticleContainer_pureSoA_6_0_arena:
         """
         The number of compile-time and runtime Real components in SoA
         """
-
     @property
     def num_runtime_int_comps(self) -> int:
         """
         The number of runtime Int components in SoA
         """
-
     @property
     def num_runtime_real_comps(self) -> int:
         """
@@ -12556,7 +12138,6 @@ class ParticleContainer_pureSoA_6_0_default:
         """
         add a new runtime component with type Int
         """
-
     def add_particles_at_level(
         self, particles: ParticleTile_pureSoA_6_0_default, level: int, ngrow: int = 0
     ) -> None: ...
@@ -12564,7 +12145,6 @@ class ParticleContainer_pureSoA_6_0_default:
         """
         add a new runtime component with type Real
         """
-
     def clear_particles(self) -> None: ...
     def get_particles(
         self, level: int
@@ -12629,7 +12209,6 @@ class ParticleContainer_pureSoA_6_0_default:
         If local=False, then all ranks but the root_rank will return None.
 
         """
-
     def total_number_of_particles(
         self, only_valid: bool = True, only_local: bool = False
     ) -> int: ...
@@ -12645,7 +12224,6 @@ class ParticleContainer_pureSoA_6_0_default:
         """
         The number of compile-time and runtime int components in SoA
         """
-
     @property
     def num_position_components(self) -> int: ...
     @property
@@ -12653,13 +12231,11 @@ class ParticleContainer_pureSoA_6_0_default:
         """
         The number of compile-time and runtime Real components in SoA
         """
-
     @property
     def num_runtime_int_comps(self) -> int:
         """
         The number of runtime Int components in SoA
         """
-
     @property
     def num_runtime_real_comps(self) -> int:
         """
@@ -12721,7 +12297,6 @@ class ParticleContainer_pureSoA_6_0_pinned:
         """
         add a new runtime component with type Int
         """
-
     def add_particles_at_level(
         self, particles: ParticleTile_pureSoA_6_0_pinned, level: int, ngrow: int = 0
     ) -> None: ...
@@ -12729,7 +12304,6 @@ class ParticleContainer_pureSoA_6_0_pinned:
         """
         add a new runtime component with type Real
         """
-
     def clear_particles(self) -> None: ...
     def get_particles(
         self, level: int
@@ -12794,7 +12368,6 @@ class ParticleContainer_pureSoA_6_0_pinned:
         If local=False, then all ranks but the root_rank will return None.
 
         """
-
     def total_number_of_particles(
         self, only_valid: bool = True, only_local: bool = False
     ) -> int: ...
@@ -12810,7 +12383,6 @@ class ParticleContainer_pureSoA_6_0_pinned:
         """
         The number of compile-time and runtime int components in SoA
         """
-
     @property
     def num_position_components(self) -> int: ...
     @property
@@ -12818,13 +12390,11 @@ class ParticleContainer_pureSoA_6_0_pinned:
         """
         The number of compile-time and runtime Real components in SoA
         """
-
     @property
     def num_runtime_int_comps(self) -> int:
         """
         The number of runtime Int components in SoA
         """
-
     @property
     def num_runtime_real_comps(self) -> int:
         """
@@ -12886,7 +12456,6 @@ class ParticleContainer_pureSoA_7_0_arena:
         """
         add a new runtime component with type Int
         """
-
     def add_particles_at_level(
         self, particles: ParticleTile_pureSoA_7_0_arena, level: int, ngrow: int = 0
     ) -> None: ...
@@ -12894,7 +12463,6 @@ class ParticleContainer_pureSoA_7_0_arena:
         """
         add a new runtime component with type Real
         """
-
     def clear_particles(self) -> None: ...
     def get_particles(
         self, level: int
@@ -12959,7 +12527,6 @@ class ParticleContainer_pureSoA_7_0_arena:
         If local=False, then all ranks but the root_rank will return None.
 
         """
-
     def total_number_of_particles(
         self, only_valid: bool = True, only_local: bool = False
     ) -> int: ...
@@ -12975,7 +12542,6 @@ class ParticleContainer_pureSoA_7_0_arena:
         """
         The number of compile-time and runtime int components in SoA
         """
-
     @property
     def num_position_components(self) -> int: ...
     @property
@@ -12983,13 +12549,11 @@ class ParticleContainer_pureSoA_7_0_arena:
         """
         The number of compile-time and runtime Real components in SoA
         """
-
     @property
     def num_runtime_int_comps(self) -> int:
         """
         The number of runtime Int components in SoA
         """
-
     @property
     def num_runtime_real_comps(self) -> int:
         """
@@ -13051,7 +12615,6 @@ class ParticleContainer_pureSoA_7_0_default:
         """
         add a new runtime component with type Int
         """
-
     def add_particles_at_level(
         self, particles: ParticleTile_pureSoA_7_0_default, level: int, ngrow: int = 0
     ) -> None: ...
@@ -13059,7 +12622,6 @@ class ParticleContainer_pureSoA_7_0_default:
         """
         add a new runtime component with type Real
         """
-
     def clear_particles(self) -> None: ...
     def get_particles(
         self, level: int
@@ -13124,7 +12686,6 @@ class ParticleContainer_pureSoA_7_0_default:
         If local=False, then all ranks but the root_rank will return None.
 
         """
-
     def total_number_of_particles(
         self, only_valid: bool = True, only_local: bool = False
     ) -> int: ...
@@ -13140,7 +12701,6 @@ class ParticleContainer_pureSoA_7_0_default:
         """
         The number of compile-time and runtime int components in SoA
         """
-
     @property
     def num_position_components(self) -> int: ...
     @property
@@ -13148,13 +12708,11 @@ class ParticleContainer_pureSoA_7_0_default:
         """
         The number of compile-time and runtime Real components in SoA
         """
-
     @property
     def num_runtime_int_comps(self) -> int:
         """
         The number of runtime Int components in SoA
         """
-
     @property
     def num_runtime_real_comps(self) -> int:
         """
@@ -13216,7 +12774,6 @@ class ParticleContainer_pureSoA_7_0_pinned:
         """
         add a new runtime component with type Int
         """
-
     def add_particles_at_level(
         self, particles: ParticleTile_pureSoA_7_0_pinned, level: int, ngrow: int = 0
     ) -> None: ...
@@ -13224,7 +12781,6 @@ class ParticleContainer_pureSoA_7_0_pinned:
         """
         add a new runtime component with type Real
         """
-
     def clear_particles(self) -> None: ...
     def get_particles(
         self, level: int
@@ -13289,7 +12845,6 @@ class ParticleContainer_pureSoA_7_0_pinned:
         If local=False, then all ranks but the root_rank will return None.
 
         """
-
     def total_number_of_particles(
         self, only_valid: bool = True, only_local: bool = False
     ) -> int: ...
@@ -13305,7 +12860,6 @@ class ParticleContainer_pureSoA_7_0_pinned:
         """
         The number of compile-time and runtime int components in SoA
         """
-
     @property
     def num_position_components(self) -> int: ...
     @property
@@ -13313,13 +12867,11 @@ class ParticleContainer_pureSoA_7_0_pinned:
         """
         The number of compile-time and runtime Real components in SoA
         """
-
     @property
     def num_runtime_int_comps(self) -> int:
         """
         The number of runtime Int components in SoA
         """
-
     @property
     def num_runtime_real_comps(self) -> int:
         """
@@ -13381,7 +12933,6 @@ class ParticleContainer_pureSoA_8_0_arena:
         """
         add a new runtime component with type Int
         """
-
     def add_particles_at_level(
         self, particles: ParticleTile_pureSoA_8_0_arena, level: int, ngrow: int = 0
     ) -> None: ...
@@ -13389,7 +12940,6 @@ class ParticleContainer_pureSoA_8_0_arena:
         """
         add a new runtime component with type Real
         """
-
     def clear_particles(self) -> None: ...
     def get_particles(
         self, level: int
@@ -13454,7 +13004,6 @@ class ParticleContainer_pureSoA_8_0_arena:
         If local=False, then all ranks but the root_rank will return None.
 
         """
-
     def total_number_of_particles(
         self, only_valid: bool = True, only_local: bool = False
     ) -> int: ...
@@ -13470,7 +13019,6 @@ class ParticleContainer_pureSoA_8_0_arena:
         """
         The number of compile-time and runtime int components in SoA
         """
-
     @property
     def num_position_components(self) -> int: ...
     @property
@@ -13478,13 +13026,11 @@ class ParticleContainer_pureSoA_8_0_arena:
         """
         The number of compile-time and runtime Real components in SoA
         """
-
     @property
     def num_runtime_int_comps(self) -> int:
         """
         The number of runtime Int components in SoA
         """
-
     @property
     def num_runtime_real_comps(self) -> int:
         """
@@ -13546,7 +13092,6 @@ class ParticleContainer_pureSoA_8_0_default:
         """
         add a new runtime component with type Int
         """
-
     def add_particles_at_level(
         self, particles: ParticleTile_pureSoA_8_0_default, level: int, ngrow: int = 0
     ) -> None: ...
@@ -13554,7 +13099,6 @@ class ParticleContainer_pureSoA_8_0_default:
         """
         add a new runtime component with type Real
         """
-
     def clear_particles(self) -> None: ...
     def get_particles(
         self, level: int
@@ -13619,7 +13163,6 @@ class ParticleContainer_pureSoA_8_0_default:
         If local=False, then all ranks but the root_rank will return None.
 
         """
-
     def total_number_of_particles(
         self, only_valid: bool = True, only_local: bool = False
     ) -> int: ...
@@ -13635,7 +13178,6 @@ class ParticleContainer_pureSoA_8_0_default:
         """
         The number of compile-time and runtime int components in SoA
         """
-
     @property
     def num_position_components(self) -> int: ...
     @property
@@ -13643,13 +13185,11 @@ class ParticleContainer_pureSoA_8_0_default:
         """
         The number of compile-time and runtime Real components in SoA
         """
-
     @property
     def num_runtime_int_comps(self) -> int:
         """
         The number of runtime Int components in SoA
         """
-
     @property
     def num_runtime_real_comps(self) -> int:
         """
@@ -13711,7 +13251,6 @@ class ParticleContainer_pureSoA_8_0_pinned:
         """
         add a new runtime component with type Int
         """
-
     def add_particles_at_level(
         self, particles: ParticleTile_pureSoA_8_0_pinned, level: int, ngrow: int = 0
     ) -> None: ...
@@ -13719,7 +13258,6 @@ class ParticleContainer_pureSoA_8_0_pinned:
         """
         add a new runtime component with type Real
         """
-
     def clear_particles(self) -> None: ...
     def get_particles(
         self, level: int
@@ -13784,7 +13322,6 @@ class ParticleContainer_pureSoA_8_0_pinned:
         If local=False, then all ranks but the root_rank will return None.
 
         """
-
     def total_number_of_particles(
         self, only_valid: bool = True, only_local: bool = False
     ) -> int: ...
@@ -13800,7 +13337,6 @@ class ParticleContainer_pureSoA_8_0_pinned:
         """
         The number of compile-time and runtime int components in SoA
         """
-
     @property
     def num_position_components(self) -> int: ...
     @property
@@ -13808,13 +13344,11 @@ class ParticleContainer_pureSoA_8_0_pinned:
         """
         The number of compile-time and runtime Real components in SoA
         """
-
     @property
     def num_runtime_int_comps(self) -> int:
         """
         The number of runtime Int components in SoA
         """
-
     @property
     def num_runtime_real_comps(self) -> int:
         """
@@ -13988,13 +13522,11 @@ class ParticleTile_16_4_0_0_arena:
         """
         Add one particle to this tile.
         """
-
     @typing.overload
     def push_back(self, arg0: Particle_16_4) -> None:
         """
         Add one particle to this tile.
         """
-
     @typing.overload
     def push_back_int(self, arg0: int, arg1: int) -> None: ...
     @typing.overload
@@ -14055,13 +13587,11 @@ class ParticleTile_16_4_0_0_default:
         """
         Add one particle to this tile.
         """
-
     @typing.overload
     def push_back(self, arg0: Particle_16_4) -> None:
         """
         Add one particle to this tile.
         """
-
     @typing.overload
     def push_back_int(self, arg0: int, arg1: int) -> None: ...
     @typing.overload
@@ -14122,13 +13652,11 @@ class ParticleTile_16_4_0_0_pinned:
         """
         Add one particle to this tile.
         """
-
     @typing.overload
     def push_back(self, arg0: Particle_16_4) -> None:
         """
         Add one particle to this tile.
         """
-
     @typing.overload
     def push_back_int(self, arg0: int, arg1: int) -> None: ...
     @typing.overload
@@ -14189,13 +13717,11 @@ class ParticleTile_2_1_3_1_arena:
         """
         Add one particle to this tile.
         """
-
     @typing.overload
     def push_back(self, arg0: Particle_5_2) -> None:
         """
         Add one particle to this tile.
         """
-
     @typing.overload
     def push_back_int(self, arg0: int, arg1: int) -> None: ...
     @typing.overload
@@ -14256,13 +13782,11 @@ class ParticleTile_2_1_3_1_default:
         """
         Add one particle to this tile.
         """
-
     @typing.overload
     def push_back(self, arg0: Particle_5_2) -> None:
         """
         Add one particle to this tile.
         """
-
     @typing.overload
     def push_back_int(self, arg0: int, arg1: int) -> None: ...
     @typing.overload
@@ -14323,13 +13847,11 @@ class ParticleTile_2_1_3_1_pinned:
         """
         Add one particle to this tile.
         """
-
     @typing.overload
     def push_back(self, arg0: Particle_5_2) -> None:
         """
         Add one particle to this tile.
         """
-
     @typing.overload
     def push_back_int(self, arg0: int, arg1: int) -> None: ...
     @typing.overload
@@ -14388,7 +13910,6 @@ class ParticleTile_pureSoA_2_0_arena:
         """
         Add one particle to this tile.
         """
-
     @typing.overload
     def push_back_int(self, arg0: int, arg1: int) -> None: ...
     @typing.overload
@@ -14447,7 +13968,6 @@ class ParticleTile_pureSoA_2_0_default:
         """
         Add one particle to this tile.
         """
-
     @typing.overload
     def push_back_int(self, arg0: int, arg1: int) -> None: ...
     @typing.overload
@@ -14506,7 +14026,6 @@ class ParticleTile_pureSoA_2_0_pinned:
         """
         Add one particle to this tile.
         """
-
     @typing.overload
     def push_back_int(self, arg0: int, arg1: int) -> None: ...
     @typing.overload
@@ -14565,7 +14084,6 @@ class ParticleTile_pureSoA_6_0_arena:
         """
         Add one particle to this tile.
         """
-
     @typing.overload
     def push_back_int(self, arg0: int, arg1: int) -> None: ...
     @typing.overload
@@ -14624,7 +14142,6 @@ class ParticleTile_pureSoA_6_0_default:
         """
         Add one particle to this tile.
         """
-
     @typing.overload
     def push_back_int(self, arg0: int, arg1: int) -> None: ...
     @typing.overload
@@ -14683,7 +14200,6 @@ class ParticleTile_pureSoA_6_0_pinned:
         """
         Add one particle to this tile.
         """
-
     @typing.overload
     def push_back_int(self, arg0: int, arg1: int) -> None: ...
     @typing.overload
@@ -14742,7 +14258,6 @@ class ParticleTile_pureSoA_7_0_arena:
         """
         Add one particle to this tile.
         """
-
     @typing.overload
     def push_back_int(self, arg0: int, arg1: int) -> None: ...
     @typing.overload
@@ -14801,7 +14316,6 @@ class ParticleTile_pureSoA_7_0_default:
         """
         Add one particle to this tile.
         """
-
     @typing.overload
     def push_back_int(self, arg0: int, arg1: int) -> None: ...
     @typing.overload
@@ -14860,7 +14374,6 @@ class ParticleTile_pureSoA_7_0_pinned:
         """
         Add one particle to this tile.
         """
-
     @typing.overload
     def push_back_int(self, arg0: int, arg1: int) -> None: ...
     @typing.overload
@@ -14919,7 +14432,6 @@ class ParticleTile_pureSoA_8_0_arena:
         """
         Add one particle to this tile.
         """
-
     @typing.overload
     def push_back_int(self, arg0: int, arg1: int) -> None: ...
     @typing.overload
@@ -14978,7 +14490,6 @@ class ParticleTile_pureSoA_8_0_default:
         """
         Add one particle to this tile.
         """
-
     @typing.overload
     def push_back_int(self, arg0: int, arg1: int) -> None: ...
     @typing.overload
@@ -15037,7 +14548,6 @@ class ParticleTile_pureSoA_8_0_pinned:
         """
         Add one particle to this tile.
         """
-
     @typing.overload
     def push_back_int(self, arg0: int, arg1: int) -> None: ...
     @typing.overload
@@ -15521,7 +15031,6 @@ class Periodicity:
         """
         Return the Periodicity object that is not periodic in any direction
         """
-
     def __eq__(self, arg0: Periodicity) -> bool: ...
     def __getitem__(self, dir: int) -> bool: ...
     @typing.overload
@@ -15535,7 +15044,6 @@ class Periodicity:
         """
         Cell-centered domain Box "infinitely" long in non-periodic directions.
         """
-
     @property
     def is_all_periodic(self) -> bool: ...
     @property
@@ -15603,31 +15111,26 @@ class RealBox:
         """
         Determine if RealBox contains ``pt``, within tolerance ``eps``
         """
-
     @typing.overload
     def contains(self, rb: RealVect, eps: float = 0.0) -> bool:
         """
         Determine if RealBox contains ``pt``, within tolerance ``eps``
         """
-
     @typing.overload
     def contains(self, rb: RealBox, eps: float = 0.0) -> bool:
         """
         Determine if RealBox contains another RealBox, within tolerance ``eps``
         """
-
     @typing.overload
     def contains(self, rb: list[float], eps: float = 0.0) -> bool:
         """
         Determine if RealBox contains ``pt``, within tolerance ``eps``
         """
-
     @typing.overload
     def hi(self, arg0: int) -> float:
         """
         Get ith component of ``xhi``
         """
-
     @typing.overload
     def hi(
         self,
@@ -15635,19 +15138,16 @@ class RealBox:
         """
         Get all components of ``xhi``
         """
-
     def intersects(self, arg0: RealBox) -> bool:
         """
         determine if box intersects with a box
         """
-
     def length(self, arg0: int) -> float: ...
     @typing.overload
     def lo(self, arg0: int) -> float:
         """
         Get ith component of ``xlo``
         """
-
     @typing.overload
     def lo(
         self,
@@ -15655,36 +15155,30 @@ class RealBox:
         """
         Get all components of ``xlo``
         """
-
     def ok(self) -> bool:
         """
         Determine if RealBox satisfies ``xlo[i]<xhi[i]`` for ``i=0,1,...,AMREX_SPACEDIM``.
         """
-
     @typing.overload
     def setHi(self, arg0: list[float]) -> None:
         """
         Get all components of ``xlo``
         """
-
     @typing.overload
     def setHi(self, arg0: int, arg1: float) -> None:
         """
         Get ith component of ``xhi``
         """
-
     @typing.overload
     def setLo(self, arg0: list[float]) -> None:
         """
         Get ith component of ``xlo``
         """
-
     @typing.overload
     def setLo(self, arg0: int, arg1: float) -> None:
         """
         Get all components of ``xlo``
         """
-
     def volume(self) -> float: ...
     @property
     def xhi(
@@ -15705,7 +15199,6 @@ class RealVect:
         """
         return basis vector in given coordinate direction
         """
-
     @typing.overload
     def __add__(self, arg0: float) -> RealVect: ...
     @typing.overload
@@ -15765,65 +15258,53 @@ class RealVect:
         """
         Return an ``IntVect`` whose components are the std::ceil of the vector components
         """
-
     def dotProduct(self, arg0: RealVect) -> float:
         """
         Return dot product of this vector with another
         """
-
     def floor(self) -> IntVect2D:
         """
         Return an ``IntVect`` whose components are the std::floor of the vector components
         """
-
     def max(self, arg0: RealVect) -> RealVect:
         """
         Replace vector with the component-wise maxima of this vector and another
         """
-
     def maxDir(self, arg0: bool) -> int:
         """
         direction or index of maximum value of this vector
         """
-
     def min(self, arg0: RealVect) -> RealVect:
         """
         Replace vector with the component-wise minima of this vector and another
         """
-
     def minDir(self, arg0: bool) -> int:
         """
         direction or index of minimum value of this vector
         """
-
     def round(self) -> IntVect2D:
         """
         Return an ``IntVect`` whose components are the std::round of the vector components
         """
-
     def scale(self, arg0: float) -> RealVect:
         """
         Multiplify each component of this vector by a scalar
         """
-
     @property
     def product(self) -> float:
         """
         Product of entries of this vector
         """
-
     @property
     def radSquared(self) -> float:
         """
         Length squared of this vector
         """
-
     @property
     def sum(self) -> float:
         """
         Sum of the components of this vector
         """
-
     @property
     def vectorLength(self) -> float:
         """
@@ -15836,7 +15317,6 @@ class StructOfArrays_0_0_arena:
         """
         Get the number of particles
         """
-
     def define(self, arg0: int, arg1: int) -> None: ...
     @typing.overload
     def get_int_data(
@@ -15847,13 +15327,11 @@ class StructOfArrays_0_0_arena:
         """
         Get access to the particle Int Arrays (only compile-time components)
         """
-
     @typing.overload
     def get_int_data(self, index: int) -> PODVector_int_arena:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
-
     def get_num_neighbors(self) -> int: ...
     @typing.overload
     def get_real_data(
@@ -15864,13 +15342,11 @@ class StructOfArrays_0_0_arena:
         """
         Get access to the particle Real Arrays (only compile-time components)
         """
-
     @typing.overload
     def get_real_data(self, index: int) -> PODVector_real_arena:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
-
     def resize(self, arg0: int) -> None: ...
     def set_num_neighbors(self, arg0: int) -> None: ...
     def soa_int_comps(self, num_comps):
@@ -15890,7 +15366,6 @@ class StructOfArrays_0_0_arena:
         A list of length num_comps with values "i1", "i2", "i3", ...
 
         """
-
     def soa_real_comps(self, num_comps, spacedim=3, rotate=True):
         """
 
@@ -15918,7 +15393,6 @@ class StructOfArrays_0_0_arena:
         - 1D-3D: "a", "b", ... "w", "r0", "r1", ...
 
         """
-
     def to_cupy(self, copy=False):
         """
 
@@ -15946,7 +15420,6 @@ class StructOfArrays_0_0_arena:
             Raises an exception if cupy is not installed
 
         """
-
     def to_numpy(self, copy=False):
         """
 
@@ -15969,7 +15442,6 @@ class StructOfArrays_0_0_arena:
             with global particle indices is populated.
 
         """
-
     def to_xp(self, copy=False):
         """
 
@@ -15995,19 +15467,16 @@ class StructOfArrays_0_0_arena:
             with global particle indices is populated.
 
         """
-
     @property
     def has_idcpu(self) -> bool:
         """
         In pure SoA particle layout, idcpu is an array in the SoA
         """
-
     @property
     def num_int_comps(self) -> int:
         """
         Get the number of compile-time + runtime Int components
         """
-
     @property
     def num_particles(self) -> int: ...
     @property
@@ -16015,7 +15484,6 @@ class StructOfArrays_0_0_arena:
         """
         Get the number of compile-time + runtime Real components
         """
-
     @property
     def num_real_particles(self) -> int: ...
     @property
@@ -16032,7 +15500,6 @@ class StructOfArrays_0_0_default:
         """
         Get the number of particles
         """
-
     def define(self, arg0: int, arg1: int) -> None: ...
     @typing.overload
     def get_int_data(
@@ -16043,13 +15510,11 @@ class StructOfArrays_0_0_default:
         """
         Get access to the particle Int Arrays (only compile-time components)
         """
-
     @typing.overload
     def get_int_data(self, index: int) -> PODVector_int_std:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
-
     def get_num_neighbors(self) -> int: ...
     @typing.overload
     def get_real_data(
@@ -16060,13 +15525,11 @@ class StructOfArrays_0_0_default:
         """
         Get access to the particle Real Arrays (only compile-time components)
         """
-
     @typing.overload
     def get_real_data(self, index: int) -> PODVector_real_std:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
-
     def resize(self, arg0: int) -> None: ...
     def set_num_neighbors(self, arg0: int) -> None: ...
     def soa_int_comps(self, num_comps):
@@ -16086,7 +15549,6 @@ class StructOfArrays_0_0_default:
         A list of length num_comps with values "i1", "i2", "i3", ...
 
         """
-
     def soa_real_comps(self, num_comps, spacedim=3, rotate=True):
         """
 
@@ -16114,7 +15576,6 @@ class StructOfArrays_0_0_default:
         - 1D-3D: "a", "b", ... "w", "r0", "r1", ...
 
         """
-
     def to_cupy(self, copy=False):
         """
 
@@ -16142,7 +15603,6 @@ class StructOfArrays_0_0_default:
             Raises an exception if cupy is not installed
 
         """
-
     def to_numpy(self, copy=False):
         """
 
@@ -16165,7 +15625,6 @@ class StructOfArrays_0_0_default:
             with global particle indices is populated.
 
         """
-
     def to_xp(self, copy=False):
         """
 
@@ -16191,19 +15650,16 @@ class StructOfArrays_0_0_default:
             with global particle indices is populated.
 
         """
-
     @property
     def has_idcpu(self) -> bool:
         """
         In pure SoA particle layout, idcpu is an array in the SoA
         """
-
     @property
     def num_int_comps(self) -> int:
         """
         Get the number of compile-time + runtime Int components
         """
-
     @property
     def num_particles(self) -> int: ...
     @property
@@ -16211,7 +15667,6 @@ class StructOfArrays_0_0_default:
         """
         Get the number of compile-time + runtime Real components
         """
-
     @property
     def num_real_particles(self) -> int: ...
     @property
@@ -16228,7 +15683,6 @@ class StructOfArrays_0_0_pinned:
         """
         Get the number of particles
         """
-
     def define(self, arg0: int, arg1: int) -> None: ...
     @typing.overload
     def get_int_data(
@@ -16239,13 +15693,11 @@ class StructOfArrays_0_0_pinned:
         """
         Get access to the particle Int Arrays (only compile-time components)
         """
-
     @typing.overload
     def get_int_data(self, index: int) -> PODVector_int_pinned:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
-
     def get_num_neighbors(self) -> int: ...
     @typing.overload
     def get_real_data(
@@ -16256,13 +15708,11 @@ class StructOfArrays_0_0_pinned:
         """
         Get access to the particle Real Arrays (only compile-time components)
         """
-
     @typing.overload
     def get_real_data(self, index: int) -> PODVector_real_pinned:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
-
     def resize(self, arg0: int) -> None: ...
     def set_num_neighbors(self, arg0: int) -> None: ...
     def soa_int_comps(self, num_comps):
@@ -16282,7 +15732,6 @@ class StructOfArrays_0_0_pinned:
         A list of length num_comps with values "i1", "i2", "i3", ...
 
         """
-
     def soa_real_comps(self, num_comps, spacedim=3, rotate=True):
         """
 
@@ -16310,7 +15759,6 @@ class StructOfArrays_0_0_pinned:
         - 1D-3D: "a", "b", ... "w", "r0", "r1", ...
 
         """
-
     def to_cupy(self, copy=False):
         """
 
@@ -16338,7 +15786,6 @@ class StructOfArrays_0_0_pinned:
             Raises an exception if cupy is not installed
 
         """
-
     def to_numpy(self, copy=False):
         """
 
@@ -16361,7 +15808,6 @@ class StructOfArrays_0_0_pinned:
             with global particle indices is populated.
 
         """
-
     def to_xp(self, copy=False):
         """
 
@@ -16387,19 +15833,16 @@ class StructOfArrays_0_0_pinned:
             with global particle indices is populated.
 
         """
-
     @property
     def has_idcpu(self) -> bool:
         """
         In pure SoA particle layout, idcpu is an array in the SoA
         """
-
     @property
     def num_int_comps(self) -> int:
         """
         Get the number of compile-time + runtime Int components
         """
-
     @property
     def num_particles(self) -> int: ...
     @property
@@ -16407,7 +15850,6 @@ class StructOfArrays_0_0_pinned:
         """
         Get the number of compile-time + runtime Real components
         """
-
     @property
     def num_real_particles(self) -> int: ...
     @property
@@ -16424,13 +15866,11 @@ class StructOfArrays_2_0_idcpu_arena:
         """
         Get the number of particles
         """
-
     def define(self, arg0: int, arg1: int) -> None: ...
     def get_idcpu_data(self) -> PODVector_uint64_arena:
         """
         Get access to a particle IdCPU component Array
         """
-
     @typing.overload
     def get_int_data(
         self,
@@ -16440,13 +15880,11 @@ class StructOfArrays_2_0_idcpu_arena:
         """
         Get access to the particle Int Arrays (only compile-time components)
         """
-
     @typing.overload
     def get_int_data(self, index: int) -> PODVector_int_arena:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
-
     def get_num_neighbors(self) -> int: ...
     @typing.overload
     def get_real_data(
@@ -16457,13 +15895,11 @@ class StructOfArrays_2_0_idcpu_arena:
         """
         Get access to the particle Real Arrays (only compile-time components)
         """
-
     @typing.overload
     def get_real_data(self, index: int) -> PODVector_real_arena:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
-
     def resize(self, arg0: int) -> None: ...
     def set_num_neighbors(self, arg0: int) -> None: ...
     def soa_int_comps(self, num_comps):
@@ -16483,7 +15919,6 @@ class StructOfArrays_2_0_idcpu_arena:
         A list of length num_comps with values "i1", "i2", "i3", ...
 
         """
-
     def soa_real_comps(self, num_comps, spacedim=3, rotate=True):
         """
 
@@ -16511,7 +15946,6 @@ class StructOfArrays_2_0_idcpu_arena:
         - 1D-3D: "a", "b", ... "w", "r0", "r1", ...
 
         """
-
     def to_cupy(self, copy=False):
         """
 
@@ -16539,7 +15973,6 @@ class StructOfArrays_2_0_idcpu_arena:
             Raises an exception if cupy is not installed
 
         """
-
     def to_numpy(self, copy=False):
         """
 
@@ -16562,7 +15995,6 @@ class StructOfArrays_2_0_idcpu_arena:
             with global particle indices is populated.
 
         """
-
     def to_xp(self, copy=False):
         """
 
@@ -16588,19 +16020,16 @@ class StructOfArrays_2_0_idcpu_arena:
             with global particle indices is populated.
 
         """
-
     @property
     def has_idcpu(self) -> bool:
         """
         In pure SoA particle layout, idcpu is an array in the SoA
         """
-
     @property
     def num_int_comps(self) -> int:
         """
         Get the number of compile-time + runtime Int components
         """
-
     @property
     def num_particles(self) -> int: ...
     @property
@@ -16608,7 +16037,6 @@ class StructOfArrays_2_0_idcpu_arena:
         """
         Get the number of compile-time + runtime Real components
         """
-
     @property
     def num_real_particles(self) -> int: ...
     @property
@@ -16625,13 +16053,11 @@ class StructOfArrays_2_0_idcpu_default:
         """
         Get the number of particles
         """
-
     def define(self, arg0: int, arg1: int) -> None: ...
     def get_idcpu_data(self) -> PODVector_uint64_std:
         """
         Get access to a particle IdCPU component Array
         """
-
     @typing.overload
     def get_int_data(
         self,
@@ -16641,13 +16067,11 @@ class StructOfArrays_2_0_idcpu_default:
         """
         Get access to the particle Int Arrays (only compile-time components)
         """
-
     @typing.overload
     def get_int_data(self, index: int) -> PODVector_int_std:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
-
     def get_num_neighbors(self) -> int: ...
     @typing.overload
     def get_real_data(
@@ -16658,13 +16082,11 @@ class StructOfArrays_2_0_idcpu_default:
         """
         Get access to the particle Real Arrays (only compile-time components)
         """
-
     @typing.overload
     def get_real_data(self, index: int) -> PODVector_real_std:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
-
     def resize(self, arg0: int) -> None: ...
     def set_num_neighbors(self, arg0: int) -> None: ...
     def soa_int_comps(self, num_comps):
@@ -16684,7 +16106,6 @@ class StructOfArrays_2_0_idcpu_default:
         A list of length num_comps with values "i1", "i2", "i3", ...
 
         """
-
     def soa_real_comps(self, num_comps, spacedim=3, rotate=True):
         """
 
@@ -16712,7 +16133,6 @@ class StructOfArrays_2_0_idcpu_default:
         - 1D-3D: "a", "b", ... "w", "r0", "r1", ...
 
         """
-
     def to_cupy(self, copy=False):
         """
 
@@ -16740,7 +16160,6 @@ class StructOfArrays_2_0_idcpu_default:
             Raises an exception if cupy is not installed
 
         """
-
     def to_numpy(self, copy=False):
         """
 
@@ -16763,7 +16182,6 @@ class StructOfArrays_2_0_idcpu_default:
             with global particle indices is populated.
 
         """
-
     def to_xp(self, copy=False):
         """
 
@@ -16789,19 +16207,16 @@ class StructOfArrays_2_0_idcpu_default:
             with global particle indices is populated.
 
         """
-
     @property
     def has_idcpu(self) -> bool:
         """
         In pure SoA particle layout, idcpu is an array in the SoA
         """
-
     @property
     def num_int_comps(self) -> int:
         """
         Get the number of compile-time + runtime Int components
         """
-
     @property
     def num_particles(self) -> int: ...
     @property
@@ -16809,7 +16224,6 @@ class StructOfArrays_2_0_idcpu_default:
         """
         Get the number of compile-time + runtime Real components
         """
-
     @property
     def num_real_particles(self) -> int: ...
     @property
@@ -16826,13 +16240,11 @@ class StructOfArrays_2_0_idcpu_pinned:
         """
         Get the number of particles
         """
-
     def define(self, arg0: int, arg1: int) -> None: ...
     def get_idcpu_data(self) -> PODVector_uint64_pinned:
         """
         Get access to a particle IdCPU component Array
         """
-
     @typing.overload
     def get_int_data(
         self,
@@ -16842,13 +16254,11 @@ class StructOfArrays_2_0_idcpu_pinned:
         """
         Get access to the particle Int Arrays (only compile-time components)
         """
-
     @typing.overload
     def get_int_data(self, index: int) -> PODVector_int_pinned:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
-
     def get_num_neighbors(self) -> int: ...
     @typing.overload
     def get_real_data(
@@ -16859,13 +16269,11 @@ class StructOfArrays_2_0_idcpu_pinned:
         """
         Get access to the particle Real Arrays (only compile-time components)
         """
-
     @typing.overload
     def get_real_data(self, index: int) -> PODVector_real_pinned:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
-
     def resize(self, arg0: int) -> None: ...
     def set_num_neighbors(self, arg0: int) -> None: ...
     def soa_int_comps(self, num_comps):
@@ -16885,7 +16293,6 @@ class StructOfArrays_2_0_idcpu_pinned:
         A list of length num_comps with values "i1", "i2", "i3", ...
 
         """
-
     def soa_real_comps(self, num_comps, spacedim=3, rotate=True):
         """
 
@@ -16913,7 +16320,6 @@ class StructOfArrays_2_0_idcpu_pinned:
         - 1D-3D: "a", "b", ... "w", "r0", "r1", ...
 
         """
-
     def to_cupy(self, copy=False):
         """
 
@@ -16941,7 +16347,6 @@ class StructOfArrays_2_0_idcpu_pinned:
             Raises an exception if cupy is not installed
 
         """
-
     def to_numpy(self, copy=False):
         """
 
@@ -16964,7 +16369,6 @@ class StructOfArrays_2_0_idcpu_pinned:
             with global particle indices is populated.
 
         """
-
     def to_xp(self, copy=False):
         """
 
@@ -16990,19 +16394,16 @@ class StructOfArrays_2_0_idcpu_pinned:
             with global particle indices is populated.
 
         """
-
     @property
     def has_idcpu(self) -> bool:
         """
         In pure SoA particle layout, idcpu is an array in the SoA
         """
-
     @property
     def num_int_comps(self) -> int:
         """
         Get the number of compile-time + runtime Int components
         """
-
     @property
     def num_particles(self) -> int: ...
     @property
@@ -17010,7 +16411,6 @@ class StructOfArrays_2_0_idcpu_pinned:
         """
         Get the number of compile-time + runtime Real components
         """
-
     @property
     def num_real_particles(self) -> int: ...
     @property
@@ -17027,7 +16427,6 @@ class StructOfArrays_3_1_arena:
         """
         Get the number of particles
         """
-
     def define(self, arg0: int, arg1: int) -> None: ...
     @typing.overload
     def get_int_data(
@@ -17038,13 +16437,11 @@ class StructOfArrays_3_1_arena:
         """
         Get access to the particle Int Arrays (only compile-time components)
         """
-
     @typing.overload
     def get_int_data(self, index: int) -> PODVector_int_arena:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
-
     def get_num_neighbors(self) -> int: ...
     @typing.overload
     def get_real_data(
@@ -17055,13 +16452,11 @@ class StructOfArrays_3_1_arena:
         """
         Get access to the particle Real Arrays (only compile-time components)
         """
-
     @typing.overload
     def get_real_data(self, index: int) -> PODVector_real_arena:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
-
     def resize(self, arg0: int) -> None: ...
     def set_num_neighbors(self, arg0: int) -> None: ...
     def soa_int_comps(self, num_comps):
@@ -17081,7 +16476,6 @@ class StructOfArrays_3_1_arena:
         A list of length num_comps with values "i1", "i2", "i3", ...
 
         """
-
     def soa_real_comps(self, num_comps, spacedim=3, rotate=True):
         """
 
@@ -17109,7 +16503,6 @@ class StructOfArrays_3_1_arena:
         - 1D-3D: "a", "b", ... "w", "r0", "r1", ...
 
         """
-
     def to_cupy(self, copy=False):
         """
 
@@ -17137,7 +16530,6 @@ class StructOfArrays_3_1_arena:
             Raises an exception if cupy is not installed
 
         """
-
     def to_numpy(self, copy=False):
         """
 
@@ -17160,7 +16552,6 @@ class StructOfArrays_3_1_arena:
             with global particle indices is populated.
 
         """
-
     def to_xp(self, copy=False):
         """
 
@@ -17186,19 +16577,16 @@ class StructOfArrays_3_1_arena:
             with global particle indices is populated.
 
         """
-
     @property
     def has_idcpu(self) -> bool:
         """
         In pure SoA particle layout, idcpu is an array in the SoA
         """
-
     @property
     def num_int_comps(self) -> int:
         """
         Get the number of compile-time + runtime Int components
         """
-
     @property
     def num_particles(self) -> int: ...
     @property
@@ -17206,7 +16594,6 @@ class StructOfArrays_3_1_arena:
         """
         Get the number of compile-time + runtime Real components
         """
-
     @property
     def num_real_particles(self) -> int: ...
     @property
@@ -17223,7 +16610,6 @@ class StructOfArrays_3_1_default:
         """
         Get the number of particles
         """
-
     def define(self, arg0: int, arg1: int) -> None: ...
     @typing.overload
     def get_int_data(
@@ -17234,13 +16620,11 @@ class StructOfArrays_3_1_default:
         """
         Get access to the particle Int Arrays (only compile-time components)
         """
-
     @typing.overload
     def get_int_data(self, index: int) -> PODVector_int_std:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
-
     def get_num_neighbors(self) -> int: ...
     @typing.overload
     def get_real_data(
@@ -17251,13 +16635,11 @@ class StructOfArrays_3_1_default:
         """
         Get access to the particle Real Arrays (only compile-time components)
         """
-
     @typing.overload
     def get_real_data(self, index: int) -> PODVector_real_std:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
-
     def resize(self, arg0: int) -> None: ...
     def set_num_neighbors(self, arg0: int) -> None: ...
     def soa_int_comps(self, num_comps):
@@ -17277,7 +16659,6 @@ class StructOfArrays_3_1_default:
         A list of length num_comps with values "i1", "i2", "i3", ...
 
         """
-
     def soa_real_comps(self, num_comps, spacedim=3, rotate=True):
         """
 
@@ -17305,7 +16686,6 @@ class StructOfArrays_3_1_default:
         - 1D-3D: "a", "b", ... "w", "r0", "r1", ...
 
         """
-
     def to_cupy(self, copy=False):
         """
 
@@ -17333,7 +16713,6 @@ class StructOfArrays_3_1_default:
             Raises an exception if cupy is not installed
 
         """
-
     def to_numpy(self, copy=False):
         """
 
@@ -17356,7 +16735,6 @@ class StructOfArrays_3_1_default:
             with global particle indices is populated.
 
         """
-
     def to_xp(self, copy=False):
         """
 
@@ -17382,19 +16760,16 @@ class StructOfArrays_3_1_default:
             with global particle indices is populated.
 
         """
-
     @property
     def has_idcpu(self) -> bool:
         """
         In pure SoA particle layout, idcpu is an array in the SoA
         """
-
     @property
     def num_int_comps(self) -> int:
         """
         Get the number of compile-time + runtime Int components
         """
-
     @property
     def num_particles(self) -> int: ...
     @property
@@ -17402,7 +16777,6 @@ class StructOfArrays_3_1_default:
         """
         Get the number of compile-time + runtime Real components
         """
-
     @property
     def num_real_particles(self) -> int: ...
     @property
@@ -17419,7 +16793,6 @@ class StructOfArrays_3_1_pinned:
         """
         Get the number of particles
         """
-
     def define(self, arg0: int, arg1: int) -> None: ...
     @typing.overload
     def get_int_data(
@@ -17430,13 +16803,11 @@ class StructOfArrays_3_1_pinned:
         """
         Get access to the particle Int Arrays (only compile-time components)
         """
-
     @typing.overload
     def get_int_data(self, index: int) -> PODVector_int_pinned:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
-
     def get_num_neighbors(self) -> int: ...
     @typing.overload
     def get_real_data(
@@ -17447,13 +16818,11 @@ class StructOfArrays_3_1_pinned:
         """
         Get access to the particle Real Arrays (only compile-time components)
         """
-
     @typing.overload
     def get_real_data(self, index: int) -> PODVector_real_pinned:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
-
     def resize(self, arg0: int) -> None: ...
     def set_num_neighbors(self, arg0: int) -> None: ...
     def soa_int_comps(self, num_comps):
@@ -17473,7 +16842,6 @@ class StructOfArrays_3_1_pinned:
         A list of length num_comps with values "i1", "i2", "i3", ...
 
         """
-
     def soa_real_comps(self, num_comps, spacedim=3, rotate=True):
         """
 
@@ -17501,7 +16869,6 @@ class StructOfArrays_3_1_pinned:
         - 1D-3D: "a", "b", ... "w", "r0", "r1", ...
 
         """
-
     def to_cupy(self, copy=False):
         """
 
@@ -17529,7 +16896,6 @@ class StructOfArrays_3_1_pinned:
             Raises an exception if cupy is not installed
 
         """
-
     def to_numpy(self, copy=False):
         """
 
@@ -17552,7 +16918,6 @@ class StructOfArrays_3_1_pinned:
             with global particle indices is populated.
 
         """
-
     def to_xp(self, copy=False):
         """
 
@@ -17578,19 +16943,16 @@ class StructOfArrays_3_1_pinned:
             with global particle indices is populated.
 
         """
-
     @property
     def has_idcpu(self) -> bool:
         """
         In pure SoA particle layout, idcpu is an array in the SoA
         """
-
     @property
     def num_int_comps(self) -> int:
         """
         Get the number of compile-time + runtime Int components
         """
-
     @property
     def num_particles(self) -> int: ...
     @property
@@ -17598,7 +16960,6 @@ class StructOfArrays_3_1_pinned:
         """
         Get the number of compile-time + runtime Real components
         """
-
     @property
     def num_real_particles(self) -> int: ...
     @property
@@ -17615,13 +16976,11 @@ class StructOfArrays_6_0_idcpu_arena:
         """
         Get the number of particles
         """
-
     def define(self, arg0: int, arg1: int) -> None: ...
     def get_idcpu_data(self) -> PODVector_uint64_arena:
         """
         Get access to a particle IdCPU component Array
         """
-
     @typing.overload
     def get_int_data(
         self,
@@ -17631,13 +16990,11 @@ class StructOfArrays_6_0_idcpu_arena:
         """
         Get access to the particle Int Arrays (only compile-time components)
         """
-
     @typing.overload
     def get_int_data(self, index: int) -> PODVector_int_arena:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
-
     def get_num_neighbors(self) -> int: ...
     @typing.overload
     def get_real_data(
@@ -17648,13 +17005,11 @@ class StructOfArrays_6_0_idcpu_arena:
         """
         Get access to the particle Real Arrays (only compile-time components)
         """
-
     @typing.overload
     def get_real_data(self, index: int) -> PODVector_real_arena:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
-
     def resize(self, arg0: int) -> None: ...
     def set_num_neighbors(self, arg0: int) -> None: ...
     def soa_int_comps(self, num_comps):
@@ -17674,7 +17029,6 @@ class StructOfArrays_6_0_idcpu_arena:
         A list of length num_comps with values "i1", "i2", "i3", ...
 
         """
-
     def soa_real_comps(self, num_comps, spacedim=3, rotate=True):
         """
 
@@ -17702,7 +17056,6 @@ class StructOfArrays_6_0_idcpu_arena:
         - 1D-3D: "a", "b", ... "w", "r0", "r1", ...
 
         """
-
     def to_cupy(self, copy=False):
         """
 
@@ -17730,7 +17083,6 @@ class StructOfArrays_6_0_idcpu_arena:
             Raises an exception if cupy is not installed
 
         """
-
     def to_numpy(self, copy=False):
         """
 
@@ -17753,7 +17105,6 @@ class StructOfArrays_6_0_idcpu_arena:
             with global particle indices is populated.
 
         """
-
     def to_xp(self, copy=False):
         """
 
@@ -17779,19 +17130,16 @@ class StructOfArrays_6_0_idcpu_arena:
             with global particle indices is populated.
 
         """
-
     @property
     def has_idcpu(self) -> bool:
         """
         In pure SoA particle layout, idcpu is an array in the SoA
         """
-
     @property
     def num_int_comps(self) -> int:
         """
         Get the number of compile-time + runtime Int components
         """
-
     @property
     def num_particles(self) -> int: ...
     @property
@@ -17799,7 +17147,6 @@ class StructOfArrays_6_0_idcpu_arena:
         """
         Get the number of compile-time + runtime Real components
         """
-
     @property
     def num_real_particles(self) -> int: ...
     @property
@@ -17816,13 +17163,11 @@ class StructOfArrays_6_0_idcpu_default:
         """
         Get the number of particles
         """
-
     def define(self, arg0: int, arg1: int) -> None: ...
     def get_idcpu_data(self) -> PODVector_uint64_std:
         """
         Get access to a particle IdCPU component Array
         """
-
     @typing.overload
     def get_int_data(
         self,
@@ -17832,13 +17177,11 @@ class StructOfArrays_6_0_idcpu_default:
         """
         Get access to the particle Int Arrays (only compile-time components)
         """
-
     @typing.overload
     def get_int_data(self, index: int) -> PODVector_int_std:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
-
     def get_num_neighbors(self) -> int: ...
     @typing.overload
     def get_real_data(
@@ -17849,13 +17192,11 @@ class StructOfArrays_6_0_idcpu_default:
         """
         Get access to the particle Real Arrays (only compile-time components)
         """
-
     @typing.overload
     def get_real_data(self, index: int) -> PODVector_real_std:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
-
     def resize(self, arg0: int) -> None: ...
     def set_num_neighbors(self, arg0: int) -> None: ...
     def soa_int_comps(self, num_comps):
@@ -17875,7 +17216,6 @@ class StructOfArrays_6_0_idcpu_default:
         A list of length num_comps with values "i1", "i2", "i3", ...
 
         """
-
     def soa_real_comps(self, num_comps, spacedim=3, rotate=True):
         """
 
@@ -17903,7 +17243,6 @@ class StructOfArrays_6_0_idcpu_default:
         - 1D-3D: "a", "b", ... "w", "r0", "r1", ...
 
         """
-
     def to_cupy(self, copy=False):
         """
 
@@ -17931,7 +17270,6 @@ class StructOfArrays_6_0_idcpu_default:
             Raises an exception if cupy is not installed
 
         """
-
     def to_numpy(self, copy=False):
         """
 
@@ -17954,7 +17292,6 @@ class StructOfArrays_6_0_idcpu_default:
             with global particle indices is populated.
 
         """
-
     def to_xp(self, copy=False):
         """
 
@@ -17980,19 +17317,16 @@ class StructOfArrays_6_0_idcpu_default:
             with global particle indices is populated.
 
         """
-
     @property
     def has_idcpu(self) -> bool:
         """
         In pure SoA particle layout, idcpu is an array in the SoA
         """
-
     @property
     def num_int_comps(self) -> int:
         """
         Get the number of compile-time + runtime Int components
         """
-
     @property
     def num_particles(self) -> int: ...
     @property
@@ -18000,7 +17334,6 @@ class StructOfArrays_6_0_idcpu_default:
         """
         Get the number of compile-time + runtime Real components
         """
-
     @property
     def num_real_particles(self) -> int: ...
     @property
@@ -18017,13 +17350,11 @@ class StructOfArrays_6_0_idcpu_pinned:
         """
         Get the number of particles
         """
-
     def define(self, arg0: int, arg1: int) -> None: ...
     def get_idcpu_data(self) -> PODVector_uint64_pinned:
         """
         Get access to a particle IdCPU component Array
         """
-
     @typing.overload
     def get_int_data(
         self,
@@ -18033,13 +17364,11 @@ class StructOfArrays_6_0_idcpu_pinned:
         """
         Get access to the particle Int Arrays (only compile-time components)
         """
-
     @typing.overload
     def get_int_data(self, index: int) -> PODVector_int_pinned:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
-
     def get_num_neighbors(self) -> int: ...
     @typing.overload
     def get_real_data(
@@ -18050,13 +17379,11 @@ class StructOfArrays_6_0_idcpu_pinned:
         """
         Get access to the particle Real Arrays (only compile-time components)
         """
-
     @typing.overload
     def get_real_data(self, index: int) -> PODVector_real_pinned:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
-
     def resize(self, arg0: int) -> None: ...
     def set_num_neighbors(self, arg0: int) -> None: ...
     def soa_int_comps(self, num_comps):
@@ -18076,7 +17403,6 @@ class StructOfArrays_6_0_idcpu_pinned:
         A list of length num_comps with values "i1", "i2", "i3", ...
 
         """
-
     def soa_real_comps(self, num_comps, spacedim=3, rotate=True):
         """
 
@@ -18104,7 +17430,6 @@ class StructOfArrays_6_0_idcpu_pinned:
         - 1D-3D: "a", "b", ... "w", "r0", "r1", ...
 
         """
-
     def to_cupy(self, copy=False):
         """
 
@@ -18132,7 +17457,6 @@ class StructOfArrays_6_0_idcpu_pinned:
             Raises an exception if cupy is not installed
 
         """
-
     def to_numpy(self, copy=False):
         """
 
@@ -18155,7 +17479,6 @@ class StructOfArrays_6_0_idcpu_pinned:
             with global particle indices is populated.
 
         """
-
     def to_xp(self, copy=False):
         """
 
@@ -18181,19 +17504,16 @@ class StructOfArrays_6_0_idcpu_pinned:
             with global particle indices is populated.
 
         """
-
     @property
     def has_idcpu(self) -> bool:
         """
         In pure SoA particle layout, idcpu is an array in the SoA
         """
-
     @property
     def num_int_comps(self) -> int:
         """
         Get the number of compile-time + runtime Int components
         """
-
     @property
     def num_particles(self) -> int: ...
     @property
@@ -18201,7 +17521,6 @@ class StructOfArrays_6_0_idcpu_pinned:
         """
         Get the number of compile-time + runtime Real components
         """
-
     @property
     def num_real_particles(self) -> int: ...
     @property
@@ -18218,13 +17537,11 @@ class StructOfArrays_7_0_idcpu_arena:
         """
         Get the number of particles
         """
-
     def define(self, arg0: int, arg1: int) -> None: ...
     def get_idcpu_data(self) -> PODVector_uint64_arena:
         """
         Get access to a particle IdCPU component Array
         """
-
     @typing.overload
     def get_int_data(
         self,
@@ -18234,13 +17551,11 @@ class StructOfArrays_7_0_idcpu_arena:
         """
         Get access to the particle Int Arrays (only compile-time components)
         """
-
     @typing.overload
     def get_int_data(self, index: int) -> PODVector_int_arena:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
-
     def get_num_neighbors(self) -> int: ...
     @typing.overload
     def get_real_data(
@@ -18251,13 +17566,11 @@ class StructOfArrays_7_0_idcpu_arena:
         """
         Get access to the particle Real Arrays (only compile-time components)
         """
-
     @typing.overload
     def get_real_data(self, index: int) -> PODVector_real_arena:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
-
     def resize(self, arg0: int) -> None: ...
     def set_num_neighbors(self, arg0: int) -> None: ...
     def soa_int_comps(self, num_comps):
@@ -18277,7 +17590,6 @@ class StructOfArrays_7_0_idcpu_arena:
         A list of length num_comps with values "i1", "i2", "i3", ...
 
         """
-
     def soa_real_comps(self, num_comps, spacedim=3, rotate=True):
         """
 
@@ -18305,7 +17617,6 @@ class StructOfArrays_7_0_idcpu_arena:
         - 1D-3D: "a", "b", ... "w", "r0", "r1", ...
 
         """
-
     def to_cupy(self, copy=False):
         """
 
@@ -18333,7 +17644,6 @@ class StructOfArrays_7_0_idcpu_arena:
             Raises an exception if cupy is not installed
 
         """
-
     def to_numpy(self, copy=False):
         """
 
@@ -18356,7 +17666,6 @@ class StructOfArrays_7_0_idcpu_arena:
             with global particle indices is populated.
 
         """
-
     def to_xp(self, copy=False):
         """
 
@@ -18382,19 +17691,16 @@ class StructOfArrays_7_0_idcpu_arena:
             with global particle indices is populated.
 
         """
-
     @property
     def has_idcpu(self) -> bool:
         """
         In pure SoA particle layout, idcpu is an array in the SoA
         """
-
     @property
     def num_int_comps(self) -> int:
         """
         Get the number of compile-time + runtime Int components
         """
-
     @property
     def num_particles(self) -> int: ...
     @property
@@ -18402,7 +17708,6 @@ class StructOfArrays_7_0_idcpu_arena:
         """
         Get the number of compile-time + runtime Real components
         """
-
     @property
     def num_real_particles(self) -> int: ...
     @property
@@ -18419,13 +17724,11 @@ class StructOfArrays_7_0_idcpu_default:
         """
         Get the number of particles
         """
-
     def define(self, arg0: int, arg1: int) -> None: ...
     def get_idcpu_data(self) -> PODVector_uint64_std:
         """
         Get access to a particle IdCPU component Array
         """
-
     @typing.overload
     def get_int_data(
         self,
@@ -18435,13 +17738,11 @@ class StructOfArrays_7_0_idcpu_default:
         """
         Get access to the particle Int Arrays (only compile-time components)
         """
-
     @typing.overload
     def get_int_data(self, index: int) -> PODVector_int_std:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
-
     def get_num_neighbors(self) -> int: ...
     @typing.overload
     def get_real_data(
@@ -18452,13 +17753,11 @@ class StructOfArrays_7_0_idcpu_default:
         """
         Get access to the particle Real Arrays (only compile-time components)
         """
-
     @typing.overload
     def get_real_data(self, index: int) -> PODVector_real_std:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
-
     def resize(self, arg0: int) -> None: ...
     def set_num_neighbors(self, arg0: int) -> None: ...
     def soa_int_comps(self, num_comps):
@@ -18478,7 +17777,6 @@ class StructOfArrays_7_0_idcpu_default:
         A list of length num_comps with values "i1", "i2", "i3", ...
 
         """
-
     def soa_real_comps(self, num_comps, spacedim=3, rotate=True):
         """
 
@@ -18506,7 +17804,6 @@ class StructOfArrays_7_0_idcpu_default:
         - 1D-3D: "a", "b", ... "w", "r0", "r1", ...
 
         """
-
     def to_cupy(self, copy=False):
         """
 
@@ -18534,7 +17831,6 @@ class StructOfArrays_7_0_idcpu_default:
             Raises an exception if cupy is not installed
 
         """
-
     def to_numpy(self, copy=False):
         """
 
@@ -18557,7 +17853,6 @@ class StructOfArrays_7_0_idcpu_default:
             with global particle indices is populated.
 
         """
-
     def to_xp(self, copy=False):
         """
 
@@ -18583,19 +17878,16 @@ class StructOfArrays_7_0_idcpu_default:
             with global particle indices is populated.
 
         """
-
     @property
     def has_idcpu(self) -> bool:
         """
         In pure SoA particle layout, idcpu is an array in the SoA
         """
-
     @property
     def num_int_comps(self) -> int:
         """
         Get the number of compile-time + runtime Int components
         """
-
     @property
     def num_particles(self) -> int: ...
     @property
@@ -18603,7 +17895,6 @@ class StructOfArrays_7_0_idcpu_default:
         """
         Get the number of compile-time + runtime Real components
         """
-
     @property
     def num_real_particles(self) -> int: ...
     @property
@@ -18620,13 +17911,11 @@ class StructOfArrays_7_0_idcpu_pinned:
         """
         Get the number of particles
         """
-
     def define(self, arg0: int, arg1: int) -> None: ...
     def get_idcpu_data(self) -> PODVector_uint64_pinned:
         """
         Get access to a particle IdCPU component Array
         """
-
     @typing.overload
     def get_int_data(
         self,
@@ -18636,13 +17925,11 @@ class StructOfArrays_7_0_idcpu_pinned:
         """
         Get access to the particle Int Arrays (only compile-time components)
         """
-
     @typing.overload
     def get_int_data(self, index: int) -> PODVector_int_pinned:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
-
     def get_num_neighbors(self) -> int: ...
     @typing.overload
     def get_real_data(
@@ -18653,13 +17940,11 @@ class StructOfArrays_7_0_idcpu_pinned:
         """
         Get access to the particle Real Arrays (only compile-time components)
         """
-
     @typing.overload
     def get_real_data(self, index: int) -> PODVector_real_pinned:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
-
     def resize(self, arg0: int) -> None: ...
     def set_num_neighbors(self, arg0: int) -> None: ...
     def soa_int_comps(self, num_comps):
@@ -18679,7 +17964,6 @@ class StructOfArrays_7_0_idcpu_pinned:
         A list of length num_comps with values "i1", "i2", "i3", ...
 
         """
-
     def soa_real_comps(self, num_comps, spacedim=3, rotate=True):
         """
 
@@ -18707,7 +17991,6 @@ class StructOfArrays_7_0_idcpu_pinned:
         - 1D-3D: "a", "b", ... "w", "r0", "r1", ...
 
         """
-
     def to_cupy(self, copy=False):
         """
 
@@ -18735,7 +18018,6 @@ class StructOfArrays_7_0_idcpu_pinned:
             Raises an exception if cupy is not installed
 
         """
-
     def to_numpy(self, copy=False):
         """
 
@@ -18758,7 +18040,6 @@ class StructOfArrays_7_0_idcpu_pinned:
             with global particle indices is populated.
 
         """
-
     def to_xp(self, copy=False):
         """
 
@@ -18784,19 +18065,16 @@ class StructOfArrays_7_0_idcpu_pinned:
             with global particle indices is populated.
 
         """
-
     @property
     def has_idcpu(self) -> bool:
         """
         In pure SoA particle layout, idcpu is an array in the SoA
         """
-
     @property
     def num_int_comps(self) -> int:
         """
         Get the number of compile-time + runtime Int components
         """
-
     @property
     def num_particles(self) -> int: ...
     @property
@@ -18804,7 +18082,6 @@ class StructOfArrays_7_0_idcpu_pinned:
         """
         Get the number of compile-time + runtime Real components
         """
-
     @property
     def num_real_particles(self) -> int: ...
     @property
@@ -18821,13 +18098,11 @@ class StructOfArrays_8_0_idcpu_arena:
         """
         Get the number of particles
         """
-
     def define(self, arg0: int, arg1: int) -> None: ...
     def get_idcpu_data(self) -> PODVector_uint64_arena:
         """
         Get access to a particle IdCPU component Array
         """
-
     @typing.overload
     def get_int_data(
         self,
@@ -18837,13 +18112,11 @@ class StructOfArrays_8_0_idcpu_arena:
         """
         Get access to the particle Int Arrays (only compile-time components)
         """
-
     @typing.overload
     def get_int_data(self, index: int) -> PODVector_int_arena:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
-
     def get_num_neighbors(self) -> int: ...
     @typing.overload
     def get_real_data(
@@ -18854,13 +18127,11 @@ class StructOfArrays_8_0_idcpu_arena:
         """
         Get access to the particle Real Arrays (only compile-time components)
         """
-
     @typing.overload
     def get_real_data(self, index: int) -> PODVector_real_arena:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
-
     def resize(self, arg0: int) -> None: ...
     def set_num_neighbors(self, arg0: int) -> None: ...
     def soa_int_comps(self, num_comps):
@@ -18880,7 +18151,6 @@ class StructOfArrays_8_0_idcpu_arena:
         A list of length num_comps with values "i1", "i2", "i3", ...
 
         """
-
     def soa_real_comps(self, num_comps, spacedim=3, rotate=True):
         """
 
@@ -18908,7 +18178,6 @@ class StructOfArrays_8_0_idcpu_arena:
         - 1D-3D: "a", "b", ... "w", "r0", "r1", ...
 
         """
-
     def to_cupy(self, copy=False):
         """
 
@@ -18936,7 +18205,6 @@ class StructOfArrays_8_0_idcpu_arena:
             Raises an exception if cupy is not installed
 
         """
-
     def to_numpy(self, copy=False):
         """
 
@@ -18959,7 +18227,6 @@ class StructOfArrays_8_0_idcpu_arena:
             with global particle indices is populated.
 
         """
-
     def to_xp(self, copy=False):
         """
 
@@ -18985,19 +18252,16 @@ class StructOfArrays_8_0_idcpu_arena:
             with global particle indices is populated.
 
         """
-
     @property
     def has_idcpu(self) -> bool:
         """
         In pure SoA particle layout, idcpu is an array in the SoA
         """
-
     @property
     def num_int_comps(self) -> int:
         """
         Get the number of compile-time + runtime Int components
         """
-
     @property
     def num_particles(self) -> int: ...
     @property
@@ -19005,7 +18269,6 @@ class StructOfArrays_8_0_idcpu_arena:
         """
         Get the number of compile-time + runtime Real components
         """
-
     @property
     def num_real_particles(self) -> int: ...
     @property
@@ -19022,13 +18285,11 @@ class StructOfArrays_8_0_idcpu_default:
         """
         Get the number of particles
         """
-
     def define(self, arg0: int, arg1: int) -> None: ...
     def get_idcpu_data(self) -> PODVector_uint64_std:
         """
         Get access to a particle IdCPU component Array
         """
-
     @typing.overload
     def get_int_data(
         self,
@@ -19038,13 +18299,11 @@ class StructOfArrays_8_0_idcpu_default:
         """
         Get access to the particle Int Arrays (only compile-time components)
         """
-
     @typing.overload
     def get_int_data(self, index: int) -> PODVector_int_std:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
-
     def get_num_neighbors(self) -> int: ...
     @typing.overload
     def get_real_data(
@@ -19055,13 +18314,11 @@ class StructOfArrays_8_0_idcpu_default:
         """
         Get access to the particle Real Arrays (only compile-time components)
         """
-
     @typing.overload
     def get_real_data(self, index: int) -> PODVector_real_std:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
-
     def resize(self, arg0: int) -> None: ...
     def set_num_neighbors(self, arg0: int) -> None: ...
     def soa_int_comps(self, num_comps):
@@ -19081,7 +18338,6 @@ class StructOfArrays_8_0_idcpu_default:
         A list of length num_comps with values "i1", "i2", "i3", ...
 
         """
-
     def soa_real_comps(self, num_comps, spacedim=3, rotate=True):
         """
 
@@ -19109,7 +18365,6 @@ class StructOfArrays_8_0_idcpu_default:
         - 1D-3D: "a", "b", ... "w", "r0", "r1", ...
 
         """
-
     def to_cupy(self, copy=False):
         """
 
@@ -19137,7 +18392,6 @@ class StructOfArrays_8_0_idcpu_default:
             Raises an exception if cupy is not installed
 
         """
-
     def to_numpy(self, copy=False):
         """
 
@@ -19160,7 +18414,6 @@ class StructOfArrays_8_0_idcpu_default:
             with global particle indices is populated.
 
         """
-
     def to_xp(self, copy=False):
         """
 
@@ -19186,19 +18439,16 @@ class StructOfArrays_8_0_idcpu_default:
             with global particle indices is populated.
 
         """
-
     @property
     def has_idcpu(self) -> bool:
         """
         In pure SoA particle layout, idcpu is an array in the SoA
         """
-
     @property
     def num_int_comps(self) -> int:
         """
         Get the number of compile-time + runtime Int components
         """
-
     @property
     def num_particles(self) -> int: ...
     @property
@@ -19206,7 +18456,6 @@ class StructOfArrays_8_0_idcpu_default:
         """
         Get the number of compile-time + runtime Real components
         """
-
     @property
     def num_real_particles(self) -> int: ...
     @property
@@ -19223,13 +18472,11 @@ class StructOfArrays_8_0_idcpu_pinned:
         """
         Get the number of particles
         """
-
     def define(self, arg0: int, arg1: int) -> None: ...
     def get_idcpu_data(self) -> PODVector_uint64_pinned:
         """
         Get access to a particle IdCPU component Array
         """
-
     @typing.overload
     def get_int_data(
         self,
@@ -19239,13 +18486,11 @@ class StructOfArrays_8_0_idcpu_pinned:
         """
         Get access to the particle Int Arrays (only compile-time components)
         """
-
     @typing.overload
     def get_int_data(self, index: int) -> PODVector_int_pinned:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
-
     def get_num_neighbors(self) -> int: ...
     @typing.overload
     def get_real_data(
@@ -19256,13 +18501,11 @@ class StructOfArrays_8_0_idcpu_pinned:
         """
         Get access to the particle Real Arrays (only compile-time components)
         """
-
     @typing.overload
     def get_real_data(self, index: int) -> PODVector_real_pinned:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
-
     def resize(self, arg0: int) -> None: ...
     def set_num_neighbors(self, arg0: int) -> None: ...
     def soa_int_comps(self, num_comps):
@@ -19282,7 +18525,6 @@ class StructOfArrays_8_0_idcpu_pinned:
         A list of length num_comps with values "i1", "i2", "i3", ...
 
         """
-
     def soa_real_comps(self, num_comps, spacedim=3, rotate=True):
         """
 
@@ -19310,7 +18552,6 @@ class StructOfArrays_8_0_idcpu_pinned:
         - 1D-3D: "a", "b", ... "w", "r0", "r1", ...
 
         """
-
     def to_cupy(self, copy=False):
         """
 
@@ -19338,7 +18579,6 @@ class StructOfArrays_8_0_idcpu_pinned:
             Raises an exception if cupy is not installed
 
         """
-
     def to_numpy(self, copy=False):
         """
 
@@ -19361,7 +18601,6 @@ class StructOfArrays_8_0_idcpu_pinned:
             with global particle indices is populated.
 
         """
-
     def to_xp(self, copy=False):
         """
 
@@ -19387,19 +18626,16 @@ class StructOfArrays_8_0_idcpu_pinned:
             with global particle indices is populated.
 
         """
-
     @property
     def has_idcpu(self) -> bool:
         """
         In pure SoA particle layout, idcpu is an array in the SoA
         """
-
     @property
     def num_int_comps(self) -> int:
         """
         Get the number of compile-time + runtime Int components
         """
-
     @property
     def num_particles(self) -> int: ...
     @property
@@ -19407,7 +18643,6 @@ class StructOfArrays_8_0_idcpu_pinned:
         """
         Get the number of compile-time + runtime Real components
         """
-
     @property
     def num_real_particles(self) -> int: ...
     @property
@@ -19424,31 +18659,26 @@ class Vector_BoxArray:
         """
         Check whether the list is nonempty
         """
-
     def __contains__(self, x: BoxArray) -> bool:
         """
         Return true the container contains ``x``
         """
-
     @typing.overload
     def __delitem__(self, arg0: int) -> None:
         """
         Delete the list elements at index ``i``
         """
-
     @typing.overload
     def __delitem__(self, arg0: slice) -> None:
         """
         Delete list elements using a slice object
         """
-
     def __eq__(self, arg0: Vector_BoxArray) -> bool: ...
     @typing.overload
     def __getitem__(self, s: slice) -> Vector_BoxArray:
         """
         Retrieve list elements using a slice object
         """
-
     @typing.overload
     def __getitem__(self, arg0: int) -> BoxArray: ...
     @typing.overload
@@ -19460,7 +18690,6 @@ class Vector_BoxArray:
         """
         Copy constructor
         """
-
     @typing.overload
     def __init__(self, arg0: typing.Iterable) -> None: ...
     @typing.overload
@@ -19475,7 +18704,6 @@ class Vector_BoxArray:
         """
         Return the canonical string representation of this list.
         """
-
     @typing.overload
     def __repr__(self) -> str: ...
     @typing.overload
@@ -19485,58 +18713,48 @@ class Vector_BoxArray:
         """
         Assign list elements using a slice object
         """
-
     @typing.overload
     def __setitem__(self, arg0: int, arg1: BoxArray) -> None: ...
     def append(self, x: BoxArray) -> None:
         """
         Add an item to the end of the list
         """
-
     def clear(self) -> None:
         """
         Clear the contents
         """
-
     def count(self, x: BoxArray) -> int:
         """
         Return the number of times ``x`` appears in the list
         """
-
     @typing.overload
     def extend(self, L: Vector_BoxArray) -> None:
         """
         Extend the list by appending all the items in the given list
         """
-
     @typing.overload
     def extend(self, L: typing.Iterable) -> None:
         """
         Extend the list by appending all the items in the given list
         """
-
     def insert(self, i: int, x: BoxArray) -> None:
         """
         Insert an item at a given position.
         """
-
     @typing.overload
     def pop(self) -> BoxArray:
         """
         Remove and return the last item
         """
-
     @typing.overload
     def pop(self, i: int) -> BoxArray:
         """
         Remove and return the item at index ``i``
         """
-
     def remove(self, x: BoxArray) -> None:
         """
         Remove the first item from the list whose value is x. It is an error if there is no such item.
         """
-
     def size(self) -> int: ...
 
 class Vector_DistributionMapping:
@@ -19545,31 +18763,26 @@ class Vector_DistributionMapping:
         """
         Check whether the list is nonempty
         """
-
     def __contains__(self, x: DistributionMapping) -> bool:
         """
         Return true the container contains ``x``
         """
-
     @typing.overload
     def __delitem__(self, arg0: int) -> None:
         """
         Delete the list elements at index ``i``
         """
-
     @typing.overload
     def __delitem__(self, arg0: slice) -> None:
         """
         Delete list elements using a slice object
         """
-
     def __eq__(self, arg0: Vector_DistributionMapping) -> bool: ...
     @typing.overload
     def __getitem__(self, s: slice) -> Vector_DistributionMapping:
         """
         Retrieve list elements using a slice object
         """
-
     @typing.overload
     def __getitem__(self, arg0: int) -> DistributionMapping: ...
     @typing.overload
@@ -19581,7 +18794,6 @@ class Vector_DistributionMapping:
         """
         Copy constructor
         """
-
     @typing.overload
     def __init__(self, arg0: typing.Iterable) -> None: ...
     @typing.overload
@@ -19596,7 +18808,6 @@ class Vector_DistributionMapping:
         """
         Return the canonical string representation of this list.
         """
-
     @typing.overload
     def __repr__(self) -> str: ...
     @typing.overload
@@ -19606,58 +18817,48 @@ class Vector_DistributionMapping:
         """
         Assign list elements using a slice object
         """
-
     @typing.overload
     def __setitem__(self, arg0: int, arg1: DistributionMapping) -> None: ...
     def append(self, x: DistributionMapping) -> None:
         """
         Add an item to the end of the list
         """
-
     def clear(self) -> None:
         """
         Clear the contents
         """
-
     def count(self, x: DistributionMapping) -> int:
         """
         Return the number of times ``x`` appears in the list
         """
-
     @typing.overload
     def extend(self, L: Vector_DistributionMapping) -> None:
         """
         Extend the list by appending all the items in the given list
         """
-
     @typing.overload
     def extend(self, L: typing.Iterable) -> None:
         """
         Extend the list by appending all the items in the given list
         """
-
     def insert(self, i: int, x: DistributionMapping) -> None:
         """
         Insert an item at a given position.
         """
-
     @typing.overload
     def pop(self) -> DistributionMapping:
         """
         Remove and return the last item
         """
-
     @typing.overload
     def pop(self, i: int) -> DistributionMapping:
         """
         Remove and return the item at index ``i``
         """
-
     def remove(self, x: DistributionMapping) -> None:
         """
         Remove the first item from the list whose value is x. It is an error if there is no such item.
         """
-
     def size(self) -> int: ...
 
 class Vector_Geometry:
@@ -19665,25 +18866,21 @@ class Vector_Geometry:
         """
         Check whether the list is nonempty
         """
-
     @typing.overload
     def __delitem__(self, arg0: int) -> None:
         """
         Delete the list elements at index ``i``
         """
-
     @typing.overload
     def __delitem__(self, arg0: slice) -> None:
         """
         Delete list elements using a slice object
         """
-
     @typing.overload
     def __getitem__(self, s: slice) -> Vector_Geometry:
         """
         Retrieve list elements using a slice object
         """
-
     @typing.overload
     def __getitem__(self, arg0: int) -> Geometry: ...
     @typing.overload
@@ -19695,7 +18892,6 @@ class Vector_Geometry:
         """
         Copy constructor
         """
-
     @typing.overload
     def __init__(self, arg0: typing.Iterable) -> None: ...
     @typing.overload
@@ -19709,7 +18905,6 @@ class Vector_Geometry:
         """
         Return the canonical string representation of this list.
         """
-
     @typing.overload
     def __repr__(self) -> str: ...
     @typing.overload
@@ -19719,48 +18914,40 @@ class Vector_Geometry:
         """
         Assign list elements using a slice object
         """
-
     @typing.overload
     def __setitem__(self, arg0: int, arg1: Geometry) -> None: ...
     def append(self, x: Geometry) -> None:
         """
         Add an item to the end of the list
         """
-
     def clear(self) -> None:
         """
         Clear the contents
         """
-
     @typing.overload
     def extend(self, L: Vector_Geometry) -> None:
         """
         Extend the list by appending all the items in the given list
         """
-
     @typing.overload
     def extend(self, L: typing.Iterable) -> None:
         """
         Extend the list by appending all the items in the given list
         """
-
     def insert(self, i: int, x: Geometry) -> None:
         """
         Insert an item at a given position.
         """
-
     @typing.overload
     def pop(self) -> Geometry:
         """
         Remove and return the last item
         """
-
     @typing.overload
     def pop(self, i: int) -> Geometry:
         """
         Remove and return the item at index ``i``
         """
-
     def size(self) -> int: ...
 
 class Vector_IntVect:
@@ -19769,31 +18956,26 @@ class Vector_IntVect:
         """
         Check whether the list is nonempty
         """
-
     def __contains__(self, x: IntVect2D) -> bool:
         """
         Return true the container contains ``x``
         """
-
     @typing.overload
     def __delitem__(self, arg0: int) -> None:
         """
         Delete the list elements at index ``i``
         """
-
     @typing.overload
     def __delitem__(self, arg0: slice) -> None:
         """
         Delete list elements using a slice object
         """
-
     def __eq__(self, arg0: Vector_IntVect) -> bool: ...
     @typing.overload
     def __getitem__(self, s: slice) -> Vector_IntVect:
         """
         Retrieve list elements using a slice object
         """
-
     @typing.overload
     def __getitem__(self, arg0: int) -> IntVect2D: ...
     @typing.overload
@@ -19805,7 +18987,6 @@ class Vector_IntVect:
         """
         Copy constructor
         """
-
     @typing.overload
     def __init__(self, arg0: typing.Iterable) -> None: ...
     @typing.overload
@@ -19820,7 +19001,6 @@ class Vector_IntVect:
         """
         Return the canonical string representation of this list.
         """
-
     @typing.overload
     def __repr__(self) -> str: ...
     @typing.overload
@@ -19830,58 +19010,48 @@ class Vector_IntVect:
         """
         Assign list elements using a slice object
         """
-
     @typing.overload
     def __setitem__(self, arg0: int, arg1: IntVect2D) -> None: ...
     def append(self, x: IntVect2D) -> None:
         """
         Add an item to the end of the list
         """
-
     def clear(self) -> None:
         """
         Clear the contents
         """
-
     def count(self, x: IntVect2D) -> int:
         """
         Return the number of times ``x`` appears in the list
         """
-
     @typing.overload
     def extend(self, L: Vector_IntVect) -> None:
         """
         Extend the list by appending all the items in the given list
         """
-
     @typing.overload
     def extend(self, L: typing.Iterable) -> None:
         """
         Extend the list by appending all the items in the given list
         """
-
     def insert(self, i: int, x: IntVect2D) -> None:
         """
         Insert an item at a given position.
         """
-
     @typing.overload
     def pop(self) -> IntVect2D:
         """
         Remove and return the last item
         """
-
     @typing.overload
     def pop(self, i: int) -> IntVect2D:
         """
         Remove and return the item at index ``i``
         """
-
     def remove(self, x: IntVect2D) -> None:
         """
         Remove the first item from the list whose value is x. It is an error if there is no such item.
         """
-
     def size(self) -> int: ...
 
 class Vector_Long:
@@ -19890,31 +19060,26 @@ class Vector_Long:
         """
         Check whether the list is nonempty
         """
-
     def __contains__(self, x: int) -> bool:
         """
         Return true the container contains ``x``
         """
-
     @typing.overload
     def __delitem__(self, arg0: int) -> None:
         """
         Delete the list elements at index ``i``
         """
-
     @typing.overload
     def __delitem__(self, arg0: slice) -> None:
         """
         Delete list elements using a slice object
         """
-
     def __eq__(self, arg0: Vector_Long) -> bool: ...
     @typing.overload
     def __getitem__(self, s: slice) -> Vector_Long:
         """
         Retrieve list elements using a slice object
         """
-
     @typing.overload
     def __getitem__(self, arg0: int) -> int: ...
     @typing.overload
@@ -19926,7 +19091,6 @@ class Vector_Long:
         """
         Copy constructor
         """
-
     @typing.overload
     def __init__(self, arg0: typing.Iterable) -> None: ...
     @typing.overload
@@ -19941,7 +19105,6 @@ class Vector_Long:
         """
         Return the canonical string representation of this list.
         """
-
     @typing.overload
     def __repr__(self) -> str: ...
     @typing.overload
@@ -19951,58 +19114,48 @@ class Vector_Long:
         """
         Assign list elements using a slice object
         """
-
     @typing.overload
     def __setitem__(self, arg0: int, arg1: int) -> None: ...
     def append(self, x: int) -> None:
         """
         Add an item to the end of the list
         """
-
     def clear(self) -> None:
         """
         Clear the contents
         """
-
     def count(self, x: int) -> int:
         """
         Return the number of times ``x`` appears in the list
         """
-
     @typing.overload
     def extend(self, L: Vector_Long) -> None:
         """
         Extend the list by appending all the items in the given list
         """
-
     @typing.overload
     def extend(self, L: typing.Iterable) -> None:
         """
         Extend the list by appending all the items in the given list
         """
-
     def insert(self, i: int, x: int) -> None:
         """
         Insert an item at a given position.
         """
-
     @typing.overload
     def pop(self) -> int:
         """
         Remove and return the last item
         """
-
     @typing.overload
     def pop(self, i: int) -> int:
         """
         Remove and return the item at index ``i``
         """
-
     def remove(self, x: int) -> None:
         """
         Remove the first item from the list whose value is x. It is an error if there is no such item.
         """
-
     def size(self) -> int: ...
     @property
     def __array_interface__(self) -> dict: ...
@@ -20015,31 +19168,26 @@ class Vector_Real:
         """
         Check whether the list is nonempty
         """
-
     def __contains__(self, x: float) -> bool:
         """
         Return true the container contains ``x``
         """
-
     @typing.overload
     def __delitem__(self, arg0: int) -> None:
         """
         Delete the list elements at index ``i``
         """
-
     @typing.overload
     def __delitem__(self, arg0: slice) -> None:
         """
         Delete list elements using a slice object
         """
-
     def __eq__(self, arg0: Vector_Real) -> bool: ...
     @typing.overload
     def __getitem__(self, s: slice) -> Vector_Real:
         """
         Retrieve list elements using a slice object
         """
-
     @typing.overload
     def __getitem__(self, arg0: int) -> float: ...
     @typing.overload
@@ -20051,7 +19199,6 @@ class Vector_Real:
         """
         Copy constructor
         """
-
     @typing.overload
     def __init__(self, arg0: typing.Iterable) -> None: ...
     @typing.overload
@@ -20066,7 +19213,6 @@ class Vector_Real:
         """
         Return the canonical string representation of this list.
         """
-
     @typing.overload
     def __repr__(self) -> str: ...
     @typing.overload
@@ -20076,58 +19222,48 @@ class Vector_Real:
         """
         Assign list elements using a slice object
         """
-
     @typing.overload
     def __setitem__(self, arg0: int, arg1: float) -> None: ...
     def append(self, x: float) -> None:
         """
         Add an item to the end of the list
         """
-
     def clear(self) -> None:
         """
         Clear the contents
         """
-
     def count(self, x: float) -> int:
         """
         Return the number of times ``x`` appears in the list
         """
-
     @typing.overload
     def extend(self, L: Vector_Real) -> None:
         """
         Extend the list by appending all the items in the given list
         """
-
     @typing.overload
     def extend(self, L: typing.Iterable) -> None:
         """
         Extend the list by appending all the items in the given list
         """
-
     def insert(self, i: int, x: float) -> None:
         """
         Insert an item at a given position.
         """
-
     @typing.overload
     def pop(self) -> float:
         """
         Remove and return the last item
         """
-
     @typing.overload
     def pop(self, i: int) -> float:
         """
         Remove and return the item at index ``i``
         """
-
     def remove(self, x: float) -> None:
         """
         Remove the first item from the list whose value is x. It is an error if there is no such item.
         """
-
     def size(self) -> int: ...
     @property
     def __array_interface__(self) -> dict: ...
@@ -20140,31 +19276,26 @@ class Vector_int:
         """
         Check whether the list is nonempty
         """
-
     def __contains__(self, x: int) -> bool:
         """
         Return true the container contains ``x``
         """
-
     @typing.overload
     def __delitem__(self, arg0: int) -> None:
         """
         Delete the list elements at index ``i``
         """
-
     @typing.overload
     def __delitem__(self, arg0: slice) -> None:
         """
         Delete list elements using a slice object
         """
-
     def __eq__(self, arg0: Vector_int) -> bool: ...
     @typing.overload
     def __getitem__(self, s: slice) -> Vector_int:
         """
         Retrieve list elements using a slice object
         """
-
     @typing.overload
     def __getitem__(self, arg0: int) -> int: ...
     @typing.overload
@@ -20176,7 +19307,6 @@ class Vector_int:
         """
         Copy constructor
         """
-
     @typing.overload
     def __init__(self, arg0: typing.Iterable) -> None: ...
     @typing.overload
@@ -20191,7 +19321,6 @@ class Vector_int:
         """
         Return the canonical string representation of this list.
         """
-
     @typing.overload
     def __repr__(self) -> str: ...
     @typing.overload
@@ -20201,58 +19330,48 @@ class Vector_int:
         """
         Assign list elements using a slice object
         """
-
     @typing.overload
     def __setitem__(self, arg0: int, arg1: int) -> None: ...
     def append(self, x: int) -> None:
         """
         Add an item to the end of the list
         """
-
     def clear(self) -> None:
         """
         Clear the contents
         """
-
     def count(self, x: int) -> int:
         """
         Return the number of times ``x`` appears in the list
         """
-
     @typing.overload
     def extend(self, L: Vector_int) -> None:
         """
         Extend the list by appending all the items in the given list
         """
-
     @typing.overload
     def extend(self, L: typing.Iterable) -> None:
         """
         Extend the list by appending all the items in the given list
         """
-
     def insert(self, i: int, x: int) -> None:
         """
         Insert an item at a given position.
         """
-
     @typing.overload
     def pop(self) -> int:
         """
         Remove and return the last item
         """
-
     @typing.overload
     def pop(self, i: int) -> int:
         """
         Remove and return the item at index ``i``
         """
-
     def remove(self, x: int) -> None:
         """
         Remove the first item from the list whose value is x. It is an error if there is no such item.
         """
-
     def size(self) -> int: ...
     @property
     def __array_interface__(self) -> dict: ...
@@ -20265,31 +19384,26 @@ class Vector_string:
         """
         Check whether the list is nonempty
         """
-
     def __contains__(self, x: str) -> bool:
         """
         Return true the container contains ``x``
         """
-
     @typing.overload
     def __delitem__(self, arg0: int) -> None:
         """
         Delete the list elements at index ``i``
         """
-
     @typing.overload
     def __delitem__(self, arg0: slice) -> None:
         """
         Delete list elements using a slice object
         """
-
     def __eq__(self, arg0: Vector_string) -> bool: ...
     @typing.overload
     def __getitem__(self, s: slice) -> Vector_string:
         """
         Retrieve list elements using a slice object
         """
-
     @typing.overload
     def __getitem__(self, arg0: int) -> str: ...
     @typing.overload
@@ -20301,7 +19415,6 @@ class Vector_string:
         """
         Copy constructor
         """
-
     @typing.overload
     def __init__(self, arg0: typing.Iterable) -> None: ...
     @typing.overload
@@ -20316,7 +19429,6 @@ class Vector_string:
         """
         Return the canonical string representation of this list.
         """
-
     @typing.overload
     def __repr__(self) -> str: ...
     @typing.overload
@@ -20326,58 +19438,48 @@ class Vector_string:
         """
         Assign list elements using a slice object
         """
-
     @typing.overload
     def __setitem__(self, arg0: int, arg1: str) -> None: ...
     def append(self, x: str) -> None:
         """
         Add an item to the end of the list
         """
-
     def clear(self) -> None:
         """
         Clear the contents
         """
-
     def count(self, x: str) -> int:
         """
         Return the number of times ``x`` appears in the list
         """
-
     @typing.overload
     def extend(self, L: Vector_string) -> None:
         """
         Extend the list by appending all the items in the given list
         """
-
     @typing.overload
     def extend(self, L: typing.Iterable) -> None:
         """
         Extend the list by appending all the items in the given list
         """
-
     def insert(self, i: int, x: str) -> None:
         """
         Insert an item at a given position.
         """
-
     @typing.overload
     def pop(self) -> str:
         """
         Remove and return the last item
         """
-
     @typing.overload
     def pop(self, i: int) -> str:
         """
         Remove and return the item at index ``i``
         """
-
     def remove(self, x: str) -> None:
         """
         Remove the first item from the list whose value is x. It is an error if there is no such item.
         """
-
     def size(self) -> int: ...
 
 class XDim3:
@@ -20688,5 +19790,5 @@ def write_single_level_plotfile(
 
 __author__: str = "Axel Huebl, Ryan T. Sandberg, Shreyas Ananthan, David P. Grote, Revathi Jambunathan, Edoardo Zoni, Remi Lehe, Andrew Myers, Weiqun Zhang"
 __license__: str = "BSD-3-Clause-LBNL"
-__version__: str = "24.08"
+__version__: str = "24.08-12-ge792933f9561"
 IntVect = IntVect2D
