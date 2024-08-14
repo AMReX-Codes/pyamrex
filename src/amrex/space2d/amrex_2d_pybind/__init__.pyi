@@ -1,35 +1,35 @@
 """
 
-            amrex
-            -----
-            .. currentmodule:: amrex
+amrex
+-----
+.. currentmodule:: amrex
 
-            .. autosummary::
-               :toctree: _generate
-               AmrInfo
-               AmrMesh
-               Arena
-               ArrayOfStructs
-               Box
-               RealBox
-               BoxArray
-               Dim3
-               FArrayBox
-               IntVect
-               IndexType
-               RealVect
-               MultiFab
-               ParallelDescriptor
-               Particle
-               ParmParse
-               ParticleTile
-               ParticleContainer
-               Periodicity
-               PlotFileUtil
-               PODVector
-               StructOfArrays
-               Utility
-               Vector
+.. autosummary::
+   :toctree: _generate
+   AmrInfo
+   AmrMesh
+   Arena
+   ArrayOfStructs
+   Box
+   RealBox
+   BoxArray
+   Dim3
+   FArrayBox
+   IntVect
+   IndexType
+   RealVect
+   MultiFab
+   ParallelDescriptor
+   Particle
+   ParmParse
+   ParticleTile
+   ParticleContainer
+   Periodicity
+   PlotFileUtil
+   PODVector
+   StructOfArrays
+   Utility
+   Vector
 
 """
 
@@ -5613,7 +5613,7 @@ class Geometry(CoordSys):
         """
 
     def ResetDefaultPeriodicity(
-        self: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(2)]
+        self: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(2)],
     ) -> None:
         """
         Reset default periodicity of Geometry class with an Array of `int`
@@ -20686,9 +20686,7 @@ def write_single_level_plotfile(
     Writes single level plotfile
     """
 
-__author__: str = (
-    "Axel Huebl, Ryan T. Sandberg, Shreyas Ananthan, David P. Grote, Revathi Jambunathan, Edoardo Zoni, Remi Lehe, Andrew Myers, Weiqun Zhang"
-)
+__author__: str = "Axel Huebl, Ryan T. Sandberg, Shreyas Ananthan, David P. Grote, Revathi Jambunathan, Edoardo Zoni, Remi Lehe, Andrew Myers, Weiqun Zhang"
 __license__: str = "BSD-3-Clause-LBNL"
 __version__: str = "24.08"
 IntVect = IntVect2D

@@ -1,35 +1,35 @@
 """
 
-            amrex
-            -----
-            .. currentmodule:: amrex
+amrex
+-----
+.. currentmodule:: amrex
 
-            .. autosummary::
-               :toctree: _generate
-               AmrInfo
-               AmrMesh
-               Arena
-               ArrayOfStructs
-               Box
-               RealBox
-               BoxArray
-               Dim3
-               FArrayBox
-               IntVect
-               IndexType
-               RealVect
-               MultiFab
-               ParallelDescriptor
-               Particle
-               ParmParse
-               ParticleTile
-               ParticleContainer
-               Periodicity
-               PlotFileUtil
-               PODVector
-               StructOfArrays
-               Utility
-               Vector
+.. autosummary::
+   :toctree: _generate
+   AmrInfo
+   AmrMesh
+   Arena
+   ArrayOfStructs
+   Box
+   RealBox
+   BoxArray
+   Dim3
+   FArrayBox
+   IntVect
+   IndexType
+   RealVect
+   MultiFab
+   ParallelDescriptor
+   Particle
+   ParmParse
+   ParticleTile
+   ParticleContainer
+   Periodicity
+   PlotFileUtil
+   PODVector
+   StructOfArrays
+   Utility
+   Vector
 
 """
 
@@ -553,8 +553,6 @@ def d_decl(x, y, z):
     Return a tuple of the three passed elements
     """
 
-__author__: str = (
-    "Axel Huebl, Ryan T. Sandberg, Shreyas Ananthan, David P. Grote, Revathi Jambunathan, Edoardo Zoni, Remi Lehe, Andrew Myers, Weiqun Zhang"
-)
+__author__: str = "Axel Huebl, Ryan T. Sandberg, Shreyas Ananthan, David P. Grote, Revathi Jambunathan, Edoardo Zoni, Remi Lehe, Andrew Myers, Weiqun Zhang"
 __license__: str = "BSD-3-Clause-LBNL"
 __version__: str = "24.08"
