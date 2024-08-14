@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 
+import amrex.space3d as amr
 import numpy as np
 import pytest
-
-import amrex.space3d as amr
 from amrex.space3d import Geometry as Gm
 
 # TODO: return coord?

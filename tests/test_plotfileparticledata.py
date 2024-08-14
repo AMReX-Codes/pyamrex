@@ -4,10 +4,9 @@ import random
 import shutil
 from dataclasses import dataclass
 
+import amrex.space3d as amr
 import numpy as np
 import pytest
-
-import amrex.space3d as amr
 
 # Particle container constructor -- depending on if gpus are available use the
 # GPU-enabled version. This uses the FHDeX Particle Container for the test

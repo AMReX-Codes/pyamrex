@@ -8,9 +8,8 @@
 # License: BSD-3-Clause-LBNL
 # Authors: Bhargav Sriram Siddani, Revathi Jambunathan, Edoardo Zoni, Olga Shapoval, David Grote, Axel Huebl
 
-from mpi4py import MPI
-
 import amrex.space3d as amr
+from mpi4py import MPI
 
 # Initialize amrex::MPMD to establish communication across the two apps
 # However, leverage MPMD_Initialize_without_split

@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 
-import pytest
-
 import amrex.space3d as amr
+import pytest
 
 
 def test_periodicity():

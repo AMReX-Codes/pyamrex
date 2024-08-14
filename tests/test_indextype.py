@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 
-import pytest
-
 import amrex.space3d as amr
+import pytest
 
 
 @pytest.mark.skipif(amr.Config.spacedim != 1, reason="Requires AMREX_SPACEDIM = 1")

@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 
-import numpy as np
-
 import amrex.space3d as amr
+import numpy as np
 
 
 def test_basefab():
