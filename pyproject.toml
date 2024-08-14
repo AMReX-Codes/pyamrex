@@ -18,6 +18,9 @@ docstring-code-format = true
 ignore = ["E402", "E501"]
 select = ["E", "F", "I"]
 
+[tool.ruff.lint.isort]
+known-first-party = ["amrex"]
+
 [tool.isort]
 known_first_party = ["amrex"]
 profile = "black"
