@@ -96,10 +96,7 @@ from amrex.space1d.amrex_1d_pybind import (
     Geometry,
     GeometryData,
     IndexType,
-)
-from amrex.space1d.amrex_1d_pybind import IntVect1D
-from amrex.space1d.amrex_1d_pybind import IntVect1D as IntVect
-from amrex.space1d.amrex_1d_pybind import (
+    IntVect1D,
     IntVect2D,
     IntVect3D,
     MFInfo,
@@ -287,6 +284,7 @@ from amrex.space1d.amrex_1d_pybind import (
     unpack_ids,
     write_single_level_plotfile,
 )
+from amrex.space1d.amrex_1d_pybind import IntVect1D as IntVect
 
 from . import amrex_1d_pybind
 
