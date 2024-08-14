@@ -74,24 +74,13 @@ repos:
 # Python: Ruff linter & formatter
 #   https://docs.astral.sh/ruff/
 - repo: https://github.com/astral-sh/ruff-pre-commit
-  rev: v0.5.6
+  rev: v0.5.7
   hooks:
     # Run the linter
     - id: ruff
       args: [--fix, --exit-non-zero-on-fix]
-      types_or: [python, jupyter]
     # Run the formatter
     - id: ruff-format
-
-# Sorts Python imports according to PEP8
-# https://www.python.org/dev/peps/pep-0008/#imports
-# Needed until https://github.com/astral-sh/ruff/issues/12872 is fixed
-- repo: https://github.com/pycqa/isort
-  rev: 5.13.2
-  hooks:
-  - id: isort
-    name: isort (python)
-    args: ["--profile", "black", "--filter-files"]
 
 # Jupyter Notebooks: clean up all cell outputs
 - repo: https://github.com/roy-ht/pre-commit-jupyter

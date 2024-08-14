@@ -98,10 +98,7 @@ from amrex.space3d.amrex_3d_pybind import (
     IndexType,
     IntVect1D,
     IntVect2D,
-)
-from amrex.space3d.amrex_3d_pybind import IntVect3D
-from amrex.space3d.amrex_3d_pybind import IntVect3D as IntVect
-from amrex.space3d.amrex_3d_pybind import (
+    IntVect3D,
     MFInfo,
     MFIter,
     MFItInfo,
@@ -287,6 +284,7 @@ from amrex.space3d.amrex_3d_pybind import (
     unpack_ids,
     write_single_level_plotfile,
 )
+from amrex.space3d.amrex_3d_pybind import IntVect3D as IntVect
 
 from . import amrex_3d_pybind
 
