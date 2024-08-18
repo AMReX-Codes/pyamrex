@@ -181,7 +181,8 @@ If you are using the pip-driven install, selected [AMReX CMake options](https://
 | `PYAMREX_LIBDIR`             | *None*                                     | If set, search for pre-built a pyAMReX library               |
 | `PYAMREX_CCACHE`             | **ON**/OFF                                 | Search and use CCache to speed up rebuilds                   |
 | `PYAMREX_IPO`                | **ON**/OFF                                 | Compile with interprocedural/link optimization (IPO/LTO)     |
-| `PYINSTALLOPTIONS`           | *None*                                     | Additional options for ``pip install``, e.g., ``-v --user``  |
+| `PY_PIP_OPTIONS`             | `-v`                                       | Additional options for ``pip``, e.g., ``-vvv``               |
+| `PY_PIP_INSTALL_OPTIONS`     | *None*                                     | Additional options for ``pip install``, e.g., ``--user``     |
 
 Furthermore, pyAMReX adds a few selected CMake build options:
 
