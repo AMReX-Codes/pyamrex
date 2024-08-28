@@ -41,21 +41,16 @@ macro(find_amrex)
             endif()
             add_subdirectory(${pyAMReX_amrex_src} _deps/localamrex-build/)
         else()
+            if(AMReX_GPU_BACKEND STREQUAL CUDA)
+                enable_language(CUDA)
+            endif()
             FetchContent_Declare(fetchedamrex
                 GIT_REPOSITORY ${pyAMReX_amrex_repo}
                 GIT_TAG        ${pyAMReX_amrex_branch}
                 BUILD_IN_SOURCE 0
             )
-            FetchContent_GetProperties(fetchedamrex)
-
-            if(NOT fetchedamrex_POPULATED)
-                FetchContent_Populate(fetchedamrex)
-                list(APPEND CMAKE_MODULE_PATH "${fetchedamrex_SOURCE_DIR}/Tools/CMake")
-                if(AMReX_GPU_BACKEND STREQUAL CUDA)
-                    enable_language(CUDA)
-                endif()
-                add_subdirectory(${fetchedamrex_SOURCE_DIR} ${fetchedamrex_BINARY_DIR})
-            endif()
+            FetchContent_MakeAvailable(fetchedamrex)
+            list(APPEND CMAKE_MODULE_PATH "${fetchedamrex_SOURCE_DIR}/Tools/CMake")
 
             # advanced fetch options
             mark_as_advanced(FETCHCONTENT_BASE_DIR)
