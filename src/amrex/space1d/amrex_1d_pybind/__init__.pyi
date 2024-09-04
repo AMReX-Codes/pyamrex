@@ -4959,7 +4959,7 @@ class BoxArray:
     def size(self) -> int: ...
 
 class Config:
-    amrex_version: typing.ClassVar[str] = "24.08-12-ge792933f9561"
+    amrex_version: typing.ClassVar[str] = "24.09"
     gpu_backend = None
     have_gpu: typing.ClassVar[bool] = False
     have_mpi: typing.ClassVar[bool] = True
@@ -13842,7 +13842,7 @@ class Periodicity:
     @property
     def is_any_periodic(self) -> bool: ...
     @property
-    def shift_IntVect(self) -> list[IntVect1D]: ...
+    def shift_IntVect(self, arg1: IntVect1D) -> list[IntVect1D]: ...
 
 class PlotFileData:
     def DistributionMap(self, arg0: int) -> DistributionMapping: ...
@@ -18020,5 +18020,5 @@ def write_single_level_plotfile(
 
 __author__: str = "Axel Huebl, Ryan T. Sandberg, Shreyas Ananthan, David P. Grote, Revathi Jambunathan, Edoardo Zoni, Remi Lehe, Andrew Myers, Weiqun Zhang"
 __license__: str = "BSD-3-Clause-LBNL"
-__version__: str = "24.08-12-ge792933f9561"
+__version__: str = "24.09"
 IntVect = IntVect1D
