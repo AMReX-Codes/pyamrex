@@ -36,6 +36,15 @@ void init_AMReX(py::module& m)
             [](py::object) { return Verbose(); },
             [](py::object, const int v) { SetVerbose(v); })
         .def_property_readonly_static(
+            "have_eb",
+            [](py::object){
+#ifdef AMREX_USE_EB
+                return true;
+#else
+                return false;
+#endif
+            })
+        .def_property_readonly_static(
             "have_mpi",
             [](py::object){
 #ifdef AMREX_USE_MPI

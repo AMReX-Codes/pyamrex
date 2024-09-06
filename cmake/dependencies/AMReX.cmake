@@ -27,6 +27,7 @@ macro(find_amrex)
             set(AMReX_FPE OFF CACHE BOOL "")
         endif()
 
+        set(AMReX_EB ON CACHE INTERNAL "")
         set(AMReX_PIC ON CACHE INTERNAL "")
         set(AMReX_ENABLE_TESTS OFF CACHE INTERNAL "")
         set(AMReX_FORTRAN OFF CACHE INTERNAL "")
@@ -65,6 +66,7 @@ macro(find_amrex)
     elseif(NOT pyAMReX_amrex_internal)
         message(STATUS "Searching for pre-installed AMReX ...")
         # https://amrex-codes.github.io/amrex/docs_html/BuildingAMReX.html#importing-amrex-into-your-cmake-project
+        # not strictly required yet to compile pyAMReX: EB
         find_package(AMReX 24.09 CONFIG REQUIRED COMPONENTS PARTICLES PIC)
         message(STATUS "AMReX: Found version '${AMReX_VERSION}'")
 
@@ -84,7 +86,7 @@ option(pyAMReX_amrex_internal "Download & build AMReX" ON)
 set(pyAMReX_amrex_repo "https://github.com/AMReX-Codes/amrex.git"
     CACHE STRING
     "Repository URI to pull and build AMReX from if(pyAMReX_amrex_internal)")
-set(pyAMReX_amrex_branch "24.09"
+set(pyAMReX_amrex_branch "b454719b10b8d73307852788e54cc62db99a6814"
     CACHE STRING
     "Repository branch for pyAMReX_amrex_repo if(pyAMReX_amrex_internal)")
 
