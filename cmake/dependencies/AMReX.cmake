@@ -27,6 +27,7 @@ macro(find_amrex)
             set(AMReX_FPE OFF CACHE BOOL "")
         endif()
 
+        set(AMReX_EB ON CACHE INTERNAL "")
         set(AMReX_PIC ON CACHE INTERNAL "")
         set(AMReX_ENABLE_TESTS OFF CACHE INTERNAL "")
         set(AMReX_FORTRAN OFF CACHE INTERNAL "")
@@ -65,7 +66,7 @@ macro(find_amrex)
     elseif(NOT pyAMReX_amrex_internal)
         message(STATUS "Searching for pre-installed AMReX ...")
         # https://amrex-codes.github.io/amrex/docs_html/BuildingAMReX.html#importing-amrex-into-your-cmake-project
-        find_package(AMReX 24.09 CONFIG REQUIRED COMPONENTS PARTICLES PIC)
+        find_package(AMReX 24.09 CONFIG REQUIRED COMPONENTS EB PARTICLES PIC)
         message(STATUS "AMReX: Found version '${AMReX_VERSION}'")
 
         if(AMReX_GPU_BACKEND STREQUAL CUDA)
