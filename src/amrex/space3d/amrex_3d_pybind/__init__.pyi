@@ -4959,8 +4959,9 @@ class BoxArray:
     def size(self) -> int: ...
 
 class Config:
-    amrex_version: typing.ClassVar[str] = "24.09"
+    amrex_version: typing.ClassVar[str] = "24.09-17-gb454719b10b8"
     gpu_backend = None
+    have_eb: typing.ClassVar[bool] = True
     have_gpu: typing.ClassVar[bool] = False
     have_mpi: typing.ClassVar[bool] = True
     have_omp: typing.ClassVar[bool] = False
@@ -18053,5 +18054,5 @@ def write_single_level_plotfile(
 
 __author__: str = "Axel Huebl, Ryan T. Sandberg, Shreyas Ananthan, David P. Grote, Revathi Jambunathan, Edoardo Zoni, Remi Lehe, Andrew Myers, Weiqun Zhang"
 __license__: str = "BSD-3-Clause-LBNL"
-__version__: str = "24.09"
+__version__: str = "24.09-17-gb454719b10b8"
 IntVect = IntVect3D
