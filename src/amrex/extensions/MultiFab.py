@@ -232,9 +232,20 @@ def shape(self, include_ghosts=False):
     min_box = self.box_array().minimal_box()
     result = min_box.size
     if include_ghosts:
-        result = result + 2*self.n_grow_vect
+        result = result + self.n_grow_vect*2
     result = list(result) + [self.nComp]
     return tuple(result)
+
+
+def shape_with_ghost(self):
+    """Returns the shape of the global array including ghost cells
+
+    Parameters
+    ----------
+    self : amrex.MultiFab
+        A MultiFab class in pyAMReX
+    """
+    return shape(self, include_ghosts=True)
 
 
 def _get_indices(index, missing):
@@ -680,6 +691,7 @@ def register_MultiFab_extension(amr):
     amr.MultiFab.copy.__doc__ = copy_multifab.__doc__
 
     amr.MultiFab.imesh = imesh
-    amr.MultiFab.shape = shape
+    amr.MultiFab.shape = property(shape)
+    amr.MultiFab.shape_with_ghost = property(shape_with_ghost)
     amr.MultiFab.__getitem__ = __getitem__
     amr.MultiFab.__setitem__ = __setitem__
