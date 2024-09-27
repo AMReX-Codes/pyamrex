@@ -6,12 +6,13 @@ Authors: Axel Huebl, David Grote
 License: BSD-3-Clause-LBNL
 """
 
-from .Iterator import next
-
 import numpy as np
+
+from .Iterator import next
 
 try:
     from mpi4py import MPI as mpi
+
     comm_world = mpi.COMM_WORLD
     npes = comm_world.Get_size()
 except ImportError:
@@ -232,7 +233,7 @@ def shape(self, include_ghosts=False):
     min_box = self.box_array().minimal_box()
     result = min_box.size
     if include_ghosts:
-        result = result + self.n_grow_vect*2
+        result = result + self.n_grow_vect * 2
     result = list(result) + [self.nComp]
     return tuple(result)
 
@@ -259,7 +260,7 @@ def _get_indices(index, missing):
     missing:
         The value used to fill in the extra dimensions added
     """
-    return list(index) + (3 - len(index))*[missing]
+    return list(index) + (3 - len(index)) * [missing]
 
 
 def _get_min_indices(self, include_ghosts):
@@ -370,6 +371,7 @@ def _find_start_stop(self, ii, imin, imax, d, include_ghosts):
     )
     return iistart, iistop
 
+
 def _get_field(self, mfi, include_ghosts):
     """Return the field at the given mfi.
     If include ghosts is true, return the whole array, otherwise
@@ -390,20 +392,20 @@ def _get_field(self, mfi, include_ghosts):
     # self.array(mfi) is in C ordering.
     # Note: transposing creates a view and not a copy.
     import inspect
+
     amr = inspect.getmodule(self)
     if amr.Config.have_gpu:
         device_arr = self.array(mfi).to_cupy(copy=False, order="F")
     else:
         device_arr = self.array(mfi).to_numpy(copy=False, order="F")
     if not include_ghosts:
-        device_arr = device_arr[
-            tuple([slice(ng, -ng) for ng in self.n_grow_vect])
-        ]
+        device_arr = device_arr[tuple([slice(ng, -ng) for ng in self.n_grow_vect])]
     return device_arr
 
 
-def _get_intersect_slice(self, mfi, starts, stops, icstart, icstop,
-                         include_ghosts, with_internal_ghosts):
+def _get_intersect_slice(
+    self, mfi, starts, stops, icstart, icstop, include_ghosts, with_internal_ghosts
+):
     """Return the slices where the block intersects with the global slice.
     If the block does not intersect, return None.
     This also shifts the block slices by the number of ghost cells in the
