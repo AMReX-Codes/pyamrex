@@ -582,7 +582,7 @@ def __getitem__(self, index):
 
 
 def __setitem__(self, index, value):
-    """Sets slices of a decomposed array.
+    """Sets slices of a decomposed array using global indexing.
     The shape of the input object depends on the number of arguments specified, which can
     be from none to all three.
     This allows negative indexing, though with ghosts cells included, the first n-ghost negative
