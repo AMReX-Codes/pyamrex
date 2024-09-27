@@ -391,7 +391,8 @@ def _get_field(self, mfi, include_ghosts):
     return device_arr
 
 
-def _get_intersect_slice(self, mfi, starts, stops, icstart, icstop, include_ghosts):
+def _get_intersect_slice(self, mfi, starts, stops, icstart, icstop,
+                         include_ghosts, with_internal_ghosts):
     """Return the slices where the block intersects with the global slice.
     If the block does not intersect, return None.
     This also shifts the block slices by the number of ghost cells in the
@@ -415,6 +416,8 @@ def _get_intersect_slice(self, mfi, starts, stops, icstart, icstop, include_ghos
         These can be negative.
     include_ghosts : bool, default=False
         Whether or not ghost cells are included
+    with_internal_ghosts: bool
+        Whether the internal ghosts are included in the slices
 
     Returns
     -------
@@ -424,11 +427,25 @@ def _get_intersect_slice(self, mfi, starts, stops, icstart, icstop, include_ghos
         The slices of the intersections relative to the global array where the data from individual block will go
     """
     box = mfi.tilebox()
+    box_small_end = box.small_end
+    box_big_end = box.big_end
     if include_ghosts:
-        box.grow(self.n_grow_vect)
+        nghosts = self.mf.n_grow_vect
+        box.grow(nghosts)
+        if with_internal_ghosts:
+            box_small_end = box.small_end
+            box_big_end = box.big_end
+        else:
+            min_box = self.box_array().minimal_box()
+            for i in range(len(nghosts)):
+                if box_small_end[i] == min_box.small_end[i]:
+                    box_small_end[i] -= nghosts[i]
+                if box_big_end[i] == min_box.big_end[i]:
+                    box_big_end[i] += nghosts[i]
 
-    ilo = _get_indices(box.small_end, 0)
-    ihi = _get_indices(box.big_end, 0)
+    boxlo = _get_indices(box.small_end, 0)
+    ilo = _get_indices(box_small_end, 0)
+    ihi = _get_indices(box_big_end, 0)
 
     # Add 1 to the upper end to be consistent with the slicing notation
     ihi_p1 = [i + 1 for i in ihi]
@@ -439,7 +456,7 @@ def _get_intersect_slice(self, mfi, starts, stops, icstart, icstop, include_ghos
         block_slices = []
         global_slices = []
         for i in range(3):
-            block_slices.append(slice(i1[i] - ilo[i], i2[i] - ilo[i]))
+            block_slices.append(slice(i1[i] - boxlo[i], i2[i] - boxlo[i]))
             global_slices.append(slice(i1[i] - starts[i], i2[i] - starts[i]))
 
         block_slices.append(slice(icstart, icstop))
@@ -507,7 +524,7 @@ def __getitem__(self, index):
     datalist = []
     for mfi in self:
         block_slices, global_slices = _get_intersect_slice(
-            self, mfi, starts, stops, icstart, icstop, include_ghosts
+            self, mfi, starts, stops, icstart, icstop, include_ghosts, False
         )
         if global_slices is not None:
             # Note that the array will always have 4 dimensions.
@@ -632,7 +649,7 @@ def __setitem__(self, index, value):
     stops = [ixstop, iystop, izstop]
     for mfi in self:
         block_slices, global_slices = _get_intersect_slice(
-            self, mfi, starts, stops, icstart, icstop, include_ghosts
+            self, mfi, starts, stops, icstart, icstop, include_ghosts, True
         )
         if global_slices is not None:
             mf_arr = _get_field(self, mfi, include_ghosts)
