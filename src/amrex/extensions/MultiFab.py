@@ -237,7 +237,7 @@ def shape(self, include_ghosts=False):
     return tuple(result)
 
 
-def shape_with_ghost(self):
+def shape_with_ghosts(self):
     """Returns the shape of the global array including ghost cells
 
     Parameters
@@ -692,6 +692,6 @@ def register_MultiFab_extension(amr):
 
     amr.MultiFab.imesh = imesh
     amr.MultiFab.shape = property(shape)
-    amr.MultiFab.shape_with_ghost = property(shape_with_ghost)
+    amr.MultiFab.shape_with_ghosts = property(shape_with_ghosts)
     amr.MultiFab.__getitem__ = __getitem__
     amr.MultiFab.__setitem__ = __setitem__
