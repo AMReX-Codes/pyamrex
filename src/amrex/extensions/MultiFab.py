@@ -622,10 +622,6 @@ def __setitem__(self, index, value):
     value : scalar or array
         Input value to assign to the specified slice of the MultiFab
     """
-    import inspect
-
-    amr = inspect.getmodule(self)
-
     # Temporary value until fixed
     include_ghosts = False
     # Get the number of dimensions. Is there a cleaner way to do this?
@@ -680,12 +676,6 @@ def __setitem__(self, index, value):
         if not isinstance(ic, slice) or len(global_shape) < 4:
             global_shape[3:3] = [1]
         value3d.shape = global_shape
-
-        if amr.Config.have_gpu:
-            # check if cupy is available for use
-            xp, cupy_status = load_cupy()
-            if cupy_status is not None:
-                amr.Print(cupy_status)
 
     starts = [ixstart, iystart, izstart]
     stops = [ixstop, iystop, izstop]
