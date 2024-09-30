@@ -481,18 +481,24 @@ def _get_intersect_slice(
 
 
 def __getitem__(self, index):
-    """Returns slice of the MultiFab using global indexing.
+    """Returns slice of the MultiFab using global indexing, as a numpy array.
+    This uses numpy array indexing, with the indexing relative to the global array.
+    The slice ranges can cross multiple blocks and the result will be gathered into a single
+    array.
+
+    In an MPI context, this is a global operation. An "allgather" is performed so that the full
+    result is returned on all processors.
+
     The shape of the object returned depends on the number of ix, iy and iz specified, which
-    can be from none to all three. Note that the values of ix, iy and iz are
-    relative to the fortran indexing, meaning that 0 is the lower boundary
-    of the whole domain, and in fortran ordering, i.e. [ix,iy,iz].
-    This allows negative indexing, though with ghosts cells included, the first n-ghost negative
-    indices will refer to the lower guard cells.
+    can be from none to all three. Note that the values of ix, iy and iz are in fortran ordering,
+    i.e. [ix,iy,iz], and that 0 is the lower boundary of the whole domain.
 
     Parameters
     ----------
-    index : integer, or sequence of integers or slices, or Ellipsis
-        Index of the slice to return
+    index : the index using numpy style indexing
+        Index of the slice to return.
+        The slice for each dimension can be ":" for the whole range, a slice instance, or an integer.
+        An Ellipsis can be used to represent the full range of multiple dimensions, as with numpy.
     """
     # Temporary value until fixed
     include_ghosts = False
@@ -584,16 +590,23 @@ def __getitem__(self, index):
 
 
 def __setitem__(self, index, value):
-    """Sets slices of a decomposed array using global indexing.
-    The shape of the input object depends on the number of arguments specified, which can
-    be from none to all three.
-    This allows negative indexing, though with ghosts cells included, the first n-ghost negative
-    indices will refer to the lower guard cells.
+    """Sets the slice of the MultiFab using global indexing.
+    This uses numpy array indexing, with the indexing relative to the global array.
+    The slice ranges can cross multiple blocks and the value will be distributed accordingly.
+
+    In an MPI context, this is a local operation. On each processor, the blocks within the slice
+    range will be set to the value.
+
+    The shape of the value depends on the number of ix, iy and iz specified, which
+    can be from none to all three. Note that the values of ix, iy and iz are in fortran ordering,
+    i.e. [ix,iy,iz], and that 0 is the lower boundary of the whole domain.
 
     Parameters
     ----------
-    index : integer, or sequence of integers or slices, or Ellipsis
-        The slice to set
+    index : the index using numpy style indexing
+        Index of the slice to return.
+        The slice for each dimension can be ":" for the whole range, a slice instance, or an integer.
+        An Ellipsis can be used to represent the full range of multiple dimensions, as with numpy.
     value : scalar or array
         Input value to assign to the specified slice of the MultiFab
     """
