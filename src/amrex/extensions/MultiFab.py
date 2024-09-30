@@ -443,17 +443,28 @@ def _get_intersect_slice(
     box_small_end = box.small_end
     box_big_end = box.big_end
     if include_ghosts:
-        nghosts = self.mf.n_grow_vect
+        nghosts = self.n_grow_vect
         box.grow(nghosts)
         if with_internal_ghosts:
             box_small_end = box.small_end
             box_big_end = box.big_end
         else:
+            # Only expand the box to include the ghost cells at the edge of the domain
             min_box = self.box_array().minimal_box()
             for i in range(len(nghosts)):
                 if box_small_end[i] == min_box.small_end[i]:
                     box_small_end[i] -= nghosts[i]
                 if box_big_end[i] == min_box.big_end[i]:
+                    box_big_end[i] += nghosts[i]
+    else:
+        if with_internal_ghosts:
+            # Expand the box to include the ghost cells within the domain
+            nghosts = self.n_grow_vect
+            min_box = self.box_array().minimal_box()
+            for i in range(len(nghosts)):
+                if box_small_end[i] > min_box.small_end[i]:
+                    box_small_end[i] -= nghosts[i]
+                if box_big_end[i] < min_box.big_end[i]:
                     box_big_end[i] += nghosts[i]
 
     boxlo = _get_indices(box.small_end, 0)
@@ -593,6 +604,7 @@ def __setitem__(self, index, value):
     """Sets the slice of the MultiFab using global indexing.
     This uses numpy array indexing, with the indexing relative to the global array.
     The slice ranges can cross multiple blocks and the value will be distributed accordingly.
+    Note that this will apply the value to both valid and ghost cells.
 
     In an MPI context, this is a local operation. On each processor, the blocks within the slice
     range will be set to the value.
