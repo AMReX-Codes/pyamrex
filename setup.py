@@ -210,7 +210,7 @@ with open("./requirements.txt") as f:
 setup(
     name="amrex",
     # note PEP-440 syntax: x.y.zaN but x.y.z.devN
-    version="24.09",
+    version="24.10",
     packages=["amrex"],
     # Python sources:
     package_dir={"": "src"},
