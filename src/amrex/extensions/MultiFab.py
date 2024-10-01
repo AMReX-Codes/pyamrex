@@ -10,14 +10,6 @@ import numpy as np
 
 from .Iterator import next
 
-try:
-    from mpi4py import MPI as mpi
-
-    comm_world = mpi.COMM_WORLD
-    npes = comm_world.Get_size()
-except ImportError:
-    npes = 1
-
 
 def mf_to_numpy(self, copy=False, order="F"):
     """
@@ -569,9 +561,21 @@ def __getitem__(self, index):
             datalist.append((global_slices, slice_arr))
 
     # Gather the data from all processors
+    import inspect
+
+    amr = inspect.getmodule(self)
+    if amr.Config.have_mpi:
+        npes = amr.ParallelDescriptor.NProcs()
+    else:
+        npes = 1
     if npes == 1:
         all_datalist = [datalist]
     else:
+        try:
+            from mpi4py import MPI as mpi
+            comm_world = mpi.COMM_WORLD
+        except ImportError:
+            raise Exception("MultiFab.__getitem__ requires mpi4py")
         all_datalist = comm_world.allgather(datalist)
 
     # Create the array to be returned
