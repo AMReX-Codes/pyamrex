@@ -573,6 +573,7 @@ def __getitem__(self, index):
     else:
         try:
             from mpi4py import MPI as mpi
+
             comm_world = mpi.COMM_WORLD
         except ImportError:
             raise Exception("MultiFab.__getitem__ requires mpi4py")
