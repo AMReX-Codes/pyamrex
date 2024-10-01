@@ -143,7 +143,7 @@ foreach(D IN LISTS AMReX_SPACEDIM)
             pyamrex_enable_IPO(pyAMReX_${D}d)
         else()
             # conditionally defined target in pybind11
-            # https://github.com/pybind/pybind11/blob/v2.12.0/tools/pybind11Common.cmake#L397-L403
+            # https://github.com/pybind/pybind11/blob/v2.13.0/tools/pybind11Common.cmake#L407-L413
             target_link_libraries(pyAMReX_${D}d PRIVATE pybind11::lto)
         endif()
     endif()
