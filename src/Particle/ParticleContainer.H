@@ -205,9 +205,13 @@ void make_ParticleContainer_and_Iterators (py::module &m, std::string allocstr)
         .def_property_readonly("byte_spread", &ParticleContainerType::ByteSpread)
 
         // runtime components
-        .def("add_real_comp", py::overload_cast<bool>(&ParticleContainerType::template AddRealComp<bool>),
+        .def("add_real_comp", py::overload_cast<int>(&ParticleContainerType::AddRealComp),
              py::arg("communicate")=true, "add a new runtime component with type Real")
-        .def("add_int_comp", py::overload_cast<bool>(&ParticleContainerType::template AddIntComp<bool>),
+        .def("add_int_comp", py::overload_cast<int>(&ParticleContainerType::AddIntComp),
+             py::arg("communicate")=true, "add a new runtime component with type Int")
+        .def("add_real_comp", py::overload_cast<const std::string&, int>(&ParticleContainerType::AddRealComp),
+             py::arg("communicate")=true, "add a new runtime component with type Real")
+        .def("add_int_comp", py::overload_cast<const std::string&, int>(&ParticleContainerType::AddIntComp),
              py::arg("communicate")=true, "add a new runtime component with type Int")
 
         .def_property_readonly("finest_level", &ParticleContainerBase::finestLevel)
