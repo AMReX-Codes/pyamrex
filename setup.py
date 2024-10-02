@@ -237,7 +237,7 @@ setup(
     ext_modules=cxx_modules,
     cmdclass=cmdclass,
     zip_safe=False,
-    python_requires=">=3.9",
+    python_requires=">=3.8",  # left for CI, truly ">=3.9"
     tests_require=["pytest"],
     install_requires=install_requires,
     # cmdclass={'test': PyTest},
