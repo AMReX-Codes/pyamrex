@@ -77,7 +77,17 @@ def test_mfab_numpy(mfab):
         # Config = sim.extension.Config
 
         # Using global indexing
+        # Set all valid cells
         mfab[...] = 42.0
+
+        # Set a range of cells. Indices are in Fortran order.
+        # First dimension, sets from first lower guard cell to first upper guard cell.
+        #  - Imaginary indices refer to the guard cells, negative lower, positive upper.
+        # Second dimension, sets all valid cells.
+        # Third dimension, sets all valid and ghost cells
+        #  - The empty tuple is used to specify the range to include all valid and ghost cells.
+        # Components dimension, sets second component.
+        mfab[-1j:2j,:,(),2] = np.full((nx+2, ny, nz+2*nghosts), 42.)
 
     # Manual: Compute Mfab Global END
 
