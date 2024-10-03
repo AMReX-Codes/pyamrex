@@ -89,6 +89,14 @@ def test_mfab_numpy(mfab):
         # Components dimension, sets second component.
         mfab[-1j:2j,:,(),2] = np.full((nx+2, ny, nz+2*nghosts), 42.)
 
+        # Get a range of cells
+        # Get the data along the valid cells in the first dimension (gathering data across blocks
+        # and processors), at the first upper guard cell in the second dimensionn, and cell 16 of
+        # the third (with 16 being relative to 0 which is the lower end of the full domain).
+        # Note that in an MPI context, this is a global operation, so caution is required when
+        # scaling to large numbers of processors.
+        mfslice = mfab[:,1j,16]
+
     # Manual: Compute Mfab Global END
 
 
