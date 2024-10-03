@@ -290,7 +290,7 @@ def _get_max_indices(self, include_ghosts):
 def _handle_imaginary_negative_index(index, imin, imax):
     """This convects imaginary and negative indices to the actual value"""
     if isinstance(index, complex):
-        assert (index.real == 0.), "Ghost indices must be purely imaginary"
+        assert index.real == 0.0, "Ghost indices must be purely imaginary"
         ii = int(index.imag)
         if ii <= 0:
             result = imin + ii
@@ -317,7 +317,9 @@ def _process_index(self, index):
         index = list(index)
         for i in range(len(index)):
             if index[i] == Ellipsis:
-                index = index[:i] + (dims + 2 - len(index))*[slice(None)] + index[i+1:]
+                index = (
+                    index[:i] + (dims + 2 - len(index)) * [slice(None)] + index[i + 1 :]
+                )
                 break
     else:
         raise Exception("MultiFab.__getitem__: unexpected index type")
@@ -325,7 +327,7 @@ def _process_index(self, index):
     if len(index) < dims + 1:
         # Add extra dims to index, including for the component.
         # These are the dims left out and assumed to extend over the valid cells
-        index = index + (dims + 1 - len(index))*[slice(None)]
+        index = index + (dims + 1 - len(index)) * [slice(None)]
     elif len(index) > dims + 1:
         raise Exception("Too many indices given")
 
@@ -344,7 +346,9 @@ def _process_index(self, index):
             if index[i].start is None:
                 start = mins[i]
             else:
-                start = _handle_imaginary_negative_index(index[i].start, mins[i], maxs[i])
+                start = _handle_imaginary_negative_index(
+                    index[i].start, mins[i], maxs[i]
+                )
             if index[i].stop is None:
                 stop = maxs[i] + 1
             else:
@@ -352,11 +356,15 @@ def _process_index(self, index):
             index[i] = slice(start, stop, index[i].step)
         elif isinstance(index[i], tuple):
             # The slice includes ghosts
-            assert len(index[i]) == 0, "Indicator to include all ghost cells must be an empty tuple"
+            assert (
+                len(index[i]) == 0
+            ), "Indicator to include all ghost cells must be an empty tuple"
             index[i] = slice(mins_with_ghost[i], maxs_with_ghost[i] + 1)
         else:
             ii = _handle_imaginary_negative_index(index[i], mins[i], maxs[i])
-            assert (mins_with_ghost[i] <= ii and ii <= maxs_with_ghost[i]), "Index out of range"
+            assert (
+                mins_with_ghost[i] <= ii and ii <= maxs_with_ghost[i]
+            ), "Index out of range"
             index[i] = slice(ii, ii + 1)
 
     return index
@@ -443,7 +451,9 @@ def _get_intersect_slice(self, mfi, index, with_internal_ghosts):
 
     if np.all(i1 < i2):
         block_slices = [slice(i1[i] - boxlo[i], i2[i] - boxlo[i]) for i in range(3)]
-        global_slices = [slice(i1[i] - index[i].start, i2[i] - index[i].start) for i in range(3)]
+        global_slices = [
+            slice(i1[i] - index[i].start, i2[i] - index[i].start) for i in range(3)
+        ]
 
         block_slices.append(index[3])
         global_slices.append(slice(0, index[3].stop - index[3].start))
