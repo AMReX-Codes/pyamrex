@@ -256,7 +256,7 @@ def _get_indices(index, missing):
 
 
 def _get_min_indices(self, include_ghosts):
-    """Returns the minimum indices, expanded to length 3
+    """Returns the minimum indices, expanded to length 3+1
 
     Parameters
     ----------
@@ -268,11 +268,11 @@ def _get_min_indices(self, include_ghosts):
     min_box = self.box_array().minimal_box()
     if include_ghosts:
         min_box.grow(self.n_grow_vect)
-    return _get_indices(min_box.small_end, 0)
+    return _get_indices(min_box.small_end, 0) + [0]
 
 
 def _get_max_indices(self, include_ghosts):
-    """Returns the maximum indices, expanded to length 3.
+    """Returns the maximum indices, expanded to length 3+1
 
     Parameters
     ----------
@@ -284,90 +284,88 @@ def _get_max_indices(self, include_ghosts):
     min_box = self.box_array().minimal_box()
     if include_ghosts:
         min_box.grow(self.n_grow_vect)
-    return _get_indices(min_box.big_end, 0)
+    return _get_indices(min_box.big_end, 0) + [self.n_comp - 1]
 
 
-def _fix_index(self, ii, imax, d, include_ghosts):
-    """Handle negative index, wrapping them as needed.
-    When ghost cells are included, the indices are
-    shifted by the number of ghost cells before being wrapped.
-
-    Parameters
-    ----------
-    self : amrex.MultiFab
-        A MultiFab class in pyAMReX
-    ii : integer
-        The index to be wrapped
-    imax : integer
-        The maximum value that the index could have
-    d : integer
-        The direction of the index
-    include_ghosts: bool
-        Whether or not ghost cells are included
-    """
-    nghosts = list(_get_indices(self.n_grow_vect, 0)) + [0]
-    if include_ghosts:
-        ii += nghosts[d]
-    if ii < 0:
-        ii += imax
-    if include_ghosts:
-        ii -= nghosts[d]
-    return ii
-
-
-def _find_start_stop(self, ii, imin, imax, d, include_ghosts):
-    """Given the input index, calculate the start and stop range of the indices.
-
-    Parameters
-    ----------
-    ii : None, slice, or integer
-        Input index, either None, a slice object, or an integer.
-        Note that ii can be negative.
-    imin : integer
-        The global lowest lower bound in the specified direction.
-        This can include the ghost cells.
-    imax : integer
-        The global highest upper bound in the specified direction.
-        This can include the ghost cells.
-        This should be the max index + 1.
-    d : integer
-        The dimension number, 0, 1, 2, or 3 (3 being the components)
-    include_ghosts : bool
-        Whether or not ghost cells are included
-
-    If ii is a slice, the start and stop values are used directly,
-    unless they are None, then the lower or upper bound is used.
-    An assertion checks if the indices are within the bounds.
-    """
-    if ii is None:
-        iistart = imin
-        iistop = imax
-    elif isinstance(ii, slice):
-        if ii.start is None:
-            iistart = imin
+def _handle_imaginary_negative_index(index, imin, imax):
+    """This convects imaginary and negative indices to the actual value"""
+    if isinstance(index, complex):
+        assert (index.real == 0.), "Ghost indices must be purely imaginary"
+        ii = int(index.imag)
+        if ii <= 0:
+            result = imin + ii
         else:
-            iistart = _fix_index(self, ii.start, imax, d, include_ghosts)
-        if ii.stop is None:
-            iistop = imax
-        else:
-            iistop = _fix_index(self, ii.stop, imax, d, include_ghosts)
+            result = imax + ii
+    elif index < 0:
+        result = index + (imax - imin) + 1
     else:
-        ii = _fix_index(self, ii, imax, d, include_ghosts)
-        iistart = ii
-        iistop = ii + 1
-    assert imin <= iistart <= imax, Exception(
-        f"Dimension {d+1} lower index is out of bounds"
-    )
-    assert imin <= iistop <= imax, Exception(
-        f"Dimension {d+1} upper index is out of bounds"
-    )
-    return iistart, iistop
+        result = index
+    return result
 
 
-def _get_field(self, mfi, include_ghosts):
+def _process_index(self, index):
+    """Convert the input index into a list of slices"""
+    # Get the number of dimensions. Is there a cleaner way to do this?
+    dims = len(self.n_grow_vect)
+
+    if index == Ellipsis:
+        index = []  # This will be filled in below to cover the valid cells
+    elif isinstance(index, slice) or isinstance(index, int):
+        # If only one slice or integer passed in, it was not wrapped in a tuple
+        index = [index]
+    elif isinstance(index, tuple):
+        index = list(index)
+        for i in range(len(index)):
+            if index[i] == Ellipsis:
+                index = index[:i] + (dims + 2 - len(index))*[slice(None)] + index[i+1:]
+                break
+    else:
+        raise Exception("MultiFab.__getitem__: unexpected index type")
+
+    if len(index) < dims + 1:
+        # Add extra dims to index, including for the component.
+        # These are the dims left out and assumed to extend over the valid cells
+        index = index + (dims + 1 - len(index))*[slice(None)]
+    elif len(index) > dims + 1:
+        raise Exception("Too many indices given")
+
+    # Expand index to length 3 + 1
+    index = _get_indices(index[:-1], 0) + [index[-1]]
+
+    mins = _get_min_indices(self, False)
+    maxs = _get_max_indices(self, False)
+    mins_with_ghost = _get_min_indices(self, True)
+    maxs_with_ghost = _get_max_indices(self, True)
+
+    # Replace all None's in the slices with the bounds of the valid cells,
+    # handle imaginary indices that specify ghost cells, and adjust negative indices
+    for i in range(4):
+        if isinstance(index[i], slice):
+            if index[i].start is None:
+                start = mins[i]
+            else:
+                start = _handle_imaginary_negative_index(index[i].start, mins[i], maxs[i])
+            if index[i].stop is None:
+                stop = maxs[i] + 1
+            else:
+                stop = _handle_imaginary_negative_index(index[i].stop, mins[i], maxs[i])
+            index[i] = slice(start, stop, index[i].step)
+        elif isinstance(index[i], tuple):
+            # The slice includes ghosts
+            assert len(index[i]) == 0, "Indicator to include all ghost cells must be an empty tuple"
+            index[i] = slice(mins_with_ghost[i], maxs_with_ghost[i] + 1)
+        else:
+            ii = _handle_imaginary_negative_index(index[i], mins[i], maxs[i])
+            assert (mins_with_ghost[i] <= ii and ii <= maxs_with_ghost[i]), "Index out of range"
+            index[i] = slice(ii, ii + 1)
+
+    return index
+
+
+def _get_field(self, mfi):
     """Return the field at the given mfi.
-    If include ghosts is true, return the whole array, otherwise
-    return the interior slice that does not include the ghosts.
+    If the field is on a GPU, a cupy reference to it is returned,
+    otherwise a numpy reference.
 
     Parameters
     ----------
@@ -375,8 +373,6 @@ def _get_field(self, mfi, include_ghosts):
         A MultiFab class in pyAMReX
     mfi : amrex.MFIiter
         Index to the FAB of the MultiFab
-    include_ghosts : bool, default=False
-        Whether or not ghost cells are included
     """
     # Note that the array will always have 4 dimensions.
     # even when dims < 3.
@@ -390,14 +386,10 @@ def _get_field(self, mfi, include_ghosts):
         device_arr = self.array(mfi).to_cupy(copy=False, order="F")
     else:
         device_arr = self.array(mfi).to_numpy(copy=False, order="F")
-    if not include_ghosts:
-        device_arr = device_arr[tuple([slice(ng, -ng) for ng in self.n_grow_vect])]
     return device_arr
 
 
-def _get_intersect_slice(
-    self, mfi, starts, stops, icstart, icstop, include_ghosts, with_internal_ghosts
-):
+def _get_intersect_slice(self, mfi, index, with_internal_ghosts):
     """Return the slices where the block intersects with the global slice.
     If the block does not intersect, return None.
     This also shifts the block slices by the number of ghost cells in the
@@ -405,22 +397,12 @@ def _get_intersect_slice(
 
     Parameters
     ----------
+    self : amrex.MultiFab
+        A MultiFab class in pyAMReX
     mfi : MFIter
         The MFIter instance for the current block,
-    starts : sequence
-        The minimum indices of the global slice.
-        These can be negative.
-    stops : sequence
-        The maximum indices of the global slice.
-        These can be negative.
-    icstart : integer
-        The minimum component index of the global slice.
-        These can be negative.
-    icstops : integer
-        The maximum component index of the global slice.
-        These can be negative.
-    include_ghosts : bool, default=False
-        Whether or not ghost cells are included
+    index : sequence
+        The list indices of the global slice.
     with_internal_ghosts: bool
         Whether the internal ghosts are included in the slices
 
@@ -434,30 +416,21 @@ def _get_intersect_slice(
     box = mfi.tilebox()
     box_small_end = box.small_end
     box_big_end = box.big_end
-    if include_ghosts:
-        nghosts = self.n_grow_vect
-        box.grow(nghosts)
-        if with_internal_ghosts:
-            box_small_end = box.small_end
-            box_big_end = box.big_end
-        else:
-            # Only expand the box to include the ghost cells at the edge of the domain
-            min_box = self.box_array().minimal_box()
-            for i in range(len(nghosts)):
-                if box_small_end[i] == min_box.small_end[i]:
-                    box_small_end[i] -= nghosts[i]
-                if box_big_end[i] == min_box.big_end[i]:
-                    box_big_end[i] += nghosts[i]
+
+    # This always include ghost cells since they are included in the MF arrays
+    nghosts = self.n_grow_vect
+    box.grow(nghosts)
+    if with_internal_ghosts:
+        box_small_end = box.small_end
+        box_big_end = box.big_end
     else:
-        if with_internal_ghosts:
-            # Expand the box to include the ghost cells within the domain
-            nghosts = self.n_grow_vect
-            min_box = self.box_array().minimal_box()
-            for i in range(len(nghosts)):
-                if box_small_end[i] > min_box.small_end[i]:
-                    box_small_end[i] -= nghosts[i]
-                if box_big_end[i] < min_box.big_end[i]:
-                    box_big_end[i] += nghosts[i]
+        # Only expand the box to include the ghost cells at the edge of the domain
+        min_box = self.box_array().minimal_box()
+        for i in range(len(nghosts)):
+            if box_small_end[i] == min_box.small_end[i]:
+                box_small_end[i] -= nghosts[i]
+            if box_big_end[i] == min_box.big_end[i]:
+                box_big_end[i] += nghosts[i]
 
     boxlo = _get_indices(box.small_end, 0)
     ilo = _get_indices(box_small_end, 0)
@@ -465,18 +438,15 @@ def _get_intersect_slice(
 
     # Add 1 to the upper end to be consistent with the slicing notation
     ihi_p1 = [i + 1 for i in ihi]
-    i1 = np.maximum(starts, ilo)
-    i2 = np.minimum(stops, ihi_p1)
+    i1 = np.maximum([index[0].start, index[1].start, index[2].start], ilo)
+    i2 = np.minimum([index[0].stop, index[1].stop, index[2].stop], ihi_p1)
 
     if np.all(i1 < i2):
-        block_slices = []
-        global_slices = []
-        for i in range(3):
-            block_slices.append(slice(i1[i] - boxlo[i], i2[i] - boxlo[i]))
-            global_slices.append(slice(i1[i] - starts[i], i2[i] - starts[i]))
+        block_slices = [slice(i1[i] - boxlo[i], i2[i] - boxlo[i]) for i in range(3)]
+        global_slices = [slice(i1[i] - index[i].start, i2[i] - index[i].start) for i in range(3)]
 
-        block_slices.append(slice(icstart, icstop))
-        global_slices.append(slice(0, icstop - icstart))
+        block_slices.append(index[3])
+        global_slices.append(slice(0, index[3].stop - index[3].start))
 
         return tuple(block_slices), tuple(global_slices)
     else:
@@ -492,65 +462,28 @@ def __getitem__(self, index):
     In an MPI context, this is a global operation. An "allgather" is performed so that the full
     result is returned on all processors.
 
-    The shape of the object returned depends on the number of ix, iy and iz specified, which
-    can be from none to all three. Note that the values of ix, iy and iz are in fortran ordering,
-    i.e. [ix,iy,iz], and that 0 is the lower boundary of the whole domain.
+    Note that the index is in fortran ordering and that 0 is the lower boundary of the whole domain.
+
+    The default range of the indices includes only the valid cells. The ":" index will include all of
+    the valid cels and no ghost cells. The ghost cells can be accessed using imaginary numbers, with
+    negative imaginary numbers for the lower ghost cells, and positive for the upper ghost cells.
+    The index "[-1j]" for example refers to the first lower ghost cell, and "[1j]" to the first upper
+    ghost cell. To access all cells, ghosts and valid cells, use an empty tuple for the index, i.e. "[()]".
 
     Parameters
     ----------
     index : the index using numpy style indexing
         Index of the slice to return.
-        The slice for each dimension can be ":" for the whole range, a slice instance, or an integer.
-        An Ellipsis can be used to represent the full range of multiple dimensions, as with numpy.
     """
-    # Temporary value until fixed
-    include_ghosts = False
-
-    # Get the number of dimensions. Is there a cleaner way to do this?
-    dims = len(self.n_grow_vect)
-
-    # Note that the index can have negative values (which wrap around) and has 1 added to the upper
-    # limit using python style slicing
-    if index == Ellipsis:
-        index = dims * [slice(None)]
-    elif isinstance(index, slice):
-        # If only one slice passed in, it was not wrapped in a list
-        index = [index]
-
-    if len(index) < dims + 1:
-        # Add extra dims to index, including for the component.
-        # These are the dims left out and assumed to extend over the full size of the dim
-        index = list(index)
-        while len(index) < dims + 1:
-            index.append(slice(None))
-    elif len(index) > dims + 1:
-        raise Exception("Too many indices given")
-
-    # Expand the indices to length 3
-    ii = _get_indices(index, None)
-    ic = index[-1]
-
-    # Global extent. These include the ghost cells when include_ghosts is True
-    ixmin, iymin, izmin = _get_min_indices(self, include_ghosts)
-    ixmax, iymax, izmax = _get_max_indices(self, include_ghosts)
-
-    # Setup the size of the array to be returned
-    ixstart, ixstop = _find_start_stop(self, ii[0], ixmin, ixmax + 1, 0, include_ghosts)
-    iystart, iystop = _find_start_stop(self, ii[1], iymin, iymax + 1, 1, include_ghosts)
-    izstart, izstop = _find_start_stop(self, ii[2], izmin, izmax + 1, 2, include_ghosts)
-    icstart, icstop = _find_start_stop(self, ic, 0, self.n_comp, 3, include_ghosts)
+    index = _process_index(self, index)
 
     # Gather the data to be included in a list to be sent to other processes
-    starts = [ixstart, iystart, izstart]
-    stops = [ixstop, iystop, izstop]
     datalist = []
     for mfi in self:
-        block_slices, global_slices = _get_intersect_slice(
-            self, mfi, starts, stops, icstart, icstop, include_ghosts, False
-        )
+        block_slices, global_slices = _get_intersect_slice(self, mfi, index, False)
         if global_slices is not None:
             # Note that the array will always have 4 dimensions.
-            device_arr = _get_field(self, mfi, include_ghosts)
+            device_arr = _get_field(self, mfi)
             slice_arr = device_arr[block_slices]
             try:
                 # Copy data from host to device using cupy syntax
@@ -580,12 +513,7 @@ def __getitem__(self, index):
         all_datalist = comm_world.allgather(datalist)
 
     # Create the array to be returned
-    result_shape = (
-        max(0, ixstop - ixstart),
-        max(0, iystop - iystart),
-        max(0, izstop - izstart),
-        max(0, icstop - icstart),
-    )
+    result_shape = tuple([max(0, ii.stop - ii.start) for ii in index])
 
     # Now, copy the data into the result array
     result_global = None
@@ -614,54 +542,22 @@ def __setitem__(self, index, value):
     In an MPI context, this is a local operation. On each processor, the blocks within the slice
     range will be set to the value.
 
-    The shape of the value depends on the number of ix, iy and iz specified, which
-    can be from none to all three. Note that the values of ix, iy and iz are in fortran ordering,
-    i.e. [ix,iy,iz], and that 0 is the lower boundary of the whole domain.
+    Note that the index is in fortran ordering and that 0 is the lower boundary of the whole domain.
+
+    The default range of the indices includes only the valid cells. The ":" index will include all of
+    the valid cels and no ghost cells. The ghost cells can be accessed using imaginary numbers, with
+    negative imaginary numbers for the lower ghost cells, and positive for the upper ghost cells.
+    The index "[-1j]" for example refers to the first lower ghost cell, and "[1j]" to the first upper
+    ghost cell. To access all cells, ghosts and valid cells, use an empty tuple for the index, i.e. "[()]".
 
     Parameters
     ----------
     index : the index using numpy style indexing
         Index of the slice to return.
-        The slice for each dimension can be ":" for the whole range, a slice instance, or an integer.
-        An Ellipsis can be used to represent the full range of multiple dimensions, as with numpy.
     value : scalar or array
         Input value to assign to the specified slice of the MultiFab
     """
-    # Temporary value until fixed
-    include_ghosts = False
-    # Get the number of dimensions. Is there a cleaner way to do this?
-    dims = len(self.n_grow_vect)
-
-    # Note that the index can have negative values (which wrap around) and has 1 added to the upper
-    # limit using python style slicing
-    if index == Ellipsis:
-        index = tuple(dims * [slice(None)])
-    elif isinstance(index, slice):
-        # If only one slice passed in, it was not wrapped in a list
-        index = [index]
-
-    if len(index) < dims + 1:
-        # Add extra dims to index, including for the component.
-        # These are the dims left out and assumed to extend over the full size of the dim.
-        index = list(index)
-        while len(index) < dims + 1:
-            index.append(slice(None))
-    elif len(index) > dims + 1:
-        raise Exception("Too many indices given")
-
-    # Expand the indices to length 3
-    ii = _get_indices(index, None)
-    ic = index[-1]
-
-    # Global extent. These include the ghost cells when include_ghosts is True
-    ixmin, iymin, izmin = _get_min_indices(self, include_ghosts)
-    ixmax, iymax, izmax = _get_max_indices(self, include_ghosts)
-
-    # Setup the size of the global array to be set
-    ixstart, ixstop = _find_start_stop(self, ii[0], ixmin, ixmax + 1, 0, include_ghosts)
-    iystart, iystop = _find_start_stop(self, ii[1], iymin, iymax + 1, 1, include_ghosts)
-    izstart, izstop = _find_start_stop(self, ii[2], izmin, izmax + 1, 2, include_ghosts)
-    icstart, icstop = _find_start_stop(self, ic, 0, self.n_comp, 3, include_ghosts)
+    index = _process_index(self, index)
 
     if isinstance(value, np.ndarray):
         # Expand the shape of the input array to match the shape of the global array
@@ -672,24 +568,20 @@ def __setitem__(self, index, value):
         global_shape = list(value3d.shape)
         # The shape of 1 is added for the extra dimensions and when index is an integer
         # (in which case the dimension was not in the input array).
-        if not isinstance(ii[0], slice):
+        if (index[0].stop - index[0].start) == 1:
             global_shape[0:0] = [1]
-        if not isinstance(ii[1], slice):
+        if (index[1].stop - index[1].start) == 1:
             global_shape[1:1] = [1]
-        if not isinstance(ii[2], slice):
+        if (index[2].stop - index[2].start) == 1:
             global_shape[2:2] = [1]
-        if not isinstance(ic, slice) or len(global_shape) < 4:
+        if (index[3].stop - index[3].start) == 1 or len(global_shape) < 4:
             global_shape[3:3] = [1]
         value3d.shape = global_shape
 
-    starts = [ixstart, iystart, izstart]
-    stops = [ixstop, iystop, izstop]
     for mfi in self:
-        block_slices, global_slices = _get_intersect_slice(
-            self, mfi, starts, stops, icstart, icstop, include_ghosts, True
-        )
+        block_slices, global_slices = _get_intersect_slice(self, mfi, index, True)
         if global_slices is not None:
-            mf_arr = _get_field(self, mfi, include_ghosts)
+            mf_arr = _get_field(self, mfi)
             if isinstance(value, np.ndarray):
                 # The data is copied from host to device automatically if needed
                 mf_arr[block_slices] = value3d[global_slices]
