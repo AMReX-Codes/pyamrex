@@ -63,6 +63,24 @@ def test_mfab_numpy(mfab):
             field[()] = 42.0
     # Manual: Compute Mfab Simple END
 
+    # Manual: Compute Mfab Global START
+    # finest active MR level, get from a
+    # simulation's AmrMesh object, e.g.:
+    # finest_level = sim.finest_level
+    finest_level = 0  # no MR
+
+    # iterate over mesh-refinement levels
+    for lev in range(finest_level + 1):
+        # get an existing MultiFab, e.g.,
+        # from a simulation:
+        # mfab = sim.get_field(lev=lev)
+        # Config = sim.extension.Config
+
+        # Using global indexing
+        mfab[...] = 42.0
+
+    # Manual: Compute Mfab Global END
+
 
 @pytest.mark.skipif(amr.Config.have_gpu, reason="This test only runs on CPU")
 def test_mfab_loop_slow(mfab):
