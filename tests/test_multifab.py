@@ -87,7 +87,7 @@ def test_mfab_numpy(mfab):
         # Third dimension, sets all valid and ghost cells
         #  - The empty tuple is used to specify the range to include all valid and ghost cells.
         # Components dimension, sets second component.
-        mfab[-1j:2j, :, (), 2] = np.full((nx + 2, ny, nz + 2 * nghosts), 42.0)
+        mfab[-1j:2j, :, (), 2] = 42.
 
         # Get a range of cells
         # Get the data along the valid cells in the first dimension (gathering data across blocks
