@@ -511,7 +511,6 @@ def __getitem__(self, index):
         npes = amr.ParallelDescriptor.NProcs()
     else:
         npes = 1
-    print(f"\n\n\n\n npes = {npes}\n\n\n")
     if npes == 1:
         all_datalist = [datalist]
     else:
