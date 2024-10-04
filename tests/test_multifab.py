@@ -96,7 +96,7 @@ def test_mfab_numpy(mfab):
         # Note that in an MPI context, this is a global operation, so caution is required when
         # scaling to large numbers of processors.
         mfslice = mfab[:, 1j, 16]
-        mfab[:, 1j, 16] = 2*mfslice
+        mfab[:, 1j, 16] = 2 * mfslice
 
     # Manual: Compute Mfab Global END
 
