@@ -95,6 +95,9 @@ def test_mfab_numpy(mfab):
         # the third (with 16 being relative to 0 which is the lower end of the full domain).
         # Note that in an MPI context, this is a global operation, so caution is required when
         # scaling to large numbers of processors.
+        print(f"small end {mfab.box_array().minimal_box().small_end}")
+        print(f"big   end {mfab.box_array().minimal_box().big_end}")
+        print(f"nghosts   {mfab.n_grow_vect}")
         mfslice = mfab[:, 1j, 2]
         mfab[:, 1j, 2] = 2 * mfslice
 
