@@ -274,9 +274,9 @@ endif()
 # pip helpers for the amrex package ###########################################
 #
 set(PY_PIP_OPTIONS "-v" CACHE STRING
-    "Additional parameters to pass to `pip`")
+    "Additional parameters to pass to `pip` as ; separated list")
 set(PY_PIP_INSTALL_OPTIONS "" CACHE STRING
-    "Additional parameters to pass to `pip install`")
+    "Additional parameters to pass to `pip install` as ; separated list")
 
 # add a prefix to custom targets so we do not collide if used as a subproject
 if(CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
@@ -292,7 +292,8 @@ add_custom_target(${pyAMReX_CUSTOM_TARGET_PREFIX}pip_wheel
     ${CMAKE_COMMAND} -E rm -f -r amrex-whl
     COMMAND
         ${CMAKE_COMMAND} -E env PYAMREX_LIBDIR=${CMAKE_PYTHON_OUTPUT_DIRECTORY}/amrex/
-            ${Python_EXECUTABLE} -m pip ${PY_PIP_OPTIONS} wheel --no-build-isolation --no-deps --wheel-dir=amrex-whl ${pyAMReX_SOURCE_DIR}
+            ${Python_EXECUTABLE} -m pip ${PY_PIP_OPTIONS} wheel --no-build-isolation --no-deps --wheel-dir=amrex-whl "${pyAMReX_SOURCE_DIR}"
+    COMMAND_EXPAND_LISTS VERBATIM
     WORKING_DIRECTORY
         ${pyAMReX_BINARY_DIR}
     DEPENDS
@@ -302,6 +303,7 @@ add_custom_target(${pyAMReX_CUSTOM_TARGET_PREFIX}pip_wheel
 # this will also upgrade/downgrade dependencies, e.g., when the version of numpy changes
 add_custom_target(${pyAMReX_CUSTOM_TARGET_PREFIX}pip_install_requirements
     ${Python_EXECUTABLE} -m pip ${PY_PIP_OPTIONS} install ${PY_PIP_INSTALL_OPTIONS} -r "${pyAMReX_SOURCE_DIR}/requirements.txt"
+    COMMAND_EXPAND_LISTS VERBATIM
     WORKING_DIRECTORY
         ${pyAMReX_BINARY_DIR}
 )
@@ -312,6 +314,7 @@ add_custom_target(${pyAMReX_CUSTOM_TARGET_PREFIX}pip_install_requirements
 add_custom_target(${pyAMReX_CUSTOM_TARGET_PREFIX}pip_install
     ${CMAKE_COMMAND} -E env AMREX_MPI=${AMReX_MPI}
         ${Python_EXECUTABLE} -m pip ${PY_PIP_OPTIONS} install --force-reinstall --no-index --no-deps ${PY_PIP_INSTALL_OPTIONS} --find-links=amrex-whl amrex
+    COMMAND_EXPAND_LISTS VERBATIM
     WORKING_DIRECTORY
         ${pyAMReX_BINARY_DIR}
     DEPENDS
@@ -323,7 +326,8 @@ add_custom_target(${pyAMReX_CUSTOM_TARGET_PREFIX}pip_install
 # this is for package managers only
 add_custom_target(${pyAMReX_CUSTOM_TARGET_PREFIX}pip_install_nodeps
     ${CMAKE_COMMAND} -E env AMREX_MPI=${AMReX_MPI}
-        ${Python_EXECUTABLE} -m pip install --force-reinstall --no-index --no-deps ${PY_PIP_INSTALL_OPTIONS} --find-links=amrex-whl amrex
+        ${Python_EXECUTABLE} -m pip ${PY_PIP_OPTIONS} install --force-reinstall --no-index --no-deps ${PY_PIP_INSTALL_OPTIONS} --find-links=amrex-whl amrex
+    COMMAND_EXPAND_LISTS VERBATIM
     WORKING_DIRECTORY
         ${pyAMReX_BINARY_DIR}
     DEPENDS
