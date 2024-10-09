@@ -12,7 +12,7 @@ def test_soa_init():
     print("num int components", soa.num_int_comps)
     assert soa.num_real_comps == 3 and soa.num_int_comps == 1
 
-    soa.define(1, 3)
+    soa.define(1, 3, ["x", "y", "z", "w"], ["i1", "i2", "i3", "i4"])
     print("--test define --")
     print("num real components", soa.num_real_comps)
     print("num int components", soa.num_int_comps)
