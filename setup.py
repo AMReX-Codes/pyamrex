@@ -171,11 +171,12 @@ AMReX_PRECISION = os.environ.get("AMREX_PRECISION", "DOUBLE")
 AMReX_SPACEDIM = os.environ.get("AMREX_SPACEDIM", "1;2;3")
 BUILD_SHARED_LIBS = os.environ.get("AMREX_BUILD_SHARED_LIBS", "OFF")
 # CMake dependency control (developers & package managers)
+Superbuild = os.environ.get("SUPERBUILD", "ON")
 AMReX_src = os.environ.get("AMREX_SRC")
-AMReX_internal = os.environ.get("AMREX_INTERNAL", "ON")
+AMReX_internal = os.environ.get("AMREX_INTERNAL", Superbuild)
 AMReX_repo = os.environ.get("AMREX_REPO")
 AMReX_branch = os.environ.get("AMREX_BRANCH")
-pybind11_internal = os.environ.get("PYBIND11_INTERNAL", "ON")
+pybind11_internal = os.environ.get("PYBIND11_INTERNAL", Superbuild)
 
 # https://cmake.org/cmake/help/v3.0/command/if.html
 if AMReX_MPI.upper() in ["1", "ON", "TRUE", "YES"]:

@@ -175,8 +175,9 @@ If you are using the pip-driven install, selected [AMReX CMake options](https://
 | `AMREX_SRC`                  | *None*                                     | Absolute path to AMReX source directory (preferred if set)   |
 | `AMREX_REPO`                 | `https://github.com/AMReX-Codes/amrex.git` | Repository URI to pull and build AMReX from                  |
 | `AMREX_BRANCH`               | `development`                              | Repository branch for `AMREX_REPO`                           |
-| `AMREX_INTERNAL`             | **ON**/OFF                                 | Needs a pre-installed AMReX library if set to `OFF`          |
-| `PYBIND11_INTERNAL`          | **ON**/OFF                                 | Needs a pre-installed pybind11 library if set to `OFF`       |
+| `AMREX_INTERNAL`             | `SUPERBUILD`                               | Needs a pre-installed AMReX library if set to `OFF`          |
+| `PYBIND11_INTERNAL`          | `SUPERBUILD`                               | Needs a pre-installed pybind11 library if set to `OFF`       |
+| `SUPERBUILD`                 | **ON**/OFF                                 | Download & build extra dependencies                          |
 | `CMAKE_BUILD_PARALLEL_LEVEL` | 2                                          | Number of parallel build threads                             |
 | `PYAMREX_LIBDIR`             | *None*                                     | If set, search for pre-built a pyAMReX library               |
 | `PYAMREX_CCACHE`             | **ON**/OFF                                 | Search and use CCache to speed up rebuilds                   |
@@ -192,12 +193,13 @@ Furthermore, pyAMReX adds a few selected CMake build options:
 | `pyAMReX_CCACHE`             | **ON**/OFF                                 | Search and use CCache to speed up rebuilds                    |
 | `pyAMReX_IPO`                | **ON**/OFF                                 | Compile with interprocedural/link optimization (IPO/LTO)      |
 | `pyAMReX_INSTALL`            | **ON**/OFF                                 | Enable install targets for pyAMReX                            |
+| `pyAMReX_SUPERBUILD`         | **ON**/OFF                                 | Download & build extra dependencies                           |
 | `pyAMReX_amrex_src`          | *None*                                     | Absolute path to AMReX source directory (preferred if set)    |
-| `pyAMReX_amrex_internal`     | **ON**/OFF                                 | Needs a pre-installed AMReX library if set to `OFF`           |
+| `pyAMReX_amrex_internal`     | `pyAMReX_SUPERBUILD`                       | Needs a pre-installed AMReX library if set to `OFF`           |
 | `pyAMReX_amrex_repo`         | `https://github.com/AMReX-Codes/amrex.git` | Repository URI to pull and build AMReX from                   |
 | `pyAMReX_amrex_branch`       | `development`                              | Repository branch for `pyAMReX_amrex_repo`                    |
 | `pyAMReX_pybind11_src`       | *None*                                     | Absolute path to pybind11 source directory (preferred if set) |
-| `pyAMReX_pybind11_internal`  | **ON**/OFF                                 | Needs a pre-installed pybind11 library if set to `OFF`        |
+| `pyAMReX_pybind11_internal`  | `pyAMReX_SUPERBUILD`                       | Needs a pre-installed pybind11 library if set to `OFF`        |
 | `pyAMReX_pybind11_repo`      | `https://github.com/pybind/pybind11.git`   | Repository URI to pull and build pybind11 from                |
 | `pyAMReX_pybind11_branch`    | `v2.12.0`                                  | Repository branch for `pyAMReX_pybind11_repo`                 |
 | `Python_EXECUTABLE`          | (newest found)                             | Path to Python executable                                     |
