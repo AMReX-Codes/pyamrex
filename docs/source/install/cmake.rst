@@ -91,8 +91,8 @@ CMake Option                    Default & Values                             Des
 ``AMReX_SPACEDIM``              ``3``                                        Dimension(s) of AMReX as a ``;``-separated list
 ``AMReX_BUILD_SHARED_LIBS``     ON/**OFF**                                   Build AMReX library as shared (required for app extensions)
 ``pyAMReX_INSTALL``             **ON**/OFF                                   Enable install targets for pyAMReX
-``PY_PIP_OPTIONS``              ``-v``                                       Additional options for ``pip``, e.g., ``-vvv``
-``PY_PIP_INSTALL_OPTIONS``      *None*                                       Additional options for ``pip install``, e.g., ``--user``
+``PY_PIP_OPTIONS``              ``-v``                                       Additional options for ``pip``, e.g., ``-vvv;-q``
+``PY_PIP_INSTALL_OPTIONS``      *None*                                       Additional options for ``pip install``, e.g., ``--user;-q``
 ``Python_EXECUTABLE``           (newest found)                               Path to Python executable
 =============================== ============================================ ===========================================================
 
