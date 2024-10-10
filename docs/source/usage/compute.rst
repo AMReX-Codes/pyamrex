@@ -48,6 +48,14 @@ This is how to iterate and potentially compute for all blocks assigned to a loca
          :start-after: # Manual: Compute Mfab Detailed START
          :end-before: # Manual: Compute Mfab Detailed END
 
+   .. tab-item:: Global
+
+      .. literalinclude:: ../../../tests/test_multifab.py
+         :language: python3
+         :dedent: 4
+         :start-after: # Manual: Compute Mfab Global START
+         :end-before: # Manual: Compute Mfab Global END
+
 
 For a complete physics example that uses CPU/GPU agnostic Python code for computation on fields, see:
 
