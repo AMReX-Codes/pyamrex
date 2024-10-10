@@ -28,8 +28,10 @@ namespace
         py::class_< iv_type > py_iv(m, iv_name.c_str());
         py_iv
             .def("__repr__",
-                 [iv_name](const iv_type&) {
-                     return "<amrex." + iv_name + ">";
+                 [iv_name](const iv_type& iv) {
+                     std::stringstream s;
+                     s << iv;
+                     return "<amrex." + iv_name + s.str() + ">";
                  }
             )
             .def("__str",
