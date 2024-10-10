@@ -6304,6 +6304,30 @@ class MultiFab(FabArray_FArrayBox):
         """
         dst = src + a*dst
         """
+    def __getitem__(self, index):
+        """
+        Returns slice of the MultiFab using global indexing, as a numpy array.
+            This uses numpy array indexing, with the indexing relative to the global array.
+            The slice ranges can cross multiple blocks and the result will be gathered into a single
+            array.
+
+            In an MPI context, this is a global operation. An "allgather" is performed so that the full
+            result is returned on all processors.
+
+            Note that the index is in fortran ordering and that 0 is the lower boundary of the whole domain.
+
+            The default range of the indices includes only the valid cells. The ":" index will include all of
+            the valid cels and no ghost cells. The ghost cells can be accessed using imaginary numbers, with
+            negative imaginary numbers for the lower ghost cells, and positive for the upper ghost cells.
+            The index "[-1j]" for example refers to the first lower ghost cell, and "[1j]" to the first upper
+            ghost cell. To access all cells, ghosts and valid cells, use an empty tuple for the index, i.e. "[()]".
+
+            Parameters
+            ----------
+            index : the index using numpy style indexing
+                Index of the slice to return.
+
+        """
     @typing.overload
     def __init__(self) -> None:
         """
@@ -6507,6 +6531,32 @@ class MultiFab(FabArray_FArrayBox):
               FArrayBoxFactory for embedded boundaries
         """
     def __repr__(self) -> str: ...
+    def __setitem__(self, index, value):
+        """
+        Sets the slice of the MultiFab using global indexing.
+            This uses numpy array indexing, with the indexing relative to the global array.
+            The slice ranges can cross multiple blocks and the value will be distributed accordingly.
+            Note that this will apply the value to both valid and ghost cells.
+
+            In an MPI context, this is a local operation. On each processor, the blocks within the slice
+            range will be set to the value.
+
+            Note that the index is in fortran ordering and that 0 is the lower boundary of the whole domain.
+
+            The default range of the indices includes only the valid cells. The ":" index will include all of
+            the valid cels and no ghost cells. The ghost cells can be accessed using imaginary numbers, with
+            negative imaginary numbers for the lower ghost cells, and positive for the upper ghost cells.
+            The index "[-1j]" for example refers to the first lower ghost cell, and "[1j]" to the first upper
+            ghost cell. To access all cells, ghosts and valid cells, use an empty tuple for the index, i.e. "[()]".
+
+            Parameters
+            ----------
+            index : the index using numpy style indexing
+                Index of the slice to return.
+            value : scalar or array
+                Input value to assign to the specified slice of the MultiFab
+
+        """
     def average_sync(self, arg0: Periodicity) -> None: ...
     def box_array(self: FabArrayBase) -> BoxArray: ...
     @typing.overload
@@ -6559,6 +6609,22 @@ class MultiFab(FabArray_FArrayBox):
         against divide by zero.
         """
     def dm(self: FabArrayBase) -> DistributionMapping: ...
+    def imesh(self, idir, include_ghosts=False):
+        """
+        Returns the integer mesh along the specified direction with the appropriate centering.
+            This is the location of the data points in grid cell units.
+
+            Parameters
+            ----------
+            self : amrex.MultiFab
+                A MultiFab class in pyAMReX
+            direction : integer
+                Zero based direction number.
+                In a typical Cartesian case, 0 would be 'x' direction.
+            include_ghosts : bool, default=False
+                Whether or not ghost cells are included in the mesh.
+
+        """
     @typing.overload
     def invert(self, numerator: float, nghost: int) -> None:
         """
@@ -6896,6 +6962,30 @@ class MultiFab(FabArray_FArrayBox):
     def n_comp(self) -> int: ...
     @property
     def n_grow_vect(self) -> IntVect2D: ...
+    @property
+    def shape(self, include_ghosts=False):
+        """
+        Returns the shape of the global array
+
+            Parameters
+            ----------
+            self : amrex.MultiFab
+                A MultiFab class in pyAMReX
+            include_ghosts : bool, default=False
+                Whether or not ghost cells are included
+
+        """
+    @property
+    def shape_with_ghosts(self):
+        """
+        Returns the shape of the global array including ghost cells
+
+            Parameters
+            ----------
+            self : amrex.MultiFab
+                A MultiFab class in pyAMReX
+
+        """
 
 class PODVector_int_arena:
     def __getitem__(self, arg0: int) -> int: ...
