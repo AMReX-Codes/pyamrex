@@ -4983,7 +4983,7 @@ class BoxArray:
     def size(self) -> int: ...
 
 class Config:
-    amrex_version: typing.ClassVar[str] = "24.10"
+    amrex_version: typing.ClassVar[str] = "24.10-8-g8df11b69a116"
     gpu_backend = None
     have_eb: typing.ClassVar[bool] = True
     have_gpu: typing.ClassVar[bool] = False
@@ -10509,14 +10509,26 @@ class ParticleContainer_16_4_0_0_arena:
         arg2: Vector_BoxArray,
         arg3: Vector_IntVect,
     ) -> None: ...
-    def add_int_comp(self, communicate: bool = True) -> None:
+    @typing.overload
+    def add_int_comp(self, communicate: int = 1) -> None:
+        """
+        add a new runtime component with type Int
+        """
+    @typing.overload
+    def add_int_comp(self, name: str, communicate: int = 1) -> None:
         """
         add a new runtime component with type Int
         """
     def add_particles_at_level(
         self, particles: ParticleTile_16_4_0_0_arena, level: int, ngrow: int = 0
     ) -> None: ...
-    def add_real_comp(self, communicate: bool = True) -> None:
+    @typing.overload
+    def add_real_comp(self, communicate: int = 1) -> None:
+        """
+        add a new runtime component with type Real
+        """
+    @typing.overload
+    def add_real_comp(self, name: str, communicate: int = 1) -> None:
         """
         add a new runtime component with type Real
         """
@@ -10674,14 +10686,26 @@ class ParticleContainer_16_4_0_0_default:
         arg2: Vector_BoxArray,
         arg3: Vector_IntVect,
     ) -> None: ...
-    def add_int_comp(self, communicate: bool = True) -> None:
+    @typing.overload
+    def add_int_comp(self, communicate: int = 1) -> None:
+        """
+        add a new runtime component with type Int
+        """
+    @typing.overload
+    def add_int_comp(self, name: str, communicate: int = 1) -> None:
         """
         add a new runtime component with type Int
         """
     def add_particles_at_level(
         self, particles: ParticleTile_16_4_0_0_default, level: int, ngrow: int = 0
     ) -> None: ...
-    def add_real_comp(self, communicate: bool = True) -> None:
+    @typing.overload
+    def add_real_comp(self, communicate: int = 1) -> None:
+        """
+        add a new runtime component with type Real
+        """
+    @typing.overload
+    def add_real_comp(self, name: str, communicate: int = 1) -> None:
         """
         add a new runtime component with type Real
         """
@@ -10839,14 +10863,26 @@ class ParticleContainer_16_4_0_0_pinned:
         arg2: Vector_BoxArray,
         arg3: Vector_IntVect,
     ) -> None: ...
-    def add_int_comp(self, communicate: bool = True) -> None:
+    @typing.overload
+    def add_int_comp(self, communicate: int = 1) -> None:
+        """
+        add a new runtime component with type Int
+        """
+    @typing.overload
+    def add_int_comp(self, name: str, communicate: int = 1) -> None:
         """
         add a new runtime component with type Int
         """
     def add_particles_at_level(
         self, particles: ParticleTile_16_4_0_0_pinned, level: int, ngrow: int = 0
     ) -> None: ...
-    def add_real_comp(self, communicate: bool = True) -> None:
+    @typing.overload
+    def add_real_comp(self, communicate: int = 1) -> None:
+        """
+        add a new runtime component with type Real
+        """
+    @typing.overload
+    def add_real_comp(self, name: str, communicate: int = 1) -> None:
         """
         add a new runtime component with type Real
         """
@@ -11004,14 +11040,26 @@ class ParticleContainer_2_1_3_1_arena:
         arg2: Vector_BoxArray,
         arg3: Vector_IntVect,
     ) -> None: ...
-    def add_int_comp(self, communicate: bool = True) -> None:
+    @typing.overload
+    def add_int_comp(self, communicate: int = 1) -> None:
+        """
+        add a new runtime component with type Int
+        """
+    @typing.overload
+    def add_int_comp(self, name: str, communicate: int = 1) -> None:
         """
         add a new runtime component with type Int
         """
     def add_particles_at_level(
         self, particles: ParticleTile_2_1_3_1_arena, level: int, ngrow: int = 0
     ) -> None: ...
-    def add_real_comp(self, communicate: bool = True) -> None:
+    @typing.overload
+    def add_real_comp(self, communicate: int = 1) -> None:
+        """
+        add a new runtime component with type Real
+        """
+    @typing.overload
+    def add_real_comp(self, name: str, communicate: int = 1) -> None:
         """
         add a new runtime component with type Real
         """
@@ -11169,14 +11217,26 @@ class ParticleContainer_2_1_3_1_default:
         arg2: Vector_BoxArray,
         arg3: Vector_IntVect,
     ) -> None: ...
-    def add_int_comp(self, communicate: bool = True) -> None:
+    @typing.overload
+    def add_int_comp(self, communicate: int = 1) -> None:
+        """
+        add a new runtime component with type Int
+        """
+    @typing.overload
+    def add_int_comp(self, name: str, communicate: int = 1) -> None:
         """
         add a new runtime component with type Int
         """
     def add_particles_at_level(
         self, particles: ParticleTile_2_1_3_1_default, level: int, ngrow: int = 0
     ) -> None: ...
-    def add_real_comp(self, communicate: bool = True) -> None:
+    @typing.overload
+    def add_real_comp(self, communicate: int = 1) -> None:
+        """
+        add a new runtime component with type Real
+        """
+    @typing.overload
+    def add_real_comp(self, name: str, communicate: int = 1) -> None:
         """
         add a new runtime component with type Real
         """
@@ -11334,14 +11394,26 @@ class ParticleContainer_2_1_3_1_pinned:
         arg2: Vector_BoxArray,
         arg3: Vector_IntVect,
     ) -> None: ...
-    def add_int_comp(self, communicate: bool = True) -> None:
+    @typing.overload
+    def add_int_comp(self, communicate: int = 1) -> None:
+        """
+        add a new runtime component with type Int
+        """
+    @typing.overload
+    def add_int_comp(self, name: str, communicate: int = 1) -> None:
         """
         add a new runtime component with type Int
         """
     def add_particles_at_level(
         self, particles: ParticleTile_2_1_3_1_pinned, level: int, ngrow: int = 0
     ) -> None: ...
-    def add_real_comp(self, communicate: bool = True) -> None:
+    @typing.overload
+    def add_real_comp(self, communicate: int = 1) -> None:
+        """
+        add a new runtime component with type Real
+        """
+    @typing.overload
+    def add_real_comp(self, name: str, communicate: int = 1) -> None:
         """
         add a new runtime component with type Real
         """
@@ -11499,14 +11571,26 @@ class ParticleContainer_pureSoA_2_0_arena:
         arg2: Vector_BoxArray,
         arg3: Vector_IntVect,
     ) -> None: ...
-    def add_int_comp(self, communicate: bool = True) -> None:
+    @typing.overload
+    def add_int_comp(self, communicate: int = 1) -> None:
+        """
+        add a new runtime component with type Int
+        """
+    @typing.overload
+    def add_int_comp(self, name: str, communicate: int = 1) -> None:
         """
         add a new runtime component with type Int
         """
     def add_particles_at_level(
         self, particles: ParticleTile_pureSoA_2_0_arena, level: int, ngrow: int = 0
     ) -> None: ...
-    def add_real_comp(self, communicate: bool = True) -> None:
+    @typing.overload
+    def add_real_comp(self, communicate: int = 1) -> None:
+        """
+        add a new runtime component with type Real
+        """
+    @typing.overload
+    def add_real_comp(self, name: str, communicate: int = 1) -> None:
         """
         add a new runtime component with type Real
         """
@@ -11658,14 +11742,26 @@ class ParticleContainer_pureSoA_2_0_default:
         arg2: Vector_BoxArray,
         arg3: Vector_IntVect,
     ) -> None: ...
-    def add_int_comp(self, communicate: bool = True) -> None:
+    @typing.overload
+    def add_int_comp(self, communicate: int = 1) -> None:
+        """
+        add a new runtime component with type Int
+        """
+    @typing.overload
+    def add_int_comp(self, name: str, communicate: int = 1) -> None:
         """
         add a new runtime component with type Int
         """
     def add_particles_at_level(
         self, particles: ParticleTile_pureSoA_2_0_default, level: int, ngrow: int = 0
     ) -> None: ...
-    def add_real_comp(self, communicate: bool = True) -> None:
+    @typing.overload
+    def add_real_comp(self, communicate: int = 1) -> None:
+        """
+        add a new runtime component with type Real
+        """
+    @typing.overload
+    def add_real_comp(self, name: str, communicate: int = 1) -> None:
         """
         add a new runtime component with type Real
         """
@@ -11817,14 +11913,26 @@ class ParticleContainer_pureSoA_2_0_pinned:
         arg2: Vector_BoxArray,
         arg3: Vector_IntVect,
     ) -> None: ...
-    def add_int_comp(self, communicate: bool = True) -> None:
+    @typing.overload
+    def add_int_comp(self, communicate: int = 1) -> None:
+        """
+        add a new runtime component with type Int
+        """
+    @typing.overload
+    def add_int_comp(self, name: str, communicate: int = 1) -> None:
         """
         add a new runtime component with type Int
         """
     def add_particles_at_level(
         self, particles: ParticleTile_pureSoA_2_0_pinned, level: int, ngrow: int = 0
     ) -> None: ...
-    def add_real_comp(self, communicate: bool = True) -> None:
+    @typing.overload
+    def add_real_comp(self, communicate: int = 1) -> None:
+        """
+        add a new runtime component with type Real
+        """
+    @typing.overload
+    def add_real_comp(self, name: str, communicate: int = 1) -> None:
         """
         add a new runtime component with type Real
         """
@@ -11976,14 +12084,26 @@ class ParticleContainer_pureSoA_6_0_arena:
         arg2: Vector_BoxArray,
         arg3: Vector_IntVect,
     ) -> None: ...
-    def add_int_comp(self, communicate: bool = True) -> None:
+    @typing.overload
+    def add_int_comp(self, communicate: int = 1) -> None:
+        """
+        add a new runtime component with type Int
+        """
+    @typing.overload
+    def add_int_comp(self, name: str, communicate: int = 1) -> None:
         """
         add a new runtime component with type Int
         """
     def add_particles_at_level(
         self, particles: ParticleTile_pureSoA_6_0_arena, level: int, ngrow: int = 0
     ) -> None: ...
-    def add_real_comp(self, communicate: bool = True) -> None:
+    @typing.overload
+    def add_real_comp(self, communicate: int = 1) -> None:
+        """
+        add a new runtime component with type Real
+        """
+    @typing.overload
+    def add_real_comp(self, name: str, communicate: int = 1) -> None:
         """
         add a new runtime component with type Real
         """
@@ -12135,14 +12255,26 @@ class ParticleContainer_pureSoA_6_0_default:
         arg2: Vector_BoxArray,
         arg3: Vector_IntVect,
     ) -> None: ...
-    def add_int_comp(self, communicate: bool = True) -> None:
+    @typing.overload
+    def add_int_comp(self, communicate: int = 1) -> None:
+        """
+        add a new runtime component with type Int
+        """
+    @typing.overload
+    def add_int_comp(self, name: str, communicate: int = 1) -> None:
         """
         add a new runtime component with type Int
         """
     def add_particles_at_level(
         self, particles: ParticleTile_pureSoA_6_0_default, level: int, ngrow: int = 0
     ) -> None: ...
-    def add_real_comp(self, communicate: bool = True) -> None:
+    @typing.overload
+    def add_real_comp(self, communicate: int = 1) -> None:
+        """
+        add a new runtime component with type Real
+        """
+    @typing.overload
+    def add_real_comp(self, name: str, communicate: int = 1) -> None:
         """
         add a new runtime component with type Real
         """
@@ -12294,14 +12426,26 @@ class ParticleContainer_pureSoA_6_0_pinned:
         arg2: Vector_BoxArray,
         arg3: Vector_IntVect,
     ) -> None: ...
-    def add_int_comp(self, communicate: bool = True) -> None:
+    @typing.overload
+    def add_int_comp(self, communicate: int = 1) -> None:
+        """
+        add a new runtime component with type Int
+        """
+    @typing.overload
+    def add_int_comp(self, name: str, communicate: int = 1) -> None:
         """
         add a new runtime component with type Int
         """
     def add_particles_at_level(
         self, particles: ParticleTile_pureSoA_6_0_pinned, level: int, ngrow: int = 0
     ) -> None: ...
-    def add_real_comp(self, communicate: bool = True) -> None:
+    @typing.overload
+    def add_real_comp(self, communicate: int = 1) -> None:
+        """
+        add a new runtime component with type Real
+        """
+    @typing.overload
+    def add_real_comp(self, name: str, communicate: int = 1) -> None:
         """
         add a new runtime component with type Real
         """
@@ -12453,14 +12597,26 @@ class ParticleContainer_pureSoA_7_0_arena:
         arg2: Vector_BoxArray,
         arg3: Vector_IntVect,
     ) -> None: ...
-    def add_int_comp(self, communicate: bool = True) -> None:
+    @typing.overload
+    def add_int_comp(self, communicate: int = 1) -> None:
+        """
+        add a new runtime component with type Int
+        """
+    @typing.overload
+    def add_int_comp(self, name: str, communicate: int = 1) -> None:
         """
         add a new runtime component with type Int
         """
     def add_particles_at_level(
         self, particles: ParticleTile_pureSoA_7_0_arena, level: int, ngrow: int = 0
     ) -> None: ...
-    def add_real_comp(self, communicate: bool = True) -> None:
+    @typing.overload
+    def add_real_comp(self, communicate: int = 1) -> None:
+        """
+        add a new runtime component with type Real
+        """
+    @typing.overload
+    def add_real_comp(self, name: str, communicate: int = 1) -> None:
         """
         add a new runtime component with type Real
         """
@@ -12612,14 +12768,26 @@ class ParticleContainer_pureSoA_7_0_default:
         arg2: Vector_BoxArray,
         arg3: Vector_IntVect,
     ) -> None: ...
-    def add_int_comp(self, communicate: bool = True) -> None:
+    @typing.overload
+    def add_int_comp(self, communicate: int = 1) -> None:
+        """
+        add a new runtime component with type Int
+        """
+    @typing.overload
+    def add_int_comp(self, name: str, communicate: int = 1) -> None:
         """
         add a new runtime component with type Int
         """
     def add_particles_at_level(
         self, particles: ParticleTile_pureSoA_7_0_default, level: int, ngrow: int = 0
     ) -> None: ...
-    def add_real_comp(self, communicate: bool = True) -> None:
+    @typing.overload
+    def add_real_comp(self, communicate: int = 1) -> None:
+        """
+        add a new runtime component with type Real
+        """
+    @typing.overload
+    def add_real_comp(self, name: str, communicate: int = 1) -> None:
         """
         add a new runtime component with type Real
         """
@@ -12771,14 +12939,26 @@ class ParticleContainer_pureSoA_7_0_pinned:
         arg2: Vector_BoxArray,
         arg3: Vector_IntVect,
     ) -> None: ...
-    def add_int_comp(self, communicate: bool = True) -> None:
+    @typing.overload
+    def add_int_comp(self, communicate: int = 1) -> None:
+        """
+        add a new runtime component with type Int
+        """
+    @typing.overload
+    def add_int_comp(self, name: str, communicate: int = 1) -> None:
         """
         add a new runtime component with type Int
         """
     def add_particles_at_level(
         self, particles: ParticleTile_pureSoA_7_0_pinned, level: int, ngrow: int = 0
     ) -> None: ...
-    def add_real_comp(self, communicate: bool = True) -> None:
+    @typing.overload
+    def add_real_comp(self, communicate: int = 1) -> None:
+        """
+        add a new runtime component with type Real
+        """
+    @typing.overload
+    def add_real_comp(self, name: str, communicate: int = 1) -> None:
         """
         add a new runtime component with type Real
         """
@@ -12930,14 +13110,26 @@ class ParticleContainer_pureSoA_8_0_arena:
         arg2: Vector_BoxArray,
         arg3: Vector_IntVect,
     ) -> None: ...
-    def add_int_comp(self, communicate: bool = True) -> None:
+    @typing.overload
+    def add_int_comp(self, communicate: int = 1) -> None:
+        """
+        add a new runtime component with type Int
+        """
+    @typing.overload
+    def add_int_comp(self, name: str, communicate: int = 1) -> None:
         """
         add a new runtime component with type Int
         """
     def add_particles_at_level(
         self, particles: ParticleTile_pureSoA_8_0_arena, level: int, ngrow: int = 0
     ) -> None: ...
-    def add_real_comp(self, communicate: bool = True) -> None:
+    @typing.overload
+    def add_real_comp(self, communicate: int = 1) -> None:
+        """
+        add a new runtime component with type Real
+        """
+    @typing.overload
+    def add_real_comp(self, name: str, communicate: int = 1) -> None:
         """
         add a new runtime component with type Real
         """
@@ -13089,14 +13281,26 @@ class ParticleContainer_pureSoA_8_0_default:
         arg2: Vector_BoxArray,
         arg3: Vector_IntVect,
     ) -> None: ...
-    def add_int_comp(self, communicate: bool = True) -> None:
+    @typing.overload
+    def add_int_comp(self, communicate: int = 1) -> None:
+        """
+        add a new runtime component with type Int
+        """
+    @typing.overload
+    def add_int_comp(self, name: str, communicate: int = 1) -> None:
         """
         add a new runtime component with type Int
         """
     def add_particles_at_level(
         self, particles: ParticleTile_pureSoA_8_0_default, level: int, ngrow: int = 0
     ) -> None: ...
-    def add_real_comp(self, communicate: bool = True) -> None:
+    @typing.overload
+    def add_real_comp(self, communicate: int = 1) -> None:
+        """
+        add a new runtime component with type Real
+        """
+    @typing.overload
+    def add_real_comp(self, name: str, communicate: int = 1) -> None:
         """
         add a new runtime component with type Real
         """
@@ -13248,14 +13452,26 @@ class ParticleContainer_pureSoA_8_0_pinned:
         arg2: Vector_BoxArray,
         arg3: Vector_IntVect,
     ) -> None: ...
-    def add_int_comp(self, communicate: bool = True) -> None:
+    @typing.overload
+    def add_int_comp(self, communicate: int = 1) -> None:
+        """
+        add a new runtime component with type Int
+        """
+    @typing.overload
+    def add_int_comp(self, name: str, communicate: int = 1) -> None:
         """
         add a new runtime component with type Int
         """
     def add_particles_at_level(
         self, particles: ParticleTile_pureSoA_8_0_pinned, level: int, ngrow: int = 0
     ) -> None: ...
-    def add_real_comp(self, communicate: bool = True) -> None:
+    @typing.overload
+    def add_real_comp(self, communicate: int = 1) -> None:
+        """
+        add a new runtime component with type Real
+        """
+    @typing.overload
+    def add_real_comp(self, name: str, communicate: int = 1) -> None:
         """
         add a new runtime component with type Real
         """
@@ -13513,7 +13729,9 @@ class ParticleTile_16_4_0_0_arena:
     def __init__(self) -> None: ...
     def __setitem__(self, arg0: int, arg1: Particle_16_4) -> None: ...
     def capacity(self) -> int: ...
-    def define(self, arg0: int, arg1: int) -> None: ...
+    def define(
+        self, arg0: int, arg1: int, arg2: list[str], arg3: list[str]
+    ) -> None: ...
     def get_array_of_structs(self) -> ArrayOfStructs_16_4_arena: ...
     def get_num_neighbors(self) -> int: ...
     def get_particle_tile_data(self) -> ParticleTileData_16_4_0_0: ...
@@ -13578,7 +13796,9 @@ class ParticleTile_16_4_0_0_default:
     def __init__(self) -> None: ...
     def __setitem__(self, arg0: int, arg1: Particle_16_4) -> None: ...
     def capacity(self) -> int: ...
-    def define(self, arg0: int, arg1: int) -> None: ...
+    def define(
+        self, arg0: int, arg1: int, arg2: list[str], arg3: list[str]
+    ) -> None: ...
     def get_array_of_structs(self) -> ArrayOfStructs_16_4_default: ...
     def get_num_neighbors(self) -> int: ...
     def get_particle_tile_data(self) -> ParticleTileData_16_4_0_0: ...
@@ -13643,7 +13863,9 @@ class ParticleTile_16_4_0_0_pinned:
     def __init__(self) -> None: ...
     def __setitem__(self, arg0: int, arg1: Particle_16_4) -> None: ...
     def capacity(self) -> int: ...
-    def define(self, arg0: int, arg1: int) -> None: ...
+    def define(
+        self, arg0: int, arg1: int, arg2: list[str], arg3: list[str]
+    ) -> None: ...
     def get_array_of_structs(self) -> ArrayOfStructs_16_4_pinned: ...
     def get_num_neighbors(self) -> int: ...
     def get_particle_tile_data(self) -> ParticleTileData_16_4_0_0: ...
@@ -13708,7 +13930,9 @@ class ParticleTile_2_1_3_1_arena:
     def __init__(self) -> None: ...
     def __setitem__(self, arg0: int, arg1: Particle_5_2) -> None: ...
     def capacity(self) -> int: ...
-    def define(self, arg0: int, arg1: int) -> None: ...
+    def define(
+        self, arg0: int, arg1: int, arg2: list[str], arg3: list[str]
+    ) -> None: ...
     def get_array_of_structs(self) -> ArrayOfStructs_2_1_arena: ...
     def get_num_neighbors(self) -> int: ...
     def get_particle_tile_data(self) -> ParticleTileData_2_1_3_1: ...
@@ -13773,7 +13997,9 @@ class ParticleTile_2_1_3_1_default:
     def __init__(self) -> None: ...
     def __setitem__(self, arg0: int, arg1: Particle_5_2) -> None: ...
     def capacity(self) -> int: ...
-    def define(self, arg0: int, arg1: int) -> None: ...
+    def define(
+        self, arg0: int, arg1: int, arg2: list[str], arg3: list[str]
+    ) -> None: ...
     def get_array_of_structs(self) -> ArrayOfStructs_2_1_default: ...
     def get_num_neighbors(self) -> int: ...
     def get_particle_tile_data(self) -> ParticleTileData_2_1_3_1: ...
@@ -13838,7 +14064,9 @@ class ParticleTile_2_1_3_1_pinned:
     def __init__(self) -> None: ...
     def __setitem__(self, arg0: int, arg1: Particle_5_2) -> None: ...
     def capacity(self) -> int: ...
-    def define(self, arg0: int, arg1: int) -> None: ...
+    def define(
+        self, arg0: int, arg1: int, arg2: list[str], arg3: list[str]
+    ) -> None: ...
     def get_array_of_structs(self) -> ArrayOfStructs_2_1_pinned: ...
     def get_num_neighbors(self) -> int: ...
     def get_particle_tile_data(self) -> ParticleTileData_2_1_3_1: ...
@@ -13903,7 +14131,9 @@ class ParticleTile_pureSoA_2_0_arena:
     def __init__(self) -> None: ...
     def __setitem__(self, arg0: int, arg1: Particle_2_0) -> None: ...
     def capacity(self) -> int: ...
-    def define(self, arg0: int, arg1: int) -> None: ...
+    def define(
+        self, arg0: int, arg1: int, arg2: list[str], arg3: list[str]
+    ) -> None: ...
     def get_num_neighbors(self) -> int: ...
     def get_particle_tile_data(self) -> ParticleTileData_pureSoA_2_0: ...
     def get_struct_of_arrays(self) -> StructOfArrays_2_0_idcpu_arena: ...
@@ -13961,7 +14191,9 @@ class ParticleTile_pureSoA_2_0_default:
     def __init__(self) -> None: ...
     def __setitem__(self, arg0: int, arg1: Particle_2_0) -> None: ...
     def capacity(self) -> int: ...
-    def define(self, arg0: int, arg1: int) -> None: ...
+    def define(
+        self, arg0: int, arg1: int, arg2: list[str], arg3: list[str]
+    ) -> None: ...
     def get_num_neighbors(self) -> int: ...
     def get_particle_tile_data(self) -> ParticleTileData_pureSoA_2_0: ...
     def get_struct_of_arrays(self) -> StructOfArrays_2_0_idcpu_default: ...
@@ -14019,7 +14251,9 @@ class ParticleTile_pureSoA_2_0_pinned:
     def __init__(self) -> None: ...
     def __setitem__(self, arg0: int, arg1: Particle_2_0) -> None: ...
     def capacity(self) -> int: ...
-    def define(self, arg0: int, arg1: int) -> None: ...
+    def define(
+        self, arg0: int, arg1: int, arg2: list[str], arg3: list[str]
+    ) -> None: ...
     def get_num_neighbors(self) -> int: ...
     def get_particle_tile_data(self) -> ParticleTileData_pureSoA_2_0: ...
     def get_struct_of_arrays(self) -> StructOfArrays_2_0_idcpu_pinned: ...
@@ -14077,7 +14311,9 @@ class ParticleTile_pureSoA_6_0_arena:
     def __init__(self) -> None: ...
     def __setitem__(self, arg0: int, arg1: Particle_6_0) -> None: ...
     def capacity(self) -> int: ...
-    def define(self, arg0: int, arg1: int) -> None: ...
+    def define(
+        self, arg0: int, arg1: int, arg2: list[str], arg3: list[str]
+    ) -> None: ...
     def get_num_neighbors(self) -> int: ...
     def get_particle_tile_data(self) -> ParticleTileData_pureSoA_6_0: ...
     def get_struct_of_arrays(self) -> StructOfArrays_6_0_idcpu_arena: ...
@@ -14135,7 +14371,9 @@ class ParticleTile_pureSoA_6_0_default:
     def __init__(self) -> None: ...
     def __setitem__(self, arg0: int, arg1: Particle_6_0) -> None: ...
     def capacity(self) -> int: ...
-    def define(self, arg0: int, arg1: int) -> None: ...
+    def define(
+        self, arg0: int, arg1: int, arg2: list[str], arg3: list[str]
+    ) -> None: ...
     def get_num_neighbors(self) -> int: ...
     def get_particle_tile_data(self) -> ParticleTileData_pureSoA_6_0: ...
     def get_struct_of_arrays(self) -> StructOfArrays_6_0_idcpu_default: ...
@@ -14193,7 +14431,9 @@ class ParticleTile_pureSoA_6_0_pinned:
     def __init__(self) -> None: ...
     def __setitem__(self, arg0: int, arg1: Particle_6_0) -> None: ...
     def capacity(self) -> int: ...
-    def define(self, arg0: int, arg1: int) -> None: ...
+    def define(
+        self, arg0: int, arg1: int, arg2: list[str], arg3: list[str]
+    ) -> None: ...
     def get_num_neighbors(self) -> int: ...
     def get_particle_tile_data(self) -> ParticleTileData_pureSoA_6_0: ...
     def get_struct_of_arrays(self) -> StructOfArrays_6_0_idcpu_pinned: ...
@@ -14251,7 +14491,9 @@ class ParticleTile_pureSoA_7_0_arena:
     def __init__(self) -> None: ...
     def __setitem__(self, arg0: int, arg1: Particle_7_0) -> None: ...
     def capacity(self) -> int: ...
-    def define(self, arg0: int, arg1: int) -> None: ...
+    def define(
+        self, arg0: int, arg1: int, arg2: list[str], arg3: list[str]
+    ) -> None: ...
     def get_num_neighbors(self) -> int: ...
     def get_particle_tile_data(self) -> ParticleTileData_pureSoA_7_0: ...
     def get_struct_of_arrays(self) -> StructOfArrays_7_0_idcpu_arena: ...
@@ -14309,7 +14551,9 @@ class ParticleTile_pureSoA_7_0_default:
     def __init__(self) -> None: ...
     def __setitem__(self, arg0: int, arg1: Particle_7_0) -> None: ...
     def capacity(self) -> int: ...
-    def define(self, arg0: int, arg1: int) -> None: ...
+    def define(
+        self, arg0: int, arg1: int, arg2: list[str], arg3: list[str]
+    ) -> None: ...
     def get_num_neighbors(self) -> int: ...
     def get_particle_tile_data(self) -> ParticleTileData_pureSoA_7_0: ...
     def get_struct_of_arrays(self) -> StructOfArrays_7_0_idcpu_default: ...
@@ -14367,7 +14611,9 @@ class ParticleTile_pureSoA_7_0_pinned:
     def __init__(self) -> None: ...
     def __setitem__(self, arg0: int, arg1: Particle_7_0) -> None: ...
     def capacity(self) -> int: ...
-    def define(self, arg0: int, arg1: int) -> None: ...
+    def define(
+        self, arg0: int, arg1: int, arg2: list[str], arg3: list[str]
+    ) -> None: ...
     def get_num_neighbors(self) -> int: ...
     def get_particle_tile_data(self) -> ParticleTileData_pureSoA_7_0: ...
     def get_struct_of_arrays(self) -> StructOfArrays_7_0_idcpu_pinned: ...
@@ -14425,7 +14671,9 @@ class ParticleTile_pureSoA_8_0_arena:
     def __init__(self) -> None: ...
     def __setitem__(self, arg0: int, arg1: Particle_8_0) -> None: ...
     def capacity(self) -> int: ...
-    def define(self, arg0: int, arg1: int) -> None: ...
+    def define(
+        self, arg0: int, arg1: int, arg2: list[str], arg3: list[str]
+    ) -> None: ...
     def get_num_neighbors(self) -> int: ...
     def get_particle_tile_data(self) -> ParticleTileData_pureSoA_8_0: ...
     def get_struct_of_arrays(self) -> StructOfArrays_8_0_idcpu_arena: ...
@@ -14483,7 +14731,9 @@ class ParticleTile_pureSoA_8_0_default:
     def __init__(self) -> None: ...
     def __setitem__(self, arg0: int, arg1: Particle_8_0) -> None: ...
     def capacity(self) -> int: ...
-    def define(self, arg0: int, arg1: int) -> None: ...
+    def define(
+        self, arg0: int, arg1: int, arg2: list[str], arg3: list[str]
+    ) -> None: ...
     def get_num_neighbors(self) -> int: ...
     def get_particle_tile_data(self) -> ParticleTileData_pureSoA_8_0: ...
     def get_struct_of_arrays(self) -> StructOfArrays_8_0_idcpu_default: ...
@@ -14541,7 +14791,9 @@ class ParticleTile_pureSoA_8_0_pinned:
     def __init__(self) -> None: ...
     def __setitem__(self, arg0: int, arg1: Particle_8_0) -> None: ...
     def capacity(self) -> int: ...
-    def define(self, arg0: int, arg1: int) -> None: ...
+    def define(
+        self, arg0: int, arg1: int, arg2: list[str], arg3: list[str]
+    ) -> None: ...
     def get_num_neighbors(self) -> int: ...
     def get_particle_tile_data(self) -> ParticleTileData_pureSoA_8_0: ...
     def get_struct_of_arrays(self) -> StructOfArrays_8_0_idcpu_pinned: ...
@@ -15318,7 +15570,9 @@ class StructOfArrays_0_0_arena:
         """
         Get the number of particles
         """
-    def define(self, arg0: int, arg1: int) -> None: ...
+    def define(
+        self, arg0: int, arg1: int, arg2: list[str], arg3: list[str]
+    ) -> None: ...
     @typing.overload
     def get_int_data(
         self,
@@ -15501,7 +15755,9 @@ class StructOfArrays_0_0_default:
         """
         Get the number of particles
         """
-    def define(self, arg0: int, arg1: int) -> None: ...
+    def define(
+        self, arg0: int, arg1: int, arg2: list[str], arg3: list[str]
+    ) -> None: ...
     @typing.overload
     def get_int_data(
         self,
@@ -15684,7 +15940,9 @@ class StructOfArrays_0_0_pinned:
         """
         Get the number of particles
         """
-    def define(self, arg0: int, arg1: int) -> None: ...
+    def define(
+        self, arg0: int, arg1: int, arg2: list[str], arg3: list[str]
+    ) -> None: ...
     @typing.overload
     def get_int_data(
         self,
@@ -15867,7 +16125,9 @@ class StructOfArrays_2_0_idcpu_arena:
         """
         Get the number of particles
         """
-    def define(self, arg0: int, arg1: int) -> None: ...
+    def define(
+        self, arg0: int, arg1: int, arg2: list[str], arg3: list[str]
+    ) -> None: ...
     def get_idcpu_data(self) -> PODVector_uint64_arena:
         """
         Get access to a particle IdCPU component Array
@@ -16054,7 +16314,9 @@ class StructOfArrays_2_0_idcpu_default:
         """
         Get the number of particles
         """
-    def define(self, arg0: int, arg1: int) -> None: ...
+    def define(
+        self, arg0: int, arg1: int, arg2: list[str], arg3: list[str]
+    ) -> None: ...
     def get_idcpu_data(self) -> PODVector_uint64_std:
         """
         Get access to a particle IdCPU component Array
@@ -16241,7 +16503,9 @@ class StructOfArrays_2_0_idcpu_pinned:
         """
         Get the number of particles
         """
-    def define(self, arg0: int, arg1: int) -> None: ...
+    def define(
+        self, arg0: int, arg1: int, arg2: list[str], arg3: list[str]
+    ) -> None: ...
     def get_idcpu_data(self) -> PODVector_uint64_pinned:
         """
         Get access to a particle IdCPU component Array
@@ -16428,7 +16692,9 @@ class StructOfArrays_3_1_arena:
         """
         Get the number of particles
         """
-    def define(self, arg0: int, arg1: int) -> None: ...
+    def define(
+        self, arg0: int, arg1: int, arg2: list[str], arg3: list[str]
+    ) -> None: ...
     @typing.overload
     def get_int_data(
         self,
@@ -16611,7 +16877,9 @@ class StructOfArrays_3_1_default:
         """
         Get the number of particles
         """
-    def define(self, arg0: int, arg1: int) -> None: ...
+    def define(
+        self, arg0: int, arg1: int, arg2: list[str], arg3: list[str]
+    ) -> None: ...
     @typing.overload
     def get_int_data(
         self,
@@ -16794,7 +17062,9 @@ class StructOfArrays_3_1_pinned:
         """
         Get the number of particles
         """
-    def define(self, arg0: int, arg1: int) -> None: ...
+    def define(
+        self, arg0: int, arg1: int, arg2: list[str], arg3: list[str]
+    ) -> None: ...
     @typing.overload
     def get_int_data(
         self,
@@ -16977,7 +17247,9 @@ class StructOfArrays_6_0_idcpu_arena:
         """
         Get the number of particles
         """
-    def define(self, arg0: int, arg1: int) -> None: ...
+    def define(
+        self, arg0: int, arg1: int, arg2: list[str], arg3: list[str]
+    ) -> None: ...
     def get_idcpu_data(self) -> PODVector_uint64_arena:
         """
         Get access to a particle IdCPU component Array
@@ -17164,7 +17436,9 @@ class StructOfArrays_6_0_idcpu_default:
         """
         Get the number of particles
         """
-    def define(self, arg0: int, arg1: int) -> None: ...
+    def define(
+        self, arg0: int, arg1: int, arg2: list[str], arg3: list[str]
+    ) -> None: ...
     def get_idcpu_data(self) -> PODVector_uint64_std:
         """
         Get access to a particle IdCPU component Array
@@ -17351,7 +17625,9 @@ class StructOfArrays_6_0_idcpu_pinned:
         """
         Get the number of particles
         """
-    def define(self, arg0: int, arg1: int) -> None: ...
+    def define(
+        self, arg0: int, arg1: int, arg2: list[str], arg3: list[str]
+    ) -> None: ...
     def get_idcpu_data(self) -> PODVector_uint64_pinned:
         """
         Get access to a particle IdCPU component Array
@@ -17538,7 +17814,9 @@ class StructOfArrays_7_0_idcpu_arena:
         """
         Get the number of particles
         """
-    def define(self, arg0: int, arg1: int) -> None: ...
+    def define(
+        self, arg0: int, arg1: int, arg2: list[str], arg3: list[str]
+    ) -> None: ...
     def get_idcpu_data(self) -> PODVector_uint64_arena:
         """
         Get access to a particle IdCPU component Array
@@ -17725,7 +18003,9 @@ class StructOfArrays_7_0_idcpu_default:
         """
         Get the number of particles
         """
-    def define(self, arg0: int, arg1: int) -> None: ...
+    def define(
+        self, arg0: int, arg1: int, arg2: list[str], arg3: list[str]
+    ) -> None: ...
     def get_idcpu_data(self) -> PODVector_uint64_std:
         """
         Get access to a particle IdCPU component Array
@@ -17912,7 +18192,9 @@ class StructOfArrays_7_0_idcpu_pinned:
         """
         Get the number of particles
         """
-    def define(self, arg0: int, arg1: int) -> None: ...
+    def define(
+        self, arg0: int, arg1: int, arg2: list[str], arg3: list[str]
+    ) -> None: ...
     def get_idcpu_data(self) -> PODVector_uint64_pinned:
         """
         Get access to a particle IdCPU component Array
@@ -18099,7 +18381,9 @@ class StructOfArrays_8_0_idcpu_arena:
         """
         Get the number of particles
         """
-    def define(self, arg0: int, arg1: int) -> None: ...
+    def define(
+        self, arg0: int, arg1: int, arg2: list[str], arg3: list[str]
+    ) -> None: ...
     def get_idcpu_data(self) -> PODVector_uint64_arena:
         """
         Get access to a particle IdCPU component Array
@@ -18286,7 +18570,9 @@ class StructOfArrays_8_0_idcpu_default:
         """
         Get the number of particles
         """
-    def define(self, arg0: int, arg1: int) -> None: ...
+    def define(
+        self, arg0: int, arg1: int, arg2: list[str], arg3: list[str]
+    ) -> None: ...
     def get_idcpu_data(self) -> PODVector_uint64_std:
         """
         Get access to a particle IdCPU component Array
@@ -18473,7 +18759,9 @@ class StructOfArrays_8_0_idcpu_pinned:
         """
         Get the number of particles
         """
-    def define(self, arg0: int, arg1: int) -> None: ...
+    def define(
+        self, arg0: int, arg1: int, arg2: list[str], arg3: list[str]
+    ) -> None: ...
     def get_idcpu_data(self) -> PODVector_uint64_pinned:
         """
         Get access to a particle IdCPU component Array
@@ -19791,5 +20079,5 @@ def write_single_level_plotfile(
 
 __author__: str = "Axel Huebl, Ryan T. Sandberg, Shreyas Ananthan, David P. Grote, Revathi Jambunathan, Edoardo Zoni, Remi Lehe, Andrew Myers, Weiqun Zhang"
 __license__: str = "BSD-3-Clause-LBNL"
-__version__: str = "24.10"
+__version__: str = "24.10-8-g8df11b69a116"
 IntVect = IntVect2D
