@@ -102,7 +102,7 @@ math(EXPR list_last "${list_len} - 1")
 list(GET AMReX_SPACEDIM ${list_last} AMReX_SPACEDIM_LAST)
 
 # Python
-find_package(Python COMPONENTS Interpreter Development.Module REQUIRED)
+find_package(Python 3.8.0 COMPONENTS Interpreter Development.Module REQUIRED)
 
 # default installation directories: Python
 pyamrex_set_default_install_dirs_python()

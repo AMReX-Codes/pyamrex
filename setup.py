@@ -77,11 +77,18 @@ class CMakeBuild(build_ext):
         r_dim = re.search(r"amrex_(1|2|3)d", ext.name)
         dims = r_dim.group(1).upper()
 
+        pyv = sys.version_info
         cmake_args = [
+            # Python: use the calling interpreter in CMake
+            # https://cmake.org/cmake/help/latest/module/FindPython.html#hints
+            # https://cmake.org/cmake/help/latest/command/find_package.html#config-mode-version-selection
+            f"-DPython_ROOT_DIR={sys.prefix}",
+            f"-DPython_FIND_VERSION={pyv.major}.{pyv.minor}.{pyv.micro}",
+            "-DPython_FIND_VERSION_EXACT=TRUE",
+            "-DPython_FIND_STRATEGY=LOCATION",
             "-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=" + os.path.join(extdir, "amrex"),
             "-DCMAKE_VERBOSE_MAKEFILE=ON",
             "-DCMAKE_PYTHON_OUTPUT_DIRECTORY=" + extdir,
-            "-DPython_EXECUTABLE=" + sys.executable,
             "-DAMReX_SPACEDIM=" + dims,
             ## variants
             "-DAMReX_OMP=" + AMReX_OMP,
