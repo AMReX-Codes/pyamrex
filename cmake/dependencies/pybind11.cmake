@@ -12,6 +12,11 @@ function(find_pybind11)
         message(STATUS "pybind11 repository: ${pyAMReX_pybind11_repo} (${pyAMReX_pybind11_branch})")
         include(FetchContent)
     endif()
+
+    # rely on our find_package(Python ...) call
+    # https://pybind11.readthedocs.io/en/stable/compiling.html#modules-with-cmake
+    set(PYBIND11_FINDPYTHON ON)
+
     if(TARGET pybind11::module)
         # nothing to do, target already exists in the superbuild
     elseif(pyAMReX_pybind11_internal OR pyAMReX_pybind11_src)
