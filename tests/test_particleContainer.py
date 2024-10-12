@@ -57,9 +57,9 @@ def particle_container(Npart, std_geometry, distmap, boxarr, std_real_box):
     pc.init_random(Npart, iseed, myt, False, std_real_box)
 
     # add runtime components: 1 real 2 int
-    pc.add_real_comp(True)
-    pc.add_int_comp(True)
-    pc.add_int_comp(True)
+    pc.add_real_comp("b", True)
+    pc.add_int_comp("i1", True)
+    pc.add_int_comp("i2", True)
 
     # assign some values to runtime components
     for lvl in range(pc.finest_level + 1):
@@ -79,13 +79,21 @@ def soa_particle_container(Npart, std_geometry, distmap, boxarr, std_real_box):
     myt.real_array_data = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8]
     myt.int_array_data = []
 
+    with pytest.raises(Exception):
+        pc.set_SoA_compile_time_names(
+            ["x", "y", "z", "z", "b", "c", "d", "e"], []
+        )  # error: z added twice
+    pc.set_SoA_compile_time_names(["x", "y", "z", "a", "b", "c", "d", "e"], [])
+
     iseed = 1
     pc.init_random(Npart, iseed, myt, False, std_real_box)
 
     # add runtime components: 1 real 2 int
-    pc.add_real_comp(True)
-    pc.add_int_comp(True)
-    pc.add_int_comp(True)
+    with pytest.raises(Exception):
+        pc.add_real_comp("a", True)  # already used as a compile-time component
+    pc.add_real_comp("f", True)
+    pc.add_int_comp("i1", True)
+    pc.add_int_comp("i2", True)
 
     # assign some values to runtime components
     for lvl in range(pc.finest_level + 1):

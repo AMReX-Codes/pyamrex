@@ -9,71 +9,6 @@ License: BSD-3-Clause-LBNL
 from collections import namedtuple
 
 
-def soa_real_comps(self, num_comps, spacedim=3, rotate=True):
-    """
-    Name the ParticleReal components in SoA.
-
-    Parameters
-    ----------
-    self : SoA Type
-      maybe unused, depending on implementation
-    num_comps : int
-      number of components to generate names for.
-    spacedim : int
-      AMReX dimensionality
-    rotate : bool = True
-      start with "x", "y", "z", "a", "b", ...
-
-    Returns
-    -------
-    A list of length num_comps with values
-    rotate=True (for pure SoA layout):
-    - 3D: "x", "y", "z", "a", "b", ... "w", "r0", "r1", ...
-    - 2D: "x", "y", "a", "b", ... "w", "r0", "r1", ...
-    - 1D: "x", "a", "b", ... "w", "r0", "r1", ...
-    rotate=False (for legacy layout):
-    - 1D-3D: "a", "b", ... "w", "r0", "r1", ...
-    """
-    import string
-
-    # x, y, z, a, b, ...
-    comp_names = list(string.ascii_lowercase)
-    if rotate:
-        # rotate x, y, z to be beginning (positions)
-        comp_names = comp_names[-3:] + comp_names[:-3]
-    else:
-        # cut off x, y, z to avoid confusion
-        comp_names = comp_names[:-3]
-
-    num_named = len(comp_names)
-    if num_comps < num_named:
-        comp_names = list(comp_names)[0:num_comps]
-    elif num_comps > num_named:
-        comp_names.extend(["r" + str(i) for i in range(num_comps - num_named)])
-
-    return comp_names
-
-
-def soa_int_comps(self, num_comps):
-    """
-    Name the int components in SoA.
-
-    Parameters
-    ----------
-    self : SoA Type
-      maybe unused, depending on implementation
-    num_comps : int
-      number of components to generate names for.
-
-    Returns
-    -------
-    A list of length num_comps with values "i1", "i2", "i3", ...
-    """
-    comp_names = ["i" + str(i) for i in range(num_comps)]
-
-    return comp_names
-
-
 def soa_to_numpy(self, copy=False):
     """
     Provide NumPy views into a StructOfArrays.
@@ -107,18 +42,17 @@ def soa_to_numpy(self, copy=False):
     else:
         soa_view = SoA_np({}, {}, None)
 
-    # for the legacy data layout, do not start with x, y, z but with a, b, c, ...
-    if self.has_idcpu:
-        real_comp_names = self.soa_real_comps(self.num_real_comps)
-    else:
-        real_comp_names = self.soa_real_comps(self.num_real_comps, rotate=False)
-
+    real_comp_names = self.real_names
+    if len(real_comp_names) != self.num_real_comps:
+        raise ValueError("Missing names for SoA Real components.")
     for idx_real in range(self.num_real_comps):
         soa_view.real[real_comp_names[idx_real]] = self.get_real_data(
             idx_real
         ).to_numpy(copy=copy)
 
-    int_comp_names = self.soa_int_comps(self.num_int_comps)
+    int_comp_names = self.int_names
+    if len(int_comp_names) != self.num_int_comps:
+        raise ValueError("Missing names for SoA int components.")
     for idx_int in range(self.num_int_comps):
         soa_view.int[int_comp_names[idx_int]] = self.get_int_data(idx_int).to_numpy(
             copy=copy
@@ -165,18 +99,17 @@ def soa_to_cupy(self, copy=False):
     else:
         soa_view = SoA_cp({}, {}, None)
 
-    # for the legacy data layout, do not start with x, y, z but with a, b, c, ...
-    if self.has_idcpu:
-        real_comp_names = self.soa_real_comps(self.num_real_comps)
-    else:
-        real_comp_names = self.soa_real_comps(self.num_real_comps, rotate=False)
-
+    real_comp_names = self.real_names
+    if len(real_comp_names) != self.num_real_comps:
+        raise ValueError("Missing names for SoA Real components.")
     for idx_real in range(self.num_real_comps):
         soa_view.real[real_comp_names[idx_real]] = self.get_real_data(idx_real).to_cupy(
             copy=copy
         )
 
-    int_comp_names = self.soa_int_comps(self.num_int_comps)
+    int_comp_names = self.int_names
+    if len(int_comp_names) != self.num_int_comps:
+        raise ValueError("Missing names for SoA int components.")
     for idx_int in range(self.num_int_comps):
         soa_view.int[int_comp_names[idx_int]] = self.get_int_data(idx_int).to_cupy(
             copy=copy
@@ -226,10 +159,6 @@ def register_SoA_extension(amr):
         and member.__module__ == amr.__name__
         and member.__name__.startswith("StructOfArrays_"),
     ):
-        # name providers
-        SoA_type.soa_real_comps = soa_real_comps
-        SoA_type.soa_int_comps = soa_int_comps
-
         # converters
         SoA_type.to_numpy = soa_to_numpy
         SoA_type.to_cupy = soa_to_cupy
