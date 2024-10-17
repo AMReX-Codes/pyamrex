@@ -10,6 +10,7 @@
 #include <AMReX_GpuAllocators.H>
 #include <AMReX_StructOfArrays.H>
 
+#include <stdexcept>
 #include <sstream>
 
 
@@ -55,6 +56,32 @@ void make_StructOfArrays(py::module &m, std::string allocstr)
              py::return_value_policy::reference_internal,
              py::arg("index"),
              "Get access to a particle Real component Array (compile-time and runtime component)")
+
+        // names
+        .def_property_readonly("real_names",
+            [](SOAType & self) {
+                try {
+                    return self.GetRealNames();
+                }
+                catch (...)
+                {
+                    return std::vector<std::string>{};
+                }
+            },
+            "Names for the Real SoA components"
+        )
+        .def_property_readonly("int_names",
+            [](SOAType & self) {
+                try {
+                    return self.GetIntNames();
+                }
+                catch (...)
+                {
+                    return std::vector<std::string>{};
+                }
+            },
+            "Names for the int SoA components"
+        )
 
         .def("__len__", &SOAType::size,
              "Get the number of particles")
