@@ -1,20 +1,25 @@
 macro(find_amrex)
     if(TARGET AMReX::amrex)
         message(STATUS "AMReX::amrex target already imported")
-    elseif(pyAMReX_amrex_src)
-        message(STATUS "Compiling local AMReX ...")
-        message(STATUS "AMReX source path: ${pyAMReX_amrex_src}")
-        if(NOT IS_DIRECTORY ${pyAMReX_amrex_src})
-            message(FATAL_ERROR "Specified directory pyAMReX_amrex_src='${pyAMReX_amrex_src}' does not exist!")
-        endif()
     elseif(pyAMReX_amrex_internal)
-        message(STATUS "Downloading AMReX ...")
-        message(STATUS "AMReX repository: ${pyAMReX_amrex_repo} (${pyAMReX_amrex_branch})")
-        include(FetchContent)
+        if(pyAMReX_amrex_src)
+            message(STATUS "Compiling local AMReX ...")
+            message(STATUS "AMReX source path: ${pyAMReX_amrex_src}")
+            if(NOT IS_DIRECTORY ${pyAMReX_amrex_src})
+                message(FATAL_ERROR "Specified directory pyAMReX_amrex_src='${pyAMReX_amrex_src}' does not exist!")
+            endif()
+        elseif(pyAMReX_amrex_tar)
+            message(STATUS "Downloading AMReX ...")
+            message(STATUS "AMReX source: ${pyAMReX_amrex_tar}")
+        elseif(pyAMReX_amrex_branch)
+            message(STATUS "Downloading AMReX ...")
+            message(STATUS "AMReX repository: ${pyAMReX_amrex_repo} (${pyAMReX_amrex_branch})")
+            include(FetchContent)
+        endif()
     endif()
     if(TARGET AMReX::amrex)
         # nothing to do, target already exists in the superbuild
-    elseif(pyAMReX_amrex_internal OR pyAMReX_amrex_src)
+    elseif(pyAMReX_amrex_internal)
         set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
 
         # see https://amrex-codes.github.io/amrex/docs_html/BuildingAMReX.html#customization-options
@@ -45,11 +50,20 @@ macro(find_amrex)
             if(AMReX_GPU_BACKEND STREQUAL CUDA)
                 enable_language(CUDA)
             endif()
-            FetchContent_Declare(fetchedamrex
-                GIT_REPOSITORY ${pyAMReX_amrex_repo}
-                GIT_TAG        ${pyAMReX_amrex_branch}
-                BUILD_IN_SOURCE 0
-            )
+            include(FetchContent)
+            if(pyAMReX_amrex_tar)
+                FetchContent_Declare(fetchedamrex
+                    URL             ${pyAMReX_amrex_tar}
+                    URL_HASH        ${pyAMReX_amrex_tar_hash}
+                    BUILD_IN_SOURCE OFF
+                )
+            else()
+                FetchContent_Declare(fetchedamrex
+                    GIT_REPOSITORY ${pyAMReX_amrex_repo}
+                    GIT_TAG        ${pyAMReX_amrex_branch}
+                    BUILD_IN_SOURCE 0
+                )
+            endif()
             FetchContent_MakeAvailable(fetchedamrex)
             list(APPEND CMAKE_MODULE_PATH "${fetchedamrex_SOURCE_DIR}/Tools/CMake")
 
@@ -76,13 +90,22 @@ macro(find_amrex)
     endif()
 endmacro()
 
+option(pyAMReX_amrex_internal "Download & build AMReX" ${pyAMReX_SUPERBUILD})
+
 # local source-tree
 set(pyAMReX_amrex_src ""
     CACHE PATH
     "Local path to AMReX source directory (preferred if set)")
 
+# tarball fetcher
+set(pyAMReX_amrex_tar "https://github.com/AMReX-Codes/amrex/archive/24.10.zip"
+    CACHE STRING
+    "Remote tarball link to pull and build AMReX from if(pyAMReX_amrex_internal)")
+set(pyAMReX_amrex_tar_hash "SHA256=245232a7218f4352892e00b42db9b510f2e66f9b4a33e89bb5fa8c956a18d55c"
+    CACHE STRING
+    "Hash checksum of the tarball of AMReX if(pyAMReX_amrex_internal)")
+
 # Git fetcher
-option(pyAMReX_amrex_internal "Download & build AMReX" ON)
 set(pyAMReX_amrex_repo "https://github.com/AMReX-Codes/amrex.git"
     CACHE STRING
     "Repository URI to pull and build AMReX from if(pyAMReX_amrex_internal)")

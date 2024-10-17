@@ -80,6 +80,9 @@ option(pyAMReX_INSTALL
     "Enable install targets for pyAMReX"
     ON
 )
+option(pyAMReX_SUPERBUILD
+    "Download & build extra dependencies"
+    ON)
 
 # change the default build type to Release (or RelWithDebInfo) instead of Debug
 set_default_build_type("Release")
