@@ -77,7 +77,7 @@ def test_mfab_numpy(mfab):
         # Config = sim.extension.Config
 
         # Using global indexing
-        # Set all valid cells
+        # Set all valid cells (and internal ghost cells)
         mfab[...] = 42.0
 
         # Set a range of cells. Indices are in Fortran order.
@@ -91,8 +91,8 @@ def test_mfab_numpy(mfab):
 
         # Get a range of cells
         # Get the data along the valid cells in the first dimension (gathering data across blocks
-        # and processors), at the first upper guard cell in the second dimensionn, and cell 16 of
-        # the third (with 16 being relative to 0 which is the lower end of the full domain).
+        # and processors), at the first upper guard cell in the second dimensionn, and cell 2 of
+        # the third (with 2 being relative to 0 which is the lower end of the valid cells of the full domain).
         # Note that in an MPI context, this is a global operation, so caution is required when
         # scaling to large numbers of processors.
         if mfab.n_grow_vect.max > 0:
