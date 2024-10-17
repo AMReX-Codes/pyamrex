@@ -52,8 +52,8 @@ pyAMReX depends on the following popular third party software.
 - a mature [C++17](https://en.wikipedia.org/wiki/C%2B%2B17) compiler, e.g., GCC 8, Clang 7, NVCC 11.0, MSVC 19.15 or newer
 - [CMake 3.24.0+](https://cmake.org)
 - [AMReX *development*](https://amrex-codes.github.io): we automatically download and compile a copy of AMReX
-- [pybind11](https://github.com/pybind/pybind11/) 2.12.0+: we automatically download and compile a copy of pybind11 ([new BSD](https://github.com/pybind/pybind11/blob/master/LICENSE))
-  - [Python](https://python.org) 3.8+
+- [pybind11](https://github.com/pybind/pybind11/) 2.13.0+: we automatically download and compile a copy of pybind11 ([new BSD](https://github.com/pybind/pybind11/blob/master/LICENSE))
+  - [Python](https://python.org) 3.9+
   - [Numpy](https://numpy.org) 1.15+
 
 Optional dependencies include:
@@ -199,7 +199,7 @@ Furthermore, pyAMReX adds a few selected CMake build options:
 | `pyAMReX_pybind11_src`       | *None*                                     | Absolute path to pybind11 source directory (preferred if set) |
 | `pyAMReX_pybind11_internal`  | **ON**/OFF                                 | Needs a pre-installed pybind11 library if set to `OFF`        |
 | `pyAMReX_pybind11_repo`      | `https://github.com/pybind/pybind11.git`   | Repository URI to pull and build pybind11 from                |
-| `pyAMReX_pybind11_branch`    | `v2.12.0`                                  | Repository branch for `pyAMReX_pybind11_repo`                 |
+| `pyAMReX_pybind11_branch`    | `v2.13.6`                                  | Repository branch for `pyAMReX_pybind11_repo`                 |
 | `Python_EXECUTABLE`          | (newest found)                             | Path to Python executable                                     |
 
 As one example, one can also build against a local AMReX copy.
