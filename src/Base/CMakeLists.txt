@@ -30,6 +30,7 @@ foreach(D IN LISTS AMReX_SPACEDIM)
         Periodicity.cpp
         PlotFileUtil.cpp
         PODVector.cpp
+        TableData.cpp
         Utility.cpp
         Vector.cpp
         Version.cpp
