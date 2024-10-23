@@ -4959,6 +4959,10 @@ class BoxArray:
     @typing.overload
     def coarsenable(self, arg0: IntVect2D, arg1: IntVect2D) -> bool: ...
     def define(self, arg0: Box) -> None: ...
+    @typing.overload
+    def enclosed_cells(self) -> BoxArray: ...
+    @typing.overload
+    def enclosed_cells(self, arg0: int) -> BoxArray: ...
     def get(self, arg0: int) -> Box: ...
     def ix_type(self) -> IndexType: ...
     @typing.overload
@@ -6304,7 +6308,7 @@ class MultiFab(FabArray_FArrayBox):
         """
         dst = src + a*dst
         """
-    def __getitem__(self, index):
+    def __getitem__(self, index, with_internal_ghosts=False):
         """
         Returns slice of the MultiFab using global indexing, as a numpy array.
             This uses numpy array indexing, with the indexing relative to the global array.
@@ -6326,6 +6330,9 @@ class MultiFab(FabArray_FArrayBox):
             ----------
             index : the index using numpy style indexing
                 Index of the slice to return.
+            with_internal_ghosts : bool, optional
+                Whether to include internal ghost cells. When true, data from ghost cells may be used that
+                overlaps valid cells.
 
         """
     @typing.overload
