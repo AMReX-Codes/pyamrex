@@ -215,23 +215,69 @@ void init_MultiFab(py::module &m)
              py::arg("comp"), py::arg("ncomp"), py::arg("nghost")
         )
 
-        .def_static("saxpy",
-            py::overload_cast< FabArray<FArrayBox> &, Real, FabArray<FArrayBox> const &, int, int, int, IntVect const & >(&FabArray<FArrayBox>::template Saxpy<FArrayBox>),
-            py::arg("y"), py::arg("a"), py::arg("x"), py::arg("xcomp"), py::arg("ycomp"), py::arg("ncomp"), py::arg("nghost"),
-            "y += a*x"
+        .def("saxpy",
+            [](FabArray<FArrayBox> & dst, Real a, FabArray<FArrayBox> const & x, int x_comp, int dst_comp, int ncomp, IntVect const & nghost)
+            {
+                FabArray<FArrayBox>::Saxpy(dst, a, x, x_comp, dst_comp, ncomp, nghost);
+            },
+            py::arg("a"), py::arg("x"), py::arg("x_comp"), py::arg("dst_comp"), py::arg("ncomp"), py::arg("nghost"),
+            "self += a*x\n\n"
+            "Parameters\n"
+            "----------\n"
+            "a        : scalar a\n"
+            "x        : FabArray x\n"
+            "x_comp   : starting component of x\n"
+            "dst_comp : starting component of y\n"
+            "ncomp    : number of components\n"
+            "nghost   : number of ghost cells"
         )
-        .def_static("xpay",
-            py::overload_cast< FabArray<FArrayBox> &, Real, FabArray<FArrayBox> const &, int, int, int, IntVect const & >(&FabArray<FArrayBox>::template Xpay<FArrayBox>),
-            py::arg("y"), py::arg("a"), py::arg("x"), py::arg("xcomp"), py::arg("ycomp"), py::arg("ncomp"), py::arg("nghost"),
-            "y = x + a*y"
+        .def("xpay",
+            [](FabArray<FArrayBox> & dst, Real a, FabArray<FArrayBox> const & x, int x_comp, int dst_comp, int ncomp, IntVect const & nghost)
+            {
+                FabArray<FArrayBox>::Xpay(dst, a, x, x_comp, dst_comp, ncomp, nghost);
+            },
+            py::arg("a"), py::arg("x"), py::arg("xcomp"), py::arg("dst_comp"), py::arg("ncomp"), py::arg("nghost"),
+            "self = x + a*self\n\n"
+            "Parameters\n"
+            "----------\n"
+            "a        : scalar a\n"
+            "x        : FabArray x\n"
+            "x_comp   : starting component of x\n"
+            "dst_comp : starting component of y\n"
+            "ncomp    : number of components\n"
+            "nghost   : number of ghost cells"
         )
-        .def_static("lin_comb",
-            py::overload_cast< FabArray<FArrayBox> &, Real, FabArray<FArrayBox> const &, int, Real, FabArray<FArrayBox> const &, int, int, int, IntVect const & >(&FabArray<FArrayBox>::template LinComb<FArrayBox>),
-            py::arg("dst"),
+        .def("lin_comb",
+            [](
+                FabArray<FArrayBox> & dst,
+                Real a, FabArray<FArrayBox> const & x, int x_comp,
+                Real b, FabArray<FArrayBox> const & y, int y_comp,
+                int dst_comp, int ncomp, IntVect const & nghost)
+            {
+                FabArray<FArrayBox>::LinComb(dst, a, x, x_comp, b, y, y_comp, dst_comp, ncomp, nghost);
+            },
             py::arg("a"), py::arg("x"), py::arg("xcomp"),
             py::arg("b"), py::arg("y"), py::arg("ycomp"),
             py::arg("dstcomp"), py::arg("numcomp"), py::arg("nghost"),
-            "dst = a*x + b*y"
+            "self = a*x + b*y\n\n"
+            "Parameters\n"
+            "----------\n"
+            "a       : float\n"
+            "    scalar a\n"
+            "x       : FabArray\n"
+            "xcomp   : int\n"
+            "    starting component of x\n"
+            "b       : float\n"
+            "    scalar b\n"
+            "y       : FabArray\n"
+            "ycomp   : int\n"
+            "    starting component of y\n"
+            "dstcomp : int\n"
+            "    starting component of destination\n"
+            "numcomp : int\n"
+            "    number of components\n"
+            "nghost : int\n"
+            "    number of ghost cells"
         )
 
         .def("sum",
