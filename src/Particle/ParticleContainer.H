@@ -224,6 +224,15 @@ void make_ParticleContainer_and_Iterators (py::module &m, std::string allocstr)
              "add a new runtime component with type Int"
         )
 
+        .def_property_readonly("real_soa_names",
+            &ParticleContainerType::GetRealSoANames,
+            "Get the names for the Real SoA components"
+        )
+        .def_property_readonly("int_soa_names",
+            &ParticleContainerType::GetIntSoANames,
+            "Get the names for the int SoA components"
+        )
+
         .def_property_readonly("finest_level", &ParticleContainerBase::finestLevel)
 
         // ParticleContainer ( const ParticleContainer &) = delete;
