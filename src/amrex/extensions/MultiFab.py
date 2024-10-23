@@ -539,7 +539,9 @@ def __getitem__(self, index, with_internal_ghosts=False):
     # The domain is complete if the number of cells in the box array is the same as
     # the number of cells in the minimal box.
     cell_centered_box_array = self.box_array().enclosed_cells()
-    domain_complete = cell_centered_box_array.numPts == cell_centered_box_array.minimal_box().numPts()
+    domain_complete = (
+        cell_centered_box_array.numPts == cell_centered_box_array.minimal_box().numPts()
+    )
 
     if domain_complete or with_internal_ghosts:
         result_global = None
