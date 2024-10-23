@@ -493,7 +493,9 @@ def __getitem__(self, index, with_internal_ghosts=False):
     # Gather the data to be included in a list to be sent to other processes
     datalist = []
     for mfi in self:
-        block_slices, global_slices = _get_intersect_slice(self, mfi, index4, with_internal_ghosts)
+        block_slices, global_slices = _get_intersect_slice(
+            self, mfi, index4, with_internal_ghosts
+        )
         if global_slices is not None:
             # Note that the array will always have 4 dimensions.
             device_arr = _get_field(self, mfi)
@@ -536,7 +538,7 @@ def __getitem__(self, index, with_internal_ghosts=False):
     # from the valid cells is used.
     # This check is whether the domain is complete is approximate (since it doesn't
     # account for cases where boxes overlap each other).
-    domain_complete = (self.box_array().numPts >= self.box_array().minimal_box().numPts())
+    domain_complete = self.box_array().numPts >= self.box_array().minimal_box().numPts()
 
     if domain_complete or with_internal_ghosts:
         result_global = None
