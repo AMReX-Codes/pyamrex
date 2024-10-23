@@ -129,13 +129,15 @@ void init_BoxArray(py::module &m) {
     //! \brief Apply surroundingNodes(Box,int) to each Box in
     //! BoxArray.  See the documentation of Box for details.
     BoxArray& surroundingNodes (int dir);
+*/
 
     //! Apply Box::enclosedCells() to each Box in the BoxArray.
-    BoxArray& enclosedCells ();
+    .def("enclosed_cells",
+            py::overload_cast<>(&BoxArray::enclosedCells))
+    .def("enclosed_cells",
+            py::overload_cast<int>(&BoxArray::enclosedCells))
 
-    //! Apply Box::enclosedCells(int) to each Box in the BoxArray.
-    BoxArray& enclosedCells  (int dir);
-
+/*
     //! Apply Box::convert(IndexType) to each Box in the BoxArray.
     BoxArray& convert (IndexType typ);
 
