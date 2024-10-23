@@ -463,7 +463,7 @@ def _get_intersect_slice(self, mfi, index, with_internal_ghosts):
         return None, None
 
 
-def __getitem__(self, index):
+def __getitem__(self, index, with_internal_ghosts=False):
     """Returns slice of the MultiFab using global indexing, as a numpy array.
     This uses numpy array indexing, with the indexing relative to the global array.
     The slice ranges can cross multiple blocks and the result will be gathered into a single
@@ -484,13 +484,16 @@ def __getitem__(self, index):
     ----------
     index : the index using numpy style indexing
         Index of the slice to return.
+    with_internal_ghosts : bool, optional
+        Whether to include internal ghost cells. When true, data from ghost cells may be used that
+        overlaps valid cells.
     """
-    index = _process_index(self, index)
+    index4 = _process_index(self, index)
 
     # Gather the data to be included in a list to be sent to other processes
     datalist = []
     for mfi in self:
-        block_slices, global_slices = _get_intersect_slice(self, mfi, index, False)
+        block_slices, global_slices = _get_intersect_slice(self, mfi, index4, with_internal_ghosts)
         if global_slices is not None:
             # Note that the array will always have 4 dimensions.
             device_arr = _get_field(self, mfi)
@@ -522,11 +525,26 @@ def __getitem__(self, index):
             raise Exception("MultiFab.__getitem__ requires mpi4py")
         all_datalist = comm_world.allgather(datalist)
 
-    # Create the array to be returned
-    result_shape = tuple([max(0, ii.stop - ii.start) for ii in index])
+    # The shape of the array to be returned
+    result_shape = tuple([max(0, ii.stop - ii.start) for ii in index4])
+
+    # If the boxes do not fill the domain, then include the internal ghost
+    # cells since they may cover internal regions not otherwise covered by valid cells.
+    # If the domain is not completely covered, __getitem__ is done twice, the first time
+    # including internal ghost cells, and the second time without. The second time is needed
+    # to ensure that in places where ghost cells overlap with valid cells, that the data
+    # from the valid cells is used.
+    # This check is whether the domain is complete is approximate (since it doesn't
+    # account for cases where boxes overlap each other).
+    domain_complete = (self.box_array().numPts >= self.box_array().minimal_box().numPts())
+
+    if domain_complete or with_internal_ghosts:
+        result_global = None
+    else:
+        # First get the data including the internal ghost cells
+        result_global = self.__getitem__(index, with_internal_ghosts=True)
 
     # Now, copy the data into the result array
-    result_global = None
     for datalist in all_datalist:
         for global_slices, f_arr in datalist:
             if result_global is None:
@@ -540,7 +558,12 @@ def __getitem__(self, index):
 
     # Remove dimensions of length 1, and if all dimensions
     # are removed, return a scalar (that's what the [()] does)
-    return result_global.squeeze()[()]
+    if with_internal_ghosts:
+        # Return the data without the squeeze so that the result can be used in the loop
+        # above again.
+        return result_global
+    else:
+        return result_global.squeeze()[()]
 
 
 def __setitem__(self, index, value):
