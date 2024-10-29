@@ -322,7 +322,9 @@ def _process_index(self, index):
             for i in range(len(index)):
                 if index[i] == Ellipsis:
                     index = (
-                        index[:i] + (dims + 2 - len(index)) * [slice(None)] + index[i + 1 :]
+                        index[:i]
+                        + (dims + 2 - len(index)) * [slice(None)]
+                        + index[i + 1 :]
                     )
                     break
     else:
