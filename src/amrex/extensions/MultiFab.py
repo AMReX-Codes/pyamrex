@@ -314,13 +314,17 @@ def _process_index(self, index):
         # If only one slice or integer passed in, it was not wrapped in a tuple
         index = [index]
     elif isinstance(index, tuple):
-        index = list(index)
-        for i in range(len(index)):
-            if index[i] == Ellipsis:
-                index = (
-                    index[:i] + (dims + 2 - len(index)) * [slice(None)] + index[i + 1 :]
-                )
-                break
+        if len(index) == 0:
+            # The empty tuple specifies all valid and ghost cells
+            index = [index]
+        else:
+            index = list(index)
+            for i in range(len(index)):
+                if index[i] == Ellipsis:
+                    index = (
+                        index[:i] + (dims + 2 - len(index)) * [slice(None)] + index[i + 1 :]
+                    )
+                    break
     else:
         raise Exception("MultiFab.__getitem__: unexpected index type")
 
