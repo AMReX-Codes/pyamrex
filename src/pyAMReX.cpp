@@ -38,6 +38,7 @@ void init_PODVector(py::module &);
 void init_Utility(py::module &);
 void init_Vector(py::module &);
 void init_Version(py::module &);
+void init_VisMF(py::module &);
 #ifdef AMREX_USE_MPI
 void init_MPMD(py::module &);
 #endif
@@ -82,6 +83,7 @@ PYBIND11_MODULE(amrex_3d_pybind, m) {
                StructOfArrays
                Utility
                Vector
+               VisMF
     )pbdoc";
 
     // note: order from parent to child classes and argument usage
@@ -117,6 +119,7 @@ PYBIND11_MODULE(amrex_3d_pybind, m) {
     init_PlotFileUtil(m);
     init_Utility(m);
     init_Version(m);
+    init_VisMF(m);
 
     // authors
     m.attr("__author__") =

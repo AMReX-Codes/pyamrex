@@ -33,6 +33,7 @@ foreach(D IN LISTS AMReX_SPACEDIM)
         Utility.cpp
         Vector.cpp
         Version.cpp
+        VisMF.cpp
     )
 
     if (AMReX_MPI)
