@@ -34,4 +34,3 @@ void init_VisMF(py::module &m)
            "Reads a MultiFab from the specified file")
         ;
 }
-
