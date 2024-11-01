@@ -26,7 +26,7 @@ jobs:
     - name: Build & Install
       # mkl/rng/device/detail/mrg32k3a_impl.hpp has a number of sign-compare error
       # mkl/rng/device/detail/mrg32k3a_impl.hpp has missing braces in array-array initalization
-      env: {CXXFLAGS: "-fno-operator-names -Werror -Wall -Wextra -Wpedantic -Wnull-dereference -Wfloat-conversion -Wshadow -Woverloaded-virtual -Wextra-semi -Wunreachable-code -Wnon-virtual-dtor -Wno-sign-compare -Wno-missing-braces"}
+      env: {CXXFLAGS: "-fno-operator-names -Werror -Wall -Wextra -Wpedantic -Wnull-dereference -Wfloat-conversion -Wshadow -Woverloaded-virtual -Wextra-semi -Wunreachable-code -Wnon-virtual-dtor -Wno-unused-variable -Wno-shadow"}
       run: |
         set +e
         source /opt/intel/oneapi/setvars.sh
@@ -73,10 +73,8 @@ jobs:
         restore-keys: |
              ccache-${{ github.workflow }}-${{ github.job }}-git-
     - name: Build & Install
-      # mkl/rng/device/detail/mrg32k3a_impl.hpp has a number of sign-compare error
-      # mkl/rng/device/detail/mrg32k3a_impl.hpp has missing braces in array-array initalization
       # /usr/include/c++/12/bits/stl_tempbuf.h has deprecated-declarations in 'get_temporary_buffer<std::pair<long, int>>'
-      env: {CXXFLAGS: "-fno-operator-names -Werror -Wall -Wextra -Wpedantic -Wnull-dereference -Wfloat-conversion -Wshadow -Woverloaded-virtual -Wextra-semi -Wunreachable-code -Wnon-virtual-dtor -Wno-sign-compare -Wno-missing-braces -Wno-error=pass-failed -Wno-tautological-constant-compare -Wno-deprecated-declarations"}
+      env: {CXXFLAGS: "-fno-operator-names -Werror -Wall -Wextra -Wpedantic -Wnull-dereference -Wfloat-conversion -Wshadow -Woverloaded-virtual -Wextra-semi -Wunreachable-code -Wnon-virtual-dtor -Wno-deprecated-declarations"}
       run: |
         set +e
         source /opt/intel/oneapi/setvars.sh
