@@ -36,6 +36,7 @@ void init_ParticleContainer(py::module &);
 void init_Periodicity(py::module &);
 void init_PlotFileUtil(py::module &);
 void init_PODVector(py::module &);
+void init_TableData(py::module &);
 void init_Utility(py::module &);
 void init_Vector(py::module &);
 void init_Version(py::module &);
@@ -82,6 +83,7 @@ PYBIND11_MODULE(amrex_3d_pybind, m) {
                PlotFileUtil
                PODVector
                StructOfArrays
+               TableData
                Utility
                Vector
                VisMF
@@ -110,6 +112,7 @@ PYBIND11_MODULE(amrex_3d_pybind, m) {
     init_MultiFab(m);
     init_ParallelDescriptor(m);
     init_PODVector(m);
+    init_TableData(m);
 
     init_ParticleContainer(m);
     init_AmrMesh(m);
