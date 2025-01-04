@@ -25,6 +25,7 @@ foreach(D IN LISTS AMReX_SPACEDIM)
         IndexType.cpp
         IntVect.cpp
         RealVect.cpp
+        SmallMatrix.cpp
         MultiFab.cpp
         ParallelDescriptor.cpp
         ParmParse.cpp

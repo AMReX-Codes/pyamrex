@@ -14,6 +14,7 @@
 // forward declarations of exposed classes
 void init_Algorithm(py::module&);
 void init_AMReX(py::module&);
+void init_AmrMesh(py::module &);
 void init_Arena(py::module&);
 void init_Array4(py::module&);
 void init_BaseFab(py::module&);
@@ -27,8 +28,9 @@ void init_FArrayBox(py::module&);
 void init_Geometry(py::module&);
 void init_IndexType(py::module &);
 void init_IntVect(py::module &);
-void init_RealVect(py::module &);
-void init_AmrMesh(py::module &);
+#ifdef AMREX_USE_MPI
+void init_MPMD(py::module &);
+#endif
 void init_MultiFab(py::module &);
 void init_ParallelDescriptor(py::module &);
 void init_ParmParse(py::module &);
@@ -36,13 +38,12 @@ void init_ParticleContainer(py::module &);
 void init_Periodicity(py::module &);
 void init_PlotFileUtil(py::module &);
 void init_PODVector(py::module &);
+void init_RealVect(py::module &);
+void init_SmallMatrix(py::module &);
 void init_Utility(py::module &);
 void init_Vector(py::module &);
 void init_Version(py::module &);
 void init_VisMF(py::module &);
-#ifdef AMREX_USE_MPI
-void init_MPMD(py::module &);
-#endif
 
 #if AMREX_SPACEDIM == 1
 PYBIND11_MODULE(amrex_1d_pybind, m) {
@@ -81,6 +82,7 @@ PYBIND11_MODULE(amrex_3d_pybind, m) {
                Periodicity
                PlotFileUtil
                PODVector
+               SmallMatrix
                StructOfArrays
                Utility
                Vector
@@ -88,6 +90,7 @@ PYBIND11_MODULE(amrex_3d_pybind, m) {
     )pbdoc";
 
     // note: order from parent to child classes and argument usage
+
     init_AMReX(m);
     init_Arena(m);
     init_Dim3(m);
@@ -98,6 +101,7 @@ PYBIND11_MODULE(amrex_3d_pybind, m) {
     init_Box(m);
     init_Periodicity(m);
     init_Array4(m);
+    init_SmallMatrix(m);
     init_BoxArray(m);
     init_ParmParse(m);
     init_CoordSys(m);
@@ -117,6 +121,7 @@ PYBIND11_MODULE(amrex_3d_pybind, m) {
 #ifdef AMREX_USE_MPI
     init_MPMD(m);
 #endif
+
     // Wrappers around standalone functions
     init_PlotFileUtil(m);
     init_Utility(m);

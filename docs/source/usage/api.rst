@@ -174,6 +174,13 @@ Data Containers
    :members:
    :undoc-members:
 
+Small Matrices and Vectors
+""""""""""""""""""""""""""
+
+.. autoclass:: amrex.space3d.SmallMatrix_6x6_F_SI1_double
+   :members:
+   :undoc-members:
+
 Utility
 """""""
 
