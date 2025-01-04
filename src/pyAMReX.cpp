@@ -12,6 +12,7 @@
 
 
 // forward declarations of exposed classes
+void init_Algorithm(py::module&);
 void init_AMReX(py::module&);
 void init_Arena(py::module&);
 void init_Array4(py::module&);
@@ -90,6 +91,7 @@ PYBIND11_MODULE(amrex_3d_pybind, m) {
     init_AMReX(m);
     init_Arena(m);
     init_Dim3(m);
+    init_Algorithm(m);
     init_IntVect(m);
     init_IndexType(m);
     init_RealVect(m);

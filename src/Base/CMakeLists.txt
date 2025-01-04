@@ -1,6 +1,7 @@
 foreach(D IN LISTS AMReX_SPACEDIM)
     target_sources(pyAMReX_${D}d
       PRIVATE
+        Algorithm.cpp
         AMReX.cpp
         Arena.cpp
         Array4.cpp
