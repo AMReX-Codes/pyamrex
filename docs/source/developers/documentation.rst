@@ -6,11 +6,21 @@ Documentation
 Python API documentation
 ------------------------
 
-to document:
+.. note::
 
-- Python doc style
-- ``.pyi`` stub files generation & usage
-- Sphinx autodocs/module used
+   TODO: document the Python doc style we use.
+
+We add `docstrings for pybind11-created types and functions <https://pybind11.readthedocs.io/en/stable/basics.html#creating-bindings-for-a-simple-function>`__.
+In order to retrieve those, one usually would need to build pyAMReX and have it available (installed) as a working Python import.
+This build step can be complicated for building documentation and it does not work well with autocompletion in IPython.
+
+Thus, on every merge to the mainline ``development`` branch, we build pyAMReX and create "stub" (interface/facade) files that carry all type information and doc strings.
+We do this by building pyAMReX and running the script ``.github/update_stub.sh``, which uses `pybind11-stubgen <https://github.com/sizmailov/pybind11-stubgen>`__ to extract these information.
+A GitHub action then commits the updated stub files (``.pyi``) to the repository.
+
+When we build our Sphinx documentation, we copy the ``.pyi`` files and generate documentation of classes and functions via `autodoc <https://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html>`__.
+The logic for this resides in ``docs/source/conf.py``.
+We also provide a zip archive online under https://pyamrex.readthedocs.io/en/latest/_static/pyapi/amrex.zip that can be downloaded by dependent projects that build their Sphinx docs.
 
 
 Doxygen documentation (C++)

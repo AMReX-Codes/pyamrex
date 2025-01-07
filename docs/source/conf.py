@@ -225,3 +225,6 @@ for subdir, _dirs, files in os.walk(dst_path):
 
 # insert into PYTHONPATH
 sys.path.insert(0, os.path.join(dst_path, ".."))
+
+# make archive for download into apps like WarpX, ImpactX, ...
+shutil.make_archive(dst_path, "zip", dst_path)
