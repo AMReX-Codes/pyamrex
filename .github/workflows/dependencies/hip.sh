@@ -52,6 +52,7 @@ sudo apt-get install -y --no-install-recommends \
     rocfft-dev      \
     rocprim-dev     \
     rocrand-dev     \
+    rocsparse-dev   \
     hiprand-dev
 
 # activate
