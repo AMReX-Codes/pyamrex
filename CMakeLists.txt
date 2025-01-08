@@ -1,7 +1,7 @@
 # Preamble ####################################################################
 #
 cmake_minimum_required(VERSION 3.24.0)
-project(pyAMReX VERSION 24.12)
+project(pyAMReX VERSION 25.01)
 
 include(${pyAMReX_SOURCE_DIR}/cmake/pyAMReXFunctions.cmake)
 
