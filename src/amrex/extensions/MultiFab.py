@@ -362,15 +362,15 @@ def _process_index(self, index):
             index[i] = slice(start, stop, index[i].step)
         elif isinstance(index[i], tuple):
             # The slice includes ghosts
-            assert (
-                len(index[i]) == 0
-            ), "Indicator to include all ghost cells must be an empty tuple"
+            assert len(index[i]) == 0, (
+                "Indicator to include all ghost cells must be an empty tuple"
+            )
             index[i] = slice(mins_with_ghost[i], maxs_with_ghost[i] + 1)
         else:
             ii = _handle_imaginary_negative_index(index[i], mins[i], maxs[i])
-            assert (
-                mins_with_ghost[i] <= ii and ii <= maxs_with_ghost[i]
-            ), "Index out of range"
+            assert mins_with_ghost[i] <= ii and ii <= maxs_with_ghost[i], (
+                "Index out of range"
+            )
             index[i] = slice(ii, ii + 1)
 
     return index
