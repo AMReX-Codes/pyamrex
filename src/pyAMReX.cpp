@@ -102,11 +102,11 @@ PYBIND11_MODULE(amrex_3d_pybind, m) {
     init_Periodicity(m);
     init_Array4(m);
     init_SmallMatrix(m);
+    init_Vector(m);
     init_BoxArray(m);
     init_ParmParse(m);
     init_CoordSys(m);
     init_RealBox(m);
-    init_Vector(m);
     init_Geometry(m);
     init_DistributionMapping(m);
     init_BaseFab(m);

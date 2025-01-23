@@ -29,25 +29,23 @@ void init_BoxArray(py::module &m) {
             }
         )
 
-        //! Construct an empty BoxArray
+        // Construct an empty BoxArray
         .def(py::init<>())
-        //.def(py::init< BoxArray const& >())
-        //.def(py::init< BoxArray const&& >())
+        // Copy a BoxArray
+        .def(py::init< BoxArray const & >())
 
-        //! Construct a BoxArray from an array of Boxes of size nbox.
+        // Construct a BoxArray from a single Box.
         .def(py::init< Box const & >())
-        //! Construct a BoxArray from an array of Boxes of size nbox.
-        .def(py::init< const Box*, int >())
+        // Construct a BoxArray from a list of Boxes.
+        .def(py::init([](Vector<Box> bl) {
+             return BoxArray(bl.dataPtr(), bl.size());
+        }))
 
-        /*
-        //! Construct a BoxArray from a BoxList.
-        explicit BoxArray (const BoxList& bl);
-        explicit BoxArray (BoxList&& bl) noexcept;
+        // Construct a BoxArray from a BoxList.
+        //.def(py::init< BoxList const& >())
 
-        BoxArray (const BoxArray& rhs, const BATransformer& trans);
-
-        BoxArray (BoxList&& bl, IntVect const& max_grid_size);
-        */
+        //BoxArray (const BoxArray& rhs, const BATransformer& trans);
+        //BoxArray (BoxList&& bl, IntVect const& max_grid_size);
 
         .def_property_readonly("size", &BoxArray::size)
         .def_property_readonly("capacity", &BoxArray::capacity)

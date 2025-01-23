@@ -7,6 +7,7 @@
 
 #include "Base/Vector.H"
 
+#include <AMReX_Box.H>
 #include <AMReX_Vector.H>
 
 #include <string>
@@ -25,5 +26,6 @@ void init_Vector(py::module& m)
     if constexpr(!std::is_same_v<int, Long>)
         make_Vector<Long> (m, "Long");
 
+    make_Vector<Box> (m, "Box");
     make_Vector<std::string> (m, "string");
 }
