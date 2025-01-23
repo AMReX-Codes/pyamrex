@@ -205,7 +205,7 @@ void make_ParticleContainer_and_Iterators (py::module &m, std::string allocstr)
         .def_property_readonly("byte_spread", &ParticleContainerType::ByteSpread)
 
         // compile-time components
-        .def("set_SoA_compile_time_names", &ParticleContainerType::SetSoACompileTimeNames)
+        .def("set_soa_compile_time_names", &ParticleContainerType::SetSoACompileTimeNames)
 
         // runtime components
         .def("add_real_comp", py::overload_cast<int>(&ParticleContainerType::AddRealComp),

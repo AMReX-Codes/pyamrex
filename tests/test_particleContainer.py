@@ -80,10 +80,10 @@ def soa_particle_container(Npart, std_geometry, distmap, boxarr, std_real_box):
     myt.int_array_data = []
 
     with pytest.raises(Exception):
-        pc.set_SoA_compile_time_names(
+        pc.set_soa_compile_time_names(
             ["x", "y", "z", "z", "b", "c", "d", "e"], []
         )  # error: z added twice
-    pc.set_SoA_compile_time_names(["x", "y", "z", "a", "b", "c", "d", "e"], [])
+    pc.set_soa_compile_time_names(["x", "y", "z", "a", "b", "c", "d", "e"], [])
 
     iseed = 1
     pc.init_random(Npart, iseed, myt, False, std_real_box)
