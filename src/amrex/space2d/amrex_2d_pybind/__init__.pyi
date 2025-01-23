@@ -288,6 +288,7 @@ __all__ = [
     "The_Device_Arena",
     "The_Managed_Arena",
     "The_Pinned_Arena",
+    "Vector_Box",
     "Vector_BoxArray",
     "Vector_DistributionMapping",
     "Vector_Geometry",
@@ -5033,9 +5034,11 @@ class BoxArray:
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
+    def __init__(self, arg0: BoxArray) -> None: ...
+    @typing.overload
     def __init__(self, arg0: Box) -> None: ...
     @typing.overload
-    def __init__(self, arg0: Box, arg1: int) -> None: ...
+    def __init__(self, arg0: Vector_Box) -> None: ...
     def __repr__(self) -> str: ...
     def cell_equal(self, arg0: BoxArray) -> bool: ...
     def clear(self) -> None: ...
@@ -20848,6 +20851,112 @@ class StructOfArrays_8_0_idcpu_pinned:
         """
         Get the number of particles
         """
+
+class Vector_Box:
+    __hash__: typing.ClassVar[None] = None
+    @staticmethod
+    def _pybind11_conduit_v1_(*args, **kwargs): ...
+    def __bool__(self) -> bool:
+        """
+        Check whether the list is nonempty
+        """
+    def __contains__(self, x: Box) -> bool:
+        """
+        Return true the container contains ``x``
+        """
+    @typing.overload
+    def __delitem__(self, arg0: int) -> None:
+        """
+        Delete the list elements at index ``i``
+        """
+    @typing.overload
+    def __delitem__(self, arg0: slice) -> None:
+        """
+        Delete list elements using a slice object
+        """
+    def __eq__(self, arg0: Vector_Box) -> bool: ...
+    @typing.overload
+    def __getitem__(self, s: slice) -> Vector_Box:
+        """
+        Retrieve list elements using a slice object
+        """
+    @typing.overload
+    def __getitem__(self, arg0: int) -> Box: ...
+    @typing.overload
+    def __getitem__(self, arg0: int) -> Box: ...
+    @typing.overload
+    def __init__(self) -> None: ...
+    @typing.overload
+    def __init__(self, arg0: Vector_Box) -> None:
+        """
+        Copy constructor
+        """
+    @typing.overload
+    def __init__(self, arg0: typing.Iterable) -> None: ...
+    @typing.overload
+    def __init__(self) -> None: ...
+    @typing.overload
+    def __init__(self, arg0: Vector_Box) -> None: ...
+    def __iter__(self) -> typing.Iterator[Box]: ...
+    def __len__(self) -> int: ...
+    def __ne__(self, arg0: Vector_Box) -> bool: ...
+    @typing.overload
+    def __repr__(self) -> str:
+        """
+        Return the canonical string representation of this list.
+        """
+    @typing.overload
+    def __repr__(self) -> str: ...
+    @typing.overload
+    def __setitem__(self, arg0: int, arg1: Box) -> None: ...
+    @typing.overload
+    def __setitem__(self, arg0: slice, arg1: Vector_Box) -> None:
+        """
+        Assign list elements using a slice object
+        """
+    @typing.overload
+    def __setitem__(self, arg0: int, arg1: Box) -> None: ...
+    def append(self, x: Box) -> None:
+        """
+        Add an item to the end of the list
+        """
+    def clear(self) -> None:
+        """
+        Clear the contents
+        """
+    def count(self, x: Box) -> int:
+        """
+        Return the number of times ``x`` appears in the list
+        """
+    @typing.overload
+    def extend(self, L: Vector_Box) -> None:
+        """
+        Extend the list by appending all the items in the given list
+        """
+    @typing.overload
+    def extend(self, L: typing.Iterable) -> None:
+        """
+        Extend the list by appending all the items in the given list
+        """
+    def insert(self, i: int, x: Box) -> None:
+        """
+        Insert an item at a given position.
+        """
+    @typing.overload
+    def pop(self) -> Box:
+        """
+        Remove and return the last item
+        """
+    @typing.overload
+    def pop(self, i: int) -> Box:
+        """
+        Remove and return the item at index ``i``
+        """
+    def remove(self, x: Box) -> None:
+        """
+        Remove the first item from the list whose value is x. It is an error if there is no such item.
+        """
+    def size(self) -> int: ...
 
 class Vector_BoxArray:
     __hash__: typing.ClassVar[None] = None
