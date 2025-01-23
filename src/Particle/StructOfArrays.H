@@ -10,7 +10,6 @@
 #include <AMReX_GpuAllocators.H>
 #include <AMReX_StructOfArrays.H>
 
-#include <stdexcept>
 #include <sstream>
 
 

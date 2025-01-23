@@ -236,6 +236,24 @@ void make_ParticleContainer_and_Iterators (py::module &m, std::string allocstr)
             "Get the names for the int SoA components"
         )
 
+        .def("has_real_comp",
+            &ParticleContainerType::HasRealComp,
+            "Check if a container has an ParticleReal component"
+        )
+        .def("has_int_comp",
+            &ParticleContainerType::HasIntComp,
+            "Check if a container has an Integer component"
+        )
+
+        .def("get_real_comp_index",
+            &ParticleContainerType::GetRealCompIndex,
+            "Get the ParticleReal SoA index of a component"
+        )
+        .def("get_int_comp_index",
+            &ParticleContainerType::GetIntCompIndex,
+            "Get the Integer SoA index of a component"
+        )
+
         .def_property_readonly("finest_level", &ParticleContainerBase::finestLevel)
 
         // ParticleContainer ( const ParticleContainer &) = delete;
