@@ -42,7 +42,7 @@ void init_BoxArray(py::module &m) {
         }))
 
         // Construct a BoxArray from a BoxList.
-        .def(py::init< BoxList const& >())
+        //.def(py::init< BoxList const& >())
 
         //BoxArray (const BoxArray& rhs, const BATransformer& trans);
         //BoxArray (BoxList&& bl, IntVect const& max_grid_size);
