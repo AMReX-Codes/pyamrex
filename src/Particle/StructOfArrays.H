@@ -56,6 +56,16 @@ void make_StructOfArrays(py::module &m, std::string allocstr)
              py::arg("index"),
              "Get access to a particle Real component Array (compile-time and runtime component)")
 
+        // names
+        .def_property_readonly("real_names",
+            &SOAType::GetRealNames,
+            "Names for the Real SoA components"
+        )
+        .def_property_readonly("int_names",
+            &SOAType::GetIntNames,
+            "Names for the int SoA components"
+        )
+
         .def("__len__", &SOAType::size,
              "Get the number of particles")
         .def_property_readonly("size", &SOAType::size,
