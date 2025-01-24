@@ -10932,9 +10932,25 @@ class ParticleContainer_16_4_0_0_arena:
         add a new runtime component with type Real
         """
     def clear_particles(self) -> None: ...
+    def get_int_comp_index(self, arg0: str) -> int:
+        """
+        Get the Integer SoA index of a component
+        """
     def get_particles(
         self, level: int
     ) -> dict[tuple[int, int], ParticleTile_16_4_0_0_arena]: ...
+    def get_real_comp_index(self, arg0: str) -> int:
+        """
+        Get the ParticleReal SoA index of a component
+        """
+    def has_int_comp(self, arg0: str) -> bool:
+        """
+        Check if a container has an Integer component
+        """
+    def has_real_comp(self, arg0: str) -> bool:
+        """
+        Check if a container has an ParticleReal component
+        """
     def increment(self, arg0: MultiFab, arg1: int) -> None: ...
     def init_one_per_cell(
         self, arg0: float, arg1: float, arg2: float, arg3: ParticleInitType_16_4_0_0
@@ -10974,6 +10990,7 @@ class ParticleContainer_16_4_0_0_arena:
     def resize_data(self) -> None: ...
     def restart(self, dir: str, file: str) -> None: ...
     def restart_checkpoint(self, dir: str, file: str, is_checkpoint: bool) -> None: ...
+    def set_soa_compile_time_names(self, arg0: list[str], arg1: list[str]) -> None: ...
     def shrink_t_fit(self) -> None: ...
     def sort_particles_by_bin(self, arg0: IntVect2D) -> None: ...
     def sort_particles_by_cell(self) -> None: ...
@@ -11012,6 +11029,11 @@ class ParticleContainer_16_4_0_0_arena:
     @property
     def finest_level(self) -> int: ...
     @property
+    def int_soa_names(self) -> list[str]:
+        """
+        Get the names for the int SoA components
+        """
+    @property
     def num_int_comps(self) -> int:
         """
         The number of compile-time and runtime int components in SoA
@@ -11032,6 +11054,11 @@ class ParticleContainer_16_4_0_0_arena:
     def num_runtime_real_comps(self) -> int:
         """
         The number of runtime Real components in SoA
+        """
+    @property
+    def real_soa_names(self) -> list[str]:
+        """
+        Get the names for the Real SoA components
         """
 
 class ParticleContainer_16_4_0_0_default:
@@ -11111,9 +11138,25 @@ class ParticleContainer_16_4_0_0_default:
         add a new runtime component with type Real
         """
     def clear_particles(self) -> None: ...
+    def get_int_comp_index(self, arg0: str) -> int:
+        """
+        Get the Integer SoA index of a component
+        """
     def get_particles(
         self, level: int
     ) -> dict[tuple[int, int], ParticleTile_16_4_0_0_default]: ...
+    def get_real_comp_index(self, arg0: str) -> int:
+        """
+        Get the ParticleReal SoA index of a component
+        """
+    def has_int_comp(self, arg0: str) -> bool:
+        """
+        Check if a container has an Integer component
+        """
+    def has_real_comp(self, arg0: str) -> bool:
+        """
+        Check if a container has an ParticleReal component
+        """
     def increment(self, arg0: MultiFab, arg1: int) -> None: ...
     def init_one_per_cell(
         self, arg0: float, arg1: float, arg2: float, arg3: ParticleInitType_16_4_0_0
@@ -11153,6 +11196,7 @@ class ParticleContainer_16_4_0_0_default:
     def resize_data(self) -> None: ...
     def restart(self, dir: str, file: str) -> None: ...
     def restart_checkpoint(self, dir: str, file: str, is_checkpoint: bool) -> None: ...
+    def set_soa_compile_time_names(self, arg0: list[str], arg1: list[str]) -> None: ...
     def shrink_t_fit(self) -> None: ...
     def sort_particles_by_bin(self, arg0: IntVect2D) -> None: ...
     def sort_particles_by_cell(self) -> None: ...
@@ -11191,6 +11235,11 @@ class ParticleContainer_16_4_0_0_default:
     @property
     def finest_level(self) -> int: ...
     @property
+    def int_soa_names(self) -> list[str]:
+        """
+        Get the names for the int SoA components
+        """
+    @property
     def num_int_comps(self) -> int:
         """
         The number of compile-time and runtime int components in SoA
@@ -11211,6 +11260,11 @@ class ParticleContainer_16_4_0_0_default:
     def num_runtime_real_comps(self) -> int:
         """
         The number of runtime Real components in SoA
+        """
+    @property
+    def real_soa_names(self) -> list[str]:
+        """
+        Get the names for the Real SoA components
         """
 
 class ParticleContainer_16_4_0_0_pinned:
@@ -11290,9 +11344,25 @@ class ParticleContainer_16_4_0_0_pinned:
         add a new runtime component with type Real
         """
     def clear_particles(self) -> None: ...
+    def get_int_comp_index(self, arg0: str) -> int:
+        """
+        Get the Integer SoA index of a component
+        """
     def get_particles(
         self, level: int
     ) -> dict[tuple[int, int], ParticleTile_16_4_0_0_pinned]: ...
+    def get_real_comp_index(self, arg0: str) -> int:
+        """
+        Get the ParticleReal SoA index of a component
+        """
+    def has_int_comp(self, arg0: str) -> bool:
+        """
+        Check if a container has an Integer component
+        """
+    def has_real_comp(self, arg0: str) -> bool:
+        """
+        Check if a container has an ParticleReal component
+        """
     def increment(self, arg0: MultiFab, arg1: int) -> None: ...
     def init_one_per_cell(
         self, arg0: float, arg1: float, arg2: float, arg3: ParticleInitType_16_4_0_0
@@ -11332,6 +11402,7 @@ class ParticleContainer_16_4_0_0_pinned:
     def resize_data(self) -> None: ...
     def restart(self, dir: str, file: str) -> None: ...
     def restart_checkpoint(self, dir: str, file: str, is_checkpoint: bool) -> None: ...
+    def set_soa_compile_time_names(self, arg0: list[str], arg1: list[str]) -> None: ...
     def shrink_t_fit(self) -> None: ...
     def sort_particles_by_bin(self, arg0: IntVect2D) -> None: ...
     def sort_particles_by_cell(self) -> None: ...
@@ -11370,6 +11441,11 @@ class ParticleContainer_16_4_0_0_pinned:
     @property
     def finest_level(self) -> int: ...
     @property
+    def int_soa_names(self) -> list[str]:
+        """
+        Get the names for the int SoA components
+        """
+    @property
     def num_int_comps(self) -> int:
         """
         The number of compile-time and runtime int components in SoA
@@ -11390,6 +11466,11 @@ class ParticleContainer_16_4_0_0_pinned:
     def num_runtime_real_comps(self) -> int:
         """
         The number of runtime Real components in SoA
+        """
+    @property
+    def real_soa_names(self) -> list[str]:
+        """
+        Get the names for the Real SoA components
         """
 
 class ParticleContainer_2_1_3_1_arena:
@@ -11469,9 +11550,25 @@ class ParticleContainer_2_1_3_1_arena:
         add a new runtime component with type Real
         """
     def clear_particles(self) -> None: ...
+    def get_int_comp_index(self, arg0: str) -> int:
+        """
+        Get the Integer SoA index of a component
+        """
     def get_particles(
         self, level: int
     ) -> dict[tuple[int, int], ParticleTile_2_1_3_1_arena]: ...
+    def get_real_comp_index(self, arg0: str) -> int:
+        """
+        Get the ParticleReal SoA index of a component
+        """
+    def has_int_comp(self, arg0: str) -> bool:
+        """
+        Check if a container has an Integer component
+        """
+    def has_real_comp(self, arg0: str) -> bool:
+        """
+        Check if a container has an ParticleReal component
+        """
     def increment(self, arg0: MultiFab, arg1: int) -> None: ...
     def init_one_per_cell(
         self, arg0: float, arg1: float, arg2: float, arg3: ParticleInitType_2_1_3_1
@@ -11511,6 +11608,7 @@ class ParticleContainer_2_1_3_1_arena:
     def resize_data(self) -> None: ...
     def restart(self, dir: str, file: str) -> None: ...
     def restart_checkpoint(self, dir: str, file: str, is_checkpoint: bool) -> None: ...
+    def set_soa_compile_time_names(self, arg0: list[str], arg1: list[str]) -> None: ...
     def shrink_t_fit(self) -> None: ...
     def sort_particles_by_bin(self, arg0: IntVect2D) -> None: ...
     def sort_particles_by_cell(self) -> None: ...
@@ -11549,6 +11647,11 @@ class ParticleContainer_2_1_3_1_arena:
     @property
     def finest_level(self) -> int: ...
     @property
+    def int_soa_names(self) -> list[str]:
+        """
+        Get the names for the int SoA components
+        """
+    @property
     def num_int_comps(self) -> int:
         """
         The number of compile-time and runtime int components in SoA
@@ -11569,6 +11672,11 @@ class ParticleContainer_2_1_3_1_arena:
     def num_runtime_real_comps(self) -> int:
         """
         The number of runtime Real components in SoA
+        """
+    @property
+    def real_soa_names(self) -> list[str]:
+        """
+        Get the names for the Real SoA components
         """
 
 class ParticleContainer_2_1_3_1_default:
@@ -11648,9 +11756,25 @@ class ParticleContainer_2_1_3_1_default:
         add a new runtime component with type Real
         """
     def clear_particles(self) -> None: ...
+    def get_int_comp_index(self, arg0: str) -> int:
+        """
+        Get the Integer SoA index of a component
+        """
     def get_particles(
         self, level: int
     ) -> dict[tuple[int, int], ParticleTile_2_1_3_1_default]: ...
+    def get_real_comp_index(self, arg0: str) -> int:
+        """
+        Get the ParticleReal SoA index of a component
+        """
+    def has_int_comp(self, arg0: str) -> bool:
+        """
+        Check if a container has an Integer component
+        """
+    def has_real_comp(self, arg0: str) -> bool:
+        """
+        Check if a container has an ParticleReal component
+        """
     def increment(self, arg0: MultiFab, arg1: int) -> None: ...
     def init_one_per_cell(
         self, arg0: float, arg1: float, arg2: float, arg3: ParticleInitType_2_1_3_1
@@ -11690,6 +11814,7 @@ class ParticleContainer_2_1_3_1_default:
     def resize_data(self) -> None: ...
     def restart(self, dir: str, file: str) -> None: ...
     def restart_checkpoint(self, dir: str, file: str, is_checkpoint: bool) -> None: ...
+    def set_soa_compile_time_names(self, arg0: list[str], arg1: list[str]) -> None: ...
     def shrink_t_fit(self) -> None: ...
     def sort_particles_by_bin(self, arg0: IntVect2D) -> None: ...
     def sort_particles_by_cell(self) -> None: ...
@@ -11728,6 +11853,11 @@ class ParticleContainer_2_1_3_1_default:
     @property
     def finest_level(self) -> int: ...
     @property
+    def int_soa_names(self) -> list[str]:
+        """
+        Get the names for the int SoA components
+        """
+    @property
     def num_int_comps(self) -> int:
         """
         The number of compile-time and runtime int components in SoA
@@ -11748,6 +11878,11 @@ class ParticleContainer_2_1_3_1_default:
     def num_runtime_real_comps(self) -> int:
         """
         The number of runtime Real components in SoA
+        """
+    @property
+    def real_soa_names(self) -> list[str]:
+        """
+        Get the names for the Real SoA components
         """
 
 class ParticleContainer_2_1_3_1_pinned:
@@ -11827,9 +11962,25 @@ class ParticleContainer_2_1_3_1_pinned:
         add a new runtime component with type Real
         """
     def clear_particles(self) -> None: ...
+    def get_int_comp_index(self, arg0: str) -> int:
+        """
+        Get the Integer SoA index of a component
+        """
     def get_particles(
         self, level: int
     ) -> dict[tuple[int, int], ParticleTile_2_1_3_1_pinned]: ...
+    def get_real_comp_index(self, arg0: str) -> int:
+        """
+        Get the ParticleReal SoA index of a component
+        """
+    def has_int_comp(self, arg0: str) -> bool:
+        """
+        Check if a container has an Integer component
+        """
+    def has_real_comp(self, arg0: str) -> bool:
+        """
+        Check if a container has an ParticleReal component
+        """
     def increment(self, arg0: MultiFab, arg1: int) -> None: ...
     def init_one_per_cell(
         self, arg0: float, arg1: float, arg2: float, arg3: ParticleInitType_2_1_3_1
@@ -11869,6 +12020,7 @@ class ParticleContainer_2_1_3_1_pinned:
     def resize_data(self) -> None: ...
     def restart(self, dir: str, file: str) -> None: ...
     def restart_checkpoint(self, dir: str, file: str, is_checkpoint: bool) -> None: ...
+    def set_soa_compile_time_names(self, arg0: list[str], arg1: list[str]) -> None: ...
     def shrink_t_fit(self) -> None: ...
     def sort_particles_by_bin(self, arg0: IntVect2D) -> None: ...
     def sort_particles_by_cell(self) -> None: ...
@@ -11907,6 +12059,11 @@ class ParticleContainer_2_1_3_1_pinned:
     @property
     def finest_level(self) -> int: ...
     @property
+    def int_soa_names(self) -> list[str]:
+        """
+        Get the names for the int SoA components
+        """
+    @property
     def num_int_comps(self) -> int:
         """
         The number of compile-time and runtime int components in SoA
@@ -11927,6 +12084,11 @@ class ParticleContainer_2_1_3_1_pinned:
     def num_runtime_real_comps(self) -> int:
         """
         The number of runtime Real components in SoA
+        """
+    @property
+    def real_soa_names(self) -> list[str]:
+        """
+        Get the names for the Real SoA components
         """
 
 class ParticleContainer_pureSoA_2_0_arena:
@@ -12006,9 +12168,25 @@ class ParticleContainer_pureSoA_2_0_arena:
         add a new runtime component with type Real
         """
     def clear_particles(self) -> None: ...
+    def get_int_comp_index(self, arg0: str) -> int:
+        """
+        Get the Integer SoA index of a component
+        """
     def get_particles(
         self, level: int
     ) -> dict[tuple[int, int], ParticleTile_pureSoA_2_0_arena]: ...
+    def get_real_comp_index(self, arg0: str) -> int:
+        """
+        Get the ParticleReal SoA index of a component
+        """
+    def has_int_comp(self, arg0: str) -> bool:
+        """
+        Check if a container has an Integer component
+        """
+    def has_real_comp(self, arg0: str) -> bool:
+        """
+        Check if a container has an ParticleReal component
+        """
     def increment(self, arg0: MultiFab, arg1: int) -> None: ...
     def init_random(
         self,
@@ -12042,6 +12220,7 @@ class ParticleContainer_pureSoA_2_0_arena:
     def resize_data(self) -> None: ...
     def restart(self, dir: str, file: str) -> None: ...
     def restart_checkpoint(self, dir: str, file: str, is_checkpoint: bool) -> None: ...
+    def set_soa_compile_time_names(self, arg0: list[str], arg1: list[str]) -> None: ...
     def shrink_t_fit(self) -> None: ...
     def sort_particles_by_bin(self, arg0: IntVect2D) -> None: ...
     def sort_particles_by_cell(self) -> None: ...
@@ -12080,6 +12259,11 @@ class ParticleContainer_pureSoA_2_0_arena:
     @property
     def finest_level(self) -> int: ...
     @property
+    def int_soa_names(self) -> list[str]:
+        """
+        Get the names for the int SoA components
+        """
+    @property
     def num_int_comps(self) -> int:
         """
         The number of compile-time and runtime int components in SoA
@@ -12100,6 +12284,11 @@ class ParticleContainer_pureSoA_2_0_arena:
     def num_runtime_real_comps(self) -> int:
         """
         The number of runtime Real components in SoA
+        """
+    @property
+    def real_soa_names(self) -> list[str]:
+        """
+        Get the names for the Real SoA components
         """
 
 class ParticleContainer_pureSoA_2_0_default:
@@ -12179,9 +12368,25 @@ class ParticleContainer_pureSoA_2_0_default:
         add a new runtime component with type Real
         """
     def clear_particles(self) -> None: ...
+    def get_int_comp_index(self, arg0: str) -> int:
+        """
+        Get the Integer SoA index of a component
+        """
     def get_particles(
         self, level: int
     ) -> dict[tuple[int, int], ParticleTile_pureSoA_2_0_default]: ...
+    def get_real_comp_index(self, arg0: str) -> int:
+        """
+        Get the ParticleReal SoA index of a component
+        """
+    def has_int_comp(self, arg0: str) -> bool:
+        """
+        Check if a container has an Integer component
+        """
+    def has_real_comp(self, arg0: str) -> bool:
+        """
+        Check if a container has an ParticleReal component
+        """
     def increment(self, arg0: MultiFab, arg1: int) -> None: ...
     def init_random(
         self,
@@ -12215,6 +12420,7 @@ class ParticleContainer_pureSoA_2_0_default:
     def resize_data(self) -> None: ...
     def restart(self, dir: str, file: str) -> None: ...
     def restart_checkpoint(self, dir: str, file: str, is_checkpoint: bool) -> None: ...
+    def set_soa_compile_time_names(self, arg0: list[str], arg1: list[str]) -> None: ...
     def shrink_t_fit(self) -> None: ...
     def sort_particles_by_bin(self, arg0: IntVect2D) -> None: ...
     def sort_particles_by_cell(self) -> None: ...
@@ -12253,6 +12459,11 @@ class ParticleContainer_pureSoA_2_0_default:
     @property
     def finest_level(self) -> int: ...
     @property
+    def int_soa_names(self) -> list[str]:
+        """
+        Get the names for the int SoA components
+        """
+    @property
     def num_int_comps(self) -> int:
         """
         The number of compile-time and runtime int components in SoA
@@ -12273,6 +12484,11 @@ class ParticleContainer_pureSoA_2_0_default:
     def num_runtime_real_comps(self) -> int:
         """
         The number of runtime Real components in SoA
+        """
+    @property
+    def real_soa_names(self) -> list[str]:
+        """
+        Get the names for the Real SoA components
         """
 
 class ParticleContainer_pureSoA_2_0_pinned:
@@ -12352,9 +12568,25 @@ class ParticleContainer_pureSoA_2_0_pinned:
         add a new runtime component with type Real
         """
     def clear_particles(self) -> None: ...
+    def get_int_comp_index(self, arg0: str) -> int:
+        """
+        Get the Integer SoA index of a component
+        """
     def get_particles(
         self, level: int
     ) -> dict[tuple[int, int], ParticleTile_pureSoA_2_0_pinned]: ...
+    def get_real_comp_index(self, arg0: str) -> int:
+        """
+        Get the ParticleReal SoA index of a component
+        """
+    def has_int_comp(self, arg0: str) -> bool:
+        """
+        Check if a container has an Integer component
+        """
+    def has_real_comp(self, arg0: str) -> bool:
+        """
+        Check if a container has an ParticleReal component
+        """
     def increment(self, arg0: MultiFab, arg1: int) -> None: ...
     def init_random(
         self,
@@ -12388,6 +12620,7 @@ class ParticleContainer_pureSoA_2_0_pinned:
     def resize_data(self) -> None: ...
     def restart(self, dir: str, file: str) -> None: ...
     def restart_checkpoint(self, dir: str, file: str, is_checkpoint: bool) -> None: ...
+    def set_soa_compile_time_names(self, arg0: list[str], arg1: list[str]) -> None: ...
     def shrink_t_fit(self) -> None: ...
     def sort_particles_by_bin(self, arg0: IntVect2D) -> None: ...
     def sort_particles_by_cell(self) -> None: ...
@@ -12426,6 +12659,11 @@ class ParticleContainer_pureSoA_2_0_pinned:
     @property
     def finest_level(self) -> int: ...
     @property
+    def int_soa_names(self) -> list[str]:
+        """
+        Get the names for the int SoA components
+        """
+    @property
     def num_int_comps(self) -> int:
         """
         The number of compile-time and runtime int components in SoA
@@ -12446,6 +12684,11 @@ class ParticleContainer_pureSoA_2_0_pinned:
     def num_runtime_real_comps(self) -> int:
         """
         The number of runtime Real components in SoA
+        """
+    @property
+    def real_soa_names(self) -> list[str]:
+        """
+        Get the names for the Real SoA components
         """
 
 class ParticleContainer_pureSoA_6_0_arena:
@@ -12525,9 +12768,25 @@ class ParticleContainer_pureSoA_6_0_arena:
         add a new runtime component with type Real
         """
     def clear_particles(self) -> None: ...
+    def get_int_comp_index(self, arg0: str) -> int:
+        """
+        Get the Integer SoA index of a component
+        """
     def get_particles(
         self, level: int
     ) -> dict[tuple[int, int], ParticleTile_pureSoA_6_0_arena]: ...
+    def get_real_comp_index(self, arg0: str) -> int:
+        """
+        Get the ParticleReal SoA index of a component
+        """
+    def has_int_comp(self, arg0: str) -> bool:
+        """
+        Check if a container has an Integer component
+        """
+    def has_real_comp(self, arg0: str) -> bool:
+        """
+        Check if a container has an ParticleReal component
+        """
     def increment(self, arg0: MultiFab, arg1: int) -> None: ...
     def init_random(
         self,
@@ -12561,6 +12820,7 @@ class ParticleContainer_pureSoA_6_0_arena:
     def resize_data(self) -> None: ...
     def restart(self, dir: str, file: str) -> None: ...
     def restart_checkpoint(self, dir: str, file: str, is_checkpoint: bool) -> None: ...
+    def set_soa_compile_time_names(self, arg0: list[str], arg1: list[str]) -> None: ...
     def shrink_t_fit(self) -> None: ...
     def sort_particles_by_bin(self, arg0: IntVect2D) -> None: ...
     def sort_particles_by_cell(self) -> None: ...
@@ -12599,6 +12859,11 @@ class ParticleContainer_pureSoA_6_0_arena:
     @property
     def finest_level(self) -> int: ...
     @property
+    def int_soa_names(self) -> list[str]:
+        """
+        Get the names for the int SoA components
+        """
+    @property
     def num_int_comps(self) -> int:
         """
         The number of compile-time and runtime int components in SoA
@@ -12619,6 +12884,11 @@ class ParticleContainer_pureSoA_6_0_arena:
     def num_runtime_real_comps(self) -> int:
         """
         The number of runtime Real components in SoA
+        """
+    @property
+    def real_soa_names(self) -> list[str]:
+        """
+        Get the names for the Real SoA components
         """
 
 class ParticleContainer_pureSoA_6_0_default:
@@ -12698,9 +12968,25 @@ class ParticleContainer_pureSoA_6_0_default:
         add a new runtime component with type Real
         """
     def clear_particles(self) -> None: ...
+    def get_int_comp_index(self, arg0: str) -> int:
+        """
+        Get the Integer SoA index of a component
+        """
     def get_particles(
         self, level: int
     ) -> dict[tuple[int, int], ParticleTile_pureSoA_6_0_default]: ...
+    def get_real_comp_index(self, arg0: str) -> int:
+        """
+        Get the ParticleReal SoA index of a component
+        """
+    def has_int_comp(self, arg0: str) -> bool:
+        """
+        Check if a container has an Integer component
+        """
+    def has_real_comp(self, arg0: str) -> bool:
+        """
+        Check if a container has an ParticleReal component
+        """
     def increment(self, arg0: MultiFab, arg1: int) -> None: ...
     def init_random(
         self,
@@ -12734,6 +13020,7 @@ class ParticleContainer_pureSoA_6_0_default:
     def resize_data(self) -> None: ...
     def restart(self, dir: str, file: str) -> None: ...
     def restart_checkpoint(self, dir: str, file: str, is_checkpoint: bool) -> None: ...
+    def set_soa_compile_time_names(self, arg0: list[str], arg1: list[str]) -> None: ...
     def shrink_t_fit(self) -> None: ...
     def sort_particles_by_bin(self, arg0: IntVect2D) -> None: ...
     def sort_particles_by_cell(self) -> None: ...
@@ -12772,6 +13059,11 @@ class ParticleContainer_pureSoA_6_0_default:
     @property
     def finest_level(self) -> int: ...
     @property
+    def int_soa_names(self) -> list[str]:
+        """
+        Get the names for the int SoA components
+        """
+    @property
     def num_int_comps(self) -> int:
         """
         The number of compile-time and runtime int components in SoA
@@ -12792,6 +13084,11 @@ class ParticleContainer_pureSoA_6_0_default:
     def num_runtime_real_comps(self) -> int:
         """
         The number of runtime Real components in SoA
+        """
+    @property
+    def real_soa_names(self) -> list[str]:
+        """
+        Get the names for the Real SoA components
         """
 
 class ParticleContainer_pureSoA_6_0_pinned:
@@ -12871,9 +13168,25 @@ class ParticleContainer_pureSoA_6_0_pinned:
         add a new runtime component with type Real
         """
     def clear_particles(self) -> None: ...
+    def get_int_comp_index(self, arg0: str) -> int:
+        """
+        Get the Integer SoA index of a component
+        """
     def get_particles(
         self, level: int
     ) -> dict[tuple[int, int], ParticleTile_pureSoA_6_0_pinned]: ...
+    def get_real_comp_index(self, arg0: str) -> int:
+        """
+        Get the ParticleReal SoA index of a component
+        """
+    def has_int_comp(self, arg0: str) -> bool:
+        """
+        Check if a container has an Integer component
+        """
+    def has_real_comp(self, arg0: str) -> bool:
+        """
+        Check if a container has an ParticleReal component
+        """
     def increment(self, arg0: MultiFab, arg1: int) -> None: ...
     def init_random(
         self,
@@ -12907,6 +13220,7 @@ class ParticleContainer_pureSoA_6_0_pinned:
     def resize_data(self) -> None: ...
     def restart(self, dir: str, file: str) -> None: ...
     def restart_checkpoint(self, dir: str, file: str, is_checkpoint: bool) -> None: ...
+    def set_soa_compile_time_names(self, arg0: list[str], arg1: list[str]) -> None: ...
     def shrink_t_fit(self) -> None: ...
     def sort_particles_by_bin(self, arg0: IntVect2D) -> None: ...
     def sort_particles_by_cell(self) -> None: ...
@@ -12945,6 +13259,11 @@ class ParticleContainer_pureSoA_6_0_pinned:
     @property
     def finest_level(self) -> int: ...
     @property
+    def int_soa_names(self) -> list[str]:
+        """
+        Get the names for the int SoA components
+        """
+    @property
     def num_int_comps(self) -> int:
         """
         The number of compile-time and runtime int components in SoA
@@ -12965,6 +13284,11 @@ class ParticleContainer_pureSoA_6_0_pinned:
     def num_runtime_real_comps(self) -> int:
         """
         The number of runtime Real components in SoA
+        """
+    @property
+    def real_soa_names(self) -> list[str]:
+        """
+        Get the names for the Real SoA components
         """
 
 class ParticleContainer_pureSoA_7_0_arena:
@@ -13044,9 +13368,25 @@ class ParticleContainer_pureSoA_7_0_arena:
         add a new runtime component with type Real
         """
     def clear_particles(self) -> None: ...
+    def get_int_comp_index(self, arg0: str) -> int:
+        """
+        Get the Integer SoA index of a component
+        """
     def get_particles(
         self, level: int
     ) -> dict[tuple[int, int], ParticleTile_pureSoA_7_0_arena]: ...
+    def get_real_comp_index(self, arg0: str) -> int:
+        """
+        Get the ParticleReal SoA index of a component
+        """
+    def has_int_comp(self, arg0: str) -> bool:
+        """
+        Check if a container has an Integer component
+        """
+    def has_real_comp(self, arg0: str) -> bool:
+        """
+        Check if a container has an ParticleReal component
+        """
     def increment(self, arg0: MultiFab, arg1: int) -> None: ...
     def init_random(
         self,
@@ -13080,6 +13420,7 @@ class ParticleContainer_pureSoA_7_0_arena:
     def resize_data(self) -> None: ...
     def restart(self, dir: str, file: str) -> None: ...
     def restart_checkpoint(self, dir: str, file: str, is_checkpoint: bool) -> None: ...
+    def set_soa_compile_time_names(self, arg0: list[str], arg1: list[str]) -> None: ...
     def shrink_t_fit(self) -> None: ...
     def sort_particles_by_bin(self, arg0: IntVect2D) -> None: ...
     def sort_particles_by_cell(self) -> None: ...
@@ -13118,6 +13459,11 @@ class ParticleContainer_pureSoA_7_0_arena:
     @property
     def finest_level(self) -> int: ...
     @property
+    def int_soa_names(self) -> list[str]:
+        """
+        Get the names for the int SoA components
+        """
+    @property
     def num_int_comps(self) -> int:
         """
         The number of compile-time and runtime int components in SoA
@@ -13138,6 +13484,11 @@ class ParticleContainer_pureSoA_7_0_arena:
     def num_runtime_real_comps(self) -> int:
         """
         The number of runtime Real components in SoA
+        """
+    @property
+    def real_soa_names(self) -> list[str]:
+        """
+        Get the names for the Real SoA components
         """
 
 class ParticleContainer_pureSoA_7_0_default:
@@ -13217,9 +13568,25 @@ class ParticleContainer_pureSoA_7_0_default:
         add a new runtime component with type Real
         """
     def clear_particles(self) -> None: ...
+    def get_int_comp_index(self, arg0: str) -> int:
+        """
+        Get the Integer SoA index of a component
+        """
     def get_particles(
         self, level: int
     ) -> dict[tuple[int, int], ParticleTile_pureSoA_7_0_default]: ...
+    def get_real_comp_index(self, arg0: str) -> int:
+        """
+        Get the ParticleReal SoA index of a component
+        """
+    def has_int_comp(self, arg0: str) -> bool:
+        """
+        Check if a container has an Integer component
+        """
+    def has_real_comp(self, arg0: str) -> bool:
+        """
+        Check if a container has an ParticleReal component
+        """
     def increment(self, arg0: MultiFab, arg1: int) -> None: ...
     def init_random(
         self,
@@ -13253,6 +13620,7 @@ class ParticleContainer_pureSoA_7_0_default:
     def resize_data(self) -> None: ...
     def restart(self, dir: str, file: str) -> None: ...
     def restart_checkpoint(self, dir: str, file: str, is_checkpoint: bool) -> None: ...
+    def set_soa_compile_time_names(self, arg0: list[str], arg1: list[str]) -> None: ...
     def shrink_t_fit(self) -> None: ...
     def sort_particles_by_bin(self, arg0: IntVect2D) -> None: ...
     def sort_particles_by_cell(self) -> None: ...
@@ -13291,6 +13659,11 @@ class ParticleContainer_pureSoA_7_0_default:
     @property
     def finest_level(self) -> int: ...
     @property
+    def int_soa_names(self) -> list[str]:
+        """
+        Get the names for the int SoA components
+        """
+    @property
     def num_int_comps(self) -> int:
         """
         The number of compile-time and runtime int components in SoA
@@ -13311,6 +13684,11 @@ class ParticleContainer_pureSoA_7_0_default:
     def num_runtime_real_comps(self) -> int:
         """
         The number of runtime Real components in SoA
+        """
+    @property
+    def real_soa_names(self) -> list[str]:
+        """
+        Get the names for the Real SoA components
         """
 
 class ParticleContainer_pureSoA_7_0_pinned:
@@ -13390,9 +13768,25 @@ class ParticleContainer_pureSoA_7_0_pinned:
         add a new runtime component with type Real
         """
     def clear_particles(self) -> None: ...
+    def get_int_comp_index(self, arg0: str) -> int:
+        """
+        Get the Integer SoA index of a component
+        """
     def get_particles(
         self, level: int
     ) -> dict[tuple[int, int], ParticleTile_pureSoA_7_0_pinned]: ...
+    def get_real_comp_index(self, arg0: str) -> int:
+        """
+        Get the ParticleReal SoA index of a component
+        """
+    def has_int_comp(self, arg0: str) -> bool:
+        """
+        Check if a container has an Integer component
+        """
+    def has_real_comp(self, arg0: str) -> bool:
+        """
+        Check if a container has an ParticleReal component
+        """
     def increment(self, arg0: MultiFab, arg1: int) -> None: ...
     def init_random(
         self,
@@ -13426,6 +13820,7 @@ class ParticleContainer_pureSoA_7_0_pinned:
     def resize_data(self) -> None: ...
     def restart(self, dir: str, file: str) -> None: ...
     def restart_checkpoint(self, dir: str, file: str, is_checkpoint: bool) -> None: ...
+    def set_soa_compile_time_names(self, arg0: list[str], arg1: list[str]) -> None: ...
     def shrink_t_fit(self) -> None: ...
     def sort_particles_by_bin(self, arg0: IntVect2D) -> None: ...
     def sort_particles_by_cell(self) -> None: ...
@@ -13464,6 +13859,11 @@ class ParticleContainer_pureSoA_7_0_pinned:
     @property
     def finest_level(self) -> int: ...
     @property
+    def int_soa_names(self) -> list[str]:
+        """
+        Get the names for the int SoA components
+        """
+    @property
     def num_int_comps(self) -> int:
         """
         The number of compile-time and runtime int components in SoA
@@ -13484,6 +13884,11 @@ class ParticleContainer_pureSoA_7_0_pinned:
     def num_runtime_real_comps(self) -> int:
         """
         The number of runtime Real components in SoA
+        """
+    @property
+    def real_soa_names(self) -> list[str]:
+        """
+        Get the names for the Real SoA components
         """
 
 class ParticleContainer_pureSoA_8_0_arena:
@@ -13563,9 +13968,25 @@ class ParticleContainer_pureSoA_8_0_arena:
         add a new runtime component with type Real
         """
     def clear_particles(self) -> None: ...
+    def get_int_comp_index(self, arg0: str) -> int:
+        """
+        Get the Integer SoA index of a component
+        """
     def get_particles(
         self, level: int
     ) -> dict[tuple[int, int], ParticleTile_pureSoA_8_0_arena]: ...
+    def get_real_comp_index(self, arg0: str) -> int:
+        """
+        Get the ParticleReal SoA index of a component
+        """
+    def has_int_comp(self, arg0: str) -> bool:
+        """
+        Check if a container has an Integer component
+        """
+    def has_real_comp(self, arg0: str) -> bool:
+        """
+        Check if a container has an ParticleReal component
+        """
     def increment(self, arg0: MultiFab, arg1: int) -> None: ...
     def init_random(
         self,
@@ -13599,6 +14020,7 @@ class ParticleContainer_pureSoA_8_0_arena:
     def resize_data(self) -> None: ...
     def restart(self, dir: str, file: str) -> None: ...
     def restart_checkpoint(self, dir: str, file: str, is_checkpoint: bool) -> None: ...
+    def set_soa_compile_time_names(self, arg0: list[str], arg1: list[str]) -> None: ...
     def shrink_t_fit(self) -> None: ...
     def sort_particles_by_bin(self, arg0: IntVect2D) -> None: ...
     def sort_particles_by_cell(self) -> None: ...
@@ -13637,6 +14059,11 @@ class ParticleContainer_pureSoA_8_0_arena:
     @property
     def finest_level(self) -> int: ...
     @property
+    def int_soa_names(self) -> list[str]:
+        """
+        Get the names for the int SoA components
+        """
+    @property
     def num_int_comps(self) -> int:
         """
         The number of compile-time and runtime int components in SoA
@@ -13657,6 +14084,11 @@ class ParticleContainer_pureSoA_8_0_arena:
     def num_runtime_real_comps(self) -> int:
         """
         The number of runtime Real components in SoA
+        """
+    @property
+    def real_soa_names(self) -> list[str]:
+        """
+        Get the names for the Real SoA components
         """
 
 class ParticleContainer_pureSoA_8_0_default:
@@ -13736,9 +14168,25 @@ class ParticleContainer_pureSoA_8_0_default:
         add a new runtime component with type Real
         """
     def clear_particles(self) -> None: ...
+    def get_int_comp_index(self, arg0: str) -> int:
+        """
+        Get the Integer SoA index of a component
+        """
     def get_particles(
         self, level: int
     ) -> dict[tuple[int, int], ParticleTile_pureSoA_8_0_default]: ...
+    def get_real_comp_index(self, arg0: str) -> int:
+        """
+        Get the ParticleReal SoA index of a component
+        """
+    def has_int_comp(self, arg0: str) -> bool:
+        """
+        Check if a container has an Integer component
+        """
+    def has_real_comp(self, arg0: str) -> bool:
+        """
+        Check if a container has an ParticleReal component
+        """
     def increment(self, arg0: MultiFab, arg1: int) -> None: ...
     def init_random(
         self,
@@ -13772,6 +14220,7 @@ class ParticleContainer_pureSoA_8_0_default:
     def resize_data(self) -> None: ...
     def restart(self, dir: str, file: str) -> None: ...
     def restart_checkpoint(self, dir: str, file: str, is_checkpoint: bool) -> None: ...
+    def set_soa_compile_time_names(self, arg0: list[str], arg1: list[str]) -> None: ...
     def shrink_t_fit(self) -> None: ...
     def sort_particles_by_bin(self, arg0: IntVect2D) -> None: ...
     def sort_particles_by_cell(self) -> None: ...
@@ -13810,6 +14259,11 @@ class ParticleContainer_pureSoA_8_0_default:
     @property
     def finest_level(self) -> int: ...
     @property
+    def int_soa_names(self) -> list[str]:
+        """
+        Get the names for the int SoA components
+        """
+    @property
     def num_int_comps(self) -> int:
         """
         The number of compile-time and runtime int components in SoA
@@ -13830,6 +14284,11 @@ class ParticleContainer_pureSoA_8_0_default:
     def num_runtime_real_comps(self) -> int:
         """
         The number of runtime Real components in SoA
+        """
+    @property
+    def real_soa_names(self) -> list[str]:
+        """
+        Get the names for the Real SoA components
         """
 
 class ParticleContainer_pureSoA_8_0_pinned:
@@ -13909,9 +14368,25 @@ class ParticleContainer_pureSoA_8_0_pinned:
         add a new runtime component with type Real
         """
     def clear_particles(self) -> None: ...
+    def get_int_comp_index(self, arg0: str) -> int:
+        """
+        Get the Integer SoA index of a component
+        """
     def get_particles(
         self, level: int
     ) -> dict[tuple[int, int], ParticleTile_pureSoA_8_0_pinned]: ...
+    def get_real_comp_index(self, arg0: str) -> int:
+        """
+        Get the ParticleReal SoA index of a component
+        """
+    def has_int_comp(self, arg0: str) -> bool:
+        """
+        Check if a container has an Integer component
+        """
+    def has_real_comp(self, arg0: str) -> bool:
+        """
+        Check if a container has an ParticleReal component
+        """
     def increment(self, arg0: MultiFab, arg1: int) -> None: ...
     def init_random(
         self,
@@ -13945,6 +14420,7 @@ class ParticleContainer_pureSoA_8_0_pinned:
     def resize_data(self) -> None: ...
     def restart(self, dir: str, file: str) -> None: ...
     def restart_checkpoint(self, dir: str, file: str, is_checkpoint: bool) -> None: ...
+    def set_soa_compile_time_names(self, arg0: list[str], arg1: list[str]) -> None: ...
     def shrink_t_fit(self) -> None: ...
     def sort_particles_by_bin(self, arg0: IntVect2D) -> None: ...
     def sort_particles_by_cell(self) -> None: ...
@@ -13983,6 +14459,11 @@ class ParticleContainer_pureSoA_8_0_pinned:
     @property
     def finest_level(self) -> int: ...
     @property
+    def int_soa_names(self) -> list[str]:
+        """
+        Get the names for the int SoA components
+        """
+    @property
     def num_int_comps(self) -> int:
         """
         The number of compile-time and runtime int components in SoA
@@ -14003,6 +14484,11 @@ class ParticleContainer_pureSoA_8_0_pinned:
     def num_runtime_real_comps(self) -> int:
         """
         The number of runtime Real components in SoA
+        """
+    @property
+    def real_soa_names(self) -> list[str]:
+        """
+        Get the names for the Real SoA components
         """
 
 class ParticleInitType_16_4_0_0:
@@ -17480,50 +17966,6 @@ class StructOfArrays_0_0_arena:
         """
     def resize(self, arg0: int) -> None: ...
     def set_num_neighbors(self, arg0: int) -> None: ...
-    def soa_int_comps(self, num_comps):
-        """
-
-        Name the int components in SoA.
-
-        Parameters
-        ----------
-        self : SoA Type
-          maybe unused, depending on implementation
-        num_comps : int
-          number of components to generate names for.
-
-        Returns
-        -------
-        A list of length num_comps with values "i1", "i2", "i3", ...
-
-        """
-    def soa_real_comps(self, num_comps, spacedim=3, rotate=True):
-        """
-
-        Name the ParticleReal components in SoA.
-
-        Parameters
-        ----------
-        self : SoA Type
-          maybe unused, depending on implementation
-        num_comps : int
-          number of components to generate names for.
-        spacedim : int
-          AMReX dimensionality
-        rotate : bool = True
-          start with "x", "y", "z", "a", "b", ...
-
-        Returns
-        -------
-        A list of length num_comps with values
-        rotate=True (for pure SoA layout):
-        - 3D: "x", "y", "z", "a", "b", ... "w", "r0", "r1", ...
-        - 2D: "x", "y", "a", "b", ... "w", "r0", "r1", ...
-        - 1D: "x", "a", "b", ... "w", "r0", "r1", ...
-        rotate=False (for legacy layout):
-        - 1D-3D: "a", "b", ... "w", "r0", "r1", ...
-
-        """
     def to_cupy(self, copy=False):
         """
 
@@ -17604,6 +18046,11 @@ class StructOfArrays_0_0_arena:
         In pure SoA particle layout, idcpu is an array in the SoA
         """
     @property
+    def int_names(self) -> list[str]:
+        """
+        Names for the int SoA components
+        """
+    @property
     def num_int_comps(self) -> int:
         """
         Get the number of compile-time + runtime Int components
@@ -17619,6 +18066,11 @@ class StructOfArrays_0_0_arena:
     def num_real_particles(self) -> int: ...
     @property
     def num_total_particles(self) -> int: ...
+    @property
+    def real_names(self) -> list[str]:
+        """
+        Names for the Real SoA components
+        """
     @property
     def size(self) -> int:
         """
@@ -17667,50 +18119,6 @@ class StructOfArrays_0_0_default:
         """
     def resize(self, arg0: int) -> None: ...
     def set_num_neighbors(self, arg0: int) -> None: ...
-    def soa_int_comps(self, num_comps):
-        """
-
-        Name the int components in SoA.
-
-        Parameters
-        ----------
-        self : SoA Type
-          maybe unused, depending on implementation
-        num_comps : int
-          number of components to generate names for.
-
-        Returns
-        -------
-        A list of length num_comps with values "i1", "i2", "i3", ...
-
-        """
-    def soa_real_comps(self, num_comps, spacedim=3, rotate=True):
-        """
-
-        Name the ParticleReal components in SoA.
-
-        Parameters
-        ----------
-        self : SoA Type
-          maybe unused, depending on implementation
-        num_comps : int
-          number of components to generate names for.
-        spacedim : int
-          AMReX dimensionality
-        rotate : bool = True
-          start with "x", "y", "z", "a", "b", ...
-
-        Returns
-        -------
-        A list of length num_comps with values
-        rotate=True (for pure SoA layout):
-        - 3D: "x", "y", "z", "a", "b", ... "w", "r0", "r1", ...
-        - 2D: "x", "y", "a", "b", ... "w", "r0", "r1", ...
-        - 1D: "x", "a", "b", ... "w", "r0", "r1", ...
-        rotate=False (for legacy layout):
-        - 1D-3D: "a", "b", ... "w", "r0", "r1", ...
-
-        """
     def to_cupy(self, copy=False):
         """
 
@@ -17791,6 +18199,11 @@ class StructOfArrays_0_0_default:
         In pure SoA particle layout, idcpu is an array in the SoA
         """
     @property
+    def int_names(self) -> list[str]:
+        """
+        Names for the int SoA components
+        """
+    @property
     def num_int_comps(self) -> int:
         """
         Get the number of compile-time + runtime Int components
@@ -17806,6 +18219,11 @@ class StructOfArrays_0_0_default:
     def num_real_particles(self) -> int: ...
     @property
     def num_total_particles(self) -> int: ...
+    @property
+    def real_names(self) -> list[str]:
+        """
+        Names for the Real SoA components
+        """
     @property
     def size(self) -> int:
         """
@@ -17854,50 +18272,6 @@ class StructOfArrays_0_0_pinned:
         """
     def resize(self, arg0: int) -> None: ...
     def set_num_neighbors(self, arg0: int) -> None: ...
-    def soa_int_comps(self, num_comps):
-        """
-
-        Name the int components in SoA.
-
-        Parameters
-        ----------
-        self : SoA Type
-          maybe unused, depending on implementation
-        num_comps : int
-          number of components to generate names for.
-
-        Returns
-        -------
-        A list of length num_comps with values "i1", "i2", "i3", ...
-
-        """
-    def soa_real_comps(self, num_comps, spacedim=3, rotate=True):
-        """
-
-        Name the ParticleReal components in SoA.
-
-        Parameters
-        ----------
-        self : SoA Type
-          maybe unused, depending on implementation
-        num_comps : int
-          number of components to generate names for.
-        spacedim : int
-          AMReX dimensionality
-        rotate : bool = True
-          start with "x", "y", "z", "a", "b", ...
-
-        Returns
-        -------
-        A list of length num_comps with values
-        rotate=True (for pure SoA layout):
-        - 3D: "x", "y", "z", "a", "b", ... "w", "r0", "r1", ...
-        - 2D: "x", "y", "a", "b", ... "w", "r0", "r1", ...
-        - 1D: "x", "a", "b", ... "w", "r0", "r1", ...
-        rotate=False (for legacy layout):
-        - 1D-3D: "a", "b", ... "w", "r0", "r1", ...
-
-        """
     def to_cupy(self, copy=False):
         """
 
@@ -17978,6 +18352,11 @@ class StructOfArrays_0_0_pinned:
         In pure SoA particle layout, idcpu is an array in the SoA
         """
     @property
+    def int_names(self) -> list[str]:
+        """
+        Names for the int SoA components
+        """
+    @property
     def num_int_comps(self) -> int:
         """
         Get the number of compile-time + runtime Int components
@@ -17993,6 +18372,11 @@ class StructOfArrays_0_0_pinned:
     def num_real_particles(self) -> int: ...
     @property
     def num_total_particles(self) -> int: ...
+    @property
+    def real_names(self) -> list[str]:
+        """
+        Names for the Real SoA components
+        """
     @property
     def size(self) -> int:
         """
@@ -18045,50 +18429,6 @@ class StructOfArrays_2_0_idcpu_arena:
         """
     def resize(self, arg0: int) -> None: ...
     def set_num_neighbors(self, arg0: int) -> None: ...
-    def soa_int_comps(self, num_comps):
-        """
-
-        Name the int components in SoA.
-
-        Parameters
-        ----------
-        self : SoA Type
-          maybe unused, depending on implementation
-        num_comps : int
-          number of components to generate names for.
-
-        Returns
-        -------
-        A list of length num_comps with values "i1", "i2", "i3", ...
-
-        """
-    def soa_real_comps(self, num_comps, spacedim=3, rotate=True):
-        """
-
-        Name the ParticleReal components in SoA.
-
-        Parameters
-        ----------
-        self : SoA Type
-          maybe unused, depending on implementation
-        num_comps : int
-          number of components to generate names for.
-        spacedim : int
-          AMReX dimensionality
-        rotate : bool = True
-          start with "x", "y", "z", "a", "b", ...
-
-        Returns
-        -------
-        A list of length num_comps with values
-        rotate=True (for pure SoA layout):
-        - 3D: "x", "y", "z", "a", "b", ... "w", "r0", "r1", ...
-        - 2D: "x", "y", "a", "b", ... "w", "r0", "r1", ...
-        - 1D: "x", "a", "b", ... "w", "r0", "r1", ...
-        rotate=False (for legacy layout):
-        - 1D-3D: "a", "b", ... "w", "r0", "r1", ...
-
-        """
     def to_cupy(self, copy=False):
         """
 
@@ -18169,6 +18509,11 @@ class StructOfArrays_2_0_idcpu_arena:
         In pure SoA particle layout, idcpu is an array in the SoA
         """
     @property
+    def int_names(self) -> list[str]:
+        """
+        Names for the int SoA components
+        """
+    @property
     def num_int_comps(self) -> int:
         """
         Get the number of compile-time + runtime Int components
@@ -18184,6 +18529,11 @@ class StructOfArrays_2_0_idcpu_arena:
     def num_real_particles(self) -> int: ...
     @property
     def num_total_particles(self) -> int: ...
+    @property
+    def real_names(self) -> list[str]:
+        """
+        Names for the Real SoA components
+        """
     @property
     def size(self) -> int:
         """
@@ -18236,50 +18586,6 @@ class StructOfArrays_2_0_idcpu_default:
         """
     def resize(self, arg0: int) -> None: ...
     def set_num_neighbors(self, arg0: int) -> None: ...
-    def soa_int_comps(self, num_comps):
-        """
-
-        Name the int components in SoA.
-
-        Parameters
-        ----------
-        self : SoA Type
-          maybe unused, depending on implementation
-        num_comps : int
-          number of components to generate names for.
-
-        Returns
-        -------
-        A list of length num_comps with values "i1", "i2", "i3", ...
-
-        """
-    def soa_real_comps(self, num_comps, spacedim=3, rotate=True):
-        """
-
-        Name the ParticleReal components in SoA.
-
-        Parameters
-        ----------
-        self : SoA Type
-          maybe unused, depending on implementation
-        num_comps : int
-          number of components to generate names for.
-        spacedim : int
-          AMReX dimensionality
-        rotate : bool = True
-          start with "x", "y", "z", "a", "b", ...
-
-        Returns
-        -------
-        A list of length num_comps with values
-        rotate=True (for pure SoA layout):
-        - 3D: "x", "y", "z", "a", "b", ... "w", "r0", "r1", ...
-        - 2D: "x", "y", "a", "b", ... "w", "r0", "r1", ...
-        - 1D: "x", "a", "b", ... "w", "r0", "r1", ...
-        rotate=False (for legacy layout):
-        - 1D-3D: "a", "b", ... "w", "r0", "r1", ...
-
-        """
     def to_cupy(self, copy=False):
         """
 
@@ -18360,6 +18666,11 @@ class StructOfArrays_2_0_idcpu_default:
         In pure SoA particle layout, idcpu is an array in the SoA
         """
     @property
+    def int_names(self) -> list[str]:
+        """
+        Names for the int SoA components
+        """
+    @property
     def num_int_comps(self) -> int:
         """
         Get the number of compile-time + runtime Int components
@@ -18375,6 +18686,11 @@ class StructOfArrays_2_0_idcpu_default:
     def num_real_particles(self) -> int: ...
     @property
     def num_total_particles(self) -> int: ...
+    @property
+    def real_names(self) -> list[str]:
+        """
+        Names for the Real SoA components
+        """
     @property
     def size(self) -> int:
         """
@@ -18427,50 +18743,6 @@ class StructOfArrays_2_0_idcpu_pinned:
         """
     def resize(self, arg0: int) -> None: ...
     def set_num_neighbors(self, arg0: int) -> None: ...
-    def soa_int_comps(self, num_comps):
-        """
-
-        Name the int components in SoA.
-
-        Parameters
-        ----------
-        self : SoA Type
-          maybe unused, depending on implementation
-        num_comps : int
-          number of components to generate names for.
-
-        Returns
-        -------
-        A list of length num_comps with values "i1", "i2", "i3", ...
-
-        """
-    def soa_real_comps(self, num_comps, spacedim=3, rotate=True):
-        """
-
-        Name the ParticleReal components in SoA.
-
-        Parameters
-        ----------
-        self : SoA Type
-          maybe unused, depending on implementation
-        num_comps : int
-          number of components to generate names for.
-        spacedim : int
-          AMReX dimensionality
-        rotate : bool = True
-          start with "x", "y", "z", "a", "b", ...
-
-        Returns
-        -------
-        A list of length num_comps with values
-        rotate=True (for pure SoA layout):
-        - 3D: "x", "y", "z", "a", "b", ... "w", "r0", "r1", ...
-        - 2D: "x", "y", "a", "b", ... "w", "r0", "r1", ...
-        - 1D: "x", "a", "b", ... "w", "r0", "r1", ...
-        rotate=False (for legacy layout):
-        - 1D-3D: "a", "b", ... "w", "r0", "r1", ...
-
-        """
     def to_cupy(self, copy=False):
         """
 
@@ -18551,6 +18823,11 @@ class StructOfArrays_2_0_idcpu_pinned:
         In pure SoA particle layout, idcpu is an array in the SoA
         """
     @property
+    def int_names(self) -> list[str]:
+        """
+        Names for the int SoA components
+        """
+    @property
     def num_int_comps(self) -> int:
         """
         Get the number of compile-time + runtime Int components
@@ -18566,6 +18843,11 @@ class StructOfArrays_2_0_idcpu_pinned:
     def num_real_particles(self) -> int: ...
     @property
     def num_total_particles(self) -> int: ...
+    @property
+    def real_names(self) -> list[str]:
+        """
+        Names for the Real SoA components
+        """
     @property
     def size(self) -> int:
         """
@@ -18614,50 +18896,6 @@ class StructOfArrays_3_1_arena:
         """
     def resize(self, arg0: int) -> None: ...
     def set_num_neighbors(self, arg0: int) -> None: ...
-    def soa_int_comps(self, num_comps):
-        """
-
-        Name the int components in SoA.
-
-        Parameters
-        ----------
-        self : SoA Type
-          maybe unused, depending on implementation
-        num_comps : int
-          number of components to generate names for.
-
-        Returns
-        -------
-        A list of length num_comps with values "i1", "i2", "i3", ...
-
-        """
-    def soa_real_comps(self, num_comps, spacedim=3, rotate=True):
-        """
-
-        Name the ParticleReal components in SoA.
-
-        Parameters
-        ----------
-        self : SoA Type
-          maybe unused, depending on implementation
-        num_comps : int
-          number of components to generate names for.
-        spacedim : int
-          AMReX dimensionality
-        rotate : bool = True
-          start with "x", "y", "z", "a", "b", ...
-
-        Returns
-        -------
-        A list of length num_comps with values
-        rotate=True (for pure SoA layout):
-        - 3D: "x", "y", "z", "a", "b", ... "w", "r0", "r1", ...
-        - 2D: "x", "y", "a", "b", ... "w", "r0", "r1", ...
-        - 1D: "x", "a", "b", ... "w", "r0", "r1", ...
-        rotate=False (for legacy layout):
-        - 1D-3D: "a", "b", ... "w", "r0", "r1", ...
-
-        """
     def to_cupy(self, copy=False):
         """
 
@@ -18738,6 +18976,11 @@ class StructOfArrays_3_1_arena:
         In pure SoA particle layout, idcpu is an array in the SoA
         """
     @property
+    def int_names(self) -> list[str]:
+        """
+        Names for the int SoA components
+        """
+    @property
     def num_int_comps(self) -> int:
         """
         Get the number of compile-time + runtime Int components
@@ -18753,6 +18996,11 @@ class StructOfArrays_3_1_arena:
     def num_real_particles(self) -> int: ...
     @property
     def num_total_particles(self) -> int: ...
+    @property
+    def real_names(self) -> list[str]:
+        """
+        Names for the Real SoA components
+        """
     @property
     def size(self) -> int:
         """
@@ -18801,50 +19049,6 @@ class StructOfArrays_3_1_default:
         """
     def resize(self, arg0: int) -> None: ...
     def set_num_neighbors(self, arg0: int) -> None: ...
-    def soa_int_comps(self, num_comps):
-        """
-
-        Name the int components in SoA.
-
-        Parameters
-        ----------
-        self : SoA Type
-          maybe unused, depending on implementation
-        num_comps : int
-          number of components to generate names for.
-
-        Returns
-        -------
-        A list of length num_comps with values "i1", "i2", "i3", ...
-
-        """
-    def soa_real_comps(self, num_comps, spacedim=3, rotate=True):
-        """
-
-        Name the ParticleReal components in SoA.
-
-        Parameters
-        ----------
-        self : SoA Type
-          maybe unused, depending on implementation
-        num_comps : int
-          number of components to generate names for.
-        spacedim : int
-          AMReX dimensionality
-        rotate : bool = True
-          start with "x", "y", "z", "a", "b", ...
-
-        Returns
-        -------
-        A list of length num_comps with values
-        rotate=True (for pure SoA layout):
-        - 3D: "x", "y", "z", "a", "b", ... "w", "r0", "r1", ...
-        - 2D: "x", "y", "a", "b", ... "w", "r0", "r1", ...
-        - 1D: "x", "a", "b", ... "w", "r0", "r1", ...
-        rotate=False (for legacy layout):
-        - 1D-3D: "a", "b", ... "w", "r0", "r1", ...
-
-        """
     def to_cupy(self, copy=False):
         """
 
@@ -18925,6 +19129,11 @@ class StructOfArrays_3_1_default:
         In pure SoA particle layout, idcpu is an array in the SoA
         """
     @property
+    def int_names(self) -> list[str]:
+        """
+        Names for the int SoA components
+        """
+    @property
     def num_int_comps(self) -> int:
         """
         Get the number of compile-time + runtime Int components
@@ -18940,6 +19149,11 @@ class StructOfArrays_3_1_default:
     def num_real_particles(self) -> int: ...
     @property
     def num_total_particles(self) -> int: ...
+    @property
+    def real_names(self) -> list[str]:
+        """
+        Names for the Real SoA components
+        """
     @property
     def size(self) -> int:
         """
@@ -18988,50 +19202,6 @@ class StructOfArrays_3_1_pinned:
         """
     def resize(self, arg0: int) -> None: ...
     def set_num_neighbors(self, arg0: int) -> None: ...
-    def soa_int_comps(self, num_comps):
-        """
-
-        Name the int components in SoA.
-
-        Parameters
-        ----------
-        self : SoA Type
-          maybe unused, depending on implementation
-        num_comps : int
-          number of components to generate names for.
-
-        Returns
-        -------
-        A list of length num_comps with values "i1", "i2", "i3", ...
-
-        """
-    def soa_real_comps(self, num_comps, spacedim=3, rotate=True):
-        """
-
-        Name the ParticleReal components in SoA.
-
-        Parameters
-        ----------
-        self : SoA Type
-          maybe unused, depending on implementation
-        num_comps : int
-          number of components to generate names for.
-        spacedim : int
-          AMReX dimensionality
-        rotate : bool = True
-          start with "x", "y", "z", "a", "b", ...
-
-        Returns
-        -------
-        A list of length num_comps with values
-        rotate=True (for pure SoA layout):
-        - 3D: "x", "y", "z", "a", "b", ... "w", "r0", "r1", ...
-        - 2D: "x", "y", "a", "b", ... "w", "r0", "r1", ...
-        - 1D: "x", "a", "b", ... "w", "r0", "r1", ...
-        rotate=False (for legacy layout):
-        - 1D-3D: "a", "b", ... "w", "r0", "r1", ...
-
-        """
     def to_cupy(self, copy=False):
         """
 
@@ -19112,6 +19282,11 @@ class StructOfArrays_3_1_pinned:
         In pure SoA particle layout, idcpu is an array in the SoA
         """
     @property
+    def int_names(self) -> list[str]:
+        """
+        Names for the int SoA components
+        """
+    @property
     def num_int_comps(self) -> int:
         """
         Get the number of compile-time + runtime Int components
@@ -19127,6 +19302,11 @@ class StructOfArrays_3_1_pinned:
     def num_real_particles(self) -> int: ...
     @property
     def num_total_particles(self) -> int: ...
+    @property
+    def real_names(self) -> list[str]:
+        """
+        Names for the Real SoA components
+        """
     @property
     def size(self) -> int:
         """
@@ -19179,50 +19359,6 @@ class StructOfArrays_6_0_idcpu_arena:
         """
     def resize(self, arg0: int) -> None: ...
     def set_num_neighbors(self, arg0: int) -> None: ...
-    def soa_int_comps(self, num_comps):
-        """
-
-        Name the int components in SoA.
-
-        Parameters
-        ----------
-        self : SoA Type
-          maybe unused, depending on implementation
-        num_comps : int
-          number of components to generate names for.
-
-        Returns
-        -------
-        A list of length num_comps with values "i1", "i2", "i3", ...
-
-        """
-    def soa_real_comps(self, num_comps, spacedim=3, rotate=True):
-        """
-
-        Name the ParticleReal components in SoA.
-
-        Parameters
-        ----------
-        self : SoA Type
-          maybe unused, depending on implementation
-        num_comps : int
-          number of components to generate names for.
-        spacedim : int
-          AMReX dimensionality
-        rotate : bool = True
-          start with "x", "y", "z", "a", "b", ...
-
-        Returns
-        -------
-        A list of length num_comps with values
-        rotate=True (for pure SoA layout):
-        - 3D: "x", "y", "z", "a", "b", ... "w", "r0", "r1", ...
-        - 2D: "x", "y", "a", "b", ... "w", "r0", "r1", ...
-        - 1D: "x", "a", "b", ... "w", "r0", "r1", ...
-        rotate=False (for legacy layout):
-        - 1D-3D: "a", "b", ... "w", "r0", "r1", ...
-
-        """
     def to_cupy(self, copy=False):
         """
 
@@ -19303,6 +19439,11 @@ class StructOfArrays_6_0_idcpu_arena:
         In pure SoA particle layout, idcpu is an array in the SoA
         """
     @property
+    def int_names(self) -> list[str]:
+        """
+        Names for the int SoA components
+        """
+    @property
     def num_int_comps(self) -> int:
         """
         Get the number of compile-time + runtime Int components
@@ -19318,6 +19459,11 @@ class StructOfArrays_6_0_idcpu_arena:
     def num_real_particles(self) -> int: ...
     @property
     def num_total_particles(self) -> int: ...
+    @property
+    def real_names(self) -> list[str]:
+        """
+        Names for the Real SoA components
+        """
     @property
     def size(self) -> int:
         """
@@ -19370,50 +19516,6 @@ class StructOfArrays_6_0_idcpu_default:
         """
     def resize(self, arg0: int) -> None: ...
     def set_num_neighbors(self, arg0: int) -> None: ...
-    def soa_int_comps(self, num_comps):
-        """
-
-        Name the int components in SoA.
-
-        Parameters
-        ----------
-        self : SoA Type
-          maybe unused, depending on implementation
-        num_comps : int
-          number of components to generate names for.
-
-        Returns
-        -------
-        A list of length num_comps with values "i1", "i2", "i3", ...
-
-        """
-    def soa_real_comps(self, num_comps, spacedim=3, rotate=True):
-        """
-
-        Name the ParticleReal components in SoA.
-
-        Parameters
-        ----------
-        self : SoA Type
-          maybe unused, depending on implementation
-        num_comps : int
-          number of components to generate names for.
-        spacedim : int
-          AMReX dimensionality
-        rotate : bool = True
-          start with "x", "y", "z", "a", "b", ...
-
-        Returns
-        -------
-        A list of length num_comps with values
-        rotate=True (for pure SoA layout):
-        - 3D: "x", "y", "z", "a", "b", ... "w", "r0", "r1", ...
-        - 2D: "x", "y", "a", "b", ... "w", "r0", "r1", ...
-        - 1D: "x", "a", "b", ... "w", "r0", "r1", ...
-        rotate=False (for legacy layout):
-        - 1D-3D: "a", "b", ... "w", "r0", "r1", ...
-
-        """
     def to_cupy(self, copy=False):
         """
 
@@ -19494,6 +19596,11 @@ class StructOfArrays_6_0_idcpu_default:
         In pure SoA particle layout, idcpu is an array in the SoA
         """
     @property
+    def int_names(self) -> list[str]:
+        """
+        Names for the int SoA components
+        """
+    @property
     def num_int_comps(self) -> int:
         """
         Get the number of compile-time + runtime Int components
@@ -19509,6 +19616,11 @@ class StructOfArrays_6_0_idcpu_default:
     def num_real_particles(self) -> int: ...
     @property
     def num_total_particles(self) -> int: ...
+    @property
+    def real_names(self) -> list[str]:
+        """
+        Names for the Real SoA components
+        """
     @property
     def size(self) -> int:
         """
@@ -19561,50 +19673,6 @@ class StructOfArrays_6_0_idcpu_pinned:
         """
     def resize(self, arg0: int) -> None: ...
     def set_num_neighbors(self, arg0: int) -> None: ...
-    def soa_int_comps(self, num_comps):
-        """
-
-        Name the int components in SoA.
-
-        Parameters
-        ----------
-        self : SoA Type
-          maybe unused, depending on implementation
-        num_comps : int
-          number of components to generate names for.
-
-        Returns
-        -------
-        A list of length num_comps with values "i1", "i2", "i3", ...
-
-        """
-    def soa_real_comps(self, num_comps, spacedim=3, rotate=True):
-        """
-
-        Name the ParticleReal components in SoA.
-
-        Parameters
-        ----------
-        self : SoA Type
-          maybe unused, depending on implementation
-        num_comps : int
-          number of components to generate names for.
-        spacedim : int
-          AMReX dimensionality
-        rotate : bool = True
-          start with "x", "y", "z", "a", "b", ...
-
-        Returns
-        -------
-        A list of length num_comps with values
-        rotate=True (for pure SoA layout):
-        - 3D: "x", "y", "z", "a", "b", ... "w", "r0", "r1", ...
-        - 2D: "x", "y", "a", "b", ... "w", "r0", "r1", ...
-        - 1D: "x", "a", "b", ... "w", "r0", "r1", ...
-        rotate=False (for legacy layout):
-        - 1D-3D: "a", "b", ... "w", "r0", "r1", ...
-
-        """
     def to_cupy(self, copy=False):
         """
 
@@ -19685,6 +19753,11 @@ class StructOfArrays_6_0_idcpu_pinned:
         In pure SoA particle layout, idcpu is an array in the SoA
         """
     @property
+    def int_names(self) -> list[str]:
+        """
+        Names for the int SoA components
+        """
+    @property
     def num_int_comps(self) -> int:
         """
         Get the number of compile-time + runtime Int components
@@ -19700,6 +19773,11 @@ class StructOfArrays_6_0_idcpu_pinned:
     def num_real_particles(self) -> int: ...
     @property
     def num_total_particles(self) -> int: ...
+    @property
+    def real_names(self) -> list[str]:
+        """
+        Names for the Real SoA components
+        """
     @property
     def size(self) -> int:
         """
@@ -19752,50 +19830,6 @@ class StructOfArrays_7_0_idcpu_arena:
         """
     def resize(self, arg0: int) -> None: ...
     def set_num_neighbors(self, arg0: int) -> None: ...
-    def soa_int_comps(self, num_comps):
-        """
-
-        Name the int components in SoA.
-
-        Parameters
-        ----------
-        self : SoA Type
-          maybe unused, depending on implementation
-        num_comps : int
-          number of components to generate names for.
-
-        Returns
-        -------
-        A list of length num_comps with values "i1", "i2", "i3", ...
-
-        """
-    def soa_real_comps(self, num_comps, spacedim=3, rotate=True):
-        """
-
-        Name the ParticleReal components in SoA.
-
-        Parameters
-        ----------
-        self : SoA Type
-          maybe unused, depending on implementation
-        num_comps : int
-          number of components to generate names for.
-        spacedim : int
-          AMReX dimensionality
-        rotate : bool = True
-          start with "x", "y", "z", "a", "b", ...
-
-        Returns
-        -------
-        A list of length num_comps with values
-        rotate=True (for pure SoA layout):
-        - 3D: "x", "y", "z", "a", "b", ... "w", "r0", "r1", ...
-        - 2D: "x", "y", "a", "b", ... "w", "r0", "r1", ...
-        - 1D: "x", "a", "b", ... "w", "r0", "r1", ...
-        rotate=False (for legacy layout):
-        - 1D-3D: "a", "b", ... "w", "r0", "r1", ...
-
-        """
     def to_cupy(self, copy=False):
         """
 
@@ -19876,6 +19910,11 @@ class StructOfArrays_7_0_idcpu_arena:
         In pure SoA particle layout, idcpu is an array in the SoA
         """
     @property
+    def int_names(self) -> list[str]:
+        """
+        Names for the int SoA components
+        """
+    @property
     def num_int_comps(self) -> int:
         """
         Get the number of compile-time + runtime Int components
@@ -19891,6 +19930,11 @@ class StructOfArrays_7_0_idcpu_arena:
     def num_real_particles(self) -> int: ...
     @property
     def num_total_particles(self) -> int: ...
+    @property
+    def real_names(self) -> list[str]:
+        """
+        Names for the Real SoA components
+        """
     @property
     def size(self) -> int:
         """
@@ -19943,50 +19987,6 @@ class StructOfArrays_7_0_idcpu_default:
         """
     def resize(self, arg0: int) -> None: ...
     def set_num_neighbors(self, arg0: int) -> None: ...
-    def soa_int_comps(self, num_comps):
-        """
-
-        Name the int components in SoA.
-
-        Parameters
-        ----------
-        self : SoA Type
-          maybe unused, depending on implementation
-        num_comps : int
-          number of components to generate names for.
-
-        Returns
-        -------
-        A list of length num_comps with values "i1", "i2", "i3", ...
-
-        """
-    def soa_real_comps(self, num_comps, spacedim=3, rotate=True):
-        """
-
-        Name the ParticleReal components in SoA.
-
-        Parameters
-        ----------
-        self : SoA Type
-          maybe unused, depending on implementation
-        num_comps : int
-          number of components to generate names for.
-        spacedim : int
-          AMReX dimensionality
-        rotate : bool = True
-          start with "x", "y", "z", "a", "b", ...
-
-        Returns
-        -------
-        A list of length num_comps with values
-        rotate=True (for pure SoA layout):
-        - 3D: "x", "y", "z", "a", "b", ... "w", "r0", "r1", ...
-        - 2D: "x", "y", "a", "b", ... "w", "r0", "r1", ...
-        - 1D: "x", "a", "b", ... "w", "r0", "r1", ...
-        rotate=False (for legacy layout):
-        - 1D-3D: "a", "b", ... "w", "r0", "r1", ...
-
-        """
     def to_cupy(self, copy=False):
         """
 
@@ -20067,6 +20067,11 @@ class StructOfArrays_7_0_idcpu_default:
         In pure SoA particle layout, idcpu is an array in the SoA
         """
     @property
+    def int_names(self) -> list[str]:
+        """
+        Names for the int SoA components
+        """
+    @property
     def num_int_comps(self) -> int:
         """
         Get the number of compile-time + runtime Int components
@@ -20082,6 +20087,11 @@ class StructOfArrays_7_0_idcpu_default:
     def num_real_particles(self) -> int: ...
     @property
     def num_total_particles(self) -> int: ...
+    @property
+    def real_names(self) -> list[str]:
+        """
+        Names for the Real SoA components
+        """
     @property
     def size(self) -> int:
         """
@@ -20134,50 +20144,6 @@ class StructOfArrays_7_0_idcpu_pinned:
         """
     def resize(self, arg0: int) -> None: ...
     def set_num_neighbors(self, arg0: int) -> None: ...
-    def soa_int_comps(self, num_comps):
-        """
-
-        Name the int components in SoA.
-
-        Parameters
-        ----------
-        self : SoA Type
-          maybe unused, depending on implementation
-        num_comps : int
-          number of components to generate names for.
-
-        Returns
-        -------
-        A list of length num_comps with values "i1", "i2", "i3", ...
-
-        """
-    def soa_real_comps(self, num_comps, spacedim=3, rotate=True):
-        """
-
-        Name the ParticleReal components in SoA.
-
-        Parameters
-        ----------
-        self : SoA Type
-          maybe unused, depending on implementation
-        num_comps : int
-          number of components to generate names for.
-        spacedim : int
-          AMReX dimensionality
-        rotate : bool = True
-          start with "x", "y", "z", "a", "b", ...
-
-        Returns
-        -------
-        A list of length num_comps with values
-        rotate=True (for pure SoA layout):
-        - 3D: "x", "y", "z", "a", "b", ... "w", "r0", "r1", ...
-        - 2D: "x", "y", "a", "b", ... "w", "r0", "r1", ...
-        - 1D: "x", "a", "b", ... "w", "r0", "r1", ...
-        rotate=False (for legacy layout):
-        - 1D-3D: "a", "b", ... "w", "r0", "r1", ...
-
-        """
     def to_cupy(self, copy=False):
         """
 
@@ -20258,6 +20224,11 @@ class StructOfArrays_7_0_idcpu_pinned:
         In pure SoA particle layout, idcpu is an array in the SoA
         """
     @property
+    def int_names(self) -> list[str]:
+        """
+        Names for the int SoA components
+        """
+    @property
     def num_int_comps(self) -> int:
         """
         Get the number of compile-time + runtime Int components
@@ -20273,6 +20244,11 @@ class StructOfArrays_7_0_idcpu_pinned:
     def num_real_particles(self) -> int: ...
     @property
     def num_total_particles(self) -> int: ...
+    @property
+    def real_names(self) -> list[str]:
+        """
+        Names for the Real SoA components
+        """
     @property
     def size(self) -> int:
         """
@@ -20325,50 +20301,6 @@ class StructOfArrays_8_0_idcpu_arena:
         """
     def resize(self, arg0: int) -> None: ...
     def set_num_neighbors(self, arg0: int) -> None: ...
-    def soa_int_comps(self, num_comps):
-        """
-
-        Name the int components in SoA.
-
-        Parameters
-        ----------
-        self : SoA Type
-          maybe unused, depending on implementation
-        num_comps : int
-          number of components to generate names for.
-
-        Returns
-        -------
-        A list of length num_comps with values "i1", "i2", "i3", ...
-
-        """
-    def soa_real_comps(self, num_comps, spacedim=3, rotate=True):
-        """
-
-        Name the ParticleReal components in SoA.
-
-        Parameters
-        ----------
-        self : SoA Type
-          maybe unused, depending on implementation
-        num_comps : int
-          number of components to generate names for.
-        spacedim : int
-          AMReX dimensionality
-        rotate : bool = True
-          start with "x", "y", "z", "a", "b", ...
-
-        Returns
-        -------
-        A list of length num_comps with values
-        rotate=True (for pure SoA layout):
-        - 3D: "x", "y", "z", "a", "b", ... "w", "r0", "r1", ...
-        - 2D: "x", "y", "a", "b", ... "w", "r0", "r1", ...
-        - 1D: "x", "a", "b", ... "w", "r0", "r1", ...
-        rotate=False (for legacy layout):
-        - 1D-3D: "a", "b", ... "w", "r0", "r1", ...
-
-        """
     def to_cupy(self, copy=False):
         """
 
@@ -20449,6 +20381,11 @@ class StructOfArrays_8_0_idcpu_arena:
         In pure SoA particle layout, idcpu is an array in the SoA
         """
     @property
+    def int_names(self) -> list[str]:
+        """
+        Names for the int SoA components
+        """
+    @property
     def num_int_comps(self) -> int:
         """
         Get the number of compile-time + runtime Int components
@@ -20464,6 +20401,11 @@ class StructOfArrays_8_0_idcpu_arena:
     def num_real_particles(self) -> int: ...
     @property
     def num_total_particles(self) -> int: ...
+    @property
+    def real_names(self) -> list[str]:
+        """
+        Names for the Real SoA components
+        """
     @property
     def size(self) -> int:
         """
@@ -20516,50 +20458,6 @@ class StructOfArrays_8_0_idcpu_default:
         """
     def resize(self, arg0: int) -> None: ...
     def set_num_neighbors(self, arg0: int) -> None: ...
-    def soa_int_comps(self, num_comps):
-        """
-
-        Name the int components in SoA.
-
-        Parameters
-        ----------
-        self : SoA Type
-          maybe unused, depending on implementation
-        num_comps : int
-          number of components to generate names for.
-
-        Returns
-        -------
-        A list of length num_comps with values "i1", "i2", "i3", ...
-
-        """
-    def soa_real_comps(self, num_comps, spacedim=3, rotate=True):
-        """
-
-        Name the ParticleReal components in SoA.
-
-        Parameters
-        ----------
-        self : SoA Type
-          maybe unused, depending on implementation
-        num_comps : int
-          number of components to generate names for.
-        spacedim : int
-          AMReX dimensionality
-        rotate : bool = True
-          start with "x", "y", "z", "a", "b", ...
-
-        Returns
-        -------
-        A list of length num_comps with values
-        rotate=True (for pure SoA layout):
-        - 3D: "x", "y", "z", "a", "b", ... "w", "r0", "r1", ...
-        - 2D: "x", "y", "a", "b", ... "w", "r0", "r1", ...
-        - 1D: "x", "a", "b", ... "w", "r0", "r1", ...
-        rotate=False (for legacy layout):
-        - 1D-3D: "a", "b", ... "w", "r0", "r1", ...
-
-        """
     def to_cupy(self, copy=False):
         """
 
@@ -20640,6 +20538,11 @@ class StructOfArrays_8_0_idcpu_default:
         In pure SoA particle layout, idcpu is an array in the SoA
         """
     @property
+    def int_names(self) -> list[str]:
+        """
+        Names for the int SoA components
+        """
+    @property
     def num_int_comps(self) -> int:
         """
         Get the number of compile-time + runtime Int components
@@ -20655,6 +20558,11 @@ class StructOfArrays_8_0_idcpu_default:
     def num_real_particles(self) -> int: ...
     @property
     def num_total_particles(self) -> int: ...
+    @property
+    def real_names(self) -> list[str]:
+        """
+        Names for the Real SoA components
+        """
     @property
     def size(self) -> int:
         """
@@ -20707,50 +20615,6 @@ class StructOfArrays_8_0_idcpu_pinned:
         """
     def resize(self, arg0: int) -> None: ...
     def set_num_neighbors(self, arg0: int) -> None: ...
-    def soa_int_comps(self, num_comps):
-        """
-
-        Name the int components in SoA.
-
-        Parameters
-        ----------
-        self : SoA Type
-          maybe unused, depending on implementation
-        num_comps : int
-          number of components to generate names for.
-
-        Returns
-        -------
-        A list of length num_comps with values "i1", "i2", "i3", ...
-
-        """
-    def soa_real_comps(self, num_comps, spacedim=3, rotate=True):
-        """
-
-        Name the ParticleReal components in SoA.
-
-        Parameters
-        ----------
-        self : SoA Type
-          maybe unused, depending on implementation
-        num_comps : int
-          number of components to generate names for.
-        spacedim : int
-          AMReX dimensionality
-        rotate : bool = True
-          start with "x", "y", "z", "a", "b", ...
-
-        Returns
-        -------
-        A list of length num_comps with values
-        rotate=True (for pure SoA layout):
-        - 3D: "x", "y", "z", "a", "b", ... "w", "r0", "r1", ...
-        - 2D: "x", "y", "a", "b", ... "w", "r0", "r1", ...
-        - 1D: "x", "a", "b", ... "w", "r0", "r1", ...
-        rotate=False (for legacy layout):
-        - 1D-3D: "a", "b", ... "w", "r0", "r1", ...
-
-        """
     def to_cupy(self, copy=False):
         """
 
@@ -20831,6 +20695,11 @@ class StructOfArrays_8_0_idcpu_pinned:
         In pure SoA particle layout, idcpu is an array in the SoA
         """
     @property
+    def int_names(self) -> list[str]:
+        """
+        Names for the int SoA components
+        """
+    @property
     def num_int_comps(self) -> int:
         """
         Get the number of compile-time + runtime Int components
@@ -20846,6 +20715,11 @@ class StructOfArrays_8_0_idcpu_pinned:
     def num_real_particles(self) -> int: ...
     @property
     def num_total_particles(self) -> int: ...
+    @property
+    def real_names(self) -> list[str]:
+        """
+        Names for the Real SoA components
+        """
     @property
     def size(self) -> int:
         """
