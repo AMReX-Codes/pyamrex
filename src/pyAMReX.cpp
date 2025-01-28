@@ -28,6 +28,7 @@ void init_FArrayBox(py::module&);
 void init_Geometry(py::module&);
 void init_IndexType(py::module &);
 void init_IntVect(py::module &);
+void init_MFInfo(py::module &);
 #ifdef AMREX_USE_MPI
 void init_MPMD(py::module &);
 #endif
@@ -73,6 +74,8 @@ PYBIND11_MODULE(amrex_3d_pybind, m) {
                IntVect
                IndexType
                RealVect
+               MFInfo
+               MFItInfo
                MultiFab
                ParallelDescriptor
                Particle
@@ -111,6 +114,7 @@ PYBIND11_MODULE(amrex_3d_pybind, m) {
     init_DistributionMapping(m);
     init_BaseFab(m);
     init_FArrayBox(m);
+    init_MFInfo(m);
     init_MultiFab(m);
     init_ParallelDescriptor(m);
     init_PODVector(m);
