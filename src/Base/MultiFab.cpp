@@ -63,8 +63,8 @@ void init_MultiFab(py::module &m)
         )
         .def(py::init< MultiFab const &, MFItInfo const & >())
 
-        //.def(py::init< iMultiFab const & >())
-        //.def(py::init< iMultiFab const &, MFItInfo const & >())
+        .def(py::init< iMultiFab const & >())
+        .def(py::init< iMultiFab const &, MFItInfo const & >())
 
         // helpers for iteration __next__
         .def("_incr", &MFIter::operator++)
@@ -513,7 +513,7 @@ void init_MultiFab(py::module &m)
 
         /* norms */
         .def("norm0", py::overload_cast< int, int, bool, bool >(&MultiFab::norm0, py::const_))
-        //.def("norm0", py::overload_cast< iMultiFab const &, int, int, bool >(&MultiFab::norm0, py::const_))
+        .def("norm0", py::overload_cast< iMultiFab const &, int, int, bool >(&MultiFab::norm0, py::const_))
 
         .def("norminf",
              //py::overload_cast< int, int, bool, bool >(&MultiFab::norminf, py::const_)
@@ -760,7 +760,6 @@ void init_MultiFab(py::module &m)
             py::arg("numcomp"), py::arg("nghost"), py::arg("local")=false,
             "Returns the dot product with itself."
         )
-        /** TODO: Bind iMultiFab
         .def("dot",
             [](MultiFab const& self, const iMultiFab& mask, int comp, MultiFab const& y, int y_comp, int numcomp, int nghost, bool local) {
                 return MultiFab::Dot(mask, self, comp, y, y_comp, numcomp, nghost, local);
@@ -769,7 +768,6 @@ void init_MultiFab(py::module &m)
             py::arg("numcomp"), py::arg("nghost"), py::arg("local")=false,
             "Returns the dot product of self with another MultiFab where the mask is valid."
         )
-        */
 
         .def("add",
             [](MultiFab & self, MultiFab const & src, int srccomp, int comp, int numcomp, int nghost) {
@@ -943,7 +941,7 @@ void init_MultiFab(py::module &m)
         /* Syncs */
         .def("average_sync", &MultiFab::AverageSync)
         .def("weighted_sync", &MultiFab::WeightedSync)
-        //.def("override_sync", py::overload_cast< iMultiFab const &, Periodicity const & >(&MultiFab::OverrideSync))
+        .def("override_sync", py::overload_cast< iMultiFab const &, Periodicity const & >(&MultiFab::OverrideSync))
 
         /* Init & Finalize */
         .def_static("initialize", &MultiFab::Initialize)
