@@ -240,6 +240,8 @@ def test_imfab_ops(boxarr, distmap, nghost):
 
 
 def test_imfab_mfiter(imfab):
+    assert len(imfab) == 8
+
     assert iter(imfab).is_valid
     assert iter(imfab).length == 8
 

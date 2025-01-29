@@ -288,6 +288,8 @@ init_FabArray(py::module &m)
             "Return number of variables (aka components) associated with each point.")
         .def_property_readonly("size", &FabArrayBase::size,
             "Return the number of FABs in the FabArray.")
+        .def("__len__", &FabArrayBase::size,
+            "Return the number of FABs in the FabArray.")
 
         .def_property_readonly("n_grow_vect", &FabArrayBase::nGrowVect,
             "Return the grow factor (per direction) that defines the region of definition.")
