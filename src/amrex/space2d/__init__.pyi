@@ -15,9 +15,12 @@ amrex
    BoxArray
    Dim3
    FArrayBox
+   iMultiFab
    IntVect
    IndexType
    RealVect
+   MFInfo
+   MFItInfo
    MultiFab
    ParallelDescriptor
    Particle
@@ -93,8 +96,10 @@ from amrex.space2d.amrex_2d_pybind import (
     Direction,
     DistributionMapping,
     FabArray_FArrayBox,
+    FabArray_IArrayBox,
     FabArrayBase,
     FabFactory_FArrayBox,
+    FabFactory_IArrayBox,
     FArrayBox,
     Geometry,
     GeometryData,
@@ -309,6 +314,7 @@ from amrex.space2d.amrex_2d_pybind import (
     end,
     finalize,
     htod_memcpy,
+    iMultiFab,
     initialize,
     initialize_when_MPMD,
     initialized,
@@ -376,7 +382,9 @@ __all__ = [
     "FArrayBox",
     "FabArrayBase",
     "FabArray_FArrayBox",
+    "FabArray_IArrayBox",
     "FabFactory_FArrayBox",
+    "FabFactory_IArrayBox",
     "Geometry",
     "GeometryData",
     "IndexType",
@@ -594,6 +602,7 @@ __all__ = [
     "end",
     "finalize",
     "htod_memcpy",
+    "iMultiFab",
     "initialize",
     "initialize_when_MPMD",
     "initialized",

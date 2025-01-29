@@ -15,9 +15,12 @@ amrex
    BoxArray
    Dim3
    FArrayBox
+   iMultiFab
    IntVect
    IndexType
    RealVect
+   MFInfo
+   MFItInfo
    MultiFab
    ParallelDescriptor
    Particle
@@ -93,7 +96,9 @@ __all__ = [
     "FArrayBox",
     "FabArrayBase",
     "FabArray_FArrayBox",
+    "FabArray_IArrayBox",
     "FabFactory_FArrayBox",
+    "FabFactory_IArrayBox",
     "Geometry",
     "GeometryData",
     "IndexType",
@@ -284,6 +289,7 @@ __all__ = [
     "end",
     "finalize",
     "htod_memcpy",
+    "iMultiFab",
     "initialize",
     "initialize_when_MPMD",
     "initialized",
@@ -5538,7 +5544,317 @@ class FabArray_FArrayBox(FabArrayBase):
     @property
     def has_EB_fab_factory(self) -> bool: ...
 
+class FabArray_IArrayBox(FabArrayBase):
+    @staticmethod
+    def _pybind11_conduit_v1_(*args, **kwargs): ...
+    @typing.overload
+    def abs(self, comp: int, ncomp: int, nghost: int = 0) -> None: ...
+    @typing.overload
+    def abs(self, comp: int, ncomp: int, nghost: IntVect1D) -> None: ...
+    def array(self, arg0: MFIter) -> Array4_int: ...
+    def clear(self) -> None: ...
+    def const_array(self, arg0: MFIter) -> Array4_int_const: ...
+    @typing.overload
+    def fill_boundary(self, cross: bool = False) -> None:
+        """
+        Copy on intersection within a FabArray.
+
+            Data is copied from valid regions to intersecting regions of definition.
+            The purpose is to fill in the boundary regions of each FAB in the FabArray.
+            If cross=true, corner cells are not filled. If the length of periodic is provided,
+            periodic boundaries are also filled.
+
+            If scomp is provided, this only copies ncomp components starting at scomp.
+
+            Note that FabArray itself does not contains any periodicity information.
+            FillBoundary expects that its cell-centered version of its BoxArray is non-overlapping.
+        """
+    @typing.overload
+    def fill_boundary(self, period: Periodicity, cross: bool = False) -> None:
+        """
+        Copy on intersection within a FabArray.
+
+            Data is copied from valid regions to intersecting regions of definition.
+            The purpose is to fill in the boundary regions of each FAB in the FabArray.
+            If cross=true, corner cells are not filled. If the length of periodic is provided,
+            periodic boundaries are also filled.
+
+            If scomp is provided, this only copies ncomp components starting at scomp.
+
+            Note that FabArray itself does not contains any periodicity information.
+            FillBoundary expects that its cell-centered version of its BoxArray is non-overlapping.
+        """
+    @typing.overload
+    def fill_boundary(
+        self, nghost: IntVect1D, period: Periodicity, cross: bool = False
+    ) -> None:
+        """
+        Copy on intersection within a FabArray.
+
+            Data is copied from valid regions to intersecting regions of definition.
+            The purpose is to fill in the boundary regions of each FAB in the FabArray.
+            If cross=true, corner cells are not filled. If the length of periodic is provided,
+            periodic boundaries are also filled.
+
+            If scomp is provided, this only copies ncomp components starting at scomp.
+
+            Note that FabArray itself does not contains any periodicity information.
+            FillBoundary expects that its cell-centered version of its BoxArray is non-overlapping.
+        """
+    @typing.overload
+    def fill_boundary(self, scomp: int, ncomp: int, cross: bool = False) -> None:
+        """
+        Copy on intersection within a FabArray.
+
+            Data is copied from valid regions to intersecting regions of definition.
+            The purpose is to fill in the boundary regions of each FAB in the FabArray.
+            If cross=true, corner cells are not filled. If the length of periodic is provided,
+            periodic boundaries are also filled.
+
+            If scomp is provided, this only copies ncomp components starting at scomp.
+
+            Note that FabArray itself does not contains any periodicity information.
+            FillBoundary expects that its cell-centered version of its BoxArray is non-overlapping.
+        """
+    @typing.overload
+    def fill_boundary(
+        self, scomp: int, ncomp: int, period: Periodicity, cross: bool = False
+    ) -> None:
+        """
+        Copy on intersection within a FabArray.
+
+            Data is copied from valid regions to intersecting regions of definition.
+            The purpose is to fill in the boundary regions of each FAB in the FabArray.
+            If cross=true, corner cells are not filled. If the length of periodic is provided,
+            periodic boundaries are also filled.
+
+            If scomp is provided, this only copies ncomp components starting at scomp.
+
+            Note that FabArray itself does not contains any periodicity information.
+            FillBoundary expects that its cell-centered version of its BoxArray is non-overlapping.
+        """
+    @typing.overload
+    def fill_boundary(
+        self,
+        scomp: int,
+        ncomp: int,
+        nghost: IntVect1D,
+        period: Periodicity,
+        cross: bool = False,
+    ) -> None:
+        """
+        Copy on intersection within a FabArray.
+
+            Data is copied from valid regions to intersecting regions of definition.
+            The purpose is to fill in the boundary regions of each FAB in the FabArray.
+            If cross=true, corner cells are not filled. If the length of periodic is provided,
+            periodic boundaries are also filled.
+
+            If scomp is provided, this only copies ncomp components starting at scomp.
+
+            Note that FabArray itself does not contains any periodicity information.
+            FillBoundary expects that its cell-centered version of its BoxArray is non-overlapping.
+        """
+    def lin_comb(
+        self,
+        a: int,
+        x: FabArray_IArrayBox,
+        xcomp: int,
+        b: int,
+        y: FabArray_IArrayBox,
+        ycomp: int,
+        comp: int,
+        numcomp: int,
+        nghost: IntVect1D,
+    ) -> None:
+        """
+        self = a * x + b * y
+
+        Parameters
+        ----------
+        a     : float
+            scalar a
+        x     : FabArray
+        xcomp : int
+            starting component of x
+        b     : float
+            scalar b
+        y     : FabArray
+        ycomp : int
+            starting component of y
+        comp  : int
+            starting component of self
+        numcomp : int
+            number of components
+        nghost  : int
+            number of ghost cells
+        """
+    def ok(self) -> bool: ...
+    @typing.overload
+    def override_sync(self, period: Periodicity) -> None:
+        """
+        Synchronize nodal data.
+
+            The synchronization will override valid regions by the intersecting valid regions with a higher precedence.
+            The smaller the global box index is, the higher precedence the box has.
+            With periodic boundaries, for cells in the same box, those near the lower corner have higher precedence than those near the upper corner.
+
+            Parameters
+            ----------
+            scomp :
+              starting component
+            ncomp :
+              number of components
+            period :
+              periodic length if it's non-zero
+        """
+    @typing.overload
+    def override_sync(self, scomp: int, ncomp: int, period: Periodicity) -> None:
+        """
+        Synchronize nodal data.
+
+            The synchronization will override valid regions by the intersecting valid regions with a higher precedence.
+            The smaller the global box index is, the higher precedence the box has.
+            With periodic boundaries, for cells in the same box, those near the lower corner have higher precedence than those near the upper corner.
+
+            Parameters
+            ----------
+            scomp :
+              starting component
+            ncomp :
+              number of components
+            period :
+              periodic length if it's non-zero
+        """
+    def saxpy(
+        self,
+        a: int,
+        x: FabArray_IArrayBox,
+        x_comp: int,
+        comp: int,
+        ncomp: int,
+        nghost: IntVect1D,
+    ) -> None:
+        """
+        self += a * x
+
+        Parameters
+        ----------
+        a      : scalar a
+        x      : FabArray x
+        x_comp : starting component of x
+        comp   : starting component of self
+        ncomp  : number of components
+        nghost : number of ghost cells
+        """
+    @typing.overload
+    def set_val(self, val: int) -> None:
+        """
+        Set all components in the entire region of each FAB to val.
+        """
+    @typing.overload
+    def set_val(self, val: int, comp: int, num_comp: int, nghost: int = 0) -> None:
+        """
+        Set the value of num_comp components in the valid region of
+        each FAB in the FabArray, starting at component comp to val.
+        Also set the value of nghost boundary cells.
+        """
+    @typing.overload
+    def set_val(self, val: int, comp: int, num_comp: int, nghost: IntVect1D) -> None:
+        """
+        Set the value of num_comp components in the valid region of
+        each FAB in the FabArray, starting at component comp to val.
+        Also set the value of nghost boundary cells.
+        """
+    @typing.overload
+    def set_val(
+        self, val: int, region: Box, comp: int, num_comp: int, nghost: int = 0
+    ) -> None:
+        """
+        Set the value of num_comp components in the valid region of
+        each FAB in the FabArray, starting at component comp, as well
+        as nghost boundary cells, to val, provided they also intersect
+        with the Box region.
+        """
+    @typing.overload
+    def set_val(
+        self, val: int, region: Box, comp: int, num_comp: int, nghost: IntVect1D
+    ) -> None:
+        """
+        Set the value of num_comp components in the valid region of
+        each FAB in the FabArray, starting at component comp, as well
+        as nghost boundary cells, to val, provided they also intersect
+        with the Box region.
+        """
+    def sum(self, comp: int, nghost: IntVect1D, local: bool) -> int:
+        """
+        Returns the sum of component "comp"
+        """
+    @typing.overload
+    def sum_boundary(self, period: Periodicity) -> None:
+        """
+        Sum values in overlapped cells.  The destination is limited to valid cells.
+        """
+    @typing.overload
+    def sum_boundary(self, scomp: int, ncomp: int, period: Periodicity) -> None:
+        """
+        Sum values in overlapped cells.  The destination is limited to valid cells.
+        """
+    @typing.overload
+    def sum_boundary(
+        self, scomp: int, ncomp: int, nghost: IntVect1D, period: Periodicity
+    ) -> None:
+        """
+        Sum values in overlapped cells.  The destination is limited to valid cells.
+        """
+    @typing.overload
+    def sum_boundary(
+        self,
+        scomp: int,
+        ncomp: int,
+        nghost: IntVect1D,
+        dst_nghost: IntVect1D,
+        period: Periodicity,
+    ) -> None:
+        """
+        Sum values in overlapped cells.  The destination is limited to valid cells.
+        """
+    def xpay(
+        self,
+        a: int,
+        x: FabArray_IArrayBox,
+        xcomp: int,
+        comp: int,
+        ncomp: int,
+        nghost: IntVect1D,
+    ) -> None:
+        """
+        self = x + a * self
+
+        Parameters
+        ----------
+        a      : scalar a
+        x      : FabArray x
+        x_comp : starting component of x
+        comp   : starting component of self
+        ncomp  : number of components
+        nghost : number of ghost cells
+        """
+    @property
+    def arena(self) -> Arena:
+        """
+        Provides access to the Arena this FabArray was build with.
+        """
+    @property
+    def factory(self) -> FabFactory_IArrayBox: ...
+    @property
+    def has_EB_fab_factory(self) -> bool: ...
+
 class FabFactory_FArrayBox:
+    @staticmethod
+    def _pybind11_conduit_v1_(*args, **kwargs): ...
+
+class FabFactory_IArrayBox:
     @staticmethod
     def _pybind11_conduit_v1_(*args, **kwargs): ...
 
@@ -6149,6 +6465,10 @@ class MFIter:
     def __init__(self, arg0: MultiFab) -> None: ...
     @typing.overload
     def __init__(self, arg0: MultiFab, arg1: MFItInfo) -> None: ...
+    @typing.overload
+    def __init__(self, arg0: iMultiFab) -> None: ...
+    @typing.overload
+    def __init__(self, arg0: iMultiFab, arg1: MFItInfo) -> None: ...
     def __next__(self):
         """
         This is a helper function for the C++ equivalent of void operator++()
@@ -6244,7 +6564,7 @@ class MultiFab(FabArray_FArrayBox):
     @typing.overload
     def __init__(self) -> None:
         """
-        Constructs an empty MultiFab.
+        Constructs an empty (i)MultiFab.
 
                     Data can be defined at a later time using the define member functions
                     inherited from FabArray.
@@ -6252,7 +6572,7 @@ class MultiFab(FabArray_FArrayBox):
     @typing.overload
     def __init__(self, a: Arena) -> None:
         """
-        Constructs an empty MultiFab.
+        Constructs an empty (i)MultiFab.
 
                     Data can be defined at a later time using the define member functions.
                     If ``define`` is called later with a nullptr as MFInfo's arena, the
@@ -6270,27 +6590,27 @@ class MultiFab(FabArray_FArrayBox):
         factory: FabFactory_FArrayBox,
     ) -> None:
         """
-        Constructs a MultiFab.
+        Constructs an (i)MultiFab.
 
-            The size of the FArrayBox is given by the Box grown by \\p ngrow, and
-            the number of components is given by \\p ncomp. If \\p info is set to
-            not allocating memory, then no FArrayBoxes are allocated at
-            this time but can be defined later.
+        The size of the FArrayBox is given by the Box grown by \\p ngrow, and
+        the number of components is given by \\p ncomp. If \\p info is set to
+        not allocating memory, then no FArrayBoxes are allocated at
+        this time but can be defined later.
 
-            Parameters
-            ----------
-            bxs :
-              a valid region
-            dm :
-              a DistribuionMapping
-            ncomp :
-              number of components
-            ngrow :
-              number of cells the region grows
-            info :
-              MultiFab info, including allocation Arena
-            factory :
-              FArrayBoxFactory for embedded boundaries
+        Parameters
+        ----------
+        bxs :
+          a valid region
+        dm :
+          a DistributionMapping
+        ncomp :
+          number of components
+        ngrow :
+          number of cells the region grows
+        info :
+          (i)MultiFab info, including allocation Arena
+        factory :
+          FArrayBoxFactory for embedded boundaries
         """
     @typing.overload
     def __init__(
@@ -6302,54 +6622,54 @@ class MultiFab(FabArray_FArrayBox):
         info: MFInfo,
     ) -> None:
         """
-        Constructs a MultiFab.
+        Constructs an (i)MultiFab.
 
-            The size of the FArrayBox is given by the Box grown by \\p ngrow, and
-            the number of components is given by \\p ncomp. If \\p info is set to
-            not allocating memory, then no FArrayBoxes are allocated at
-            this time but can be defined later.
+        The size of the FArrayBox is given by the Box grown by \\p ngrow, and
+        the number of components is given by \\p ncomp. If \\p info is set to
+        not allocating memory, then no FArrayBoxes are allocated at
+        this time but can be defined later.
 
-            Parameters
-            ----------
-            bxs :
-              a valid region
-            dm :
-              a DistribuionMapping
-            ncomp :
-              number of components
-            ngrow :
-              number of cells the region grows
-            info :
-              MultiFab info, including allocation Arena
-            factory :
-              FArrayBoxFactory for embedded boundaries
+        Parameters
+        ----------
+        bxs :
+          a valid region
+        dm :
+          a DistributionMapping
+        ncomp :
+          number of components
+        ngrow :
+          number of cells the region grows
+        info :
+          (i)MultiFab info, including allocation Arena
+        factory :
+          FArrayBoxFactory for embedded boundaries
         """
     @typing.overload
     def __init__(
         self, bxs: BoxArray, dm: DistributionMapping, ncomp: int, ngrow: int
     ) -> None:
         """
-        Constructs a MultiFab.
+        Constructs an (i)MultiFab.
 
-            The size of the FArrayBox is given by the Box grown by \\p ngrow, and
-            the number of components is given by \\p ncomp. If \\p info is set to
-            not allocating memory, then no FArrayBoxes are allocated at
-            this time but can be defined later.
+        The size of the FArrayBox is given by the Box grown by \\p ngrow, and
+        the number of components is given by \\p ncomp. If \\p info is set to
+        not allocating memory, then no FArrayBoxes are allocated at
+        this time but can be defined later.
 
-            Parameters
-            ----------
-            bxs :
-              a valid region
-            dm :
-              a DistribuionMapping
-            ncomp :
-              number of components
-            ngrow :
-              number of cells the region grows
-            info :
-              MultiFab info, including allocation Arena
-            factory :
-              FArrayBoxFactory for embedded boundaries
+        Parameters
+        ----------
+        bxs :
+          a valid region
+        dm :
+          a DistributionMapping
+        ncomp :
+          number of components
+        ngrow :
+          number of cells the region grows
+        info :
+          (i)MultiFab info, including allocation Arena
+        factory :
+          FArrayBoxFactory for embedded boundaries
         """
     @typing.overload
     def __init__(
@@ -6361,27 +6681,27 @@ class MultiFab(FabArray_FArrayBox):
         info: MFInfo,
     ) -> None:
         """
-        Constructs a MultiFab.
+        Constructs an (i)MultiFab.
 
-            The size of the FArrayBox is given by the Box grown by \\p ngrow, and
-            the number of components is given by \\p ncomp. If \\p info is set to
-            not allocating memory, then no FArrayBoxes are allocated at
-            this time but can be defined later.
+        The size of the FArrayBox is given by the Box grown by \\p ngrow, and
+        the number of components is given by \\p ncomp. If \\p info is set to
+        not allocating memory, then no FArrayBoxes are allocated at
+        this time but can be defined later.
 
-            Parameters
-            ----------
-            bxs :
-              a valid region
-            dm :
-              a DistribuionMapping
-            ncomp :
-              number of components
-            ngrow :
-              number of cells the region grows
-            info :
-              MultiFab info, including allocation Arena
-            factory :
-              FArrayBoxFactory for embedded boundaries
+        Parameters
+        ----------
+        bxs :
+          a valid region
+        dm :
+          a DistributionMapping
+        ncomp :
+          number of components
+        ngrow :
+          number of cells the region grows
+        info :
+          (i)MultiFab info, including allocation Arena
+        factory :
+          FArrayBoxFactory for embedded boundaries
         """
     @typing.overload
     def __init__(
@@ -6394,54 +6714,54 @@ class MultiFab(FabArray_FArrayBox):
         factory: FabFactory_FArrayBox,
     ) -> None:
         """
-        Constructs a MultiFab.
+        Constructs an (i)MultiFab.
 
-            The size of the FArrayBox is given by the Box grown by \\p ngrow, and
-            the number of components is given by \\p ncomp. If \\p info is set to
-            not allocating memory, then no FArrayBoxes are allocated at
-            this time but can be defined later.
+        The size of the FArrayBox is given by the Box grown by \\p ngrow, and
+        the number of components is given by \\p ncomp. If \\p info is set to
+        not allocating memory, then no FArrayBoxes are allocated at
+        this time but can be defined later.
 
-            Parameters
-            ----------
-            bxs :
-              a valid region
-            dm :
-              a DistribuionMapping
-            ncomp :
-              number of components
-            ngrow :
-              number of cells the region grows
-            info :
-              MultiFab info, including allocation Arena
-            factory :
-              FArrayBoxFactory for embedded boundaries
+        Parameters
+        ----------
+        bxs :
+          a valid region
+        dm :
+          a DistributionMapping
+        ncomp :
+          number of components
+        ngrow :
+          number of cells the region grows
+        info :
+          (i)MultiFab info, including allocation Arena
+        factory :
+          FArrayBoxFactory for embedded boundaries
         """
     @typing.overload
     def __init__(
         self, bxs: BoxArray, dm: DistributionMapping, ncomp: int, ngrow: IntVect1D
     ) -> None:
         """
-        Constructs a MultiFab.
+        Constructs an (i)MultiFab.
 
-            The size of the FArrayBox is given by the Box grown by \\p ngrow, and
-            the number of components is given by \\p ncomp. If \\p info is set to
-            not allocating memory, then no FArrayBoxes are allocated at
-            this time but can be defined later.
+        The size of the FArrayBox is given by the Box grown by \\p ngrow, and
+        the number of components is given by \\p ncomp. If \\p info is set to
+        not allocating memory, then no FArrayBoxes are allocated at
+        this time but can be defined later.
 
-            Parameters
-            ----------
-            bxs :
-              a valid region
-            dm :
-              a DistribuionMapping
-            ncomp :
-              number of components
-            ngrow :
-              number of cells the region grows
-            info :
-              MultiFab info, including allocation Arena
-            factory :
-              FArrayBoxFactory for embedded boundaries
+        Parameters
+        ----------
+        bxs :
+          a valid region
+        dm :
+          a DistributionMapping
+        ncomp :
+          number of components
+        ngrow :
+          number of cells the region grows
+        info :
+          (i)MultiFab info, including allocation Arena
+        factory :
+          FArrayBoxFactory for embedded boundaries
         """
     def __repr__(self) -> str: ...
     def __setitem__(self, index, value):
@@ -6600,6 +6920,20 @@ class MultiFab(FabArray_FArrayBox):
         """
         Returns the dot product with itself.
         """
+    @typing.overload
+    def dot(
+        self,
+        mask: iMultiFab,
+        comp: int,
+        y: MultiFab,
+        y_comp: int,
+        numcomp: int,
+        nghost: int,
+        local: bool = False,
+    ) -> float:
+        """
+        Returns the dot product of self with another MultiFab where the mask is valid.
+        """
     def imesh(self, idir, include_ghosts=False):
         """
         Returns the integer mesh along the specified direction with the appropriate centering.
@@ -6674,27 +7008,27 @@ class MultiFab(FabArray_FArrayBox):
     @typing.overload
     def max(self, comp: int = 0, nghost: int = 0, local: bool = False) -> float:
         """
-        Returns the maximum value of the specfied component of the MultiFab.
+        Returns the maximum value of the specified component of the (i)MultiFab.
         """
     @typing.overload
     def max(
         self, region: Box, comp: int = 0, nghost: int = 0, local: bool = False
     ) -> float:
         """
-        Returns the maximum value of the specfied component of the MultiFab over the region.
+        Returns the maximum value of the specified component of the (i)MultiFab over the region.
         """
     def maxIndex(self, arg0: int, arg1: int) -> IntVect1D: ...
     @typing.overload
     def min(self, comp: int = 0, nghost: int = 0, local: bool = False) -> float:
         """
-        Returns the minimum value of the specfied component of the MultiFab.
+        Returns the minimum value of the specified component of the (i)MultiFab.
         """
     @typing.overload
     def min(
         self, region: Box, comp: int = 0, nghost: int = 0, local: bool = False
     ) -> float:
         """
-        Returns the minimum value of the specfied component of the MultiFab over the region.
+        Returns the minimum value of the specified component of the (i)MultiFab over the region.
         """
     def minIndex(self, arg0: int, arg1: int) -> IntVect1D: ...
     def minus(
@@ -6794,7 +7128,10 @@ class MultiFab(FabArray_FArrayBox):
         restriction that the subregion is further constrained to
         the intersection with Box region.
         """
+    @typing.overload
     def norm0(self, arg0: int, arg1: int, arg2: bool, arg3: bool) -> float: ...
+    @typing.overload
+    def norm0(self, arg0: iMultiFab, arg1: int, arg2: int, arg3: bool) -> float: ...
     @typing.overload
     def norm1(self, arg0: int, arg1: Periodicity, arg2: bool) -> float: ...
     @typing.overload
@@ -6808,6 +7145,7 @@ class MultiFab(FabArray_FArrayBox):
     @typing.overload
     def norm2(self, arg0: Vector_int) -> Vector_Real: ...
     def norminf(self, arg0: int, arg1: int, arg2: bool, arg3: bool) -> float: ...
+    def override_sync(self, arg0: iMultiFab, arg1: Periodicity) -> None: ...
     @typing.overload
     def plus(self, val: float, nghost: int = 0) -> None:
         """
@@ -6889,7 +7227,7 @@ class MultiFab(FabArray_FArrayBox):
     @typing.overload
     def sum(self, comp: int = 0, local: bool = False) -> float:
         """
-        Returns the sum of component 'comp' over the MultiFab -- no ghost cells are included.
+        Returns the sum of component 'comp' over the (i)MultiFab -- no ghost cells are included.
         """
     @typing.overload
     def sum(self, region: Box, comp: int = 0, local: bool = False) -> float:
@@ -19826,6 +20164,641 @@ class XDim3:
     def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __init__(self, arg0: float, arg1: float, arg2: float) -> None: ...
 
+class iMultiFab(FabArray_IArrayBox):
+    @staticmethod
+    def __iter__(imfab): ...
+    @staticmethod
+    def _pybind11_conduit_v1_(*args, **kwargs): ...
+    @staticmethod
+    def finalize() -> None: ...
+    @staticmethod
+    def initialize() -> None: ...
+    def __getitem__(self, index, with_internal_ghosts=False):
+        """
+        Returns slice of the MultiFab using global indexing, as a numpy array.
+            This uses numpy array indexing, with the indexing relative to the global array.
+            The slice ranges can cross multiple blocks and the result will be gathered into a single
+            array.
+
+            In an MPI context, this is a global operation. An "allgather" is performed so that the full
+            result is returned on all processors.
+
+            Note that the index is in fortran ordering and that 0 is the lower boundary of the whole domain.
+
+            The default range of the indices includes only the valid cells. The ":" index will include all of
+            the valid cels and no ghost cells. The ghost cells can be accessed using imaginary numbers, with
+            negative imaginary numbers for the lower ghost cells, and positive for the upper ghost cells.
+            The index "[-1j]" for example refers to the first lower ghost cell, and "[1j]" to the first upper
+            ghost cell. To access all cells, ghosts and valid cells, use an empty tuple for the index, i.e. "[()]".
+
+            Parameters
+            ----------
+            index : the index using numpy style indexing
+                Index of the slice to return.
+            with_internal_ghosts : bool, optional
+                Whether to include internal ghost cells. When true, data from ghost cells may be used that
+                overlaps valid cells.
+
+        """
+    @typing.overload
+    def __init__(self) -> None:
+        """
+        Constructs an empty (i)MultiFab.
+
+                    Data can be defined at a later time using the define member functions
+                    inherited from FabArray.
+        """
+    @typing.overload
+    def __init__(self, a: Arena) -> None:
+        """
+        Constructs an empty (i)MultiFab.
+
+                    Data can be defined at a later time using the define member functions.
+                    If ``define`` is called later with a nullptr as MFInfo's arena, the
+                    default Arena ``a`` will be used.  If the arena in MFInfo is not a
+                    nullptr, the MFInfo's arena will be used.
+        """
+    @typing.overload
+    def __init__(
+        self,
+        bxs: BoxArray,
+        dm: DistributionMapping,
+        ncomp: int,
+        ngrow: int,
+        info: MFInfo,
+        factory: FabFactory_IArrayBox,
+    ) -> None:
+        """
+        Constructs an (i)MultiFab.
+
+        The size of the FArrayBox is given by the Box grown by \\p ngrow, and
+        the number of components is given by \\p ncomp. If \\p info is set to
+        not allocating memory, then no FArrayBoxes are allocated at
+        this time but can be defined later.
+
+        Parameters
+        ----------
+        bxs :
+          a valid region
+        dm :
+          a DistributionMapping
+        ncomp :
+          number of components
+        ngrow :
+          number of cells the region grows
+        info :
+          (i)MultiFab info, including allocation Arena
+        factory :
+          FArrayBoxFactory for embedded boundaries
+        """
+    @typing.overload
+    def __init__(
+        self,
+        bxs: BoxArray,
+        dm: DistributionMapping,
+        ncomp: int,
+        ngrow: int,
+        info: MFInfo,
+    ) -> None:
+        """
+        Constructs an (i)MultiFab.
+
+        The size of the FArrayBox is given by the Box grown by \\p ngrow, and
+        the number of components is given by \\p ncomp. If \\p info is set to
+        not allocating memory, then no FArrayBoxes are allocated at
+        this time but can be defined later.
+
+        Parameters
+        ----------
+        bxs :
+          a valid region
+        dm :
+          a DistributionMapping
+        ncomp :
+          number of components
+        ngrow :
+          number of cells the region grows
+        info :
+          (i)MultiFab info, including allocation Arena
+        factory :
+          FArrayBoxFactory for embedded boundaries
+        """
+    @typing.overload
+    def __init__(
+        self, bxs: BoxArray, dm: DistributionMapping, ncomp: int, ngrow: int
+    ) -> None:
+        """
+        Constructs an (i)MultiFab.
+
+        The size of the FArrayBox is given by the Box grown by \\p ngrow, and
+        the number of components is given by \\p ncomp. If \\p info is set to
+        not allocating memory, then no FArrayBoxes are allocated at
+        this time but can be defined later.
+
+        Parameters
+        ----------
+        bxs :
+          a valid region
+        dm :
+          a DistributionMapping
+        ncomp :
+          number of components
+        ngrow :
+          number of cells the region grows
+        info :
+          (i)MultiFab info, including allocation Arena
+        factory :
+          FArrayBoxFactory for embedded boundaries
+        """
+    @typing.overload
+    def __init__(
+        self,
+        bxs: BoxArray,
+        dm: DistributionMapping,
+        ncomp: int,
+        ngrow: IntVect1D,
+        info: MFInfo,
+    ) -> None:
+        """
+        Constructs an (i)MultiFab.
+
+        The size of the FArrayBox is given by the Box grown by \\p ngrow, and
+        the number of components is given by \\p ncomp. If \\p info is set to
+        not allocating memory, then no FArrayBoxes are allocated at
+        this time but can be defined later.
+
+        Parameters
+        ----------
+        bxs :
+          a valid region
+        dm :
+          a DistributionMapping
+        ncomp :
+          number of components
+        ngrow :
+          number of cells the region grows
+        info :
+          (i)MultiFab info, including allocation Arena
+        factory :
+          FArrayBoxFactory for embedded boundaries
+        """
+    @typing.overload
+    def __init__(
+        self,
+        bxs: BoxArray,
+        dm: DistributionMapping,
+        ncomp: int,
+        ngrow: IntVect1D,
+        info: MFInfo,
+        factory: FabFactory_IArrayBox,
+    ) -> None:
+        """
+        Constructs an (i)MultiFab.
+
+        The size of the FArrayBox is given by the Box grown by \\p ngrow, and
+        the number of components is given by \\p ncomp. If \\p info is set to
+        not allocating memory, then no FArrayBoxes are allocated at
+        this time but can be defined later.
+
+        Parameters
+        ----------
+        bxs :
+          a valid region
+        dm :
+          a DistributionMapping
+        ncomp :
+          number of components
+        ngrow :
+          number of cells the region grows
+        info :
+          (i)MultiFab info, including allocation Arena
+        factory :
+          FArrayBoxFactory for embedded boundaries
+        """
+    @typing.overload
+    def __init__(
+        self, bxs: BoxArray, dm: DistributionMapping, ncomp: int, ngrow: IntVect1D
+    ) -> None:
+        """
+        Constructs an (i)MultiFab.
+
+        The size of the FArrayBox is given by the Box grown by \\p ngrow, and
+        the number of components is given by \\p ncomp. If \\p info is set to
+        not allocating memory, then no FArrayBoxes are allocated at
+        this time but can be defined later.
+
+        Parameters
+        ----------
+        bxs :
+          a valid region
+        dm :
+          a DistributionMapping
+        ncomp :
+          number of components
+        ngrow :
+          number of cells the region grows
+        info :
+          (i)MultiFab info, including allocation Arena
+        factory :
+          FArrayBoxFactory for embedded boundaries
+        """
+    def __repr__(self) -> str: ...
+    def __setitem__(self, index, value):
+        """
+        Sets the slice of the MultiFab using global indexing.
+            This uses numpy array indexing, with the indexing relative to the global array.
+            The slice ranges can cross multiple blocks and the value will be distributed accordingly.
+            Note that this will apply the value to both valid and ghost cells.
+
+            In an MPI context, this is a local operation. On each processor, the blocks within the slice
+            range will be set to the value.
+
+            Note that the index is in fortran ordering and that 0 is the lower boundary of the whole domain.
+
+            The default range of the indices includes only the valid cells. The ":" index will include all of
+            the valid cels and no ghost cells. The ghost cells can be accessed using imaginary numbers, with
+            negative imaginary numbers for the lower ghost cells, and positive for the upper ghost cells.
+            The index "[-1j]" for example refers to the first lower ghost cell, and "[1j]" to the first upper
+            ghost cell. To access all cells, ghosts and valid cells, use an empty tuple for the index, i.e. "[()]".
+
+            Parameters
+            ----------
+            index : the index using numpy style indexing
+                Index of the slice to return.
+            value : scalar or array
+                Input value to assign to the specified slice of the MultiFab
+
+        """
+    def add(
+        self, src: iMultiFab, srccomp: int, comp: int, numcomp: int, nghost: int
+    ) -> None:
+        """
+        Add src to self including nghost ghost cells.
+        The two MultiFabs MUST have the same underlying BoxArray.
+        """
+    def box_array(self: FabArrayBase) -> BoxArray: ...
+    def copy(self):
+        """
+
+        Create a copy of this MultiFab, using the same Arena.
+
+        Parameters
+        ----------
+        self : amrex.MultiFab
+            A MultiFab class in pyAMReX
+
+        Returns
+        -------
+        amrex.MultiFab
+            A copy of this MultiFab.
+
+        """
+    def divi(
+        self, mf: iMultiFab, strt_comp: int, num_comp: int, nghost: int = 0
+    ) -> None:
+        """
+        This function divides the values of the cells in mf from the
+        corresponding cells of this MultiFab.  mf is required to have the
+        same BoxArray or "valid region" as this MultiFab.  The division is
+        done only to num_comp components, starting with component number
+        strt_comp.  The parameter nghost specifies the number of boundary
+        cells that will be modified.  If nghost == 0, only the valid region of
+        each FArrayBox will be modified.  Note, nothing is done to protect
+        against divide by zero.
+        """
+    def divide(
+        self, src: iMultiFab, srccomp: int, comp: int, numcomp: int, nghost: int
+    ) -> None:
+        """
+        Divide self by src including nghost ghost cells.
+        The two MultiFabs MUST have the same underlying BoxArray.
+        """
+    def dm(self: FabArrayBase) -> DistributionMapping: ...
+    def imesh(self, idir, include_ghosts=False):
+        """
+        Returns the integer mesh along the specified direction with the appropriate centering.
+            This is the location of the data points in grid cell units.
+
+            Parameters
+            ----------
+            self : amrex.MultiFab
+                A MultiFab class in pyAMReX
+            direction : integer
+                Zero based direction number.
+                In a typical Cartesian case, 0 would be 'x' direction.
+            include_ghosts : bool, default=False
+                Whether or not ghost cells are included in the mesh.
+
+        """
+    @typing.overload
+    def max(self, comp: int = 0, nghost: int = 0, local: bool = False) -> int:
+        """
+        Returns the maximum value of the specified component of the (i)MultiFab.
+        """
+    @typing.overload
+    def max(
+        self, region: Box, comp: int = 0, nghost: int = 0, local: bool = False
+    ) -> int:
+        """
+        Returns the maximum value of the specified component of the (i)MultiFab over the region.
+        """
+    def maxIndex(self, arg0: int, arg1: int) -> IntVect1D: ...
+    @typing.overload
+    def min(self, comp: int = 0, nghost: int = 0, local: bool = False) -> int:
+        """
+        Returns the minimum value of the specified component of the (i)MultiFab.
+        """
+    @typing.overload
+    def min(
+        self, region: Box, comp: int = 0, nghost: int = 0, local: bool = False
+    ) -> int:
+        """
+        Returns the minimum value of the specified component of the (i)MultiFab over the region.
+        """
+    def minIndex(self, arg0: int, arg1: int) -> IntVect1D: ...
+    def minus(
+        self, mf: iMultiFab, strt_comp: int, num_comp: int, nghost: int = 0
+    ) -> None:
+        """
+        This function subtracts the values of the cells in mf from the
+        corresponding cells of this MultiFab.  mf is required to have the
+        same BoxArray or "valid region" as this MultiFab.  The subtraction is
+        done only to num_comp components, starting with component number
+        strt_comp.  The parameter nghost specifies the number of boundary
+        cells that will be modified.  If nghost == 0, only the valid region of
+        each FArrayBox will be modified.
+        """
+    @typing.overload
+    def mult(self, val: int, nghost: int = 0) -> None:
+        """
+        Scales the value of each cell in the valid region of each
+        component of the MultiFab by the scalar val (a[i] <- a[i]*val).
+        The value of nghost specifies the number of cells in the
+        boundary region that should be modified.
+        """
+    @typing.overload
+    def mult(self, val: int, comp: int, num_comp: int, nghost: int = 0) -> None:
+        """
+        Scales the value of each cell in the specified subregion of the
+        MultiFab by the scalar val (a[i] <- a[i]*val). The subregion
+        consists of the num_comp components starting at component comp.
+        The value of nghost specifies the number of cells in the
+        boundary region of each FArrayBox in the subregion that should
+        be modified.
+        """
+    @typing.overload
+    def mult(
+        self, val: int, region: Box, comp: int, num_comp: int, nghost: int = 0
+    ) -> None:
+        """
+        Identical to the previous version of mult(), with the
+        restriction that the subregion is further constrained to the
+        intersection with Box region.  The value of nghost specifies the
+        number of cells in the boundary region of each FArrayBox in
+        the subregion that should be modified.
+        """
+    @typing.overload
+    def mult(self, val: int, region: Box, nghost: int = 0) -> None:
+        """
+        Scales the value of each cell in the valid region of each
+        component of the MultiFab by the scalar val (a[i] <- a[i]*val),
+        that also intersects the Box region.  The value of nghost
+        specifies the number of cells in the boundary region of each
+        FArrayBox in the subregion that should be modified.
+        """
+    def multiply(
+        self, src: iMultiFab, srccomp: int, comp: int, numcomp: int, nghost: int
+    ) -> None:
+        """
+        Multiply self by src including nghost ghost cells.
+        The two MultiFabs MUST have the same underlying BoxArray.
+        """
+    @typing.overload
+    def negate(self, nghost: int = 0) -> None:
+        """
+        Negates the value of each cell in the valid region of
+        the MultiFab.  The value of nghost specifies the number of
+        cells in the boundary region that should be modified.
+        """
+    @typing.overload
+    def negate(self, comp: int, num_comp: int, nghost: int = 0) -> None:
+        """
+        Negates the value of each cell in the specified subregion of
+        the MultiFab.  The subregion consists of the num_comp
+        components starting at component comp.  The value of nghost
+        specifies the number of cells in the boundary region of each
+        FArrayBox in the subregion that should be modified.
+        """
+    @typing.overload
+    def negate(self, region: Box, nghost: int = 0) -> None:
+        """
+        Negates the value of each cell in the valid region of
+        the MultiFab that also intersects the Box region.  The value
+        of nghost specifies the number of cells in the boundary region
+        that should be modified.
+        """
+    @typing.overload
+    def negate(self, region: Box, comp: int, num_comp: int, nghost: int = 0) -> None:
+        """
+        Identical to the previous version of negate(), with the
+        restriction that the subregion is further constrained to
+        the intersection with Box region.
+        """
+    @typing.overload
+    def plus(self, val: int, nghost: int = 0) -> None:
+        """
+        Adds the scalar value val to the value of each cell in the
+        valid region of each component of the MultiFab.  The value
+        of nghost specifies the number of cells in the boundary
+        region that should be modified.
+        """
+    @typing.overload
+    def plus(self, val: int, comp: int, num_comp: int, nghost: int = 0) -> None:
+        """
+        Adds the scalar value \\p val to the value of each cell in the
+        specified subregion of the MultiFab.
+
+        The subregion consists of the \\p num_comp components starting at component \\p comp.
+        The value of nghost specifies the number of cells in the
+        boundary region of each FArrayBox in the subregion that should
+        be modified.
+        """
+    @typing.overload
+    def plus(self, val: int, region: Box, nghost: int = 0) -> None:
+        """
+        Adds the scalar value val to the value of each cell in the
+        valid region of each component of the MultiFab, that also
+        intersects the Box region.  The value of nghost specifies the
+        number of cells in the boundary region of each FArrayBox in
+        the subregion that should be modified.
+        """
+    @typing.overload
+    def plus(
+        self, val: int, region: Box, comp: int, num_comp: int, nghost: int = 0
+    ) -> None:
+        """
+        Identical to the previous version of plus(), with the
+        restriction that the subregion is further constrained to
+        the intersection with Box region.
+        """
+    @typing.overload
+    def plus(
+        self, mf: iMultiFab, strt_comp: int, num_comp: int, nghost: int = 0
+    ) -> None:
+        """
+        This function adds the values of the cells in mf to the corresponding
+        cells of this MultiFab.  mf is required to have the same BoxArray or
+        "valid region" as this MultiFab.  The addition is done only to num_comp
+        components, starting with component number strt_comp.  The parameter
+        nghost specifies the number of boundary cells that will be modified.
+        If nghost == 0, only the valid region of each FArrayBox will be
+        modified.
+        """
+    def subtract(
+        self, src: iMultiFab, srccomp: int, comp: int, numcomp: int, nghost: int
+    ) -> None:
+        """
+        Subtract src from self including nghost ghost cells.
+        The two MultiFabs MUST have the same underlying BoxArray.
+        """
+    @typing.overload
+    def sum(self, comp: int = 0, local: bool = False) -> int:
+        """
+        Returns the sum of component 'comp' over the (i)MultiFab -- no ghost cells are included.
+        """
+    @typing.overload
+    def sum(self, region: Box, comp: int = 0, local: bool = False) -> int:
+        """
+        Returns the sum of component 'comp' in the given 'region'. -- no ghost cells are included.
+        """
+    def to_cupy(self, copy=False, order="F"):
+        """
+
+        Provide a CuPy view into a MultiFab.
+
+        This includes ngrow guard cells of each box.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.MultiFab
+            A MultiFab class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        list of cupy.array
+            A list of CuPy n-dimensional arrays, for each local block in the
+            MultiFab.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if cupy is not installed
+
+        """
+    def to_numpy(self, copy=False, order="F"):
+        """
+
+        Provide a NumPy view into a MultiFab.
+
+        This includes ngrow guard cells of each box.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.MultiFab
+            A MultiFab class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        list of numpy.array
+            A list of NumPy n-dimensional arrays, for each local block in the
+            MultiFab.
+
+        """
+    def to_xp(self, copy=False, order="F"):
+        """
+
+        Provide a NumPy or CuPy view into a MultiFab,
+        depending on amr.Config.have_gpu .
+
+        This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
+        https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
+
+        This includes ngrow guard cells of each box.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.MultiFab
+            A MultiFab class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        list of xp.array
+            A list of NumPy or CuPy n-dimensional arrays, for each local block in the
+            MultiFab.
+
+        """
+    @property
+    def n_comp(self) -> int: ...
+    @property
+    def n_grow_vect(self) -> IntVect1D: ...
+    @property
+    def shape(self, include_ghosts=False):
+        """
+        Returns the shape of the global array
+
+            Parameters
+            ----------
+            self : amrex.MultiFab
+                A MultiFab class in pyAMReX
+            include_ghosts : bool, default=False
+                Whether or not ghost cells are included
+
+        """
+    @property
+    def shape_with_ghosts(self):
+        """
+        Returns the shape of the global array including ghost cells
+
+            Parameters
+            ----------
+            self : amrex.MultiFab
+                A MultiFab class in pyAMReX
+
+        """
+
 def AlmostEqual(rb1: RealBox, rb2: RealBox, eps: float = 0.0) -> bool:
     """
     Determine if two boxes are equal to within a tolerance
@@ -19869,6 +20842,24 @@ def concatenate(root: str, num: int, mindigits: int = 5) -> str:
     Builds plotfile name
     """
 
+@typing.overload
+def copy_mfab(
+    dst: iMultiFab,
+    src: iMultiFab,
+    srccomp: int,
+    dstcomp: int,
+    numcomp: int,
+    nghost: int,
+) -> None: ...
+@typing.overload
+def copy_mfab(
+    dst: iMultiFab,
+    src: iMultiFab,
+    srccomp: int,
+    dstcomp: int,
+    numcomp: int,
+    nghost: IntVect1D,
+) -> None: ...
 @typing.overload
 def copy_mfab(
     dst: MultiFab, src: MultiFab, srccomp: int, dstcomp: int, numcomp: int, nghost: int
