@@ -138,3 +138,45 @@ def mfab_device(boxarr, distmap, request):
 
     with MfabDeviceContextManager() as mfab:
         yield mfab
+
+
+@pytest.fixture(scope="function", params=list(itertools.product([1, 3], [0, 1])))
+def imfab(boxarr, distmap, request):
+    class iMfabContextManager:
+        def __enter__(self):
+            num_components = request.param[0]
+            num_ghost = request.param[1]
+            self.imfab = amr.iMultiFab(boxarr, distmap, num_components, num_ghost)
+            self.imfab.set_val(0, 0, num_components)
+            return self.imfab
+
+        def __exit__(self, exc_type, exc_value, traceback):
+            self.imfab.clear()
+            del self.imfab
+
+    with iMfabContextManager() as imfab:
+        yield imfab
+
+
+@pytest.fixture(scope="function", params=list(itertools.product([1, 3], [0, 1])))
+def imfab_device(boxarr, distmap, request):
+    class iMfabDeviceContextManager:
+        def __enter__(self):
+            num_components = request.param[0]
+            num_ghost = request.param[1]
+            self.imfab = amr.iMultiFab(
+                boxarr,
+                distmap,
+                num_components,
+                num_ghost,
+                amr.MFInfo().set_arena(amr.The_Device_Arena()),
+            )
+            self.imfab.set_val(0, 0, num_components)
+            return self.imfab
+
+        def __exit__(self, exc_type, exc_value, traceback):
+            self.imfab.clear()
+            del self.imfab
+
+    with iMfabDeviceContextManager() as imfab:
+        yield imfab
