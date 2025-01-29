@@ -28,6 +28,7 @@ void init_DistributionMapping(py::module&);
 void init_FabArray(py::module &);
 void init_FArrayBox(py::module&);
 void init_Geometry(py::module&);
+void init_iMultiFab(py::module&);
 void init_IndexType(py::module &);
 void init_IntVect(py::module &);
 void init_MFInfo(py::module &);
@@ -73,6 +74,7 @@ PYBIND11_MODULE(amrex_3d_pybind, m) {
                BoxArray
                Dim3
                FArrayBox
+               iMultiFab
                IntVect
                IndexType
                RealVect
@@ -119,6 +121,7 @@ PYBIND11_MODULE(amrex_3d_pybind, m) {
     py::class_< amrex::MFIter > py_MFIter(m, "MFIter", py::dynamic_attr());
     init_FabArray(m);
     init_MFInfo(m);
+    init_iMultiFab(m);
     init_MultiFab(m, py_MFIter);
     init_ParallelDescriptor(m);
     init_PODVector(m);

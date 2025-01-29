@@ -23,6 +23,7 @@ foreach(D IN LISTS AMReX_SPACEDIM)
         FabArray.cpp
         FArrayBox.cpp
         Geometry.cpp
+        iMultiFab.cpp
         IndexType.cpp
         IntVect.cpp
         RealVect.cpp
