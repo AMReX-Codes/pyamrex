@@ -5235,48 +5235,6 @@ class FabArrayBase:
 class FabArray_FArrayBox(FabArrayBase):
     @staticmethod
     def _pybind11_conduit_v1_(*args, **kwargs): ...
-    @staticmethod
-    def lin_comb(
-        dst: FabArray_FArrayBox,
-        a: float,
-        x: FabArray_FArrayBox,
-        xcomp: int,
-        b: float,
-        y: FabArray_FArrayBox,
-        ycomp: int,
-        dstcomp: int,
-        numcomp: int,
-        nghost: IntVect3D,
-    ) -> None:
-        """
-        dst = a*x + b*y
-        """
-    @staticmethod
-    def saxpy(
-        y: FabArray_FArrayBox,
-        a: float,
-        x: FabArray_FArrayBox,
-        xcomp: int,
-        ycomp: int,
-        ncomp: int,
-        nghost: IntVect3D,
-    ) -> None:
-        """
-        y += a*x
-        """
-    @staticmethod
-    def xpay(
-        y: FabArray_FArrayBox,
-        a: float,
-        x: FabArray_FArrayBox,
-        xcomp: int,
-        ycomp: int,
-        ncomp: int,
-        nghost: IntVect3D,
-    ) -> None:
-        """
-        y = x + a*y
-        """
     @typing.overload
     def abs(self, comp: int, ncomp: int, nghost: int = 0) -> None: ...
     @typing.overload
@@ -5385,6 +5343,40 @@ class FabArray_FArrayBox(FabArrayBase):
             Note that FabArray itself does not contains any periodicity information.
             FillBoundary expects that its cell-centered version of its BoxArray is non-overlapping.
         """
+    def lin_comb(
+        self,
+        a: float,
+        x: FabArray_FArrayBox,
+        xcomp: int,
+        b: float,
+        y: FabArray_FArrayBox,
+        ycomp: int,
+        comp: int,
+        numcomp: int,
+        nghost: IntVect3D,
+    ) -> None:
+        """
+        self = a * x + b * y
+
+        Parameters
+        ----------
+        a     : float
+            scalar a
+        x     : FabArray
+        xcomp : int
+            starting component of x
+        b     : float
+            scalar b
+        y     : FabArray
+        ycomp : int
+            starting component of y
+        comp  : int
+            starting component of self
+        numcomp : int
+            number of components
+        nghost  : int
+            number of ghost cells
+        """
     def ok(self) -> bool: ...
     @typing.overload
     def override_sync(self, period: Periodicity) -> None:
@@ -5421,6 +5413,27 @@ class FabArray_FArrayBox(FabArrayBase):
               number of components
             period :
               periodic length if it's non-zero
+        """
+    def saxpy(
+        self,
+        a: float,
+        x: FabArray_FArrayBox,
+        x_comp: int,
+        comp: int,
+        ncomp: int,
+        nghost: IntVect3D,
+    ) -> None:
+        """
+        self += a * x
+
+        Parameters
+        ----------
+        a      : scalar a
+        x      : FabArray x
+        x_comp : starting component of x
+        comp   : starting component of self
+        ncomp  : number of components
+        nghost : number of ghost cells
         """
     @typing.overload
     def set_val(self, val: float) -> None:
@@ -5493,6 +5506,27 @@ class FabArray_FArrayBox(FabArrayBase):
     ) -> None:
         """
         Sum values in overlapped cells.  The destination is limited to valid cells.
+        """
+    def xpay(
+        self,
+        a: float,
+        x: FabArray_FArrayBox,
+        xcomp: int,
+        comp: int,
+        ncomp: int,
+        nghost: IntVect3D,
+    ) -> None:
+        """
+        self = x + a * self
+
+        Parameters
+        ----------
+        a      : scalar a
+        x      : FabArray x
+        x_comp : starting component of x
+        comp   : starting component of self
+        ncomp  : number of components
+        nghost : number of ghost cells
         """
     @property
     def arena(self) -> Arena:
@@ -6184,245 +6218,9 @@ class MultiFab(FabArray_FArrayBox):
     @staticmethod
     def _pybind11_conduit_v1_(*args, **kwargs): ...
     @staticmethod
-    @typing.overload
-    def add(
-        dst: MultiFab,
-        src: MultiFab,
-        srccomp: int,
-        dstcomp: int,
-        numcomp: int,
-        nghost: int,
-    ) -> None:
-        """
-        Add src to dst including nghost ghost cells.
-        The two MultiFabs MUST have the same underlying BoxArray.
-        """
-    @staticmethod
-    @typing.overload
-    def add(
-        dst: MultiFab,
-        src: MultiFab,
-        srccomp: int,
-        dstcomp: int,
-        numcomp: int,
-        nghost: IntVect3D,
-    ) -> None:
-        """
-        Add src to dst including nghost ghost cells.
-        The two MultiFabs MUST have the same underlying BoxArray.
-        """
-    @staticmethod
-    @typing.overload
-    def add_product(
-        dst: MultiFab,
-        src1: MultiFab,
-        comp1: int,
-        src2: MultiFab,
-        comp2: int,
-        dstcomp: int,
-        numcomp: int,
-        nghost: int,
-    ) -> None:
-        """
-        dst += src1*src2
-        """
-    @staticmethod
-    @typing.overload
-    def add_product(
-        arg0: MultiFab,
-        arg1: MultiFab,
-        arg2: int,
-        arg3: MultiFab,
-        arg4: int,
-        arg5: int,
-        arg6: int,
-        arg7: IntVect3D,
-    ) -> None:
-        """
-        dst += src1*src2
-        """
-    @staticmethod
-    @typing.overload
-    def divide(
-        dst: MultiFab,
-        src: MultiFab,
-        srccomp: int,
-        dstcomp: int,
-        numcomp: int,
-        nghost: int,
-    ) -> None:
-        """
-        Divide dst by src including nghost ghost cells.
-        The two MultiFabs MUST have the same underlying BoxArray.
-        """
-    @staticmethod
-    @typing.overload
-    def divide(
-        dst: MultiFab,
-        src: MultiFab,
-        srccomp: int,
-        dstcomp: int,
-        numcomp: int,
-        nghost: IntVect3D,
-    ) -> None:
-        """
-        Divide dst by src including nghost ghost cells.
-        The two MultiFabs MUST have the same underlying BoxArray.
-        """
-    @staticmethod
-    @typing.overload
-    def dot(
-        x: MultiFab,
-        xcomp: int,
-        y: MultiFab,
-        ycomp: int,
-        numcomp: int,
-        nghost: int,
-        local: bool = False,
-    ) -> float:
-        """
-        Returns the dot product of two MultiFabs.
-        """
-    @staticmethod
-    @typing.overload
-    def dot(
-        x: MultiFab, xcomp: int, numcomp: int, nghost: int, local: bool = False
-    ) -> float:
-        """
-        Returns the dot product of a MultiFab with itself.
-        """
-    @staticmethod
     def finalize() -> None: ...
     @staticmethod
     def initialize() -> None: ...
-    @staticmethod
-    def lin_comb(
-        dst: MultiFab,
-        a: float,
-        x: MultiFab,
-        x_comp: int,
-        b: float,
-        y: MultiFab,
-        y_comp: int,
-        dstcomp: int,
-        numcomp: int,
-        nghost: int,
-    ) -> None:
-        """
-        dst = a*x + b*y
-        """
-    @staticmethod
-    @typing.overload
-    def multiply(
-        dst: MultiFab,
-        src: MultiFab,
-        srccomp: int,
-        dstcomp: int,
-        numcomp: int,
-        nghost: int,
-    ) -> None:
-        """
-        Multiply dst by src including nghost ghost cells.
-        The two MultiFabs MUST have the same underlying BoxArray.
-        """
-    @staticmethod
-    @typing.overload
-    def multiply(
-        dst: MultiFab,
-        src: MultiFab,
-        srccomp: int,
-        dstcomp: int,
-        numcomp: int,
-        nghost: IntVect3D,
-    ) -> None:
-        """
-        Multiply dst by src including nghost ghost cells.
-        The two MultiFabs MUST have the same underlying BoxArray.
-        """
-    @staticmethod
-    def saxpy(
-        dst: MultiFab,
-        a: float,
-        src: MultiFab,
-        srccomp: int,
-        dstcomp: int,
-        numcomp: int,
-        nghost: int,
-    ) -> None:
-        """
-        dst += a*src
-        """
-    @staticmethod
-    @typing.overload
-    def subtract(
-        dst: MultiFab,
-        src: MultiFab,
-        srccomp: int,
-        dstcomp: int,
-        numcomp: int,
-        nghost: int,
-    ) -> None:
-        """
-        Subtract src from dst including nghost ghost cells.
-        The two MultiFabs MUST have the same underlying BoxArray.
-        """
-    @staticmethod
-    @typing.overload
-    def subtract(
-        dst: MultiFab,
-        src: MultiFab,
-        srccomp: int,
-        dstcomp: int,
-        numcomp: int,
-        nghost: IntVect3D,
-    ) -> None:
-        """
-        Subtract src from dst including nghost ghost cells.
-        The two MultiFabs MUST have the same underlying BoxArray.
-        """
-    @staticmethod
-    @typing.overload
-    def swap(
-        dst: MultiFab,
-        src: MultiFab,
-        srccomp: int,
-        dstcomp: int,
-        numcomp: int,
-        nghost: int,
-    ) -> None:
-        """
-        Swap from src to dst including nghost ghost cells.
-        The two MultiFabs MUST have the same underlying BoxArray.
-        The swap is local.
-        """
-    @staticmethod
-    @typing.overload
-    def swap(
-        dst: MultiFab,
-        src: MultiFab,
-        srccomp: int,
-        dstcomp: int,
-        numcomp: int,
-        nghost: IntVect3D,
-    ) -> None:
-        """
-        Swap from src to dst including nghost ghost cells.
-        The two MultiFabs MUST have the same underlying BoxArray.
-        The swap is local.
-        """
-    @staticmethod
-    def xpay(
-        dst: MultiFab,
-        a: float,
-        src: MultiFab,
-        srccomp: int,
-        dstcomp: int,
-        numcomp: int,
-        nghost: int,
-    ) -> None:
-        """
-        dst = src + a*dst
-        """
     def __getitem__(self, index, with_internal_ghosts=False):
         """
         Returns slice of the MultiFab using global indexing, as a numpy array.
@@ -6679,6 +6477,50 @@ class MultiFab(FabArray_FArrayBox):
                 Input value to assign to the specified slice of the MultiFab
 
         """
+    @typing.overload
+    def add(
+        self, src: MultiFab, srccomp: int, comp: int, numcomp: int, nghost: int
+    ) -> None:
+        """
+        Add src to self including nghost ghost cells.
+        The two MultiFabs MUST have the same underlying BoxArray.
+        """
+    @typing.overload
+    def add(
+        self, src: MultiFab, srccomp: int, comp: int, numcomp: int, nghost: IntVect3D
+    ) -> None:
+        """
+        Add src to self including nghost ghost cells.
+        The two MultiFabs MUST have the same underlying BoxArray.
+        """
+    @typing.overload
+    def add_product(
+        self,
+        src1: MultiFab,
+        comp1: int,
+        src2: MultiFab,
+        comp2: int,
+        comp: int,
+        numcomp: int,
+        nghost: int,
+    ) -> None:
+        """
+        self += src1 * src2
+        """
+    @typing.overload
+    def add_product(
+        self,
+        src1: MultiFab,
+        comp1: int,
+        src2: MultiFab,
+        comp2: int,
+        comp: int,
+        numcomp: int,
+        nghost: IntVect3D,
+    ) -> None:
+        """
+        self += src1 * src2
+        """
     def average_sync(self, arg0: Periodicity) -> None: ...
     def box_array(self: FabArrayBase) -> BoxArray: ...
     @typing.overload
@@ -6730,7 +6572,41 @@ class MultiFab(FabArray_FArrayBox):
         each FArrayBox will be modified.  Note, nothing is done to protect
         against divide by zero.
         """
+    @typing.overload
+    def divide(
+        self, src: MultiFab, srccomp: int, comp: int, numcomp: int, nghost: int
+    ) -> None:
+        """
+        Divide self by src including nghost ghost cells.
+        The two MultiFabs MUST have the same underlying BoxArray.
+        """
+    @typing.overload
+    def divide(
+        self, src: MultiFab, srccomp: int, comp: int, numcomp: int, nghost: IntVect3D
+    ) -> None:
+        """
+        Divide self by src including nghost ghost cells.
+        The two MultiFabs MUST have the same underlying BoxArray.
+        """
     def dm(self: FabArrayBase) -> DistributionMapping: ...
+    @typing.overload
+    def dot(
+        self,
+        comp: int,
+        y: MultiFab,
+        y_comp: int,
+        numcomp: int,
+        nghost: int,
+        local: bool = False,
+    ) -> float:
+        """
+        Returns the dot product of self with another MultiFab.
+        """
+    @typing.overload
+    def dot(self, comp: int, numcomp: int, nghost: int, local: bool = False) -> float:
+        """
+        Returns the dot product with itself.
+        """
     def imesh(self, idir, include_ghosts=False):
         """
         Returns the integer mesh along the specified direction with the appropriate centering.
@@ -6786,6 +6662,21 @@ class MultiFab(FabArray_FArrayBox):
         intersection with Box region.  The value of nghost specifies the
         number of cells in the boundary region of each FArrayBox in the
         subregion that should be modified.
+        """
+    def lin_comb(
+        self,
+        a: float,
+        x: MultiFab,
+        x_comp: int,
+        b: float,
+        y: MultiFab,
+        y_comp: int,
+        comp: int,
+        numcomp: int,
+        nghost: int,
+    ) -> None:
+        """
+        self = a * x + b * y
         """
     @typing.overload
     def max(self, comp: int = 0, nghost: int = 0, local: bool = False) -> float:
@@ -6862,6 +6753,22 @@ class MultiFab(FabArray_FArrayBox):
         that also intersects the Box region.  The value of nghost
         specifies the number of cells in the boundary region of each
         FArrayBox in the subregion that should be modified.
+        """
+    @typing.overload
+    def multiply(
+        self, src: MultiFab, srccomp: int, comp: int, numcomp: int, nghost: int
+    ) -> None:
+        """
+        Multiply self by src including nghost ghost cells.
+        The two MultiFabs MUST have the same underlying BoxArray.
+        """
+    @typing.overload
+    def multiply(
+        self, src: MultiFab, srccomp: int, comp: int, numcomp: int, nghost: IntVect3D
+    ) -> None:
+        """
+        Multiply self by src including nghost ghost cells.
+        The two MultiFabs MUST have the same underlying BoxArray.
         """
     @typing.overload
     def negate(self, nghost: int = 0) -> None:
@@ -6958,6 +6865,34 @@ class MultiFab(FabArray_FArrayBox):
         If nghost == 0, only the valid region of each FArrayBox will be
         modified.
         """
+    def saxpy(
+        self,
+        a: float,
+        src: MultiFab,
+        srccomp: int,
+        comp: int,
+        numcomp: int,
+        nghost: int,
+    ) -> None:
+        """
+        self += a * src
+        """
+    @typing.overload
+    def subtract(
+        self, src: MultiFab, srccomp: int, comp: int, numcomp: int, nghost: int
+    ) -> None:
+        """
+        Subtract src from self including nghost ghost cells.
+        The two MultiFabs MUST have the same underlying BoxArray.
+        """
+    @typing.overload
+    def subtract(
+        self, src: MultiFab, srccomp: int, comp: int, numcomp: int, nghost: IntVect3D
+    ) -> None:
+        """
+        Subtract src from self including nghost ghost cells.
+        The two MultiFabs MUST have the same underlying BoxArray.
+        """
     @typing.overload
     def sum(self, comp: int = 0, local: bool = False) -> float:
         """
@@ -6979,6 +6914,24 @@ class MultiFab(FabArray_FArrayBox):
     def sum_unique(self, region: Box, comp: int = 0, local: bool = False) -> float:
         """
         Returns the unique sum of component `comp` in the given region. Non-unique points owned by multiple boxes in the MultiFab areonly added once. No ghost cells are included. This function does not takeperiodicity into account in the determination of uniqueness of points.
+        """
+    @typing.overload
+    def swap(
+        self, src: MultiFab, srccomp: int, comp: int, numcomp: int, nghost: int
+    ) -> None:
+        """
+        Swap from src to self including nghost ghost cells.
+        The two MultiFabs MUST have the same underlying BoxArray.
+        The swap is local.
+        """
+    @typing.overload
+    def swap(
+        self, src: MultiFab, srccomp: int, comp: int, numcomp: int, nghost: IntVect3D
+    ) -> None:
+        """
+        Swap from src to self including nghost ghost cells.
+        The two MultiFabs MUST have the same underlying BoxArray.
+        The swap is local.
         """
     def to_cupy(self, copy=False, order="F"):
         """
@@ -7080,6 +7033,18 @@ class MultiFab(FabArray_FArrayBox):
 
         """
     def weighted_sync(self, arg0: MultiFab, arg1: Periodicity) -> None: ...
+    def xpay(
+        self,
+        a: float,
+        src: MultiFab,
+        srccomp: int,
+        comp: int,
+        numcomp: int,
+        nghost: int,
+    ) -> None:
+        """
+        self = src + a * self
+        """
     @property
     def n_comp(self) -> int: ...
     @property
