@@ -45,7 +45,8 @@ def mf_to_numpy(self, copy=False, order="F"):
 
     mf = self
     if copy:
-        mf = amr.MultiFab(
+        mf_type = type(self)  # MultiFab or iMultiFab
+        mf = mf_type(
             self.box_array(),
             self.dm(),
             self.n_comp,
@@ -156,7 +157,8 @@ def copy_multifab(amr, self):
     amrex.MultiFab
         A copy of this MultiFab.
     """
-    mf = amr.MultiFab(
+    mf_type = type(self)  # MultiFab or iMultiFab
+    mf = mf_type(
         self.box_array(),
         self.dm(),
         self.n_comp,
@@ -657,3 +659,19 @@ def register_MultiFab_extension(amr):
     amr.MultiFab.shape_with_ghosts = property(shape_with_ghosts)
     amr.MultiFab.__getitem__ = __getitem__
     amr.MultiFab.__setitem__ = __setitem__
+
+    # iMultiFab
+    amr.iMultiFab.__iter__ = lambda imfab: amr.MFIter(imfab)
+
+    amr.iMultiFab.to_numpy = mf_to_numpy
+    amr.iMultiFab.to_cupy = mf_to_cupy
+    amr.iMultiFab.to_xp = mf_to_xp
+
+    amr.iMultiFab.copy = lambda self: copy_multifab(amr, self)
+    amr.iMultiFab.copy.__doc__ = copy_multifab.__doc__
+
+    amr.iMultiFab.imesh = imesh
+    amr.iMultiFab.shape = property(shape)
+    amr.iMultiFab.shape_with_ghosts = property(shape_with_ghosts)
+    amr.iMultiFab.__getitem__ = __getitem__
+    amr.iMultiFab.__setitem__ = __setitem__
