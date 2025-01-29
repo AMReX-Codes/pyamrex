@@ -20,6 +20,7 @@ foreach(D IN LISTS AMReX_SPACEDIM)
         CoordSys.cpp
         Dim3.cpp
         DistributionMapping.cpp
+        FabArray.cpp
         FArrayBox.cpp
         Geometry.cpp
         IndexType.cpp

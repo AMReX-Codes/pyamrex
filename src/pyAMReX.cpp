@@ -6,6 +6,7 @@
 #include "pyAMReX.H"
 
 #include <AMReX.H>
+#include <AMReX_MFIter.H>
 
 #define STRINGIFY(x) #x
 #define MACRO_STRINGIFY(x) STRINGIFY(x)
@@ -24,6 +25,7 @@ void init_BoxArray(py::module &);
 void init_CoordSys(py::module&);
 void init_Dim3(py::module&);
 void init_DistributionMapping(py::module&);
+void init_FabArray(py::module &);
 void init_FArrayBox(py::module&);
 void init_Geometry(py::module&);
 void init_IndexType(py::module &);
@@ -32,7 +34,7 @@ void init_MFInfo(py::module &);
 #ifdef AMREX_USE_MPI
 void init_MPMD(py::module &);
 #endif
-void init_MultiFab(py::module &);
+void init_MultiFab(py::module &, py::class_< amrex::MFIter >&);
 void init_ParallelDescriptor(py::module &);
 void init_ParmParse(py::module &);
 void init_ParticleContainer(py::module &);
@@ -114,8 +116,10 @@ PYBIND11_MODULE(amrex_3d_pybind, m) {
     init_DistributionMapping(m);
     init_BaseFab(m);
     init_FArrayBox(m);
+    py::class_< amrex::MFIter > py_MFIter(m, "MFIter", py::dynamic_attr());
+    init_FabArray(m);
     init_MFInfo(m);
-    init_MultiFab(m);
+    init_MultiFab(m, py_MFIter);
     init_ParallelDescriptor(m);
     init_PODVector(m);
 
