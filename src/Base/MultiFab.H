@@ -225,7 +225,8 @@ factory :
         )
     ;
 
-    // TODO: Missing in AMReX iMultiFab as of v25.01
+    // TODO: Missing in AMReX iMultiFab as of v25.02
+    //       https://github.com/AMReX-Codes/amrex/issues/4317
     if constexpr (std::is_same_v<T, MultiFab>) {
         py_MultiFab
         .def("sum_unique",
@@ -478,7 +479,7 @@ factory :
         )
     ;
 
-    // TODO: Missing in iMultiFab
+    // TODO: Missing in iMultiFab https://github.com/AMReX-Codes/amrex/issues/4317
     if constexpr (std::is_same_v<T, MultiFab>) {
         py_MultiFab
             .def("add",
@@ -503,7 +504,7 @@ factory :
         )
     ;
 
-    // TODO: Missing in iMultiFab
+    // TODO: Missing in iMultiFab https://github.com/AMReX-Codes/amrex/issues/4317
     if constexpr (std::is_same_v<T, MultiFab>) {
         py_MultiFab
             .def("subtract",
@@ -554,7 +555,7 @@ factory :
 
     if constexpr (std::is_same_v<T, MultiFab>) {
         py_MultiFab
-            .def("divide",  /* TODO: Missing in iMultiFab */
+            .def("divide",  /* TODO: Missing in iMultiFab https://github.com/AMReX-Codes/amrex/issues/4317 */
                  [](T &self, T const &src, int srccomp, int comp, int numcomp, IntVect const &nghost) {
                      T::Divide(self, src, srccomp, comp, numcomp, nghost);
                  },
@@ -563,7 +564,7 @@ factory :
                  "The two MultiFabs MUST have the same underlying BoxArray."
             )
 
-            .def("swap",  /* TODO: Missing in iMultiFab */
+            .def("swap",  /* TODO: Missing in iMultiFab https://github.com/AMReX-Codes/amrex/issues/4317 */
                  [](T &self, T &src, int srccomp, int comp, int numcomp, int nghost) {
                      T::Swap(self, src, srccomp, comp, numcomp, nghost);
                  },
@@ -572,7 +573,7 @@ factory :
                  "The two MultiFabs MUST have the same underlying BoxArray.\n"
                  "The swap is local."
             )
-            .def("swap",  /* TODO: Missing in iMultiFab */
+            .def("swap",  /* TODO: Missing in iMultiFab https://github.com/AMReX-Codes/amrex/issues/4317 */
                  [](T &self, T &src, int srccomp, int comp, int numcomp, IntVect const &nghost) {
                      T::Swap(self, src, srccomp, comp, numcomp, nghost);
                  },
