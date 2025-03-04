@@ -3,7 +3,6 @@ foreach(D IN LISTS AMReX_SPACEDIM)
       PRIVATE
         ParticleContainer.cpp
         ParticleContainer_FHDeX.cpp
-        ParticleContainer_HiPACE.cpp
         ParticleContainer_ImpactX.cpp
         ParticleContainer_WarpX.cpp
     )
