@@ -307,8 +307,6 @@ __all__ = [
 
 class AMReX:
     @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
-    @staticmethod
     def empty() -> bool: ...
     @staticmethod
     def erase(arg0: AMReX) -> None: ...
@@ -329,8 +327,6 @@ class AmrInfo:
     use_fixed_upto_level: int
     use_new_chop: bool
     verbose: int
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __init__(self) -> None: ...
     def __repr__(self) -> str: ...
     def blocking_factor(self, arg0: int) -> IntVect3D: ...
@@ -339,8 +335,6 @@ class AmrInfo:
     def ref_ratio(self, arg0: int) -> IntVect3D: ...
 
 class AmrMesh:
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
@@ -367,8 +361,6 @@ class AmrMesh:
 
 class Arena:
     @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
-    @staticmethod
     def finalize() -> None: ...
     @staticmethod
     def initialize() -> None: ...
@@ -392,8 +384,6 @@ class Arena:
     def is_pinned(self) -> bool: ...
 
 class Array4_cdouble:
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     @typing.overload
     def __getitem__(self, arg0: IntVect3D) -> complex: ...
     @typing.overload
@@ -545,8 +535,6 @@ class Array4_cdouble:
     def size(self) -> int: ...
 
 class Array4_cdouble_const:
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     @typing.overload
     def __getitem__(self, arg0: IntVect3D) -> complex: ...
     @typing.overload
@@ -684,8 +672,6 @@ class Array4_cdouble_const:
     def size(self) -> int: ...
 
 class Array4_cfloat:
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     @typing.overload
     def __getitem__(self, arg0: IntVect3D) -> complex: ...
     @typing.overload
@@ -837,8 +823,6 @@ class Array4_cfloat:
     def size(self) -> int: ...
 
 class Array4_cfloat_const:
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     @typing.overload
     def __getitem__(self, arg0: IntVect3D) -> complex: ...
     @typing.overload
@@ -976,8 +960,6 @@ class Array4_cfloat_const:
     def size(self) -> int: ...
 
 class Array4_double:
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     @typing.overload
     def __getitem__(self, arg0: IntVect3D) -> float: ...
     @typing.overload
@@ -1129,8 +1111,6 @@ class Array4_double:
     def size(self) -> int: ...
 
 class Array4_double_const:
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     @typing.overload
     def __getitem__(self, arg0: IntVect3D) -> float: ...
     @typing.overload
@@ -1268,8 +1248,6 @@ class Array4_double_const:
     def size(self) -> int: ...
 
 class Array4_float:
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     @typing.overload
     def __getitem__(self, arg0: IntVect3D) -> float: ...
     @typing.overload
@@ -1421,8 +1399,6 @@ class Array4_float:
     def size(self) -> int: ...
 
 class Array4_float_const:
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     @typing.overload
     def __getitem__(self, arg0: IntVect3D) -> float: ...
     @typing.overload
@@ -1560,8 +1536,6 @@ class Array4_float_const:
     def size(self) -> int: ...
 
 class Array4_int:
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     @typing.overload
     def __getitem__(self, arg0: IntVect3D) -> int: ...
     @typing.overload
@@ -1713,8 +1687,6 @@ class Array4_int:
     def size(self) -> int: ...
 
 class Array4_int_const:
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     @typing.overload
     def __getitem__(self, arg0: IntVect3D) -> int: ...
     @typing.overload
@@ -1852,8 +1824,6 @@ class Array4_int_const:
     def size(self) -> int: ...
 
 class Array4_long:
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     @typing.overload
     def __getitem__(self, arg0: IntVect3D) -> int: ...
     @typing.overload
@@ -2005,8 +1975,6 @@ class Array4_long:
     def size(self) -> int: ...
 
 class Array4_long_const:
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     @typing.overload
     def __getitem__(self, arg0: IntVect3D) -> int: ...
     @typing.overload
@@ -2144,8 +2112,6 @@ class Array4_long_const:
     def size(self) -> int: ...
 
 class Array4_longdouble:
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     @typing.overload
     def __getitem__(self, arg0: IntVect3D) -> float: ...
     @typing.overload
@@ -2297,8 +2263,6 @@ class Array4_longdouble:
     def size(self) -> int: ...
 
 class Array4_longdouble_const:
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     @typing.overload
     def __getitem__(self, arg0: IntVect3D) -> float: ...
     @typing.overload
@@ -2436,8 +2400,6 @@ class Array4_longdouble_const:
     def size(self) -> int: ...
 
 class Array4_longlong:
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     @typing.overload
     def __getitem__(self, arg0: IntVect3D) -> int: ...
     @typing.overload
@@ -2589,8 +2551,6 @@ class Array4_longlong:
     def size(self) -> int: ...
 
 class Array4_longlong_const:
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     @typing.overload
     def __getitem__(self, arg0: IntVect3D) -> int: ...
     @typing.overload
@@ -2728,8 +2688,6 @@ class Array4_longlong_const:
     def size(self) -> int: ...
 
 class Array4_short:
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     @typing.overload
     def __getitem__(self, arg0: IntVect3D) -> int: ...
     @typing.overload
@@ -2881,8 +2839,6 @@ class Array4_short:
     def size(self) -> int: ...
 
 class Array4_short_const:
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     @typing.overload
     def __getitem__(self, arg0: IntVect3D) -> int: ...
     @typing.overload
@@ -3020,8 +2976,6 @@ class Array4_short_const:
     def size(self) -> int: ...
 
 class Array4_uint:
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     @typing.overload
     def __getitem__(self, arg0: IntVect3D) -> int: ...
     @typing.overload
@@ -3173,8 +3127,6 @@ class Array4_uint:
     def size(self) -> int: ...
 
 class Array4_uint_const:
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     @typing.overload
     def __getitem__(self, arg0: IntVect3D) -> int: ...
     @typing.overload
@@ -3312,8 +3264,6 @@ class Array4_uint_const:
     def size(self) -> int: ...
 
 class Array4_ulong:
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     @typing.overload
     def __getitem__(self, arg0: IntVect3D) -> int: ...
     @typing.overload
@@ -3465,8 +3415,6 @@ class Array4_ulong:
     def size(self) -> int: ...
 
 class Array4_ulong_const:
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     @typing.overload
     def __getitem__(self, arg0: IntVect3D) -> int: ...
     @typing.overload
@@ -3604,8 +3552,6 @@ class Array4_ulong_const:
     def size(self) -> int: ...
 
 class Array4_ulonglong:
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     @typing.overload
     def __getitem__(self, arg0: IntVect3D) -> int: ...
     @typing.overload
@@ -3757,8 +3703,6 @@ class Array4_ulonglong:
     def size(self) -> int: ...
 
 class Array4_ulonglong_const:
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     @typing.overload
     def __getitem__(self, arg0: IntVect3D) -> int: ...
     @typing.overload
@@ -3896,8 +3840,6 @@ class Array4_ulonglong_const:
     def size(self) -> int: ...
 
 class Array4_ushort:
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     @typing.overload
     def __getitem__(self, arg0: IntVect3D) -> int: ...
     @typing.overload
@@ -4049,8 +3991,6 @@ class Array4_ushort:
     def size(self) -> int: ...
 
 class Array4_ushort_const:
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     @typing.overload
     def __getitem__(self, arg0: IntVect3D) -> int: ...
     @typing.overload
@@ -4189,8 +4129,6 @@ class Array4_ushort_const:
 
 class ArrayOfStructs_16_4_arena:
     @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
-    @staticmethod
     def test_sizes() -> None: ...
     def __getitem__(self, arg0: int) -> Particle_16_4: ...
     def __init__(self) -> None: ...
@@ -4284,8 +4222,6 @@ class ArrayOfStructs_16_4_arena:
     def __cuda_array_interface__(self) -> dict: ...
 
 class ArrayOfStructs_16_4_default:
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     @staticmethod
     def test_sizes() -> None: ...
     def __getitem__(self, arg0: int) -> Particle_16_4: ...
@@ -4381,8 +4317,6 @@ class ArrayOfStructs_16_4_default:
 
 class ArrayOfStructs_16_4_pinned:
     @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
-    @staticmethod
     def test_sizes() -> None: ...
     def __getitem__(self, arg0: int) -> Particle_16_4: ...
     def __init__(self) -> None: ...
@@ -4476,8 +4410,6 @@ class ArrayOfStructs_16_4_pinned:
     def __cuda_array_interface__(self) -> dict: ...
 
 class ArrayOfStructs_2_1_arena:
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     @staticmethod
     def test_sizes() -> None: ...
     def __getitem__(self, arg0: int) -> Particle_2_1: ...
@@ -4573,8 +4505,6 @@ class ArrayOfStructs_2_1_arena:
 
 class ArrayOfStructs_2_1_default:
     @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
-    @staticmethod
     def test_sizes() -> None: ...
     def __getitem__(self, arg0: int) -> Particle_2_1: ...
     def __init__(self) -> None: ...
@@ -4669,8 +4599,6 @@ class ArrayOfStructs_2_1_default:
 
 class ArrayOfStructs_2_1_pinned:
     @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
-    @staticmethod
     def test_sizes() -> None: ...
     def __getitem__(self, arg0: int) -> Particle_2_1: ...
     def __init__(self) -> None: ...
@@ -4764,8 +4692,6 @@ class ArrayOfStructs_2_1_pinned:
     def __cuda_array_interface__(self) -> dict: ...
 
 class BaseFab_Real:
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
@@ -4815,8 +4741,6 @@ class Box:
     hi_vect: IntVect3D
     lo_vect: IntVect3D
     small_end: IntVect3D
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __add__(self, arg0: IntVect3D) -> Box: ...
     def __iadd__(self, arg0: IntVect3D) -> Box: ...
     @typing.overload
@@ -5010,8 +4934,6 @@ class Box:
     def volume(self) -> int: ...
 
 class BoxArray:
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __getitem__(self, arg0: int) -> Box: ...
     @typing.overload
     def __init__(self) -> None: ...
@@ -5071,8 +4993,6 @@ class Config:
     have_omp: typing.ClassVar[bool] = False
     spacedim: typing.ClassVar[int] = 3
     verbose: typing.ClassVar[int] = 1
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
 
 class CoordSys:
     class CoordType:
@@ -5099,8 +5019,6 @@ class CoordSys:
             CoordSys.CoordType
         ]  # value = <CoordType.cartesian: 0>
         undef: typing.ClassVar[CoordSys.CoordType]  # value = <CoordType.undef: -1>
-        @staticmethod
-        def _pybind11_conduit_v1_(*args, **kwargs): ...
         def __eq__(self, other: typing.Any) -> bool: ...
         def __getstate__(self) -> int: ...
         def __hash__(self) -> int: ...
@@ -5120,8 +5038,6 @@ class CoordSys:
     SPHERICAL: typing.ClassVar[CoordSys.CoordType]  # value = <CoordType.SPHERICAL: 2>
     cartesian: typing.ClassVar[CoordSys.CoordType]  # value = <CoordType.cartesian: 0>
     undef: typing.ClassVar[CoordSys.CoordType]  # value = <CoordType.undef: -1>
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def Coord(self) -> CoordSys.CoordType: ...
     def CoordInt(self) -> int: ...
     def IsCartesian(self) -> bool: ...
@@ -5139,19 +5055,14 @@ class Dim3:
     x: int
     y: int
     z: int
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __init__(self, arg0: int, arg1: int, arg2: int) -> None: ...
     def __repr__(self) -> str: ...
     def __str__(self) -> str: ...
 
 class Direction:
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
+    pass
 
 class DistributionMapping:
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def ProcessorMap(self) -> Vector_int: ...
     def __getitem__(self, arg0: int) -> int: ...
     @typing.overload
@@ -5181,8 +5092,6 @@ class DistributionMapping:
     def size(self) -> int: ...
 
 class FArrayBox(BaseFab_Real):
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
@@ -5210,8 +5119,6 @@ class FArrayBox(BaseFab_Real):
 class FabArrayBase:
     @staticmethod
     def __iter__(fab): ...
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __len__(self) -> int:
         """
         Return the number of FABs in the FabArray.
@@ -5243,8 +5150,6 @@ class FabArrayBase:
         """
 
 class FabArray_FArrayBox(FabArrayBase):
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     @typing.overload
     def abs(self, comp: int, ncomp: int, nghost: int = 0) -> None: ...
     @typing.overload
@@ -5549,8 +5454,6 @@ class FabArray_FArrayBox(FabArrayBase):
     def has_EB_fab_factory(self) -> bool: ...
 
 class FabArray_IArrayBox(FabArrayBase):
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     @typing.overload
     def abs(self, comp: int, ncomp: int, nghost: int = 0) -> None: ...
     @typing.overload
@@ -5855,16 +5758,12 @@ class FabArray_IArrayBox(FabArrayBase):
     def has_EB_fab_factory(self) -> bool: ...
 
 class FabFactory_FArrayBox:
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
+    pass
 
 class FabFactory_IArrayBox:
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
+    pass
 
 class Geometry(CoordSys):
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     @typing.overload
     def ProbHi(self, dir: int) -> float:
         """
@@ -6010,8 +5909,6 @@ class Geometry(CoordSys):
     def prob_domain(self, arg1: RealBox) -> None: ...
 
 class GeometryData:
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     @typing.overload
     def CellSize(
         self,
@@ -6115,8 +6012,6 @@ class IndexType:
         __members__: typing.ClassVar[
             dict[str, IndexType.CellIndex]
         ]  # value = {'CELL': <CellIndex.CELL: 0>, 'NODE': <CellIndex.NODE: 1>}
-        @staticmethod
-        def _pybind11_conduit_v1_(*args, **kwargs): ...
         def __eq__(self, other: typing.Any) -> bool: ...
         def __getstate__(self) -> int: ...
         def __hash__(self) -> int: ...
@@ -6135,8 +6030,6 @@ class IndexType:
     CELL: typing.ClassVar[IndexType.CellIndex]  # value = <CellIndex.CELL: 0>
     NODE: typing.ClassVar[IndexType.CellIndex]  # value = <CellIndex.NODE: 1>
     __hash__: typing.ClassVar[None] = None
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     @staticmethod
     def cell_type() -> IndexType: ...
     @staticmethod
@@ -6184,8 +6077,6 @@ class IndexType:
 
 class IntVect1D:
     __hash__: typing.ClassVar[None] = None
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     @staticmethod
     def cell_vector() -> IntVect1D: ...
     @staticmethod
@@ -6268,8 +6159,6 @@ class IntVect1D:
 
 class IntVect2D:
     __hash__: typing.ClassVar[None] = None
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     @staticmethod
     def cell_vector() -> IntVect2D: ...
     @staticmethod
@@ -6354,8 +6243,6 @@ class IntVect2D:
 
 class IntVect3D:
     __hash__: typing.ClassVar[None] = None
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     @staticmethod
     def cell_vector() -> IntVect3D: ...
     @staticmethod
@@ -6442,8 +6329,6 @@ class MFInfo:
     alloc: bool
     arena: Arena
     tags: Vector_string
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __init__(self) -> None: ...
     def set_alloc(self, arg0: bool) -> MFInfo: ...
     def set_arena(self, arg0: Arena) -> MFInfo: ...
@@ -6455,8 +6340,6 @@ class MFItInfo:
     dynamic: bool
     num_streams: int
     tilesize: IntVect3D
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __init__(self) -> None: ...
     def disable_device_sync(self) -> MFItInfo: ...
     def enable_tiling(self, ts: IntVect3D) -> MFItInfo: ...
@@ -6466,8 +6349,6 @@ class MFItInfo:
     def use_default_stream(self) -> MFItInfo: ...
 
 class MFIter:
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     @typing.overload
     def __init__(self, arg0: FabArrayBase) -> None: ...
     @typing.overload
@@ -6523,8 +6404,6 @@ class MFIter:
     def length(self) -> int: ...
 
 class MPMD_Copier:
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     @typing.overload
     def __init__(self, arg0: bool) -> None: ...
     @typing.overload
@@ -6539,8 +6418,6 @@ class MPMD_Copier:
 class MultiFab(FabArray_FArrayBox):
     @staticmethod
     def __iter__(mfab): ...
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     @staticmethod
     def finalize() -> None: ...
     @staticmethod
@@ -7417,8 +7294,6 @@ class MultiFab(FabArray_FArrayBox):
         """
 
 class PODVector_int_arena:
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __getitem__(self, arg0: int) -> int: ...
     @typing.overload
     def __init__(self) -> None: ...
@@ -7515,8 +7390,6 @@ class PODVector_int_arena:
     def __cuda_array_interface__(self) -> dict: ...
 
 class PODVector_int_pinned:
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __getitem__(self, arg0: int) -> int: ...
     @typing.overload
     def __init__(self) -> None: ...
@@ -7613,8 +7486,6 @@ class PODVector_int_pinned:
     def __cuda_array_interface__(self) -> dict: ...
 
 class PODVector_int_std:
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __getitem__(self, arg0: int) -> int: ...
     @typing.overload
     def __init__(self) -> None: ...
@@ -7711,8 +7582,6 @@ class PODVector_int_std:
     def __cuda_array_interface__(self) -> dict: ...
 
 class PODVector_real_arena:
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __getitem__(self, arg0: int) -> float: ...
     @typing.overload
     def __init__(self) -> None: ...
@@ -7809,8 +7678,6 @@ class PODVector_real_arena:
     def __cuda_array_interface__(self) -> dict: ...
 
 class PODVector_real_pinned:
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __getitem__(self, arg0: int) -> float: ...
     @typing.overload
     def __init__(self) -> None: ...
@@ -7907,8 +7774,6 @@ class PODVector_real_pinned:
     def __cuda_array_interface__(self) -> dict: ...
 
 class PODVector_real_std:
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __getitem__(self, arg0: int) -> float: ...
     @typing.overload
     def __init__(self) -> None: ...
@@ -8005,8 +7870,6 @@ class PODVector_real_std:
     def __cuda_array_interface__(self) -> dict: ...
 
 class PODVector_uint64_arena:
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __getitem__(self, arg0: int) -> int: ...
     @typing.overload
     def __init__(self) -> None: ...
@@ -8103,8 +7966,6 @@ class PODVector_uint64_arena:
     def __cuda_array_interface__(self) -> dict: ...
 
 class PODVector_uint64_pinned:
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __getitem__(self, arg0: int) -> int: ...
     @typing.overload
     def __init__(self) -> None: ...
@@ -8201,8 +8062,6 @@ class PODVector_uint64_pinned:
     def __cuda_array_interface__(self) -> dict: ...
 
 class PODVector_uint64_std:
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __getitem__(self, arg0: int) -> int: ...
     @typing.overload
     def __init__(self) -> None: ...
@@ -8300,8 +8159,6 @@ class PODVector_uint64_std:
 
 class ParConstIterBase_16_4_0_0_arena(MFIter):
     is_soa_particle: typing.ClassVar[bool] = False
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __init__(
         self, particle_container: ParticleContainer_16_4_0_0_arena, level: int
     ) -> None: ...
@@ -8350,8 +8207,6 @@ class ParConstIterBase_16_4_0_0_arena(MFIter):
 
 class ParConstIterBase_16_4_0_0_default(MFIter):
     is_soa_particle: typing.ClassVar[bool] = False
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __init__(
         self, particle_container: ParticleContainer_16_4_0_0_default, level: int
     ) -> None: ...
@@ -8400,8 +8255,6 @@ class ParConstIterBase_16_4_0_0_default(MFIter):
 
 class ParConstIterBase_16_4_0_0_pinned(MFIter):
     is_soa_particle: typing.ClassVar[bool] = False
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __init__(
         self, particle_container: ParticleContainer_16_4_0_0_pinned, level: int
     ) -> None: ...
@@ -8450,8 +8303,6 @@ class ParConstIterBase_16_4_0_0_pinned(MFIter):
 
 class ParConstIterBase_2_1_3_1_arena(MFIter):
     is_soa_particle: typing.ClassVar[bool] = False
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __init__(
         self, particle_container: ParticleContainer_2_1_3_1_arena, level: int
     ) -> None: ...
@@ -8500,8 +8351,6 @@ class ParConstIterBase_2_1_3_1_arena(MFIter):
 
 class ParConstIterBase_2_1_3_1_default(MFIter):
     is_soa_particle: typing.ClassVar[bool] = False
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __init__(
         self, particle_container: ParticleContainer_2_1_3_1_default, level: int
     ) -> None: ...
@@ -8550,8 +8399,6 @@ class ParConstIterBase_2_1_3_1_default(MFIter):
 
 class ParConstIterBase_2_1_3_1_pinned(MFIter):
     is_soa_particle: typing.ClassVar[bool] = False
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __init__(
         self, particle_container: ParticleContainer_2_1_3_1_pinned, level: int
     ) -> None: ...
@@ -8600,8 +8447,6 @@ class ParConstIterBase_2_1_3_1_pinned(MFIter):
 
 class ParConstIterBase_pureSoA_3_0_arena(MFIter):
     is_soa_particle: typing.ClassVar[bool] = True
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __init__(
         self, particle_container: ParticleContainer_pureSoA_3_0_arena, level: int
     ) -> None: ...
@@ -8649,8 +8494,6 @@ class ParConstIterBase_pureSoA_3_0_arena(MFIter):
 
 class ParConstIterBase_pureSoA_3_0_default(MFIter):
     is_soa_particle: typing.ClassVar[bool] = True
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __init__(
         self, particle_container: ParticleContainer_pureSoA_3_0_default, level: int
     ) -> None: ...
@@ -8698,8 +8541,6 @@ class ParConstIterBase_pureSoA_3_0_default(MFIter):
 
 class ParConstIterBase_pureSoA_3_0_pinned(MFIter):
     is_soa_particle: typing.ClassVar[bool] = True
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __init__(
         self, particle_container: ParticleContainer_pureSoA_3_0_pinned, level: int
     ) -> None: ...
@@ -8747,8 +8588,6 @@ class ParConstIterBase_pureSoA_3_0_pinned(MFIter):
 
 class ParConstIterBase_pureSoA_7_0_arena(MFIter):
     is_soa_particle: typing.ClassVar[bool] = True
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __init__(
         self, particle_container: ParticleContainer_pureSoA_7_0_arena, level: int
     ) -> None: ...
@@ -8796,8 +8635,6 @@ class ParConstIterBase_pureSoA_7_0_arena(MFIter):
 
 class ParConstIterBase_pureSoA_7_0_default(MFIter):
     is_soa_particle: typing.ClassVar[bool] = True
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __init__(
         self, particle_container: ParticleContainer_pureSoA_7_0_default, level: int
     ) -> None: ...
@@ -8845,8 +8682,6 @@ class ParConstIterBase_pureSoA_7_0_default(MFIter):
 
 class ParConstIterBase_pureSoA_7_0_pinned(MFIter):
     is_soa_particle: typing.ClassVar[bool] = True
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __init__(
         self, particle_container: ParticleContainer_pureSoA_7_0_pinned, level: int
     ) -> None: ...
@@ -8894,8 +8729,6 @@ class ParConstIterBase_pureSoA_7_0_pinned(MFIter):
 
 class ParConstIterBase_pureSoA_8_0_arena(MFIter):
     is_soa_particle: typing.ClassVar[bool] = True
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __init__(
         self, particle_container: ParticleContainer_pureSoA_8_0_arena, level: int
     ) -> None: ...
@@ -8943,8 +8776,6 @@ class ParConstIterBase_pureSoA_8_0_arena(MFIter):
 
 class ParConstIterBase_pureSoA_8_0_default(MFIter):
     is_soa_particle: typing.ClassVar[bool] = True
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __init__(
         self, particle_container: ParticleContainer_pureSoA_8_0_default, level: int
     ) -> None: ...
@@ -8992,8 +8823,6 @@ class ParConstIterBase_pureSoA_8_0_default(MFIter):
 
 class ParConstIterBase_pureSoA_8_0_pinned(MFIter):
     is_soa_particle: typing.ClassVar[bool] = True
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __init__(
         self, particle_container: ParticleContainer_pureSoA_8_0_pinned, level: int
     ) -> None: ...
@@ -9041,8 +8870,6 @@ class ParConstIterBase_pureSoA_8_0_pinned(MFIter):
 
 class ParConstIter_16_4_0_0_arena(ParConstIterBase_16_4_0_0_arena):
     is_soa_particle: typing.ClassVar[bool] = False
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __init__(
         self, particle_container: ParticleContainer_16_4_0_0_arena, level: int
     ) -> None: ...
@@ -9069,8 +8896,6 @@ class ParConstIter_16_4_0_0_arena(ParConstIterBase_16_4_0_0_arena):
 
 class ParConstIter_16_4_0_0_default(ParConstIterBase_16_4_0_0_default):
     is_soa_particle: typing.ClassVar[bool] = False
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __init__(
         self, particle_container: ParticleContainer_16_4_0_0_default, level: int
     ) -> None: ...
@@ -9097,8 +8922,6 @@ class ParConstIter_16_4_0_0_default(ParConstIterBase_16_4_0_0_default):
 
 class ParConstIter_16_4_0_0_pinned(ParConstIterBase_16_4_0_0_pinned):
     is_soa_particle: typing.ClassVar[bool] = False
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __init__(
         self, particle_container: ParticleContainer_16_4_0_0_pinned, level: int
     ) -> None: ...
@@ -9125,8 +8948,6 @@ class ParConstIter_16_4_0_0_pinned(ParConstIterBase_16_4_0_0_pinned):
 
 class ParConstIter_2_1_3_1_arena(ParConstIterBase_2_1_3_1_arena):
     is_soa_particle: typing.ClassVar[bool] = False
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __init__(
         self, particle_container: ParticleContainer_2_1_3_1_arena, level: int
     ) -> None: ...
@@ -9153,8 +8974,6 @@ class ParConstIter_2_1_3_1_arena(ParConstIterBase_2_1_3_1_arena):
 
 class ParConstIter_2_1_3_1_default(ParConstIterBase_2_1_3_1_default):
     is_soa_particle: typing.ClassVar[bool] = False
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __init__(
         self, particle_container: ParticleContainer_2_1_3_1_default, level: int
     ) -> None: ...
@@ -9181,8 +9000,6 @@ class ParConstIter_2_1_3_1_default(ParConstIterBase_2_1_3_1_default):
 
 class ParConstIter_2_1_3_1_pinned(ParConstIterBase_2_1_3_1_pinned):
     is_soa_particle: typing.ClassVar[bool] = False
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __init__(
         self, particle_container: ParticleContainer_2_1_3_1_pinned, level: int
     ) -> None: ...
@@ -9209,8 +9026,6 @@ class ParConstIter_2_1_3_1_pinned(ParConstIterBase_2_1_3_1_pinned):
 
 class ParConstIter_pureSoA_3_0_arena(ParConstIterBase_pureSoA_3_0_arena):
     is_soa_particle: typing.ClassVar[bool] = True
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __init__(
         self, particle_container: ParticleContainer_pureSoA_3_0_arena, level: int
     ) -> None: ...
@@ -9237,8 +9052,6 @@ class ParConstIter_pureSoA_3_0_arena(ParConstIterBase_pureSoA_3_0_arena):
 
 class ParConstIter_pureSoA_3_0_default(ParConstIterBase_pureSoA_3_0_default):
     is_soa_particle: typing.ClassVar[bool] = True
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __init__(
         self, particle_container: ParticleContainer_pureSoA_3_0_default, level: int
     ) -> None: ...
@@ -9265,8 +9078,6 @@ class ParConstIter_pureSoA_3_0_default(ParConstIterBase_pureSoA_3_0_default):
 
 class ParConstIter_pureSoA_3_0_pinned(ParConstIterBase_pureSoA_3_0_pinned):
     is_soa_particle: typing.ClassVar[bool] = True
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __init__(
         self, particle_container: ParticleContainer_pureSoA_3_0_pinned, level: int
     ) -> None: ...
@@ -9293,8 +9104,6 @@ class ParConstIter_pureSoA_3_0_pinned(ParConstIterBase_pureSoA_3_0_pinned):
 
 class ParConstIter_pureSoA_7_0_arena(ParConstIterBase_pureSoA_7_0_arena):
     is_soa_particle: typing.ClassVar[bool] = True
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __init__(
         self, particle_container: ParticleContainer_pureSoA_7_0_arena, level: int
     ) -> None: ...
@@ -9321,8 +9130,6 @@ class ParConstIter_pureSoA_7_0_arena(ParConstIterBase_pureSoA_7_0_arena):
 
 class ParConstIter_pureSoA_7_0_default(ParConstIterBase_pureSoA_7_0_default):
     is_soa_particle: typing.ClassVar[bool] = True
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __init__(
         self, particle_container: ParticleContainer_pureSoA_7_0_default, level: int
     ) -> None: ...
@@ -9349,8 +9156,6 @@ class ParConstIter_pureSoA_7_0_default(ParConstIterBase_pureSoA_7_0_default):
 
 class ParConstIter_pureSoA_7_0_pinned(ParConstIterBase_pureSoA_7_0_pinned):
     is_soa_particle: typing.ClassVar[bool] = True
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __init__(
         self, particle_container: ParticleContainer_pureSoA_7_0_pinned, level: int
     ) -> None: ...
@@ -9377,8 +9182,6 @@ class ParConstIter_pureSoA_7_0_pinned(ParConstIterBase_pureSoA_7_0_pinned):
 
 class ParConstIter_pureSoA_8_0_arena(ParConstIterBase_pureSoA_8_0_arena):
     is_soa_particle: typing.ClassVar[bool] = True
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __init__(
         self, particle_container: ParticleContainer_pureSoA_8_0_arena, level: int
     ) -> None: ...
@@ -9405,8 +9208,6 @@ class ParConstIter_pureSoA_8_0_arena(ParConstIterBase_pureSoA_8_0_arena):
 
 class ParConstIter_pureSoA_8_0_default(ParConstIterBase_pureSoA_8_0_default):
     is_soa_particle: typing.ClassVar[bool] = True
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __init__(
         self, particle_container: ParticleContainer_pureSoA_8_0_default, level: int
     ) -> None: ...
@@ -9433,8 +9234,6 @@ class ParConstIter_pureSoA_8_0_default(ParConstIterBase_pureSoA_8_0_default):
 
 class ParConstIter_pureSoA_8_0_pinned(ParConstIterBase_pureSoA_8_0_pinned):
     is_soa_particle: typing.ClassVar[bool] = True
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __init__(
         self, particle_container: ParticleContainer_pureSoA_8_0_pinned, level: int
     ) -> None: ...
@@ -9461,8 +9260,6 @@ class ParConstIter_pureSoA_8_0_pinned(ParConstIterBase_pureSoA_8_0_pinned):
 
 class ParIterBase_16_4_0_0_arena(MFIter):
     is_soa_particle: typing.ClassVar[bool] = False
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __init__(
         self, particle_container: ParticleContainer_16_4_0_0_arena, level: int
     ) -> None: ...
@@ -9511,8 +9308,6 @@ class ParIterBase_16_4_0_0_arena(MFIter):
 
 class ParIterBase_16_4_0_0_default(MFIter):
     is_soa_particle: typing.ClassVar[bool] = False
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __init__(
         self, particle_container: ParticleContainer_16_4_0_0_default, level: int
     ) -> None: ...
@@ -9561,8 +9356,6 @@ class ParIterBase_16_4_0_0_default(MFIter):
 
 class ParIterBase_16_4_0_0_pinned(MFIter):
     is_soa_particle: typing.ClassVar[bool] = False
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __init__(
         self, particle_container: ParticleContainer_16_4_0_0_pinned, level: int
     ) -> None: ...
@@ -9611,8 +9404,6 @@ class ParIterBase_16_4_0_0_pinned(MFIter):
 
 class ParIterBase_2_1_3_1_arena(MFIter):
     is_soa_particle: typing.ClassVar[bool] = False
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __init__(
         self, particle_container: ParticleContainer_2_1_3_1_arena, level: int
     ) -> None: ...
@@ -9661,8 +9452,6 @@ class ParIterBase_2_1_3_1_arena(MFIter):
 
 class ParIterBase_2_1_3_1_default(MFIter):
     is_soa_particle: typing.ClassVar[bool] = False
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __init__(
         self, particle_container: ParticleContainer_2_1_3_1_default, level: int
     ) -> None: ...
@@ -9711,8 +9500,6 @@ class ParIterBase_2_1_3_1_default(MFIter):
 
 class ParIterBase_2_1_3_1_pinned(MFIter):
     is_soa_particle: typing.ClassVar[bool] = False
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __init__(
         self, particle_container: ParticleContainer_2_1_3_1_pinned, level: int
     ) -> None: ...
@@ -9761,8 +9548,6 @@ class ParIterBase_2_1_3_1_pinned(MFIter):
 
 class ParIterBase_pureSoA_3_0_arena(MFIter):
     is_soa_particle: typing.ClassVar[bool] = True
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __init__(
         self, particle_container: ParticleContainer_pureSoA_3_0_arena, level: int
     ) -> None: ...
@@ -9810,8 +9595,6 @@ class ParIterBase_pureSoA_3_0_arena(MFIter):
 
 class ParIterBase_pureSoA_3_0_default(MFIter):
     is_soa_particle: typing.ClassVar[bool] = True
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __init__(
         self, particle_container: ParticleContainer_pureSoA_3_0_default, level: int
     ) -> None: ...
@@ -9859,8 +9642,6 @@ class ParIterBase_pureSoA_3_0_default(MFIter):
 
 class ParIterBase_pureSoA_3_0_pinned(MFIter):
     is_soa_particle: typing.ClassVar[bool] = True
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __init__(
         self, particle_container: ParticleContainer_pureSoA_3_0_pinned, level: int
     ) -> None: ...
@@ -9908,8 +9689,6 @@ class ParIterBase_pureSoA_3_0_pinned(MFIter):
 
 class ParIterBase_pureSoA_7_0_arena(MFIter):
     is_soa_particle: typing.ClassVar[bool] = True
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __init__(
         self, particle_container: ParticleContainer_pureSoA_7_0_arena, level: int
     ) -> None: ...
@@ -9957,8 +9736,6 @@ class ParIterBase_pureSoA_7_0_arena(MFIter):
 
 class ParIterBase_pureSoA_7_0_default(MFIter):
     is_soa_particle: typing.ClassVar[bool] = True
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __init__(
         self, particle_container: ParticleContainer_pureSoA_7_0_default, level: int
     ) -> None: ...
@@ -10006,8 +9783,6 @@ class ParIterBase_pureSoA_7_0_default(MFIter):
 
 class ParIterBase_pureSoA_7_0_pinned(MFIter):
     is_soa_particle: typing.ClassVar[bool] = True
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __init__(
         self, particle_container: ParticleContainer_pureSoA_7_0_pinned, level: int
     ) -> None: ...
@@ -10055,8 +9830,6 @@ class ParIterBase_pureSoA_7_0_pinned(MFIter):
 
 class ParIterBase_pureSoA_8_0_arena(MFIter):
     is_soa_particle: typing.ClassVar[bool] = True
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __init__(
         self, particle_container: ParticleContainer_pureSoA_8_0_arena, level: int
     ) -> None: ...
@@ -10104,8 +9877,6 @@ class ParIterBase_pureSoA_8_0_arena(MFIter):
 
 class ParIterBase_pureSoA_8_0_default(MFIter):
     is_soa_particle: typing.ClassVar[bool] = True
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __init__(
         self, particle_container: ParticleContainer_pureSoA_8_0_default, level: int
     ) -> None: ...
@@ -10153,8 +9924,6 @@ class ParIterBase_pureSoA_8_0_default(MFIter):
 
 class ParIterBase_pureSoA_8_0_pinned(MFIter):
     is_soa_particle: typing.ClassVar[bool] = True
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __init__(
         self, particle_container: ParticleContainer_pureSoA_8_0_pinned, level: int
     ) -> None: ...
@@ -10202,8 +9971,6 @@ class ParIterBase_pureSoA_8_0_pinned(MFIter):
 
 class ParIter_16_4_0_0_arena(ParIterBase_16_4_0_0_arena):
     is_soa_particle: typing.ClassVar[bool] = False
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __init__(
         self, particle_container: ParticleContainer_16_4_0_0_arena, level: int
     ) -> None: ...
@@ -10230,8 +9997,6 @@ class ParIter_16_4_0_0_arena(ParIterBase_16_4_0_0_arena):
 
 class ParIter_16_4_0_0_default(ParIterBase_16_4_0_0_default):
     is_soa_particle: typing.ClassVar[bool] = False
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __init__(
         self, particle_container: ParticleContainer_16_4_0_0_default, level: int
     ) -> None: ...
@@ -10258,8 +10023,6 @@ class ParIter_16_4_0_0_default(ParIterBase_16_4_0_0_default):
 
 class ParIter_16_4_0_0_pinned(ParIterBase_16_4_0_0_pinned):
     is_soa_particle: typing.ClassVar[bool] = False
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __init__(
         self, particle_container: ParticleContainer_16_4_0_0_pinned, level: int
     ) -> None: ...
@@ -10286,8 +10049,6 @@ class ParIter_16_4_0_0_pinned(ParIterBase_16_4_0_0_pinned):
 
 class ParIter_2_1_3_1_arena(ParIterBase_2_1_3_1_arena):
     is_soa_particle: typing.ClassVar[bool] = False
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __init__(
         self, particle_container: ParticleContainer_2_1_3_1_arena, level: int
     ) -> None: ...
@@ -10314,8 +10075,6 @@ class ParIter_2_1_3_1_arena(ParIterBase_2_1_3_1_arena):
 
 class ParIter_2_1_3_1_default(ParIterBase_2_1_3_1_default):
     is_soa_particle: typing.ClassVar[bool] = False
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __init__(
         self, particle_container: ParticleContainer_2_1_3_1_default, level: int
     ) -> None: ...
@@ -10342,8 +10101,6 @@ class ParIter_2_1_3_1_default(ParIterBase_2_1_3_1_default):
 
 class ParIter_2_1_3_1_pinned(ParIterBase_2_1_3_1_pinned):
     is_soa_particle: typing.ClassVar[bool] = False
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __init__(
         self, particle_container: ParticleContainer_2_1_3_1_pinned, level: int
     ) -> None: ...
@@ -10370,8 +10127,6 @@ class ParIter_2_1_3_1_pinned(ParIterBase_2_1_3_1_pinned):
 
 class ParIter_pureSoA_3_0_arena(ParIterBase_pureSoA_3_0_arena):
     is_soa_particle: typing.ClassVar[bool] = True
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __init__(
         self, particle_container: ParticleContainer_pureSoA_3_0_arena, level: int
     ) -> None: ...
@@ -10398,8 +10153,6 @@ class ParIter_pureSoA_3_0_arena(ParIterBase_pureSoA_3_0_arena):
 
 class ParIter_pureSoA_3_0_default(ParIterBase_pureSoA_3_0_default):
     is_soa_particle: typing.ClassVar[bool] = True
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __init__(
         self, particle_container: ParticleContainer_pureSoA_3_0_default, level: int
     ) -> None: ...
@@ -10426,8 +10179,6 @@ class ParIter_pureSoA_3_0_default(ParIterBase_pureSoA_3_0_default):
 
 class ParIter_pureSoA_3_0_pinned(ParIterBase_pureSoA_3_0_pinned):
     is_soa_particle: typing.ClassVar[bool] = True
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __init__(
         self, particle_container: ParticleContainer_pureSoA_3_0_pinned, level: int
     ) -> None: ...
@@ -10454,8 +10205,6 @@ class ParIter_pureSoA_3_0_pinned(ParIterBase_pureSoA_3_0_pinned):
 
 class ParIter_pureSoA_7_0_arena(ParIterBase_pureSoA_7_0_arena):
     is_soa_particle: typing.ClassVar[bool] = True
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __init__(
         self, particle_container: ParticleContainer_pureSoA_7_0_arena, level: int
     ) -> None: ...
@@ -10482,8 +10231,6 @@ class ParIter_pureSoA_7_0_arena(ParIterBase_pureSoA_7_0_arena):
 
 class ParIter_pureSoA_7_0_default(ParIterBase_pureSoA_7_0_default):
     is_soa_particle: typing.ClassVar[bool] = True
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __init__(
         self, particle_container: ParticleContainer_pureSoA_7_0_default, level: int
     ) -> None: ...
@@ -10510,8 +10257,6 @@ class ParIter_pureSoA_7_0_default(ParIterBase_pureSoA_7_0_default):
 
 class ParIter_pureSoA_7_0_pinned(ParIterBase_pureSoA_7_0_pinned):
     is_soa_particle: typing.ClassVar[bool] = True
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __init__(
         self, particle_container: ParticleContainer_pureSoA_7_0_pinned, level: int
     ) -> None: ...
@@ -10538,8 +10283,6 @@ class ParIter_pureSoA_7_0_pinned(ParIterBase_pureSoA_7_0_pinned):
 
 class ParIter_pureSoA_8_0_arena(ParIterBase_pureSoA_8_0_arena):
     is_soa_particle: typing.ClassVar[bool] = True
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __init__(
         self, particle_container: ParticleContainer_pureSoA_8_0_arena, level: int
     ) -> None: ...
@@ -10566,8 +10309,6 @@ class ParIter_pureSoA_8_0_arena(ParIterBase_pureSoA_8_0_arena):
 
 class ParIter_pureSoA_8_0_default(ParIterBase_pureSoA_8_0_default):
     is_soa_particle: typing.ClassVar[bool] = True
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __init__(
         self, particle_container: ParticleContainer_pureSoA_8_0_default, level: int
     ) -> None: ...
@@ -10594,8 +10335,6 @@ class ParIter_pureSoA_8_0_default(ParIterBase_pureSoA_8_0_default):
 
 class ParIter_pureSoA_8_0_pinned(ParIterBase_pureSoA_8_0_pinned):
     is_soa_particle: typing.ClassVar[bool] = True
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __init__(
         self, particle_container: ParticleContainer_pureSoA_8_0_pinned, level: int
     ) -> None: ...
@@ -10621,8 +10360,6 @@ class ParIter_pureSoA_8_0_pinned(ParIterBase_pureSoA_8_0_pinned):
     def __repr__(self) -> str: ...
 
 class ParmParse:
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     @staticmethod
     def addfile(arg0: str) -> None: ...
     def __init__(self, prefix: str = "") -> None: ...
@@ -10687,8 +10424,6 @@ class ParticleContainer_16_4_0_0_arena:
     num_struct_real: typing.ClassVar[int] = 16
     const_iterator = ParConstIter_16_4_0_0_arena
     iterator = ParIter_16_4_0_0_arena
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     @typing.overload
     def Define(
         self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray
@@ -10893,8 +10628,6 @@ class ParticleContainer_16_4_0_0_default:
     num_struct_real: typing.ClassVar[int] = 16
     const_iterator = ParConstIter_16_4_0_0_default
     iterator = ParIter_16_4_0_0_default
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     @typing.overload
     def Define(
         self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray
@@ -11099,8 +10832,6 @@ class ParticleContainer_16_4_0_0_pinned:
     num_struct_real: typing.ClassVar[int] = 16
     const_iterator = ParConstIter_16_4_0_0_pinned
     iterator = ParIter_16_4_0_0_pinned
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     @typing.overload
     def Define(
         self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray
@@ -11305,8 +11036,6 @@ class ParticleContainer_2_1_3_1_arena:
     num_struct_real: typing.ClassVar[int] = 2
     const_iterator = ParConstIter_2_1_3_1_arena
     iterator = ParIter_2_1_3_1_arena
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     @typing.overload
     def Define(
         self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray
@@ -11511,8 +11240,6 @@ class ParticleContainer_2_1_3_1_default:
     num_struct_real: typing.ClassVar[int] = 2
     const_iterator = ParConstIter_2_1_3_1_default
     iterator = ParIter_2_1_3_1_default
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     @typing.overload
     def Define(
         self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray
@@ -11717,8 +11444,6 @@ class ParticleContainer_2_1_3_1_pinned:
     num_struct_real: typing.ClassVar[int] = 2
     const_iterator = ParConstIter_2_1_3_1_pinned
     iterator = ParIter_2_1_3_1_pinned
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     @typing.overload
     def Define(
         self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray
@@ -11923,8 +11648,6 @@ class ParticleContainer_pureSoA_3_0_arena:
     num_struct_real: typing.ClassVar[int] = 0
     const_iterator = ParConstIter_pureSoA_3_0_arena
     iterator = ParIter_pureSoA_3_0_arena
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     @typing.overload
     def Define(
         self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray
@@ -12123,8 +11846,6 @@ class ParticleContainer_pureSoA_3_0_default:
     num_struct_real: typing.ClassVar[int] = 0
     const_iterator = ParConstIter_pureSoA_3_0_default
     iterator = ParIter_pureSoA_3_0_default
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     @typing.overload
     def Define(
         self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray
@@ -12323,8 +12044,6 @@ class ParticleContainer_pureSoA_3_0_pinned:
     num_struct_real: typing.ClassVar[int] = 0
     const_iterator = ParConstIter_pureSoA_3_0_pinned
     iterator = ParIter_pureSoA_3_0_pinned
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     @typing.overload
     def Define(
         self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray
@@ -12523,8 +12242,6 @@ class ParticleContainer_pureSoA_7_0_arena:
     num_struct_real: typing.ClassVar[int] = 0
     const_iterator = ParConstIter_pureSoA_7_0_arena
     iterator = ParIter_pureSoA_7_0_arena
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     @typing.overload
     def Define(
         self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray
@@ -12723,8 +12440,6 @@ class ParticleContainer_pureSoA_7_0_default:
     num_struct_real: typing.ClassVar[int] = 0
     const_iterator = ParConstIter_pureSoA_7_0_default
     iterator = ParIter_pureSoA_7_0_default
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     @typing.overload
     def Define(
         self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray
@@ -12923,8 +12638,6 @@ class ParticleContainer_pureSoA_7_0_pinned:
     num_struct_real: typing.ClassVar[int] = 0
     const_iterator = ParConstIter_pureSoA_7_0_pinned
     iterator = ParIter_pureSoA_7_0_pinned
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     @typing.overload
     def Define(
         self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray
@@ -13123,8 +12836,6 @@ class ParticleContainer_pureSoA_8_0_arena:
     num_struct_real: typing.ClassVar[int] = 0
     const_iterator = ParConstIter_pureSoA_8_0_arena
     iterator = ParIter_pureSoA_8_0_arena
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     @typing.overload
     def Define(
         self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray
@@ -13323,8 +13034,6 @@ class ParticleContainer_pureSoA_8_0_default:
     num_struct_real: typing.ClassVar[int] = 0
     const_iterator = ParConstIter_pureSoA_8_0_default
     iterator = ParIter_pureSoA_8_0_default
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     @typing.overload
     def Define(
         self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray
@@ -13523,8 +13232,6 @@ class ParticleContainer_pureSoA_8_0_pinned:
     num_struct_real: typing.ClassVar[int] = 0
     const_iterator = ParConstIter_pureSoA_8_0_pinned
     iterator = ParIter_pureSoA_8_0_pinned
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     @typing.overload
     def Define(
         self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray
@@ -13729,8 +13436,6 @@ class ParticleInitType_16_4_0_0:
     real_struct_data: typing.Annotated[
         list[float], pybind11_stubgen.typing_ext.FixedSize(16)
     ]
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __init__(self) -> None: ...
 
 class ParticleInitType_2_1_3_1:
@@ -13747,8 +13452,6 @@ class ParticleInitType_2_1_3_1:
     real_struct_data: typing.Annotated[
         list[float], pybind11_stubgen.typing_ext.FixedSize(2)
     ]
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __init__(self) -> None: ...
 
 class ParticleInitType_pureSoA_3_0:
@@ -13759,8 +13462,6 @@ class ParticleInitType_pureSoA_3_0:
     real_array_data: typing.Annotated[
         list[float], pybind11_stubgen.typing_ext.FixedSize(3)
     ]
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __init__(self) -> None: ...
 
 class ParticleInitType_pureSoA_7_0:
@@ -13771,8 +13472,6 @@ class ParticleInitType_pureSoA_7_0:
     real_array_data: typing.Annotated[
         list[float], pybind11_stubgen.typing_ext.FixedSize(7)
     ]
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __init__(self) -> None: ...
 
 class ParticleInitType_pureSoA_8_0:
@@ -13783,13 +13482,9 @@ class ParticleInitType_pureSoA_8_0:
     real_array_data: typing.Annotated[
         list[float], pybind11_stubgen.typing_ext.FixedSize(8)
     ]
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __init__(self) -> None: ...
 
 class ParticleTileData_16_4_0_0:
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __getitem__(self, arg0: int) -> Particle_16_4: ...
     def __init__(self) -> None: ...
     def __setitem__(self, arg0: int, arg1: Particle_16_4) -> None: ...
@@ -13803,8 +13498,6 @@ class ParticleTileData_16_4_0_0:
     def m_size(self) -> int: ...
 
 class ParticleTileData_2_1_3_1:
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __getitem__(self, arg0: int) -> Particle_5_2: ...
     def __init__(self) -> None: ...
     def __setitem__(self, arg0: int, arg1: Particle_5_2) -> None: ...
@@ -13818,8 +13511,6 @@ class ParticleTileData_2_1_3_1:
     def m_size(self) -> int: ...
 
 class ParticleTileData_pureSoA_3_0:
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __getitem__(self, arg0: int) -> Particle_3_0: ...
     def __init__(self) -> None: ...
     def __setitem__(self, arg0: int, arg1: Particle_3_0) -> None: ...
@@ -13833,8 +13524,6 @@ class ParticleTileData_pureSoA_3_0:
     def m_size(self) -> int: ...
 
 class ParticleTileData_pureSoA_7_0:
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __getitem__(self, arg0: int) -> Particle_7_0: ...
     def __init__(self) -> None: ...
     def __setitem__(self, arg0: int, arg1: Particle_7_0) -> None: ...
@@ -13848,8 +13537,6 @@ class ParticleTileData_pureSoA_7_0:
     def m_size(self) -> int: ...
 
 class ParticleTileData_pureSoA_8_0:
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __getitem__(self, arg0: int) -> Particle_8_0: ...
     def __init__(self) -> None: ...
     def __setitem__(self, arg0: int, arg1: Particle_8_0) -> None: ...
@@ -13865,8 +13552,6 @@ class ParticleTileData_pureSoA_8_0:
 class ParticleTile_16_4_0_0_arena:
     NAI: typing.ClassVar[int] = 0
     NAR: typing.ClassVar[int] = 0
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __getitem__(self, arg0: int) -> Particle_16_4: ...
     def __init__(self) -> None: ...
     def __setitem__(self, arg0: int, arg1: Particle_16_4) -> None: ...
@@ -13934,8 +13619,6 @@ class ParticleTile_16_4_0_0_arena:
 class ParticleTile_16_4_0_0_default:
     NAI: typing.ClassVar[int] = 0
     NAR: typing.ClassVar[int] = 0
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __getitem__(self, arg0: int) -> Particle_16_4: ...
     def __init__(self) -> None: ...
     def __setitem__(self, arg0: int, arg1: Particle_16_4) -> None: ...
@@ -14003,8 +13686,6 @@ class ParticleTile_16_4_0_0_default:
 class ParticleTile_16_4_0_0_pinned:
     NAI: typing.ClassVar[int] = 0
     NAR: typing.ClassVar[int] = 0
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __getitem__(self, arg0: int) -> Particle_16_4: ...
     def __init__(self) -> None: ...
     def __setitem__(self, arg0: int, arg1: Particle_16_4) -> None: ...
@@ -14072,8 +13753,6 @@ class ParticleTile_16_4_0_0_pinned:
 class ParticleTile_2_1_3_1_arena:
     NAI: typing.ClassVar[int] = 1
     NAR: typing.ClassVar[int] = 3
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __getitem__(self, arg0: int) -> Particle_5_2: ...
     def __init__(self) -> None: ...
     def __setitem__(self, arg0: int, arg1: Particle_5_2) -> None: ...
@@ -14141,8 +13820,6 @@ class ParticleTile_2_1_3_1_arena:
 class ParticleTile_2_1_3_1_default:
     NAI: typing.ClassVar[int] = 1
     NAR: typing.ClassVar[int] = 3
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __getitem__(self, arg0: int) -> Particle_5_2: ...
     def __init__(self) -> None: ...
     def __setitem__(self, arg0: int, arg1: Particle_5_2) -> None: ...
@@ -14210,8 +13887,6 @@ class ParticleTile_2_1_3_1_default:
 class ParticleTile_2_1_3_1_pinned:
     NAI: typing.ClassVar[int] = 1
     NAR: typing.ClassVar[int] = 3
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __getitem__(self, arg0: int) -> Particle_5_2: ...
     def __init__(self) -> None: ...
     def __setitem__(self, arg0: int, arg1: Particle_5_2) -> None: ...
@@ -14279,8 +13954,6 @@ class ParticleTile_2_1_3_1_pinned:
 class ParticleTile_pureSoA_3_0_arena:
     NAI: typing.ClassVar[int] = 0
     NAR: typing.ClassVar[int] = 3
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __getitem__(self, arg0: int) -> Particle_3_0: ...
     def __init__(self) -> None: ...
     def __setitem__(self, arg0: int, arg1: Particle_3_0) -> None: ...
@@ -14341,8 +14014,6 @@ class ParticleTile_pureSoA_3_0_arena:
 class ParticleTile_pureSoA_3_0_default:
     NAI: typing.ClassVar[int] = 0
     NAR: typing.ClassVar[int] = 3
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __getitem__(self, arg0: int) -> Particle_3_0: ...
     def __init__(self) -> None: ...
     def __setitem__(self, arg0: int, arg1: Particle_3_0) -> None: ...
@@ -14403,8 +14074,6 @@ class ParticleTile_pureSoA_3_0_default:
 class ParticleTile_pureSoA_3_0_pinned:
     NAI: typing.ClassVar[int] = 0
     NAR: typing.ClassVar[int] = 3
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __getitem__(self, arg0: int) -> Particle_3_0: ...
     def __init__(self) -> None: ...
     def __setitem__(self, arg0: int, arg1: Particle_3_0) -> None: ...
@@ -14465,8 +14134,6 @@ class ParticleTile_pureSoA_3_0_pinned:
 class ParticleTile_pureSoA_7_0_arena:
     NAI: typing.ClassVar[int] = 0
     NAR: typing.ClassVar[int] = 7
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __getitem__(self, arg0: int) -> Particle_7_0: ...
     def __init__(self) -> None: ...
     def __setitem__(self, arg0: int, arg1: Particle_7_0) -> None: ...
@@ -14527,8 +14194,6 @@ class ParticleTile_pureSoA_7_0_arena:
 class ParticleTile_pureSoA_7_0_default:
     NAI: typing.ClassVar[int] = 0
     NAR: typing.ClassVar[int] = 7
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __getitem__(self, arg0: int) -> Particle_7_0: ...
     def __init__(self) -> None: ...
     def __setitem__(self, arg0: int, arg1: Particle_7_0) -> None: ...
@@ -14589,8 +14254,6 @@ class ParticleTile_pureSoA_7_0_default:
 class ParticleTile_pureSoA_7_0_pinned:
     NAI: typing.ClassVar[int] = 0
     NAR: typing.ClassVar[int] = 7
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __getitem__(self, arg0: int) -> Particle_7_0: ...
     def __init__(self) -> None: ...
     def __setitem__(self, arg0: int, arg1: Particle_7_0) -> None: ...
@@ -14651,8 +14314,6 @@ class ParticleTile_pureSoA_7_0_pinned:
 class ParticleTile_pureSoA_8_0_arena:
     NAI: typing.ClassVar[int] = 0
     NAR: typing.ClassVar[int] = 8
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __getitem__(self, arg0: int) -> Particle_8_0: ...
     def __init__(self) -> None: ...
     def __setitem__(self, arg0: int, arg1: Particle_8_0) -> None: ...
@@ -14713,8 +14374,6 @@ class ParticleTile_pureSoA_8_0_arena:
 class ParticleTile_pureSoA_8_0_default:
     NAI: typing.ClassVar[int] = 0
     NAR: typing.ClassVar[int] = 8
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __getitem__(self, arg0: int) -> Particle_8_0: ...
     def __init__(self) -> None: ...
     def __setitem__(self, arg0: int, arg1: Particle_8_0) -> None: ...
@@ -14775,8 +14434,6 @@ class ParticleTile_pureSoA_8_0_default:
 class ParticleTile_pureSoA_8_0_pinned:
     NAI: typing.ClassVar[int] = 0
     NAR: typing.ClassVar[int] = 8
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __getitem__(self, arg0: int) -> Particle_8_0: ...
     def __init__(self) -> None: ...
     def __setitem__(self, arg0: int, arg1: Particle_8_0) -> None: ...
@@ -14840,8 +14497,6 @@ class Particle_16_4:
     x: float
     y: float
     z: float
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     @typing.overload
     def NextID(self) -> int: ...
     @typing.overload
@@ -14906,8 +14561,6 @@ class Particle_2_1:
     x: float
     y: float
     z: float
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     @typing.overload
     def NextID(self) -> int: ...
     @typing.overload
@@ -14972,8 +14625,6 @@ class Particle_3_0:
     x: float
     y: float
     z: float
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     @typing.overload
     def NextID(self) -> int: ...
     @typing.overload
@@ -15036,8 +14687,6 @@ class Particle_5_2:
     x: float
     y: float
     z: float
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     @typing.overload
     def NextID(self) -> int: ...
     @typing.overload
@@ -15102,8 +14751,6 @@ class Particle_7_0:
     x: float
     y: float
     z: float
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     @typing.overload
     def NextID(self) -> int: ...
     @typing.overload
@@ -15166,8 +14813,6 @@ class Particle_8_0:
     x: float
     y: float
     z: float
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     @typing.overload
     def NextID(self) -> int: ...
     @typing.overload
@@ -15227,8 +14872,6 @@ class Particle_8_0:
 class Periodicity:
     __hash__: typing.ClassVar[None] = None
     @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
-    @staticmethod
     def non_periodic() -> Periodicity:
         """
         Return the Periodicity object that is not periodic in any direction
@@ -15254,8 +14897,6 @@ class Periodicity:
     def shift_IntVect(self, arg1: IntVect3D) -> list[IntVect3D]: ...
 
 class PlotFileData:
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def DistributionMap(self, arg0: int) -> DistributionMapping: ...
     def __init__(self, arg0: str) -> None: ...
     def boxArray(self, arg0: int) -> BoxArray: ...
@@ -15291,8 +14932,6 @@ class PlotFileData:
     def varNames(self) -> Vector_string: ...
 
 class RealBox:
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
@@ -15405,8 +15044,6 @@ class RealBox:
 
 class RealVect:
     __hash__: typing.ClassVar[None] = None
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     @staticmethod
     def unit_vector() -> RealVect: ...
     @staticmethod
@@ -15532,8 +15169,6 @@ class RealVect:
         """
 
 class SmallMatrix_1x6_F_SI1_double:
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     @staticmethod
     def zero() -> SmallMatrix_1x6_F_SI1_double: ...
     def __add__(
@@ -15680,8 +15315,6 @@ class SmallMatrix_1x6_F_SI1_double:
 
 class SmallMatrix_1x6_F_SI1_float:
     @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
-    @staticmethod
     def zero() -> SmallMatrix_1x6_F_SI1_float: ...
     def __add__(
         self, arg0: SmallMatrix_1x6_F_SI1_float
@@ -15826,8 +15459,6 @@ class SmallMatrix_1x6_F_SI1_float:
     def starting_index(self) -> int: ...
 
 class SmallMatrix_1x6_F_SI1_longdouble:
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     @staticmethod
     def zero() -> SmallMatrix_1x6_F_SI1_longdouble: ...
     def __add__(
@@ -15974,8 +15605,6 @@ class SmallMatrix_1x6_F_SI1_longdouble:
 
 class SmallMatrix_6x1_F_SI1_double:
     @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
-    @staticmethod
     def zero() -> SmallMatrix_6x1_F_SI1_double: ...
     def __add__(
         self, arg0: SmallMatrix_6x1_F_SI1_double
@@ -16120,8 +15749,6 @@ class SmallMatrix_6x1_F_SI1_double:
     def starting_index(self) -> int: ...
 
 class SmallMatrix_6x1_F_SI1_float:
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     @staticmethod
     def zero() -> SmallMatrix_6x1_F_SI1_float: ...
     def __add__(
@@ -16268,8 +15895,6 @@ class SmallMatrix_6x1_F_SI1_float:
 
 class SmallMatrix_6x1_F_SI1_longdouble:
     @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
-    @staticmethod
     def zero() -> SmallMatrix_6x1_F_SI1_longdouble: ...
     def __add__(
         self, arg0: SmallMatrix_6x1_F_SI1_longdouble
@@ -16414,8 +16039,6 @@ class SmallMatrix_6x1_F_SI1_longdouble:
     def starting_index(self) -> int: ...
 
 class SmallMatrix_6x6_F_SI1_double:
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     @staticmethod
     def identity() -> SmallMatrix_6x6_F_SI1_double: ...
     @staticmethod
@@ -16574,8 +16197,6 @@ class SmallMatrix_6x6_F_SI1_double:
 
 class SmallMatrix_6x6_F_SI1_float:
     @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
-    @staticmethod
     def identity() -> SmallMatrix_6x6_F_SI1_float: ...
     @staticmethod
     def zero() -> SmallMatrix_6x6_F_SI1_float: ...
@@ -16733,8 +16354,6 @@ class SmallMatrix_6x6_F_SI1_float:
 
 class SmallMatrix_6x6_F_SI1_longdouble:
     @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
-    @staticmethod
     def identity() -> SmallMatrix_6x6_F_SI1_longdouble: ...
     @staticmethod
     def zero() -> SmallMatrix_6x6_F_SI1_longdouble: ...
@@ -16891,8 +16510,6 @@ class SmallMatrix_6x6_F_SI1_longdouble:
     def starting_index(self) -> int: ...
 
 class StructOfArrays_0_0_arena:
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __init__(self) -> None: ...
     def __len__(self) -> int:
         """
@@ -17044,8 +16661,6 @@ class StructOfArrays_0_0_arena:
         """
 
 class StructOfArrays_0_0_default:
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __init__(self) -> None: ...
     def __len__(self) -> int:
         """
@@ -17197,8 +16812,6 @@ class StructOfArrays_0_0_default:
         """
 
 class StructOfArrays_0_0_pinned:
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __init__(self) -> None: ...
     def __len__(self) -> int:
         """
@@ -17350,8 +16963,6 @@ class StructOfArrays_0_0_pinned:
         """
 
 class StructOfArrays_3_0_idcpu_arena:
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __init__(self) -> None: ...
     def __len__(self) -> int:
         """
@@ -17507,8 +17118,6 @@ class StructOfArrays_3_0_idcpu_arena:
         """
 
 class StructOfArrays_3_0_idcpu_default:
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __init__(self) -> None: ...
     def __len__(self) -> int:
         """
@@ -17664,8 +17273,6 @@ class StructOfArrays_3_0_idcpu_default:
         """
 
 class StructOfArrays_3_0_idcpu_pinned:
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __init__(self) -> None: ...
     def __len__(self) -> int:
         """
@@ -17821,8 +17428,6 @@ class StructOfArrays_3_0_idcpu_pinned:
         """
 
 class StructOfArrays_3_1_arena:
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __init__(self) -> None: ...
     def __len__(self) -> int:
         """
@@ -17974,8 +17579,6 @@ class StructOfArrays_3_1_arena:
         """
 
 class StructOfArrays_3_1_default:
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __init__(self) -> None: ...
     def __len__(self) -> int:
         """
@@ -18127,8 +17730,6 @@ class StructOfArrays_3_1_default:
         """
 
 class StructOfArrays_3_1_pinned:
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __init__(self) -> None: ...
     def __len__(self) -> int:
         """
@@ -18280,8 +17881,6 @@ class StructOfArrays_3_1_pinned:
         """
 
 class StructOfArrays_7_0_idcpu_arena:
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __init__(self) -> None: ...
     def __len__(self) -> int:
         """
@@ -18437,8 +18036,6 @@ class StructOfArrays_7_0_idcpu_arena:
         """
 
 class StructOfArrays_7_0_idcpu_default:
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __init__(self) -> None: ...
     def __len__(self) -> int:
         """
@@ -18594,8 +18191,6 @@ class StructOfArrays_7_0_idcpu_default:
         """
 
 class StructOfArrays_7_0_idcpu_pinned:
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __init__(self) -> None: ...
     def __len__(self) -> int:
         """
@@ -18751,8 +18346,6 @@ class StructOfArrays_7_0_idcpu_pinned:
         """
 
 class StructOfArrays_8_0_idcpu_arena:
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __init__(self) -> None: ...
     def __len__(self) -> int:
         """
@@ -18908,8 +18501,6 @@ class StructOfArrays_8_0_idcpu_arena:
         """
 
 class StructOfArrays_8_0_idcpu_default:
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __init__(self) -> None: ...
     def __len__(self) -> int:
         """
@@ -19065,8 +18656,6 @@ class StructOfArrays_8_0_idcpu_default:
         """
 
 class StructOfArrays_8_0_idcpu_pinned:
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __init__(self) -> None: ...
     def __len__(self) -> int:
         """
@@ -19223,8 +18812,6 @@ class StructOfArrays_8_0_idcpu_pinned:
 
 class Vector_Box:
     __hash__: typing.ClassVar[None] = None
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __bool__(self) -> bool:
         """
         Check whether the list is nonempty
@@ -19329,8 +18916,6 @@ class Vector_Box:
 
 class Vector_BoxArray:
     __hash__: typing.ClassVar[None] = None
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __bool__(self) -> bool:
         """
         Check whether the list is nonempty
@@ -19435,8 +19020,6 @@ class Vector_BoxArray:
 
 class Vector_DistributionMapping:
     __hash__: typing.ClassVar[None] = None
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __bool__(self) -> bool:
         """
         Check whether the list is nonempty
@@ -19540,8 +19123,6 @@ class Vector_DistributionMapping:
     def size(self) -> int: ...
 
 class Vector_Geometry:
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __bool__(self) -> bool:
         """
         Check whether the list is nonempty
@@ -19632,8 +19213,6 @@ class Vector_Geometry:
 
 class Vector_IntVect:
     __hash__: typing.ClassVar[None] = None
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __bool__(self) -> bool:
         """
         Check whether the list is nonempty
@@ -19738,8 +19317,6 @@ class Vector_IntVect:
 
 class Vector_Long:
     __hash__: typing.ClassVar[None] = None
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __bool__(self) -> bool:
         """
         Check whether the list is nonempty
@@ -19848,8 +19425,6 @@ class Vector_Long:
 
 class Vector_Real:
     __hash__: typing.ClassVar[None] = None
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __bool__(self) -> bool:
         """
         Check whether the list is nonempty
@@ -19958,8 +19533,6 @@ class Vector_Real:
 
 class Vector_int:
     __hash__: typing.ClassVar[None] = None
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __bool__(self) -> bool:
         """
         Check whether the list is nonempty
@@ -20068,8 +19641,6 @@ class Vector_int:
 
 class Vector_string:
     __hash__: typing.ClassVar[None] = None
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __bool__(self) -> bool:
         """
         Check whether the list is nonempty
@@ -20190,22 +19761,16 @@ class VisMF:
         """
         Writes a Multifab to the specified file
         """
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
 
 class XDim3:
     x: float
     y: float
     z: float
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     def __init__(self, arg0: float, arg1: float, arg2: float) -> None: ...
 
 class iMultiFab(FabArray_IArrayBox):
     @staticmethod
     def __iter__(imfab): ...
-    @staticmethod
-    def _pybind11_conduit_v1_(*args, **kwargs): ...
     @staticmethod
     def finalize() -> None: ...
     @staticmethod
