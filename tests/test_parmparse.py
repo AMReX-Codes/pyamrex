@@ -16,3 +16,5 @@ def test_parmparse():
     assert dopml
     assert dt == 1.0e-5
     assert ncell == 100
+
+    pp.pretty_print_table()
