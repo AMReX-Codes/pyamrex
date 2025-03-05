@@ -34,7 +34,6 @@ namespace
 
 // forward declarations
 void init_ParticleContainer_FHDeX(py::module& m);
-void init_ParticleContainer_HiPACE(py::module& m);
 void init_ParticleContainer_ImpactX(py::module& m);
 void init_ParticleContainer_WarpX(py::module& m);
 
@@ -58,7 +57,6 @@ void init_ParticleContainer(py::module& m) {
 
     // application codes
     init_ParticleContainer_FHDeX(m);
-    init_ParticleContainer_HiPACE(m);
     init_ParticleContainer_ImpactX(m);
     init_ParticleContainer_WarpX(m);
 
