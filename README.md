@@ -90,7 +90,7 @@ Now, `cmake --version` should be at version 3.24.0 or newer.
 Or go:
 ```bash
 python3 -m pip install -U pip
-python3 -m pip install -U build packaging setuptools wheel
+python3 -m pip install -U build packaging setuptools[core] wheel
 python3 -m pip install -U cmake
 ```
 

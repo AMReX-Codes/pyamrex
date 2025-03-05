@@ -15,5 +15,5 @@ brew install ccache || true
 
 python3 -m venv venv
 source venv/bin/activate
-python3 -m pip install -U pip setuptools wheel pytest
+python3 -m pip install -U pip setuptools[core] wheel pytest
 python3 -m pip install -U cmake

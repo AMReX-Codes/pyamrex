@@ -34,7 +34,7 @@ On your development machine, :ref:`follow the instructions here <install-depende
    .. code-block:: bash
 
       python3 -m pip install -U pip
-      python3 -m pip install -U build packaging setuptools wheel pytest
+      python3 -m pip install -U build packaging setuptools[core] wheel pytest
       python3 -m pip install -U -r requirements.txt
 
 
