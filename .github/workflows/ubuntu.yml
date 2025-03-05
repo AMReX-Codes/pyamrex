@@ -42,7 +42,7 @@ jobs:
         export CMAKE_BUILD_PARALLEL_LEVEL=4
 
         python3 -m pip install -U pip
-        python3 -m pip install -U build packaging setuptools wheel
+        python3 -m pip install -U build packaging setuptools[core] wheel
         python3 -m pip install -U cmake pytest
         AMREX_MPI=ON python3 -m pip install -v .
         python3 -c "import amrex.space1d as amr; print(amr.__version__)"
@@ -83,7 +83,7 @@ jobs:
         export CC=$(which gcc-10)
         export CXX=$(which g++-10)
         python3 -m pip install -U pip
-        python3 -m pip install -U build packaging setuptools wheel
+        python3 -m pip install -U build packaging setuptools[core] wheel
         python3 -m pip install -U cmake
         python3 -m pip install -U pandas pytest mpi4py
 
@@ -137,7 +137,7 @@ jobs:
         export CC=$(which clang-6.0)
         export CXX=$(which clang++-6.0)
         python3 -m pip install -U pip
-        python3 -m pip install -U build packaging setuptools wheel
+        python3 -m pip install -U build packaging setuptools[core] wheel
         python3 -m pip install -U cmake pytest
         python3 -m pip install -v .
         python3 -c "import amrex.space1d as amr; print(amr.__version__)"
@@ -182,7 +182,7 @@ jobs:
         export CMAKE_BUILD_PARALLEL_LEVEL=4
 
         python3 -m pip install -U pip
-        python3 -m pip install -U build packaging setuptools wheel
+        python3 -m pip install -U build packaging setuptools[core] wheel
         python3 -m pip install -U cmake
         python3 -m pip install -U pandas pytest
         python3 -m pip install -v .

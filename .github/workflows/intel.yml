@@ -40,7 +40,7 @@ jobs:
 
         export CC=$(which icx)
         export CXX=$(which icpx)
-        python3 -m pip install -U pip setuptools wheel
+        python3 -m pip install -U pip setuptools[core] wheel
         python3 -m pip install -U cmake
         python3 -m pip install -U pytest mpi4py
 
@@ -87,7 +87,7 @@ jobs:
 
         export CC=$(which icx)
         export CXX=$(which icpx)
-        python3 -m pip install -U pip setuptools wheel
+        python3 -m pip install -U pip setuptools[core] wheel
         python3 -m pip install -U cmake
         python3 -m pip install -U pytest mpi4py
 
