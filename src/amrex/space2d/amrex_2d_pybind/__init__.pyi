@@ -10869,6 +10869,10 @@ class ParmParse:
         """
         parses input values
         """
+    def pretty_print_table(self) -> None:
+        """
+        Write the table in a pretty way to the ostream. If there are duplicates, only the last one is printed.
+        """
     def query_int(self, name: str, ival: int = 0) -> tuple[bool, int]:
         """
         queries input values
