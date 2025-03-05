@@ -9,6 +9,7 @@
 #include <AMReX_IntVect.H>
 #include <AMReX_ParmParse.H>
 
+#include <iostream>
 #include <string>
 #include <vector>
 
@@ -77,16 +78,29 @@ void init_ParmParse(py::module &m)
                 return ref;
             },
             "parses input values", py::arg("name"), py::arg("ival")=0
-         )
+        )
 
-         .def("query_int",
-             [](ParmParse &pp, std::string name, int ival) {
-                 int ref;
-                 bool exist = pp.query(name.c_str(), ref, ival);
-                 return std::make_tuple(exist,ref);
-             },
-             "queries input values", py::arg("name"), py::arg("ival")=0
-         )
+        .def("query_int",
+            [](ParmParse &pp, std::string name, int ival) {
+                int ref;
+                bool exist = pp.query(name.c_str(), ref, ival);
+                return std::make_tuple(exist,ref);
+            },
+            "queries input values", py::arg("name"), py::arg("ival")=0
+        )
+
+        .def(
+            "pretty_print_table",
+            [](ParmParse &pp) {
+                py::scoped_ostream_redirect stream(
+                    std::cout,                               // std::ostream&
+                    py::module_::import("sys").attr("stdout") // Python output
+                );
+                pp.prettyPrintTable(std::cout);
+            },
+            "Write the table in a pretty way to the ostream. If there are "
+            "duplicates, only the last one is printed."
+        )
 
         // TODO: dumpTable, hasUnusedInputs, getUnusedInputs, getEntries
     ;
