@@ -130,15 +130,22 @@ namespace
         py::class_< SM > py_sm(m, sm_name.c_str());
         py_sm
             .def("__repr__",
-                 [sm_name](SM const &) {
-                     return "<amrex." + sm_name + ">";
-                 }
-            )
-            .def("__str__",
-                 [sm_name](SM const & sm) {
+                [](SM const & sm) {
+                     // similar look & feel like numpy.ndarray.__repr__
                      std::stringstream ss;
-                     ss << sm;
-                     return ss.str();
+                     for (int i = sm.starting_index; i < sm.row_size + sm.starting_index; ++i) {
+                         if (i > sm.starting_index) { ss << ",\n             "; }
+                         ss << "[";
+                         ss << sm(i, sm.starting_index);
+                         for (int j = 1 + sm.starting_index; j < sm.column_size + sm.starting_index; ++j) {
+                            ss << ", " << sm(i, j);
+                         }
+                         ss << "]";
+                     }
+                     using namespace std::string_literals;
+                     return "SmallMatrix(["s +
+                            ss.str() +
+                            "])"s;
                  }
             )
 
