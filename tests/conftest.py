@@ -30,7 +30,10 @@ def amrex_init(tmpdir):
         amr.initialize(
             [
                 # print AMReX status messages
-                "amrex.verbose=2",
+                # consider also 0 (silent) and 2 (FabArray and TileArray/FB/Copy/FillPatch/CrsFineCache usage)
+                "amrex.verbose=1",
+                # disable verbose profiler plots at the end of each test
+                "tiny_profiler.enabled=0",
                 # throw exceptions and create core dumps instead of
                 # AMReX backtrace files: allows to attach to
                 # debuggers
