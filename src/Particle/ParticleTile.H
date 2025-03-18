@@ -202,4 +202,6 @@ void make_ParticleTile(py::module &m)
     make_ParticleTile<T_ParticleType, NArrayReal, NArrayInt,
                       amrex::AsyncArenaAllocator>(m, "async");
 #endif
+    make_ParticleTile<T_ParticleType, NArrayReal, NArrayInt,
+                      amrex::PolymorphicArenaAllocator>(m, "polymorphic");
 }

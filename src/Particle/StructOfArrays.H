@@ -122,4 +122,5 @@ void make_StructOfArrays(py::module &m)
     make_StructOfArrays<NReal, NInt, amrex::ManagedArenaAllocator, use64BitIdCpu>(m, "managed");
     make_StructOfArrays<NReal, NInt, amrex::AsyncArenaAllocator, use64BitIdCpu>(m, "async");
 #endif
+    make_StructOfArrays<NReal, NInt, amrex::PolymorphicArenaAllocator, use64BitIdCpu>(m, "polymorphic");
 }

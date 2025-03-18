@@ -187,4 +187,5 @@ void make_ArrayOfStructs(py::module &m)
     make_ArrayOfStructs<ParticleType, amrex::ManagedArenaAllocator> (m, "managed");
     make_ArrayOfStructs<ParticleType, amrex::AsyncArenaAllocator> (m, "async");
 #endif
+    make_ArrayOfStructs<ParticleType, amrex::PolymorphicArenaAllocator> (m, "polymorphic");
 }

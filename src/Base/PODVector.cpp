@@ -148,6 +148,7 @@ void make_PODVector(py::module &m, std::string typestr)
     make_PODVector<T, amrex::ManagedArenaAllocator<T>> (m, typestr, "managed");
     make_PODVector<T, amrex::AsyncArenaAllocator<T>> (m, typestr, "async");
 #endif
+    make_PODVector<T, amrex::PolymorphicArenaAllocator<T>> (m, typestr, "polymorphic");
 }
 
 void init_PODVector(py::module& m)

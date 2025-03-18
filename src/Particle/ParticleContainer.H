@@ -574,4 +574,6 @@ void make_ParticleContainer_and_Iterators (py::module &m)
     make_ParticleContainer_and_Iterators<T_ParticleType, T_NArrayReal, T_NArrayInt,
                                          amrex::AsyncArenaAllocator>(m, "async");
 #endif
+    make_ParticleContainer_and_Iterators<T_ParticleType, T_NArrayReal, T_NArrayInt,
+                                         amrex::PolymorphicArenaAllocator>(m, "polymorphic");
 }
