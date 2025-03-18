@@ -35,9 +35,9 @@ def smallmatrix_to_numpy(self, copy=False, order="F"):
     import numpy as np
 
     if copy:
-        data = np.array(self, copy=True)
+        data = np.asarray(self, copy=True)
     else:
-        data = np.array(self, copy=False)
+        data = np.asarray(self, copy=False)
 
     # TODO: Check self.order == "F" ?
     if order == "F":

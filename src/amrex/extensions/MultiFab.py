@@ -610,7 +610,7 @@ def __setitem__(self, index, value):
         # (it needs to be 4-D).
         # This converts value to an array if needed, and the [...] grabs a view so
         # that the shape change below doesn't affect value.
-        value3d = np.array(value)[...]
+        value3d = np.asarray(value)[...]
         global_shape = list(value3d.shape)
         # The shape of 1 is added for the extra dimensions and when index is an integer
         # (in which case the dimension was not in the input array).

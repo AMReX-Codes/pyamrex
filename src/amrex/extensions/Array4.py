@@ -40,7 +40,7 @@ def array4_to_numpy(self, copy=False, order="F"):
         # This supports a device-to-host copy.
         data = self.to_host()
     else:
-        data = np.array(self, copy=False)
+        data = np.asarray(self, copy=False)
 
     if order == "F":
         return data.T
