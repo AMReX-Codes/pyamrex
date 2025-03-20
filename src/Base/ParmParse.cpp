@@ -103,5 +103,53 @@ void init_ParmParse(py::module &m)
         )
 
         // TODO: dumpTable, hasUnusedInputs, getUnusedInputs, getEntries
+
+        .def(
+            "to_dict",
+            [](ParmParse &pp) {
+                py::dict d;
+
+                auto g_table = pp.table();
+
+                std::vector<std::string> sorted_names;
+                sorted_names.reserve(g_table.size());
+                for (auto const& [name, entry] : g_table) {
+                    sorted_names.push_back(name);
+                }
+                std::sort(sorted_names.begin(), sorted_names.end());
+
+                for (auto const& name : sorted_names) {
+                    auto const& entry = g_table[name];
+                    for (auto const & vals : entry.m_vals) {
+                        if (vals.size() == 1) {
+                            std::visit(
+                                [&d,&name,&pp](auto&& arg) {
+                                    using T = std::remove_pointer_t<std::decay_t<decltype(arg)>>;
+                                    T v;
+                                    pp.get(name.c_str(), v);
+                                    d[name.c_str()] = v;
+                                },
+                                entry.m_typehint
+                            );
+                        } else {
+                            std::visit(
+                                [&d,&name,&pp](auto&& arg) {
+                                    using T = std::remove_pointer_t<std::decay_t<decltype(arg)>>;
+                                    if constexpr (!std::is_same_v<T, bool>) {
+                                        std::vector<T> valarr;
+                                        pp.getarr(name.c_str(), valarr);
+                                        d[name.c_str()] = valarr;
+                                    }
+                                },
+                                entry.m_typehint
+                            );
+                        }
+                    }
+                }
+
+                return d;
+            },
+            "DOC GOES HERE TODO TODO"
+        )
     ;
 }
