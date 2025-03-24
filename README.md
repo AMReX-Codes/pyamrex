@@ -3,10 +3,10 @@
 [![Python3][api-py3]](https://www.python.org/)
 ![Python3 API: Beta][dev-beta]
 [![Documentation Status](https://readthedocs.org/projects/pyamrex/badge/?version=latest)](https://pyamrex.readthedocs.io)
-[![Discussions](https://img.shields.io/badge/chat-discussions-turquoise.svg)](https://github.com/AMReX-Codes/pyamrex/discussions)  
+[![Discussions](https://img.shields.io/badge/chat-discussions-turquoise.svg)](https://github.com/AMReX-Codes/pyamrex/discussions)
 ![Linux](https://github.com/AMReX-Codes/pyamrex/actions/workflows/ubuntu.yml/badge.svg?branch=development)
 ![macOS](https://github.com/AMReX-Codes/pyamrex/actions/workflows/macos.yml/badge.svg?branch=development)
-![Windows](https://github.com/AMReX-Codes/pyamrex/actions/workflows/windows.yml/badge.svg?branch=development)  
+![Windows](https://github.com/AMReX-Codes/pyamrex/actions/workflows/windows.yml/badge.svg?branch=development)
 [![License pyAMReX](https://img.shields.io/badge/license-BSD--3--Clause--LBNL-blue.svg)](https://spdx.org/licenses/BSD-3-Clause-LBNL.html)
 [![DOI (source)](https://img.shields.io/badge/DOI%20(source)-10.5281/zenodo.8408733-blue.svg)](https://doi.org/10.5281/zenodo.8408733)
 
@@ -24,11 +24,13 @@ pyAMReX [can be installed](https://pyamrex.readthedocs.io/en/latest/install/user
 
 ### Usage
 
-Please see the [manual](https://pyamrex.readthedocs.io/en/latest/usage/how_to_run.html) and our [test cases](https://github.com/AMReX-Codes/pyamrex/tree/development/tests) for detailed examples.
+Please see the [manual](https://pyamrex.readthedocs.io/en/latest/usage/examples.html) and our [test cases](https://github.com/AMReX-Codes/pyamrex/tree/development/tests) for detailed examples.
 
 Use AMReX objects and APIs from Python:
 ```python
 import amrex.space3d as amr
+
+amr.initialize([])
 
 small_end = amr.IntVect()
 big_end = amr.IntVect(2, 3, 4)
@@ -37,7 +39,11 @@ b = amr.Box(small_end, big_end)
 print(b)
 
 # ...
+
+amr.finalize()
 ```
+
+Note that many AMReX functions may cause a segmentation fault if run without first initializing AMReX (`amr.initialize([])`).
 
 ## Developers
 
@@ -241,6 +247,6 @@ If you have questions about your rights to use or distribute this software,
 please contact Berkeley Lab's Intellectual Property Office at
 IPO@lbl.gov.
 
-Please see the full license agreement in [LICENSE](LICENSE).  
-Please see the notices in [NOTICE](NOTICE).  
+Please see the full license agreement in [LICENSE](LICENSE).
+Please see the notices in [NOTICE](NOTICE).
 The SPDX license identifier is `BSD-3-Clause-LBNL`.
