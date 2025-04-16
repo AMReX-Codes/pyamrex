@@ -108,15 +108,15 @@ jobs:
         rm -rf build
         python3 -m pytest tests
 
-  clang6:
-    name: Clang@6.0 w/o MPI
+  clang14:
+    name: Clang@14.0 w/o MPI
     runs-on: ubuntu-24.04
     env: {CXXFLAGS: "-Werror -Wshadow -Woverloaded-virtual -Wextra-semi -Wunreachable-code -fno-operator-names -Wno-pass-failed"}
     steps:
     - uses: actions/checkout@v4
     - name: Dependencies
       run: |
-        .github/workflows/dependencies/dependencies_clang6.sh
+        .github/workflows/dependencies/dependencies_clang14.sh
         .github/workflows/dependencies/dependencies_ccache.sh
     - name: Set Up Cache
       uses: actions/cache@v4
@@ -134,8 +134,8 @@ jobs:
 
         export CMAKE_BUILD_PARALLEL_LEVEL=4
 
-        export CC=$(which clang-6.0)
-        export CXX=$(which clang++-6.0)
+        export CC=$(which clang-14.0)
+        export CXX=$(which clang++-14.0)
         python3 -m pip install -U pip
         python3 -m pip install -U build packaging setuptools[core] wheel
         python3 -m pip install -U cmake pytest
@@ -151,9 +151,9 @@ jobs:
       run: |
         python3 -m pytest tests/
 
-  clang14:
-    name: Clang@14.0 w/ libc++ w/ MPI
-    runs-on: ubuntu-22.04
+  clang18:
+    name: Clang@18.0 w/ libc++ w/ MPI
+    runs-on: ubuntu-24.04
     env:
       CXXFLAGS: "-Werror -Wshadow -Woverloaded-virtual -Wextra-semi -Wunreachable-code -fno-operator-names -Wno-pass-failed -stdlib=libc++"
       LDFLAGS: "-fuse-ld=lld"
@@ -163,7 +163,7 @@ jobs:
     - uses: actions/checkout@v4
     - name: Dependencies
       run: |
-        .github/workflows/dependencies/dependencies_clang14_libcpp.sh
+        .github/workflows/dependencies/dependencies_clang18_libcpp.sh
         .github/workflows/dependencies/dependencies_ccache.sh
     - name: Set Up Cache
       uses: actions/cache@v4
@@ -198,7 +198,7 @@ jobs:
         python3 -m pytest tests/
 
   nvcc11:
-    name: CUDA@11.2 GNU@9.4.0
+    name: CUDA@11.2 GNU@10.5
     runs-on: ubuntu-24.04
     env: {CXXFLAGS: "-fno-operator-names"}
     steps:
