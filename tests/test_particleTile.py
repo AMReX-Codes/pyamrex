@@ -156,8 +156,27 @@ def test_ptile_aos_3d():
 
 
 def test_ptile_aos():
-    idcpu = np.array([100, 100, 100, 100, 100], dtype=np.uint64)
+    idcpu = np.array([9223372036871553124, 9223372036871553124, 9223372036871553124, 9223372036871553124, 9223372036871553124], dtype=np.uint64)
     ids = amr.unpack_ids(idcpu)
     cpus = amr.unpack_cpus(idcpu)
-    assert np.array_equal(ids, np.array([0, 0, 0, 0, 0]))
+    assert np.array_equal(ids, np.array([1, 1, 1, 1, 1]))
+    assert np.array_equal(cpus, np.array([100, 100, 100, 100, 100]))
+
+    assert(amr.is_valid(idcpu[0]))
+    idcpu[0] = amr.make_invalid(idcpu[0])
+    assert(not amr.is_valid(idcpu[0]))
+    idcpu[0] = amr.make_valid(idcpu[0])
+    assert(amr.is_valid(idcpu[0]))
+    assert(idcpu[0] == 9223372036871553124)
+
+    idcpu = np.array([0, 0, 0, 0, 0], dtype=np.uint64)
+    amr.pack_ids(idcpu, np.array([1, 1, 1, 1, 1], dtype=np.int64))
+    amr.pack_cpus(idcpu, np.array([100, 100, 100, 100, 100], dtype=np.int32))
+    print(idcpu)
+    assert np.array_equal(idcpu, np.array([9223372036871553124, 9223372036871553124, 9223372036871553124, 9223372036871553124, 9223372036871553124]))
+
+    idcpu = np.array([9223372036871553124, 9223372036871553124, 9223372036871553124, 9223372036871553124, 9223372036871553124])
+    ids = amr.unpack_ids(idcpu)
+    cpus = amr.unpack_cpus(idcpu)
+    assert np.array_equal(ids, np.array([1, 1, 1, 1, 1]))
     assert np.array_equal(cpus, np.array([100, 100, 100, 100, 100]))
