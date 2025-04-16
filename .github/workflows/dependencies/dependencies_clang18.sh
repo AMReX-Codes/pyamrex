@@ -11,4 +11,7 @@ sudo apt-get update
 
 sudo apt-get install -y  \
     build-essential      \
-    clang-18
+    clang-18             \
+    lld                  \
+    libopenmpi-dev       \
+    openmpi-bin
