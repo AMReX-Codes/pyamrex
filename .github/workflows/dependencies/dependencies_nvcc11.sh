@@ -16,7 +16,7 @@ sudo apt-get install -y \
     build-essential     \
     ca-certificates     \
     cmake               \
-    g++=10              \
+    g++-10              \
     gfortran-10         \
     gnupg               \
     libopenmpi-dev      \

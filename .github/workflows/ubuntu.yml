@@ -116,7 +116,7 @@ jobs:
     - uses: actions/checkout@v4
     - name: Dependencies
       run: |
-        .github/workflows/dependencies/dependencies_clang14.sh
+        .github/workflows/dependencies/dependencies_clang14_libcpp.sh
         .github/workflows/dependencies/dependencies_ccache.sh
     - name: Set Up Cache
       uses: actions/cache@v4
@@ -163,7 +163,7 @@ jobs:
     - uses: actions/checkout@v4
     - name: Dependencies
       run: |
-        .github/workflows/dependencies/dependencies_clang18_libcpp.sh
+        .github/workflows/dependencies/dependencies_clang18.sh
         .github/workflows/dependencies/dependencies_ccache.sh
     - name: Set Up Cache
       uses: actions/cache@v4
