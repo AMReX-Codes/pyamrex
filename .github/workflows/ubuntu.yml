@@ -134,8 +134,8 @@ jobs:
 
         export CMAKE_BUILD_PARALLEL_LEVEL=4
 
-        export CC=$(which clang-14.0)
-        export CXX=$(which clang++-14.0)
+        export CC=$(which clang-14)
+        export CXX=$(which clang++-14)
         python3 -m pip install -U pip
         python3 -m pip install -U build packaging setuptools[core] wheel
         python3 -m pip install -U cmake pytest
@@ -181,8 +181,8 @@ jobs:
 
         export CMAKE_BUILD_PARALLEL_LEVEL=4
 
-        export CC=$(which clang-18.0)
-        export CXX=$(which clang++-18.0)
+        export CC=$(which clang-18)
+        export CXX=$(which clang++-18)
         python3 -m pip install -U pip
         python3 -m pip install -U build packaging setuptools[core] wheel
         python3 -m pip install -U cmake
