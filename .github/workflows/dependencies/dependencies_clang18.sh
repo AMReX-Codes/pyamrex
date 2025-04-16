@@ -11,4 +11,4 @@ sudo apt-get update
 
 sudo apt-get install -y  \
     build-essential      \
-    clang-18.0
+    clang-18
