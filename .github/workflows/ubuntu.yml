@@ -181,6 +181,8 @@ jobs:
 
         export CMAKE_BUILD_PARALLEL_LEVEL=4
 
+        export CC=$(which clang-18.0)
+        export CXX=$(which clang++-18.0)
         python3 -m pip install -U pip
         python3 -m pip install -U build packaging setuptools[core] wheel
         python3 -m pip install -U cmake
@@ -225,9 +227,9 @@ jobs:
         export LD_LIBRARY_PATH=/usr/local/nvidia/lib:/usr/local/nvidia/lib64:/usr/local/cuda/lib64:${LD_LIBRARY_PATH}
         which nvcc || echo "nvcc not in PATH!"
 
-        export CC=$(which gcc)
-        export CXX=$(which g++)
-        export CUDAHOSTCXX=$(which g++)
+        export CC=$(which gcc-10)
+        export CXX=$(which g++-10)
+        export CUDAHOSTCXX=$(which g++-10)
 
         python3 -m pip install -U pip
         python3 -m pip install -U build packaging setuptools[core] wheel
