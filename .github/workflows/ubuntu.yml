@@ -10,7 +10,7 @@ jobs:
   # Build and install libamrex as AMReX CMake project
   gcc7:
     name: GNU@7.5
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     env:
       CC: gcc-7
       CXX: g++-7
@@ -110,7 +110,7 @@ jobs:
 
   clang6:
     name: Clang@6.0 w/o MPI
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     env: {CXXFLAGS: "-Werror -Wshadow -Woverloaded-virtual -Wextra-semi -Wunreachable-code -fno-operator-names -Wno-pass-failed"}
     steps:
     - uses: actions/checkout@v4
@@ -199,7 +199,7 @@ jobs:
 
   nvcc11:
     name: CUDA@11.2 GNU@9.4.0
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     env: {CXXFLAGS: "-fno-operator-names"}
     steps:
     - uses: actions/checkout@v4
