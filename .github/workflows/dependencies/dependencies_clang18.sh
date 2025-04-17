@@ -13,6 +13,6 @@ sudo apt-get install -y  \
     build-essential      \
     clang-18             \
     lld                  \
-    libstdc++-18-dev     \
+    libc++-18-dev        \
     libopenmpi-dev       \
     openmpi-bin
