@@ -494,7 +494,7 @@ factory :
     }
 
     py_MultiFab
-        .def("copy",
+        .def("copymf",
             [](T &self, T const &src, int srccomp, int dstcomp, int numcomp, int nghost) {
                 T::Copy(self, src, srccomp, dstcomp, numcomp, nghost);
             },
@@ -507,7 +507,7 @@ factory :
     // TODO: Missing in iMultiFab https://github.com/AMReX-Codes/amrex/issues/4317
     if constexpr (std::is_same_v<T, MultiFab>) {
         py_MultiFab
-            .def("copy",
+            .def("copymf",
             [](T &self, T const &src, int srccomp, int dstcomp, int numcomp, IntVect const &nghost) {
                 T::Copy(self, src, srccomp, dstcomp, numcomp, nghost);
             },
