@@ -498,7 +498,7 @@ factory :
             [](T &self, T const &src, int srccomp, int dstcomp, int numcomp, int nghost) {
                 T::Copy(self, src, srccomp, dstcomp, numcomp, nghost);
             },
-            py::arg("src"), py::arg("srccomp"), py::arg("comp"), py::arg("numcomp"), py::arg("nghost"),
+            py::arg("src"), py::arg("srccomp"), py::arg("dstcomp"), py::arg("numcomp"), py::arg("nghost"),
             "Copy from src to self including nghost ghost cells.\n"
             "The two MultiFabs MUST have the same underlying BoxArray. The copy is local"
         )
@@ -511,7 +511,7 @@ factory :
             [](T &self, T const &src, int srccomp, int dstcomp, int numcomp, IntVect const &nghost) {
                 T::Copy(self, src, srccomp, dstcomp, numcomp, nghost);
             },
-            py::arg("src"), py::arg("srccomp"), py::arg("comp"), py::arg("numcomp"), py::arg("nghost"),
+            py::arg("src"), py::arg("srccomp"), py::arg("dstcomp"), py::arg("numcomp"), py::arg("nghost"),
             "Copy from src to self including nghost ghost cells.\n"
             "The two MultiFabs MUST have the same underlying BoxArray. The copy is local"
             )
