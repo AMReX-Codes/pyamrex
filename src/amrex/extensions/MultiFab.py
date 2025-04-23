@@ -316,9 +316,9 @@ def _process_index(self, index):
         # If only one slice or integer passed in, it was not wrapped in a tuple
         index = [index]
     elif isinstance(index, tuple):
-        if len(index) == 0:
-            # The empty tuple specifies all valid and ghost cells
-            index = [index]
+        if len(index) == 0: 
+            # The empty tuple specifies all valid and ghost cells for all axis
+            index = dims*[index]
         else:
             index = list(index)
             for i in range(len(index)):
