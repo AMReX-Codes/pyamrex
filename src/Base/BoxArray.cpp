@@ -135,18 +135,12 @@ void init_BoxArray(py::module &m) {
     .def("enclosed_cells",
             py::overload_cast<int>(&BoxArray::enclosedCells))
 
+    //! Convert nodality of each box in the BoxArray
     .def("convert",
             py::overload_cast< IndexType >(&BoxArray::convert))
     .def("convert",
             py::overload_cast< IntVect const &>(&BoxArray::convert))
-//    .def("convert",
-//            py::overlead_cast< Box >(&BoxArray::convert))
 /*
-    BoxArray& convert (const IntVect& typ);
-
-    //! Apply function (*fp)(Box) to each Box in the BoxArray.
-    BoxArray& convert (Box (*fp)(const Box&));
-
     //! Apply Box::shift(int,int) to each Box in the BoxArray.
     BoxArray& shift (int dir, int nzones);
 
