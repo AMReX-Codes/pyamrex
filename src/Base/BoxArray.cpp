@@ -136,7 +136,7 @@ void init_BoxArray(py::module &m) {
             py::overload_cast<int>(&BoxArray::enclosedCells))
 
     .def("convert",
-            py::overload_cast< IntVect >(&BoxArray::convert))
+            py::overload_cast< IndexType >(&BoxArray::convert))
     .def("convert",
             py::overload_cast< IntVect const &>(&BoxArray::convert))
 //    .def("convert",
