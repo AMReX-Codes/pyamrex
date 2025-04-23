@@ -494,6 +494,31 @@ factory :
     }
 
     py_MultiFab
+        .def("copy",
+            [](T &self, T const &src, int srccomp, int dstcomp, int numcomp, int nghost) {
+                T::Copy(self, src, srccomp, dstcomp, numcomp, nghost);
+            },
+            py::arg("src"), py::arg("srccomp"), py::arg("comp"), py::arg("numcomp"), py::arg("nghost"),
+            "Copy from src to self including nghost ghost cells.\n"
+            "The two MultiFabs MUST have the same underlying BoxArray. The copy is local"
+        )
+    ;
+
+    // TODO: Missing in iMultiFab https://github.com/AMReX-Codes/amrex/issues/4317
+    if constexpr (std::is_same_v<T, MultiFab>) {
+        py_MultiFab
+            .def("copy",
+            [](T &self, T const &src, int srccomp, int dstcomp, int numcomp, IntVect const &nghost) {
+                T::Copy(self, src, srccomp, dstcomp, numcomp, nghost);
+            },
+            py::arg("src"), py::arg("srccomp"), py::arg("comp"), py::arg("numcomp"), py::arg("nghost"),
+            "Copy from src to self including nghost ghost cells.\n"
+            "The two MultiFabs MUST have the same underlying BoxArray. The copy is local"
+            )
+        ;
+    }
+
+    py_MultiFab
         .def("subtract",
              [](T & self, T const & src, int srccomp, int comp, int numcomp, int nghost) {
                  T::Subtract(self, src, srccomp, comp, numcomp, nghost);
