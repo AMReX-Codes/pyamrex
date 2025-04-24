@@ -8,7 +8,7 @@ concurrency:
 
 jobs:
   build_hip:
-    name: ROCm HIP 6.1
+    name: ROCm HIP 6.3.2
     runs-on: ubuntu-24.04
     env:
       CXXFLAGS: "-Werror -Wno-deprecated-declarations -Wno-error=pass-failed"
@@ -18,7 +18,7 @@ jobs:
     - name: install dependencies
       shell: bash
       run: |
-        .github/workflows/dependencies/hip.sh 6.1
+        .github/workflows/dependencies/hip.sh 6.3.2
         .github/workflows/dependencies/dependencies_ccache.sh
     - name: Set Up Cache
       uses: actions/cache@v4
@@ -45,11 +45,6 @@ jobs:
         python3 -m pip install -U pip
         python3 -m pip install -U build packaging setuptools[core] wheel
         python3 -m pip install -U cmake
-
-        # "mpic++ --showme" forgets open-pal in Ubuntu 24.04 + OpenMPI 4.0.3
-        #   https://bugs.launchpad.net/ubuntu/+source/openmpi/+bug/1941786
-        #   https://github.com/open-mpi/ompi/issues/9317
-        export LDFLAGS="-lopen-pal"
 
         cmake -S . -B build              \
             -DCMAKE_VERBOSE_MAKEFILE=ON  \
