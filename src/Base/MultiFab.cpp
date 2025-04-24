@@ -105,4 +105,14 @@ void init_MultiFab(py::module &m, py::class_< amrex::MFIter > & py_MFIter)
 
     m.def("copy_mfab", py::overload_cast< MultiFab &, MultiFab const &, int, int, int, int >(&MultiFab::Copy), py::arg("dst"), py::arg("src"), py::arg("srccomp"), py::arg("dstcomp"), py::arg("numcomp"), py::arg("nghost"))
      .def("copy_mfab", py::overload_cast< MultiFab &, MultiFab const &, int, int, int, IntVect const & >(&MultiFab::Copy), py::arg("dst"), py::arg("src"), py::arg("srccomp"), py::arg("dstcomp"), py::arg("numcomp"), py::arg("nghost"));
+    m.def("copymf",
+            [](T &self, T const &src, int srccomp, int dstcomp, int numcomp, int nghost) {
+                T::Copy(self, src, srccomp, dstcomp, numcomp, nghost);
+            },
+            py::arg("src"), py::arg("srccomp"), py::arg("dstcomp"), py::arg("numcomp"), py::arg("nghost"),
+            "Copy from src to self including nghost ghost cells.\n"
+            "The two MultiFabs MUST have the same underlying BoxArray. The copy is local"
+        )
+    ;
+
 }
