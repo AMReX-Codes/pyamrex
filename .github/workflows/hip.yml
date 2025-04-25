@@ -46,6 +46,11 @@ jobs:
         python3 -m pip install -U build packaging setuptools[core] wheel
         python3 -m pip install -U cmake
 
+        # "mpic++ --showme" forgets open-pal in Ubuntu 20.04 + OpenMPI 4.0.3
+        #   https://bugs.launchpad.net/ubuntu/+source/openmpi/+bug/1941786
+        #   https://github.com/open-mpi/ompi/issues/9317
+        export LDFLAGS="-lopen-pal"
+
         cmake -S . -B build              \
             -DCMAKE_VERBOSE_MAKEFILE=ON  \
             -DAMReX_GPU_BACKEND=HIP      \
