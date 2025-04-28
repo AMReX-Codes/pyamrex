@@ -8,7 +8,7 @@ concurrency:
 
 jobs:
   build_hip:
-    name: ROCm HIP 6.3.2
+    name: ROCm HIP 6.4
     runs-on: ubuntu-24.04
     env:
       CXXFLAGS: "-Werror -Wno-deprecated-declarations -Wno-error=pass-failed"
@@ -18,7 +18,7 @@ jobs:
     - name: install dependencies
       shell: bash
       run: |
-        .github/workflows/dependencies/hip.sh 6.3.2
+        .github/workflows/dependencies/hip.sh 6.4
         .github/workflows/dependencies/dependencies_ccache.sh
     - name: Set Up Cache
       uses: actions/cache@v4
@@ -27,7 +27,7 @@ jobs:
         key: ccache-${{ github.workflow }}-${{ github.job }}-git-${{ github.sha }}
         restore-keys: |
              ccache-${{ github.workflow }}-${{ github.job }}-git-
-    - name: build ImpactX
+    - name: build pyAMReX
       shell: bash
       run: |
         export CCACHE_COMPRESS=1
