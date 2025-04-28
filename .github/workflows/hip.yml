@@ -54,8 +54,12 @@ jobs:
         cmake -S . -B build              \
             -DCMAKE_VERBOSE_MAKEFILE=ON  \
             -DAMReX_GPU_BACKEND=HIP      \
-            -DAMReX_AMD_ARCH=gfx900      \
-            -DAMReX_SPACEDIM="1;2;3"
+            -DAMReX_SPACEDIM="1;2;3"     \
+            -DCMAKE_C_COMPILER=$(which clang)             \
+            -DCMAKE_CXX_COMPILER=$(which clang++)         \
+            -DAMReX_AMD_ARCH=gfx1010                      \
+            -DAMReX_ROCTX=ON                              \
+            -DCMAKE_CXX_STANDARD=17
         cmake --build build --target pip_install -j 4
 
         ccache -s
