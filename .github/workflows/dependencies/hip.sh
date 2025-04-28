@@ -33,7 +33,7 @@ sudo apt-key add rocm.gpg.key
 
 source /etc/os-release # set UBUNTU_CODENAME: focal or jammy or ...
 
-VERSION=${1-6.4}
+VERSION=${1-6.3.4}
 
 echo "deb [arch=amd64] https://repo.radeon.com/rocm/apt/${VERSION} ${UBUNTU_CODENAME} main" \
   | sudo tee /etc/apt/sources.list.d/rocm.list
