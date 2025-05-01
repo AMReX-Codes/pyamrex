@@ -8,8 +8,8 @@ concurrency:
 
 jobs:
   build_hip:
-    name: ROCm HIP 6.2.4
-    runs-on: ubuntu-24.04
+    name: ROCm HIP 6.3.2
+    runs-on: ubuntu-22.04
     env:
       CXXFLAGS: "-Werror -Wno-deprecated-declarations -Wno-error=pass-failed"
       CMAKE_GENERATOR: Ninja
@@ -18,7 +18,7 @@ jobs:
     - name: install dependencies
       shell: bash
       run: |
-        .github/workflows/dependencies/hip.sh 6.2.4
+        .github/workflows/dependencies/hip.sh 6.3.2
         .github/workflows/dependencies/dependencies_ccache.sh
     - name: Set Up Cache
       uses: actions/cache@v4
