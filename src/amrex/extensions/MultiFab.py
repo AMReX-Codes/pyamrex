@@ -604,6 +604,7 @@ def __setitem__(self, index, value):
     # This checks if amr was built with GPU, and if so, it must convert the input
     # value to a cupy array. Otherwise, it will use a numpy array.
     import inspect
+
     amr = inspect.getmodule(self)
     if amr.Config.have_gpu:
         import cupy as xp
