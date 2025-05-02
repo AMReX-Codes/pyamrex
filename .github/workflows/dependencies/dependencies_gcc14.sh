@@ -9,6 +9,8 @@ set -eu -o pipefail
 
 sudo apt-get update
 
-sudo apt-get install -y  \
-    build-essential      \
-    clang-6.0
+sudo apt-get install -y --no-install-recommends\
+    build-essential \
+    g++-14          \
+    libopenmpi-dev  \
+    openmpi-bin

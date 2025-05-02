@@ -1,9 +1,14 @@
 #!/usr/bin/env bash
 #
-# Copyright 2022 The AMReX Community
+# Copyright 2020 The AMReX Community
 #
 # License: BSD-3-Clause-LBNL
 # Authors: Axel Huebl
+
+# search recursive inside a folder if a file contains tabs
+#
+# @result 0 if no files are found, else 1
+#
 
 set -eu -o pipefail
 
@@ -28,13 +33,16 @@ sudo apt-key add rocm.gpg.key
 
 source /etc/os-release # set UBUNTU_CODENAME: focal or jammy or ...
 
-echo "deb [arch=amd64] https://repo.radeon.com/rocm/apt/${1-latest} ${UBUNTU_CODENAME} main" \
+VERSION=${1-6.3.2}
+
+echo "deb [arch=amd64] https://repo.radeon.com/rocm/apt/${VERSION} ${UBUNTU_CODENAME} main" \
   | sudo tee /etc/apt/sources.list.d/rocm.list
 echo 'export PATH=/opt/rocm/llvm/bin:/opt/rocm/bin:/opt/rocm/profiler/bin:/opt/rocm/opencl/bin:$PATH' \
   | sudo tee -a /etc/profile.d/rocm.sh
 
 # we should not need to export HIP_PATH=/opt/rocm/hip with those installs
 
+sudo apt-get clean
 sudo apt-get update
 
 # Ref.: https://rocmdocs.amd.com/en/latest/Installation_Guide/Installation-Guide.html#installing-development-packages-for-cross-compilation
@@ -46,25 +54,23 @@ sudo apt-get install -y --no-install-recommends \
     gfortran        \
     libnuma-dev     \
     libopenmpi-dev  \
-    ninja-build     \
     openmpi-bin     \
-    rocm-dev        \
-    rocfft-dev      \
-    rocprim-dev     \
-    rocrand-dev     \
-    rocsparse-dev   \
-    hiprand-dev
+    rocm-dev${VERSION}        \
+    roctracer-dev${VERSION}   \
+    rocprofiler-dev${VERSION} \
+    rocrand-dev${VERSION}     \
+    rocfft-dev${VERSION}      \
+    rocprim-dev${VERSION}     \
+    rocsparse-dev${VERSION}
+
+# hiprand-dev is a new package that does not exist in old versions
+sudo apt-get install -y --no-install-recommends hiprand-dev${VERSION} || true
 
 # activate
 #
 source /etc/profile.d/rocm.sh
 hipcc --version
+hipconfig --full
 which clang
 which clang++
-
-# cmake-easyinstall
-#
-sudo curl -L -o /usr/local/bin/cmake-easyinstall https://raw.githubusercontent.com/ax3l/cmake-easyinstall/main/cmake-easyinstall
-sudo chmod a+x /usr/local/bin/cmake-easyinstall
-export CEI_SUDO="sudo"
-export CEI_TMP="/tmp/cei"
+which flang
