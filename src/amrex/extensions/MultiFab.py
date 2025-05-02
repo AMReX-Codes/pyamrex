@@ -398,10 +398,7 @@ def _get_field(self, mfi):
     import inspect
 
     amr = inspect.getmodule(self)
-    if amr.Config.have_gpu:
-        device_arr = self.array(mfi).to_cupy(copy=False, order="F")
-    else:
-        device_arr = self.array(mfi).to_numpy(copy=False, order="F")
+    device_arr = self.array(mfi).to_xp(copy=False, order="F")
     return device_arr
 
 
@@ -603,6 +600,16 @@ def __setitem__(self, index, value):
     value : scalar or array
         Input value to assign to the specified slice of the MultiFab
     """
+    # When filling an array that is a cupy array, the RHS must also be a cupy array.
+    # This checks if amr was built with GPU, and if so, it must convert the input
+    # value to a cupy array. Otherwise, it will use a numpy array.
+    import inspect
+    amr = inspect.getmodule(self)
+    if amr.Config.have_gpu:
+        import cupy as xp
+    else:
+        xp = np
+
     index = _process_index(self, index)
 
     if not np.isscalar(value):
@@ -610,7 +617,7 @@ def __setitem__(self, index, value):
         # (it needs to be 4-D).
         # This converts value to an array if needed, and the [...] grabs a view so
         # that the shape change below doesn't affect value.
-        value4d = np.array(value)[...]
+        value4d = xp.array(value)[...]
         global_shape = list(value4d.shape)
         # The shape of 1 is added for the extra dimensions and when index is an integer
         # (in which case the dimension was not in the input array).
