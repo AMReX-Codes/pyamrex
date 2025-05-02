@@ -8,12 +8,12 @@ concurrency:
 
 jobs:
   # Build and install libamrex as AMReX CMake project
-  gcc7:
-    name: GNU@7.5
-    runs-on: ubuntu-20.04
+  gcc10:
+    name: GNU@10.5 Release
+    runs-on: ubuntu-24.04
     env:
-      CC: gcc-7
-      CXX: g++-7
+      CC: gcc-10
+      CXX: g++-10
       CXXFLAGS: "-Werror -Wshadow -Woverloaded-virtual -Wunreachable-code -fno-operator-names -Wno-array-bounds"
     steps:
     - uses: actions/checkout@v4
@@ -23,7 +23,7 @@ jobs:
         python-version: '3.9'
     - name: Dependencies
       run: |
-        .github/workflows/dependencies/gcc7.sh
+        .github/workflows/dependencies/dependencies_gcc10.sh
         .github/workflows/dependencies/dependencies_ccache.sh
     - name: Set Up Cache
       uses: actions/cache@v4
@@ -56,15 +56,15 @@ jobs:
       run: |
         mpiexec -np 1 python3 -m pytest tests/
 
-  gcc10:
-    name: GNU@10.5 Debug
-    runs-on: ubuntu-22.04
+  gcc14:
+    name: GNU@14.5 Debug
+    runs-on: ubuntu-24.04
     env: {CXXFLAGS: "-Werror -Wno-error=deprecated-declarations -Wshadow -Woverloaded-virtual -Wunreachable-code -fno-operator-names"}
     steps:
     - uses: actions/checkout@v4
     - name: Dependencies
       run: |
-        .github/workflows/dependencies/dependencies_gcc10.sh
+        .github/workflows/dependencies/dependencies_gcc14.sh
         .github/workflows/dependencies/dependencies_ccache.sh
     - name: Set Up Cache
       uses: actions/cache@v4
@@ -80,8 +80,8 @@ jobs:
         export CCACHE_MAXSIZE=600M
         ccache -z
 
-        export CC=$(which gcc-10)
-        export CXX=$(which g++-10)
+        export CC=$(which gcc-14)
+        export CXX=$(which g++-14)
         python3 -m pip install -U pip
         python3 -m pip install -U build packaging setuptools[core] wheel
         python3 -m pip install -U cmake
@@ -108,57 +108,10 @@ jobs:
         rm -rf build
         python3 -m pytest tests
 
-  clang6:
-    name: Clang@6.0 w/o MPI
-    runs-on: ubuntu-20.04
-    env: {CXXFLAGS: "-Werror -Wshadow -Woverloaded-virtual -Wextra-semi -Wunreachable-code -fno-operator-names -Wno-pass-failed"}
-    steps:
-    - uses: actions/checkout@v4
-    - name: Dependencies
-      run: |
-        .github/workflows/dependencies/dependencies_clang6.sh
-        .github/workflows/dependencies/dependencies_ccache.sh
-    - name: Set Up Cache
-      uses: actions/cache@v4
-      with:
-        path: ~/.cache/ccache
-        key: ccache-${{ github.workflow }}-${{ github.job }}-git-${{ github.sha }}
-        restore-keys: |
-             ccache-${{ github.workflow }}-${{ github.job }}-git-
-    - name: Build & Install
-      run: |
-        export CCACHE_COMPRESS=1
-        export CCACHE_COMPRESSLEVEL=10
-        export CCACHE_MAXSIZE=500M
-        ccache -z
-
-        export CMAKE_BUILD_PARALLEL_LEVEL=4
-
-        export CC=$(which clang-6.0)
-        export CXX=$(which clang++-6.0)
-        python3 -m pip install -U pip
-        python3 -m pip install -U build packaging setuptools[core] wheel
-        python3 -m pip install -U cmake pytest
-        python3 -m pip install -v .
-        python3 -c "import amrex.space1d as amr; print(amr.__version__)"
-        python3 -c "import amrex.space2d as amr; print(amr.__version__)"
-        python3 -c "import amrex.space3d as amr; print(amr.__version__)"
-
-        ccache -s
-        du -hs ~/.cache/ccache
-
-    - name: Unit tests
-      run: |
-        python3 -m pytest tests/
-
   clang14:
-    name: Clang@14.0 w/ libc++ w/ MPI
-    runs-on: ubuntu-22.04
-    env:
-      CXXFLAGS: "-Werror -Wshadow -Woverloaded-virtual -Wextra-semi -Wunreachable-code -fno-operator-names -Wno-pass-failed -stdlib=libc++"
-      LDFLAGS: "-fuse-ld=lld"
-      CXX: "clang++"
-      CC: "clang"
+    name: Clang@14.0 w/o MPI
+    runs-on: ubuntu-24.04
+    env: {CXXFLAGS: "-Werror -Wshadow -Woverloaded-virtual -Wextra-semi -Wunreachable-code -fno-operator-names -Wno-pass-failed"}
     steps:
     - uses: actions/checkout@v4
     - name: Dependencies
@@ -176,11 +129,60 @@ jobs:
       run: |
         export CCACHE_COMPRESS=1
         export CCACHE_COMPRESSLEVEL=10
+        export CCACHE_MAXSIZE=500M
+        ccache -z
+
+        export CMAKE_BUILD_PARALLEL_LEVEL=4
+
+        export CC=$(which clang-14)
+        export CXX=$(which clang++-14)
+        python3 -m pip install -U pip
+        python3 -m pip install -U build packaging setuptools[core] wheel
+        python3 -m pip install -U cmake pytest
+        python3 -m pip install -v .
+        python3 -c "import amrex.space1d as amr; print(amr.__version__)"
+        python3 -c "import amrex.space2d as amr; print(amr.__version__)"
+        python3 -c "import amrex.space3d as amr; print(amr.__version__)"
+
+        ccache -s
+        du -hs ~/.cache/ccache
+
+    - name: Unit tests
+      run: |
+        python3 -m pytest tests/
+
+  clang18:
+    name: Clang@18.0 w/ libc++ w/ MPI
+    runs-on: ubuntu-24.04
+    env:
+      CXXFLAGS: "-Werror -Wshadow -Woverloaded-virtual -Wextra-semi -Wunreachable-code -fno-operator-names -Wno-pass-failed -stdlib=libc++"
+      LDFLAGS: "-fuse-ld=lld"
+      CXX: "clang++"
+      CC: "clang"
+    steps:
+    - uses: actions/checkout@v4
+    - name: Dependencies
+      run: |
+        .github/workflows/dependencies/dependencies_clang18.sh
+        .github/workflows/dependencies/dependencies_ccache.sh
+    - name: Set Up Cache
+      uses: actions/cache@v4
+      with:
+        path: ~/.cache/ccache
+        key: ccache-${{ github.workflow }}-${{ github.job }}-git-${{ github.sha }}
+        restore-keys: |
+             ccache-${{ github.workflow }}-${{ github.job }}-git-
+    - name: Build & Install
+      run: |
+        export CCACHE_COMPRESS=1
+        export CCACHE_COMPRESSLEVEL=10
         export CCACHE_MAXSIZE=300M
         ccache -z
 
         export CMAKE_BUILD_PARALLEL_LEVEL=4
 
+        export CC=$(which clang-18)
+        export CXX=$(which clang++-18)
         python3 -m pip install -U pip
         python3 -m pip install -U build packaging setuptools[core] wheel
         python3 -m pip install -U cmake
@@ -198,14 +200,14 @@ jobs:
         python3 -m pytest tests/
 
   nvcc11:
-    name: CUDA@11.2 GNU@9.4.0
-    runs-on: ubuntu-20.04
+    name: CUDA@12.2 GNU@10.5
+    runs-on: ubuntu-24.04
     env: {CXXFLAGS: "-fno-operator-names"}
     steps:
     - uses: actions/checkout@v4
     - name: Dependencies
       run: |
-        .github/workflows/dependencies/dependencies_nvcc11.sh
+        .github/workflows/dependencies/dependencies_nvcc12.sh
         .github/workflows/dependencies/dependencies_ccache.sh
     - name: Set Up Cache
       uses: actions/cache@v4
@@ -225,9 +227,9 @@ jobs:
         export LD_LIBRARY_PATH=/usr/local/nvidia/lib:/usr/local/nvidia/lib64:/usr/local/cuda/lib64:${LD_LIBRARY_PATH}
         which nvcc || echo "nvcc not in PATH!"
 
-        export CC=$(which gcc)
-        export CXX=$(which g++)
-        export CUDAHOSTCXX=$(which g++)
+        export CC=$(which gcc-10)
+        export CXX=$(which g++-10)
+        export CUDAHOSTCXX=$(which g++-10)
 
         python3 -m pip install -U pip
         python3 -m pip install -U build packaging setuptools[core] wheel

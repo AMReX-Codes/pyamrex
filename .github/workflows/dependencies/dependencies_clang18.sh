@@ -9,8 +9,10 @@ set -eu -o pipefail
 
 sudo apt-get update
 
-sudo apt-get install -y --no-install-recommends\
-    build-essential \
-    g++-7           \
-    libopenmpi-dev  \
+sudo apt-get install -y  \
+    build-essential      \
+    clang-18             \
+    lld                  \
+    libc++-18-dev        \
+    libopenmpi-dev       \
     openmpi-bin
