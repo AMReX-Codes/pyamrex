@@ -395,9 +395,6 @@ def _get_field(self, mfi):
     # The transpose is taken since the Python array interface to Array4 in
     # self.array(mfi) is in C ordering.
     # Note: transposing creates a view and not a copy.
-    import inspect
-
-    amr = inspect.getmodule(self)
     device_arr = self.array(mfi).to_xp(copy=False, order="F")
     return device_arr
 
