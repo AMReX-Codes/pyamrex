@@ -605,13 +605,13 @@ def __setitem__(self, index, value):
     """
     index = _process_index(self, index)
 
-    if isinstance(value, np.ndarray):
+    if not np.isscalar(value):
         # Expand the shape of the input array to match the shape of the global array
         # (it needs to be 4-D).
         # This converts value to an array if needed, and the [...] grabs a view so
         # that the shape change below doesn't affect value.
-        value3d = np.array(value)[...]
-        global_shape = list(value3d.shape)
+        value4d = np.array(value)[...]
+        global_shape = list(value4d.shape)
         # The shape of 1 is added for the extra dimensions and when index is an integer
         # (in which case the dimension was not in the input array).
         if (index[0].stop - index[0].start) == 1:
@@ -622,15 +622,15 @@ def __setitem__(self, index, value):
             global_shape[2:2] = [1]
         if (index[3].stop - index[3].start) == 1 or len(global_shape) < 4:
             global_shape[3:3] = [1]
-        value3d.shape = global_shape
+        value4d.shape = global_shape
 
     for mfi in self:
         block_slices, global_slices = _get_intersect_slice(self, mfi, index, True)
         if global_slices is not None:
             mf_arr = _get_field(self, mfi)
-            if isinstance(value, np.ndarray):
+            if not np.isscalar(value):
                 # The data is copied from host to device automatically if needed
-                mf_arr[block_slices] = value3d[global_slices]
+                mf_arr[block_slices] = value4d[global_slices]
             else:
                 mf_arr[block_slices] = value
 
