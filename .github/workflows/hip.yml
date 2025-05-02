@@ -8,8 +8,8 @@ concurrency:
 
 jobs:
   build_hip:
-    name: ROCm HIP 6.1
-    runs-on: ubuntu-20.04
+    name: ROCm HIP 6.3.2
+    runs-on: ubuntu-22.04
     env:
       CXXFLAGS: "-Werror -Wno-deprecated-declarations -Wno-error=pass-failed"
       CMAKE_GENERATOR: Ninja
@@ -18,7 +18,7 @@ jobs:
     - name: install dependencies
       shell: bash
       run: |
-        .github/workflows/dependencies/hip.sh 6.1
+        .github/workflows/dependencies/hip.sh 6.3.2
         .github/workflows/dependencies/dependencies_ccache.sh
     - name: Set Up Cache
       uses: actions/cache@v4
@@ -27,7 +27,7 @@ jobs:
         key: ccache-${{ github.workflow }}-${{ github.job }}-git-${{ github.sha }}
         restore-keys: |
              ccache-${{ github.workflow }}-${{ github.job }}-git-
-    - name: build ImpactX
+    - name: build pyAMReX
       shell: bash
       run: |
         export CCACHE_COMPRESS=1
@@ -54,8 +54,12 @@ jobs:
         cmake -S . -B build              \
             -DCMAKE_VERBOSE_MAKEFILE=ON  \
             -DAMReX_GPU_BACKEND=HIP      \
-            -DAMReX_AMD_ARCH=gfx900      \
-            -DAMReX_SPACEDIM="1;2;3"
+            -DAMReX_SPACEDIM="1;2;3"     \
+            -DCMAKE_C_COMPILER=$(which clang)             \
+            -DCMAKE_CXX_COMPILER=$(which clang++)         \
+            -DAMReX_AMD_ARCH=gfx1010                      \
+            -DAMReX_ROCTX=ON                              \
+            -DCMAKE_CXX_STANDARD=17
         cmake --build build --target pip_install -j 4
 
         ccache -s
