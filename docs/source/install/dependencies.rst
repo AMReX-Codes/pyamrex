@@ -13,7 +13,7 @@ Please see installation instructions below.
 - `pybind11 2.13.0+ <https://github.com/pybind/pybind11/>`__: we automatically download and compile a copy
 - `Python 3.9+ <https://www.python.org>`__
 
-  - `numpy 1.15+ <https://numpy.org>`__
+  - `NumPy 2.0+ <https://numpy.org>`__
 
 Optional dependencies include:
 

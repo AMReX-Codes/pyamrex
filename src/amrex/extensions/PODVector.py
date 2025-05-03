@@ -32,9 +32,9 @@ def podvector_to_numpy(self, copy=False):
             # todo: validate of the to_host() returned object
             #       lifetime is always managed correctly by
             #       Python's GC - otherwise copy twice via copy=True
-            return np.array(self.to_host(), copy=False)
+            return np.asarray(self.to_host(), copy=False)
         else:
-            return np.array(self, copy=False)
+            return np.asarray(self, copy=False)
     else:
         raise ValueError("Vector is empty.")
 
