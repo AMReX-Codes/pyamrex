@@ -317,8 +317,8 @@ def _process_index(self, index):
         index = [index]
     elif isinstance(index, tuple):
         if len(index) == 0:
-            # The empty tuple specifies all valid and ghost cells
-            index = [index]
+            # The empty tuple specifies all valid and ghost cells for all axis
+            index = dims * [index]
         else:
             index = list(index)
             for i in range(len(index)):
