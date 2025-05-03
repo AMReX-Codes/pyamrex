@@ -15,7 +15,7 @@ namespace
     using namespace amrex;
 
     py::object pack_ids (py::array_t<uint64_t> idcpus,
-                         py::array_t<long> ids)
+                         py::array_t<amrex::Long> ids)
     {
         if (idcpus.ndim() != 1) {
             throw std::runtime_error("Input should be 1-D NumPy array");
@@ -28,7 +28,7 @@ namespace
         int N = idcpus.shape()[0];
         for (int i = 0; i < N; i++) {
             uint64_t* idcpus_ptr = (uint64_t*) buf.ptr;
-            amrex::Long* ids_ptr = (long*) buf2.ptr;
+            amrex::Long* ids_ptr = (amrex::Long*) buf2.ptr;
             particle_impl::pack_id(idcpus_ptr[i], ids_ptr[i]);
         }
         return py::cast<py::none>(Py_None);
