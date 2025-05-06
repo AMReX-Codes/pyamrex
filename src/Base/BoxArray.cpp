@@ -120,14 +120,14 @@ void init_BoxArray(py::module &m) {
     //! \brief Grow each Box in the BoxArray on the high end
     //! by n_cell cells in the idir direction.
     BoxArray& growHi (int idir, int n_cell);
-    //! \brief Apply surroundingNodes(Box) to each Box in BoxArray.
-    //! See the documentation of Box for details.
-    BoxArray& surroundingNodes ();
-    //!
+*/
+
     //! \brief Apply surroundingNodes(Box,int) to each Box in
     //! BoxArray.  See the documentation of Box for details.
-    BoxArray& surroundingNodes (int dir);
-*/
+    .def("surroundingNodes",
+            py::overload_cast<>(&BoxArray::surroundingNodes))
+    .def("surroundingNodes",
+            py::overload_cast<int>(&BoxArray::surroundingNodes))
 
     //! Apply Box::enclosedCells() to each Box in the BoxArray.
     .def("enclosed_cells",
@@ -135,15 +135,12 @@ void init_BoxArray(py::module &m) {
     .def("enclosed_cells",
             py::overload_cast<int>(&BoxArray::enclosedCells))
 
+    //! Convert nodality of each box in the BoxArray
+    .def("convert",
+            py::overload_cast< IndexType >(&BoxArray::convert))
+    .def("convert",
+            py::overload_cast< IntVect const &>(&BoxArray::convert))
 /*
-    //! Apply Box::convert(IndexType) to each Box in the BoxArray.
-    BoxArray& convert (IndexType typ);
-
-    BoxArray& convert (const IntVect& typ);
-
-    //! Apply function (*fp)(Box) to each Box in the BoxArray.
-    BoxArray& convert (Box (*fp)(const Box&));
-
     //! Apply Box::shift(int,int) to each Box in the BoxArray.
     BoxArray& shift (int dir, int nzones);
 
