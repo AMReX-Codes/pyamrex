@@ -293,10 +293,15 @@ __all__ = [
     "initialize",
     "initialize_when_MPMD",
     "initialized",
+    "is_valid",
     "lbound",
     "length",
+    "make_invalid",
+    "make_valid",
     "max",
     "min",
+    "pack_cpus",
+    "pack_ids",
     "refine",
     "size",
     "ubound",
@@ -4993,7 +4998,7 @@ class BoxArray:
     def size(self) -> int: ...
 
 class Config:
-    amrex_version: typing.ClassVar[str] = "25.04"
+    amrex_version: typing.ClassVar[str] = "25.05-4-g793ea9f71759"
     gpu_backend = None
     have_eb: typing.ClassVar[bool] = False
     have_gpu: typing.ClassVar[bool] = False
@@ -20520,6 +20525,7 @@ def initialized() -> bool:
     Returns true if there are any currently-active and initialized AMReX instances (i.e. one for which amrex::Initialize has been called, and amrex::Finalize has not). Otherwise false.
     """
 
+def is_valid(arg0: int) -> bool: ...
 @typing.overload
 def lbound(arg0: Box) -> Dim3: ...
 @typing.overload
@@ -20628,8 +20634,16 @@ def length(arg0: Array4_uint_const) -> Dim3: ...
 def length(arg0: Array4_ulong_const) -> Dim3: ...
 @typing.overload
 def length(arg0: Array4_ulonglong_const) -> Dim3: ...
+def make_invalid(arg0: int) -> int: ...
+def make_valid(arg0: int) -> int: ...
 def max(arg0: RealVect, arg1: RealVect) -> RealVect: ...
 def min(arg0: RealVect, arg1: RealVect) -> RealVect: ...
+def pack_cpus(
+    arg0: numpy.ndarray[numpy.uint64], arg1: numpy.ndarray[numpy.int32]
+) -> typing.Any: ...
+def pack_ids(
+    arg0: numpy.ndarray[numpy.uint64], arg1: numpy.ndarray[numpy.int64]
+) -> typing.Any: ...
 @typing.overload
 def refine(arg0: Dim3, arg1: IntVect1D) -> Dim3: ...
 @typing.overload
@@ -20715,5 +20729,5 @@ def write_single_level_plotfile(
 
 __author__: str = "Axel Huebl, Ryan T. Sandberg, Shreyas Ananthan, David P. Grote, Revathi Jambunathan, Edoardo Zoni, Remi Lehe, Andrew Myers, Weiqun Zhang"
 __license__: str = "BSD-3-Clause-LBNL"
-__version__: str = "25.04"
+__version__: str = "25.05-4-g793ea9f71759"
 IntVect = IntVect1D
