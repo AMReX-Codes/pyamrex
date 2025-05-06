@@ -23,7 +23,9 @@ namespace
 
         auto buf = idcpus.request();
         auto buf2 = ids.request();
-        if (buf.size != buf2.size) throw std::runtime_error("sizes do not match!");
+        if (buf.size != buf2.size) {
+            throw std::runtime_error("sizes do not match!");
+        }
 
         int N = idcpus.shape()[0];
         for (int i = 0; i < N; i++) {
@@ -43,7 +45,9 @@ namespace
 
         auto buf = idcpus.request();
         auto buf2 = cpus.request();
-        if (buf.size != buf2.size) throw std::runtime_error("sizes do not match!");
+        if (buf.size != buf2.size) {
+            throw std::runtime_error("sizes do not match!");
+        }
 
         int N = idcpus.shape()[0];
         for (int i = 0; i < N; i++) {

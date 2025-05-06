@@ -176,6 +176,12 @@ def test_ptile_aos():
     assert not amr.is_valid(idcpu[0])
     idcpu[0] = amr.make_valid(idcpu[0])
     assert amr.is_valid(idcpu[0])
+
+    # the leftmost bit stores the sign of the id
+    # the next 39 store its absolute value
+    # the rightmost 24 then store the cpu number
+    # using this scheme, id = 1 cpu = 100
+    # corresponds to 9223372036871553124
     assert idcpu[0] == 9223372036871553124
 
     idcpu = np.array([0, 0, 0, 0, 0], dtype=np.uint64)
