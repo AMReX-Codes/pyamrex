@@ -600,4 +600,4 @@ def d_decl(x, y, z):
 
 __author__: str = "Axel Huebl, Ryan T. Sandberg, Shreyas Ananthan, David P. Grote, Revathi Jambunathan, Edoardo Zoni, Remi Lehe, Andrew Myers, Weiqun Zhang"
 __license__: str = "BSD-3-Clause-LBNL"
-__version__: str = "25.05-4-g793ea9f71759"
+__version__: str = "25.05"
