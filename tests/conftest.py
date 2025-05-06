@@ -43,6 +43,10 @@ def amrex_init(tmpdir):
                 # "abort_on_out_of_gpu_memory=1",
                 # avoid managed memory unless explicitly used
                 "amrex.the_arena_is_managed=0",
+                # allocate GPU memory on-demand instead of pre-allocating 3/4th
+                # to enable parallel test runs on the same GPU
+                # https://amrex-codes.github.io/amrex/docs_html/RuntimeParameters.html?highlight=arena#memory
+                "amrex.the_arena_init_size=0",
             ]
         )
         yield
