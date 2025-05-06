@@ -1,6 +1,6 @@
 /* Copyright 2022 The AMReX Community
  *
- * Authors: Ryan Sandberg, Axel Huebl
+ * Authors: Ryan Sandberg, Axel Huebl, Andrew Myers
  * License: BSD-3-Clause-LBNL
  */
 #include "ParticleContainer.H"
@@ -14,21 +14,70 @@ namespace
 {
     using namespace amrex;
 
-    // Note - this function MUST be consistent with AMReX_Particle.H
-    Long unpack_id (uint64_t idcpu) {
-        Long r = 0;
+    py::object pack_ids (py::array_t<uint64_t> idcpus,
+                         py::array_t<amrex::Long> ids)
+    {
+        if (idcpus.ndim() != 1) {
+            throw std::runtime_error("Input should be 1-D NumPy array");
+        }
 
-        uint64_t sign = idcpu >> 63;  // extract leftmost sign bit
-        uint64_t val  = ((idcpu >> 24) & 0x7FFFFFFFFF);  // extract next 39 id bits
+        auto buf = idcpus.request();
+        auto buf2 = ids.request();
+        if (buf.size != buf2.size) {
+            throw std::runtime_error("sizes do not match!");
+        }
 
-        Long lval = static_cast<Long>(val);  // bc we take -
-        r = (sign) ? lval : -lval;
-        return r;
+        int N = idcpus.shape()[0];
+        for (int i = 0; i < N; i++) {
+            uint64_t* idcpus_ptr = (uint64_t*) buf.ptr;
+            amrex::Long* ids_ptr = (amrex::Long*) buf2.ptr;
+            particle_impl::pack_id(idcpus_ptr[i], ids_ptr[i]);
+        }
+        return py::cast<py::none>(Py_None);
     }
 
-    // Note - this function MUST be consistent with AMReX_Particle.H
+    py::object pack_cpus (py::array_t<uint64_t> idcpus,
+                          py::array_t<int> cpus)
+    {
+        if (idcpus.ndim() != 1) {
+            throw std::runtime_error("Input should be 1-D NumPy array");
+        }
+
+        auto buf = idcpus.request();
+        auto buf2 = cpus.request();
+        if (buf.size != buf2.size) {
+            throw std::runtime_error("sizes do not match!");
+        }
+
+        int N = idcpus.shape()[0];
+        for (int i = 0; i < N; i++) {
+            uint64_t* idcpus_ptr = (uint64_t*) buf.ptr;
+            int* cpus_ptr = (int*) buf2.ptr;
+            particle_impl::pack_cpu(idcpus_ptr[i], cpus_ptr[i]);
+        }
+        return py::cast<py::none>(Py_None);
+    }
+
+    Long unpack_id (uint64_t idcpu) {
+        return particle_impl::unpack_id(idcpu);
+    }
+
     int unpack_cpu (uint64_t idcpu) {
-        return static_cast<int>(idcpu & 0x00FFFFFF);
+        return particle_impl::unpack_cpu(idcpu);
+    }
+
+    uint64_t make_invalid (uint64_t idcpu) {
+        particle_impl::make_invalid(idcpu);
+        return idcpu;
+    }
+
+    uint64_t make_valid (uint64_t idcpu) {
+        particle_impl::make_valid(idcpu);
+        return idcpu;
+    }
+
+    bool is_valid (const uint64_t idcpu) {
+        return particle_impl::is_valid(idcpu);
     }
 }
 
@@ -61,6 +110,11 @@ void init_ParticleContainer(py::module& m) {
     init_ParticleContainer_WarpX(m);
 
     // for particle idcpu arrays
+    m.def("pack_ids", &pack_ids);
+    m.def("pack_cpus", &pack_cpus);
     m.def("unpack_ids", py::vectorize(unpack_id));
     m.def("unpack_cpus", py::vectorize(unpack_cpu));
+    m.def("make_invalid", make_invalid);
+    m.def("make_valid", make_valid);
+    m.def("is_valid", is_valid);
 }

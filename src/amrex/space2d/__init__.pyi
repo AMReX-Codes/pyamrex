@@ -318,10 +318,15 @@ from amrex.space2d.amrex_2d_pybind import (
     initialize,
     initialize_when_MPMD,
     initialized,
+    is_valid,
     lbound,
     length,
+    make_invalid,
+    make_valid,
     max,
     min,
+    pack_cpus,
+    pack_ids,
     refine,
     size,
     ubound,
@@ -606,11 +611,16 @@ __all__ = [
     "initialize",
     "initialize_when_MPMD",
     "initialized",
+    "is_valid",
     "lbound",
     "length",
+    "make_invalid",
+    "make_valid",
     "max",
     "min",
     "os",
+    "pack_cpus",
+    "pack_ids",
     "refine",
     "register_AoS_extension",
     "register_Array4_extension",
@@ -638,4 +648,4 @@ def d_decl(x, y, z):
 
 __author__: str = "Axel Huebl, Ryan T. Sandberg, Shreyas Ananthan, David P. Grote, Revathi Jambunathan, Edoardo Zoni, Remi Lehe, Andrew Myers, Weiqun Zhang"
 __license__: str = "BSD-3-Clause-LBNL"
-__version__: str = "25.04"
+__version__: str = "25.05-4-g793ea9f71759"

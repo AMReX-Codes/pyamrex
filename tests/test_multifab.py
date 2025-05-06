@@ -77,7 +77,10 @@ def test_mfab_numpy(mfab):
         # Config = sim.extension.Config
 
         # Using global indexing
-        # Set all valid cells (and internal ghost cells)
+        # Set all cells, valid and ghost cells, using the empty tuple
+        mfab[()] = np.pi
+
+        # Set all valid cells (and ghost cells overlapping valid cells), using the Ellipsis
         mfab[...] = 42.0
 
         # Set a range of cells. Indices are in Fortran order.
@@ -87,7 +90,7 @@ def test_mfab_numpy(mfab):
         # Third dimension, sets all valid and ghost cells
         #  - The empty tuple is used to specify the range to include all valid and ghost cells.
         # Components dimension, sets first component.
-        mfab[-1j:2j, :, (), 0] = 42.0
+        mfab[-1j:2j, :, (), 0] = 37.0
 
         # Get a range of cells
         # Get the data along the valid cells in the first dimension (gathering data across blocks
