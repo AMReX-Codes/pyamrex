@@ -4956,6 +4956,10 @@ class BoxArray:
     def coarsenable(self, arg0: IntVect3D, arg1: int) -> bool: ...
     @typing.overload
     def coarsenable(self, arg0: IntVect3D, arg1: IntVect3D) -> bool: ...
+    @typing.overload
+    def convert(self, arg0: IndexType) -> BoxArray: ...
+    @typing.overload
+    def convert(self, arg0: IntVect3D) -> BoxArray: ...
     def define(self, arg0: Box) -> None: ...
     @typing.overload
     def enclosed_cells(self) -> BoxArray: ...
@@ -4973,6 +4977,10 @@ class BoxArray:
     @typing.overload
     def refine(self, arg0: IntVect3D) -> BoxArray: ...
     def resize(self, arg0: int) -> None: ...
+    @typing.overload
+    def surroundingNodes(self) -> BoxArray: ...
+    @typing.overload
+    def surroundingNodes(self, arg0: int) -> BoxArray: ...
     @property
     def capacity(self) -> int: ...
     @property
@@ -6759,6 +6767,22 @@ class MultiFab(FabArray_FArrayBox):
         amrex.MultiFab
             A copy of this MultiFab.
 
+        """
+    @typing.overload
+    def copymf(
+        self, src: MultiFab, srccomp: int, dstcomp: int, numcomp: int, nghost: int
+    ) -> None:
+        """
+        Copy from src to self including nghost ghost cells.
+        The two MultiFabs MUST have the same underlying BoxArray. The copy is local
+        """
+    @typing.overload
+    def copymf(
+        self, src: MultiFab, srccomp: int, dstcomp: int, numcomp: int, nghost: IntVect3D
+    ) -> None:
+        """
+        Copy from src to self including nghost ghost cells.
+        The two MultiFabs MUST have the same underlying BoxArray. The copy is local
         """
     def divi(
         self, mf: MultiFab, strt_comp: int, num_comp: int, nghost: int = 0
@@ -20049,6 +20073,13 @@ class iMultiFab(FabArray_IArrayBox):
         amrex.MultiFab
             A copy of this MultiFab.
 
+        """
+    def copymf(
+        self, src: iMultiFab, srccomp: int, dstcomp: int, numcomp: int, nghost: int
+    ) -> None:
+        """
+        Copy from src to self including nghost ghost cells.
+        The two MultiFabs MUST have the same underlying BoxArray. The copy is local
         """
     def divi(
         self, mf: iMultiFab, strt_comp: int, num_comp: int, nghost: int = 0
