@@ -317,10 +317,15 @@ __all__ = [
     "initialize",
     "initialize_when_MPMD",
     "initialized",
+    "is_valid",
     "lbound",
     "length",
+    "make_invalid",
+    "make_valid",
     "max",
     "min",
+    "pack_cpus",
+    "pack_ids",
     "refine",
     "size",
     "ubound",
@@ -4980,6 +4985,10 @@ class BoxArray:
     def coarsenable(self, arg0: IntVect2D, arg1: int) -> bool: ...
     @typing.overload
     def coarsenable(self, arg0: IntVect2D, arg1: IntVect2D) -> bool: ...
+    @typing.overload
+    def convert(self, arg0: IndexType) -> BoxArray: ...
+    @typing.overload
+    def convert(self, arg0: IntVect2D) -> BoxArray: ...
     def define(self, arg0: Box) -> None: ...
     @typing.overload
     def enclosed_cells(self) -> BoxArray: ...
@@ -4997,6 +5006,10 @@ class BoxArray:
     @typing.overload
     def refine(self, arg0: IntVect2D) -> BoxArray: ...
     def resize(self, arg0: int) -> None: ...
+    @typing.overload
+    def surroundingNodes(self) -> BoxArray: ...
+    @typing.overload
+    def surroundingNodes(self, arg0: int) -> BoxArray: ...
     @property
     def capacity(self) -> int: ...
     @property
@@ -5009,7 +5022,7 @@ class BoxArray:
     def size(self) -> int: ...
 
 class Config:
-    amrex_version: typing.ClassVar[str] = "25.04"
+    amrex_version: typing.ClassVar[str] = "25.05-4-g793ea9f71759"
     gpu_backend = None
     have_eb: typing.ClassVar[bool] = True
     have_gpu: typing.ClassVar[bool] = False
@@ -6780,6 +6793,22 @@ class MultiFab(FabArray_FArrayBox):
         amrex.MultiFab
             A copy of this MultiFab.
 
+        """
+    @typing.overload
+    def copymf(
+        self, src: MultiFab, srccomp: int, dstcomp: int, numcomp: int, nghost: int
+    ) -> None:
+        """
+        Copy from src to self including nghost ghost cells.
+        The two MultiFabs MUST have the same underlying BoxArray. The copy is local
+        """
+    @typing.overload
+    def copymf(
+        self, src: MultiFab, srccomp: int, dstcomp: int, numcomp: int, nghost: IntVect2D
+    ) -> None:
+        """
+        Copy from src to self including nghost ghost cells.
+        The two MultiFabs MUST have the same underlying BoxArray. The copy is local
         """
     def divi(
         self, mf: MultiFab, strt_comp: int, num_comp: int, nghost: int = 0
@@ -21814,6 +21843,13 @@ class iMultiFab(FabArray_IArrayBox):
             A copy of this MultiFab.
 
         """
+    def copymf(
+        self, src: iMultiFab, srccomp: int, dstcomp: int, numcomp: int, nghost: int
+    ) -> None:
+        """
+        Copy from src to self including nghost ghost cells.
+        The two MultiFabs MUST have the same underlying BoxArray. The copy is local
+        """
     def divi(
         self, mf: iMultiFab, strt_comp: int, num_comp: int, nghost: int = 0
     ) -> None:
@@ -22286,6 +22322,7 @@ def initialized() -> bool:
     Returns true if there are any currently-active and initialized AMReX instances (i.e. one for which amrex::Initialize has been called, and amrex::Finalize has not). Otherwise false.
     """
 
+def is_valid(arg0: int) -> bool: ...
 @typing.overload
 def lbound(arg0: Box) -> Dim3: ...
 @typing.overload
@@ -22394,8 +22431,16 @@ def length(arg0: Array4_uint_const) -> Dim3: ...
 def length(arg0: Array4_ulong_const) -> Dim3: ...
 @typing.overload
 def length(arg0: Array4_ulonglong_const) -> Dim3: ...
+def make_invalid(arg0: int) -> int: ...
+def make_valid(arg0: int) -> int: ...
 def max(arg0: RealVect, arg1: RealVect) -> RealVect: ...
 def min(arg0: RealVect, arg1: RealVect) -> RealVect: ...
+def pack_cpus(
+    arg0: numpy.ndarray[numpy.uint64], arg1: numpy.ndarray[numpy.int32]
+) -> typing.Any: ...
+def pack_ids(
+    arg0: numpy.ndarray[numpy.uint64], arg1: numpy.ndarray[numpy.int64]
+) -> typing.Any: ...
 @typing.overload
 def refine(arg0: Dim3, arg1: IntVect1D) -> Dim3: ...
 @typing.overload
@@ -22481,5 +22526,5 @@ def write_single_level_plotfile(
 
 __author__: str = "Axel Huebl, Ryan T. Sandberg, Shreyas Ananthan, David P. Grote, Revathi Jambunathan, Edoardo Zoni, Remi Lehe, Andrew Myers, Weiqun Zhang"
 __license__: str = "BSD-3-Clause-LBNL"
-__version__: str = "25.04"
+__version__: str = "25.05-4-g793ea9f71759"
 IntVect = IntVect2D
