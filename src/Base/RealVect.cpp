@@ -125,7 +125,7 @@ void init_RealVect(py::module &m) {
           .def_static("zero_vector", &RealVect::TheZeroVector)
           .def_static("unit_vector", &RealVect::TheUnitVector)
 
-          .def("BASISREALV", &BASISREALV, "return basis vector in given coordinate direction")
+          .def("BASISREALV", &BASISREALV<AMREX_SPACEDIM>, "return basis vector in given coordinate direction")
      ;
 
      m.def("min", [](const RealVect& a, const RealVect& b) {
