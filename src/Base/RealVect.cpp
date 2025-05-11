@@ -126,7 +126,7 @@ void init_RealVect(py::module &m) {
           .def_static("unit_vector", &RealVect::TheUnitVector)
 
           .def("BASISREALV", [](int dir) -> RealVect {
-              return amrex::BASISREALV<AMREX_SPACEDIM>(dir); },
+              return amrex::BASISREALV(dir); },
               "return basis vector in given coordinate direction")
      ;
 
