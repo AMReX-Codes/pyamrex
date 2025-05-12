@@ -50,7 +50,8 @@ jobs:
               -DBUILD_SHARED_LIBS=ON      \
               -DAMReX_GPU_BACKEND=SYCL    \
               -DAMReX_MPI=ON              \
-              -DAMReX_SPACEDIM="3"
+              -DAMReX_SPACEDIM="3"        \
+              -DpyAMReX_amrex_branch="development"
         cmake --build build --target pip_install -j 4
 
         ccache -s
@@ -95,7 +96,8 @@ jobs:
               -DCMAKE_BUILD_TYPE=Release  \
               -DCMAKE_VERBOSE_MAKEFILE=ON \
               -DAMReX_MPI=ON              \
-              -DAMReX_SPACEDIM="1;2;3"
+              -DAMReX_SPACEDIM="1;2;3"    \
+              -DpyAMReX_amrex_branch="development"
         cmake --build build --target pip_install -j 4
 
         ccache -s
