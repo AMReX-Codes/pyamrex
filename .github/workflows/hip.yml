@@ -51,8 +51,7 @@ jobs:
             -DpyAMReX_IPO=OFF            \
             -DAMReX_GPU_BACKEND=HIP      \
             -DAMReX_AMD_ARCH=gfx90a      \
-            -DAMReX_SPACEDIM="1;2;3"     \
-            -DpyAMReX_amrex_branch="development"
+            -DAMReX_SPACEDIM="1;2;3"
         cmake --build build --target pip_install -j 4
 
         ccache -s

@@ -55,8 +55,7 @@ jobs:
               -DCMAKE_VERBOSE_MAKEFILE=ON `
               -DBUILD_SHARED_LIBS=ON      `
               -DAMReX_MPI=OFF             `
-              -DAMReX_SPACEDIM="1;2;3"    `
-              -DpyAMReX_amrex_branch="development"
+              -DAMReX_SPACEDIM="1;2;3"
         if(!$?) { Exit $LASTEXITCODE }
 
         cmake --build build --config Debug -j 4

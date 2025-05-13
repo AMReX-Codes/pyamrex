@@ -63,7 +63,7 @@ jobs:
 
         python3 -m pip install -U pip setuptools[core] wheel
         python3 -m pip install -U pip mpi4py pytest pybind11-stubgen pre-commit
-        cmake -S . -B build -DAMReX_SPACEDIM="1;2;3" -DpyAMReX_IPO=OFF -DpyAMReX_amrex_branch="development"
+        cmake -S . -B build -DAMReX_SPACEDIM="1;2;3" -DpyAMReX_IPO=OFF
         cmake --build build -j 4 --target pip_install
 
         ccache -s
