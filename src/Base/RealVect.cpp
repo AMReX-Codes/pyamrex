@@ -93,9 +93,7 @@ void init_RealVect(py::module &m) {
           .def(py::self * py::self)
           .def("dotProduct", &RealVect::dotProduct, "Return dot product of this vector with another")
 #if (AMREX_SPACEDIM == 3)
-          .def("crossProduct",
-               py::overload_cast<const RealVect&>(&RealVect::crossProduct, py::const_),
-               "Return cross product of this vector with another")
+          .def("crossProduct", &RealVect::crossProduct<>, "Return cross product of this vector with another")
 #endif
           .def("__mul__",
                py::overload_cast<Real>(&RealVect::operator*, py::const_))
