@@ -16,7 +16,7 @@
 #if (AMREX_SPACEDIM == 3)
 namespace {
     using pyamrex_realvect_crossproduct_f = amrex::RealVect (amrex::RealVect::*)(const amrex::RealVect&) const noexcept;
-    pyamrex_realvect_crossproduct_f pyamrex_realvect_crossproduct = &amrex::RealVect::template crossProduct<3>;
+    pyamrex_realvect_crossproduct_f pyamrex_realvect_crossproduct = &amrex::RealVect::crossProduct;
 }
 #endif
 
