@@ -185,7 +185,8 @@ void make_ParticleContainer_and_Iterators (py::module &m, std::string allocstr)
                       const Vector<DistributionMapping>&,
                       const Vector<BoxArray>&,
                       const Vector<IntVect>&>())
-
+    ;
+    py_pc
         .def("make_alike", &ParticleContainerType::template make_alike<>)
 
         .def_property_readonly_static("is_soa_particle", [](const py::object&){return ParticleType::is_soa_particle;})
