@@ -185,6 +185,9 @@ void make_ParticleContainer_and_Iterators (py::module &m, std::string allocstr)
                       const Vector<DistributionMapping>&,
                       const Vector<BoxArray>&,
                       const Vector<IntVect>&>())
+    ;
+    py_pc
+        .def("make_alike", &ParticleContainerType::template make_alike<Allocator>)
 
         .def_property_readonly_static("is_soa_particle", [](const py::object&){return ParticleType::is_soa_particle;})
         .def_property_readonly_static("num_struct_real", [](const py::object&){return ParticleContainerType::NStructReal; })
@@ -341,6 +344,8 @@ void make_ParticleContainer_and_Iterators (py::module &m, std::string allocstr)
         // template <class PCType,
         //           std::enable_if_t<IsParticleContainer<PCType>::value, int> foo = 0>
         // void addParticles (const PCType& other, bool local=false);
+        .def("add_particles", py::overload_cast<ParticleContainerType const &, bool>(&ParticleContainerType::template addParticles<ParticleContainerType, true>),
+            py::arg("other"), py::arg("local")=false)
         // template <class F, class PCType,
         //           std::enable_if_t<IsParticleContainer<PCType>::value, int> foo = 0,
         //           std::enable_if_t<! std::is_integral<F>::value, int> bar = 0>
