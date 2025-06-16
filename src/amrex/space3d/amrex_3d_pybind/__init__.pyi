@@ -10510,6 +10510,9 @@ class ParticleContainer_16_4_0_0_arena:
         """
         add a new runtime component with type Int
         """
+    def add_particles(
+        self, other: ParticleContainer_16_4_0_0_arena, local: bool = False
+    ) -> None: ...
     def add_particles_at_level(
         self, particles: ParticleTile_16_4_0_0_arena, level: int, ngrow: int = 0
     ) -> None: ...
@@ -10558,6 +10561,7 @@ class ParticleContainer_16_4_0_0_arena:
     def init_random_per_box(
         self, arg0: int, arg1: int, arg2: ParticleInitType_16_4_0_0
     ) -> None: ...
+    def make_alike(self) -> ParticleContainer_16_4_0_0_arena: ...
     def num_local_tiles_at_level(self, arg0: int) -> int: ...
     def number_of_particles_at_level(
         self, level: int, only_valid: bool = True, only_local: bool = False
@@ -10714,6 +10718,9 @@ class ParticleContainer_16_4_0_0_default:
         """
         add a new runtime component with type Int
         """
+    def add_particles(
+        self, other: ParticleContainer_16_4_0_0_default, local: bool = False
+    ) -> None: ...
     def add_particles_at_level(
         self, particles: ParticleTile_16_4_0_0_default, level: int, ngrow: int = 0
     ) -> None: ...
@@ -10762,6 +10769,7 @@ class ParticleContainer_16_4_0_0_default:
     def init_random_per_box(
         self, arg0: int, arg1: int, arg2: ParticleInitType_16_4_0_0
     ) -> None: ...
+    def make_alike(self) -> ParticleContainer_16_4_0_0_default: ...
     def num_local_tiles_at_level(self, arg0: int) -> int: ...
     def number_of_particles_at_level(
         self, level: int, only_valid: bool = True, only_local: bool = False
@@ -10918,6 +10926,9 @@ class ParticleContainer_16_4_0_0_pinned:
         """
         add a new runtime component with type Int
         """
+    def add_particles(
+        self, other: ParticleContainer_16_4_0_0_pinned, local: bool = False
+    ) -> None: ...
     def add_particles_at_level(
         self, particles: ParticleTile_16_4_0_0_pinned, level: int, ngrow: int = 0
     ) -> None: ...
@@ -10966,6 +10977,7 @@ class ParticleContainer_16_4_0_0_pinned:
     def init_random_per_box(
         self, arg0: int, arg1: int, arg2: ParticleInitType_16_4_0_0
     ) -> None: ...
+    def make_alike(self) -> ParticleContainer_16_4_0_0_pinned: ...
     def num_local_tiles_at_level(self, arg0: int) -> int: ...
     def number_of_particles_at_level(
         self, level: int, only_valid: bool = True, only_local: bool = False
@@ -11122,6 +11134,9 @@ class ParticleContainer_2_1_3_1_arena:
         """
         add a new runtime component with type Int
         """
+    def add_particles(
+        self, other: ParticleContainer_2_1_3_1_arena, local: bool = False
+    ) -> None: ...
     def add_particles_at_level(
         self, particles: ParticleTile_2_1_3_1_arena, level: int, ngrow: int = 0
     ) -> None: ...
@@ -11170,6 +11185,7 @@ class ParticleContainer_2_1_3_1_arena:
     def init_random_per_box(
         self, arg0: int, arg1: int, arg2: ParticleInitType_2_1_3_1
     ) -> None: ...
+    def make_alike(self) -> ParticleContainer_2_1_3_1_arena: ...
     def num_local_tiles_at_level(self, arg0: int) -> int: ...
     def number_of_particles_at_level(
         self, level: int, only_valid: bool = True, only_local: bool = False
@@ -11326,6 +11342,9 @@ class ParticleContainer_2_1_3_1_default:
         """
         add a new runtime component with type Int
         """
+    def add_particles(
+        self, other: ParticleContainer_2_1_3_1_default, local: bool = False
+    ) -> None: ...
     def add_particles_at_level(
         self, particles: ParticleTile_2_1_3_1_default, level: int, ngrow: int = 0
     ) -> None: ...
@@ -11374,6 +11393,7 @@ class ParticleContainer_2_1_3_1_default:
     def init_random_per_box(
         self, arg0: int, arg1: int, arg2: ParticleInitType_2_1_3_1
     ) -> None: ...
+    def make_alike(self) -> ParticleContainer_2_1_3_1_default: ...
     def num_local_tiles_at_level(self, arg0: int) -> int: ...
     def number_of_particles_at_level(
         self, level: int, only_valid: bool = True, only_local: bool = False
@@ -11530,6 +11550,9 @@ class ParticleContainer_2_1_3_1_pinned:
         """
         add a new runtime component with type Int
         """
+    def add_particles(
+        self, other: ParticleContainer_2_1_3_1_pinned, local: bool = False
+    ) -> None: ...
     def add_particles_at_level(
         self, particles: ParticleTile_2_1_3_1_pinned, level: int, ngrow: int = 0
     ) -> None: ...
@@ -11578,6 +11601,7 @@ class ParticleContainer_2_1_3_1_pinned:
     def init_random_per_box(
         self, arg0: int, arg1: int, arg2: ParticleInitType_2_1_3_1
     ) -> None: ...
+    def make_alike(self) -> ParticleContainer_2_1_3_1_pinned: ...
     def num_local_tiles_at_level(self, arg0: int) -> int: ...
     def number_of_particles_at_level(
         self, level: int, only_valid: bool = True, only_local: bool = False
@@ -11734,6 +11758,9 @@ class ParticleContainer_pureSoA_3_0_arena:
         """
         add a new runtime component with type Int
         """
+    def add_particles(
+        self, other: ParticleContainer_pureSoA_3_0_arena, local: bool = False
+    ) -> None: ...
     def add_particles_at_level(
         self, particles: ParticleTile_pureSoA_3_0_arena, level: int, ngrow: int = 0
     ) -> None: ...
@@ -11776,6 +11803,7 @@ class ParticleContainer_pureSoA_3_0_arena:
         arg3: bool,
         arg4: RealBox,
     ) -> None: ...
+    def make_alike(self) -> ParticleContainer_pureSoA_3_0_arena: ...
     def num_local_tiles_at_level(self, arg0: int) -> int: ...
     def number_of_particles_at_level(
         self, level: int, only_valid: bool = True, only_local: bool = False
@@ -11932,6 +11960,9 @@ class ParticleContainer_pureSoA_3_0_default:
         """
         add a new runtime component with type Int
         """
+    def add_particles(
+        self, other: ParticleContainer_pureSoA_3_0_default, local: bool = False
+    ) -> None: ...
     def add_particles_at_level(
         self, particles: ParticleTile_pureSoA_3_0_default, level: int, ngrow: int = 0
     ) -> None: ...
@@ -11974,6 +12005,7 @@ class ParticleContainer_pureSoA_3_0_default:
         arg3: bool,
         arg4: RealBox,
     ) -> None: ...
+    def make_alike(self) -> ParticleContainer_pureSoA_3_0_default: ...
     def num_local_tiles_at_level(self, arg0: int) -> int: ...
     def number_of_particles_at_level(
         self, level: int, only_valid: bool = True, only_local: bool = False
@@ -12130,6 +12162,9 @@ class ParticleContainer_pureSoA_3_0_pinned:
         """
         add a new runtime component with type Int
         """
+    def add_particles(
+        self, other: ParticleContainer_pureSoA_3_0_pinned, local: bool = False
+    ) -> None: ...
     def add_particles_at_level(
         self, particles: ParticleTile_pureSoA_3_0_pinned, level: int, ngrow: int = 0
     ) -> None: ...
@@ -12172,6 +12207,7 @@ class ParticleContainer_pureSoA_3_0_pinned:
         arg3: bool,
         arg4: RealBox,
     ) -> None: ...
+    def make_alike(self) -> ParticleContainer_pureSoA_3_0_pinned: ...
     def num_local_tiles_at_level(self, arg0: int) -> int: ...
     def number_of_particles_at_level(
         self, level: int, only_valid: bool = True, only_local: bool = False
@@ -12328,6 +12364,9 @@ class ParticleContainer_pureSoA_7_0_arena:
         """
         add a new runtime component with type Int
         """
+    def add_particles(
+        self, other: ParticleContainer_pureSoA_7_0_arena, local: bool = False
+    ) -> None: ...
     def add_particles_at_level(
         self, particles: ParticleTile_pureSoA_7_0_arena, level: int, ngrow: int = 0
     ) -> None: ...
@@ -12370,6 +12409,7 @@ class ParticleContainer_pureSoA_7_0_arena:
         arg3: bool,
         arg4: RealBox,
     ) -> None: ...
+    def make_alike(self) -> ParticleContainer_pureSoA_7_0_arena: ...
     def num_local_tiles_at_level(self, arg0: int) -> int: ...
     def number_of_particles_at_level(
         self, level: int, only_valid: bool = True, only_local: bool = False
@@ -12526,6 +12566,9 @@ class ParticleContainer_pureSoA_7_0_default:
         """
         add a new runtime component with type Int
         """
+    def add_particles(
+        self, other: ParticleContainer_pureSoA_7_0_default, local: bool = False
+    ) -> None: ...
     def add_particles_at_level(
         self, particles: ParticleTile_pureSoA_7_0_default, level: int, ngrow: int = 0
     ) -> None: ...
@@ -12568,6 +12611,7 @@ class ParticleContainer_pureSoA_7_0_default:
         arg3: bool,
         arg4: RealBox,
     ) -> None: ...
+    def make_alike(self) -> ParticleContainer_pureSoA_7_0_default: ...
     def num_local_tiles_at_level(self, arg0: int) -> int: ...
     def number_of_particles_at_level(
         self, level: int, only_valid: bool = True, only_local: bool = False
@@ -12724,6 +12768,9 @@ class ParticleContainer_pureSoA_7_0_pinned:
         """
         add a new runtime component with type Int
         """
+    def add_particles(
+        self, other: ParticleContainer_pureSoA_7_0_pinned, local: bool = False
+    ) -> None: ...
     def add_particles_at_level(
         self, particles: ParticleTile_pureSoA_7_0_pinned, level: int, ngrow: int = 0
     ) -> None: ...
@@ -12766,6 +12813,7 @@ class ParticleContainer_pureSoA_7_0_pinned:
         arg3: bool,
         arg4: RealBox,
     ) -> None: ...
+    def make_alike(self) -> ParticleContainer_pureSoA_7_0_pinned: ...
     def num_local_tiles_at_level(self, arg0: int) -> int: ...
     def number_of_particles_at_level(
         self, level: int, only_valid: bool = True, only_local: bool = False
@@ -12922,6 +12970,9 @@ class ParticleContainer_pureSoA_8_0_arena:
         """
         add a new runtime component with type Int
         """
+    def add_particles(
+        self, other: ParticleContainer_pureSoA_8_0_arena, local: bool = False
+    ) -> None: ...
     def add_particles_at_level(
         self, particles: ParticleTile_pureSoA_8_0_arena, level: int, ngrow: int = 0
     ) -> None: ...
@@ -12964,6 +13015,7 @@ class ParticleContainer_pureSoA_8_0_arena:
         arg3: bool,
         arg4: RealBox,
     ) -> None: ...
+    def make_alike(self) -> ParticleContainer_pureSoA_8_0_arena: ...
     def num_local_tiles_at_level(self, arg0: int) -> int: ...
     def number_of_particles_at_level(
         self, level: int, only_valid: bool = True, only_local: bool = False
@@ -13120,6 +13172,9 @@ class ParticleContainer_pureSoA_8_0_default:
         """
         add a new runtime component with type Int
         """
+    def add_particles(
+        self, other: ParticleContainer_pureSoA_8_0_default, local: bool = False
+    ) -> None: ...
     def add_particles_at_level(
         self, particles: ParticleTile_pureSoA_8_0_default, level: int, ngrow: int = 0
     ) -> None: ...
@@ -13162,6 +13217,7 @@ class ParticleContainer_pureSoA_8_0_default:
         arg3: bool,
         arg4: RealBox,
     ) -> None: ...
+    def make_alike(self) -> ParticleContainer_pureSoA_8_0_default: ...
     def num_local_tiles_at_level(self, arg0: int) -> int: ...
     def number_of_particles_at_level(
         self, level: int, only_valid: bool = True, only_local: bool = False
@@ -13318,6 +13374,9 @@ class ParticleContainer_pureSoA_8_0_pinned:
         """
         add a new runtime component with type Int
         """
+    def add_particles(
+        self, other: ParticleContainer_pureSoA_8_0_pinned, local: bool = False
+    ) -> None: ...
     def add_particles_at_level(
         self, particles: ParticleTile_pureSoA_8_0_pinned, level: int, ngrow: int = 0
     ) -> None: ...
@@ -13360,6 +13419,7 @@ class ParticleContainer_pureSoA_8_0_pinned:
         arg3: bool,
         arg4: RealBox,
     ) -> None: ...
+    def make_alike(self) -> ParticleContainer_pureSoA_8_0_pinned: ...
     def num_local_tiles_at_level(self, arg0: int) -> int: ...
     def number_of_particles_at_level(
         self, level: int, only_valid: bool = True, only_local: bool = False
