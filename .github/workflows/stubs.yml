@@ -36,7 +36,7 @@ jobs:
       if: github.event_name == 'push' && github.repository == 'AMReX-Codes/pyamrex' && github.ref == 'refs/heads/development'
       run: git pull
 
-    - uses: actions/setup-python@v4
+    - uses: actions/setup-python@v5
       name: Install Python
       with:
         python-version: '3.9'

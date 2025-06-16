@@ -12,7 +12,7 @@ jobs:
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v4
-    - uses: actions/setup-python@v4
+    - uses: actions/setup-python@v5
       with:
         python-version: '3.x'
     - name: Build & Install
@@ -40,10 +40,9 @@ jobs:
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v4
-    - uses: actions/setup-python@v4
+    - uses: actions/setup-python@v5
       with:
         python-version: '3.x'
-    - uses: seanmiddleditch/gha-setup-ninja@master
     - name: Build
       run: |
         python3 -m pip install -U pip setuptools[core] wheel pytest
