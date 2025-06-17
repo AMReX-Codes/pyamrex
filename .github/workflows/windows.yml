@@ -53,6 +53,7 @@ jobs:
               -T "ClangCl"                `
               -DCMAKE_VERBOSE_MAKEFILE=ON `
               -DBUILD_SHARED_LIBS=ON      `
+              -DAMReX_OMP=ON              `
               -DAMReX_MPI=OFF             `
               -DAMReX_SPACEDIM="1;2;3"
         if(!$?) { Exit $LASTEXITCODE }
