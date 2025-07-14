@@ -105,7 +105,7 @@ void init_MPMD(py::module &m) {
               // only checks same layout, e.g. an `int` in `PyObject` could
               // pass this
               if (!py::isinstance<py::class_<pyAMReX_PyMPIIntracommObject> >(
-                      app_comm_py.get_type()))
+                      py::type::of(app_comm_py))
                   // TODO add mpi4py version from above import check to error
                   // message
                   throw std::runtime_error(
