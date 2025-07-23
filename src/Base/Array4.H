@@ -18,6 +18,15 @@
 #include <sstream>
 #include <type_traits>
 #include <vector>
+#include "dlpack.h"
+
+// GPU backend headers for device detection
+#ifdef AMREX_USE_CUDA
+#include <cuda_runtime.h>
+#endif
+#ifdef AMREX_USE_HIP
+#include <hip/hip_runtime.h>
+#endif
 
 
 namespace
@@ -233,13 +242,109 @@ namespace pyAMReX
             })
 
 
-            // TODO: __dlpack__ __dlpack_device__
             // DLPack protocol (CPU, NVIDIA GPU, AMD GPU, Intel GPU, etc.)
             // https://dmlc.github.io/dlpack/latest/
-            // https://data-apis.org/array-api/latest/design_topics/data_interchange.html
-            // https://github.com/data-apis/consortium-feedback/issues/1
             // https://github.com/dmlc/dlpack/blob/master/include/dlpack/dlpack.h
             // https://docs.cupy.dev/en/stable/user_guide/interoperability.html#dlpack-data-exchange-protocol
+            .def("__dlpack__", [](Array4<T> const &a4, py::handle stream = py::none()) {
+                // Allocate shape/strides arrays
+                constexpr int ndim = 4;
+                auto const len = length(a4);
+                auto *shape = new int64_t[ndim]{a4.nComp(), len.z, len.y, len.x};
+                auto *strides = new int64_t[ndim]{a4.nstride, a4.kstride, a4.jstride, 1};
+                // DLPack dtype
+                DLDataType dtype{};
+                if constexpr (std::is_same_v<T, float>) { dtype.code = kDLFloat; dtype.bits = 32; dtype.lanes = 1; }
+                else if constexpr (std::is_same_v<T, double>) { dtype.code = kDLFloat; dtype.bits = 64; dtype.lanes = 1; }
+                else if constexpr (std::is_same_v<T, int32_t>) { dtype.code = kDLInt; dtype.bits = 32; dtype.lanes = 1; }
+                else if constexpr (std::is_same_v<T, int64_t>) { dtype.code = kDLInt; dtype.bits = 64; dtype.lanes = 1; }
+                else if constexpr (std::is_same_v<T, uint32_t>) { dtype.code = kDLUInt; dtype.bits = 32; dtype.lanes = 1; }
+                else if constexpr (std::is_same_v<T, uint64_t>) { dtype.code = kDLUInt; dtype.bits = 64; dtype.lanes = 1; }
+                else { throw std::runtime_error("Unsupported dtype for DLPack"); }
+
+                // Device detection based on AMReX GPU backend
+                DLDevice device{ kDLCPU, 0 };
+#ifdef AMREX_USE_CUDA
+                // Check if data is on GPU by checking if pointer is in CUDA memory
+                cudaPointerAttributes attr;
+                cudaError_t err = cudaPointerGetAttributes(&attr, a4.dataPtr());
+                if (err == cudaSuccess && attr.memoryType == cudaMemoryTypeDevice) {
+                    device.device_type = kDLCUDA;
+                    device.device_id = attr.device;
+                }
+#elif defined(AMREX_USE_HIP)
+                // Check if data is on GPU by checking if pointer is in HIP memory
+                hipPointerAttribute_t attr;
+                hipError_t err = hipPointerGetAttributes(&attr, a4.dataPtr());
+                if (err == hipSuccess && attr.memoryType == hipMemoryTypeDevice) {
+                    device.device_type = kDLROCM;
+                    device.device_id = attr.device;
+                }
+#elif defined(AMREX_USE_DPCPP)
+                // For SYCL, we need to check if the data is on device
+                // This is more complex as SYCL doesn't have a simple pointer check
+                // For now, assume CPU - SYCL support would need more sophisticated detection
+                // device.device_type = kDLExtDev;  // SYCL would use extended device type
+                // device.device_id = 0;
+#endif
+
+                // Construct DLTensor
+                auto *dl_tensor = new DLManagedTensor;
+                dl_tensor->dl_tensor.data = const_cast<void*>(static_cast<const void*>(a4.dataPtr()));
+                dl_tensor->dl_tensor.device = device;
+                dl_tensor->dl_tensor.ndim = ndim;
+                dl_tensor->dl_tensor.dtype = dtype;
+                dl_tensor->dl_tensor.shape = shape;
+                dl_tensor->dl_tensor.strides = strides;
+                dl_tensor->dl_tensor.byte_offset = 0;
+                dl_tensor->manager_ctx = nullptr;
+                dl_tensor->deleter = [](DLManagedTensor *self) {
+                    delete[] self->dl_tensor.shape;
+                    delete[] self->dl_tensor.strides;
+                    delete self;
+                };
+                // Return as Python capsule
+                return py::capsule(dl_tensor, "dltensor", [](void* ptr) {
+                    auto* tensor = static_cast<DLManagedTensor*>(ptr);
+                    tensor->deleter(tensor);
+                });
+            }, py::arg("stream") = py::none(), R"doc(
+                DLPack protocol for zero-copy tensor exchange.
+                See https://dmlc.github.io/dlpack/latest/ for details.
+            )doc")
+            .def("__dlpack_device__", [](Array4<T> const &a4) {
+                // Device detection based on AMReX GPU backend
+                int device_type = kDLCPU;
+                int device_id = 0;
+
+#ifdef AMREX_USE_CUDA
+                // Check if data is on GPU by checking if pointer is in CUDA memory
+                cudaPointerAttributes attr;
+                cudaError_t err = cudaPointerGetAttributes(&attr, a4.dataPtr());
+                if (err == cudaSuccess && attr.memoryType == cudaMemoryTypeDevice) {
+                    device_type = kDLCUDA;
+                    device_id = attr.device;
+                }
+#elif defined(AMREX_USE_HIP)
+                // Check if data is on GPU by checking if pointer is in HIP memory
+                hipPointerAttribute_t attr;
+                hipError_t err = hipPointerGetAttributes(&attr, a4.dataPtr());
+                if (err == hipSuccess && attr.memoryType == hipMemoryTypeDevice) {
+                    device_type = kDLROCM;
+                    device_id = attr.device;
+                }
+#elif defined(AMREX_USE_DPCPP)
+                // For SYCL, we need to check if the data is on device
+                // This is more complex as SYCL doesn't have a simple pointer check
+                // For now, assume CPU - SYCL support would need more sophisticated detection
+                // device_type = kDLExtDev;  // SYCL would use extended device type
+                // device_id = 0;
+#endif
+
+                return std::make_tuple(device_type, device_id);
+            }, R"doc(
+                DLPack device info (device_type, device_id).
+            )doc")
 
             .def("to_host", [](Array4<T> const & a4) {
                 // py::tuple to std::vector
