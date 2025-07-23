@@ -40,9 +40,9 @@ extern "C" {
  */
 typedef struct {
   /*! \brief DLPack major version. */
-  uint32_t major;
+  uint32_t major = 1;
   /*! \brief DLPack minor version. */
-  uint32_t minor;
+  uint32_t minor = 1;
 } DLPackVersion;
 
 /*!
@@ -238,37 +238,7 @@ typedef struct {
   uint64_t byte_offset;
 } DLTensor;
 
-/*!
- * \brief C Tensor object, manage memory of DLTensor. This data structure is
- *  intended to facilitate the borrowing of DLTensor by another framework. It is
- *  not meant to transfer the tensor. When the borrowing framework doesn't need
- *  the tensor, it should call the deleter to notify the host that the resource
- *  is no longer needed.
- *
- * \note This data structure is used as Legacy DLManagedTensor
- *       in DLPack exchange and is deprecated after DLPack v0.8
- *       Use DLManagedTensorVersioned instead.
- *       This data structure may get renamed or deleted in future versions.
- *
- * \sa DLManagedTensorVersioned
- */
-typedef struct DLManagedTensor {
-  /*! \brief DLTensor which is being memory managed */
-  DLTensor dl_tensor;
-  /*! \brief the context of the original host framework of DLManagedTensor in
-   *   which DLManagedTensor is used in the framework. It can also be NULL.
-   */
-  void * manager_ctx;
-  /*!
-   * \brief Destructor - this should be called
-   * to destruct the manager_ctx  which backs the DLManagedTensor. It can be
-   * NULL if there is no way for the caller to provide a reasonable destructor.
-   * The destructor deletes the argument self as well.
-   */
-  void (*deleter)(struct DLManagedTensor * self);
-} DLManagedTensor;
-
-// bit masks used in in the DLManagedTensorVersioned
+// bit masks used in the DLManagedTensorVersioned
 
 /*! \brief bit mask to indicate that the tensor is read only. */
 #define DLPACK_FLAG_BITMASK_READ_ONLY (1UL << 0UL)
@@ -344,34 +314,35 @@ namespace pyAMReX::dlpack
     AMREX_INLINE
     DLDataType get_dlpack_dtype ()
     {
+        using V = std::decay_t<T>;
         DLDataType dtype{};
 
-        if constexpr (std::is_same_v<T, float>) {
+        if constexpr (std::is_same_v<V, float>) {
             dtype.code = kDLFloat;
             dtype.bits = 32;
             dtype.lanes = 1;
         }
-        else if constexpr (std::is_same_v<T, double>) {
+        else if constexpr (std::is_same_v<V, double>) {
             dtype.code = kDLFloat;
             dtype.bits = 64;
             dtype.lanes = 1;
         }
-        else if constexpr (std::is_same_v<T, int32_t>) {
+        else if constexpr (std::is_same_v<V, int32_t>) {
             dtype.code = kDLInt;
             dtype.bits = 32;
             dtype.lanes = 1;
         }
-        else if constexpr (std::is_same_v<T, int64_t>) {
+        else if constexpr (std::is_same_v<V, int64_t>) {
             dtype.code = kDLInt;
             dtype.bits = 64;
             dtype.lanes = 1;
         }
-        else if constexpr (std::is_same_v<T, uint32_t>) {
+        else if constexpr (std::is_same_v<V, uint32_t>) {
             dtype.code = kDLUInt;
             dtype.bits = 32;
             dtype.lanes = 1;
         }
-        else if constexpr (std::is_same_v<T, uint64_t>) {
+        else if constexpr (std::is_same_v<V, uint64_t>) {
             dtype.code = kDLUInt;
             dtype.bits = 64;
             dtype.lanes = 1;

@@ -236,39 +236,60 @@ namespace pyAMReX
             */
 
 
-            // DLPack protocol (CPU, NVIDIA GPU, AMD GPU, Intel GPU, etc.)
+            // DLPack v1.1 protocol (CPU, NVIDIA GPU, AMD GPU, Intel GPU, etc.)
             // https://dmlc.github.io/dlpack/latest/
             // https://github.com/dmlc/dlpack/blob/master/include/dlpack/dlpack.h
             // https://docs.cupy.dev/en/stable/user_guide/interoperability.html#dlpack-data-exchange-protocol
-            .def("__dlpack__", [](Array4<T> const &a4, [[maybe_unused]] py::handle stream = py::none()) {
+            .def("__dlpack__", [](
+                    Array4<T> const &a4
+                    /* TODO:
+                    [[maybe_unused]] py::handle stream,
+                    [[maybe_unused]] std::tuple<int, int> max_version,
+                    [[maybe_unused]] std::tuple<DLDeviceType, int32_t> dl_device,
+                    [[maybe_unused]] bool copy
+                    */
+            )
+            {
                 // Allocate shape/strides arrays
                 constexpr int ndim = 4;
                 auto const len = length(a4);
-                auto *shape = new int64_t[ndim]{a4.nComp(), len.z, len.y, len.x};
-                auto *strides = new int64_t[ndim]{a4.nstride, a4.kstride, a4.jstride, 1};
 
-                // Construct DLTensor
-                auto *dl_tensor = new DLManagedTensor;
-                dl_tensor->dl_tensor.data = const_cast<void*>(static_cast<const void*>(a4.dataPtr()));
-                dl_tensor->dl_tensor.device = dlpack::detect_device_from_pointer(a4.dataPtr());
-                dl_tensor->dl_tensor.ndim = ndim;
-                dl_tensor->dl_tensor.dtype = dlpack::get_dlpack_dtype<T>();
-                dl_tensor->dl_tensor.shape = shape;
-                dl_tensor->dl_tensor.strides = strides;
-                dl_tensor->dl_tensor.byte_offset = 0;
-                dl_tensor->manager_ctx = nullptr;
-                dl_tensor->deleter = [](DLManagedTensor *self) {
+                // Construct DLManagedTensorVersioned (DLPack 1.1 standard)
+                auto *dl_mgt_tensor = new DLManagedTensorVersioned;
+                dl_mgt_tensor->version = DLPackVersion{};
+                dl_mgt_tensor->flags = 0; // No special flags
+                dl_mgt_tensor->dl_tensor.data = const_cast<void*>(static_cast<const void*>(a4.dataPtr()));
+                dl_mgt_tensor->dl_tensor.device = dlpack::detect_device_from_pointer(a4.dataPtr());
+                dl_mgt_tensor->dl_tensor.ndim = ndim;
+                dl_mgt_tensor->dl_tensor.dtype = dlpack::get_dlpack_dtype<T>();
+                dl_mgt_tensor->dl_tensor.shape = new int64_t[ndim]{a4.nComp(), len.z, len.y, len.x};
+                dl_mgt_tensor->dl_tensor.strides = new int64_t[ndim]{a4.nstride, a4.kstride, a4.jstride, 1};
+                dl_mgt_tensor->dl_tensor.byte_offset = 0;
+                dl_mgt_tensor->manager_ctx = nullptr;  // TODO: we can increase/decrease the Python ref counter of the producer here
+                dl_mgt_tensor->deleter = [](DLManagedTensorVersioned *self) {
                     delete[] self->dl_tensor.shape;
                     delete[] self->dl_tensor.strides;
                     delete self;
                 };
                 // Return as Python capsule
-                return py::capsule(dl_tensor, "dltensor", [](void* ptr) {
-                    auto* tensor = static_cast<DLManagedTensor*>(ptr);
-                    tensor->deleter(tensor);
-                });
+                return py::capsule(
+                    dl_mgt_tensor,
+                    "dltensor_versioned",
+                    /*[](void* ptr) {
+                        auto* tensor = static_cast<DLManagedTensorVersioned*>(ptr);
+                        tensor->deleter(tensor);
+                    }*/
+                    [](PyObject *capsule)
+                    {
+                        auto *p = static_cast<DLManagedTensorVersioned*>(
+                            PyCapsule_GetPointer(capsule, "dltensor_versioned"));
+                        if (p && p->deleter)
+                            p->deleter(p);
+                    }
+                );
             },
-                py::arg("stream") = py::none(),
+                //py::arg("stream") = py::none(),
+                // ... other args & their defaults
                 R"doc(
                 DLPack protocol for zero-copy tensor exchange.
                 See https://dmlc.github.io/dlpack/latest/ for details.
@@ -276,10 +297,12 @@ namespace pyAMReX
             )
             .def("__dlpack_device__", [](Array4<T> const &a4) {
                 DLDevice device = dlpack::detect_device_from_pointer(a4.dataPtr());
-                return std::make_tuple(device.device_type, device.device_id);
+                return std::make_tuple(static_cast<int32_t>(device.device_type), device.device_id);
             }, R"doc(
                 DLPack device info (device_type, device_id).
             )doc")
+
+
 
             .def("to_host", [](Array4<T> const & a4) {
                 // py::tuple to std::vector

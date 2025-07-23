@@ -31,7 +31,9 @@ def test_array4():
     )
     print(f"\nx: {x.__array_interface__} {x.dtype}")
     arr = amr.Array4_double(x)
-    print(f"arr: {arr.__array_interface__}")
+    print(f"arr: DLPack device info: {arr.__dlpack_device__()}")
+    # print(f"arr: DLPack: {arr.__dlpack__()}")
+    print(f"x.shape: {x.shape}")
     print(arr)
     assert arr.nComp == 1
 
@@ -44,16 +46,16 @@ def test_array4():
     assert arr[0, 0, 0] == 1
     assert arr[3, 2, 1] == 1
 
-    # copy to numpy
-    c_arr2np = np.array(arr, copy=True)  # segfaults on Windows
+    # copy to numpy using DLPack
+    c_arr2np = np.from_dlpack(arr)
     assert c_arr2np.ndim == 4
     assert c_arr2np.dtype == np.dtype("double")
     print(f"c_arr2np: {c_arr2np.__array_interface__}")
     np.testing.assert_array_equal(x, c_arr2np[0, :, :, :])
     assert c_arr2np[0, 1, 1, 1] == 42
 
-    # view to numpy
-    v_arr2np = np.array(arr, copy=False)
+    # view to numpy using DLPack
+    v_arr2np = np.from_dlpack(arr)
     assert c_arr2np.ndim == 4
     assert v_arr2np.dtype == np.dtype("double")
     np.testing.assert_array_equal(x, v_arr2np[0, :, :, :])
@@ -65,7 +67,7 @@ def test_array4():
 
     # copy array4 (view)
     c_arr = amr.Array4_double(arr)
-    v_carr2np = np.array(c_arr, copy=False)
+    v_carr2np = np.from_dlpack(c_arr)
     x[1, 1, 1] = 44
     assert v_carr2np[0, 1, 1, 1] == 44
 
