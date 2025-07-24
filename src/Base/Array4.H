@@ -281,6 +281,9 @@ namespace pyAMReX
                     }*/
                     [](PyObject *capsule)
                     {
+                        if (PyCapsule_IsValid(capsule, "used_dltensor_versioned")) {
+                            return;  /* Do nothing if the capsule has been consumed. */
+                        }
                         auto *p = static_cast<DLManagedTensorVersioned*>(
                             PyCapsule_GetPointer(capsule, "dltensor_versioned"));
                         if (p && p->deleter)
@@ -301,7 +304,6 @@ namespace pyAMReX
             }, R"doc(
                 DLPack device info (device_type, device_id).
             )doc")
-
 
 
             .def("to_host", [](Array4<T> const & a4) {
