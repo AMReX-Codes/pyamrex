@@ -365,7 +365,7 @@ namespace pyAMReX::dlpack
         //       assume device-side if need be.
         cudaPointerAttributes attr;
         cudaError_t err = cudaPointerGetAttributes(&attr, ptr);
-        if (err == cudaSuccess && attr.memoryType == cudaMemoryTypeDevice) {
+        if (err == cudaSuccess && attr.type == cudaMemoryTypeDevice) {
             device.device_type = kDLCUDA;
             device.device_id = attr.device;
         }

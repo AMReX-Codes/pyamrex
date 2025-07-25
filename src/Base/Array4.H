@@ -241,8 +241,9 @@ namespace pyAMReX
             // https://github.com/dmlc/dlpack/blob/master/include/dlpack/dlpack.h
             // https://docs.cupy.dev/en/stable/user_guide/interoperability.html#dlpack-data-exchange-protocol
             .def("__dlpack__", [](
-                    Array4<T> const &a4
-                    /* TODO:
+                    Array4<T> const &a4,
+                    py::kwargs kwargs
+                    /* TODO: Handle keyword arguments
                     [[maybe_unused]] py::handle stream,
                     [[maybe_unused]] std::tuple<int, int> max_version,
                     [[maybe_unused]] std::tuple<DLDeviceType, int32_t> dl_device,
