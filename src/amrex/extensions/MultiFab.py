@@ -539,6 +539,7 @@ def __getitem__(self, index, with_internal_ghosts=False):
         overlaps valid cells.
     """
     import inspect
+
     amr = inspect.getmodule(self)
 
     index4 = _process_index(self, index)
@@ -556,6 +557,7 @@ def __getitem__(self, index, with_internal_ghosts=False):
             try:
                 if amr.Config.gpu_backend == "SYCL":
                     import dpnp
+
                     slice_arr = dpnp.asnumpy(slice_arr)
                 else:
                     # Copy data from host to device using cupy syntax
