@@ -242,13 +242,12 @@ namespace pyAMReX
             // https://docs.cupy.dev/en/stable/user_guide/interoperability.html#dlpack-data-exchange-protocol
             .def("__dlpack__", [](
                     Array4<T> const &a4,
-                    py::kwargs kwargs
-                    /* TODO: Handle keyword arguments
-                    [[maybe_unused]] py::handle stream,
-                    [[maybe_unused]] std::tuple<int, int> max_version,
-                    [[maybe_unused]] std::tuple<DLDeviceType, int32_t> dl_device,
-                    [[maybe_unused]] bool copy
-                    */
+                    /* TODO: Handle keyword arguments */
+                    [[maybe_unused]] std::optional<py::handle> stream = std::nullopt,
+                    [[maybe_unused]] std::optional<std::tuple<int, int>> max_version = std::nullopt,
+                    [[maybe_unused]] std::optional<std::tuple<DLDeviceType, int32_t>> dl_device = std::nullopt,
+                    [[maybe_unused]] std::optional<bool> copy = std::nullopt
+
             )
             {
                 // Allocate shape/strides arrays
@@ -292,8 +291,10 @@ namespace pyAMReX
                     }
                 );
             },
-                //py::arg("stream") = py::none(),
-                // ... other args & their defaults
+                py::arg("stream") = py::none(),
+                py::arg("max_version") = py::none(),
+                py::arg("dl_device") = py::none(),
+                py::arg("copy") = py::none(),
                 R"doc(
                 DLPack protocol for zero-copy tensor exchange.
                 See https://dmlc.github.io/dlpack/latest/ for details.
