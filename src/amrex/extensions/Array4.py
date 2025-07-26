@@ -1,7 +1,7 @@
 """
 This file is part of pyAMReX
 
-Copyright 2023 AMReX community
+Copyright 2023-2025 AMReX community
 Authors: Axel Huebl
 License: BSD-3-Clause-LBNL
 """
@@ -92,9 +92,52 @@ def array4_to_cupy(self, copy=False, order="F"):
         raise ValueError("The order argument must be F or C.")
 
 
+def array4_to_dpnp(self, copy=False, order="F"):
+    """
+    Provide a dpnp view into an Array4.
+
+    This includes ngrow guard cells of the box.
+
+    Note on the order of indices:
+    By default, this is as in AMReX in Fortran contiguous order, indexing as
+    x,y,z. This has performance implications for use in external libraries such
+    as dpnp.
+    The order="C" option will index as z,y,x and may perform better.
+    https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+    Parameters
+    ----------
+    self : amrex.Array4_*
+        An Array4 class in pyAMReX
+    copy : bool, optional
+        Copy the data if true, otherwise create a view (default).
+    order : string, optional
+        F order (default) or C. C is faster with external libraries.
+
+    Returns
+    -------
+    dpnp.array
+        A dpnp n-dimensional array.
+
+    Raises
+    ------
+    ImportError
+        Raises an exception if dpnp is not installed
+    """
+    import dpnp as dp
+
+    if order == "F":
+        return dp.from_dlpack(self, copy=copy).T
+    elif order == "C":
+        return dp.from_dlpack(self, copy=copy)
+    else:
+        raise ValueError("The order argument must be F or C.")
+
+
 def array4_to_xp(self, copy=False, order="F"):
     """
-    Provide a NumPy or CuPy view into an Array4, depending on amr.Config.have_gpu .
+    Provide a NumPy, CuPy or dpnp view into an Array4, depending on amr.Config.have_gpu
+    and amr.Config.gpu_backend .
 
     This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
     https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
@@ -120,14 +163,20 @@ def array4_to_xp(self, copy=False, order="F"):
     Returns
     -------
     xp.array
-        A NumPy or CuPy n-dimensional array.
+        A NumPy, CuPy or dpnp n-dimensional array.
     """
     import inspect
 
     amr = inspect.getmodule(self)
-    return (
-        self.to_cupy(copy, order) if amr.Config.have_gpu else self.to_numpy(copy, order)
-    )
+
+    if amr.Config.have_gpu:
+        if amr.Config.gpu_backend == 'SYCL':
+            return self.to_dpnp(copy, order)
+        else:  # if not SYCL use cupy
+            return self.to_cupy(copy, order)
+
+    # if no GPU, use NumPy
+    return self.to_numpy(copy, order)
 
 
 def register_Array4_extension(amr):
@@ -146,4 +195,5 @@ def register_Array4_extension(amr):
     ):
         Array4_type.to_numpy = array4_to_numpy
         Array4_type.to_cupy = array4_to_cupy
+        Array4_type.to_dpnp = array4_to_dpnp
         Array4_type.to_xp = array4_to_xp
