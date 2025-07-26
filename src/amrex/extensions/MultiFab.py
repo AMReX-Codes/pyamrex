@@ -175,18 +175,11 @@ def mf_to_xp(self, copy=False, order="F"):
         A list of NumPy, CuPy or dpnp n-dimensional arrays, for each local block
         in the MultiFab.
     """
-    import inspect
+    views = []
+    for mfi in self:
+        views.append(self.array(mfi).to_xp(copy, order))
 
-    amr = inspect.getmodule(self)
-
-    if amr.Config.have_gpu:
-        if amr.Config.gpu_backend == "SYCL":
-            return self.to_dpnp(copy, order)
-        else:  # if not SYCL use cupy
-            return self.to_cupy(copy, order)
-
-    # if no GPU, use NumPy
-    return self.to_numpy(copy, order)
+    return views
 
 
 def copy_multifab(amr, self):
