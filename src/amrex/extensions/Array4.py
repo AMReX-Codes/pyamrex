@@ -170,7 +170,7 @@ def array4_to_xp(self, copy=False, order="F"):
     amr = inspect.getmodule(self)
 
     if amr.Config.have_gpu:
-        if amr.Config.gpu_backend == 'SYCL':
+        if amr.Config.gpu_backend == "SYCL":
             return self.to_dpnp(copy, order)
         else:  # if not SYCL use cupy
             return self.to_cupy(copy, order)
