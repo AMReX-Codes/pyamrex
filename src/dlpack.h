@@ -197,7 +197,7 @@ typedef struct {
    * types. This pointer is always aligned to 256 bytes as in CUDA. The
    * `byte_offset` field should be used to point to the beginning of the data.
    *
-   * Note that as of Nov 2021, multiply libraries (CuPy, PyTorch, TensorFlow,
+   * Note that as of Nov 2021, multiple libraries (CuPy, PyTorch, TensorFlow,
    * TVM, perhaps others) do not adhere to this 256 byte aligment requirement
    * on CPU/CUDA/ROCm, and always use `byte_offset=0`.  This must be fixed
    * (after which this note will be updated); at the moment it is recommended
