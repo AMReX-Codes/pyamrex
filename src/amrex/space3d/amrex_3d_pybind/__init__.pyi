@@ -40,10 +40,12 @@ amrex
 
 from __future__ import annotations
 
+import collections.abc
+import enum
 import typing
 
 import numpy
-import pybind11_stubgen.typing_ext
+import numpy.typing
 
 from . import ParallelDescriptor
 
@@ -322,22 +324,37 @@ class AMReX:
 
 class AmrInfo:
     check_input: bool
-    grid_eff: float
     iterate_on_new_grids: bool
-    max_level: int
-    n_proper: int
     refine_grid_layout: bool
     refine_grid_layout_dims: IntVect3D
     use_fixed_coarse_grids: bool
-    use_fixed_upto_level: int
     use_new_chop: bool
-    verbose: int
     def __init__(self) -> None: ...
     def __repr__(self) -> str: ...
-    def blocking_factor(self, arg0: int) -> IntVect3D: ...
-    def max_grid_size(self, arg0: int) -> IntVect3D: ...
-    def n_error_buf(self, arg0: int) -> IntVect3D: ...
-    def ref_ratio(self, arg0: int) -> IntVect3D: ...
+    def blocking_factor(self, arg0: typing.SupportsInt) -> IntVect3D: ...
+    def max_grid_size(self, arg0: typing.SupportsInt) -> IntVect3D: ...
+    def n_error_buf(self, arg0: typing.SupportsInt) -> IntVect3D: ...
+    def ref_ratio(self, arg0: typing.SupportsInt) -> IntVect3D: ...
+    @property
+    def grid_eff(self) -> float: ...
+    @grid_eff.setter
+    def grid_eff(self, arg0: typing.SupportsFloat) -> None: ...
+    @property
+    def max_level(self) -> int: ...
+    @max_level.setter
+    def max_level(self, arg0: typing.SupportsInt) -> None: ...
+    @property
+    def n_proper(self) -> int: ...
+    @n_proper.setter
+    def n_proper(self, arg0: typing.SupportsInt) -> None: ...
+    @property
+    def use_fixed_upto_level(self) -> int: ...
+    @use_fixed_upto_level.setter
+    def use_fixed_upto_level(self, arg0: typing.SupportsInt) -> None: ...
+    @property
+    def verbose(self) -> int: ...
+    @verbose.setter
+    def verbose(self, arg0: typing.SupportsInt) -> None: ...
 
 class AmrMesh:
     @typing.overload
@@ -346,17 +363,19 @@ class AmrMesh:
     def __init__(
         self,
         rb: RealBox,
-        max_level_in: int,
+        max_level_in: typing.SupportsInt,
         n_cell_in: Vector_int,
-        coord: int,
+        coord: typing.SupportsInt,
         ref_ratios: Vector_IntVect,
-        is_per: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
+        is_per: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(3)"
+        ],
     ) -> None: ...
     def __repr__(self) -> str: ...
     @typing.overload
     def ref_ratio(self) -> Vector_IntVect: ...
     @typing.overload
-    def ref_ratio(self, arg0: int) -> IntVect3D: ...
+    def ref_ratio(self, arg0: typing.SupportsInt) -> IntVect3D: ...
     @property
     def finest_level(self) -> int: ...
     @property
@@ -373,7 +392,7 @@ class Arena:
     def print_usage(arg0: bool) -> None: ...
     @staticmethod
     def print_usage_to_files(filename: str, message: str) -> None: ...
-    def has_free_device_memory(self, sz: int) -> bool:
+    def has_free_device_memory(self, sz: typing.SupportsInt) -> bool:
         """
         Does the device have enough free memory for allocating this much memory? For CPU builds, this always return true.
         """
@@ -394,40 +413,57 @@ class Array4_cdouble:
     @typing.overload
     def __getitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(4)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(4)"
+        ],
     ) -> complex: ...
     @typing.overload
     def __getitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(3)"
+        ],
     ) -> complex: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
     def __init__(self, arg0: Array4_cdouble) -> None: ...
     @typing.overload
-    def __init__(self, arg0: Array4_cdouble, arg1: int) -> None: ...
+    def __init__(self, arg0: Array4_cdouble, arg1: typing.SupportsInt) -> None: ...
     @typing.overload
-    def __init__(self, arg0: Array4_cdouble, arg1: int, arg2: int) -> None: ...
+    def __init__(
+        self, arg0: Array4_cdouble, arg1: typing.SupportsInt, arg2: typing.SupportsInt
+    ) -> None: ...
     @typing.overload
-    def __init__(self, arg0: numpy.ndarray[numpy.complex128]) -> None: ...
+    def __init__(
+        self, arg0: typing.Annotated[numpy.typing.ArrayLike, numpy.complex128]
+    ) -> None: ...
     def __repr__(self) -> str: ...
     @typing.overload
     def __setitem__(self, arg0: IntVect3D, arg1: complex) -> None: ...
     @typing.overload
     def __setitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(4)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(4)"
+        ],
         arg1: complex,
     ) -> None: ...
     @typing.overload
     def __setitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(3)"
+        ],
         arg1: complex,
     ) -> None: ...
     @typing.overload
-    def contains(self, arg0: int, arg1: int, arg2: int) -> bool: ...
+    def contains(
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: typing.SupportsInt,
+    ) -> bool: ...
     @typing.overload
     def contains(self, arg0: IntVect3D) -> bool: ...
     @typing.overload
@@ -466,7 +502,7 @@ class Array4_cdouble:
             Raises an exception if cupy is not installed
 
         """
-    def to_host(self) -> numpy.ndarray[numpy.complex128]: ...
+    def to_host(self) -> numpy.typing.NDArray[numpy.complex128]: ...
     def to_numpy(self, copy=False, order="F"):
         """
 
@@ -545,26 +581,44 @@ class Array4_cdouble_const:
     @typing.overload
     def __getitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(4)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(4)"
+        ],
     ) -> complex: ...
     @typing.overload
     def __getitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(3)"
+        ],
     ) -> complex: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
     def __init__(self, arg0: Array4_cdouble_const) -> None: ...
     @typing.overload
-    def __init__(self, arg0: Array4_cdouble_const, arg1: int) -> None: ...
+    def __init__(
+        self, arg0: Array4_cdouble_const, arg1: typing.SupportsInt
+    ) -> None: ...
     @typing.overload
-    def __init__(self, arg0: Array4_cdouble_const, arg1: int, arg2: int) -> None: ...
+    def __init__(
+        self,
+        arg0: Array4_cdouble_const,
+        arg1: typing.SupportsInt,
+        arg2: typing.SupportsInt,
+    ) -> None: ...
     @typing.overload
-    def __init__(self, arg0: numpy.ndarray[complex]) -> None: ...
+    def __init__(
+        self, arg0: typing.Annotated[numpy.typing.ArrayLike, complex]
+    ) -> None: ...
     def __repr__(self) -> str: ...
     @typing.overload
-    def contains(self, arg0: int, arg1: int, arg2: int) -> bool: ...
+    def contains(
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: typing.SupportsInt,
+    ) -> bool: ...
     @typing.overload
     def contains(self, arg0: IntVect3D) -> bool: ...
     @typing.overload
@@ -603,7 +657,7 @@ class Array4_cdouble_const:
             Raises an exception if cupy is not installed
 
         """
-    def to_host(self) -> numpy.ndarray[numpy.complex128]: ...
+    def to_host(self) -> numpy.typing.NDArray[numpy.complex128]: ...
     def to_numpy(self, copy=False, order="F"):
         """
 
@@ -682,40 +736,57 @@ class Array4_cfloat:
     @typing.overload
     def __getitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(4)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(4)"
+        ],
     ) -> complex: ...
     @typing.overload
     def __getitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(3)"
+        ],
     ) -> complex: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
     def __init__(self, arg0: Array4_cfloat) -> None: ...
     @typing.overload
-    def __init__(self, arg0: Array4_cfloat, arg1: int) -> None: ...
+    def __init__(self, arg0: Array4_cfloat, arg1: typing.SupportsInt) -> None: ...
     @typing.overload
-    def __init__(self, arg0: Array4_cfloat, arg1: int, arg2: int) -> None: ...
+    def __init__(
+        self, arg0: Array4_cfloat, arg1: typing.SupportsInt, arg2: typing.SupportsInt
+    ) -> None: ...
     @typing.overload
-    def __init__(self, arg0: numpy.ndarray[numpy.complex64]) -> None: ...
+    def __init__(
+        self, arg0: typing.Annotated[numpy.typing.ArrayLike, numpy.complex64]
+    ) -> None: ...
     def __repr__(self) -> str: ...
     @typing.overload
     def __setitem__(self, arg0: IntVect3D, arg1: complex) -> None: ...
     @typing.overload
     def __setitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(4)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(4)"
+        ],
         arg1: complex,
     ) -> None: ...
     @typing.overload
     def __setitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(3)"
+        ],
         arg1: complex,
     ) -> None: ...
     @typing.overload
-    def contains(self, arg0: int, arg1: int, arg2: int) -> bool: ...
+    def contains(
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: typing.SupportsInt,
+    ) -> bool: ...
     @typing.overload
     def contains(self, arg0: IntVect3D) -> bool: ...
     @typing.overload
@@ -754,7 +825,7 @@ class Array4_cfloat:
             Raises an exception if cupy is not installed
 
         """
-    def to_host(self) -> numpy.ndarray[numpy.complex64]: ...
+    def to_host(self) -> numpy.typing.NDArray[numpy.complex64]: ...
     def to_numpy(self, copy=False, order="F"):
         """
 
@@ -833,26 +904,42 @@ class Array4_cfloat_const:
     @typing.overload
     def __getitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(4)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(4)"
+        ],
     ) -> complex: ...
     @typing.overload
     def __getitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(3)"
+        ],
     ) -> complex: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
     def __init__(self, arg0: Array4_cfloat_const) -> None: ...
     @typing.overload
-    def __init__(self, arg0: Array4_cfloat_const, arg1: int) -> None: ...
+    def __init__(self, arg0: Array4_cfloat_const, arg1: typing.SupportsInt) -> None: ...
     @typing.overload
-    def __init__(self, arg0: Array4_cfloat_const, arg1: int, arg2: int) -> None: ...
+    def __init__(
+        self,
+        arg0: Array4_cfloat_const,
+        arg1: typing.SupportsInt,
+        arg2: typing.SupportsInt,
+    ) -> None: ...
     @typing.overload
-    def __init__(self, arg0: numpy.ndarray[complex]) -> None: ...
+    def __init__(
+        self, arg0: typing.Annotated[numpy.typing.ArrayLike, complex]
+    ) -> None: ...
     def __repr__(self) -> str: ...
     @typing.overload
-    def contains(self, arg0: int, arg1: int, arg2: int) -> bool: ...
+    def contains(
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: typing.SupportsInt,
+    ) -> bool: ...
     @typing.overload
     def contains(self, arg0: IntVect3D) -> bool: ...
     @typing.overload
@@ -891,7 +978,7 @@ class Array4_cfloat_const:
             Raises an exception if cupy is not installed
 
         """
-    def to_host(self) -> numpy.ndarray[numpy.complex64]: ...
+    def to_host(self) -> numpy.typing.NDArray[numpy.complex64]: ...
     def to_numpy(self, copy=False, order="F"):
         """
 
@@ -970,40 +1057,57 @@ class Array4_double:
     @typing.overload
     def __getitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(4)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(4)"
+        ],
     ) -> float: ...
     @typing.overload
     def __getitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(3)"
+        ],
     ) -> float: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
     def __init__(self, arg0: Array4_double) -> None: ...
     @typing.overload
-    def __init__(self, arg0: Array4_double, arg1: int) -> None: ...
+    def __init__(self, arg0: Array4_double, arg1: typing.SupportsInt) -> None: ...
     @typing.overload
-    def __init__(self, arg0: Array4_double, arg1: int, arg2: int) -> None: ...
+    def __init__(
+        self, arg0: Array4_double, arg1: typing.SupportsInt, arg2: typing.SupportsInt
+    ) -> None: ...
     @typing.overload
-    def __init__(self, arg0: numpy.ndarray[numpy.float64]) -> None: ...
+    def __init__(
+        self, arg0: typing.Annotated[numpy.typing.ArrayLike, numpy.float64]
+    ) -> None: ...
     def __repr__(self) -> str: ...
     @typing.overload
-    def __setitem__(self, arg0: IntVect3D, arg1: float) -> None: ...
+    def __setitem__(self, arg0: IntVect3D, arg1: typing.SupportsFloat) -> None: ...
     @typing.overload
     def __setitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(4)],
-        arg1: float,
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(4)"
+        ],
+        arg1: typing.SupportsFloat,
     ) -> None: ...
     @typing.overload
     def __setitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
-        arg1: float,
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(3)"
+        ],
+        arg1: typing.SupportsFloat,
     ) -> None: ...
     @typing.overload
-    def contains(self, arg0: int, arg1: int, arg2: int) -> bool: ...
+    def contains(
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: typing.SupportsInt,
+    ) -> bool: ...
     @typing.overload
     def contains(self, arg0: IntVect3D) -> bool: ...
     @typing.overload
@@ -1042,7 +1146,7 @@ class Array4_double:
             Raises an exception if cupy is not installed
 
         """
-    def to_host(self) -> numpy.ndarray[numpy.float64]: ...
+    def to_host(self) -> numpy.typing.NDArray[numpy.float64]: ...
     def to_numpy(self, copy=False, order="F"):
         """
 
@@ -1121,26 +1225,42 @@ class Array4_double_const:
     @typing.overload
     def __getitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(4)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(4)"
+        ],
     ) -> float: ...
     @typing.overload
     def __getitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(3)"
+        ],
     ) -> float: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
     def __init__(self, arg0: Array4_double_const) -> None: ...
     @typing.overload
-    def __init__(self, arg0: Array4_double_const, arg1: int) -> None: ...
+    def __init__(self, arg0: Array4_double_const, arg1: typing.SupportsInt) -> None: ...
     @typing.overload
-    def __init__(self, arg0: Array4_double_const, arg1: int, arg2: int) -> None: ...
+    def __init__(
+        self,
+        arg0: Array4_double_const,
+        arg1: typing.SupportsInt,
+        arg2: typing.SupportsInt,
+    ) -> None: ...
     @typing.overload
-    def __init__(self, arg0: numpy.ndarray[numpy.float64]) -> None: ...
+    def __init__(
+        self, arg0: typing.Annotated[numpy.typing.ArrayLike, numpy.float64]
+    ) -> None: ...
     def __repr__(self) -> str: ...
     @typing.overload
-    def contains(self, arg0: int, arg1: int, arg2: int) -> bool: ...
+    def contains(
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: typing.SupportsInt,
+    ) -> bool: ...
     @typing.overload
     def contains(self, arg0: IntVect3D) -> bool: ...
     @typing.overload
@@ -1179,7 +1299,7 @@ class Array4_double_const:
             Raises an exception if cupy is not installed
 
         """
-    def to_host(self) -> numpy.ndarray[numpy.float64]: ...
+    def to_host(self) -> numpy.typing.NDArray[numpy.float64]: ...
     def to_numpy(self, copy=False, order="F"):
         """
 
@@ -1258,40 +1378,57 @@ class Array4_float:
     @typing.overload
     def __getitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(4)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(4)"
+        ],
     ) -> float: ...
     @typing.overload
     def __getitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(3)"
+        ],
     ) -> float: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
     def __init__(self, arg0: Array4_float) -> None: ...
     @typing.overload
-    def __init__(self, arg0: Array4_float, arg1: int) -> None: ...
+    def __init__(self, arg0: Array4_float, arg1: typing.SupportsInt) -> None: ...
     @typing.overload
-    def __init__(self, arg0: Array4_float, arg1: int, arg2: int) -> None: ...
+    def __init__(
+        self, arg0: Array4_float, arg1: typing.SupportsInt, arg2: typing.SupportsInt
+    ) -> None: ...
     @typing.overload
-    def __init__(self, arg0: numpy.ndarray[numpy.float32]) -> None: ...
+    def __init__(
+        self, arg0: typing.Annotated[numpy.typing.ArrayLike, numpy.float32]
+    ) -> None: ...
     def __repr__(self) -> str: ...
     @typing.overload
-    def __setitem__(self, arg0: IntVect3D, arg1: float) -> None: ...
+    def __setitem__(self, arg0: IntVect3D, arg1: typing.SupportsFloat) -> None: ...
     @typing.overload
     def __setitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(4)],
-        arg1: float,
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(4)"
+        ],
+        arg1: typing.SupportsFloat,
     ) -> None: ...
     @typing.overload
     def __setitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
-        arg1: float,
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(3)"
+        ],
+        arg1: typing.SupportsFloat,
     ) -> None: ...
     @typing.overload
-    def contains(self, arg0: int, arg1: int, arg2: int) -> bool: ...
+    def contains(
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: typing.SupportsInt,
+    ) -> bool: ...
     @typing.overload
     def contains(self, arg0: IntVect3D) -> bool: ...
     @typing.overload
@@ -1330,7 +1467,7 @@ class Array4_float:
             Raises an exception if cupy is not installed
 
         """
-    def to_host(self) -> numpy.ndarray[numpy.float32]: ...
+    def to_host(self) -> numpy.typing.NDArray[numpy.float32]: ...
     def to_numpy(self, copy=False, order="F"):
         """
 
@@ -1409,26 +1546,42 @@ class Array4_float_const:
     @typing.overload
     def __getitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(4)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(4)"
+        ],
     ) -> float: ...
     @typing.overload
     def __getitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(3)"
+        ],
     ) -> float: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
     def __init__(self, arg0: Array4_float_const) -> None: ...
     @typing.overload
-    def __init__(self, arg0: Array4_float_const, arg1: int) -> None: ...
+    def __init__(self, arg0: Array4_float_const, arg1: typing.SupportsInt) -> None: ...
     @typing.overload
-    def __init__(self, arg0: Array4_float_const, arg1: int, arg2: int) -> None: ...
+    def __init__(
+        self,
+        arg0: Array4_float_const,
+        arg1: typing.SupportsInt,
+        arg2: typing.SupportsInt,
+    ) -> None: ...
     @typing.overload
-    def __init__(self, arg0: numpy.ndarray[numpy.float32]) -> None: ...
+    def __init__(
+        self, arg0: typing.Annotated[numpy.typing.ArrayLike, numpy.float32]
+    ) -> None: ...
     def __repr__(self) -> str: ...
     @typing.overload
-    def contains(self, arg0: int, arg1: int, arg2: int) -> bool: ...
+    def contains(
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: typing.SupportsInt,
+    ) -> bool: ...
     @typing.overload
     def contains(self, arg0: IntVect3D) -> bool: ...
     @typing.overload
@@ -1467,7 +1620,7 @@ class Array4_float_const:
             Raises an exception if cupy is not installed
 
         """
-    def to_host(self) -> numpy.ndarray[numpy.float32]: ...
+    def to_host(self) -> numpy.typing.NDArray[numpy.float32]: ...
     def to_numpy(self, copy=False, order="F"):
         """
 
@@ -1546,40 +1699,57 @@ class Array4_int:
     @typing.overload
     def __getitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(4)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(4)"
+        ],
     ) -> int: ...
     @typing.overload
     def __getitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(3)"
+        ],
     ) -> int: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
     def __init__(self, arg0: Array4_int) -> None: ...
     @typing.overload
-    def __init__(self, arg0: Array4_int, arg1: int) -> None: ...
+    def __init__(self, arg0: Array4_int, arg1: typing.SupportsInt) -> None: ...
     @typing.overload
-    def __init__(self, arg0: Array4_int, arg1: int, arg2: int) -> None: ...
+    def __init__(
+        self, arg0: Array4_int, arg1: typing.SupportsInt, arg2: typing.SupportsInt
+    ) -> None: ...
     @typing.overload
-    def __init__(self, arg0: numpy.ndarray[numpy.int32]) -> None: ...
+    def __init__(
+        self, arg0: typing.Annotated[numpy.typing.ArrayLike, numpy.int32]
+    ) -> None: ...
     def __repr__(self) -> str: ...
     @typing.overload
-    def __setitem__(self, arg0: IntVect3D, arg1: int) -> None: ...
+    def __setitem__(self, arg0: IntVect3D, arg1: typing.SupportsInt) -> None: ...
     @typing.overload
     def __setitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(4)],
-        arg1: int,
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(4)"
+        ],
+        arg1: typing.SupportsInt,
     ) -> None: ...
     @typing.overload
     def __setitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
-        arg1: int,
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(3)"
+        ],
+        arg1: typing.SupportsInt,
     ) -> None: ...
     @typing.overload
-    def contains(self, arg0: int, arg1: int, arg2: int) -> bool: ...
+    def contains(
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: typing.SupportsInt,
+    ) -> bool: ...
     @typing.overload
     def contains(self, arg0: IntVect3D) -> bool: ...
     @typing.overload
@@ -1618,7 +1788,7 @@ class Array4_int:
             Raises an exception if cupy is not installed
 
         """
-    def to_host(self) -> numpy.ndarray[numpy.int32]: ...
+    def to_host(self) -> numpy.typing.NDArray[numpy.int32]: ...
     def to_numpy(self, copy=False, order="F"):
         """
 
@@ -1697,26 +1867,39 @@ class Array4_int_const:
     @typing.overload
     def __getitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(4)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(4)"
+        ],
     ) -> int: ...
     @typing.overload
     def __getitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(3)"
+        ],
     ) -> int: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
     def __init__(self, arg0: Array4_int_const) -> None: ...
     @typing.overload
-    def __init__(self, arg0: Array4_int_const, arg1: int) -> None: ...
+    def __init__(self, arg0: Array4_int_const, arg1: typing.SupportsInt) -> None: ...
     @typing.overload
-    def __init__(self, arg0: Array4_int_const, arg1: int, arg2: int) -> None: ...
+    def __init__(
+        self, arg0: Array4_int_const, arg1: typing.SupportsInt, arg2: typing.SupportsInt
+    ) -> None: ...
     @typing.overload
-    def __init__(self, arg0: numpy.ndarray[numpy.int32]) -> None: ...
+    def __init__(
+        self, arg0: typing.Annotated[numpy.typing.ArrayLike, numpy.int32]
+    ) -> None: ...
     def __repr__(self) -> str: ...
     @typing.overload
-    def contains(self, arg0: int, arg1: int, arg2: int) -> bool: ...
+    def contains(
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: typing.SupportsInt,
+    ) -> bool: ...
     @typing.overload
     def contains(self, arg0: IntVect3D) -> bool: ...
     @typing.overload
@@ -1755,7 +1938,7 @@ class Array4_int_const:
             Raises an exception if cupy is not installed
 
         """
-    def to_host(self) -> numpy.ndarray[numpy.int32]: ...
+    def to_host(self) -> numpy.typing.NDArray[numpy.int32]: ...
     def to_numpy(self, copy=False, order="F"):
         """
 
@@ -1834,40 +2017,57 @@ class Array4_long:
     @typing.overload
     def __getitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(4)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(4)"
+        ],
     ) -> int: ...
     @typing.overload
     def __getitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(3)"
+        ],
     ) -> int: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
     def __init__(self, arg0: Array4_long) -> None: ...
     @typing.overload
-    def __init__(self, arg0: Array4_long, arg1: int) -> None: ...
+    def __init__(self, arg0: Array4_long, arg1: typing.SupportsInt) -> None: ...
     @typing.overload
-    def __init__(self, arg0: Array4_long, arg1: int, arg2: int) -> None: ...
+    def __init__(
+        self, arg0: Array4_long, arg1: typing.SupportsInt, arg2: typing.SupportsInt
+    ) -> None: ...
     @typing.overload
-    def __init__(self, arg0: numpy.ndarray[numpy.int64]) -> None: ...
+    def __init__(
+        self, arg0: typing.Annotated[numpy.typing.ArrayLike, numpy.int64]
+    ) -> None: ...
     def __repr__(self) -> str: ...
     @typing.overload
-    def __setitem__(self, arg0: IntVect3D, arg1: int) -> None: ...
+    def __setitem__(self, arg0: IntVect3D, arg1: typing.SupportsInt) -> None: ...
     @typing.overload
     def __setitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(4)],
-        arg1: int,
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(4)"
+        ],
+        arg1: typing.SupportsInt,
     ) -> None: ...
     @typing.overload
     def __setitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
-        arg1: int,
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(3)"
+        ],
+        arg1: typing.SupportsInt,
     ) -> None: ...
     @typing.overload
-    def contains(self, arg0: int, arg1: int, arg2: int) -> bool: ...
+    def contains(
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: typing.SupportsInt,
+    ) -> bool: ...
     @typing.overload
     def contains(self, arg0: IntVect3D) -> bool: ...
     @typing.overload
@@ -1906,7 +2106,7 @@ class Array4_long:
             Raises an exception if cupy is not installed
 
         """
-    def to_host(self) -> numpy.ndarray[numpy.int64]: ...
+    def to_host(self) -> numpy.typing.NDArray[numpy.int64]: ...
     def to_numpy(self, copy=False, order="F"):
         """
 
@@ -1985,26 +2185,42 @@ class Array4_long_const:
     @typing.overload
     def __getitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(4)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(4)"
+        ],
     ) -> int: ...
     @typing.overload
     def __getitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(3)"
+        ],
     ) -> int: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
     def __init__(self, arg0: Array4_long_const) -> None: ...
     @typing.overload
-    def __init__(self, arg0: Array4_long_const, arg1: int) -> None: ...
+    def __init__(self, arg0: Array4_long_const, arg1: typing.SupportsInt) -> None: ...
     @typing.overload
-    def __init__(self, arg0: Array4_long_const, arg1: int, arg2: int) -> None: ...
+    def __init__(
+        self,
+        arg0: Array4_long_const,
+        arg1: typing.SupportsInt,
+        arg2: typing.SupportsInt,
+    ) -> None: ...
     @typing.overload
-    def __init__(self, arg0: numpy.ndarray[numpy.int64]) -> None: ...
+    def __init__(
+        self, arg0: typing.Annotated[numpy.typing.ArrayLike, numpy.int64]
+    ) -> None: ...
     def __repr__(self) -> str: ...
     @typing.overload
-    def contains(self, arg0: int, arg1: int, arg2: int) -> bool: ...
+    def contains(
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: typing.SupportsInt,
+    ) -> bool: ...
     @typing.overload
     def contains(self, arg0: IntVect3D) -> bool: ...
     @typing.overload
@@ -2043,7 +2259,7 @@ class Array4_long_const:
             Raises an exception if cupy is not installed
 
         """
-    def to_host(self) -> numpy.ndarray[numpy.int64]: ...
+    def to_host(self) -> numpy.typing.NDArray[numpy.int64]: ...
     def to_numpy(self, copy=False, order="F"):
         """
 
@@ -2122,40 +2338,60 @@ class Array4_longdouble:
     @typing.overload
     def __getitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(4)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(4)"
+        ],
     ) -> float: ...
     @typing.overload
     def __getitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(3)"
+        ],
     ) -> float: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
     def __init__(self, arg0: Array4_longdouble) -> None: ...
     @typing.overload
-    def __init__(self, arg0: Array4_longdouble, arg1: int) -> None: ...
+    def __init__(self, arg0: Array4_longdouble, arg1: typing.SupportsInt) -> None: ...
     @typing.overload
-    def __init__(self, arg0: Array4_longdouble, arg1: int, arg2: int) -> None: ...
+    def __init__(
+        self,
+        arg0: Array4_longdouble,
+        arg1: typing.SupportsInt,
+        arg2: typing.SupportsInt,
+    ) -> None: ...
     @typing.overload
-    def __init__(self, arg0: numpy.ndarray[numpy.longdouble]) -> None: ...
+    def __init__(
+        self, arg0: typing.Annotated[numpy.typing.ArrayLike, numpy.longdouble]
+    ) -> None: ...
     def __repr__(self) -> str: ...
     @typing.overload
-    def __setitem__(self, arg0: IntVect3D, arg1: float) -> None: ...
+    def __setitem__(self, arg0: IntVect3D, arg1: typing.SupportsFloat) -> None: ...
     @typing.overload
     def __setitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(4)],
-        arg1: float,
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(4)"
+        ],
+        arg1: typing.SupportsFloat,
     ) -> None: ...
     @typing.overload
     def __setitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
-        arg1: float,
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(3)"
+        ],
+        arg1: typing.SupportsFloat,
     ) -> None: ...
     @typing.overload
-    def contains(self, arg0: int, arg1: int, arg2: int) -> bool: ...
+    def contains(
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: typing.SupportsInt,
+    ) -> bool: ...
     @typing.overload
     def contains(self, arg0: IntVect3D) -> bool: ...
     @typing.overload
@@ -2194,7 +2430,7 @@ class Array4_longdouble:
             Raises an exception if cupy is not installed
 
         """
-    def to_host(self) -> numpy.ndarray[numpy.longdouble]: ...
+    def to_host(self) -> numpy.typing.NDArray[numpy.longdouble]: ...
     def to_numpy(self, copy=False, order="F"):
         """
 
@@ -2273,26 +2509,44 @@ class Array4_longdouble_const:
     @typing.overload
     def __getitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(4)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(4)"
+        ],
     ) -> float: ...
     @typing.overload
     def __getitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(3)"
+        ],
     ) -> float: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
     def __init__(self, arg0: Array4_longdouble_const) -> None: ...
     @typing.overload
-    def __init__(self, arg0: Array4_longdouble_const, arg1: int) -> None: ...
+    def __init__(
+        self, arg0: Array4_longdouble_const, arg1: typing.SupportsInt
+    ) -> None: ...
     @typing.overload
-    def __init__(self, arg0: Array4_longdouble_const, arg1: int, arg2: int) -> None: ...
+    def __init__(
+        self,
+        arg0: Array4_longdouble_const,
+        arg1: typing.SupportsInt,
+        arg2: typing.SupportsInt,
+    ) -> None: ...
     @typing.overload
-    def __init__(self, arg0: numpy.ndarray[numpy.longdouble]) -> None: ...
+    def __init__(
+        self, arg0: typing.Annotated[numpy.typing.ArrayLike, numpy.longdouble]
+    ) -> None: ...
     def __repr__(self) -> str: ...
     @typing.overload
-    def contains(self, arg0: int, arg1: int, arg2: int) -> bool: ...
+    def contains(
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: typing.SupportsInt,
+    ) -> bool: ...
     @typing.overload
     def contains(self, arg0: IntVect3D) -> bool: ...
     @typing.overload
@@ -2331,7 +2585,7 @@ class Array4_longdouble_const:
             Raises an exception if cupy is not installed
 
         """
-    def to_host(self) -> numpy.ndarray[numpy.longdouble]: ...
+    def to_host(self) -> numpy.typing.NDArray[numpy.longdouble]: ...
     def to_numpy(self, copy=False, order="F"):
         """
 
@@ -2410,40 +2664,57 @@ class Array4_longlong:
     @typing.overload
     def __getitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(4)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(4)"
+        ],
     ) -> int: ...
     @typing.overload
     def __getitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(3)"
+        ],
     ) -> int: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
     def __init__(self, arg0: Array4_longlong) -> None: ...
     @typing.overload
-    def __init__(self, arg0: Array4_longlong, arg1: int) -> None: ...
+    def __init__(self, arg0: Array4_longlong, arg1: typing.SupportsInt) -> None: ...
     @typing.overload
-    def __init__(self, arg0: Array4_longlong, arg1: int, arg2: int) -> None: ...
+    def __init__(
+        self, arg0: Array4_longlong, arg1: typing.SupportsInt, arg2: typing.SupportsInt
+    ) -> None: ...
     @typing.overload
-    def __init__(self, arg0: numpy.ndarray[numpy.int64]) -> None: ...
+    def __init__(
+        self, arg0: typing.Annotated[numpy.typing.ArrayLike, numpy.int64]
+    ) -> None: ...
     def __repr__(self) -> str: ...
     @typing.overload
-    def __setitem__(self, arg0: IntVect3D, arg1: int) -> None: ...
+    def __setitem__(self, arg0: IntVect3D, arg1: typing.SupportsInt) -> None: ...
     @typing.overload
     def __setitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(4)],
-        arg1: int,
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(4)"
+        ],
+        arg1: typing.SupportsInt,
     ) -> None: ...
     @typing.overload
     def __setitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
-        arg1: int,
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(3)"
+        ],
+        arg1: typing.SupportsInt,
     ) -> None: ...
     @typing.overload
-    def contains(self, arg0: int, arg1: int, arg2: int) -> bool: ...
+    def contains(
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: typing.SupportsInt,
+    ) -> bool: ...
     @typing.overload
     def contains(self, arg0: IntVect3D) -> bool: ...
     @typing.overload
@@ -2482,7 +2753,7 @@ class Array4_longlong:
             Raises an exception if cupy is not installed
 
         """
-    def to_host(self) -> numpy.ndarray[numpy.int64]: ...
+    def to_host(self) -> numpy.typing.NDArray[numpy.int64]: ...
     def to_numpy(self, copy=False, order="F"):
         """
 
@@ -2561,26 +2832,44 @@ class Array4_longlong_const:
     @typing.overload
     def __getitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(4)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(4)"
+        ],
     ) -> int: ...
     @typing.overload
     def __getitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(3)"
+        ],
     ) -> int: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
     def __init__(self, arg0: Array4_longlong_const) -> None: ...
     @typing.overload
-    def __init__(self, arg0: Array4_longlong_const, arg1: int) -> None: ...
+    def __init__(
+        self, arg0: Array4_longlong_const, arg1: typing.SupportsInt
+    ) -> None: ...
     @typing.overload
-    def __init__(self, arg0: Array4_longlong_const, arg1: int, arg2: int) -> None: ...
+    def __init__(
+        self,
+        arg0: Array4_longlong_const,
+        arg1: typing.SupportsInt,
+        arg2: typing.SupportsInt,
+    ) -> None: ...
     @typing.overload
-    def __init__(self, arg0: numpy.ndarray[numpy.int64]) -> None: ...
+    def __init__(
+        self, arg0: typing.Annotated[numpy.typing.ArrayLike, numpy.int64]
+    ) -> None: ...
     def __repr__(self) -> str: ...
     @typing.overload
-    def contains(self, arg0: int, arg1: int, arg2: int) -> bool: ...
+    def contains(
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: typing.SupportsInt,
+    ) -> bool: ...
     @typing.overload
     def contains(self, arg0: IntVect3D) -> bool: ...
     @typing.overload
@@ -2619,7 +2908,7 @@ class Array4_longlong_const:
             Raises an exception if cupy is not installed
 
         """
-    def to_host(self) -> numpy.ndarray[numpy.int64]: ...
+    def to_host(self) -> numpy.typing.NDArray[numpy.int64]: ...
     def to_numpy(self, copy=False, order="F"):
         """
 
@@ -2698,40 +2987,57 @@ class Array4_short:
     @typing.overload
     def __getitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(4)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(4)"
+        ],
     ) -> int: ...
     @typing.overload
     def __getitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(3)"
+        ],
     ) -> int: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
     def __init__(self, arg0: Array4_short) -> None: ...
     @typing.overload
-    def __init__(self, arg0: Array4_short, arg1: int) -> None: ...
+    def __init__(self, arg0: Array4_short, arg1: typing.SupportsInt) -> None: ...
     @typing.overload
-    def __init__(self, arg0: Array4_short, arg1: int, arg2: int) -> None: ...
+    def __init__(
+        self, arg0: Array4_short, arg1: typing.SupportsInt, arg2: typing.SupportsInt
+    ) -> None: ...
     @typing.overload
-    def __init__(self, arg0: numpy.ndarray[numpy.int16]) -> None: ...
+    def __init__(
+        self, arg0: typing.Annotated[numpy.typing.ArrayLike, numpy.int16]
+    ) -> None: ...
     def __repr__(self) -> str: ...
     @typing.overload
-    def __setitem__(self, arg0: IntVect3D, arg1: int) -> None: ...
+    def __setitem__(self, arg0: IntVect3D, arg1: typing.SupportsInt) -> None: ...
     @typing.overload
     def __setitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(4)],
-        arg1: int,
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(4)"
+        ],
+        arg1: typing.SupportsInt,
     ) -> None: ...
     @typing.overload
     def __setitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
-        arg1: int,
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(3)"
+        ],
+        arg1: typing.SupportsInt,
     ) -> None: ...
     @typing.overload
-    def contains(self, arg0: int, arg1: int, arg2: int) -> bool: ...
+    def contains(
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: typing.SupportsInt,
+    ) -> bool: ...
     @typing.overload
     def contains(self, arg0: IntVect3D) -> bool: ...
     @typing.overload
@@ -2770,7 +3076,7 @@ class Array4_short:
             Raises an exception if cupy is not installed
 
         """
-    def to_host(self) -> numpy.ndarray[numpy.int16]: ...
+    def to_host(self) -> numpy.typing.NDArray[numpy.int16]: ...
     def to_numpy(self, copy=False, order="F"):
         """
 
@@ -2849,26 +3155,42 @@ class Array4_short_const:
     @typing.overload
     def __getitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(4)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(4)"
+        ],
     ) -> int: ...
     @typing.overload
     def __getitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(3)"
+        ],
     ) -> int: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
     def __init__(self, arg0: Array4_short_const) -> None: ...
     @typing.overload
-    def __init__(self, arg0: Array4_short_const, arg1: int) -> None: ...
+    def __init__(self, arg0: Array4_short_const, arg1: typing.SupportsInt) -> None: ...
     @typing.overload
-    def __init__(self, arg0: Array4_short_const, arg1: int, arg2: int) -> None: ...
+    def __init__(
+        self,
+        arg0: Array4_short_const,
+        arg1: typing.SupportsInt,
+        arg2: typing.SupportsInt,
+    ) -> None: ...
     @typing.overload
-    def __init__(self, arg0: numpy.ndarray[numpy.int16]) -> None: ...
+    def __init__(
+        self, arg0: typing.Annotated[numpy.typing.ArrayLike, numpy.int16]
+    ) -> None: ...
     def __repr__(self) -> str: ...
     @typing.overload
-    def contains(self, arg0: int, arg1: int, arg2: int) -> bool: ...
+    def contains(
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: typing.SupportsInt,
+    ) -> bool: ...
     @typing.overload
     def contains(self, arg0: IntVect3D) -> bool: ...
     @typing.overload
@@ -2907,7 +3229,7 @@ class Array4_short_const:
             Raises an exception if cupy is not installed
 
         """
-    def to_host(self) -> numpy.ndarray[numpy.int16]: ...
+    def to_host(self) -> numpy.typing.NDArray[numpy.int16]: ...
     def to_numpy(self, copy=False, order="F"):
         """
 
@@ -2986,40 +3308,57 @@ class Array4_uint:
     @typing.overload
     def __getitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(4)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(4)"
+        ],
     ) -> int: ...
     @typing.overload
     def __getitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(3)"
+        ],
     ) -> int: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
     def __init__(self, arg0: Array4_uint) -> None: ...
     @typing.overload
-    def __init__(self, arg0: Array4_uint, arg1: int) -> None: ...
+    def __init__(self, arg0: Array4_uint, arg1: typing.SupportsInt) -> None: ...
     @typing.overload
-    def __init__(self, arg0: Array4_uint, arg1: int, arg2: int) -> None: ...
+    def __init__(
+        self, arg0: Array4_uint, arg1: typing.SupportsInt, arg2: typing.SupportsInt
+    ) -> None: ...
     @typing.overload
-    def __init__(self, arg0: numpy.ndarray[numpy.uint32]) -> None: ...
+    def __init__(
+        self, arg0: typing.Annotated[numpy.typing.ArrayLike, numpy.uint32]
+    ) -> None: ...
     def __repr__(self) -> str: ...
     @typing.overload
-    def __setitem__(self, arg0: IntVect3D, arg1: int) -> None: ...
+    def __setitem__(self, arg0: IntVect3D, arg1: typing.SupportsInt) -> None: ...
     @typing.overload
     def __setitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(4)],
-        arg1: int,
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(4)"
+        ],
+        arg1: typing.SupportsInt,
     ) -> None: ...
     @typing.overload
     def __setitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
-        arg1: int,
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(3)"
+        ],
+        arg1: typing.SupportsInt,
     ) -> None: ...
     @typing.overload
-    def contains(self, arg0: int, arg1: int, arg2: int) -> bool: ...
+    def contains(
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: typing.SupportsInt,
+    ) -> bool: ...
     @typing.overload
     def contains(self, arg0: IntVect3D) -> bool: ...
     @typing.overload
@@ -3058,7 +3397,7 @@ class Array4_uint:
             Raises an exception if cupy is not installed
 
         """
-    def to_host(self) -> numpy.ndarray[numpy.uint32]: ...
+    def to_host(self) -> numpy.typing.NDArray[numpy.uint32]: ...
     def to_numpy(self, copy=False, order="F"):
         """
 
@@ -3137,26 +3476,42 @@ class Array4_uint_const:
     @typing.overload
     def __getitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(4)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(4)"
+        ],
     ) -> int: ...
     @typing.overload
     def __getitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(3)"
+        ],
     ) -> int: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
     def __init__(self, arg0: Array4_uint_const) -> None: ...
     @typing.overload
-    def __init__(self, arg0: Array4_uint_const, arg1: int) -> None: ...
+    def __init__(self, arg0: Array4_uint_const, arg1: typing.SupportsInt) -> None: ...
     @typing.overload
-    def __init__(self, arg0: Array4_uint_const, arg1: int, arg2: int) -> None: ...
+    def __init__(
+        self,
+        arg0: Array4_uint_const,
+        arg1: typing.SupportsInt,
+        arg2: typing.SupportsInt,
+    ) -> None: ...
     @typing.overload
-    def __init__(self, arg0: numpy.ndarray[numpy.uint32]) -> None: ...
+    def __init__(
+        self, arg0: typing.Annotated[numpy.typing.ArrayLike, numpy.uint32]
+    ) -> None: ...
     def __repr__(self) -> str: ...
     @typing.overload
-    def contains(self, arg0: int, arg1: int, arg2: int) -> bool: ...
+    def contains(
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: typing.SupportsInt,
+    ) -> bool: ...
     @typing.overload
     def contains(self, arg0: IntVect3D) -> bool: ...
     @typing.overload
@@ -3195,7 +3550,7 @@ class Array4_uint_const:
             Raises an exception if cupy is not installed
 
         """
-    def to_host(self) -> numpy.ndarray[numpy.uint32]: ...
+    def to_host(self) -> numpy.typing.NDArray[numpy.uint32]: ...
     def to_numpy(self, copy=False, order="F"):
         """
 
@@ -3274,40 +3629,57 @@ class Array4_ulong:
     @typing.overload
     def __getitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(4)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(4)"
+        ],
     ) -> int: ...
     @typing.overload
     def __getitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(3)"
+        ],
     ) -> int: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
     def __init__(self, arg0: Array4_ulong) -> None: ...
     @typing.overload
-    def __init__(self, arg0: Array4_ulong, arg1: int) -> None: ...
+    def __init__(self, arg0: Array4_ulong, arg1: typing.SupportsInt) -> None: ...
     @typing.overload
-    def __init__(self, arg0: Array4_ulong, arg1: int, arg2: int) -> None: ...
+    def __init__(
+        self, arg0: Array4_ulong, arg1: typing.SupportsInt, arg2: typing.SupportsInt
+    ) -> None: ...
     @typing.overload
-    def __init__(self, arg0: numpy.ndarray[numpy.uint64]) -> None: ...
+    def __init__(
+        self, arg0: typing.Annotated[numpy.typing.ArrayLike, numpy.uint64]
+    ) -> None: ...
     def __repr__(self) -> str: ...
     @typing.overload
-    def __setitem__(self, arg0: IntVect3D, arg1: int) -> None: ...
+    def __setitem__(self, arg0: IntVect3D, arg1: typing.SupportsInt) -> None: ...
     @typing.overload
     def __setitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(4)],
-        arg1: int,
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(4)"
+        ],
+        arg1: typing.SupportsInt,
     ) -> None: ...
     @typing.overload
     def __setitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
-        arg1: int,
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(3)"
+        ],
+        arg1: typing.SupportsInt,
     ) -> None: ...
     @typing.overload
-    def contains(self, arg0: int, arg1: int, arg2: int) -> bool: ...
+    def contains(
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: typing.SupportsInt,
+    ) -> bool: ...
     @typing.overload
     def contains(self, arg0: IntVect3D) -> bool: ...
     @typing.overload
@@ -3346,7 +3718,7 @@ class Array4_ulong:
             Raises an exception if cupy is not installed
 
         """
-    def to_host(self) -> numpy.ndarray[numpy.uint64]: ...
+    def to_host(self) -> numpy.typing.NDArray[numpy.uint64]: ...
     def to_numpy(self, copy=False, order="F"):
         """
 
@@ -3425,26 +3797,42 @@ class Array4_ulong_const:
     @typing.overload
     def __getitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(4)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(4)"
+        ],
     ) -> int: ...
     @typing.overload
     def __getitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(3)"
+        ],
     ) -> int: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
     def __init__(self, arg0: Array4_ulong_const) -> None: ...
     @typing.overload
-    def __init__(self, arg0: Array4_ulong_const, arg1: int) -> None: ...
+    def __init__(self, arg0: Array4_ulong_const, arg1: typing.SupportsInt) -> None: ...
     @typing.overload
-    def __init__(self, arg0: Array4_ulong_const, arg1: int, arg2: int) -> None: ...
+    def __init__(
+        self,
+        arg0: Array4_ulong_const,
+        arg1: typing.SupportsInt,
+        arg2: typing.SupportsInt,
+    ) -> None: ...
     @typing.overload
-    def __init__(self, arg0: numpy.ndarray[numpy.uint64]) -> None: ...
+    def __init__(
+        self, arg0: typing.Annotated[numpy.typing.ArrayLike, numpy.uint64]
+    ) -> None: ...
     def __repr__(self) -> str: ...
     @typing.overload
-    def contains(self, arg0: int, arg1: int, arg2: int) -> bool: ...
+    def contains(
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: typing.SupportsInt,
+    ) -> bool: ...
     @typing.overload
     def contains(self, arg0: IntVect3D) -> bool: ...
     @typing.overload
@@ -3483,7 +3871,7 @@ class Array4_ulong_const:
             Raises an exception if cupy is not installed
 
         """
-    def to_host(self) -> numpy.ndarray[numpy.uint64]: ...
+    def to_host(self) -> numpy.typing.NDArray[numpy.uint64]: ...
     def to_numpy(self, copy=False, order="F"):
         """
 
@@ -3562,40 +3950,57 @@ class Array4_ulonglong:
     @typing.overload
     def __getitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(4)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(4)"
+        ],
     ) -> int: ...
     @typing.overload
     def __getitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(3)"
+        ],
     ) -> int: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
     def __init__(self, arg0: Array4_ulonglong) -> None: ...
     @typing.overload
-    def __init__(self, arg0: Array4_ulonglong, arg1: int) -> None: ...
+    def __init__(self, arg0: Array4_ulonglong, arg1: typing.SupportsInt) -> None: ...
     @typing.overload
-    def __init__(self, arg0: Array4_ulonglong, arg1: int, arg2: int) -> None: ...
+    def __init__(
+        self, arg0: Array4_ulonglong, arg1: typing.SupportsInt, arg2: typing.SupportsInt
+    ) -> None: ...
     @typing.overload
-    def __init__(self, arg0: numpy.ndarray[numpy.uint64]) -> None: ...
+    def __init__(
+        self, arg0: typing.Annotated[numpy.typing.ArrayLike, numpy.uint64]
+    ) -> None: ...
     def __repr__(self) -> str: ...
     @typing.overload
-    def __setitem__(self, arg0: IntVect3D, arg1: int) -> None: ...
+    def __setitem__(self, arg0: IntVect3D, arg1: typing.SupportsInt) -> None: ...
     @typing.overload
     def __setitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(4)],
-        arg1: int,
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(4)"
+        ],
+        arg1: typing.SupportsInt,
     ) -> None: ...
     @typing.overload
     def __setitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
-        arg1: int,
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(3)"
+        ],
+        arg1: typing.SupportsInt,
     ) -> None: ...
     @typing.overload
-    def contains(self, arg0: int, arg1: int, arg2: int) -> bool: ...
+    def contains(
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: typing.SupportsInt,
+    ) -> bool: ...
     @typing.overload
     def contains(self, arg0: IntVect3D) -> bool: ...
     @typing.overload
@@ -3634,7 +4039,7 @@ class Array4_ulonglong:
             Raises an exception if cupy is not installed
 
         """
-    def to_host(self) -> numpy.ndarray[numpy.uint64]: ...
+    def to_host(self) -> numpy.typing.NDArray[numpy.uint64]: ...
     def to_numpy(self, copy=False, order="F"):
         """
 
@@ -3713,26 +4118,44 @@ class Array4_ulonglong_const:
     @typing.overload
     def __getitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(4)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(4)"
+        ],
     ) -> int: ...
     @typing.overload
     def __getitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(3)"
+        ],
     ) -> int: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
     def __init__(self, arg0: Array4_ulonglong_const) -> None: ...
     @typing.overload
-    def __init__(self, arg0: Array4_ulonglong_const, arg1: int) -> None: ...
+    def __init__(
+        self, arg0: Array4_ulonglong_const, arg1: typing.SupportsInt
+    ) -> None: ...
     @typing.overload
-    def __init__(self, arg0: Array4_ulonglong_const, arg1: int, arg2: int) -> None: ...
+    def __init__(
+        self,
+        arg0: Array4_ulonglong_const,
+        arg1: typing.SupportsInt,
+        arg2: typing.SupportsInt,
+    ) -> None: ...
     @typing.overload
-    def __init__(self, arg0: numpy.ndarray[numpy.uint64]) -> None: ...
+    def __init__(
+        self, arg0: typing.Annotated[numpy.typing.ArrayLike, numpy.uint64]
+    ) -> None: ...
     def __repr__(self) -> str: ...
     @typing.overload
-    def contains(self, arg0: int, arg1: int, arg2: int) -> bool: ...
+    def contains(
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: typing.SupportsInt,
+    ) -> bool: ...
     @typing.overload
     def contains(self, arg0: IntVect3D) -> bool: ...
     @typing.overload
@@ -3771,7 +4194,7 @@ class Array4_ulonglong_const:
             Raises an exception if cupy is not installed
 
         """
-    def to_host(self) -> numpy.ndarray[numpy.uint64]: ...
+    def to_host(self) -> numpy.typing.NDArray[numpy.uint64]: ...
     def to_numpy(self, copy=False, order="F"):
         """
 
@@ -3850,40 +4273,57 @@ class Array4_ushort:
     @typing.overload
     def __getitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(4)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(4)"
+        ],
     ) -> int: ...
     @typing.overload
     def __getitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(3)"
+        ],
     ) -> int: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
     def __init__(self, arg0: Array4_ushort) -> None: ...
     @typing.overload
-    def __init__(self, arg0: Array4_ushort, arg1: int) -> None: ...
+    def __init__(self, arg0: Array4_ushort, arg1: typing.SupportsInt) -> None: ...
     @typing.overload
-    def __init__(self, arg0: Array4_ushort, arg1: int, arg2: int) -> None: ...
+    def __init__(
+        self, arg0: Array4_ushort, arg1: typing.SupportsInt, arg2: typing.SupportsInt
+    ) -> None: ...
     @typing.overload
-    def __init__(self, arg0: numpy.ndarray[numpy.uint16]) -> None: ...
+    def __init__(
+        self, arg0: typing.Annotated[numpy.typing.ArrayLike, numpy.uint16]
+    ) -> None: ...
     def __repr__(self) -> str: ...
     @typing.overload
-    def __setitem__(self, arg0: IntVect3D, arg1: int) -> None: ...
+    def __setitem__(self, arg0: IntVect3D, arg1: typing.SupportsInt) -> None: ...
     @typing.overload
     def __setitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(4)],
-        arg1: int,
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(4)"
+        ],
+        arg1: typing.SupportsInt,
     ) -> None: ...
     @typing.overload
     def __setitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
-        arg1: int,
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(3)"
+        ],
+        arg1: typing.SupportsInt,
     ) -> None: ...
     @typing.overload
-    def contains(self, arg0: int, arg1: int, arg2: int) -> bool: ...
+    def contains(
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: typing.SupportsInt,
+    ) -> bool: ...
     @typing.overload
     def contains(self, arg0: IntVect3D) -> bool: ...
     @typing.overload
@@ -3922,7 +4362,7 @@ class Array4_ushort:
             Raises an exception if cupy is not installed
 
         """
-    def to_host(self) -> numpy.ndarray[numpy.uint16]: ...
+    def to_host(self) -> numpy.typing.NDArray[numpy.uint16]: ...
     def to_numpy(self, copy=False, order="F"):
         """
 
@@ -4001,26 +4441,42 @@ class Array4_ushort_const:
     @typing.overload
     def __getitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(4)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(4)"
+        ],
     ) -> int: ...
     @typing.overload
     def __getitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(3)"
+        ],
     ) -> int: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
     def __init__(self, arg0: Array4_ushort_const) -> None: ...
     @typing.overload
-    def __init__(self, arg0: Array4_ushort_const, arg1: int) -> None: ...
+    def __init__(self, arg0: Array4_ushort_const, arg1: typing.SupportsInt) -> None: ...
     @typing.overload
-    def __init__(self, arg0: Array4_ushort_const, arg1: int, arg2: int) -> None: ...
+    def __init__(
+        self,
+        arg0: Array4_ushort_const,
+        arg1: typing.SupportsInt,
+        arg2: typing.SupportsInt,
+    ) -> None: ...
     @typing.overload
-    def __init__(self, arg0: numpy.ndarray[numpy.uint16]) -> None: ...
+    def __init__(
+        self, arg0: typing.Annotated[numpy.typing.ArrayLike, numpy.uint16]
+    ) -> None: ...
     def __repr__(self) -> str: ...
     @typing.overload
-    def contains(self, arg0: int, arg1: int, arg2: int) -> bool: ...
+    def contains(
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: typing.SupportsInt,
+    ) -> bool: ...
     @typing.overload
     def contains(self, arg0: IntVect3D) -> bool: ...
     @typing.overload
@@ -4059,7 +4515,7 @@ class Array4_ushort_const:
             Raises an exception if cupy is not installed
 
         """
-    def to_host(self) -> numpy.ndarray[numpy.uint16]: ...
+    def to_host(self) -> numpy.typing.NDArray[numpy.uint16]: ...
     def to_numpy(self, copy=False, order="F"):
         """
 
@@ -4135,9 +4591,9 @@ class Array4_ushort_const:
 class ArrayOfStructs_16_4_arena:
     @staticmethod
     def test_sizes() -> None: ...
-    def __getitem__(self, arg0: int) -> Particle_16_4: ...
+    def __getitem__(self, arg0: typing.SupportsInt) -> Particle_16_4: ...
     def __init__(self) -> None: ...
-    def __setitem__(self, arg0: int, arg1: Particle_16_4) -> None: ...
+    def __setitem__(self, arg0: typing.SupportsInt, arg1: Particle_16_4) -> None: ...
     def back(self) -> Particle_16_4:
         """
         get back member.  Problem!!!!! this is perfo
@@ -4153,7 +4609,7 @@ class ArrayOfStructs_16_4_arena:
     def numTotalParticles(self) -> int: ...
     def pop_back(self) -> None: ...
     def push_back(self, arg0: Particle_16_4) -> None: ...
-    def setNumNeighbors(self, arg0: int) -> None: ...
+    def setNumNeighbors(self, arg0: typing.SupportsInt) -> None: ...
     def size(self) -> int: ...
     def to_cupy(self, copy=False):
         """
@@ -4229,9 +4685,9 @@ class ArrayOfStructs_16_4_arena:
 class ArrayOfStructs_16_4_default:
     @staticmethod
     def test_sizes() -> None: ...
-    def __getitem__(self, arg0: int) -> Particle_16_4: ...
+    def __getitem__(self, arg0: typing.SupportsInt) -> Particle_16_4: ...
     def __init__(self) -> None: ...
-    def __setitem__(self, arg0: int, arg1: Particle_16_4) -> None: ...
+    def __setitem__(self, arg0: typing.SupportsInt, arg1: Particle_16_4) -> None: ...
     def back(self) -> Particle_16_4:
         """
         get back member.  Problem!!!!! this is perfo
@@ -4247,7 +4703,7 @@ class ArrayOfStructs_16_4_default:
     def numTotalParticles(self) -> int: ...
     def pop_back(self) -> None: ...
     def push_back(self, arg0: Particle_16_4) -> None: ...
-    def setNumNeighbors(self, arg0: int) -> None: ...
+    def setNumNeighbors(self, arg0: typing.SupportsInt) -> None: ...
     def size(self) -> int: ...
     def to_cupy(self, copy=False):
         """
@@ -4323,9 +4779,9 @@ class ArrayOfStructs_16_4_default:
 class ArrayOfStructs_16_4_pinned:
     @staticmethod
     def test_sizes() -> None: ...
-    def __getitem__(self, arg0: int) -> Particle_16_4: ...
+    def __getitem__(self, arg0: typing.SupportsInt) -> Particle_16_4: ...
     def __init__(self) -> None: ...
-    def __setitem__(self, arg0: int, arg1: Particle_16_4) -> None: ...
+    def __setitem__(self, arg0: typing.SupportsInt, arg1: Particle_16_4) -> None: ...
     def back(self) -> Particle_16_4:
         """
         get back member.  Problem!!!!! this is perfo
@@ -4341,7 +4797,7 @@ class ArrayOfStructs_16_4_pinned:
     def numTotalParticles(self) -> int: ...
     def pop_back(self) -> None: ...
     def push_back(self, arg0: Particle_16_4) -> None: ...
-    def setNumNeighbors(self, arg0: int) -> None: ...
+    def setNumNeighbors(self, arg0: typing.SupportsInt) -> None: ...
     def size(self) -> int: ...
     def to_cupy(self, copy=False):
         """
@@ -4417,9 +4873,9 @@ class ArrayOfStructs_16_4_pinned:
 class ArrayOfStructs_2_1_arena:
     @staticmethod
     def test_sizes() -> None: ...
-    def __getitem__(self, arg0: int) -> Particle_2_1: ...
+    def __getitem__(self, arg0: typing.SupportsInt) -> Particle_2_1: ...
     def __init__(self) -> None: ...
-    def __setitem__(self, arg0: int, arg1: Particle_2_1) -> None: ...
+    def __setitem__(self, arg0: typing.SupportsInt, arg1: Particle_2_1) -> None: ...
     def back(self) -> Particle_2_1:
         """
         get back member.  Problem!!!!! this is perfo
@@ -4435,7 +4891,7 @@ class ArrayOfStructs_2_1_arena:
     def numTotalParticles(self) -> int: ...
     def pop_back(self) -> None: ...
     def push_back(self, arg0: Particle_2_1) -> None: ...
-    def setNumNeighbors(self, arg0: int) -> None: ...
+    def setNumNeighbors(self, arg0: typing.SupportsInt) -> None: ...
     def size(self) -> int: ...
     def to_cupy(self, copy=False):
         """
@@ -4511,9 +4967,9 @@ class ArrayOfStructs_2_1_arena:
 class ArrayOfStructs_2_1_default:
     @staticmethod
     def test_sizes() -> None: ...
-    def __getitem__(self, arg0: int) -> Particle_2_1: ...
+    def __getitem__(self, arg0: typing.SupportsInt) -> Particle_2_1: ...
     def __init__(self) -> None: ...
-    def __setitem__(self, arg0: int, arg1: Particle_2_1) -> None: ...
+    def __setitem__(self, arg0: typing.SupportsInt, arg1: Particle_2_1) -> None: ...
     def back(self) -> Particle_2_1:
         """
         get back member.  Problem!!!!! this is perfo
@@ -4529,7 +4985,7 @@ class ArrayOfStructs_2_1_default:
     def numTotalParticles(self) -> int: ...
     def pop_back(self) -> None: ...
     def push_back(self, arg0: Particle_2_1) -> None: ...
-    def setNumNeighbors(self, arg0: int) -> None: ...
+    def setNumNeighbors(self, arg0: typing.SupportsInt) -> None: ...
     def size(self) -> int: ...
     def to_cupy(self, copy=False):
         """
@@ -4605,9 +5061,9 @@ class ArrayOfStructs_2_1_default:
 class ArrayOfStructs_2_1_pinned:
     @staticmethod
     def test_sizes() -> None: ...
-    def __getitem__(self, arg0: int) -> Particle_2_1: ...
+    def __getitem__(self, arg0: typing.SupportsInt) -> Particle_2_1: ...
     def __init__(self) -> None: ...
-    def __setitem__(self, arg0: int, arg1: Particle_2_1) -> None: ...
+    def __setitem__(self, arg0: typing.SupportsInt, arg1: Particle_2_1) -> None: ...
     def back(self) -> Particle_2_1:
         """
         get back member.  Problem!!!!! this is perfo
@@ -4623,7 +5079,7 @@ class ArrayOfStructs_2_1_pinned:
     def numTotalParticles(self) -> int: ...
     def pop_back(self) -> None: ...
     def push_back(self, arg0: Particle_2_1) -> None: ...
-    def setNumNeighbors(self, arg0: int) -> None: ...
+    def setNumNeighbors(self, arg0: typing.SupportsInt) -> None: ...
     def size(self) -> int: ...
     def to_cupy(self, copy=False):
         """
@@ -4702,11 +5158,15 @@ class BaseFab_Real:
     @typing.overload
     def __init__(self, arg0: Arena) -> None: ...
     @typing.overload
-    def __init__(self, arg0: Box, arg1: int, arg2: Arena) -> None: ...
+    def __init__(self, arg0: Box, arg1: typing.SupportsInt, arg2: Arena) -> None: ...
     @typing.overload
-    def __init__(self, arg0: Box, arg1: int, arg2: float) -> None: ...
+    def __init__(
+        self, arg0: Box, arg1: typing.SupportsInt, arg2: typing.SupportsFloat
+    ) -> None: ...
     @typing.overload
-    def __init__(self, arg0: Box, arg1: int, arg2: float) -> None: ...
+    def __init__(
+        self, arg0: Box, arg1: typing.SupportsInt, arg2: typing.SupportsFloat
+    ) -> None: ...
     @typing.overload
     def __init__(self, arg0: Array4_double) -> None: ...
     @typing.overload
@@ -4728,11 +5188,11 @@ class BaseFab_Real:
     @typing.overload
     def n_bytes(self) -> int: ...
     @typing.overload
-    def n_bytes(self, arg0: Box, arg1: int) -> int: ...
+    def n_bytes(self, arg0: Box, arg1: typing.SupportsInt) -> int: ...
     def n_bytes_owned(self) -> int: ...
     def n_comp(self) -> int: ...
     def num_pts(self) -> int: ...
-    def resize(self, arg0: Box, arg1: int, arg2: Arena) -> None: ...
+    def resize(self, arg0: Box, arg1: typing.SupportsInt, arg2: Arena) -> None: ...
     def size(self) -> int: ...
     def small_end(self) -> IntVect3D: ...
     def to_host(self) -> BaseFab_Real: ...
@@ -4757,18 +5217,26 @@ class Box:
     @typing.overload
     def __init__(
         self,
-        small: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
-        big: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
+        small: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(3)"
+        ],
+        big: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(3)"
+        ],
     ) -> None: ...
     @typing.overload
     def __init__(
         self,
-        small: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
-        big: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
+        small: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(3)"
+        ],
+        big: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(3)"
+        ],
         t: IndexType,
     ) -> None: ...
     def __isub__(self, arg0: IntVect3D) -> Box: ...
-    def __iter__(self) -> typing.Iterator[IntVect3D]: ...
+    def __iter__(self) -> collections.abc.Iterator[IntVect3D]: ...
     def __repr__(self) -> str: ...
     def __sub__(self, arg0: IntVect3D) -> Box: ...
     def begin(self, box: Box) -> Dim3: ...
@@ -4800,7 +5268,7 @@ class Box:
         Convert to CELL type in all directions.
         """
     @typing.overload
-    def enclosed_cells(self, dir: int) -> Box:
+    def enclosed_cells(self, dir: typing.SupportsInt) -> Box:
         """
         Convert to CELL type in given direction.
         """
@@ -4811,7 +5279,7 @@ class Box:
         """
     def end(self, box: Box) -> Dim3: ...
     @typing.overload
-    def grow(self, n_cell: int) -> Box:
+    def grow(self, n_cell: typing.SupportsInt) -> Box:
         """
         Grow Box in all directions by given amount.
         NOTE: n_cell negative shrinks the Box by that number of cells.
@@ -4822,30 +5290,32 @@ class Box:
         Grow Box in each direction by specified amount.
         """
     @typing.overload
-    def grow(self, idir: int, n_cell: int) -> Box:
+    def grow(self, idir: typing.SupportsInt, n_cell: typing.SupportsInt) -> Box:
         """
         Grow the Box on the low and high end by n_cell cells
         in direction idir.
         """
     @typing.overload
-    def grow(self, d: Direction, n_cell: int) -> Box: ...
+    def grow(self, d: Direction, n_cell: typing.SupportsInt) -> Box: ...
     @typing.overload
-    def grow_high(self, idir: int, n_cell: int = 1) -> Box:
+    def grow_high(
+        self, idir: typing.SupportsInt, n_cell: typing.SupportsInt = 1
+    ) -> Box:
         """
         Grow the Box on the high end by n_cell cells in
         direction idir.  NOTE: n_cell negative shrinks the Box by that
         number of cells.
         """
     @typing.overload
-    def grow_high(self, d: Direction, n_cell: int = 1) -> Box: ...
+    def grow_high(self, d: Direction, n_cell: typing.SupportsInt = 1) -> Box: ...
     @typing.overload
-    def grow_low(self, idir: int, n_cell: int = 1) -> Box:
+    def grow_low(self, idir: typing.SupportsInt, n_cell: typing.SupportsInt = 1) -> Box:
         """
         Grow the Box on the low end by n_cell cells in direction idir.
         NOTE: n_cell negative shrinks the Box by that number of cells.
         """
     @typing.overload
-    def grow_low(self, d: Direction, n_cell: int = 1) -> Box: ...
+    def grow_low(self, d: Direction, n_cell: typing.SupportsInt = 1) -> Box: ...
     def intersects(self, b: Box) -> bool:
         """
         Returns true if Boxes have non-null intersections.
@@ -4858,11 +5328,13 @@ class Box:
         Return IntVect of lengths of the Box
         """
     @typing.overload
-    def length(self, dir: int) -> int:
+    def length(self, dir: typing.SupportsInt) -> int:
         """
         Return the length of the Box in given direction.
         """
-    def make_slab(self, direction: int, slab_index: int) -> Box:
+    def make_slab(
+        self, direction: typing.SupportsInt, slab_index: typing.SupportsInt
+    ) -> Box:
         """
         Flatten the box in one direction.
         """
@@ -4881,7 +5353,7 @@ class Box:
         Returns true if Boxes have same type.
         """
     @typing.overload
-    def shift(self, dir: int, nzones: int) -> Box:
+    def shift(self, dir: typing.SupportsInt, nzones: typing.SupportsInt) -> Box:
         """
         Shift this Box nzones indexing positions in coordinate direction dir.
         """
@@ -4900,7 +5372,7 @@ class Box:
         Convert to NODE type in all directions.
         """
     @typing.overload
-    def surrounding_nodes(self, dir: int) -> Box:
+    def surrounding_nodes(self, dir: typing.SupportsInt) -> Box:
         """
         Convert to NODE type in given direction.
         """
@@ -4939,7 +5411,7 @@ class Box:
     def volume(self) -> int: ...
 
 class BoxArray:
-    def __getitem__(self, arg0: int) -> Box: ...
+    def __getitem__(self, arg0: typing.SupportsInt) -> Box: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
@@ -4954,11 +5426,13 @@ class BoxArray:
     @typing.overload
     def coarsen(self, arg0: IntVect3D) -> BoxArray: ...
     @typing.overload
-    def coarsen(self, arg0: int) -> BoxArray: ...
+    def coarsen(self, arg0: typing.SupportsInt) -> BoxArray: ...
     @typing.overload
-    def coarsenable(self, arg0: int, arg1: int) -> bool: ...
+    def coarsenable(
+        self, arg0: typing.SupportsInt, arg1: typing.SupportsInt
+    ) -> bool: ...
     @typing.overload
-    def coarsenable(self, arg0: IntVect3D, arg1: int) -> bool: ...
+    def coarsenable(self, arg0: IntVect3D, arg1: typing.SupportsInt) -> bool: ...
     @typing.overload
     def coarsenable(self, arg0: IntVect3D, arg1: IntVect3D) -> bool: ...
     @typing.overload
@@ -4969,23 +5443,23 @@ class BoxArray:
     @typing.overload
     def enclosed_cells(self) -> BoxArray: ...
     @typing.overload
-    def enclosed_cells(self, arg0: int) -> BoxArray: ...
-    def get(self, arg0: int) -> Box: ...
+    def enclosed_cells(self, arg0: typing.SupportsInt) -> BoxArray: ...
+    def get(self, arg0: typing.SupportsInt) -> Box: ...
     def ix_type(self) -> IndexType: ...
     @typing.overload
-    def max_size(self, arg0: int) -> BoxArray: ...
+    def max_size(self, arg0: typing.SupportsInt) -> BoxArray: ...
     @typing.overload
     def max_size(self, arg0: IntVect3D) -> BoxArray: ...
     def minimal_box(self) -> Box: ...
     @typing.overload
-    def refine(self, arg0: int) -> BoxArray: ...
+    def refine(self, arg0: typing.SupportsInt) -> BoxArray: ...
     @typing.overload
     def refine(self, arg0: IntVect3D) -> BoxArray: ...
-    def resize(self, arg0: int) -> None: ...
+    def resize(self, arg0: typing.SupportsInt) -> None: ...
     @typing.overload
     def surroundingNodes(self) -> BoxArray: ...
     @typing.overload
-    def surroundingNodes(self, arg0: int) -> BoxArray: ...
+    def surroundingNodes(self, arg0: typing.SupportsInt) -> BoxArray: ...
     @property
     def capacity(self) -> int: ...
     @property
@@ -5008,44 +5482,19 @@ class Config:
     verbose: typing.ClassVar[int] = 1
 
 class CoordSys:
-    class CoordType:
+    class CoordType(enum.IntEnum):
         """
-        Members:
-
-          undef
-
-          cartesian
-
-          RZ
-
-          SPHERICAL
+        An enumeration.
         """
 
         RZ: typing.ClassVar[CoordSys.CoordType]  # value = <CoordType.RZ: 1>
         SPHERICAL: typing.ClassVar[
             CoordSys.CoordType
         ]  # value = <CoordType.SPHERICAL: 2>
-        __members__: typing.ClassVar[
-            dict[str, CoordSys.CoordType]
-        ]  # value = {'undef': <CoordType.undef: -1>, 'cartesian': <CoordType.cartesian: 0>, 'RZ': <CoordType.RZ: 1>, 'SPHERICAL': <CoordType.SPHERICAL: 2>}
         cartesian: typing.ClassVar[
             CoordSys.CoordType
         ]  # value = <CoordType.cartesian: 0>
         undef: typing.ClassVar[CoordSys.CoordType]  # value = <CoordType.undef: -1>
-        def __eq__(self, other: typing.Any) -> bool: ...
-        def __getstate__(self) -> int: ...
-        def __hash__(self) -> int: ...
-        def __index__(self) -> int: ...
-        def __init__(self, value: int) -> None: ...
-        def __int__(self) -> int: ...
-        def __ne__(self, other: typing.Any) -> bool: ...
-        def __repr__(self) -> str: ...
-        def __setstate__(self, state: int) -> None: ...
-        def __str__(self) -> str: ...
-        @property
-        def name(self) -> str: ...
-        @property
-        def value(self) -> int: ...
 
     RZ: typing.ClassVar[CoordSys.CoordType]  # value = <CoordType.RZ: 1>
     SPHERICAL: typing.ClassVar[CoordSys.CoordType]  # value = <CoordType.SPHERICAL: 2>
@@ -5065,19 +5514,33 @@ class CoordSys:
     def ok(self) -> bool: ...
 
 class Dim3:
-    x: int
-    y: int
-    z: int
-    def __init__(self, arg0: int, arg1: int, arg2: int) -> None: ...
+    def __init__(
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: typing.SupportsInt,
+    ) -> None: ...
     def __repr__(self) -> str: ...
     def __str__(self) -> str: ...
+    @property
+    def x(self) -> int: ...
+    @x.setter
+    def x(self, arg0: typing.SupportsInt) -> None: ...
+    @property
+    def y(self) -> int: ...
+    @y.setter
+    def y(self, arg0: typing.SupportsInt) -> None: ...
+    @property
+    def z(self) -> int: ...
+    @z.setter
+    def z(self, arg0: typing.SupportsInt) -> None: ...
 
 class Direction:
     pass
 
 class DistributionMapping:
     def ProcessorMap(self) -> Vector_int: ...
-    def __getitem__(self, arg0: int) -> int: ...
+    def __getitem__(self, arg0: typing.SupportsInt) -> int: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
@@ -5087,12 +5550,12 @@ class DistributionMapping:
     @typing.overload
     def __init__(self, boxes: BoxArray) -> None: ...
     @typing.overload
-    def __init__(self, boxes: BoxArray, nprocs: int) -> None: ...
+    def __init__(self, boxes: BoxArray, nprocs: typing.SupportsInt) -> None: ...
     def __repr__(self) -> str: ...
     @typing.overload
     def define(self, boxes: BoxArray) -> None: ...
     @typing.overload
-    def define(self, boxes: BoxArray, nprocs: int) -> None: ...
+    def define(self, boxes: BoxArray, nprocs: typing.SupportsInt) -> None: ...
     @typing.overload
     def define(self, arg0: Vector_int) -> None: ...
     @property
@@ -5110,15 +5573,19 @@ class FArrayBox(BaseFab_Real):
     @typing.overload
     def __init__(self, arg0: Arena) -> None: ...
     @typing.overload
-    def __init__(self, arg0: Box, arg1: int, arg2: Arena) -> None: ...
+    def __init__(self, arg0: Box, arg1: typing.SupportsInt, arg2: Arena) -> None: ...
     @typing.overload
     def __init__(
-        self, arg0: Box, arg1: int, arg2: bool, arg3: bool, arg4: Arena
+        self, arg0: Box, arg1: typing.SupportsInt, arg2: bool, arg3: bool, arg4: Arena
     ) -> None: ...
     @typing.overload
-    def __init__(self, arg0: Box, arg1: int, arg2: float) -> None: ...
+    def __init__(
+        self, arg0: Box, arg1: typing.SupportsInt, arg2: typing.SupportsFloat
+    ) -> None: ...
     @typing.overload
-    def __init__(self, arg0: Box, arg1: int, arg2: float) -> None: ...
+    def __init__(
+        self, arg0: Box, arg1: typing.SupportsInt, arg2: typing.SupportsFloat
+    ) -> None: ...
     @typing.overload
     def __init__(self, arg0: Array4_double) -> None: ...
     @typing.overload
@@ -5136,7 +5603,7 @@ class FabArrayBase:
         """
         Return the number of FABs in the FabArray.
         """
-    def is_nodal(self, arg0: int) -> bool: ...
+    def is_nodal(self, arg0: typing.SupportsInt) -> bool: ...
     @property
     def is_all_cell_centered(self) -> bool: ...
     @property
@@ -5164,9 +5631,16 @@ class FabArrayBase:
 
 class FabArray_FArrayBox(FabArrayBase):
     @typing.overload
-    def abs(self, comp: int, ncomp: int, nghost: int = 0) -> None: ...
+    def abs(
+        self,
+        comp: typing.SupportsInt,
+        ncomp: typing.SupportsInt,
+        nghost: typing.SupportsInt = 0,
+    ) -> None: ...
     @typing.overload
-    def abs(self, comp: int, ncomp: int, nghost: IntVect3D) -> None: ...
+    def abs(
+        self, comp: typing.SupportsInt, ncomp: typing.SupportsInt, nghost: IntVect3D
+    ) -> None: ...
     def array(self, arg0: MFIter) -> Array4_double: ...
     def clear(self) -> None: ...
     def const_array(self, arg0: MFIter) -> Array4_double_const: ...
@@ -5218,23 +5692,8 @@ class FabArray_FArrayBox(FabArrayBase):
             FillBoundary expects that its cell-centered version of its BoxArray is non-overlapping.
         """
     @typing.overload
-    def fill_boundary(self, scomp: int, ncomp: int, cross: bool = False) -> None:
-        """
-        Copy on intersection within a FabArray.
-
-            Data is copied from valid regions to intersecting regions of definition.
-            The purpose is to fill in the boundary regions of each FAB in the FabArray.
-            If cross=true, corner cells are not filled. If the length of periodic is provided,
-            periodic boundaries are also filled.
-
-            If scomp is provided, this only copies ncomp components starting at scomp.
-
-            Note that FabArray itself does not contains any periodicity information.
-            FillBoundary expects that its cell-centered version of its BoxArray is non-overlapping.
-        """
-    @typing.overload
     def fill_boundary(
-        self, scomp: int, ncomp: int, period: Periodicity, cross: bool = False
+        self, scomp: typing.SupportsInt, ncomp: typing.SupportsInt, cross: bool = False
     ) -> None:
         """
         Copy on intersection within a FabArray.
@@ -5252,8 +5711,29 @@ class FabArray_FArrayBox(FabArrayBase):
     @typing.overload
     def fill_boundary(
         self,
-        scomp: int,
-        ncomp: int,
+        scomp: typing.SupportsInt,
+        ncomp: typing.SupportsInt,
+        period: Periodicity,
+        cross: bool = False,
+    ) -> None:
+        """
+        Copy on intersection within a FabArray.
+
+            Data is copied from valid regions to intersecting regions of definition.
+            The purpose is to fill in the boundary regions of each FAB in the FabArray.
+            If cross=true, corner cells are not filled. If the length of periodic is provided,
+            periodic boundaries are also filled.
+
+            If scomp is provided, this only copies ncomp components starting at scomp.
+
+            Note that FabArray itself does not contains any periodicity information.
+            FillBoundary expects that its cell-centered version of its BoxArray is non-overlapping.
+        """
+    @typing.overload
+    def fill_boundary(
+        self,
+        scomp: typing.SupportsInt,
+        ncomp: typing.SupportsInt,
         nghost: IntVect3D,
         period: Periodicity,
         cross: bool = False,
@@ -5273,14 +5753,14 @@ class FabArray_FArrayBox(FabArrayBase):
         """
     def lin_comb(
         self,
-        a: float,
+        a: typing.SupportsFloat,
         x: FabArray_FArrayBox,
-        xcomp: int,
-        b: float,
+        xcomp: typing.SupportsInt,
+        b: typing.SupportsFloat,
         y: FabArray_FArrayBox,
-        ycomp: int,
-        comp: int,
-        numcomp: int,
+        ycomp: typing.SupportsInt,
+        comp: typing.SupportsInt,
+        numcomp: typing.SupportsInt,
         nghost: IntVect3D,
     ) -> None:
         """
@@ -5325,7 +5805,9 @@ class FabArray_FArrayBox(FabArrayBase):
               periodic length if it's non-zero
         """
     @typing.overload
-    def override_sync(self, scomp: int, ncomp: int, period: Periodicity) -> None:
+    def override_sync(
+        self, scomp: typing.SupportsInt, ncomp: typing.SupportsInt, period: Periodicity
+    ) -> None:
         """
         Synchronize nodal data.
 
@@ -5344,11 +5826,11 @@ class FabArray_FArrayBox(FabArrayBase):
         """
     def saxpy(
         self,
-        a: float,
+        a: typing.SupportsFloat,
         x: FabArray_FArrayBox,
-        x_comp: int,
-        comp: int,
-        ncomp: int,
+        x_comp: typing.SupportsInt,
+        comp: typing.SupportsInt,
+        ncomp: typing.SupportsInt,
         nghost: IntVect3D,
     ) -> None:
         """
@@ -5364,19 +5846,18 @@ class FabArray_FArrayBox(FabArrayBase):
         nghost : number of ghost cells
         """
     @typing.overload
-    def set_val(self, val: float) -> None:
+    def set_val(self, val: typing.SupportsFloat) -> None:
         """
         Set all components in the entire region of each FAB to val.
         """
     @typing.overload
-    def set_val(self, val: float, comp: int, num_comp: int, nghost: int = 0) -> None:
-        """
-        Set the value of num_comp components in the valid region of
-        each FAB in the FabArray, starting at component comp to val.
-        Also set the value of nghost boundary cells.
-        """
-    @typing.overload
-    def set_val(self, val: float, comp: int, num_comp: int, nghost: IntVect3D) -> None:
+    def set_val(
+        self,
+        val: typing.SupportsFloat,
+        comp: typing.SupportsInt,
+        num_comp: typing.SupportsInt,
+        nghost: typing.SupportsInt = 0,
+    ) -> None:
         """
         Set the value of num_comp components in the valid region of
         each FAB in the FabArray, starting at component comp to val.
@@ -5384,7 +5865,25 @@ class FabArray_FArrayBox(FabArrayBase):
         """
     @typing.overload
     def set_val(
-        self, val: float, region: Box, comp: int, num_comp: int, nghost: int = 0
+        self,
+        val: typing.SupportsFloat,
+        comp: typing.SupportsInt,
+        num_comp: typing.SupportsInt,
+        nghost: IntVect3D,
+    ) -> None:
+        """
+        Set the value of num_comp components in the valid region of
+        each FAB in the FabArray, starting at component comp to val.
+        Also set the value of nghost boundary cells.
+        """
+    @typing.overload
+    def set_val(
+        self,
+        val: typing.SupportsFloat,
+        region: Box,
+        comp: typing.SupportsInt,
+        num_comp: typing.SupportsInt,
+        nghost: typing.SupportsInt = 0,
     ) -> None:
         """
         Set the value of num_comp components in the valid region of
@@ -5394,7 +5893,12 @@ class FabArray_FArrayBox(FabArrayBase):
         """
     @typing.overload
     def set_val(
-        self, val: float, region: Box, comp: int, num_comp: int, nghost: IntVect3D
+        self,
+        val: typing.SupportsFloat,
+        region: Box,
+        comp: typing.SupportsInt,
+        num_comp: typing.SupportsInt,
+        nghost: IntVect3D,
     ) -> None:
         """
         Set the value of num_comp components in the valid region of
@@ -5402,7 +5906,7 @@ class FabArray_FArrayBox(FabArrayBase):
         as nghost boundary cells, to val, provided they also intersect
         with the Box region.
         """
-    def sum(self, comp: int, nghost: IntVect3D, local: bool) -> float:
+    def sum(self, comp: typing.SupportsInt, nghost: IntVect3D, local: bool) -> float:
         """
         Returns the sum of component "comp"
         """
@@ -5412,13 +5916,8 @@ class FabArray_FArrayBox(FabArrayBase):
         Sum values in overlapped cells.  The destination is limited to valid cells.
         """
     @typing.overload
-    def sum_boundary(self, scomp: int, ncomp: int, period: Periodicity) -> None:
-        """
-        Sum values in overlapped cells.  The destination is limited to valid cells.
-        """
-    @typing.overload
     def sum_boundary(
-        self, scomp: int, ncomp: int, nghost: IntVect3D, period: Periodicity
+        self, scomp: typing.SupportsInt, ncomp: typing.SupportsInt, period: Periodicity
     ) -> None:
         """
         Sum values in overlapped cells.  The destination is limited to valid cells.
@@ -5426,8 +5925,19 @@ class FabArray_FArrayBox(FabArrayBase):
     @typing.overload
     def sum_boundary(
         self,
-        scomp: int,
-        ncomp: int,
+        scomp: typing.SupportsInt,
+        ncomp: typing.SupportsInt,
+        nghost: IntVect3D,
+        period: Periodicity,
+    ) -> None:
+        """
+        Sum values in overlapped cells.  The destination is limited to valid cells.
+        """
+    @typing.overload
+    def sum_boundary(
+        self,
+        scomp: typing.SupportsInt,
+        ncomp: typing.SupportsInt,
         nghost: IntVect3D,
         dst_nghost: IntVect3D,
         period: Periodicity,
@@ -5437,11 +5947,11 @@ class FabArray_FArrayBox(FabArrayBase):
         """
     def xpay(
         self,
-        a: float,
+        a: typing.SupportsFloat,
         x: FabArray_FArrayBox,
-        xcomp: int,
-        comp: int,
-        ncomp: int,
+        xcomp: typing.SupportsInt,
+        comp: typing.SupportsInt,
+        ncomp: typing.SupportsInt,
         nghost: IntVect3D,
     ) -> None:
         """
@@ -5468,9 +5978,16 @@ class FabArray_FArrayBox(FabArrayBase):
 
 class FabArray_IArrayBox(FabArrayBase):
     @typing.overload
-    def abs(self, comp: int, ncomp: int, nghost: int = 0) -> None: ...
+    def abs(
+        self,
+        comp: typing.SupportsInt,
+        ncomp: typing.SupportsInt,
+        nghost: typing.SupportsInt = 0,
+    ) -> None: ...
     @typing.overload
-    def abs(self, comp: int, ncomp: int, nghost: IntVect3D) -> None: ...
+    def abs(
+        self, comp: typing.SupportsInt, ncomp: typing.SupportsInt, nghost: IntVect3D
+    ) -> None: ...
     def array(self, arg0: MFIter) -> Array4_int: ...
     def clear(self) -> None: ...
     def const_array(self, arg0: MFIter) -> Array4_int_const: ...
@@ -5522,23 +6039,8 @@ class FabArray_IArrayBox(FabArrayBase):
             FillBoundary expects that its cell-centered version of its BoxArray is non-overlapping.
         """
     @typing.overload
-    def fill_boundary(self, scomp: int, ncomp: int, cross: bool = False) -> None:
-        """
-        Copy on intersection within a FabArray.
-
-            Data is copied from valid regions to intersecting regions of definition.
-            The purpose is to fill in the boundary regions of each FAB in the FabArray.
-            If cross=true, corner cells are not filled. If the length of periodic is provided,
-            periodic boundaries are also filled.
-
-            If scomp is provided, this only copies ncomp components starting at scomp.
-
-            Note that FabArray itself does not contains any periodicity information.
-            FillBoundary expects that its cell-centered version of its BoxArray is non-overlapping.
-        """
-    @typing.overload
     def fill_boundary(
-        self, scomp: int, ncomp: int, period: Periodicity, cross: bool = False
+        self, scomp: typing.SupportsInt, ncomp: typing.SupportsInt, cross: bool = False
     ) -> None:
         """
         Copy on intersection within a FabArray.
@@ -5556,8 +6058,29 @@ class FabArray_IArrayBox(FabArrayBase):
     @typing.overload
     def fill_boundary(
         self,
-        scomp: int,
-        ncomp: int,
+        scomp: typing.SupportsInt,
+        ncomp: typing.SupportsInt,
+        period: Periodicity,
+        cross: bool = False,
+    ) -> None:
+        """
+        Copy on intersection within a FabArray.
+
+            Data is copied from valid regions to intersecting regions of definition.
+            The purpose is to fill in the boundary regions of each FAB in the FabArray.
+            If cross=true, corner cells are not filled. If the length of periodic is provided,
+            periodic boundaries are also filled.
+
+            If scomp is provided, this only copies ncomp components starting at scomp.
+
+            Note that FabArray itself does not contains any periodicity information.
+            FillBoundary expects that its cell-centered version of its BoxArray is non-overlapping.
+        """
+    @typing.overload
+    def fill_boundary(
+        self,
+        scomp: typing.SupportsInt,
+        ncomp: typing.SupportsInt,
         nghost: IntVect3D,
         period: Periodicity,
         cross: bool = False,
@@ -5577,14 +6100,14 @@ class FabArray_IArrayBox(FabArrayBase):
         """
     def lin_comb(
         self,
-        a: int,
+        a: typing.SupportsInt,
         x: FabArray_IArrayBox,
-        xcomp: int,
-        b: int,
+        xcomp: typing.SupportsInt,
+        b: typing.SupportsInt,
         y: FabArray_IArrayBox,
-        ycomp: int,
-        comp: int,
-        numcomp: int,
+        ycomp: typing.SupportsInt,
+        comp: typing.SupportsInt,
+        numcomp: typing.SupportsInt,
         nghost: IntVect3D,
     ) -> None:
         """
@@ -5629,7 +6152,9 @@ class FabArray_IArrayBox(FabArrayBase):
               periodic length if it's non-zero
         """
     @typing.overload
-    def override_sync(self, scomp: int, ncomp: int, period: Periodicity) -> None:
+    def override_sync(
+        self, scomp: typing.SupportsInt, ncomp: typing.SupportsInt, period: Periodicity
+    ) -> None:
         """
         Synchronize nodal data.
 
@@ -5648,11 +6173,11 @@ class FabArray_IArrayBox(FabArrayBase):
         """
     def saxpy(
         self,
-        a: int,
+        a: typing.SupportsInt,
         x: FabArray_IArrayBox,
-        x_comp: int,
-        comp: int,
-        ncomp: int,
+        x_comp: typing.SupportsInt,
+        comp: typing.SupportsInt,
+        ncomp: typing.SupportsInt,
         nghost: IntVect3D,
     ) -> None:
         """
@@ -5668,19 +6193,18 @@ class FabArray_IArrayBox(FabArrayBase):
         nghost : number of ghost cells
         """
     @typing.overload
-    def set_val(self, val: int) -> None:
+    def set_val(self, val: typing.SupportsInt) -> None:
         """
         Set all components in the entire region of each FAB to val.
         """
     @typing.overload
-    def set_val(self, val: int, comp: int, num_comp: int, nghost: int = 0) -> None:
-        """
-        Set the value of num_comp components in the valid region of
-        each FAB in the FabArray, starting at component comp to val.
-        Also set the value of nghost boundary cells.
-        """
-    @typing.overload
-    def set_val(self, val: int, comp: int, num_comp: int, nghost: IntVect3D) -> None:
+    def set_val(
+        self,
+        val: typing.SupportsInt,
+        comp: typing.SupportsInt,
+        num_comp: typing.SupportsInt,
+        nghost: typing.SupportsInt = 0,
+    ) -> None:
         """
         Set the value of num_comp components in the valid region of
         each FAB in the FabArray, starting at component comp to val.
@@ -5688,7 +6212,25 @@ class FabArray_IArrayBox(FabArrayBase):
         """
     @typing.overload
     def set_val(
-        self, val: int, region: Box, comp: int, num_comp: int, nghost: int = 0
+        self,
+        val: typing.SupportsInt,
+        comp: typing.SupportsInt,
+        num_comp: typing.SupportsInt,
+        nghost: IntVect3D,
+    ) -> None:
+        """
+        Set the value of num_comp components in the valid region of
+        each FAB in the FabArray, starting at component comp to val.
+        Also set the value of nghost boundary cells.
+        """
+    @typing.overload
+    def set_val(
+        self,
+        val: typing.SupportsInt,
+        region: Box,
+        comp: typing.SupportsInt,
+        num_comp: typing.SupportsInt,
+        nghost: typing.SupportsInt = 0,
     ) -> None:
         """
         Set the value of num_comp components in the valid region of
@@ -5698,7 +6240,12 @@ class FabArray_IArrayBox(FabArrayBase):
         """
     @typing.overload
     def set_val(
-        self, val: int, region: Box, comp: int, num_comp: int, nghost: IntVect3D
+        self,
+        val: typing.SupportsInt,
+        region: Box,
+        comp: typing.SupportsInt,
+        num_comp: typing.SupportsInt,
+        nghost: IntVect3D,
     ) -> None:
         """
         Set the value of num_comp components in the valid region of
@@ -5706,7 +6253,7 @@ class FabArray_IArrayBox(FabArrayBase):
         as nghost boundary cells, to val, provided they also intersect
         with the Box region.
         """
-    def sum(self, comp: int, nghost: IntVect3D, local: bool) -> int:
+    def sum(self, comp: typing.SupportsInt, nghost: IntVect3D, local: bool) -> int:
         """
         Returns the sum of component "comp"
         """
@@ -5716,13 +6263,8 @@ class FabArray_IArrayBox(FabArrayBase):
         Sum values in overlapped cells.  The destination is limited to valid cells.
         """
     @typing.overload
-    def sum_boundary(self, scomp: int, ncomp: int, period: Periodicity) -> None:
-        """
-        Sum values in overlapped cells.  The destination is limited to valid cells.
-        """
-    @typing.overload
     def sum_boundary(
-        self, scomp: int, ncomp: int, nghost: IntVect3D, period: Periodicity
+        self, scomp: typing.SupportsInt, ncomp: typing.SupportsInt, period: Periodicity
     ) -> None:
         """
         Sum values in overlapped cells.  The destination is limited to valid cells.
@@ -5730,8 +6272,19 @@ class FabArray_IArrayBox(FabArrayBase):
     @typing.overload
     def sum_boundary(
         self,
-        scomp: int,
-        ncomp: int,
+        scomp: typing.SupportsInt,
+        ncomp: typing.SupportsInt,
+        nghost: IntVect3D,
+        period: Periodicity,
+    ) -> None:
+        """
+        Sum values in overlapped cells.  The destination is limited to valid cells.
+        """
+    @typing.overload
+    def sum_boundary(
+        self,
+        scomp: typing.SupportsInt,
+        ncomp: typing.SupportsInt,
         nghost: IntVect3D,
         dst_nghost: IntVect3D,
         period: Periodicity,
@@ -5741,11 +6294,11 @@ class FabArray_IArrayBox(FabArrayBase):
         """
     def xpay(
         self,
-        a: int,
+        a: typing.SupportsInt,
         x: FabArray_IArrayBox,
-        xcomp: int,
-        comp: int,
-        ncomp: int,
+        xcomp: typing.SupportsInt,
+        comp: typing.SupportsInt,
+        ncomp: typing.SupportsInt,
         nghost: IntVect3D,
     ) -> None:
         """
@@ -5778,30 +6331,26 @@ class FabFactory_IArrayBox:
 
 class Geometry(CoordSys):
     @typing.overload
-    def ProbHi(self, dir: int) -> float:
+    def ProbHi(self, dir: typing.SupportsInt) -> float:
         """
         Get the hi end of the problem domain in specified direction
         """
     @typing.overload
-    def ProbHi(
-        self,
-    ) -> typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(3)]:
+    def ProbHi(self) -> typing.Annotated[list[float], "FixedSize(3)"]:
         """
         Get the list of lo ends of the problem domain
         """
-    def ProbLength(self, arg0: int) -> float:
+    def ProbLength(self, arg0: typing.SupportsInt) -> float:
         """
         length of problem domain in specified dimension
         """
     @typing.overload
-    def ProbLo(self, dir: int) -> float:
+    def ProbLo(self, dir: typing.SupportsInt) -> float:
         """
         Get the lo end of the problem domain in specified direction
         """
     @typing.overload
-    def ProbLo(
-        self,
-    ) -> typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(3)]:
+    def ProbLo(self) -> typing.Annotated[list[float], "FixedSize(3)"]:
         """
         Get the list of lo ends of the problem domain
         """
@@ -5809,12 +6358,14 @@ class Geometry(CoordSys):
         """
         the overall size of the domain
         """
-    def ResetDefaultCoord(self: int) -> None:
+    def ResetDefaultCoord(self: typing.SupportsInt) -> None:
         """
         Reset default coord of Geometry class with an Array of `int`
         """
     def ResetDefaultPeriodicity(
-        self: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
+        self: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(3)"
+        ],
     ) -> None:
         """
         Reset default periodicity of Geometry class with an Array of `int`
@@ -5830,8 +6381,10 @@ class Geometry(CoordSys):
         self,
         dom: Box,
         rb: RealBox,
-        coord: int,
-        is_per: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
+        coord: typing.SupportsInt,
+        is_per: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(3)"
+        ],
     ) -> None: ...
     def __repr__(self) -> str: ...
     def __str__(self) -> str: ...
@@ -5844,8 +6397,10 @@ class Geometry(CoordSys):
         self,
         dom: Box,
         rb: RealBox,
-        coord: int,
-        is_per: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
+        coord: typing.SupportsInt,
+        is_per: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(3)"
+        ],
     ) -> None:
         """
         Set geometry
@@ -5853,12 +6408,14 @@ class Geometry(CoordSys):
     @typing.overload
     def growNonPeriodicDomain(self, ngrow: IntVect3D) -> Box: ...
     @typing.overload
-    def growNonPeriodicDomain(self, ngrow: int) -> Box: ...
+    def growNonPeriodicDomain(self, ngrow: typing.SupportsInt) -> Box: ...
     @typing.overload
     def growPeriodicDomain(self, ngrow: IntVect3D) -> Box: ...
     @typing.overload
-    def growPeriodicDomain(self, ngrow: int) -> Box: ...
-    def insideRoundOffDomain(self, x: float, y: float, z: float) -> bool:
+    def growPeriodicDomain(self, ngrow: typing.SupportsInt) -> Box: ...
+    def insideRoundOffDomain(
+        self, x: typing.SupportsFloat, y: typing.SupportsFloat, z: typing.SupportsFloat
+    ) -> bool:
         """
         Returns true if a point is inside the roundoff domain. All particles with positions inside the roundoff domain are sure to be mapped to cells inside the Domain() box. Note that the same need not be true for all points inside ProbDomain()
         """
@@ -5871,22 +6428,22 @@ class Geometry(CoordSys):
         Is domain periodic in any direction?
         """
     @typing.overload
-    def isPeriodic(self, arg0: int) -> bool:
+    def isPeriodic(self, arg0: typing.SupportsInt) -> bool:
         """
         Is the domain periodic in the specified direction?
         """
     @typing.overload
-    def isPeriodic(
-        self,
-    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)]:
+    def isPeriodic(self) -> typing.Annotated[list[int], "FixedSize(3)"]:
         """
         Return list indicating whether domain is periodic in each direction
         """
-    def outsideRoundOffDomain(self, x: float, y: float, z: float) -> bool:
+    def outsideRoundOffDomain(
+        self, x: typing.SupportsFloat, y: typing.SupportsFloat, z: typing.SupportsFloat
+    ) -> bool:
         """
         Returns true if a point is outside the roundoff domain. All particles with positions inside the roundoff domain are sure to be mapped to cells inside the Domain() box. Note that the same need not be true for all points inside ProbDomain()
         """
-    def period(self, dir: int) -> int:
+    def period(self, dir: typing.SupportsInt) -> int:
         """
         Return the period in the specified direction
         """
@@ -5900,8 +6457,10 @@ class Geometry(CoordSys):
     def refine(self, rr: IntVect3D) -> None: ...
     def setPeriodicity(
         self,
-        period: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
-    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)]:
+        period: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(3)"
+        ],
+    ) -> typing.Annotated[list[int], "FixedSize(3)"]:
         """
         Set periodicity flags and return the old flags.
         Note that, unlike Periodicity class, the flags are just boolean.
@@ -5923,14 +6482,12 @@ class Geometry(CoordSys):
 
 class GeometryData:
     @typing.overload
-    def CellSize(
-        self,
-    ) -> typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(3)]:
+    def CellSize(self) -> typing.Annotated[list[float], "FixedSize(3)"]:
         """
         Returns the cellsize for each coordinate direction.
         """
     @typing.overload
-    def CellSize(self, arg0: int) -> float:
+    def CellSize(self, arg0: typing.SupportsInt) -> float:
         """
         Returns the cellsize for specified coordinate direction.
         """
@@ -5943,40 +6500,34 @@ class GeometryData:
         Returns our rectangular domain
         """
     @typing.overload
-    def ProbHi(
-        self,
-    ) -> typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(3)]:
+    def ProbHi(self) -> typing.Annotated[list[float], "FixedSize(3)"]:
         """
         Returns the hi end for each coordinate direction.
         """
     @typing.overload
-    def ProbHi(self, arg0: int) -> float:
+    def ProbHi(self, arg0: typing.SupportsInt) -> float:
         """
         Returns the hi end of the problem domain in specified dimension.
         """
     @typing.overload
-    def ProbLo(
-        self,
-    ) -> typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(3)]:
+    def ProbLo(self) -> typing.Annotated[list[float], "FixedSize(3)"]:
         """
         Returns the lo end for each coordinate direction.
         """
     @typing.overload
-    def ProbLo(self, arg0: int) -> float:
+    def ProbLo(self, arg0: typing.SupportsInt) -> float:
         """
         Returns the lo end of the problem domain in specified dimension.
         """
     def __init__(self) -> None: ...
     def __repr__(self) -> str: ...
     @typing.overload
-    def isPeriodic(
-        self,
-    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)]:
+    def isPeriodic(self) -> typing.Annotated[list[int], "FixedSize(3)"]:
         """
         Returns whether the domain is periodic in each direction.
         """
     @typing.overload
-    def isPeriodic(self, arg0: int) -> int:
+    def isPeriodic(self, arg0: typing.SupportsInt) -> int:
         """
         Returns whether the domain is periodic in the given direction.
         """
@@ -5991,16 +6542,12 @@ class GeometryData:
         The index domain.
         """
     @property
-    def dx(
-        self,
-    ) -> typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(3)]:
+    def dx(self) -> typing.Annotated[list[float], "FixedSize(3)"]:
         """
         The cellsize for each coordinate direction.
         """
     @property
-    def is_periodic(
-        self,
-    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)]:
+    def is_periodic(self) -> typing.Annotated[list[int], "FixedSize(3)"]:
         """
         Returns whether the domain is periodic in each coordinate direction.
         """
@@ -6011,34 +6558,13 @@ class GeometryData:
         """
 
 class IndexType:
-    class CellIndex:
+    class CellIndex(enum.IntEnum):
         """
-        Members:
-
-          CELL
-
-          NODE
+        An enumeration.
         """
 
         CELL: typing.ClassVar[IndexType.CellIndex]  # value = <CellIndex.CELL: 0>
         NODE: typing.ClassVar[IndexType.CellIndex]  # value = <CellIndex.NODE: 1>
-        __members__: typing.ClassVar[
-            dict[str, IndexType.CellIndex]
-        ]  # value = {'CELL': <CellIndex.CELL: 0>, 'NODE': <CellIndex.NODE: 1>}
-        def __eq__(self, other: typing.Any) -> bool: ...
-        def __getstate__(self) -> int: ...
-        def __hash__(self) -> int: ...
-        def __index__(self) -> int: ...
-        def __init__(self, value: int) -> None: ...
-        def __int__(self) -> int: ...
-        def __ne__(self, other: typing.Any) -> bool: ...
-        def __repr__(self) -> str: ...
-        def __setstate__(self, state: int) -> None: ...
-        def __str__(self) -> str: ...
-        @property
-        def name(self) -> str: ...
-        @property
-        def value(self) -> int: ...
 
     CELL: typing.ClassVar[IndexType.CellIndex]  # value = <CellIndex.CELL: 0>
     NODE: typing.ClassVar[IndexType.CellIndex]  # value = <CellIndex.NODE: 1>
@@ -6048,7 +6574,7 @@ class IndexType:
     @staticmethod
     def node_type() -> IndexType: ...
     def __eq__(self, arg0: IndexType) -> bool: ...
-    def __getitem__(self, arg0: int) -> int: ...
+    def __getitem__(self, arg0: typing.SupportsInt) -> int: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
@@ -6069,24 +6595,24 @@ class IndexType:
     @typing.overload
     def cell_centered(self) -> bool: ...
     @typing.overload
-    def cell_centered(self, arg0: int) -> bool: ...
+    def cell_centered(self, arg0: typing.SupportsInt) -> bool: ...
     def clear(self) -> None: ...
-    def flip(self, arg0: int) -> None: ...
+    def flip(self, arg0: typing.SupportsInt) -> None: ...
     @typing.overload
     def ix_type(self) -> IntVect3D: ...
     @typing.overload
-    def ix_type(self, arg0: int) -> IndexType.CellIndex: ...
+    def ix_type(self, arg0: typing.SupportsInt) -> IndexType.CellIndex: ...
     @typing.overload
     def node_centered(self) -> bool: ...
     @typing.overload
-    def node_centered(self, arg0: int) -> bool: ...
+    def node_centered(self, arg0: typing.SupportsInt) -> bool: ...
     def ok(self) -> bool: ...
-    def set(self, arg0: int) -> None: ...
-    def set_type(self, arg0: int, arg1: IndexType.CellIndex) -> None: ...
+    def set(self, arg0: typing.SupportsInt) -> None: ...
+    def set_type(self, arg0: typing.SupportsInt, arg1: IndexType.CellIndex) -> None: ...
     def setall(self) -> None: ...
-    def test(self, arg0: int) -> bool: ...
+    def test(self, arg0: typing.SupportsInt) -> bool: ...
     def to_IntVect(self) -> IntVect3D: ...
-    def unset(self, arg0: int) -> None: ...
+    def unset(self, arg0: typing.SupportsInt) -> None: ...
 
 class IntVect1D:
     __hash__: typing.ClassVar[None] = None
@@ -6103,62 +6629,66 @@ class IntVect1D:
     @staticmethod
     def zero_vector() -> IntVect1D: ...
     @typing.overload
-    def __add__(self, arg0: int) -> IntVect1D: ...
+    def __add__(self, arg0: typing.SupportsInt) -> IntVect1D: ...
     @typing.overload
     def __add__(self, arg0: IntVect1D) -> IntVect1D: ...
     @typing.overload
-    def __eq__(self, arg0: int) -> bool: ...
+    def __eq__(self, arg0: typing.SupportsInt) -> bool: ...
     @typing.overload
     def __eq__(self, arg0: IntVect1D) -> bool: ...
     def __ge__(self, arg0: IntVect1D) -> bool: ...
-    def __getitem__(self, arg0: int) -> int: ...
+    def __getitem__(self, arg0: typing.SupportsInt) -> int: ...
     def __gt__(self, arg0: IntVect1D) -> bool: ...
     @typing.overload
-    def __iadd__(self, arg0: int) -> IntVect1D: ...
+    def __iadd__(self, arg0: typing.SupportsInt) -> IntVect1D: ...
     @typing.overload
     def __iadd__(self, arg0: IntVect1D) -> IntVect1D: ...
     @typing.overload
-    def __imul__(self, arg0: int) -> IntVect1D: ...
+    def __imul__(self, arg0: typing.SupportsInt) -> IntVect1D: ...
     @typing.overload
     def __imul__(self, arg0: IntVect1D) -> IntVect1D: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
-    def __init__(self, arg0: int) -> None: ...
+    def __init__(self, arg0: typing.SupportsInt) -> None: ...
     @typing.overload
     def __init__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(1)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(1)"
+        ],
     ) -> None: ...
     @typing.overload
-    def __isub__(self, arg0: int) -> IntVect1D: ...
+    def __isub__(self, arg0: typing.SupportsInt) -> IntVect1D: ...
     @typing.overload
     def __isub__(self, arg0: IntVect1D) -> IntVect1D: ...
-    def __iter__(self) -> typing.Iterator[int]: ...
+    def __iter__(self) -> collections.abc.Iterator[int]: ...
     @typing.overload
-    def __itruediv__(self, arg0: int) -> IntVect1D: ...
+    def __itruediv__(self, arg0: typing.SupportsInt) -> IntVect1D: ...
     @typing.overload
     def __itruediv__(self, arg0: IntVect1D) -> IntVect1D: ...
     def __le__(self, arg0: IntVect1D) -> bool: ...
     def __len__(self) -> int: ...
     def __lt__(self, arg0: IntVect1D) -> bool: ...
     @typing.overload
-    def __mul__(self, arg0: int) -> IntVect1D: ...
+    def __mul__(self, arg0: typing.SupportsInt) -> IntVect1D: ...
     @typing.overload
     def __mul__(self, arg0: IntVect1D) -> IntVect1D: ...
     @typing.overload
-    def __ne__(self, arg0: int) -> bool: ...
+    def __ne__(self, arg0: typing.SupportsInt) -> bool: ...
     @typing.overload
     def __ne__(self, arg0: IntVect1D) -> bool: ...
     def __repr__(self) -> str: ...
-    def __setitem__(self, arg0: int, arg1: int) -> int: ...
+    def __setitem__(
+        self, arg0: typing.SupportsInt, arg1: typing.SupportsInt
+    ) -> int: ...
     def __str(self) -> str: ...
     @typing.overload
-    def __sub__(self, arg0: int) -> IntVect1D: ...
+    def __sub__(self, arg0: typing.SupportsInt) -> IntVect1D: ...
     @typing.overload
     def __sub__(self, arg0: IntVect1D) -> IntVect1D: ...
     @typing.overload
-    def __truediv__(self, arg0: int) -> IntVect1D: ...
+    def __truediv__(self, arg0: typing.SupportsInt) -> IntVect1D: ...
     @typing.overload
     def __truediv__(self, arg0: IntVect1D) -> IntVect1D: ...
     def dim3(self) -> Dim3: ...
@@ -6185,64 +6715,68 @@ class IntVect2D:
     @staticmethod
     def zero_vector() -> IntVect2D: ...
     @typing.overload
-    def __add__(self, arg0: int) -> IntVect2D: ...
+    def __add__(self, arg0: typing.SupportsInt) -> IntVect2D: ...
     @typing.overload
     def __add__(self, arg0: IntVect2D) -> IntVect2D: ...
     @typing.overload
-    def __eq__(self, arg0: int) -> bool: ...
+    def __eq__(self, arg0: typing.SupportsInt) -> bool: ...
     @typing.overload
     def __eq__(self, arg0: IntVect2D) -> bool: ...
     def __ge__(self, arg0: IntVect2D) -> bool: ...
-    def __getitem__(self, arg0: int) -> int: ...
+    def __getitem__(self, arg0: typing.SupportsInt) -> int: ...
     def __gt__(self, arg0: IntVect2D) -> bool: ...
     @typing.overload
-    def __iadd__(self, arg0: int) -> IntVect2D: ...
+    def __iadd__(self, arg0: typing.SupportsInt) -> IntVect2D: ...
     @typing.overload
     def __iadd__(self, arg0: IntVect2D) -> IntVect2D: ...
     @typing.overload
-    def __imul__(self, arg0: int) -> IntVect2D: ...
+    def __imul__(self, arg0: typing.SupportsInt) -> IntVect2D: ...
     @typing.overload
     def __imul__(self, arg0: IntVect2D) -> IntVect2D: ...
     @typing.overload
-    def __init__(self, arg0: int, arg1: int) -> None: ...
+    def __init__(self, arg0: typing.SupportsInt, arg1: typing.SupportsInt) -> None: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
-    def __init__(self, arg0: int) -> None: ...
+    def __init__(self, arg0: typing.SupportsInt) -> None: ...
     @typing.overload
     def __init__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(2)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(2)"
+        ],
     ) -> None: ...
     @typing.overload
-    def __isub__(self, arg0: int) -> IntVect2D: ...
+    def __isub__(self, arg0: typing.SupportsInt) -> IntVect2D: ...
     @typing.overload
     def __isub__(self, arg0: IntVect2D) -> IntVect2D: ...
-    def __iter__(self) -> typing.Iterator[int]: ...
+    def __iter__(self) -> collections.abc.Iterator[int]: ...
     @typing.overload
-    def __itruediv__(self, arg0: int) -> IntVect2D: ...
+    def __itruediv__(self, arg0: typing.SupportsInt) -> IntVect2D: ...
     @typing.overload
     def __itruediv__(self, arg0: IntVect2D) -> IntVect2D: ...
     def __le__(self, arg0: IntVect2D) -> bool: ...
     def __len__(self) -> int: ...
     def __lt__(self, arg0: IntVect2D) -> bool: ...
     @typing.overload
-    def __mul__(self, arg0: int) -> IntVect2D: ...
+    def __mul__(self, arg0: typing.SupportsInt) -> IntVect2D: ...
     @typing.overload
     def __mul__(self, arg0: IntVect2D) -> IntVect2D: ...
     @typing.overload
-    def __ne__(self, arg0: int) -> bool: ...
+    def __ne__(self, arg0: typing.SupportsInt) -> bool: ...
     @typing.overload
     def __ne__(self, arg0: IntVect2D) -> bool: ...
     def __repr__(self) -> str: ...
-    def __setitem__(self, arg0: int, arg1: int) -> int: ...
+    def __setitem__(
+        self, arg0: typing.SupportsInt, arg1: typing.SupportsInt
+    ) -> int: ...
     def __str(self) -> str: ...
     @typing.overload
-    def __sub__(self, arg0: int) -> IntVect2D: ...
+    def __sub__(self, arg0: typing.SupportsInt) -> IntVect2D: ...
     @typing.overload
     def __sub__(self, arg0: IntVect2D) -> IntVect2D: ...
     @typing.overload
-    def __truediv__(self, arg0: int) -> IntVect2D: ...
+    def __truediv__(self, arg0: typing.SupportsInt) -> IntVect2D: ...
     @typing.overload
     def __truediv__(self, arg0: IntVect2D) -> IntVect2D: ...
     def dim3(self) -> Dim3: ...
@@ -6269,64 +6803,73 @@ class IntVect3D:
     @staticmethod
     def zero_vector() -> IntVect3D: ...
     @typing.overload
-    def __add__(self, arg0: int) -> IntVect3D: ...
+    def __add__(self, arg0: typing.SupportsInt) -> IntVect3D: ...
     @typing.overload
     def __add__(self, arg0: IntVect3D) -> IntVect3D: ...
     @typing.overload
-    def __eq__(self, arg0: int) -> bool: ...
+    def __eq__(self, arg0: typing.SupportsInt) -> bool: ...
     @typing.overload
     def __eq__(self, arg0: IntVect3D) -> bool: ...
     def __ge__(self, arg0: IntVect3D) -> bool: ...
-    def __getitem__(self, arg0: int) -> int: ...
+    def __getitem__(self, arg0: typing.SupportsInt) -> int: ...
     def __gt__(self, arg0: IntVect3D) -> bool: ...
     @typing.overload
-    def __iadd__(self, arg0: int) -> IntVect3D: ...
+    def __iadd__(self, arg0: typing.SupportsInt) -> IntVect3D: ...
     @typing.overload
     def __iadd__(self, arg0: IntVect3D) -> IntVect3D: ...
     @typing.overload
-    def __imul__(self, arg0: int) -> IntVect3D: ...
+    def __imul__(self, arg0: typing.SupportsInt) -> IntVect3D: ...
     @typing.overload
     def __imul__(self, arg0: IntVect3D) -> IntVect3D: ...
     @typing.overload
-    def __init__(self, arg0: int, arg1: int, arg2: int) -> None: ...
+    def __init__(
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: typing.SupportsInt,
+    ) -> None: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
-    def __init__(self, arg0: int) -> None: ...
+    def __init__(self, arg0: typing.SupportsInt) -> None: ...
     @typing.overload
     def __init__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(3)"
+        ],
     ) -> None: ...
     @typing.overload
-    def __isub__(self, arg0: int) -> IntVect3D: ...
+    def __isub__(self, arg0: typing.SupportsInt) -> IntVect3D: ...
     @typing.overload
     def __isub__(self, arg0: IntVect3D) -> IntVect3D: ...
-    def __iter__(self) -> typing.Iterator[int]: ...
+    def __iter__(self) -> collections.abc.Iterator[int]: ...
     @typing.overload
-    def __itruediv__(self, arg0: int) -> IntVect3D: ...
+    def __itruediv__(self, arg0: typing.SupportsInt) -> IntVect3D: ...
     @typing.overload
     def __itruediv__(self, arg0: IntVect3D) -> IntVect3D: ...
     def __le__(self, arg0: IntVect3D) -> bool: ...
     def __len__(self) -> int: ...
     def __lt__(self, arg0: IntVect3D) -> bool: ...
     @typing.overload
-    def __mul__(self, arg0: int) -> IntVect3D: ...
+    def __mul__(self, arg0: typing.SupportsInt) -> IntVect3D: ...
     @typing.overload
     def __mul__(self, arg0: IntVect3D) -> IntVect3D: ...
     @typing.overload
-    def __ne__(self, arg0: int) -> bool: ...
+    def __ne__(self, arg0: typing.SupportsInt) -> bool: ...
     @typing.overload
     def __ne__(self, arg0: IntVect3D) -> bool: ...
     def __repr__(self) -> str: ...
-    def __setitem__(self, arg0: int, arg1: int) -> int: ...
+    def __setitem__(
+        self, arg0: typing.SupportsInt, arg1: typing.SupportsInt
+    ) -> int: ...
     def __str(self) -> str: ...
     @typing.overload
-    def __sub__(self, arg0: int) -> IntVect3D: ...
+    def __sub__(self, arg0: typing.SupportsInt) -> IntVect3D: ...
     @typing.overload
     def __sub__(self, arg0: IntVect3D) -> IntVect3D: ...
     @typing.overload
-    def __truediv__(self, arg0: int) -> IntVect3D: ...
+    def __truediv__(self, arg0: typing.SupportsInt) -> IntVect3D: ...
     @typing.overload
     def __truediv__(self, arg0: IntVect3D) -> IntVect3D: ...
     def dim3(self) -> Dim3: ...
@@ -6351,15 +6894,18 @@ class MFItInfo:
     device_sync: bool
     do_tiling: bool
     dynamic: bool
-    num_streams: int
     tilesize: IntVect3D
     def __init__(self) -> None: ...
     def disable_device_sync(self) -> MFItInfo: ...
     def enable_tiling(self, ts: IntVect3D) -> MFItInfo: ...
     def set_device_sync(self, f: bool) -> MFItInfo: ...
     def set_dynamic(self, f: bool) -> MFItInfo: ...
-    def set_num_streams(self, n: int) -> MFItInfo: ...
+    def set_num_streams(self, n: typing.SupportsInt) -> MFItInfo: ...
     def use_default_stream(self) -> MFItInfo: ...
+    @property
+    def num_streams(self) -> int: ...
+    @num_streams.setter
+    def num_streams(self, arg0: typing.SupportsInt) -> None: ...
 
 class MFIter:
     @typing.overload
@@ -6397,11 +6943,13 @@ class MFIter:
     def fabbox(self) -> Box: ...
     def finalize(self) -> None: ...
     @typing.overload
-    def grownnodaltilebox(self, int: int = -1, ng: int = -1000000) -> Box: ...
+    def grownnodaltilebox(
+        self, int: typing.SupportsInt = -1, ng: typing.SupportsInt = -1000000
+    ) -> Box: ...
     @typing.overload
-    def grownnodaltilebox(self, int: int, ng: IntVect3D) -> Box: ...
+    def grownnodaltilebox(self, int: typing.SupportsInt, ng: IntVect3D) -> Box: ...
     def growntilebox(self, ng: IntVect3D = -1000000) -> Box: ...
-    def nodaltilebox(self, dir: int = -1) -> Box: ...
+    def nodaltilebox(self, dir: typing.SupportsInt = -1) -> Box: ...
     @typing.overload
     def tilebox(self) -> Box: ...
     @typing.overload
@@ -6425,8 +6973,18 @@ class MPMD_Copier:
     ) -> None: ...
     def box_array(self) -> BoxArray: ...
     def distribution_map(self) -> DistributionMapping: ...
-    def recv(self, arg0: FabArray_FArrayBox, arg1: int, arg2: int) -> None: ...
-    def send(self, arg0: FabArray_FArrayBox, arg1: int, arg2: int) -> None: ...
+    def recv(
+        self,
+        arg0: FabArray_FArrayBox,
+        arg1: typing.SupportsInt,
+        arg2: typing.SupportsInt,
+    ) -> None: ...
+    def send(
+        self,
+        arg0: FabArray_FArrayBox,
+        arg1: typing.SupportsInt,
+        arg2: typing.SupportsInt,
+    ) -> None: ...
 
 class MultiFab(FabArray_FArrayBox):
     @staticmethod
@@ -6485,8 +7043,8 @@ class MultiFab(FabArray_FArrayBox):
         self,
         bxs: BoxArray,
         dm: DistributionMapping,
-        ncomp: int,
-        ngrow: int,
+        ncomp: typing.SupportsInt,
+        ngrow: typing.SupportsInt,
         info: MFInfo,
         factory: FabFactory_FArrayBox,
     ) -> None:
@@ -6518,36 +7076,9 @@ class MultiFab(FabArray_FArrayBox):
         self,
         bxs: BoxArray,
         dm: DistributionMapping,
-        ncomp: int,
-        ngrow: int,
+        ncomp: typing.SupportsInt,
+        ngrow: typing.SupportsInt,
         info: MFInfo,
-    ) -> None:
-        """
-        Constructs an (i)MultiFab.
-
-        The size of the FArrayBox is given by the Box grown by \\p ngrow, and
-        the number of components is given by \\p ncomp. If \\p info is set to
-        not allocating memory, then no FArrayBoxes are allocated at
-        this time but can be defined later.
-
-        Parameters
-        ----------
-        bxs :
-          a valid region
-        dm :
-          a DistributionMapping
-        ncomp :
-          number of components
-        ngrow :
-          number of cells the region grows
-        info :
-          (i)MultiFab info, including allocation Arena
-        factory :
-          FArrayBoxFactory for embedded boundaries
-        """
-    @typing.overload
-    def __init__(
-        self, bxs: BoxArray, dm: DistributionMapping, ncomp: int, ngrow: int
     ) -> None:
         """
         Constructs an (i)MultiFab.
@@ -6577,7 +7108,38 @@ class MultiFab(FabArray_FArrayBox):
         self,
         bxs: BoxArray,
         dm: DistributionMapping,
-        ncomp: int,
+        ncomp: typing.SupportsInt,
+        ngrow: typing.SupportsInt,
+    ) -> None:
+        """
+        Constructs an (i)MultiFab.
+
+        The size of the FArrayBox is given by the Box grown by \\p ngrow, and
+        the number of components is given by \\p ncomp. If \\p info is set to
+        not allocating memory, then no FArrayBoxes are allocated at
+        this time but can be defined later.
+
+        Parameters
+        ----------
+        bxs :
+          a valid region
+        dm :
+          a DistributionMapping
+        ncomp :
+          number of components
+        ngrow :
+          number of cells the region grows
+        info :
+          (i)MultiFab info, including allocation Arena
+        factory :
+          FArrayBoxFactory for embedded boundaries
+        """
+    @typing.overload
+    def __init__(
+        self,
+        bxs: BoxArray,
+        dm: DistributionMapping,
+        ncomp: typing.SupportsInt,
         ngrow: IntVect3D,
         info: MFInfo,
     ) -> None:
@@ -6609,7 +7171,7 @@ class MultiFab(FabArray_FArrayBox):
         self,
         bxs: BoxArray,
         dm: DistributionMapping,
-        ncomp: int,
+        ncomp: typing.SupportsInt,
         ngrow: IntVect3D,
         info: MFInfo,
         factory: FabFactory_FArrayBox,
@@ -6639,7 +7201,11 @@ class MultiFab(FabArray_FArrayBox):
         """
     @typing.overload
     def __init__(
-        self, bxs: BoxArray, dm: DistributionMapping, ncomp: int, ngrow: IntVect3D
+        self,
+        bxs: BoxArray,
+        dm: DistributionMapping,
+        ncomp: typing.SupportsInt,
+        ngrow: IntVect3D,
     ) -> None:
         """
         Constructs an (i)MultiFab.
@@ -6693,7 +7259,12 @@ class MultiFab(FabArray_FArrayBox):
         """
     @typing.overload
     def add(
-        self, src: MultiFab, srccomp: int, comp: int, numcomp: int, nghost: int
+        self,
+        src: MultiFab,
+        srccomp: typing.SupportsInt,
+        comp: typing.SupportsInt,
+        numcomp: typing.SupportsInt,
+        nghost: typing.SupportsInt,
     ) -> None:
         """
         Add src to self including nghost ghost cells.
@@ -6701,7 +7272,12 @@ class MultiFab(FabArray_FArrayBox):
         """
     @typing.overload
     def add(
-        self, src: MultiFab, srccomp: int, comp: int, numcomp: int, nghost: IntVect3D
+        self,
+        src: MultiFab,
+        srccomp: typing.SupportsInt,
+        comp: typing.SupportsInt,
+        numcomp: typing.SupportsInt,
+        nghost: IntVect3D,
     ) -> None:
         """
         Add src to self including nghost ghost cells.
@@ -6711,12 +7287,12 @@ class MultiFab(FabArray_FArrayBox):
     def add_product(
         self,
         src1: MultiFab,
-        comp1: int,
+        comp1: typing.SupportsInt,
         src2: MultiFab,
-        comp2: int,
-        comp: int,
-        numcomp: int,
-        nghost: int,
+        comp2: typing.SupportsInt,
+        comp: typing.SupportsInt,
+        numcomp: typing.SupportsInt,
+        nghost: typing.SupportsInt,
     ) -> None:
         """
         self += src1 * src2
@@ -6725,11 +7301,11 @@ class MultiFab(FabArray_FArrayBox):
     def add_product(
         self,
         src1: MultiFab,
-        comp1: int,
+        comp1: typing.SupportsInt,
         src2: MultiFab,
-        comp2: int,
-        comp: int,
-        numcomp: int,
+        comp2: typing.SupportsInt,
+        comp: typing.SupportsInt,
+        numcomp: typing.SupportsInt,
         nghost: IntVect3D,
     ) -> None:
         """
@@ -6741,21 +7317,37 @@ class MultiFab(FabArray_FArrayBox):
     def contains_inf(self, local: bool = False) -> bool: ...
     @typing.overload
     def contains_inf(
-        self, scomp: int, ncomp: int, ngrow: int = 0, local: bool = False
+        self,
+        scomp: typing.SupportsInt,
+        ncomp: typing.SupportsInt,
+        ngrow: typing.SupportsInt = 0,
+        local: bool = False,
     ) -> bool: ...
     @typing.overload
     def contains_inf(
-        self, scomp: int, ncomp: int, ngrow: IntVect3D, local: bool = False
+        self,
+        scomp: typing.SupportsInt,
+        ncomp: typing.SupportsInt,
+        ngrow: IntVect3D,
+        local: bool = False,
     ) -> bool: ...
     @typing.overload
     def contains_nan(self, local: bool = False) -> bool: ...
     @typing.overload
     def contains_nan(
-        self, scomp: int, ncomp: int, ngrow: int = 0, local: bool = False
+        self,
+        scomp: typing.SupportsInt,
+        ncomp: typing.SupportsInt,
+        ngrow: typing.SupportsInt = 0,
+        local: bool = False,
     ) -> bool: ...
     @typing.overload
     def contains_nan(
-        self, scomp: int, ncomp: int, ngrow: IntVect3D, local: bool = False
+        self,
+        scomp: typing.SupportsInt,
+        ncomp: typing.SupportsInt,
+        ngrow: IntVect3D,
+        local: bool = False,
     ) -> bool: ...
     def copy(self):
         """
@@ -6775,7 +7367,12 @@ class MultiFab(FabArray_FArrayBox):
         """
     @typing.overload
     def copymf(
-        self, src: MultiFab, srccomp: int, dstcomp: int, numcomp: int, nghost: int
+        self,
+        src: MultiFab,
+        srccomp: typing.SupportsInt,
+        dstcomp: typing.SupportsInt,
+        numcomp: typing.SupportsInt,
+        nghost: typing.SupportsInt,
     ) -> None:
         """
         Copy from src to self including nghost ghost cells.
@@ -6783,14 +7380,23 @@ class MultiFab(FabArray_FArrayBox):
         """
     @typing.overload
     def copymf(
-        self, src: MultiFab, srccomp: int, dstcomp: int, numcomp: int, nghost: IntVect3D
+        self,
+        src: MultiFab,
+        srccomp: typing.SupportsInt,
+        dstcomp: typing.SupportsInt,
+        numcomp: typing.SupportsInt,
+        nghost: IntVect3D,
     ) -> None:
         """
         Copy from src to self including nghost ghost cells.
         The two MultiFabs MUST have the same underlying BoxArray. The copy is local
         """
     def divi(
-        self, mf: MultiFab, strt_comp: int, num_comp: int, nghost: int = 0
+        self,
+        mf: MultiFab,
+        strt_comp: typing.SupportsInt,
+        num_comp: typing.SupportsInt,
+        nghost: typing.SupportsInt = 0,
     ) -> None:
         """
         This function divides the values of the cells in mf from the
@@ -6804,7 +7410,12 @@ class MultiFab(FabArray_FArrayBox):
         """
     @typing.overload
     def divide(
-        self, src: MultiFab, srccomp: int, comp: int, numcomp: int, nghost: int
+        self,
+        src: MultiFab,
+        srccomp: typing.SupportsInt,
+        comp: typing.SupportsInt,
+        numcomp: typing.SupportsInt,
+        nghost: typing.SupportsInt,
     ) -> None:
         """
         Divide self by src including nghost ghost cells.
@@ -6812,7 +7423,12 @@ class MultiFab(FabArray_FArrayBox):
         """
     @typing.overload
     def divide(
-        self, src: MultiFab, srccomp: int, comp: int, numcomp: int, nghost: IntVect3D
+        self,
+        src: MultiFab,
+        srccomp: typing.SupportsInt,
+        comp: typing.SupportsInt,
+        numcomp: typing.SupportsInt,
+        nghost: IntVect3D,
     ) -> None:
         """
         Divide self by src including nghost ghost cells.
@@ -6822,18 +7438,24 @@ class MultiFab(FabArray_FArrayBox):
     @typing.overload
     def dot(
         self,
-        comp: int,
+        comp: typing.SupportsInt,
         y: MultiFab,
-        y_comp: int,
-        numcomp: int,
-        nghost: int,
+        y_comp: typing.SupportsInt,
+        numcomp: typing.SupportsInt,
+        nghost: typing.SupportsInt,
         local: bool = False,
     ) -> float:
         """
         Returns the dot product of self with another MultiFab.
         """
     @typing.overload
-    def dot(self, comp: int, numcomp: int, nghost: int, local: bool = False) -> float:
+    def dot(
+        self,
+        comp: typing.SupportsInt,
+        numcomp: typing.SupportsInt,
+        nghost: typing.SupportsInt,
+        local: bool = False,
+    ) -> float:
         """
         Returns the dot product with itself.
         """
@@ -6841,11 +7463,11 @@ class MultiFab(FabArray_FArrayBox):
     def dot(
         self,
         mask: iMultiFab,
-        comp: int,
+        comp: typing.SupportsInt,
         y: MultiFab,
-        y_comp: int,
-        numcomp: int,
-        nghost: int,
+        y_comp: typing.SupportsInt,
+        numcomp: typing.SupportsInt,
+        nghost: typing.SupportsInt,
         local: bool = False,
     ) -> float:
         """
@@ -6868,7 +7490,9 @@ class MultiFab(FabArray_FArrayBox):
 
         """
     @typing.overload
-    def invert(self, numerator: float, nghost: int) -> None:
+    def invert(
+        self, numerator: typing.SupportsFloat, nghost: typing.SupportsInt
+    ) -> None:
         """
         Replaces the value of each cell in the specified subregion of
         the MultiFab with its reciprocal multiplied by the value of
@@ -6877,7 +7501,11 @@ class MultiFab(FabArray_FArrayBox):
         """
     @typing.overload
     def invert(
-        self, numerator: float, comp: int, num_comp: int, nghost: int = 0
+        self,
+        numerator: typing.SupportsFloat,
+        comp: typing.SupportsInt,
+        num_comp: typing.SupportsInt,
+        nghost: typing.SupportsInt = 0,
     ) -> None:
         """
         Replaces the value of each cell in the specified subregion of
@@ -6888,7 +7516,9 @@ class MultiFab(FabArray_FArrayBox):
         subregion that should be modified.
         """
     @typing.overload
-    def invert(self, numerator: float, region: Box, nghost: int) -> None:
+    def invert(
+        self, numerator: typing.SupportsFloat, region: Box, nghost: typing.SupportsInt
+    ) -> None:
         """
         Scales the value of each cell in the valid region of each
         component of the MultiFab by the scalar val (a[i] <- a[i]*val),
@@ -6898,7 +7528,12 @@ class MultiFab(FabArray_FArrayBox):
         """
     @typing.overload
     def invert(
-        self, numerator: float, region: Box, comp: int, num_comp: int, nghost: int = 0
+        self,
+        numerator: typing.SupportsFloat,
+        region: Box,
+        comp: typing.SupportsInt,
+        num_comp: typing.SupportsInt,
+        nghost: typing.SupportsInt = 0,
     ) -> None:
         """
         Identical to the previous version of invert(), with the
@@ -6909,47 +7544,73 @@ class MultiFab(FabArray_FArrayBox):
         """
     def lin_comb(
         self,
-        a: float,
+        a: typing.SupportsFloat,
         x: MultiFab,
-        x_comp: int,
-        b: float,
+        x_comp: typing.SupportsInt,
+        b: typing.SupportsFloat,
         y: MultiFab,
-        y_comp: int,
-        comp: int,
-        numcomp: int,
-        nghost: int,
+        y_comp: typing.SupportsInt,
+        comp: typing.SupportsInt,
+        numcomp: typing.SupportsInt,
+        nghost: typing.SupportsInt,
     ) -> None:
         """
         self = a * x + b * y
         """
     @typing.overload
-    def max(self, comp: int = 0, nghost: int = 0, local: bool = False) -> float:
+    def max(
+        self,
+        comp: typing.SupportsInt = 0,
+        nghost: typing.SupportsInt = 0,
+        local: bool = False,
+    ) -> float:
         """
         Returns the maximum value of the specified component of the (i)MultiFab.
         """
     @typing.overload
     def max(
-        self, region: Box, comp: int = 0, nghost: int = 0, local: bool = False
+        self,
+        region: Box,
+        comp: typing.SupportsInt = 0,
+        nghost: typing.SupportsInt = 0,
+        local: bool = False,
     ) -> float:
         """
         Returns the maximum value of the specified component of the (i)MultiFab over the region.
         """
-    def maxIndex(self, arg0: int, arg1: int) -> IntVect3D: ...
+    def maxIndex(
+        self, arg0: typing.SupportsInt, arg1: typing.SupportsInt
+    ) -> IntVect3D: ...
     @typing.overload
-    def min(self, comp: int = 0, nghost: int = 0, local: bool = False) -> float:
+    def min(
+        self,
+        comp: typing.SupportsInt = 0,
+        nghost: typing.SupportsInt = 0,
+        local: bool = False,
+    ) -> float:
         """
         Returns the minimum value of the specified component of the (i)MultiFab.
         """
     @typing.overload
     def min(
-        self, region: Box, comp: int = 0, nghost: int = 0, local: bool = False
+        self,
+        region: Box,
+        comp: typing.SupportsInt = 0,
+        nghost: typing.SupportsInt = 0,
+        local: bool = False,
     ) -> float:
         """
         Returns the minimum value of the specified component of the (i)MultiFab over the region.
         """
-    def minIndex(self, arg0: int, arg1: int) -> IntVect3D: ...
+    def minIndex(
+        self, arg0: typing.SupportsInt, arg1: typing.SupportsInt
+    ) -> IntVect3D: ...
     def minus(
-        self, mf: MultiFab, strt_comp: int, num_comp: int, nghost: int = 0
+        self,
+        mf: MultiFab,
+        strt_comp: typing.SupportsInt,
+        num_comp: typing.SupportsInt,
+        nghost: typing.SupportsInt = 0,
     ) -> None:
         """
         This function subtracts the values of the cells in mf from the
@@ -6961,7 +7622,7 @@ class MultiFab(FabArray_FArrayBox):
         each FArrayBox will be modified.
         """
     @typing.overload
-    def mult(self, val: float, nghost: int = 0) -> None:
+    def mult(self, val: typing.SupportsFloat, nghost: typing.SupportsInt = 0) -> None:
         """
         Scales the value of each cell in the valid region of each
         component of the MultiFab by the scalar val (a[i] <- a[i]*val).
@@ -6969,7 +7630,13 @@ class MultiFab(FabArray_FArrayBox):
         boundary region that should be modified.
         """
     @typing.overload
-    def mult(self, val: float, comp: int, num_comp: int, nghost: int = 0) -> None:
+    def mult(
+        self,
+        val: typing.SupportsFloat,
+        comp: typing.SupportsInt,
+        num_comp: typing.SupportsInt,
+        nghost: typing.SupportsInt = 0,
+    ) -> None:
         """
         Scales the value of each cell in the specified subregion of the
         MultiFab by the scalar val (a[i] <- a[i]*val). The subregion
@@ -6980,7 +7647,12 @@ class MultiFab(FabArray_FArrayBox):
         """
     @typing.overload
     def mult(
-        self, val: float, region: Box, comp: int, num_comp: int, nghost: int = 0
+        self,
+        val: typing.SupportsFloat,
+        region: Box,
+        comp: typing.SupportsInt,
+        num_comp: typing.SupportsInt,
+        nghost: typing.SupportsInt = 0,
     ) -> None:
         """
         Identical to the previous version of mult(), with the
@@ -6990,7 +7662,9 @@ class MultiFab(FabArray_FArrayBox):
         the subregion that should be modified.
         """
     @typing.overload
-    def mult(self, val: float, region: Box, nghost: int = 0) -> None:
+    def mult(
+        self, val: typing.SupportsFloat, region: Box, nghost: typing.SupportsInt = 0
+    ) -> None:
         """
         Scales the value of each cell in the valid region of each
         component of the MultiFab by the scalar val (a[i] <- a[i]*val),
@@ -7000,7 +7674,12 @@ class MultiFab(FabArray_FArrayBox):
         """
     @typing.overload
     def multiply(
-        self, src: MultiFab, srccomp: int, comp: int, numcomp: int, nghost: int
+        self,
+        src: MultiFab,
+        srccomp: typing.SupportsInt,
+        comp: typing.SupportsInt,
+        numcomp: typing.SupportsInt,
+        nghost: typing.SupportsInt,
     ) -> None:
         """
         Multiply self by src including nghost ghost cells.
@@ -7008,21 +7687,31 @@ class MultiFab(FabArray_FArrayBox):
         """
     @typing.overload
     def multiply(
-        self, src: MultiFab, srccomp: int, comp: int, numcomp: int, nghost: IntVect3D
+        self,
+        src: MultiFab,
+        srccomp: typing.SupportsInt,
+        comp: typing.SupportsInt,
+        numcomp: typing.SupportsInt,
+        nghost: IntVect3D,
     ) -> None:
         """
         Multiply self by src including nghost ghost cells.
         The two MultiFabs MUST have the same underlying BoxArray.
         """
     @typing.overload
-    def negate(self, nghost: int = 0) -> None:
+    def negate(self, nghost: typing.SupportsInt = 0) -> None:
         """
         Negates the value of each cell in the valid region of
         the MultiFab.  The value of nghost specifies the number of
         cells in the boundary region that should be modified.
         """
     @typing.overload
-    def negate(self, comp: int, num_comp: int, nghost: int = 0) -> None:
+    def negate(
+        self,
+        comp: typing.SupportsInt,
+        num_comp: typing.SupportsInt,
+        nghost: typing.SupportsInt = 0,
+    ) -> None:
         """
         Negates the value of each cell in the specified subregion of
         the MultiFab.  The subregion consists of the num_comp
@@ -7031,7 +7720,7 @@ class MultiFab(FabArray_FArrayBox):
         FArrayBox in the subregion that should be modified.
         """
     @typing.overload
-    def negate(self, region: Box, nghost: int = 0) -> None:
+    def negate(self, region: Box, nghost: typing.SupportsInt = 0) -> None:
         """
         Negates the value of each cell in the valid region of
         the MultiFab that also intersects the Box region.  The value
@@ -7039,32 +7728,54 @@ class MultiFab(FabArray_FArrayBox):
         that should be modified.
         """
     @typing.overload
-    def negate(self, region: Box, comp: int, num_comp: int, nghost: int = 0) -> None:
+    def negate(
+        self,
+        region: Box,
+        comp: typing.SupportsInt,
+        num_comp: typing.SupportsInt,
+        nghost: typing.SupportsInt = 0,
+    ) -> None:
         """
         Identical to the previous version of negate(), with the
         restriction that the subregion is further constrained to
         the intersection with Box region.
         """
     @typing.overload
-    def norm0(self, arg0: int, arg1: int, arg2: bool, arg3: bool) -> float: ...
+    def norm0(
+        self, arg0: typing.SupportsInt, arg1: typing.SupportsInt, arg2: bool, arg3: bool
+    ) -> float: ...
     @typing.overload
-    def norm0(self, arg0: iMultiFab, arg1: int, arg2: int, arg3: bool) -> float: ...
+    def norm0(
+        self,
+        arg0: iMultiFab,
+        arg1: typing.SupportsInt,
+        arg2: typing.SupportsInt,
+        arg3: bool,
+    ) -> float: ...
     @typing.overload
-    def norm1(self, arg0: int, arg1: Periodicity, arg2: bool) -> float: ...
+    def norm1(
+        self, arg0: typing.SupportsInt, arg1: Periodicity, arg2: bool
+    ) -> float: ...
     @typing.overload
-    def norm1(self, arg0: int, arg1: int, arg2: bool) -> float: ...
+    def norm1(
+        self, arg0: typing.SupportsInt, arg1: typing.SupportsInt, arg2: bool
+    ) -> float: ...
     @typing.overload
-    def norm1(self, arg0: Vector_int, arg1: int, arg2: bool) -> Vector_Real: ...
+    def norm1(
+        self, arg0: Vector_int, arg1: typing.SupportsInt, arg2: bool
+    ) -> Vector_Real: ...
     @typing.overload
-    def norm2(self, arg0: int) -> float: ...
+    def norm2(self, arg0: typing.SupportsInt) -> float: ...
     @typing.overload
-    def norm2(self, arg0: int, arg1: Periodicity) -> float: ...
+    def norm2(self, arg0: typing.SupportsInt, arg1: Periodicity) -> float: ...
     @typing.overload
     def norm2(self, arg0: Vector_int) -> Vector_Real: ...
-    def norminf(self, arg0: int, arg1: int, arg2: bool, arg3: bool) -> float: ...
+    def norminf(
+        self, arg0: typing.SupportsInt, arg1: typing.SupportsInt, arg2: bool, arg3: bool
+    ) -> float: ...
     def override_sync(self, arg0: iMultiFab, arg1: Periodicity) -> None: ...
     @typing.overload
-    def plus(self, val: float, nghost: int = 0) -> None:
+    def plus(self, val: typing.SupportsFloat, nghost: typing.SupportsInt = 0) -> None:
         """
         Adds the scalar value val to the value of each cell in the
         valid region of each component of the MultiFab.  The value
@@ -7072,7 +7783,13 @@ class MultiFab(FabArray_FArrayBox):
         region that should be modified.
         """
     @typing.overload
-    def plus(self, val: float, comp: int, num_comp: int, nghost: int = 0) -> None:
+    def plus(
+        self,
+        val: typing.SupportsFloat,
+        comp: typing.SupportsInt,
+        num_comp: typing.SupportsInt,
+        nghost: typing.SupportsInt = 0,
+    ) -> None:
         """
         Adds the scalar value \\p val to the value of each cell in the
         specified subregion of the MultiFab.
@@ -7083,7 +7800,9 @@ class MultiFab(FabArray_FArrayBox):
         be modified.
         """
     @typing.overload
-    def plus(self, val: float, region: Box, nghost: int = 0) -> None:
+    def plus(
+        self, val: typing.SupportsFloat, region: Box, nghost: typing.SupportsInt = 0
+    ) -> None:
         """
         Adds the scalar value val to the value of each cell in the
         valid region of each component of the MultiFab, that also
@@ -7093,7 +7812,12 @@ class MultiFab(FabArray_FArrayBox):
         """
     @typing.overload
     def plus(
-        self, val: float, region: Box, comp: int, num_comp: int, nghost: int = 0
+        self,
+        val: typing.SupportsFloat,
+        region: Box,
+        comp: typing.SupportsInt,
+        num_comp: typing.SupportsInt,
+        nghost: typing.SupportsInt = 0,
     ) -> None:
         """
         Identical to the previous version of plus(), with the
@@ -7102,7 +7826,11 @@ class MultiFab(FabArray_FArrayBox):
         """
     @typing.overload
     def plus(
-        self, mf: MultiFab, strt_comp: int, num_comp: int, nghost: int = 0
+        self,
+        mf: MultiFab,
+        strt_comp: typing.SupportsInt,
+        num_comp: typing.SupportsInt,
+        nghost: typing.SupportsInt = 0,
     ) -> None:
         """
         This function adds the values of the cells in mf to the corresponding
@@ -7115,19 +7843,24 @@ class MultiFab(FabArray_FArrayBox):
         """
     def saxpy(
         self,
-        a: float,
+        a: typing.SupportsFloat,
         src: MultiFab,
-        srccomp: int,
-        comp: int,
-        numcomp: int,
-        nghost: int,
+        srccomp: typing.SupportsInt,
+        comp: typing.SupportsInt,
+        numcomp: typing.SupportsInt,
+        nghost: typing.SupportsInt,
     ) -> None:
         """
         self += a * src
         """
     @typing.overload
     def subtract(
-        self, src: MultiFab, srccomp: int, comp: int, numcomp: int, nghost: int
+        self,
+        src: MultiFab,
+        srccomp: typing.SupportsInt,
+        comp: typing.SupportsInt,
+        numcomp: typing.SupportsInt,
+        nghost: typing.SupportsInt,
     ) -> None:
         """
         Subtract src from self including nghost ghost cells.
@@ -7135,37 +7868,54 @@ class MultiFab(FabArray_FArrayBox):
         """
     @typing.overload
     def subtract(
-        self, src: MultiFab, srccomp: int, comp: int, numcomp: int, nghost: IntVect3D
+        self,
+        src: MultiFab,
+        srccomp: typing.SupportsInt,
+        comp: typing.SupportsInt,
+        numcomp: typing.SupportsInt,
+        nghost: IntVect3D,
     ) -> None:
         """
         Subtract src from self including nghost ghost cells.
         The two MultiFabs MUST have the same underlying BoxArray.
         """
     @typing.overload
-    def sum(self, comp: int = 0, local: bool = False) -> float:
+    def sum(self, comp: typing.SupportsInt = 0, local: bool = False) -> float:
         """
         Returns the sum of component 'comp' over the (i)MultiFab -- no ghost cells are included.
         """
     @typing.overload
-    def sum(self, region: Box, comp: int = 0, local: bool = False) -> float:
+    def sum(
+        self, region: Box, comp: typing.SupportsInt = 0, local: bool = False
+    ) -> float:
         """
         Returns the sum of component 'comp' in the given 'region'. -- no ghost cells are included.
         """
     @typing.overload
     def sum_unique(
-        self, comp: int = 0, local: bool = False, period: Periodicity = ...
+        self,
+        comp: typing.SupportsInt = 0,
+        local: bool = False,
+        period: Periodicity = ...,
     ) -> float:
         """
         Same as sum with local=false, but for non-cell-centered data, thisskips non-unique points that are owned by multiple boxes.
         """
     @typing.overload
-    def sum_unique(self, region: Box, comp: int = 0, local: bool = False) -> float:
+    def sum_unique(
+        self, region: Box, comp: typing.SupportsInt = 0, local: bool = False
+    ) -> float:
         """
         Returns the unique sum of component `comp` in the given region. Non-unique points owned by multiple boxes in the MultiFab areonly added once. No ghost cells are included. This function does not takeperiodicity into account in the determination of uniqueness of points.
         """
     @typing.overload
     def swap(
-        self, src: MultiFab, srccomp: int, comp: int, numcomp: int, nghost: int
+        self,
+        src: MultiFab,
+        srccomp: typing.SupportsInt,
+        comp: typing.SupportsInt,
+        numcomp: typing.SupportsInt,
+        nghost: typing.SupportsInt,
     ) -> None:
         """
         Swap from src to self including nghost ghost cells.
@@ -7174,7 +7924,12 @@ class MultiFab(FabArray_FArrayBox):
         """
     @typing.overload
     def swap(
-        self, src: MultiFab, srccomp: int, comp: int, numcomp: int, nghost: IntVect3D
+        self,
+        src: MultiFab,
+        srccomp: typing.SupportsInt,
+        comp: typing.SupportsInt,
+        numcomp: typing.SupportsInt,
+        nghost: IntVect3D,
     ) -> None:
         """
         Swap from src to self including nghost ghost cells.
@@ -7283,12 +8038,12 @@ class MultiFab(FabArray_FArrayBox):
     def weighted_sync(self, arg0: MultiFab, arg1: Periodicity) -> None: ...
     def xpay(
         self,
-        a: float,
+        a: typing.SupportsFloat,
         src: MultiFab,
-        srccomp: int,
-        comp: int,
-        numcomp: int,
-        nghost: int,
+        srccomp: typing.SupportsInt,
+        comp: typing.SupportsInt,
+        numcomp: typing.SupportsInt,
+        nghost: typing.SupportsInt,
     ) -> None:
         """
         self = src + a * self
@@ -7323,17 +8078,19 @@ class MultiFab(FabArray_FArrayBox):
         """
 
 class PODVector_int_arena:
-    def __getitem__(self, arg0: int) -> int: ...
+    def __getitem__(self, arg0: typing.SupportsInt) -> int: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
-    def __init__(self, size: int) -> None: ...
+    def __init__(self, size: typing.SupportsInt) -> None: ...
     @typing.overload
     def __init__(self, other: PODVector_int_arena) -> None: ...
     def __len__(self) -> int: ...
     def __repr__(self) -> str: ...
-    def __setitem__(self, arg0: int, arg1: int) -> None: ...
-    def assign(self, value: int) -> None:
+    def __setitem__(
+        self, arg0: typing.SupportsInt, arg1: typing.SupportsInt
+    ) -> None: ...
+    def assign(self, value: typing.SupportsInt) -> None:
         """
         assign the same value to every element
         """
@@ -7341,12 +8098,12 @@ class PODVector_int_arena:
     def clear(self) -> None: ...
     def empty(self) -> bool: ...
     def pop_back(self) -> None: ...
-    def push_back(self, arg0: int) -> None: ...
-    def reserve(self, arg0: int) -> None: ...
+    def push_back(self, arg0: typing.SupportsInt) -> None: ...
+    def reserve(self, arg0: typing.SupportsInt) -> None: ...
     @typing.overload
-    def resize(self, arg0: int) -> None: ...
+    def resize(self, arg0: typing.SupportsInt) -> None: ...
     @typing.overload
-    def resize(self, arg0: int, arg1: int) -> None: ...
+    def resize(self, arg0: typing.SupportsInt, arg1: typing.SupportsInt) -> None: ...
     def shrink_to_fit(self) -> None: ...
     def size(self) -> int: ...
     def to_cupy(self, copy=False):
@@ -7419,17 +8176,19 @@ class PODVector_int_arena:
     def __cuda_array_interface__(self) -> dict: ...
 
 class PODVector_int_pinned:
-    def __getitem__(self, arg0: int) -> int: ...
+    def __getitem__(self, arg0: typing.SupportsInt) -> int: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
-    def __init__(self, size: int) -> None: ...
+    def __init__(self, size: typing.SupportsInt) -> None: ...
     @typing.overload
     def __init__(self, other: PODVector_int_pinned) -> None: ...
     def __len__(self) -> int: ...
     def __repr__(self) -> str: ...
-    def __setitem__(self, arg0: int, arg1: int) -> None: ...
-    def assign(self, value: int) -> None:
+    def __setitem__(
+        self, arg0: typing.SupportsInt, arg1: typing.SupportsInt
+    ) -> None: ...
+    def assign(self, value: typing.SupportsInt) -> None:
         """
         assign the same value to every element
         """
@@ -7437,12 +8196,12 @@ class PODVector_int_pinned:
     def clear(self) -> None: ...
     def empty(self) -> bool: ...
     def pop_back(self) -> None: ...
-    def push_back(self, arg0: int) -> None: ...
-    def reserve(self, arg0: int) -> None: ...
+    def push_back(self, arg0: typing.SupportsInt) -> None: ...
+    def reserve(self, arg0: typing.SupportsInt) -> None: ...
     @typing.overload
-    def resize(self, arg0: int) -> None: ...
+    def resize(self, arg0: typing.SupportsInt) -> None: ...
     @typing.overload
-    def resize(self, arg0: int, arg1: int) -> None: ...
+    def resize(self, arg0: typing.SupportsInt, arg1: typing.SupportsInt) -> None: ...
     def shrink_to_fit(self) -> None: ...
     def size(self) -> int: ...
     def to_cupy(self, copy=False):
@@ -7515,17 +8274,19 @@ class PODVector_int_pinned:
     def __cuda_array_interface__(self) -> dict: ...
 
 class PODVector_int_std:
-    def __getitem__(self, arg0: int) -> int: ...
+    def __getitem__(self, arg0: typing.SupportsInt) -> int: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
-    def __init__(self, size: int) -> None: ...
+    def __init__(self, size: typing.SupportsInt) -> None: ...
     @typing.overload
     def __init__(self, other: PODVector_int_std) -> None: ...
     def __len__(self) -> int: ...
     def __repr__(self) -> str: ...
-    def __setitem__(self, arg0: int, arg1: int) -> None: ...
-    def assign(self, value: int) -> None:
+    def __setitem__(
+        self, arg0: typing.SupportsInt, arg1: typing.SupportsInt
+    ) -> None: ...
+    def assign(self, value: typing.SupportsInt) -> None:
         """
         assign the same value to every element
         """
@@ -7533,12 +8294,12 @@ class PODVector_int_std:
     def clear(self) -> None: ...
     def empty(self) -> bool: ...
     def pop_back(self) -> None: ...
-    def push_back(self, arg0: int) -> None: ...
-    def reserve(self, arg0: int) -> None: ...
+    def push_back(self, arg0: typing.SupportsInt) -> None: ...
+    def reserve(self, arg0: typing.SupportsInt) -> None: ...
     @typing.overload
-    def resize(self, arg0: int) -> None: ...
+    def resize(self, arg0: typing.SupportsInt) -> None: ...
     @typing.overload
-    def resize(self, arg0: int, arg1: int) -> None: ...
+    def resize(self, arg0: typing.SupportsInt, arg1: typing.SupportsInt) -> None: ...
     def shrink_to_fit(self) -> None: ...
     def size(self) -> int: ...
     def to_cupy(self, copy=False):
@@ -7611,17 +8372,19 @@ class PODVector_int_std:
     def __cuda_array_interface__(self) -> dict: ...
 
 class PODVector_real_arena:
-    def __getitem__(self, arg0: int) -> float: ...
+    def __getitem__(self, arg0: typing.SupportsInt) -> float: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
-    def __init__(self, size: int) -> None: ...
+    def __init__(self, size: typing.SupportsInt) -> None: ...
     @typing.overload
     def __init__(self, other: PODVector_real_arena) -> None: ...
     def __len__(self) -> int: ...
     def __repr__(self) -> str: ...
-    def __setitem__(self, arg0: int, arg1: float) -> None: ...
-    def assign(self, value: float) -> None:
+    def __setitem__(
+        self, arg0: typing.SupportsInt, arg1: typing.SupportsFloat
+    ) -> None: ...
+    def assign(self, value: typing.SupportsFloat) -> None:
         """
         assign the same value to every element
         """
@@ -7629,12 +8392,12 @@ class PODVector_real_arena:
     def clear(self) -> None: ...
     def empty(self) -> bool: ...
     def pop_back(self) -> None: ...
-    def push_back(self, arg0: float) -> None: ...
-    def reserve(self, arg0: int) -> None: ...
+    def push_back(self, arg0: typing.SupportsFloat) -> None: ...
+    def reserve(self, arg0: typing.SupportsInt) -> None: ...
     @typing.overload
-    def resize(self, arg0: int) -> None: ...
+    def resize(self, arg0: typing.SupportsInt) -> None: ...
     @typing.overload
-    def resize(self, arg0: int, arg1: float) -> None: ...
+    def resize(self, arg0: typing.SupportsInt, arg1: typing.SupportsFloat) -> None: ...
     def shrink_to_fit(self) -> None: ...
     def size(self) -> int: ...
     def to_cupy(self, copy=False):
@@ -7707,17 +8470,19 @@ class PODVector_real_arena:
     def __cuda_array_interface__(self) -> dict: ...
 
 class PODVector_real_pinned:
-    def __getitem__(self, arg0: int) -> float: ...
+    def __getitem__(self, arg0: typing.SupportsInt) -> float: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
-    def __init__(self, size: int) -> None: ...
+    def __init__(self, size: typing.SupportsInt) -> None: ...
     @typing.overload
     def __init__(self, other: PODVector_real_pinned) -> None: ...
     def __len__(self) -> int: ...
     def __repr__(self) -> str: ...
-    def __setitem__(self, arg0: int, arg1: float) -> None: ...
-    def assign(self, value: float) -> None:
+    def __setitem__(
+        self, arg0: typing.SupportsInt, arg1: typing.SupportsFloat
+    ) -> None: ...
+    def assign(self, value: typing.SupportsFloat) -> None:
         """
         assign the same value to every element
         """
@@ -7725,12 +8490,12 @@ class PODVector_real_pinned:
     def clear(self) -> None: ...
     def empty(self) -> bool: ...
     def pop_back(self) -> None: ...
-    def push_back(self, arg0: float) -> None: ...
-    def reserve(self, arg0: int) -> None: ...
+    def push_back(self, arg0: typing.SupportsFloat) -> None: ...
+    def reserve(self, arg0: typing.SupportsInt) -> None: ...
     @typing.overload
-    def resize(self, arg0: int) -> None: ...
+    def resize(self, arg0: typing.SupportsInt) -> None: ...
     @typing.overload
-    def resize(self, arg0: int, arg1: float) -> None: ...
+    def resize(self, arg0: typing.SupportsInt, arg1: typing.SupportsFloat) -> None: ...
     def shrink_to_fit(self) -> None: ...
     def size(self) -> int: ...
     def to_cupy(self, copy=False):
@@ -7803,17 +8568,19 @@ class PODVector_real_pinned:
     def __cuda_array_interface__(self) -> dict: ...
 
 class PODVector_real_std:
-    def __getitem__(self, arg0: int) -> float: ...
+    def __getitem__(self, arg0: typing.SupportsInt) -> float: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
-    def __init__(self, size: int) -> None: ...
+    def __init__(self, size: typing.SupportsInt) -> None: ...
     @typing.overload
     def __init__(self, other: PODVector_real_std) -> None: ...
     def __len__(self) -> int: ...
     def __repr__(self) -> str: ...
-    def __setitem__(self, arg0: int, arg1: float) -> None: ...
-    def assign(self, value: float) -> None:
+    def __setitem__(
+        self, arg0: typing.SupportsInt, arg1: typing.SupportsFloat
+    ) -> None: ...
+    def assign(self, value: typing.SupportsFloat) -> None:
         """
         assign the same value to every element
         """
@@ -7821,12 +8588,12 @@ class PODVector_real_std:
     def clear(self) -> None: ...
     def empty(self) -> bool: ...
     def pop_back(self) -> None: ...
-    def push_back(self, arg0: float) -> None: ...
-    def reserve(self, arg0: int) -> None: ...
+    def push_back(self, arg0: typing.SupportsFloat) -> None: ...
+    def reserve(self, arg0: typing.SupportsInt) -> None: ...
     @typing.overload
-    def resize(self, arg0: int) -> None: ...
+    def resize(self, arg0: typing.SupportsInt) -> None: ...
     @typing.overload
-    def resize(self, arg0: int, arg1: float) -> None: ...
+    def resize(self, arg0: typing.SupportsInt, arg1: typing.SupportsFloat) -> None: ...
     def shrink_to_fit(self) -> None: ...
     def size(self) -> int: ...
     def to_cupy(self, copy=False):
@@ -7899,17 +8666,19 @@ class PODVector_real_std:
     def __cuda_array_interface__(self) -> dict: ...
 
 class PODVector_uint64_arena:
-    def __getitem__(self, arg0: int) -> int: ...
+    def __getitem__(self, arg0: typing.SupportsInt) -> int: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
-    def __init__(self, size: int) -> None: ...
+    def __init__(self, size: typing.SupportsInt) -> None: ...
     @typing.overload
     def __init__(self, other: PODVector_uint64_arena) -> None: ...
     def __len__(self) -> int: ...
     def __repr__(self) -> str: ...
-    def __setitem__(self, arg0: int, arg1: int) -> None: ...
-    def assign(self, value: int) -> None:
+    def __setitem__(
+        self, arg0: typing.SupportsInt, arg1: typing.SupportsInt
+    ) -> None: ...
+    def assign(self, value: typing.SupportsInt) -> None:
         """
         assign the same value to every element
         """
@@ -7917,12 +8686,12 @@ class PODVector_uint64_arena:
     def clear(self) -> None: ...
     def empty(self) -> bool: ...
     def pop_back(self) -> None: ...
-    def push_back(self, arg0: int) -> None: ...
-    def reserve(self, arg0: int) -> None: ...
+    def push_back(self, arg0: typing.SupportsInt) -> None: ...
+    def reserve(self, arg0: typing.SupportsInt) -> None: ...
     @typing.overload
-    def resize(self, arg0: int) -> None: ...
+    def resize(self, arg0: typing.SupportsInt) -> None: ...
     @typing.overload
-    def resize(self, arg0: int, arg1: int) -> None: ...
+    def resize(self, arg0: typing.SupportsInt, arg1: typing.SupportsInt) -> None: ...
     def shrink_to_fit(self) -> None: ...
     def size(self) -> int: ...
     def to_cupy(self, copy=False):
@@ -7995,17 +8764,19 @@ class PODVector_uint64_arena:
     def __cuda_array_interface__(self) -> dict: ...
 
 class PODVector_uint64_pinned:
-    def __getitem__(self, arg0: int) -> int: ...
+    def __getitem__(self, arg0: typing.SupportsInt) -> int: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
-    def __init__(self, size: int) -> None: ...
+    def __init__(self, size: typing.SupportsInt) -> None: ...
     @typing.overload
     def __init__(self, other: PODVector_uint64_pinned) -> None: ...
     def __len__(self) -> int: ...
     def __repr__(self) -> str: ...
-    def __setitem__(self, arg0: int, arg1: int) -> None: ...
-    def assign(self, value: int) -> None:
+    def __setitem__(
+        self, arg0: typing.SupportsInt, arg1: typing.SupportsInt
+    ) -> None: ...
+    def assign(self, value: typing.SupportsInt) -> None:
         """
         assign the same value to every element
         """
@@ -8013,12 +8784,12 @@ class PODVector_uint64_pinned:
     def clear(self) -> None: ...
     def empty(self) -> bool: ...
     def pop_back(self) -> None: ...
-    def push_back(self, arg0: int) -> None: ...
-    def reserve(self, arg0: int) -> None: ...
+    def push_back(self, arg0: typing.SupportsInt) -> None: ...
+    def reserve(self, arg0: typing.SupportsInt) -> None: ...
     @typing.overload
-    def resize(self, arg0: int) -> None: ...
+    def resize(self, arg0: typing.SupportsInt) -> None: ...
     @typing.overload
-    def resize(self, arg0: int, arg1: int) -> None: ...
+    def resize(self, arg0: typing.SupportsInt, arg1: typing.SupportsInt) -> None: ...
     def shrink_to_fit(self) -> None: ...
     def size(self) -> int: ...
     def to_cupy(self, copy=False):
@@ -8091,17 +8862,19 @@ class PODVector_uint64_pinned:
     def __cuda_array_interface__(self) -> dict: ...
 
 class PODVector_uint64_std:
-    def __getitem__(self, arg0: int) -> int: ...
+    def __getitem__(self, arg0: typing.SupportsInt) -> int: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
-    def __init__(self, size: int) -> None: ...
+    def __init__(self, size: typing.SupportsInt) -> None: ...
     @typing.overload
     def __init__(self, other: PODVector_uint64_std) -> None: ...
     def __len__(self) -> int: ...
     def __repr__(self) -> str: ...
-    def __setitem__(self, arg0: int, arg1: int) -> None: ...
-    def assign(self, value: int) -> None:
+    def __setitem__(
+        self, arg0: typing.SupportsInt, arg1: typing.SupportsInt
+    ) -> None: ...
+    def assign(self, value: typing.SupportsInt) -> None:
         """
         assign the same value to every element
         """
@@ -8109,12 +8882,12 @@ class PODVector_uint64_std:
     def clear(self) -> None: ...
     def empty(self) -> bool: ...
     def pop_back(self) -> None: ...
-    def push_back(self, arg0: int) -> None: ...
-    def reserve(self, arg0: int) -> None: ...
+    def push_back(self, arg0: typing.SupportsInt) -> None: ...
+    def reserve(self, arg0: typing.SupportsInt) -> None: ...
     @typing.overload
-    def resize(self, arg0: int) -> None: ...
+    def resize(self, arg0: typing.SupportsInt) -> None: ...
     @typing.overload
-    def resize(self, arg0: int, arg1: int) -> None: ...
+    def resize(self, arg0: typing.SupportsInt, arg1: typing.SupportsInt) -> None: ...
     def shrink_to_fit(self) -> None: ...
     def size(self) -> int: ...
     def to_cupy(self, copy=False):
@@ -8189,7 +8962,9 @@ class PODVector_uint64_std:
 class ParConstIterBase_16_4_0_0_arena(MFIter):
     is_soa_particle: typing.ClassVar[bool] = False
     def __init__(
-        self, particle_container: ParticleContainer_16_4_0_0_arena, level: int
+        self,
+        particle_container: ParticleContainer_16_4_0_0_arena,
+        level: typing.SupportsInt,
     ) -> None: ...
     def __iter__(self): ...
     def __next__(self):
@@ -8213,7 +8988,7 @@ class ParConstIterBase_16_4_0_0_arena(MFIter):
     def _incr(self) -> None: ...
     def aos(self) -> ArrayOfStructs_16_4_arena: ...
     def finalize(self) -> None: ...
-    def geom(self, level: int) -> Geometry: ...
+    def geom(self, level: typing.SupportsInt) -> Geometry: ...
     def particle_tile(self) -> ParticleTile_16_4_0_0_arena: ...
     def soa(self) -> StructOfArrays_0_0_arena: ...
     @property
@@ -8237,7 +9012,9 @@ class ParConstIterBase_16_4_0_0_arena(MFIter):
 class ParConstIterBase_16_4_0_0_default(MFIter):
     is_soa_particle: typing.ClassVar[bool] = False
     def __init__(
-        self, particle_container: ParticleContainer_16_4_0_0_default, level: int
+        self,
+        particle_container: ParticleContainer_16_4_0_0_default,
+        level: typing.SupportsInt,
     ) -> None: ...
     def __iter__(self): ...
     def __next__(self):
@@ -8261,7 +9038,7 @@ class ParConstIterBase_16_4_0_0_default(MFIter):
     def _incr(self) -> None: ...
     def aos(self) -> ArrayOfStructs_16_4_default: ...
     def finalize(self) -> None: ...
-    def geom(self, level: int) -> Geometry: ...
+    def geom(self, level: typing.SupportsInt) -> Geometry: ...
     def particle_tile(self) -> ParticleTile_16_4_0_0_default: ...
     def soa(self) -> StructOfArrays_0_0_default: ...
     @property
@@ -8285,7 +9062,9 @@ class ParConstIterBase_16_4_0_0_default(MFIter):
 class ParConstIterBase_16_4_0_0_pinned(MFIter):
     is_soa_particle: typing.ClassVar[bool] = False
     def __init__(
-        self, particle_container: ParticleContainer_16_4_0_0_pinned, level: int
+        self,
+        particle_container: ParticleContainer_16_4_0_0_pinned,
+        level: typing.SupportsInt,
     ) -> None: ...
     def __iter__(self): ...
     def __next__(self):
@@ -8309,7 +9088,7 @@ class ParConstIterBase_16_4_0_0_pinned(MFIter):
     def _incr(self) -> None: ...
     def aos(self) -> ArrayOfStructs_16_4_pinned: ...
     def finalize(self) -> None: ...
-    def geom(self, level: int) -> Geometry: ...
+    def geom(self, level: typing.SupportsInt) -> Geometry: ...
     def particle_tile(self) -> ParticleTile_16_4_0_0_pinned: ...
     def soa(self) -> StructOfArrays_0_0_pinned: ...
     @property
@@ -8333,7 +9112,9 @@ class ParConstIterBase_16_4_0_0_pinned(MFIter):
 class ParConstIterBase_2_1_3_1_arena(MFIter):
     is_soa_particle: typing.ClassVar[bool] = False
     def __init__(
-        self, particle_container: ParticleContainer_2_1_3_1_arena, level: int
+        self,
+        particle_container: ParticleContainer_2_1_3_1_arena,
+        level: typing.SupportsInt,
     ) -> None: ...
     def __iter__(self): ...
     def __next__(self):
@@ -8357,7 +9138,7 @@ class ParConstIterBase_2_1_3_1_arena(MFIter):
     def _incr(self) -> None: ...
     def aos(self) -> ArrayOfStructs_2_1_arena: ...
     def finalize(self) -> None: ...
-    def geom(self, level: int) -> Geometry: ...
+    def geom(self, level: typing.SupportsInt) -> Geometry: ...
     def particle_tile(self) -> ParticleTile_2_1_3_1_arena: ...
     def soa(self) -> StructOfArrays_3_1_arena: ...
     @property
@@ -8381,7 +9162,9 @@ class ParConstIterBase_2_1_3_1_arena(MFIter):
 class ParConstIterBase_2_1_3_1_default(MFIter):
     is_soa_particle: typing.ClassVar[bool] = False
     def __init__(
-        self, particle_container: ParticleContainer_2_1_3_1_default, level: int
+        self,
+        particle_container: ParticleContainer_2_1_3_1_default,
+        level: typing.SupportsInt,
     ) -> None: ...
     def __iter__(self): ...
     def __next__(self):
@@ -8405,7 +9188,7 @@ class ParConstIterBase_2_1_3_1_default(MFIter):
     def _incr(self) -> None: ...
     def aos(self) -> ArrayOfStructs_2_1_default: ...
     def finalize(self) -> None: ...
-    def geom(self, level: int) -> Geometry: ...
+    def geom(self, level: typing.SupportsInt) -> Geometry: ...
     def particle_tile(self) -> ParticleTile_2_1_3_1_default: ...
     def soa(self) -> StructOfArrays_3_1_default: ...
     @property
@@ -8429,7 +9212,9 @@ class ParConstIterBase_2_1_3_1_default(MFIter):
 class ParConstIterBase_2_1_3_1_pinned(MFIter):
     is_soa_particle: typing.ClassVar[bool] = False
     def __init__(
-        self, particle_container: ParticleContainer_2_1_3_1_pinned, level: int
+        self,
+        particle_container: ParticleContainer_2_1_3_1_pinned,
+        level: typing.SupportsInt,
     ) -> None: ...
     def __iter__(self): ...
     def __next__(self):
@@ -8453,7 +9238,7 @@ class ParConstIterBase_2_1_3_1_pinned(MFIter):
     def _incr(self) -> None: ...
     def aos(self) -> ArrayOfStructs_2_1_pinned: ...
     def finalize(self) -> None: ...
-    def geom(self, level: int) -> Geometry: ...
+    def geom(self, level: typing.SupportsInt) -> Geometry: ...
     def particle_tile(self) -> ParticleTile_2_1_3_1_pinned: ...
     def soa(self) -> StructOfArrays_3_1_pinned: ...
     @property
@@ -8477,7 +9262,9 @@ class ParConstIterBase_2_1_3_1_pinned(MFIter):
 class ParConstIterBase_pureSoA_3_0_arena(MFIter):
     is_soa_particle: typing.ClassVar[bool] = True
     def __init__(
-        self, particle_container: ParticleContainer_pureSoA_3_0_arena, level: int
+        self,
+        particle_container: ParticleContainer_pureSoA_3_0_arena,
+        level: typing.SupportsInt,
     ) -> None: ...
     def __iter__(self): ...
     def __next__(self):
@@ -8500,7 +9287,7 @@ class ParConstIterBase_pureSoA_3_0_arena(MFIter):
         """
     def _incr(self) -> None: ...
     def finalize(self) -> None: ...
-    def geom(self, level: int) -> Geometry: ...
+    def geom(self, level: typing.SupportsInt) -> Geometry: ...
     def particle_tile(self) -> ParticleTile_pureSoA_3_0_arena: ...
     def soa(self) -> StructOfArrays_3_0_idcpu_arena: ...
     @property
@@ -8524,7 +9311,9 @@ class ParConstIterBase_pureSoA_3_0_arena(MFIter):
 class ParConstIterBase_pureSoA_3_0_default(MFIter):
     is_soa_particle: typing.ClassVar[bool] = True
     def __init__(
-        self, particle_container: ParticleContainer_pureSoA_3_0_default, level: int
+        self,
+        particle_container: ParticleContainer_pureSoA_3_0_default,
+        level: typing.SupportsInt,
     ) -> None: ...
     def __iter__(self): ...
     def __next__(self):
@@ -8547,7 +9336,7 @@ class ParConstIterBase_pureSoA_3_0_default(MFIter):
         """
     def _incr(self) -> None: ...
     def finalize(self) -> None: ...
-    def geom(self, level: int) -> Geometry: ...
+    def geom(self, level: typing.SupportsInt) -> Geometry: ...
     def particle_tile(self) -> ParticleTile_pureSoA_3_0_default: ...
     def soa(self) -> StructOfArrays_3_0_idcpu_default: ...
     @property
@@ -8571,7 +9360,9 @@ class ParConstIterBase_pureSoA_3_0_default(MFIter):
 class ParConstIterBase_pureSoA_3_0_pinned(MFIter):
     is_soa_particle: typing.ClassVar[bool] = True
     def __init__(
-        self, particle_container: ParticleContainer_pureSoA_3_0_pinned, level: int
+        self,
+        particle_container: ParticleContainer_pureSoA_3_0_pinned,
+        level: typing.SupportsInt,
     ) -> None: ...
     def __iter__(self): ...
     def __next__(self):
@@ -8594,7 +9385,7 @@ class ParConstIterBase_pureSoA_3_0_pinned(MFIter):
         """
     def _incr(self) -> None: ...
     def finalize(self) -> None: ...
-    def geom(self, level: int) -> Geometry: ...
+    def geom(self, level: typing.SupportsInt) -> Geometry: ...
     def particle_tile(self) -> ParticleTile_pureSoA_3_0_pinned: ...
     def soa(self) -> StructOfArrays_3_0_idcpu_pinned: ...
     @property
@@ -8618,7 +9409,9 @@ class ParConstIterBase_pureSoA_3_0_pinned(MFIter):
 class ParConstIterBase_pureSoA_7_0_arena(MFIter):
     is_soa_particle: typing.ClassVar[bool] = True
     def __init__(
-        self, particle_container: ParticleContainer_pureSoA_7_0_arena, level: int
+        self,
+        particle_container: ParticleContainer_pureSoA_7_0_arena,
+        level: typing.SupportsInt,
     ) -> None: ...
     def __iter__(self): ...
     def __next__(self):
@@ -8641,7 +9434,7 @@ class ParConstIterBase_pureSoA_7_0_arena(MFIter):
         """
     def _incr(self) -> None: ...
     def finalize(self) -> None: ...
-    def geom(self, level: int) -> Geometry: ...
+    def geom(self, level: typing.SupportsInt) -> Geometry: ...
     def particle_tile(self) -> ParticleTile_pureSoA_7_0_arena: ...
     def soa(self) -> StructOfArrays_7_0_idcpu_arena: ...
     @property
@@ -8665,7 +9458,9 @@ class ParConstIterBase_pureSoA_7_0_arena(MFIter):
 class ParConstIterBase_pureSoA_7_0_default(MFIter):
     is_soa_particle: typing.ClassVar[bool] = True
     def __init__(
-        self, particle_container: ParticleContainer_pureSoA_7_0_default, level: int
+        self,
+        particle_container: ParticleContainer_pureSoA_7_0_default,
+        level: typing.SupportsInt,
     ) -> None: ...
     def __iter__(self): ...
     def __next__(self):
@@ -8688,7 +9483,7 @@ class ParConstIterBase_pureSoA_7_0_default(MFIter):
         """
     def _incr(self) -> None: ...
     def finalize(self) -> None: ...
-    def geom(self, level: int) -> Geometry: ...
+    def geom(self, level: typing.SupportsInt) -> Geometry: ...
     def particle_tile(self) -> ParticleTile_pureSoA_7_0_default: ...
     def soa(self) -> StructOfArrays_7_0_idcpu_default: ...
     @property
@@ -8712,7 +9507,9 @@ class ParConstIterBase_pureSoA_7_0_default(MFIter):
 class ParConstIterBase_pureSoA_7_0_pinned(MFIter):
     is_soa_particle: typing.ClassVar[bool] = True
     def __init__(
-        self, particle_container: ParticleContainer_pureSoA_7_0_pinned, level: int
+        self,
+        particle_container: ParticleContainer_pureSoA_7_0_pinned,
+        level: typing.SupportsInt,
     ) -> None: ...
     def __iter__(self): ...
     def __next__(self):
@@ -8735,7 +9532,7 @@ class ParConstIterBase_pureSoA_7_0_pinned(MFIter):
         """
     def _incr(self) -> None: ...
     def finalize(self) -> None: ...
-    def geom(self, level: int) -> Geometry: ...
+    def geom(self, level: typing.SupportsInt) -> Geometry: ...
     def particle_tile(self) -> ParticleTile_pureSoA_7_0_pinned: ...
     def soa(self) -> StructOfArrays_7_0_idcpu_pinned: ...
     @property
@@ -8759,7 +9556,9 @@ class ParConstIterBase_pureSoA_7_0_pinned(MFIter):
 class ParConstIterBase_pureSoA_8_0_arena(MFIter):
     is_soa_particle: typing.ClassVar[bool] = True
     def __init__(
-        self, particle_container: ParticleContainer_pureSoA_8_0_arena, level: int
+        self,
+        particle_container: ParticleContainer_pureSoA_8_0_arena,
+        level: typing.SupportsInt,
     ) -> None: ...
     def __iter__(self): ...
     def __next__(self):
@@ -8782,7 +9581,7 @@ class ParConstIterBase_pureSoA_8_0_arena(MFIter):
         """
     def _incr(self) -> None: ...
     def finalize(self) -> None: ...
-    def geom(self, level: int) -> Geometry: ...
+    def geom(self, level: typing.SupportsInt) -> Geometry: ...
     def particle_tile(self) -> ParticleTile_pureSoA_8_0_arena: ...
     def soa(self) -> StructOfArrays_8_0_idcpu_arena: ...
     @property
@@ -8806,7 +9605,9 @@ class ParConstIterBase_pureSoA_8_0_arena(MFIter):
 class ParConstIterBase_pureSoA_8_0_default(MFIter):
     is_soa_particle: typing.ClassVar[bool] = True
     def __init__(
-        self, particle_container: ParticleContainer_pureSoA_8_0_default, level: int
+        self,
+        particle_container: ParticleContainer_pureSoA_8_0_default,
+        level: typing.SupportsInt,
     ) -> None: ...
     def __iter__(self): ...
     def __next__(self):
@@ -8829,7 +9630,7 @@ class ParConstIterBase_pureSoA_8_0_default(MFIter):
         """
     def _incr(self) -> None: ...
     def finalize(self) -> None: ...
-    def geom(self, level: int) -> Geometry: ...
+    def geom(self, level: typing.SupportsInt) -> Geometry: ...
     def particle_tile(self) -> ParticleTile_pureSoA_8_0_default: ...
     def soa(self) -> StructOfArrays_8_0_idcpu_default: ...
     @property
@@ -8853,7 +9654,9 @@ class ParConstIterBase_pureSoA_8_0_default(MFIter):
 class ParConstIterBase_pureSoA_8_0_pinned(MFIter):
     is_soa_particle: typing.ClassVar[bool] = True
     def __init__(
-        self, particle_container: ParticleContainer_pureSoA_8_0_pinned, level: int
+        self,
+        particle_container: ParticleContainer_pureSoA_8_0_pinned,
+        level: typing.SupportsInt,
     ) -> None: ...
     def __iter__(self): ...
     def __next__(self):
@@ -8876,7 +9679,7 @@ class ParConstIterBase_pureSoA_8_0_pinned(MFIter):
         """
     def _incr(self) -> None: ...
     def finalize(self) -> None: ...
-    def geom(self, level: int) -> Geometry: ...
+    def geom(self, level: typing.SupportsInt) -> Geometry: ...
     def particle_tile(self) -> ParticleTile_pureSoA_8_0_pinned: ...
     def soa(self) -> StructOfArrays_8_0_idcpu_pinned: ...
     @property
@@ -8900,7 +9703,9 @@ class ParConstIterBase_pureSoA_8_0_pinned(MFIter):
 class ParConstIter_16_4_0_0_arena(ParConstIterBase_16_4_0_0_arena):
     is_soa_particle: typing.ClassVar[bool] = False
     def __init__(
-        self, particle_container: ParticleContainer_16_4_0_0_arena, level: int
+        self,
+        particle_container: ParticleContainer_16_4_0_0_arena,
+        level: typing.SupportsInt,
     ) -> None: ...
     def __iter__(self): ...
     def __next__(self):
@@ -8926,7 +9731,9 @@ class ParConstIter_16_4_0_0_arena(ParConstIterBase_16_4_0_0_arena):
 class ParConstIter_16_4_0_0_default(ParConstIterBase_16_4_0_0_default):
     is_soa_particle: typing.ClassVar[bool] = False
     def __init__(
-        self, particle_container: ParticleContainer_16_4_0_0_default, level: int
+        self,
+        particle_container: ParticleContainer_16_4_0_0_default,
+        level: typing.SupportsInt,
     ) -> None: ...
     def __iter__(self): ...
     def __next__(self):
@@ -8952,7 +9759,9 @@ class ParConstIter_16_4_0_0_default(ParConstIterBase_16_4_0_0_default):
 class ParConstIter_16_4_0_0_pinned(ParConstIterBase_16_4_0_0_pinned):
     is_soa_particle: typing.ClassVar[bool] = False
     def __init__(
-        self, particle_container: ParticleContainer_16_4_0_0_pinned, level: int
+        self,
+        particle_container: ParticleContainer_16_4_0_0_pinned,
+        level: typing.SupportsInt,
     ) -> None: ...
     def __iter__(self): ...
     def __next__(self):
@@ -8978,7 +9787,9 @@ class ParConstIter_16_4_0_0_pinned(ParConstIterBase_16_4_0_0_pinned):
 class ParConstIter_2_1_3_1_arena(ParConstIterBase_2_1_3_1_arena):
     is_soa_particle: typing.ClassVar[bool] = False
     def __init__(
-        self, particle_container: ParticleContainer_2_1_3_1_arena, level: int
+        self,
+        particle_container: ParticleContainer_2_1_3_1_arena,
+        level: typing.SupportsInt,
     ) -> None: ...
     def __iter__(self): ...
     def __next__(self):
@@ -9004,7 +9815,9 @@ class ParConstIter_2_1_3_1_arena(ParConstIterBase_2_1_3_1_arena):
 class ParConstIter_2_1_3_1_default(ParConstIterBase_2_1_3_1_default):
     is_soa_particle: typing.ClassVar[bool] = False
     def __init__(
-        self, particle_container: ParticleContainer_2_1_3_1_default, level: int
+        self,
+        particle_container: ParticleContainer_2_1_3_1_default,
+        level: typing.SupportsInt,
     ) -> None: ...
     def __iter__(self): ...
     def __next__(self):
@@ -9030,7 +9843,9 @@ class ParConstIter_2_1_3_1_default(ParConstIterBase_2_1_3_1_default):
 class ParConstIter_2_1_3_1_pinned(ParConstIterBase_2_1_3_1_pinned):
     is_soa_particle: typing.ClassVar[bool] = False
     def __init__(
-        self, particle_container: ParticleContainer_2_1_3_1_pinned, level: int
+        self,
+        particle_container: ParticleContainer_2_1_3_1_pinned,
+        level: typing.SupportsInt,
     ) -> None: ...
     def __iter__(self): ...
     def __next__(self):
@@ -9056,7 +9871,9 @@ class ParConstIter_2_1_3_1_pinned(ParConstIterBase_2_1_3_1_pinned):
 class ParConstIter_pureSoA_3_0_arena(ParConstIterBase_pureSoA_3_0_arena):
     is_soa_particle: typing.ClassVar[bool] = True
     def __init__(
-        self, particle_container: ParticleContainer_pureSoA_3_0_arena, level: int
+        self,
+        particle_container: ParticleContainer_pureSoA_3_0_arena,
+        level: typing.SupportsInt,
     ) -> None: ...
     def __iter__(self): ...
     def __next__(self):
@@ -9082,7 +9899,9 @@ class ParConstIter_pureSoA_3_0_arena(ParConstIterBase_pureSoA_3_0_arena):
 class ParConstIter_pureSoA_3_0_default(ParConstIterBase_pureSoA_3_0_default):
     is_soa_particle: typing.ClassVar[bool] = True
     def __init__(
-        self, particle_container: ParticleContainer_pureSoA_3_0_default, level: int
+        self,
+        particle_container: ParticleContainer_pureSoA_3_0_default,
+        level: typing.SupportsInt,
     ) -> None: ...
     def __iter__(self): ...
     def __next__(self):
@@ -9108,7 +9927,9 @@ class ParConstIter_pureSoA_3_0_default(ParConstIterBase_pureSoA_3_0_default):
 class ParConstIter_pureSoA_3_0_pinned(ParConstIterBase_pureSoA_3_0_pinned):
     is_soa_particle: typing.ClassVar[bool] = True
     def __init__(
-        self, particle_container: ParticleContainer_pureSoA_3_0_pinned, level: int
+        self,
+        particle_container: ParticleContainer_pureSoA_3_0_pinned,
+        level: typing.SupportsInt,
     ) -> None: ...
     def __iter__(self): ...
     def __next__(self):
@@ -9134,7 +9955,9 @@ class ParConstIter_pureSoA_3_0_pinned(ParConstIterBase_pureSoA_3_0_pinned):
 class ParConstIter_pureSoA_7_0_arena(ParConstIterBase_pureSoA_7_0_arena):
     is_soa_particle: typing.ClassVar[bool] = True
     def __init__(
-        self, particle_container: ParticleContainer_pureSoA_7_0_arena, level: int
+        self,
+        particle_container: ParticleContainer_pureSoA_7_0_arena,
+        level: typing.SupportsInt,
     ) -> None: ...
     def __iter__(self): ...
     def __next__(self):
@@ -9160,7 +9983,9 @@ class ParConstIter_pureSoA_7_0_arena(ParConstIterBase_pureSoA_7_0_arena):
 class ParConstIter_pureSoA_7_0_default(ParConstIterBase_pureSoA_7_0_default):
     is_soa_particle: typing.ClassVar[bool] = True
     def __init__(
-        self, particle_container: ParticleContainer_pureSoA_7_0_default, level: int
+        self,
+        particle_container: ParticleContainer_pureSoA_7_0_default,
+        level: typing.SupportsInt,
     ) -> None: ...
     def __iter__(self): ...
     def __next__(self):
@@ -9186,7 +10011,9 @@ class ParConstIter_pureSoA_7_0_default(ParConstIterBase_pureSoA_7_0_default):
 class ParConstIter_pureSoA_7_0_pinned(ParConstIterBase_pureSoA_7_0_pinned):
     is_soa_particle: typing.ClassVar[bool] = True
     def __init__(
-        self, particle_container: ParticleContainer_pureSoA_7_0_pinned, level: int
+        self,
+        particle_container: ParticleContainer_pureSoA_7_0_pinned,
+        level: typing.SupportsInt,
     ) -> None: ...
     def __iter__(self): ...
     def __next__(self):
@@ -9212,7 +10039,9 @@ class ParConstIter_pureSoA_7_0_pinned(ParConstIterBase_pureSoA_7_0_pinned):
 class ParConstIter_pureSoA_8_0_arena(ParConstIterBase_pureSoA_8_0_arena):
     is_soa_particle: typing.ClassVar[bool] = True
     def __init__(
-        self, particle_container: ParticleContainer_pureSoA_8_0_arena, level: int
+        self,
+        particle_container: ParticleContainer_pureSoA_8_0_arena,
+        level: typing.SupportsInt,
     ) -> None: ...
     def __iter__(self): ...
     def __next__(self):
@@ -9238,7 +10067,9 @@ class ParConstIter_pureSoA_8_0_arena(ParConstIterBase_pureSoA_8_0_arena):
 class ParConstIter_pureSoA_8_0_default(ParConstIterBase_pureSoA_8_0_default):
     is_soa_particle: typing.ClassVar[bool] = True
     def __init__(
-        self, particle_container: ParticleContainer_pureSoA_8_0_default, level: int
+        self,
+        particle_container: ParticleContainer_pureSoA_8_0_default,
+        level: typing.SupportsInt,
     ) -> None: ...
     def __iter__(self): ...
     def __next__(self):
@@ -9264,7 +10095,9 @@ class ParConstIter_pureSoA_8_0_default(ParConstIterBase_pureSoA_8_0_default):
 class ParConstIter_pureSoA_8_0_pinned(ParConstIterBase_pureSoA_8_0_pinned):
     is_soa_particle: typing.ClassVar[bool] = True
     def __init__(
-        self, particle_container: ParticleContainer_pureSoA_8_0_pinned, level: int
+        self,
+        particle_container: ParticleContainer_pureSoA_8_0_pinned,
+        level: typing.SupportsInt,
     ) -> None: ...
     def __iter__(self): ...
     def __next__(self):
@@ -9290,7 +10123,9 @@ class ParConstIter_pureSoA_8_0_pinned(ParConstIterBase_pureSoA_8_0_pinned):
 class ParIterBase_16_4_0_0_arena(MFIter):
     is_soa_particle: typing.ClassVar[bool] = False
     def __init__(
-        self, particle_container: ParticleContainer_16_4_0_0_arena, level: int
+        self,
+        particle_container: ParticleContainer_16_4_0_0_arena,
+        level: typing.SupportsInt,
     ) -> None: ...
     def __iter__(self): ...
     def __next__(self):
@@ -9314,7 +10149,7 @@ class ParIterBase_16_4_0_0_arena(MFIter):
     def _incr(self) -> None: ...
     def aos(self) -> ArrayOfStructs_16_4_arena: ...
     def finalize(self) -> None: ...
-    def geom(self, level: int) -> Geometry: ...
+    def geom(self, level: typing.SupportsInt) -> Geometry: ...
     def particle_tile(self) -> ParticleTile_16_4_0_0_arena: ...
     def soa(self) -> StructOfArrays_0_0_arena: ...
     @property
@@ -9338,7 +10173,9 @@ class ParIterBase_16_4_0_0_arena(MFIter):
 class ParIterBase_16_4_0_0_default(MFIter):
     is_soa_particle: typing.ClassVar[bool] = False
     def __init__(
-        self, particle_container: ParticleContainer_16_4_0_0_default, level: int
+        self,
+        particle_container: ParticleContainer_16_4_0_0_default,
+        level: typing.SupportsInt,
     ) -> None: ...
     def __iter__(self): ...
     def __next__(self):
@@ -9362,7 +10199,7 @@ class ParIterBase_16_4_0_0_default(MFIter):
     def _incr(self) -> None: ...
     def aos(self) -> ArrayOfStructs_16_4_default: ...
     def finalize(self) -> None: ...
-    def geom(self, level: int) -> Geometry: ...
+    def geom(self, level: typing.SupportsInt) -> Geometry: ...
     def particle_tile(self) -> ParticleTile_16_4_0_0_default: ...
     def soa(self) -> StructOfArrays_0_0_default: ...
     @property
@@ -9386,7 +10223,9 @@ class ParIterBase_16_4_0_0_default(MFIter):
 class ParIterBase_16_4_0_0_pinned(MFIter):
     is_soa_particle: typing.ClassVar[bool] = False
     def __init__(
-        self, particle_container: ParticleContainer_16_4_0_0_pinned, level: int
+        self,
+        particle_container: ParticleContainer_16_4_0_0_pinned,
+        level: typing.SupportsInt,
     ) -> None: ...
     def __iter__(self): ...
     def __next__(self):
@@ -9410,7 +10249,7 @@ class ParIterBase_16_4_0_0_pinned(MFIter):
     def _incr(self) -> None: ...
     def aos(self) -> ArrayOfStructs_16_4_pinned: ...
     def finalize(self) -> None: ...
-    def geom(self, level: int) -> Geometry: ...
+    def geom(self, level: typing.SupportsInt) -> Geometry: ...
     def particle_tile(self) -> ParticleTile_16_4_0_0_pinned: ...
     def soa(self) -> StructOfArrays_0_0_pinned: ...
     @property
@@ -9434,7 +10273,9 @@ class ParIterBase_16_4_0_0_pinned(MFIter):
 class ParIterBase_2_1_3_1_arena(MFIter):
     is_soa_particle: typing.ClassVar[bool] = False
     def __init__(
-        self, particle_container: ParticleContainer_2_1_3_1_arena, level: int
+        self,
+        particle_container: ParticleContainer_2_1_3_1_arena,
+        level: typing.SupportsInt,
     ) -> None: ...
     def __iter__(self): ...
     def __next__(self):
@@ -9458,7 +10299,7 @@ class ParIterBase_2_1_3_1_arena(MFIter):
     def _incr(self) -> None: ...
     def aos(self) -> ArrayOfStructs_2_1_arena: ...
     def finalize(self) -> None: ...
-    def geom(self, level: int) -> Geometry: ...
+    def geom(self, level: typing.SupportsInt) -> Geometry: ...
     def particle_tile(self) -> ParticleTile_2_1_3_1_arena: ...
     def soa(self) -> StructOfArrays_3_1_arena: ...
     @property
@@ -9482,7 +10323,9 @@ class ParIterBase_2_1_3_1_arena(MFIter):
 class ParIterBase_2_1_3_1_default(MFIter):
     is_soa_particle: typing.ClassVar[bool] = False
     def __init__(
-        self, particle_container: ParticleContainer_2_1_3_1_default, level: int
+        self,
+        particle_container: ParticleContainer_2_1_3_1_default,
+        level: typing.SupportsInt,
     ) -> None: ...
     def __iter__(self): ...
     def __next__(self):
@@ -9506,7 +10349,7 @@ class ParIterBase_2_1_3_1_default(MFIter):
     def _incr(self) -> None: ...
     def aos(self) -> ArrayOfStructs_2_1_default: ...
     def finalize(self) -> None: ...
-    def geom(self, level: int) -> Geometry: ...
+    def geom(self, level: typing.SupportsInt) -> Geometry: ...
     def particle_tile(self) -> ParticleTile_2_1_3_1_default: ...
     def soa(self) -> StructOfArrays_3_1_default: ...
     @property
@@ -9530,7 +10373,9 @@ class ParIterBase_2_1_3_1_default(MFIter):
 class ParIterBase_2_1_3_1_pinned(MFIter):
     is_soa_particle: typing.ClassVar[bool] = False
     def __init__(
-        self, particle_container: ParticleContainer_2_1_3_1_pinned, level: int
+        self,
+        particle_container: ParticleContainer_2_1_3_1_pinned,
+        level: typing.SupportsInt,
     ) -> None: ...
     def __iter__(self): ...
     def __next__(self):
@@ -9554,7 +10399,7 @@ class ParIterBase_2_1_3_1_pinned(MFIter):
     def _incr(self) -> None: ...
     def aos(self) -> ArrayOfStructs_2_1_pinned: ...
     def finalize(self) -> None: ...
-    def geom(self, level: int) -> Geometry: ...
+    def geom(self, level: typing.SupportsInt) -> Geometry: ...
     def particle_tile(self) -> ParticleTile_2_1_3_1_pinned: ...
     def soa(self) -> StructOfArrays_3_1_pinned: ...
     @property
@@ -9578,7 +10423,9 @@ class ParIterBase_2_1_3_1_pinned(MFIter):
 class ParIterBase_pureSoA_3_0_arena(MFIter):
     is_soa_particle: typing.ClassVar[bool] = True
     def __init__(
-        self, particle_container: ParticleContainer_pureSoA_3_0_arena, level: int
+        self,
+        particle_container: ParticleContainer_pureSoA_3_0_arena,
+        level: typing.SupportsInt,
     ) -> None: ...
     def __iter__(self): ...
     def __next__(self):
@@ -9601,7 +10448,7 @@ class ParIterBase_pureSoA_3_0_arena(MFIter):
         """
     def _incr(self) -> None: ...
     def finalize(self) -> None: ...
-    def geom(self, level: int) -> Geometry: ...
+    def geom(self, level: typing.SupportsInt) -> Geometry: ...
     def particle_tile(self) -> ParticleTile_pureSoA_3_0_arena: ...
     def soa(self) -> StructOfArrays_3_0_idcpu_arena: ...
     @property
@@ -9625,7 +10472,9 @@ class ParIterBase_pureSoA_3_0_arena(MFIter):
 class ParIterBase_pureSoA_3_0_default(MFIter):
     is_soa_particle: typing.ClassVar[bool] = True
     def __init__(
-        self, particle_container: ParticleContainer_pureSoA_3_0_default, level: int
+        self,
+        particle_container: ParticleContainer_pureSoA_3_0_default,
+        level: typing.SupportsInt,
     ) -> None: ...
     def __iter__(self): ...
     def __next__(self):
@@ -9648,7 +10497,7 @@ class ParIterBase_pureSoA_3_0_default(MFIter):
         """
     def _incr(self) -> None: ...
     def finalize(self) -> None: ...
-    def geom(self, level: int) -> Geometry: ...
+    def geom(self, level: typing.SupportsInt) -> Geometry: ...
     def particle_tile(self) -> ParticleTile_pureSoA_3_0_default: ...
     def soa(self) -> StructOfArrays_3_0_idcpu_default: ...
     @property
@@ -9672,7 +10521,9 @@ class ParIterBase_pureSoA_3_0_default(MFIter):
 class ParIterBase_pureSoA_3_0_pinned(MFIter):
     is_soa_particle: typing.ClassVar[bool] = True
     def __init__(
-        self, particle_container: ParticleContainer_pureSoA_3_0_pinned, level: int
+        self,
+        particle_container: ParticleContainer_pureSoA_3_0_pinned,
+        level: typing.SupportsInt,
     ) -> None: ...
     def __iter__(self): ...
     def __next__(self):
@@ -9695,7 +10546,7 @@ class ParIterBase_pureSoA_3_0_pinned(MFIter):
         """
     def _incr(self) -> None: ...
     def finalize(self) -> None: ...
-    def geom(self, level: int) -> Geometry: ...
+    def geom(self, level: typing.SupportsInt) -> Geometry: ...
     def particle_tile(self) -> ParticleTile_pureSoA_3_0_pinned: ...
     def soa(self) -> StructOfArrays_3_0_idcpu_pinned: ...
     @property
@@ -9719,7 +10570,9 @@ class ParIterBase_pureSoA_3_0_pinned(MFIter):
 class ParIterBase_pureSoA_7_0_arena(MFIter):
     is_soa_particle: typing.ClassVar[bool] = True
     def __init__(
-        self, particle_container: ParticleContainer_pureSoA_7_0_arena, level: int
+        self,
+        particle_container: ParticleContainer_pureSoA_7_0_arena,
+        level: typing.SupportsInt,
     ) -> None: ...
     def __iter__(self): ...
     def __next__(self):
@@ -9742,7 +10595,7 @@ class ParIterBase_pureSoA_7_0_arena(MFIter):
         """
     def _incr(self) -> None: ...
     def finalize(self) -> None: ...
-    def geom(self, level: int) -> Geometry: ...
+    def geom(self, level: typing.SupportsInt) -> Geometry: ...
     def particle_tile(self) -> ParticleTile_pureSoA_7_0_arena: ...
     def soa(self) -> StructOfArrays_7_0_idcpu_arena: ...
     @property
@@ -9766,7 +10619,9 @@ class ParIterBase_pureSoA_7_0_arena(MFIter):
 class ParIterBase_pureSoA_7_0_default(MFIter):
     is_soa_particle: typing.ClassVar[bool] = True
     def __init__(
-        self, particle_container: ParticleContainer_pureSoA_7_0_default, level: int
+        self,
+        particle_container: ParticleContainer_pureSoA_7_0_default,
+        level: typing.SupportsInt,
     ) -> None: ...
     def __iter__(self): ...
     def __next__(self):
@@ -9789,7 +10644,7 @@ class ParIterBase_pureSoA_7_0_default(MFIter):
         """
     def _incr(self) -> None: ...
     def finalize(self) -> None: ...
-    def geom(self, level: int) -> Geometry: ...
+    def geom(self, level: typing.SupportsInt) -> Geometry: ...
     def particle_tile(self) -> ParticleTile_pureSoA_7_0_default: ...
     def soa(self) -> StructOfArrays_7_0_idcpu_default: ...
     @property
@@ -9813,7 +10668,9 @@ class ParIterBase_pureSoA_7_0_default(MFIter):
 class ParIterBase_pureSoA_7_0_pinned(MFIter):
     is_soa_particle: typing.ClassVar[bool] = True
     def __init__(
-        self, particle_container: ParticleContainer_pureSoA_7_0_pinned, level: int
+        self,
+        particle_container: ParticleContainer_pureSoA_7_0_pinned,
+        level: typing.SupportsInt,
     ) -> None: ...
     def __iter__(self): ...
     def __next__(self):
@@ -9836,7 +10693,7 @@ class ParIterBase_pureSoA_7_0_pinned(MFIter):
         """
     def _incr(self) -> None: ...
     def finalize(self) -> None: ...
-    def geom(self, level: int) -> Geometry: ...
+    def geom(self, level: typing.SupportsInt) -> Geometry: ...
     def particle_tile(self) -> ParticleTile_pureSoA_7_0_pinned: ...
     def soa(self) -> StructOfArrays_7_0_idcpu_pinned: ...
     @property
@@ -9860,7 +10717,9 @@ class ParIterBase_pureSoA_7_0_pinned(MFIter):
 class ParIterBase_pureSoA_8_0_arena(MFIter):
     is_soa_particle: typing.ClassVar[bool] = True
     def __init__(
-        self, particle_container: ParticleContainer_pureSoA_8_0_arena, level: int
+        self,
+        particle_container: ParticleContainer_pureSoA_8_0_arena,
+        level: typing.SupportsInt,
     ) -> None: ...
     def __iter__(self): ...
     def __next__(self):
@@ -9883,7 +10742,7 @@ class ParIterBase_pureSoA_8_0_arena(MFIter):
         """
     def _incr(self) -> None: ...
     def finalize(self) -> None: ...
-    def geom(self, level: int) -> Geometry: ...
+    def geom(self, level: typing.SupportsInt) -> Geometry: ...
     def particle_tile(self) -> ParticleTile_pureSoA_8_0_arena: ...
     def soa(self) -> StructOfArrays_8_0_idcpu_arena: ...
     @property
@@ -9907,7 +10766,9 @@ class ParIterBase_pureSoA_8_0_arena(MFIter):
 class ParIterBase_pureSoA_8_0_default(MFIter):
     is_soa_particle: typing.ClassVar[bool] = True
     def __init__(
-        self, particle_container: ParticleContainer_pureSoA_8_0_default, level: int
+        self,
+        particle_container: ParticleContainer_pureSoA_8_0_default,
+        level: typing.SupportsInt,
     ) -> None: ...
     def __iter__(self): ...
     def __next__(self):
@@ -9930,7 +10791,7 @@ class ParIterBase_pureSoA_8_0_default(MFIter):
         """
     def _incr(self) -> None: ...
     def finalize(self) -> None: ...
-    def geom(self, level: int) -> Geometry: ...
+    def geom(self, level: typing.SupportsInt) -> Geometry: ...
     def particle_tile(self) -> ParticleTile_pureSoA_8_0_default: ...
     def soa(self) -> StructOfArrays_8_0_idcpu_default: ...
     @property
@@ -9954,7 +10815,9 @@ class ParIterBase_pureSoA_8_0_default(MFIter):
 class ParIterBase_pureSoA_8_0_pinned(MFIter):
     is_soa_particle: typing.ClassVar[bool] = True
     def __init__(
-        self, particle_container: ParticleContainer_pureSoA_8_0_pinned, level: int
+        self,
+        particle_container: ParticleContainer_pureSoA_8_0_pinned,
+        level: typing.SupportsInt,
     ) -> None: ...
     def __iter__(self): ...
     def __next__(self):
@@ -9977,7 +10840,7 @@ class ParIterBase_pureSoA_8_0_pinned(MFIter):
         """
     def _incr(self) -> None: ...
     def finalize(self) -> None: ...
-    def geom(self, level: int) -> Geometry: ...
+    def geom(self, level: typing.SupportsInt) -> Geometry: ...
     def particle_tile(self) -> ParticleTile_pureSoA_8_0_pinned: ...
     def soa(self) -> StructOfArrays_8_0_idcpu_pinned: ...
     @property
@@ -10001,7 +10864,9 @@ class ParIterBase_pureSoA_8_0_pinned(MFIter):
 class ParIter_16_4_0_0_arena(ParIterBase_16_4_0_0_arena):
     is_soa_particle: typing.ClassVar[bool] = False
     def __init__(
-        self, particle_container: ParticleContainer_16_4_0_0_arena, level: int
+        self,
+        particle_container: ParticleContainer_16_4_0_0_arena,
+        level: typing.SupportsInt,
     ) -> None: ...
     def __iter__(self): ...
     def __next__(self):
@@ -10027,7 +10892,9 @@ class ParIter_16_4_0_0_arena(ParIterBase_16_4_0_0_arena):
 class ParIter_16_4_0_0_default(ParIterBase_16_4_0_0_default):
     is_soa_particle: typing.ClassVar[bool] = False
     def __init__(
-        self, particle_container: ParticleContainer_16_4_0_0_default, level: int
+        self,
+        particle_container: ParticleContainer_16_4_0_0_default,
+        level: typing.SupportsInt,
     ) -> None: ...
     def __iter__(self): ...
     def __next__(self):
@@ -10053,7 +10920,9 @@ class ParIter_16_4_0_0_default(ParIterBase_16_4_0_0_default):
 class ParIter_16_4_0_0_pinned(ParIterBase_16_4_0_0_pinned):
     is_soa_particle: typing.ClassVar[bool] = False
     def __init__(
-        self, particle_container: ParticleContainer_16_4_0_0_pinned, level: int
+        self,
+        particle_container: ParticleContainer_16_4_0_0_pinned,
+        level: typing.SupportsInt,
     ) -> None: ...
     def __iter__(self): ...
     def __next__(self):
@@ -10079,7 +10948,9 @@ class ParIter_16_4_0_0_pinned(ParIterBase_16_4_0_0_pinned):
 class ParIter_2_1_3_1_arena(ParIterBase_2_1_3_1_arena):
     is_soa_particle: typing.ClassVar[bool] = False
     def __init__(
-        self, particle_container: ParticleContainer_2_1_3_1_arena, level: int
+        self,
+        particle_container: ParticleContainer_2_1_3_1_arena,
+        level: typing.SupportsInt,
     ) -> None: ...
     def __iter__(self): ...
     def __next__(self):
@@ -10105,7 +10976,9 @@ class ParIter_2_1_3_1_arena(ParIterBase_2_1_3_1_arena):
 class ParIter_2_1_3_1_default(ParIterBase_2_1_3_1_default):
     is_soa_particle: typing.ClassVar[bool] = False
     def __init__(
-        self, particle_container: ParticleContainer_2_1_3_1_default, level: int
+        self,
+        particle_container: ParticleContainer_2_1_3_1_default,
+        level: typing.SupportsInt,
     ) -> None: ...
     def __iter__(self): ...
     def __next__(self):
@@ -10131,7 +11004,9 @@ class ParIter_2_1_3_1_default(ParIterBase_2_1_3_1_default):
 class ParIter_2_1_3_1_pinned(ParIterBase_2_1_3_1_pinned):
     is_soa_particle: typing.ClassVar[bool] = False
     def __init__(
-        self, particle_container: ParticleContainer_2_1_3_1_pinned, level: int
+        self,
+        particle_container: ParticleContainer_2_1_3_1_pinned,
+        level: typing.SupportsInt,
     ) -> None: ...
     def __iter__(self): ...
     def __next__(self):
@@ -10157,7 +11032,9 @@ class ParIter_2_1_3_1_pinned(ParIterBase_2_1_3_1_pinned):
 class ParIter_pureSoA_3_0_arena(ParIterBase_pureSoA_3_0_arena):
     is_soa_particle: typing.ClassVar[bool] = True
     def __init__(
-        self, particle_container: ParticleContainer_pureSoA_3_0_arena, level: int
+        self,
+        particle_container: ParticleContainer_pureSoA_3_0_arena,
+        level: typing.SupportsInt,
     ) -> None: ...
     def __iter__(self): ...
     def __next__(self):
@@ -10183,7 +11060,9 @@ class ParIter_pureSoA_3_0_arena(ParIterBase_pureSoA_3_0_arena):
 class ParIter_pureSoA_3_0_default(ParIterBase_pureSoA_3_0_default):
     is_soa_particle: typing.ClassVar[bool] = True
     def __init__(
-        self, particle_container: ParticleContainer_pureSoA_3_0_default, level: int
+        self,
+        particle_container: ParticleContainer_pureSoA_3_0_default,
+        level: typing.SupportsInt,
     ) -> None: ...
     def __iter__(self): ...
     def __next__(self):
@@ -10209,7 +11088,9 @@ class ParIter_pureSoA_3_0_default(ParIterBase_pureSoA_3_0_default):
 class ParIter_pureSoA_3_0_pinned(ParIterBase_pureSoA_3_0_pinned):
     is_soa_particle: typing.ClassVar[bool] = True
     def __init__(
-        self, particle_container: ParticleContainer_pureSoA_3_0_pinned, level: int
+        self,
+        particle_container: ParticleContainer_pureSoA_3_0_pinned,
+        level: typing.SupportsInt,
     ) -> None: ...
     def __iter__(self): ...
     def __next__(self):
@@ -10235,7 +11116,9 @@ class ParIter_pureSoA_3_0_pinned(ParIterBase_pureSoA_3_0_pinned):
 class ParIter_pureSoA_7_0_arena(ParIterBase_pureSoA_7_0_arena):
     is_soa_particle: typing.ClassVar[bool] = True
     def __init__(
-        self, particle_container: ParticleContainer_pureSoA_7_0_arena, level: int
+        self,
+        particle_container: ParticleContainer_pureSoA_7_0_arena,
+        level: typing.SupportsInt,
     ) -> None: ...
     def __iter__(self): ...
     def __next__(self):
@@ -10261,7 +11144,9 @@ class ParIter_pureSoA_7_0_arena(ParIterBase_pureSoA_7_0_arena):
 class ParIter_pureSoA_7_0_default(ParIterBase_pureSoA_7_0_default):
     is_soa_particle: typing.ClassVar[bool] = True
     def __init__(
-        self, particle_container: ParticleContainer_pureSoA_7_0_default, level: int
+        self,
+        particle_container: ParticleContainer_pureSoA_7_0_default,
+        level: typing.SupportsInt,
     ) -> None: ...
     def __iter__(self): ...
     def __next__(self):
@@ -10287,7 +11172,9 @@ class ParIter_pureSoA_7_0_default(ParIterBase_pureSoA_7_0_default):
 class ParIter_pureSoA_7_0_pinned(ParIterBase_pureSoA_7_0_pinned):
     is_soa_particle: typing.ClassVar[bool] = True
     def __init__(
-        self, particle_container: ParticleContainer_pureSoA_7_0_pinned, level: int
+        self,
+        particle_container: ParticleContainer_pureSoA_7_0_pinned,
+        level: typing.SupportsInt,
     ) -> None: ...
     def __iter__(self): ...
     def __next__(self):
@@ -10313,7 +11200,9 @@ class ParIter_pureSoA_7_0_pinned(ParIterBase_pureSoA_7_0_pinned):
 class ParIter_pureSoA_8_0_arena(ParIterBase_pureSoA_8_0_arena):
     is_soa_particle: typing.ClassVar[bool] = True
     def __init__(
-        self, particle_container: ParticleContainer_pureSoA_8_0_arena, level: int
+        self,
+        particle_container: ParticleContainer_pureSoA_8_0_arena,
+        level: typing.SupportsInt,
     ) -> None: ...
     def __iter__(self): ...
     def __next__(self):
@@ -10339,7 +11228,9 @@ class ParIter_pureSoA_8_0_arena(ParIterBase_pureSoA_8_0_arena):
 class ParIter_pureSoA_8_0_default(ParIterBase_pureSoA_8_0_default):
     is_soa_particle: typing.ClassVar[bool] = True
     def __init__(
-        self, particle_container: ParticleContainer_pureSoA_8_0_default, level: int
+        self,
+        particle_container: ParticleContainer_pureSoA_8_0_default,
+        level: typing.SupportsInt,
     ) -> None: ...
     def __iter__(self): ...
     def __next__(self):
@@ -10365,7 +11256,9 @@ class ParIter_pureSoA_8_0_default(ParIterBase_pureSoA_8_0_default):
 class ParIter_pureSoA_8_0_pinned(ParIterBase_pureSoA_8_0_pinned):
     is_soa_particle: typing.ClassVar[bool] = True
     def __init__(
-        self, particle_container: ParticleContainer_pureSoA_8_0_pinned, level: int
+        self,
+        particle_container: ParticleContainer_pureSoA_8_0_pinned,
+        level: typing.SupportsInt,
     ) -> None: ...
     def __iter__(self): ...
     def __next__(self):
@@ -10396,15 +11289,15 @@ class ParmParse:
     @typing.overload
     def add(self, arg0: str, arg1: bool) -> None: ...
     @typing.overload
-    def add(self, arg0: str, arg1: int) -> None: ...
+    def add(self, arg0: str, arg1: typing.SupportsInt) -> None: ...
     @typing.overload
-    def add(self, arg0: str, arg1: int) -> None: ...
+    def add(self, arg0: str, arg1: typing.SupportsInt) -> None: ...
     @typing.overload
-    def add(self, arg0: str, arg1: int) -> None: ...
+    def add(self, arg0: str, arg1: typing.SupportsInt) -> None: ...
     @typing.overload
-    def add(self, arg0: str, arg1: float) -> None: ...
+    def add(self, arg0: str, arg1: typing.SupportsFloat) -> None: ...
     @typing.overload
-    def add(self, arg0: str, arg1: float) -> None: ...
+    def add(self, arg0: str, arg1: typing.SupportsFloat) -> None: ...
     @typing.overload
     def add(self, arg0: str, arg1: str) -> None: ...
     @typing.overload
@@ -10412,30 +11305,40 @@ class ParmParse:
     @typing.overload
     def add(self, arg0: str, arg1: Box) -> None: ...
     @typing.overload
-    def addarr(self, arg0: str, arg1: list[int]) -> None: ...
+    def addarr(
+        self, arg0: str, arg1: collections.abc.Sequence[typing.SupportsInt]
+    ) -> None: ...
     @typing.overload
-    def addarr(self, arg0: str, arg1: list[int]) -> None: ...
+    def addarr(
+        self, arg0: str, arg1: collections.abc.Sequence[typing.SupportsInt]
+    ) -> None: ...
     @typing.overload
-    def addarr(self, arg0: str, arg1: list[int]) -> None: ...
+    def addarr(
+        self, arg0: str, arg1: collections.abc.Sequence[typing.SupportsInt]
+    ) -> None: ...
     @typing.overload
-    def addarr(self, arg0: str, arg1: list[float]) -> None: ...
+    def addarr(
+        self, arg0: str, arg1: collections.abc.Sequence[typing.SupportsFloat]
+    ) -> None: ...
     @typing.overload
-    def addarr(self, arg0: str, arg1: list[float]) -> None: ...
+    def addarr(
+        self, arg0: str, arg1: collections.abc.Sequence[typing.SupportsFloat]
+    ) -> None: ...
     @typing.overload
-    def addarr(self, arg0: str, arg1: list[str]) -> None: ...
+    def addarr(self, arg0: str, arg1: collections.abc.Sequence[str]) -> None: ...
     @typing.overload
-    def addarr(self, arg0: str, arg1: list[IntVect3D]) -> None: ...
+    def addarr(self, arg0: str, arg1: collections.abc.Sequence[IntVect3D]) -> None: ...
     @typing.overload
-    def addarr(self, arg0: str, arg1: list[Box]) -> None: ...
-    def get_bool(self, name: str, ival: int = 0) -> bool:
+    def addarr(self, arg0: str, arg1: collections.abc.Sequence[Box]) -> None: ...
+    def get_bool(self, name: str, ival: typing.SupportsInt = 0) -> bool:
         """
         parses input values
         """
-    def get_int(self, name: str, ival: int = 0) -> int:
+    def get_int(self, name: str, ival: typing.SupportsInt = 0) -> int:
         """
         parses input values
         """
-    def get_real(self, name: str, ival: int = 0) -> float:
+    def get_real(self, name: str, ival: typing.SupportsInt = 0) -> float:
         """
         parses input values
         """
@@ -10443,7 +11346,7 @@ class ParmParse:
         """
         Write the table in a pretty way to the ostream. If there are duplicates, only the last one is printed.
         """
-    def query_int(self, name: str, ival: int = 0) -> tuple[bool, int]:
+    def query_int(self, name: str, ival: typing.SupportsInt = 0) -> tuple[bool, int]:
         """
         queries input values
         """
@@ -10477,7 +11380,12 @@ class ParticleContainer_16_4_0_0_arena:
         arg2: Vector_BoxArray,
         arg3: Vector_IntVect,
     ) -> None: ...
-    def OK(self, lev_min: int = 0, lev_max: int = -1, nGrow: int = 0) -> bool: ...
+    def OK(
+        self,
+        lev_min: typing.SupportsInt = 0,
+        lev_max: typing.SupportsInt = -1,
+        nGrow: typing.SupportsInt = 0,
+    ) -> bool: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
@@ -10501,12 +11409,12 @@ class ParticleContainer_16_4_0_0_arena:
         arg3: Vector_IntVect,
     ) -> None: ...
     @typing.overload
-    def add_int_comp(self, communicate: int = 1) -> None:
+    def add_int_comp(self, communicate: typing.SupportsInt = 1) -> None:
         """
         add a new runtime component with type Int
         """
     @typing.overload
-    def add_int_comp(self, name: str, communicate: int = 1) -> None:
+    def add_int_comp(self, name: str, communicate: typing.SupportsInt = 1) -> None:
         """
         add a new runtime component with type Int
         """
@@ -10514,15 +11422,18 @@ class ParticleContainer_16_4_0_0_arena:
         self, other: ParticleContainer_16_4_0_0_arena, local: bool = False
     ) -> None: ...
     def add_particles_at_level(
-        self, particles: ParticleTile_16_4_0_0_arena, level: int, ngrow: int = 0
+        self,
+        particles: ParticleTile_16_4_0_0_arena,
+        level: typing.SupportsInt,
+        ngrow: typing.SupportsInt = 0,
     ) -> None: ...
     @typing.overload
-    def add_real_comp(self, communicate: int = 1) -> None:
+    def add_real_comp(self, communicate: typing.SupportsInt = 1) -> None:
         """
         add a new runtime component with type Real
         """
     @typing.overload
-    def add_real_comp(self, name: str, communicate: int = 1) -> None:
+    def add_real_comp(self, name: str, communicate: typing.SupportsInt = 1) -> None:
         """
         add a new runtime component with type Real
         """
@@ -10532,7 +11443,7 @@ class ParticleContainer_16_4_0_0_arena:
         Get the Integer SoA index of a component
         """
     def get_particles(
-        self, level: int
+        self, level: typing.SupportsInt
     ) -> dict[tuple[int, int], ParticleTile_16_4_0_0_arena]: ...
     def get_real_comp_index(self, arg0: str) -> int:
         """
@@ -10546,47 +11457,60 @@ class ParticleContainer_16_4_0_0_arena:
         """
         Check if a container has an ParticleReal component
         """
-    def increment(self, arg0: MultiFab, arg1: int) -> None: ...
+    def increment(self, arg0: MultiFab, arg1: typing.SupportsInt) -> None: ...
     def init_one_per_cell(
-        self, arg0: float, arg1: float, arg2: float, arg3: ParticleInitType_16_4_0_0
+        self,
+        arg0: typing.SupportsFloat,
+        arg1: typing.SupportsFloat,
+        arg2: typing.SupportsFloat,
+        arg3: ParticleInitType_16_4_0_0,
     ) -> None: ...
     def init_random(
         self,
-        arg0: int,
-        arg1: int,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
         arg2: ParticleInitType_16_4_0_0,
         arg3: bool,
         arg4: RealBox,
     ) -> None: ...
     def init_random_per_box(
-        self, arg0: int, arg1: int, arg2: ParticleInitType_16_4_0_0
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: ParticleInitType_16_4_0_0,
     ) -> None: ...
     def make_alike(self) -> ParticleContainer_16_4_0_0_arena: ...
-    def num_local_tiles_at_level(self, arg0: int) -> int: ...
+    def num_local_tiles_at_level(self, arg0: typing.SupportsInt) -> int: ...
     def number_of_particles_at_level(
-        self, level: int, only_valid: bool = True, only_local: bool = False
+        self,
+        level: typing.SupportsInt,
+        only_valid: bool = True,
+        only_local: bool = False,
     ) -> int: ...
     def number_of_particles_in_grid(
-        self, level: int, only_valid: bool = True, only_local: bool = False
-    ) -> Vector_Long: ...
-    def print_capacity(
         self,
-    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)]: ...
+        level: typing.SupportsInt,
+        only_valid: bool = True,
+        only_local: bool = False,
+    ) -> Vector_Long: ...
+    def print_capacity(self) -> typing.Annotated[list[int], "FixedSize(3)"]: ...
     def redistribute(
         self,
-        lev_min: int = 0,
-        lev_max: int = -1,
-        nGrow: int = 0,
-        local: int = 0,
+        lev_min: typing.SupportsInt = 0,
+        lev_max: typing.SupportsInt = -1,
+        nGrow: typing.SupportsInt = 0,
+        local: typing.SupportsInt = 0,
         remove_negative: bool = True,
     ) -> None: ...
-    def remove_particles_at_level(self, arg0: int) -> None: ...
+    def remove_particles_at_level(self, arg0: typing.SupportsInt) -> None: ...
     def remove_particles_not_at_finestLevel(self) -> None: ...
     def reserve_data(self) -> None: ...
     def resize_data(self) -> None: ...
     def restart(self, dir: str, file: str) -> None: ...
     def restart_checkpoint(self, dir: str, file: str, is_checkpoint: bool) -> None: ...
-    def set_soa_compile_time_names(self, arg0: list[str], arg1: list[str]) -> None: ...
+    def set_soa_compile_time_names(
+        self, arg0: collections.abc.Sequence[str], arg1: collections.abc.Sequence[str]
+    ) -> None: ...
     def shrink_t_fit(self) -> None: ...
     def sort_particles_by_bin(self, arg0: IntVect3D) -> None: ...
     def sort_particles_by_cell(self) -> None: ...
@@ -10619,9 +11543,7 @@ class ParticleContainer_16_4_0_0_arena:
     ) -> int: ...
     def write_plotfile(self, dir: str, name: str) -> None: ...
     @property
-    def byte_spread(
-        self,
-    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)]: ...
+    def byte_spread(self) -> typing.Annotated[list[int], "FixedSize(3)"]: ...
     @property
     def finest_level(self) -> int: ...
     @property
@@ -10685,7 +11607,12 @@ class ParticleContainer_16_4_0_0_default:
         arg2: Vector_BoxArray,
         arg3: Vector_IntVect,
     ) -> None: ...
-    def OK(self, lev_min: int = 0, lev_max: int = -1, nGrow: int = 0) -> bool: ...
+    def OK(
+        self,
+        lev_min: typing.SupportsInt = 0,
+        lev_max: typing.SupportsInt = -1,
+        nGrow: typing.SupportsInt = 0,
+    ) -> bool: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
@@ -10709,12 +11636,12 @@ class ParticleContainer_16_4_0_0_default:
         arg3: Vector_IntVect,
     ) -> None: ...
     @typing.overload
-    def add_int_comp(self, communicate: int = 1) -> None:
+    def add_int_comp(self, communicate: typing.SupportsInt = 1) -> None:
         """
         add a new runtime component with type Int
         """
     @typing.overload
-    def add_int_comp(self, name: str, communicate: int = 1) -> None:
+    def add_int_comp(self, name: str, communicate: typing.SupportsInt = 1) -> None:
         """
         add a new runtime component with type Int
         """
@@ -10722,15 +11649,18 @@ class ParticleContainer_16_4_0_0_default:
         self, other: ParticleContainer_16_4_0_0_default, local: bool = False
     ) -> None: ...
     def add_particles_at_level(
-        self, particles: ParticleTile_16_4_0_0_default, level: int, ngrow: int = 0
+        self,
+        particles: ParticleTile_16_4_0_0_default,
+        level: typing.SupportsInt,
+        ngrow: typing.SupportsInt = 0,
     ) -> None: ...
     @typing.overload
-    def add_real_comp(self, communicate: int = 1) -> None:
+    def add_real_comp(self, communicate: typing.SupportsInt = 1) -> None:
         """
         add a new runtime component with type Real
         """
     @typing.overload
-    def add_real_comp(self, name: str, communicate: int = 1) -> None:
+    def add_real_comp(self, name: str, communicate: typing.SupportsInt = 1) -> None:
         """
         add a new runtime component with type Real
         """
@@ -10740,7 +11670,7 @@ class ParticleContainer_16_4_0_0_default:
         Get the Integer SoA index of a component
         """
     def get_particles(
-        self, level: int
+        self, level: typing.SupportsInt
     ) -> dict[tuple[int, int], ParticleTile_16_4_0_0_default]: ...
     def get_real_comp_index(self, arg0: str) -> int:
         """
@@ -10754,47 +11684,60 @@ class ParticleContainer_16_4_0_0_default:
         """
         Check if a container has an ParticleReal component
         """
-    def increment(self, arg0: MultiFab, arg1: int) -> None: ...
+    def increment(self, arg0: MultiFab, arg1: typing.SupportsInt) -> None: ...
     def init_one_per_cell(
-        self, arg0: float, arg1: float, arg2: float, arg3: ParticleInitType_16_4_0_0
+        self,
+        arg0: typing.SupportsFloat,
+        arg1: typing.SupportsFloat,
+        arg2: typing.SupportsFloat,
+        arg3: ParticleInitType_16_4_0_0,
     ) -> None: ...
     def init_random(
         self,
-        arg0: int,
-        arg1: int,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
         arg2: ParticleInitType_16_4_0_0,
         arg3: bool,
         arg4: RealBox,
     ) -> None: ...
     def init_random_per_box(
-        self, arg0: int, arg1: int, arg2: ParticleInitType_16_4_0_0
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: ParticleInitType_16_4_0_0,
     ) -> None: ...
     def make_alike(self) -> ParticleContainer_16_4_0_0_default: ...
-    def num_local_tiles_at_level(self, arg0: int) -> int: ...
+    def num_local_tiles_at_level(self, arg0: typing.SupportsInt) -> int: ...
     def number_of_particles_at_level(
-        self, level: int, only_valid: bool = True, only_local: bool = False
+        self,
+        level: typing.SupportsInt,
+        only_valid: bool = True,
+        only_local: bool = False,
     ) -> int: ...
     def number_of_particles_in_grid(
-        self, level: int, only_valid: bool = True, only_local: bool = False
-    ) -> Vector_Long: ...
-    def print_capacity(
         self,
-    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)]: ...
+        level: typing.SupportsInt,
+        only_valid: bool = True,
+        only_local: bool = False,
+    ) -> Vector_Long: ...
+    def print_capacity(self) -> typing.Annotated[list[int], "FixedSize(3)"]: ...
     def redistribute(
         self,
-        lev_min: int = 0,
-        lev_max: int = -1,
-        nGrow: int = 0,
-        local: int = 0,
+        lev_min: typing.SupportsInt = 0,
+        lev_max: typing.SupportsInt = -1,
+        nGrow: typing.SupportsInt = 0,
+        local: typing.SupportsInt = 0,
         remove_negative: bool = True,
     ) -> None: ...
-    def remove_particles_at_level(self, arg0: int) -> None: ...
+    def remove_particles_at_level(self, arg0: typing.SupportsInt) -> None: ...
     def remove_particles_not_at_finestLevel(self) -> None: ...
     def reserve_data(self) -> None: ...
     def resize_data(self) -> None: ...
     def restart(self, dir: str, file: str) -> None: ...
     def restart_checkpoint(self, dir: str, file: str, is_checkpoint: bool) -> None: ...
-    def set_soa_compile_time_names(self, arg0: list[str], arg1: list[str]) -> None: ...
+    def set_soa_compile_time_names(
+        self, arg0: collections.abc.Sequence[str], arg1: collections.abc.Sequence[str]
+    ) -> None: ...
     def shrink_t_fit(self) -> None: ...
     def sort_particles_by_bin(self, arg0: IntVect3D) -> None: ...
     def sort_particles_by_cell(self) -> None: ...
@@ -10827,9 +11770,7 @@ class ParticleContainer_16_4_0_0_default:
     ) -> int: ...
     def write_plotfile(self, dir: str, name: str) -> None: ...
     @property
-    def byte_spread(
-        self,
-    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)]: ...
+    def byte_spread(self) -> typing.Annotated[list[int], "FixedSize(3)"]: ...
     @property
     def finest_level(self) -> int: ...
     @property
@@ -10893,7 +11834,12 @@ class ParticleContainer_16_4_0_0_pinned:
         arg2: Vector_BoxArray,
         arg3: Vector_IntVect,
     ) -> None: ...
-    def OK(self, lev_min: int = 0, lev_max: int = -1, nGrow: int = 0) -> bool: ...
+    def OK(
+        self,
+        lev_min: typing.SupportsInt = 0,
+        lev_max: typing.SupportsInt = -1,
+        nGrow: typing.SupportsInt = 0,
+    ) -> bool: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
@@ -10917,12 +11863,12 @@ class ParticleContainer_16_4_0_0_pinned:
         arg3: Vector_IntVect,
     ) -> None: ...
     @typing.overload
-    def add_int_comp(self, communicate: int = 1) -> None:
+    def add_int_comp(self, communicate: typing.SupportsInt = 1) -> None:
         """
         add a new runtime component with type Int
         """
     @typing.overload
-    def add_int_comp(self, name: str, communicate: int = 1) -> None:
+    def add_int_comp(self, name: str, communicate: typing.SupportsInt = 1) -> None:
         """
         add a new runtime component with type Int
         """
@@ -10930,15 +11876,18 @@ class ParticleContainer_16_4_0_0_pinned:
         self, other: ParticleContainer_16_4_0_0_pinned, local: bool = False
     ) -> None: ...
     def add_particles_at_level(
-        self, particles: ParticleTile_16_4_0_0_pinned, level: int, ngrow: int = 0
+        self,
+        particles: ParticleTile_16_4_0_0_pinned,
+        level: typing.SupportsInt,
+        ngrow: typing.SupportsInt = 0,
     ) -> None: ...
     @typing.overload
-    def add_real_comp(self, communicate: int = 1) -> None:
+    def add_real_comp(self, communicate: typing.SupportsInt = 1) -> None:
         """
         add a new runtime component with type Real
         """
     @typing.overload
-    def add_real_comp(self, name: str, communicate: int = 1) -> None:
+    def add_real_comp(self, name: str, communicate: typing.SupportsInt = 1) -> None:
         """
         add a new runtime component with type Real
         """
@@ -10948,7 +11897,7 @@ class ParticleContainer_16_4_0_0_pinned:
         Get the Integer SoA index of a component
         """
     def get_particles(
-        self, level: int
+        self, level: typing.SupportsInt
     ) -> dict[tuple[int, int], ParticleTile_16_4_0_0_pinned]: ...
     def get_real_comp_index(self, arg0: str) -> int:
         """
@@ -10962,47 +11911,60 @@ class ParticleContainer_16_4_0_0_pinned:
         """
         Check if a container has an ParticleReal component
         """
-    def increment(self, arg0: MultiFab, arg1: int) -> None: ...
+    def increment(self, arg0: MultiFab, arg1: typing.SupportsInt) -> None: ...
     def init_one_per_cell(
-        self, arg0: float, arg1: float, arg2: float, arg3: ParticleInitType_16_4_0_0
+        self,
+        arg0: typing.SupportsFloat,
+        arg1: typing.SupportsFloat,
+        arg2: typing.SupportsFloat,
+        arg3: ParticleInitType_16_4_0_0,
     ) -> None: ...
     def init_random(
         self,
-        arg0: int,
-        arg1: int,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
         arg2: ParticleInitType_16_4_0_0,
         arg3: bool,
         arg4: RealBox,
     ) -> None: ...
     def init_random_per_box(
-        self, arg0: int, arg1: int, arg2: ParticleInitType_16_4_0_0
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: ParticleInitType_16_4_0_0,
     ) -> None: ...
     def make_alike(self) -> ParticleContainer_16_4_0_0_pinned: ...
-    def num_local_tiles_at_level(self, arg0: int) -> int: ...
+    def num_local_tiles_at_level(self, arg0: typing.SupportsInt) -> int: ...
     def number_of_particles_at_level(
-        self, level: int, only_valid: bool = True, only_local: bool = False
+        self,
+        level: typing.SupportsInt,
+        only_valid: bool = True,
+        only_local: bool = False,
     ) -> int: ...
     def number_of_particles_in_grid(
-        self, level: int, only_valid: bool = True, only_local: bool = False
-    ) -> Vector_Long: ...
-    def print_capacity(
         self,
-    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)]: ...
+        level: typing.SupportsInt,
+        only_valid: bool = True,
+        only_local: bool = False,
+    ) -> Vector_Long: ...
+    def print_capacity(self) -> typing.Annotated[list[int], "FixedSize(3)"]: ...
     def redistribute(
         self,
-        lev_min: int = 0,
-        lev_max: int = -1,
-        nGrow: int = 0,
-        local: int = 0,
+        lev_min: typing.SupportsInt = 0,
+        lev_max: typing.SupportsInt = -1,
+        nGrow: typing.SupportsInt = 0,
+        local: typing.SupportsInt = 0,
         remove_negative: bool = True,
     ) -> None: ...
-    def remove_particles_at_level(self, arg0: int) -> None: ...
+    def remove_particles_at_level(self, arg0: typing.SupportsInt) -> None: ...
     def remove_particles_not_at_finestLevel(self) -> None: ...
     def reserve_data(self) -> None: ...
     def resize_data(self) -> None: ...
     def restart(self, dir: str, file: str) -> None: ...
     def restart_checkpoint(self, dir: str, file: str, is_checkpoint: bool) -> None: ...
-    def set_soa_compile_time_names(self, arg0: list[str], arg1: list[str]) -> None: ...
+    def set_soa_compile_time_names(
+        self, arg0: collections.abc.Sequence[str], arg1: collections.abc.Sequence[str]
+    ) -> None: ...
     def shrink_t_fit(self) -> None: ...
     def sort_particles_by_bin(self, arg0: IntVect3D) -> None: ...
     def sort_particles_by_cell(self) -> None: ...
@@ -11035,9 +11997,7 @@ class ParticleContainer_16_4_0_0_pinned:
     ) -> int: ...
     def write_plotfile(self, dir: str, name: str) -> None: ...
     @property
-    def byte_spread(
-        self,
-    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)]: ...
+    def byte_spread(self) -> typing.Annotated[list[int], "FixedSize(3)"]: ...
     @property
     def finest_level(self) -> int: ...
     @property
@@ -11101,7 +12061,12 @@ class ParticleContainer_2_1_3_1_arena:
         arg2: Vector_BoxArray,
         arg3: Vector_IntVect,
     ) -> None: ...
-    def OK(self, lev_min: int = 0, lev_max: int = -1, nGrow: int = 0) -> bool: ...
+    def OK(
+        self,
+        lev_min: typing.SupportsInt = 0,
+        lev_max: typing.SupportsInt = -1,
+        nGrow: typing.SupportsInt = 0,
+    ) -> bool: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
@@ -11125,12 +12090,12 @@ class ParticleContainer_2_1_3_1_arena:
         arg3: Vector_IntVect,
     ) -> None: ...
     @typing.overload
-    def add_int_comp(self, communicate: int = 1) -> None:
+    def add_int_comp(self, communicate: typing.SupportsInt = 1) -> None:
         """
         add a new runtime component with type Int
         """
     @typing.overload
-    def add_int_comp(self, name: str, communicate: int = 1) -> None:
+    def add_int_comp(self, name: str, communicate: typing.SupportsInt = 1) -> None:
         """
         add a new runtime component with type Int
         """
@@ -11138,15 +12103,18 @@ class ParticleContainer_2_1_3_1_arena:
         self, other: ParticleContainer_2_1_3_1_arena, local: bool = False
     ) -> None: ...
     def add_particles_at_level(
-        self, particles: ParticleTile_2_1_3_1_arena, level: int, ngrow: int = 0
+        self,
+        particles: ParticleTile_2_1_3_1_arena,
+        level: typing.SupportsInt,
+        ngrow: typing.SupportsInt = 0,
     ) -> None: ...
     @typing.overload
-    def add_real_comp(self, communicate: int = 1) -> None:
+    def add_real_comp(self, communicate: typing.SupportsInt = 1) -> None:
         """
         add a new runtime component with type Real
         """
     @typing.overload
-    def add_real_comp(self, name: str, communicate: int = 1) -> None:
+    def add_real_comp(self, name: str, communicate: typing.SupportsInt = 1) -> None:
         """
         add a new runtime component with type Real
         """
@@ -11156,7 +12124,7 @@ class ParticleContainer_2_1_3_1_arena:
         Get the Integer SoA index of a component
         """
     def get_particles(
-        self, level: int
+        self, level: typing.SupportsInt
     ) -> dict[tuple[int, int], ParticleTile_2_1_3_1_arena]: ...
     def get_real_comp_index(self, arg0: str) -> int:
         """
@@ -11170,47 +12138,60 @@ class ParticleContainer_2_1_3_1_arena:
         """
         Check if a container has an ParticleReal component
         """
-    def increment(self, arg0: MultiFab, arg1: int) -> None: ...
+    def increment(self, arg0: MultiFab, arg1: typing.SupportsInt) -> None: ...
     def init_one_per_cell(
-        self, arg0: float, arg1: float, arg2: float, arg3: ParticleInitType_2_1_3_1
+        self,
+        arg0: typing.SupportsFloat,
+        arg1: typing.SupportsFloat,
+        arg2: typing.SupportsFloat,
+        arg3: ParticleInitType_2_1_3_1,
     ) -> None: ...
     def init_random(
         self,
-        arg0: int,
-        arg1: int,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
         arg2: ParticleInitType_2_1_3_1,
         arg3: bool,
         arg4: RealBox,
     ) -> None: ...
     def init_random_per_box(
-        self, arg0: int, arg1: int, arg2: ParticleInitType_2_1_3_1
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: ParticleInitType_2_1_3_1,
     ) -> None: ...
     def make_alike(self) -> ParticleContainer_2_1_3_1_arena: ...
-    def num_local_tiles_at_level(self, arg0: int) -> int: ...
+    def num_local_tiles_at_level(self, arg0: typing.SupportsInt) -> int: ...
     def number_of_particles_at_level(
-        self, level: int, only_valid: bool = True, only_local: bool = False
+        self,
+        level: typing.SupportsInt,
+        only_valid: bool = True,
+        only_local: bool = False,
     ) -> int: ...
     def number_of_particles_in_grid(
-        self, level: int, only_valid: bool = True, only_local: bool = False
-    ) -> Vector_Long: ...
-    def print_capacity(
         self,
-    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)]: ...
+        level: typing.SupportsInt,
+        only_valid: bool = True,
+        only_local: bool = False,
+    ) -> Vector_Long: ...
+    def print_capacity(self) -> typing.Annotated[list[int], "FixedSize(3)"]: ...
     def redistribute(
         self,
-        lev_min: int = 0,
-        lev_max: int = -1,
-        nGrow: int = 0,
-        local: int = 0,
+        lev_min: typing.SupportsInt = 0,
+        lev_max: typing.SupportsInt = -1,
+        nGrow: typing.SupportsInt = 0,
+        local: typing.SupportsInt = 0,
         remove_negative: bool = True,
     ) -> None: ...
-    def remove_particles_at_level(self, arg0: int) -> None: ...
+    def remove_particles_at_level(self, arg0: typing.SupportsInt) -> None: ...
     def remove_particles_not_at_finestLevel(self) -> None: ...
     def reserve_data(self) -> None: ...
     def resize_data(self) -> None: ...
     def restart(self, dir: str, file: str) -> None: ...
     def restart_checkpoint(self, dir: str, file: str, is_checkpoint: bool) -> None: ...
-    def set_soa_compile_time_names(self, arg0: list[str], arg1: list[str]) -> None: ...
+    def set_soa_compile_time_names(
+        self, arg0: collections.abc.Sequence[str], arg1: collections.abc.Sequence[str]
+    ) -> None: ...
     def shrink_t_fit(self) -> None: ...
     def sort_particles_by_bin(self, arg0: IntVect3D) -> None: ...
     def sort_particles_by_cell(self) -> None: ...
@@ -11243,9 +12224,7 @@ class ParticleContainer_2_1_3_1_arena:
     ) -> int: ...
     def write_plotfile(self, dir: str, name: str) -> None: ...
     @property
-    def byte_spread(
-        self,
-    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)]: ...
+    def byte_spread(self) -> typing.Annotated[list[int], "FixedSize(3)"]: ...
     @property
     def finest_level(self) -> int: ...
     @property
@@ -11309,7 +12288,12 @@ class ParticleContainer_2_1_3_1_default:
         arg2: Vector_BoxArray,
         arg3: Vector_IntVect,
     ) -> None: ...
-    def OK(self, lev_min: int = 0, lev_max: int = -1, nGrow: int = 0) -> bool: ...
+    def OK(
+        self,
+        lev_min: typing.SupportsInt = 0,
+        lev_max: typing.SupportsInt = -1,
+        nGrow: typing.SupportsInt = 0,
+    ) -> bool: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
@@ -11333,12 +12317,12 @@ class ParticleContainer_2_1_3_1_default:
         arg3: Vector_IntVect,
     ) -> None: ...
     @typing.overload
-    def add_int_comp(self, communicate: int = 1) -> None:
+    def add_int_comp(self, communicate: typing.SupportsInt = 1) -> None:
         """
         add a new runtime component with type Int
         """
     @typing.overload
-    def add_int_comp(self, name: str, communicate: int = 1) -> None:
+    def add_int_comp(self, name: str, communicate: typing.SupportsInt = 1) -> None:
         """
         add a new runtime component with type Int
         """
@@ -11346,15 +12330,18 @@ class ParticleContainer_2_1_3_1_default:
         self, other: ParticleContainer_2_1_3_1_default, local: bool = False
     ) -> None: ...
     def add_particles_at_level(
-        self, particles: ParticleTile_2_1_3_1_default, level: int, ngrow: int = 0
+        self,
+        particles: ParticleTile_2_1_3_1_default,
+        level: typing.SupportsInt,
+        ngrow: typing.SupportsInt = 0,
     ) -> None: ...
     @typing.overload
-    def add_real_comp(self, communicate: int = 1) -> None:
+    def add_real_comp(self, communicate: typing.SupportsInt = 1) -> None:
         """
         add a new runtime component with type Real
         """
     @typing.overload
-    def add_real_comp(self, name: str, communicate: int = 1) -> None:
+    def add_real_comp(self, name: str, communicate: typing.SupportsInt = 1) -> None:
         """
         add a new runtime component with type Real
         """
@@ -11364,7 +12351,7 @@ class ParticleContainer_2_1_3_1_default:
         Get the Integer SoA index of a component
         """
     def get_particles(
-        self, level: int
+        self, level: typing.SupportsInt
     ) -> dict[tuple[int, int], ParticleTile_2_1_3_1_default]: ...
     def get_real_comp_index(self, arg0: str) -> int:
         """
@@ -11378,47 +12365,60 @@ class ParticleContainer_2_1_3_1_default:
         """
         Check if a container has an ParticleReal component
         """
-    def increment(self, arg0: MultiFab, arg1: int) -> None: ...
+    def increment(self, arg0: MultiFab, arg1: typing.SupportsInt) -> None: ...
     def init_one_per_cell(
-        self, arg0: float, arg1: float, arg2: float, arg3: ParticleInitType_2_1_3_1
+        self,
+        arg0: typing.SupportsFloat,
+        arg1: typing.SupportsFloat,
+        arg2: typing.SupportsFloat,
+        arg3: ParticleInitType_2_1_3_1,
     ) -> None: ...
     def init_random(
         self,
-        arg0: int,
-        arg1: int,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
         arg2: ParticleInitType_2_1_3_1,
         arg3: bool,
         arg4: RealBox,
     ) -> None: ...
     def init_random_per_box(
-        self, arg0: int, arg1: int, arg2: ParticleInitType_2_1_3_1
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: ParticleInitType_2_1_3_1,
     ) -> None: ...
     def make_alike(self) -> ParticleContainer_2_1_3_1_default: ...
-    def num_local_tiles_at_level(self, arg0: int) -> int: ...
+    def num_local_tiles_at_level(self, arg0: typing.SupportsInt) -> int: ...
     def number_of_particles_at_level(
-        self, level: int, only_valid: bool = True, only_local: bool = False
+        self,
+        level: typing.SupportsInt,
+        only_valid: bool = True,
+        only_local: bool = False,
     ) -> int: ...
     def number_of_particles_in_grid(
-        self, level: int, only_valid: bool = True, only_local: bool = False
-    ) -> Vector_Long: ...
-    def print_capacity(
         self,
-    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)]: ...
+        level: typing.SupportsInt,
+        only_valid: bool = True,
+        only_local: bool = False,
+    ) -> Vector_Long: ...
+    def print_capacity(self) -> typing.Annotated[list[int], "FixedSize(3)"]: ...
     def redistribute(
         self,
-        lev_min: int = 0,
-        lev_max: int = -1,
-        nGrow: int = 0,
-        local: int = 0,
+        lev_min: typing.SupportsInt = 0,
+        lev_max: typing.SupportsInt = -1,
+        nGrow: typing.SupportsInt = 0,
+        local: typing.SupportsInt = 0,
         remove_negative: bool = True,
     ) -> None: ...
-    def remove_particles_at_level(self, arg0: int) -> None: ...
+    def remove_particles_at_level(self, arg0: typing.SupportsInt) -> None: ...
     def remove_particles_not_at_finestLevel(self) -> None: ...
     def reserve_data(self) -> None: ...
     def resize_data(self) -> None: ...
     def restart(self, dir: str, file: str) -> None: ...
     def restart_checkpoint(self, dir: str, file: str, is_checkpoint: bool) -> None: ...
-    def set_soa_compile_time_names(self, arg0: list[str], arg1: list[str]) -> None: ...
+    def set_soa_compile_time_names(
+        self, arg0: collections.abc.Sequence[str], arg1: collections.abc.Sequence[str]
+    ) -> None: ...
     def shrink_t_fit(self) -> None: ...
     def sort_particles_by_bin(self, arg0: IntVect3D) -> None: ...
     def sort_particles_by_cell(self) -> None: ...
@@ -11451,9 +12451,7 @@ class ParticleContainer_2_1_3_1_default:
     ) -> int: ...
     def write_plotfile(self, dir: str, name: str) -> None: ...
     @property
-    def byte_spread(
-        self,
-    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)]: ...
+    def byte_spread(self) -> typing.Annotated[list[int], "FixedSize(3)"]: ...
     @property
     def finest_level(self) -> int: ...
     @property
@@ -11517,7 +12515,12 @@ class ParticleContainer_2_1_3_1_pinned:
         arg2: Vector_BoxArray,
         arg3: Vector_IntVect,
     ) -> None: ...
-    def OK(self, lev_min: int = 0, lev_max: int = -1, nGrow: int = 0) -> bool: ...
+    def OK(
+        self,
+        lev_min: typing.SupportsInt = 0,
+        lev_max: typing.SupportsInt = -1,
+        nGrow: typing.SupportsInt = 0,
+    ) -> bool: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
@@ -11541,12 +12544,12 @@ class ParticleContainer_2_1_3_1_pinned:
         arg3: Vector_IntVect,
     ) -> None: ...
     @typing.overload
-    def add_int_comp(self, communicate: int = 1) -> None:
+    def add_int_comp(self, communicate: typing.SupportsInt = 1) -> None:
         """
         add a new runtime component with type Int
         """
     @typing.overload
-    def add_int_comp(self, name: str, communicate: int = 1) -> None:
+    def add_int_comp(self, name: str, communicate: typing.SupportsInt = 1) -> None:
         """
         add a new runtime component with type Int
         """
@@ -11554,15 +12557,18 @@ class ParticleContainer_2_1_3_1_pinned:
         self, other: ParticleContainer_2_1_3_1_pinned, local: bool = False
     ) -> None: ...
     def add_particles_at_level(
-        self, particles: ParticleTile_2_1_3_1_pinned, level: int, ngrow: int = 0
+        self,
+        particles: ParticleTile_2_1_3_1_pinned,
+        level: typing.SupportsInt,
+        ngrow: typing.SupportsInt = 0,
     ) -> None: ...
     @typing.overload
-    def add_real_comp(self, communicate: int = 1) -> None:
+    def add_real_comp(self, communicate: typing.SupportsInt = 1) -> None:
         """
         add a new runtime component with type Real
         """
     @typing.overload
-    def add_real_comp(self, name: str, communicate: int = 1) -> None:
+    def add_real_comp(self, name: str, communicate: typing.SupportsInt = 1) -> None:
         """
         add a new runtime component with type Real
         """
@@ -11572,7 +12578,7 @@ class ParticleContainer_2_1_3_1_pinned:
         Get the Integer SoA index of a component
         """
     def get_particles(
-        self, level: int
+        self, level: typing.SupportsInt
     ) -> dict[tuple[int, int], ParticleTile_2_1_3_1_pinned]: ...
     def get_real_comp_index(self, arg0: str) -> int:
         """
@@ -11586,47 +12592,60 @@ class ParticleContainer_2_1_3_1_pinned:
         """
         Check if a container has an ParticleReal component
         """
-    def increment(self, arg0: MultiFab, arg1: int) -> None: ...
+    def increment(self, arg0: MultiFab, arg1: typing.SupportsInt) -> None: ...
     def init_one_per_cell(
-        self, arg0: float, arg1: float, arg2: float, arg3: ParticleInitType_2_1_3_1
+        self,
+        arg0: typing.SupportsFloat,
+        arg1: typing.SupportsFloat,
+        arg2: typing.SupportsFloat,
+        arg3: ParticleInitType_2_1_3_1,
     ) -> None: ...
     def init_random(
         self,
-        arg0: int,
-        arg1: int,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
         arg2: ParticleInitType_2_1_3_1,
         arg3: bool,
         arg4: RealBox,
     ) -> None: ...
     def init_random_per_box(
-        self, arg0: int, arg1: int, arg2: ParticleInitType_2_1_3_1
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: ParticleInitType_2_1_3_1,
     ) -> None: ...
     def make_alike(self) -> ParticleContainer_2_1_3_1_pinned: ...
-    def num_local_tiles_at_level(self, arg0: int) -> int: ...
+    def num_local_tiles_at_level(self, arg0: typing.SupportsInt) -> int: ...
     def number_of_particles_at_level(
-        self, level: int, only_valid: bool = True, only_local: bool = False
+        self,
+        level: typing.SupportsInt,
+        only_valid: bool = True,
+        only_local: bool = False,
     ) -> int: ...
     def number_of_particles_in_grid(
-        self, level: int, only_valid: bool = True, only_local: bool = False
-    ) -> Vector_Long: ...
-    def print_capacity(
         self,
-    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)]: ...
+        level: typing.SupportsInt,
+        only_valid: bool = True,
+        only_local: bool = False,
+    ) -> Vector_Long: ...
+    def print_capacity(self) -> typing.Annotated[list[int], "FixedSize(3)"]: ...
     def redistribute(
         self,
-        lev_min: int = 0,
-        lev_max: int = -1,
-        nGrow: int = 0,
-        local: int = 0,
+        lev_min: typing.SupportsInt = 0,
+        lev_max: typing.SupportsInt = -1,
+        nGrow: typing.SupportsInt = 0,
+        local: typing.SupportsInt = 0,
         remove_negative: bool = True,
     ) -> None: ...
-    def remove_particles_at_level(self, arg0: int) -> None: ...
+    def remove_particles_at_level(self, arg0: typing.SupportsInt) -> None: ...
     def remove_particles_not_at_finestLevel(self) -> None: ...
     def reserve_data(self) -> None: ...
     def resize_data(self) -> None: ...
     def restart(self, dir: str, file: str) -> None: ...
     def restart_checkpoint(self, dir: str, file: str, is_checkpoint: bool) -> None: ...
-    def set_soa_compile_time_names(self, arg0: list[str], arg1: list[str]) -> None: ...
+    def set_soa_compile_time_names(
+        self, arg0: collections.abc.Sequence[str], arg1: collections.abc.Sequence[str]
+    ) -> None: ...
     def shrink_t_fit(self) -> None: ...
     def sort_particles_by_bin(self, arg0: IntVect3D) -> None: ...
     def sort_particles_by_cell(self) -> None: ...
@@ -11659,9 +12678,7 @@ class ParticleContainer_2_1_3_1_pinned:
     ) -> int: ...
     def write_plotfile(self, dir: str, name: str) -> None: ...
     @property
-    def byte_spread(
-        self,
-    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)]: ...
+    def byte_spread(self) -> typing.Annotated[list[int], "FixedSize(3)"]: ...
     @property
     def finest_level(self) -> int: ...
     @property
@@ -11725,7 +12742,12 @@ class ParticleContainer_pureSoA_3_0_arena:
         arg2: Vector_BoxArray,
         arg3: Vector_IntVect,
     ) -> None: ...
-    def OK(self, lev_min: int = 0, lev_max: int = -1, nGrow: int = 0) -> bool: ...
+    def OK(
+        self,
+        lev_min: typing.SupportsInt = 0,
+        lev_max: typing.SupportsInt = -1,
+        nGrow: typing.SupportsInt = 0,
+    ) -> bool: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
@@ -11749,12 +12771,12 @@ class ParticleContainer_pureSoA_3_0_arena:
         arg3: Vector_IntVect,
     ) -> None: ...
     @typing.overload
-    def add_int_comp(self, communicate: int = 1) -> None:
+    def add_int_comp(self, communicate: typing.SupportsInt = 1) -> None:
         """
         add a new runtime component with type Int
         """
     @typing.overload
-    def add_int_comp(self, name: str, communicate: int = 1) -> None:
+    def add_int_comp(self, name: str, communicate: typing.SupportsInt = 1) -> None:
         """
         add a new runtime component with type Int
         """
@@ -11762,15 +12784,18 @@ class ParticleContainer_pureSoA_3_0_arena:
         self, other: ParticleContainer_pureSoA_3_0_arena, local: bool = False
     ) -> None: ...
     def add_particles_at_level(
-        self, particles: ParticleTile_pureSoA_3_0_arena, level: int, ngrow: int = 0
+        self,
+        particles: ParticleTile_pureSoA_3_0_arena,
+        level: typing.SupportsInt,
+        ngrow: typing.SupportsInt = 0,
     ) -> None: ...
     @typing.overload
-    def add_real_comp(self, communicate: int = 1) -> None:
+    def add_real_comp(self, communicate: typing.SupportsInt = 1) -> None:
         """
         add a new runtime component with type Real
         """
     @typing.overload
-    def add_real_comp(self, name: str, communicate: int = 1) -> None:
+    def add_real_comp(self, name: str, communicate: typing.SupportsInt = 1) -> None:
         """
         add a new runtime component with type Real
         """
@@ -11780,7 +12805,7 @@ class ParticleContainer_pureSoA_3_0_arena:
         Get the Integer SoA index of a component
         """
     def get_particles(
-        self, level: int
+        self, level: typing.SupportsInt
     ) -> dict[tuple[int, int], ParticleTile_pureSoA_3_0_arena]: ...
     def get_real_comp_index(self, arg0: str) -> int:
         """
@@ -11794,41 +12819,47 @@ class ParticleContainer_pureSoA_3_0_arena:
         """
         Check if a container has an ParticleReal component
         """
-    def increment(self, arg0: MultiFab, arg1: int) -> None: ...
+    def increment(self, arg0: MultiFab, arg1: typing.SupportsInt) -> None: ...
     def init_random(
         self,
-        arg0: int,
-        arg1: int,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
         arg2: ParticleInitType_pureSoA_3_0,
         arg3: bool,
         arg4: RealBox,
     ) -> None: ...
     def make_alike(self) -> ParticleContainer_pureSoA_3_0_arena: ...
-    def num_local_tiles_at_level(self, arg0: int) -> int: ...
+    def num_local_tiles_at_level(self, arg0: typing.SupportsInt) -> int: ...
     def number_of_particles_at_level(
-        self, level: int, only_valid: bool = True, only_local: bool = False
+        self,
+        level: typing.SupportsInt,
+        only_valid: bool = True,
+        only_local: bool = False,
     ) -> int: ...
     def number_of_particles_in_grid(
-        self, level: int, only_valid: bool = True, only_local: bool = False
-    ) -> Vector_Long: ...
-    def print_capacity(
         self,
-    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)]: ...
+        level: typing.SupportsInt,
+        only_valid: bool = True,
+        only_local: bool = False,
+    ) -> Vector_Long: ...
+    def print_capacity(self) -> typing.Annotated[list[int], "FixedSize(3)"]: ...
     def redistribute(
         self,
-        lev_min: int = 0,
-        lev_max: int = -1,
-        nGrow: int = 0,
-        local: int = 0,
+        lev_min: typing.SupportsInt = 0,
+        lev_max: typing.SupportsInt = -1,
+        nGrow: typing.SupportsInt = 0,
+        local: typing.SupportsInt = 0,
         remove_negative: bool = True,
     ) -> None: ...
-    def remove_particles_at_level(self, arg0: int) -> None: ...
+    def remove_particles_at_level(self, arg0: typing.SupportsInt) -> None: ...
     def remove_particles_not_at_finestLevel(self) -> None: ...
     def reserve_data(self) -> None: ...
     def resize_data(self) -> None: ...
     def restart(self, dir: str, file: str) -> None: ...
     def restart_checkpoint(self, dir: str, file: str, is_checkpoint: bool) -> None: ...
-    def set_soa_compile_time_names(self, arg0: list[str], arg1: list[str]) -> None: ...
+    def set_soa_compile_time_names(
+        self, arg0: collections.abc.Sequence[str], arg1: collections.abc.Sequence[str]
+    ) -> None: ...
     def shrink_t_fit(self) -> None: ...
     def sort_particles_by_bin(self, arg0: IntVect3D) -> None: ...
     def sort_particles_by_cell(self) -> None: ...
@@ -11861,9 +12892,7 @@ class ParticleContainer_pureSoA_3_0_arena:
     ) -> int: ...
     def write_plotfile(self, dir: str, name: str) -> None: ...
     @property
-    def byte_spread(
-        self,
-    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)]: ...
+    def byte_spread(self) -> typing.Annotated[list[int], "FixedSize(3)"]: ...
     @property
     def finest_level(self) -> int: ...
     @property
@@ -11927,7 +12956,12 @@ class ParticleContainer_pureSoA_3_0_default:
         arg2: Vector_BoxArray,
         arg3: Vector_IntVect,
     ) -> None: ...
-    def OK(self, lev_min: int = 0, lev_max: int = -1, nGrow: int = 0) -> bool: ...
+    def OK(
+        self,
+        lev_min: typing.SupportsInt = 0,
+        lev_max: typing.SupportsInt = -1,
+        nGrow: typing.SupportsInt = 0,
+    ) -> bool: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
@@ -11951,12 +12985,12 @@ class ParticleContainer_pureSoA_3_0_default:
         arg3: Vector_IntVect,
     ) -> None: ...
     @typing.overload
-    def add_int_comp(self, communicate: int = 1) -> None:
+    def add_int_comp(self, communicate: typing.SupportsInt = 1) -> None:
         """
         add a new runtime component with type Int
         """
     @typing.overload
-    def add_int_comp(self, name: str, communicate: int = 1) -> None:
+    def add_int_comp(self, name: str, communicate: typing.SupportsInt = 1) -> None:
         """
         add a new runtime component with type Int
         """
@@ -11964,15 +12998,18 @@ class ParticleContainer_pureSoA_3_0_default:
         self, other: ParticleContainer_pureSoA_3_0_default, local: bool = False
     ) -> None: ...
     def add_particles_at_level(
-        self, particles: ParticleTile_pureSoA_3_0_default, level: int, ngrow: int = 0
+        self,
+        particles: ParticleTile_pureSoA_3_0_default,
+        level: typing.SupportsInt,
+        ngrow: typing.SupportsInt = 0,
     ) -> None: ...
     @typing.overload
-    def add_real_comp(self, communicate: int = 1) -> None:
+    def add_real_comp(self, communicate: typing.SupportsInt = 1) -> None:
         """
         add a new runtime component with type Real
         """
     @typing.overload
-    def add_real_comp(self, name: str, communicate: int = 1) -> None:
+    def add_real_comp(self, name: str, communicate: typing.SupportsInt = 1) -> None:
         """
         add a new runtime component with type Real
         """
@@ -11982,7 +13019,7 @@ class ParticleContainer_pureSoA_3_0_default:
         Get the Integer SoA index of a component
         """
     def get_particles(
-        self, level: int
+        self, level: typing.SupportsInt
     ) -> dict[tuple[int, int], ParticleTile_pureSoA_3_0_default]: ...
     def get_real_comp_index(self, arg0: str) -> int:
         """
@@ -11996,41 +13033,47 @@ class ParticleContainer_pureSoA_3_0_default:
         """
         Check if a container has an ParticleReal component
         """
-    def increment(self, arg0: MultiFab, arg1: int) -> None: ...
+    def increment(self, arg0: MultiFab, arg1: typing.SupportsInt) -> None: ...
     def init_random(
         self,
-        arg0: int,
-        arg1: int,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
         arg2: ParticleInitType_pureSoA_3_0,
         arg3: bool,
         arg4: RealBox,
     ) -> None: ...
     def make_alike(self) -> ParticleContainer_pureSoA_3_0_default: ...
-    def num_local_tiles_at_level(self, arg0: int) -> int: ...
+    def num_local_tiles_at_level(self, arg0: typing.SupportsInt) -> int: ...
     def number_of_particles_at_level(
-        self, level: int, only_valid: bool = True, only_local: bool = False
+        self,
+        level: typing.SupportsInt,
+        only_valid: bool = True,
+        only_local: bool = False,
     ) -> int: ...
     def number_of_particles_in_grid(
-        self, level: int, only_valid: bool = True, only_local: bool = False
-    ) -> Vector_Long: ...
-    def print_capacity(
         self,
-    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)]: ...
+        level: typing.SupportsInt,
+        only_valid: bool = True,
+        only_local: bool = False,
+    ) -> Vector_Long: ...
+    def print_capacity(self) -> typing.Annotated[list[int], "FixedSize(3)"]: ...
     def redistribute(
         self,
-        lev_min: int = 0,
-        lev_max: int = -1,
-        nGrow: int = 0,
-        local: int = 0,
+        lev_min: typing.SupportsInt = 0,
+        lev_max: typing.SupportsInt = -1,
+        nGrow: typing.SupportsInt = 0,
+        local: typing.SupportsInt = 0,
         remove_negative: bool = True,
     ) -> None: ...
-    def remove_particles_at_level(self, arg0: int) -> None: ...
+    def remove_particles_at_level(self, arg0: typing.SupportsInt) -> None: ...
     def remove_particles_not_at_finestLevel(self) -> None: ...
     def reserve_data(self) -> None: ...
     def resize_data(self) -> None: ...
     def restart(self, dir: str, file: str) -> None: ...
     def restart_checkpoint(self, dir: str, file: str, is_checkpoint: bool) -> None: ...
-    def set_soa_compile_time_names(self, arg0: list[str], arg1: list[str]) -> None: ...
+    def set_soa_compile_time_names(
+        self, arg0: collections.abc.Sequence[str], arg1: collections.abc.Sequence[str]
+    ) -> None: ...
     def shrink_t_fit(self) -> None: ...
     def sort_particles_by_bin(self, arg0: IntVect3D) -> None: ...
     def sort_particles_by_cell(self) -> None: ...
@@ -12063,9 +13106,7 @@ class ParticleContainer_pureSoA_3_0_default:
     ) -> int: ...
     def write_plotfile(self, dir: str, name: str) -> None: ...
     @property
-    def byte_spread(
-        self,
-    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)]: ...
+    def byte_spread(self) -> typing.Annotated[list[int], "FixedSize(3)"]: ...
     @property
     def finest_level(self) -> int: ...
     @property
@@ -12129,7 +13170,12 @@ class ParticleContainer_pureSoA_3_0_pinned:
         arg2: Vector_BoxArray,
         arg3: Vector_IntVect,
     ) -> None: ...
-    def OK(self, lev_min: int = 0, lev_max: int = -1, nGrow: int = 0) -> bool: ...
+    def OK(
+        self,
+        lev_min: typing.SupportsInt = 0,
+        lev_max: typing.SupportsInt = -1,
+        nGrow: typing.SupportsInt = 0,
+    ) -> bool: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
@@ -12153,12 +13199,12 @@ class ParticleContainer_pureSoA_3_0_pinned:
         arg3: Vector_IntVect,
     ) -> None: ...
     @typing.overload
-    def add_int_comp(self, communicate: int = 1) -> None:
+    def add_int_comp(self, communicate: typing.SupportsInt = 1) -> None:
         """
         add a new runtime component with type Int
         """
     @typing.overload
-    def add_int_comp(self, name: str, communicate: int = 1) -> None:
+    def add_int_comp(self, name: str, communicate: typing.SupportsInt = 1) -> None:
         """
         add a new runtime component with type Int
         """
@@ -12166,15 +13212,18 @@ class ParticleContainer_pureSoA_3_0_pinned:
         self, other: ParticleContainer_pureSoA_3_0_pinned, local: bool = False
     ) -> None: ...
     def add_particles_at_level(
-        self, particles: ParticleTile_pureSoA_3_0_pinned, level: int, ngrow: int = 0
+        self,
+        particles: ParticleTile_pureSoA_3_0_pinned,
+        level: typing.SupportsInt,
+        ngrow: typing.SupportsInt = 0,
     ) -> None: ...
     @typing.overload
-    def add_real_comp(self, communicate: int = 1) -> None:
+    def add_real_comp(self, communicate: typing.SupportsInt = 1) -> None:
         """
         add a new runtime component with type Real
         """
     @typing.overload
-    def add_real_comp(self, name: str, communicate: int = 1) -> None:
+    def add_real_comp(self, name: str, communicate: typing.SupportsInt = 1) -> None:
         """
         add a new runtime component with type Real
         """
@@ -12184,7 +13233,7 @@ class ParticleContainer_pureSoA_3_0_pinned:
         Get the Integer SoA index of a component
         """
     def get_particles(
-        self, level: int
+        self, level: typing.SupportsInt
     ) -> dict[tuple[int, int], ParticleTile_pureSoA_3_0_pinned]: ...
     def get_real_comp_index(self, arg0: str) -> int:
         """
@@ -12198,41 +13247,47 @@ class ParticleContainer_pureSoA_3_0_pinned:
         """
         Check if a container has an ParticleReal component
         """
-    def increment(self, arg0: MultiFab, arg1: int) -> None: ...
+    def increment(self, arg0: MultiFab, arg1: typing.SupportsInt) -> None: ...
     def init_random(
         self,
-        arg0: int,
-        arg1: int,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
         arg2: ParticleInitType_pureSoA_3_0,
         arg3: bool,
         arg4: RealBox,
     ) -> None: ...
     def make_alike(self) -> ParticleContainer_pureSoA_3_0_pinned: ...
-    def num_local_tiles_at_level(self, arg0: int) -> int: ...
+    def num_local_tiles_at_level(self, arg0: typing.SupportsInt) -> int: ...
     def number_of_particles_at_level(
-        self, level: int, only_valid: bool = True, only_local: bool = False
+        self,
+        level: typing.SupportsInt,
+        only_valid: bool = True,
+        only_local: bool = False,
     ) -> int: ...
     def number_of_particles_in_grid(
-        self, level: int, only_valid: bool = True, only_local: bool = False
-    ) -> Vector_Long: ...
-    def print_capacity(
         self,
-    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)]: ...
+        level: typing.SupportsInt,
+        only_valid: bool = True,
+        only_local: bool = False,
+    ) -> Vector_Long: ...
+    def print_capacity(self) -> typing.Annotated[list[int], "FixedSize(3)"]: ...
     def redistribute(
         self,
-        lev_min: int = 0,
-        lev_max: int = -1,
-        nGrow: int = 0,
-        local: int = 0,
+        lev_min: typing.SupportsInt = 0,
+        lev_max: typing.SupportsInt = -1,
+        nGrow: typing.SupportsInt = 0,
+        local: typing.SupportsInt = 0,
         remove_negative: bool = True,
     ) -> None: ...
-    def remove_particles_at_level(self, arg0: int) -> None: ...
+    def remove_particles_at_level(self, arg0: typing.SupportsInt) -> None: ...
     def remove_particles_not_at_finestLevel(self) -> None: ...
     def reserve_data(self) -> None: ...
     def resize_data(self) -> None: ...
     def restart(self, dir: str, file: str) -> None: ...
     def restart_checkpoint(self, dir: str, file: str, is_checkpoint: bool) -> None: ...
-    def set_soa_compile_time_names(self, arg0: list[str], arg1: list[str]) -> None: ...
+    def set_soa_compile_time_names(
+        self, arg0: collections.abc.Sequence[str], arg1: collections.abc.Sequence[str]
+    ) -> None: ...
     def shrink_t_fit(self) -> None: ...
     def sort_particles_by_bin(self, arg0: IntVect3D) -> None: ...
     def sort_particles_by_cell(self) -> None: ...
@@ -12265,9 +13320,7 @@ class ParticleContainer_pureSoA_3_0_pinned:
     ) -> int: ...
     def write_plotfile(self, dir: str, name: str) -> None: ...
     @property
-    def byte_spread(
-        self,
-    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)]: ...
+    def byte_spread(self) -> typing.Annotated[list[int], "FixedSize(3)"]: ...
     @property
     def finest_level(self) -> int: ...
     @property
@@ -12331,7 +13384,12 @@ class ParticleContainer_pureSoA_7_0_arena:
         arg2: Vector_BoxArray,
         arg3: Vector_IntVect,
     ) -> None: ...
-    def OK(self, lev_min: int = 0, lev_max: int = -1, nGrow: int = 0) -> bool: ...
+    def OK(
+        self,
+        lev_min: typing.SupportsInt = 0,
+        lev_max: typing.SupportsInt = -1,
+        nGrow: typing.SupportsInt = 0,
+    ) -> bool: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
@@ -12355,12 +13413,12 @@ class ParticleContainer_pureSoA_7_0_arena:
         arg3: Vector_IntVect,
     ) -> None: ...
     @typing.overload
-    def add_int_comp(self, communicate: int = 1) -> None:
+    def add_int_comp(self, communicate: typing.SupportsInt = 1) -> None:
         """
         add a new runtime component with type Int
         """
     @typing.overload
-    def add_int_comp(self, name: str, communicate: int = 1) -> None:
+    def add_int_comp(self, name: str, communicate: typing.SupportsInt = 1) -> None:
         """
         add a new runtime component with type Int
         """
@@ -12368,15 +13426,18 @@ class ParticleContainer_pureSoA_7_0_arena:
         self, other: ParticleContainer_pureSoA_7_0_arena, local: bool = False
     ) -> None: ...
     def add_particles_at_level(
-        self, particles: ParticleTile_pureSoA_7_0_arena, level: int, ngrow: int = 0
+        self,
+        particles: ParticleTile_pureSoA_7_0_arena,
+        level: typing.SupportsInt,
+        ngrow: typing.SupportsInt = 0,
     ) -> None: ...
     @typing.overload
-    def add_real_comp(self, communicate: int = 1) -> None:
+    def add_real_comp(self, communicate: typing.SupportsInt = 1) -> None:
         """
         add a new runtime component with type Real
         """
     @typing.overload
-    def add_real_comp(self, name: str, communicate: int = 1) -> None:
+    def add_real_comp(self, name: str, communicate: typing.SupportsInt = 1) -> None:
         """
         add a new runtime component with type Real
         """
@@ -12386,7 +13447,7 @@ class ParticleContainer_pureSoA_7_0_arena:
         Get the Integer SoA index of a component
         """
     def get_particles(
-        self, level: int
+        self, level: typing.SupportsInt
     ) -> dict[tuple[int, int], ParticleTile_pureSoA_7_0_arena]: ...
     def get_real_comp_index(self, arg0: str) -> int:
         """
@@ -12400,41 +13461,47 @@ class ParticleContainer_pureSoA_7_0_arena:
         """
         Check if a container has an ParticleReal component
         """
-    def increment(self, arg0: MultiFab, arg1: int) -> None: ...
+    def increment(self, arg0: MultiFab, arg1: typing.SupportsInt) -> None: ...
     def init_random(
         self,
-        arg0: int,
-        arg1: int,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
         arg2: ParticleInitType_pureSoA_7_0,
         arg3: bool,
         arg4: RealBox,
     ) -> None: ...
     def make_alike(self) -> ParticleContainer_pureSoA_7_0_arena: ...
-    def num_local_tiles_at_level(self, arg0: int) -> int: ...
+    def num_local_tiles_at_level(self, arg0: typing.SupportsInt) -> int: ...
     def number_of_particles_at_level(
-        self, level: int, only_valid: bool = True, only_local: bool = False
+        self,
+        level: typing.SupportsInt,
+        only_valid: bool = True,
+        only_local: bool = False,
     ) -> int: ...
     def number_of_particles_in_grid(
-        self, level: int, only_valid: bool = True, only_local: bool = False
-    ) -> Vector_Long: ...
-    def print_capacity(
         self,
-    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)]: ...
+        level: typing.SupportsInt,
+        only_valid: bool = True,
+        only_local: bool = False,
+    ) -> Vector_Long: ...
+    def print_capacity(self) -> typing.Annotated[list[int], "FixedSize(3)"]: ...
     def redistribute(
         self,
-        lev_min: int = 0,
-        lev_max: int = -1,
-        nGrow: int = 0,
-        local: int = 0,
+        lev_min: typing.SupportsInt = 0,
+        lev_max: typing.SupportsInt = -1,
+        nGrow: typing.SupportsInt = 0,
+        local: typing.SupportsInt = 0,
         remove_negative: bool = True,
     ) -> None: ...
-    def remove_particles_at_level(self, arg0: int) -> None: ...
+    def remove_particles_at_level(self, arg0: typing.SupportsInt) -> None: ...
     def remove_particles_not_at_finestLevel(self) -> None: ...
     def reserve_data(self) -> None: ...
     def resize_data(self) -> None: ...
     def restart(self, dir: str, file: str) -> None: ...
     def restart_checkpoint(self, dir: str, file: str, is_checkpoint: bool) -> None: ...
-    def set_soa_compile_time_names(self, arg0: list[str], arg1: list[str]) -> None: ...
+    def set_soa_compile_time_names(
+        self, arg0: collections.abc.Sequence[str], arg1: collections.abc.Sequence[str]
+    ) -> None: ...
     def shrink_t_fit(self) -> None: ...
     def sort_particles_by_bin(self, arg0: IntVect3D) -> None: ...
     def sort_particles_by_cell(self) -> None: ...
@@ -12467,9 +13534,7 @@ class ParticleContainer_pureSoA_7_0_arena:
     ) -> int: ...
     def write_plotfile(self, dir: str, name: str) -> None: ...
     @property
-    def byte_spread(
-        self,
-    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)]: ...
+    def byte_spread(self) -> typing.Annotated[list[int], "FixedSize(3)"]: ...
     @property
     def finest_level(self) -> int: ...
     @property
@@ -12533,7 +13598,12 @@ class ParticleContainer_pureSoA_7_0_default:
         arg2: Vector_BoxArray,
         arg3: Vector_IntVect,
     ) -> None: ...
-    def OK(self, lev_min: int = 0, lev_max: int = -1, nGrow: int = 0) -> bool: ...
+    def OK(
+        self,
+        lev_min: typing.SupportsInt = 0,
+        lev_max: typing.SupportsInt = -1,
+        nGrow: typing.SupportsInt = 0,
+    ) -> bool: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
@@ -12557,12 +13627,12 @@ class ParticleContainer_pureSoA_7_0_default:
         arg3: Vector_IntVect,
     ) -> None: ...
     @typing.overload
-    def add_int_comp(self, communicate: int = 1) -> None:
+    def add_int_comp(self, communicate: typing.SupportsInt = 1) -> None:
         """
         add a new runtime component with type Int
         """
     @typing.overload
-    def add_int_comp(self, name: str, communicate: int = 1) -> None:
+    def add_int_comp(self, name: str, communicate: typing.SupportsInt = 1) -> None:
         """
         add a new runtime component with type Int
         """
@@ -12570,15 +13640,18 @@ class ParticleContainer_pureSoA_7_0_default:
         self, other: ParticleContainer_pureSoA_7_0_default, local: bool = False
     ) -> None: ...
     def add_particles_at_level(
-        self, particles: ParticleTile_pureSoA_7_0_default, level: int, ngrow: int = 0
+        self,
+        particles: ParticleTile_pureSoA_7_0_default,
+        level: typing.SupportsInt,
+        ngrow: typing.SupportsInt = 0,
     ) -> None: ...
     @typing.overload
-    def add_real_comp(self, communicate: int = 1) -> None:
+    def add_real_comp(self, communicate: typing.SupportsInt = 1) -> None:
         """
         add a new runtime component with type Real
         """
     @typing.overload
-    def add_real_comp(self, name: str, communicate: int = 1) -> None:
+    def add_real_comp(self, name: str, communicate: typing.SupportsInt = 1) -> None:
         """
         add a new runtime component with type Real
         """
@@ -12588,7 +13661,7 @@ class ParticleContainer_pureSoA_7_0_default:
         Get the Integer SoA index of a component
         """
     def get_particles(
-        self, level: int
+        self, level: typing.SupportsInt
     ) -> dict[tuple[int, int], ParticleTile_pureSoA_7_0_default]: ...
     def get_real_comp_index(self, arg0: str) -> int:
         """
@@ -12602,41 +13675,47 @@ class ParticleContainer_pureSoA_7_0_default:
         """
         Check if a container has an ParticleReal component
         """
-    def increment(self, arg0: MultiFab, arg1: int) -> None: ...
+    def increment(self, arg0: MultiFab, arg1: typing.SupportsInt) -> None: ...
     def init_random(
         self,
-        arg0: int,
-        arg1: int,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
         arg2: ParticleInitType_pureSoA_7_0,
         arg3: bool,
         arg4: RealBox,
     ) -> None: ...
     def make_alike(self) -> ParticleContainer_pureSoA_7_0_default: ...
-    def num_local_tiles_at_level(self, arg0: int) -> int: ...
+    def num_local_tiles_at_level(self, arg0: typing.SupportsInt) -> int: ...
     def number_of_particles_at_level(
-        self, level: int, only_valid: bool = True, only_local: bool = False
+        self,
+        level: typing.SupportsInt,
+        only_valid: bool = True,
+        only_local: bool = False,
     ) -> int: ...
     def number_of_particles_in_grid(
-        self, level: int, only_valid: bool = True, only_local: bool = False
-    ) -> Vector_Long: ...
-    def print_capacity(
         self,
-    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)]: ...
+        level: typing.SupportsInt,
+        only_valid: bool = True,
+        only_local: bool = False,
+    ) -> Vector_Long: ...
+    def print_capacity(self) -> typing.Annotated[list[int], "FixedSize(3)"]: ...
     def redistribute(
         self,
-        lev_min: int = 0,
-        lev_max: int = -1,
-        nGrow: int = 0,
-        local: int = 0,
+        lev_min: typing.SupportsInt = 0,
+        lev_max: typing.SupportsInt = -1,
+        nGrow: typing.SupportsInt = 0,
+        local: typing.SupportsInt = 0,
         remove_negative: bool = True,
     ) -> None: ...
-    def remove_particles_at_level(self, arg0: int) -> None: ...
+    def remove_particles_at_level(self, arg0: typing.SupportsInt) -> None: ...
     def remove_particles_not_at_finestLevel(self) -> None: ...
     def reserve_data(self) -> None: ...
     def resize_data(self) -> None: ...
     def restart(self, dir: str, file: str) -> None: ...
     def restart_checkpoint(self, dir: str, file: str, is_checkpoint: bool) -> None: ...
-    def set_soa_compile_time_names(self, arg0: list[str], arg1: list[str]) -> None: ...
+    def set_soa_compile_time_names(
+        self, arg0: collections.abc.Sequence[str], arg1: collections.abc.Sequence[str]
+    ) -> None: ...
     def shrink_t_fit(self) -> None: ...
     def sort_particles_by_bin(self, arg0: IntVect3D) -> None: ...
     def sort_particles_by_cell(self) -> None: ...
@@ -12669,9 +13748,7 @@ class ParticleContainer_pureSoA_7_0_default:
     ) -> int: ...
     def write_plotfile(self, dir: str, name: str) -> None: ...
     @property
-    def byte_spread(
-        self,
-    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)]: ...
+    def byte_spread(self) -> typing.Annotated[list[int], "FixedSize(3)"]: ...
     @property
     def finest_level(self) -> int: ...
     @property
@@ -12735,7 +13812,12 @@ class ParticleContainer_pureSoA_7_0_pinned:
         arg2: Vector_BoxArray,
         arg3: Vector_IntVect,
     ) -> None: ...
-    def OK(self, lev_min: int = 0, lev_max: int = -1, nGrow: int = 0) -> bool: ...
+    def OK(
+        self,
+        lev_min: typing.SupportsInt = 0,
+        lev_max: typing.SupportsInt = -1,
+        nGrow: typing.SupportsInt = 0,
+    ) -> bool: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
@@ -12759,12 +13841,12 @@ class ParticleContainer_pureSoA_7_0_pinned:
         arg3: Vector_IntVect,
     ) -> None: ...
     @typing.overload
-    def add_int_comp(self, communicate: int = 1) -> None:
+    def add_int_comp(self, communicate: typing.SupportsInt = 1) -> None:
         """
         add a new runtime component with type Int
         """
     @typing.overload
-    def add_int_comp(self, name: str, communicate: int = 1) -> None:
+    def add_int_comp(self, name: str, communicate: typing.SupportsInt = 1) -> None:
         """
         add a new runtime component with type Int
         """
@@ -12772,15 +13854,18 @@ class ParticleContainer_pureSoA_7_0_pinned:
         self, other: ParticleContainer_pureSoA_7_0_pinned, local: bool = False
     ) -> None: ...
     def add_particles_at_level(
-        self, particles: ParticleTile_pureSoA_7_0_pinned, level: int, ngrow: int = 0
+        self,
+        particles: ParticleTile_pureSoA_7_0_pinned,
+        level: typing.SupportsInt,
+        ngrow: typing.SupportsInt = 0,
     ) -> None: ...
     @typing.overload
-    def add_real_comp(self, communicate: int = 1) -> None:
+    def add_real_comp(self, communicate: typing.SupportsInt = 1) -> None:
         """
         add a new runtime component with type Real
         """
     @typing.overload
-    def add_real_comp(self, name: str, communicate: int = 1) -> None:
+    def add_real_comp(self, name: str, communicate: typing.SupportsInt = 1) -> None:
         """
         add a new runtime component with type Real
         """
@@ -12790,7 +13875,7 @@ class ParticleContainer_pureSoA_7_0_pinned:
         Get the Integer SoA index of a component
         """
     def get_particles(
-        self, level: int
+        self, level: typing.SupportsInt
     ) -> dict[tuple[int, int], ParticleTile_pureSoA_7_0_pinned]: ...
     def get_real_comp_index(self, arg0: str) -> int:
         """
@@ -12804,41 +13889,47 @@ class ParticleContainer_pureSoA_7_0_pinned:
         """
         Check if a container has an ParticleReal component
         """
-    def increment(self, arg0: MultiFab, arg1: int) -> None: ...
+    def increment(self, arg0: MultiFab, arg1: typing.SupportsInt) -> None: ...
     def init_random(
         self,
-        arg0: int,
-        arg1: int,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
         arg2: ParticleInitType_pureSoA_7_0,
         arg3: bool,
         arg4: RealBox,
     ) -> None: ...
     def make_alike(self) -> ParticleContainer_pureSoA_7_0_pinned: ...
-    def num_local_tiles_at_level(self, arg0: int) -> int: ...
+    def num_local_tiles_at_level(self, arg0: typing.SupportsInt) -> int: ...
     def number_of_particles_at_level(
-        self, level: int, only_valid: bool = True, only_local: bool = False
+        self,
+        level: typing.SupportsInt,
+        only_valid: bool = True,
+        only_local: bool = False,
     ) -> int: ...
     def number_of_particles_in_grid(
-        self, level: int, only_valid: bool = True, only_local: bool = False
-    ) -> Vector_Long: ...
-    def print_capacity(
         self,
-    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)]: ...
+        level: typing.SupportsInt,
+        only_valid: bool = True,
+        only_local: bool = False,
+    ) -> Vector_Long: ...
+    def print_capacity(self) -> typing.Annotated[list[int], "FixedSize(3)"]: ...
     def redistribute(
         self,
-        lev_min: int = 0,
-        lev_max: int = -1,
-        nGrow: int = 0,
-        local: int = 0,
+        lev_min: typing.SupportsInt = 0,
+        lev_max: typing.SupportsInt = -1,
+        nGrow: typing.SupportsInt = 0,
+        local: typing.SupportsInt = 0,
         remove_negative: bool = True,
     ) -> None: ...
-    def remove_particles_at_level(self, arg0: int) -> None: ...
+    def remove_particles_at_level(self, arg0: typing.SupportsInt) -> None: ...
     def remove_particles_not_at_finestLevel(self) -> None: ...
     def reserve_data(self) -> None: ...
     def resize_data(self) -> None: ...
     def restart(self, dir: str, file: str) -> None: ...
     def restart_checkpoint(self, dir: str, file: str, is_checkpoint: bool) -> None: ...
-    def set_soa_compile_time_names(self, arg0: list[str], arg1: list[str]) -> None: ...
+    def set_soa_compile_time_names(
+        self, arg0: collections.abc.Sequence[str], arg1: collections.abc.Sequence[str]
+    ) -> None: ...
     def shrink_t_fit(self) -> None: ...
     def sort_particles_by_bin(self, arg0: IntVect3D) -> None: ...
     def sort_particles_by_cell(self) -> None: ...
@@ -12871,9 +13962,7 @@ class ParticleContainer_pureSoA_7_0_pinned:
     ) -> int: ...
     def write_plotfile(self, dir: str, name: str) -> None: ...
     @property
-    def byte_spread(
-        self,
-    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)]: ...
+    def byte_spread(self) -> typing.Annotated[list[int], "FixedSize(3)"]: ...
     @property
     def finest_level(self) -> int: ...
     @property
@@ -12937,7 +14026,12 @@ class ParticleContainer_pureSoA_8_0_arena:
         arg2: Vector_BoxArray,
         arg3: Vector_IntVect,
     ) -> None: ...
-    def OK(self, lev_min: int = 0, lev_max: int = -1, nGrow: int = 0) -> bool: ...
+    def OK(
+        self,
+        lev_min: typing.SupportsInt = 0,
+        lev_max: typing.SupportsInt = -1,
+        nGrow: typing.SupportsInt = 0,
+    ) -> bool: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
@@ -12961,12 +14055,12 @@ class ParticleContainer_pureSoA_8_0_arena:
         arg3: Vector_IntVect,
     ) -> None: ...
     @typing.overload
-    def add_int_comp(self, communicate: int = 1) -> None:
+    def add_int_comp(self, communicate: typing.SupportsInt = 1) -> None:
         """
         add a new runtime component with type Int
         """
     @typing.overload
-    def add_int_comp(self, name: str, communicate: int = 1) -> None:
+    def add_int_comp(self, name: str, communicate: typing.SupportsInt = 1) -> None:
         """
         add a new runtime component with type Int
         """
@@ -12974,15 +14068,18 @@ class ParticleContainer_pureSoA_8_0_arena:
         self, other: ParticleContainer_pureSoA_8_0_arena, local: bool = False
     ) -> None: ...
     def add_particles_at_level(
-        self, particles: ParticleTile_pureSoA_8_0_arena, level: int, ngrow: int = 0
+        self,
+        particles: ParticleTile_pureSoA_8_0_arena,
+        level: typing.SupportsInt,
+        ngrow: typing.SupportsInt = 0,
     ) -> None: ...
     @typing.overload
-    def add_real_comp(self, communicate: int = 1) -> None:
+    def add_real_comp(self, communicate: typing.SupportsInt = 1) -> None:
         """
         add a new runtime component with type Real
         """
     @typing.overload
-    def add_real_comp(self, name: str, communicate: int = 1) -> None:
+    def add_real_comp(self, name: str, communicate: typing.SupportsInt = 1) -> None:
         """
         add a new runtime component with type Real
         """
@@ -12992,7 +14089,7 @@ class ParticleContainer_pureSoA_8_0_arena:
         Get the Integer SoA index of a component
         """
     def get_particles(
-        self, level: int
+        self, level: typing.SupportsInt
     ) -> dict[tuple[int, int], ParticleTile_pureSoA_8_0_arena]: ...
     def get_real_comp_index(self, arg0: str) -> int:
         """
@@ -13006,41 +14103,47 @@ class ParticleContainer_pureSoA_8_0_arena:
         """
         Check if a container has an ParticleReal component
         """
-    def increment(self, arg0: MultiFab, arg1: int) -> None: ...
+    def increment(self, arg0: MultiFab, arg1: typing.SupportsInt) -> None: ...
     def init_random(
         self,
-        arg0: int,
-        arg1: int,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
         arg2: ParticleInitType_pureSoA_8_0,
         arg3: bool,
         arg4: RealBox,
     ) -> None: ...
     def make_alike(self) -> ParticleContainer_pureSoA_8_0_arena: ...
-    def num_local_tiles_at_level(self, arg0: int) -> int: ...
+    def num_local_tiles_at_level(self, arg0: typing.SupportsInt) -> int: ...
     def number_of_particles_at_level(
-        self, level: int, only_valid: bool = True, only_local: bool = False
+        self,
+        level: typing.SupportsInt,
+        only_valid: bool = True,
+        only_local: bool = False,
     ) -> int: ...
     def number_of_particles_in_grid(
-        self, level: int, only_valid: bool = True, only_local: bool = False
-    ) -> Vector_Long: ...
-    def print_capacity(
         self,
-    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)]: ...
+        level: typing.SupportsInt,
+        only_valid: bool = True,
+        only_local: bool = False,
+    ) -> Vector_Long: ...
+    def print_capacity(self) -> typing.Annotated[list[int], "FixedSize(3)"]: ...
     def redistribute(
         self,
-        lev_min: int = 0,
-        lev_max: int = -1,
-        nGrow: int = 0,
-        local: int = 0,
+        lev_min: typing.SupportsInt = 0,
+        lev_max: typing.SupportsInt = -1,
+        nGrow: typing.SupportsInt = 0,
+        local: typing.SupportsInt = 0,
         remove_negative: bool = True,
     ) -> None: ...
-    def remove_particles_at_level(self, arg0: int) -> None: ...
+    def remove_particles_at_level(self, arg0: typing.SupportsInt) -> None: ...
     def remove_particles_not_at_finestLevel(self) -> None: ...
     def reserve_data(self) -> None: ...
     def resize_data(self) -> None: ...
     def restart(self, dir: str, file: str) -> None: ...
     def restart_checkpoint(self, dir: str, file: str, is_checkpoint: bool) -> None: ...
-    def set_soa_compile_time_names(self, arg0: list[str], arg1: list[str]) -> None: ...
+    def set_soa_compile_time_names(
+        self, arg0: collections.abc.Sequence[str], arg1: collections.abc.Sequence[str]
+    ) -> None: ...
     def shrink_t_fit(self) -> None: ...
     def sort_particles_by_bin(self, arg0: IntVect3D) -> None: ...
     def sort_particles_by_cell(self) -> None: ...
@@ -13073,9 +14176,7 @@ class ParticleContainer_pureSoA_8_0_arena:
     ) -> int: ...
     def write_plotfile(self, dir: str, name: str) -> None: ...
     @property
-    def byte_spread(
-        self,
-    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)]: ...
+    def byte_spread(self) -> typing.Annotated[list[int], "FixedSize(3)"]: ...
     @property
     def finest_level(self) -> int: ...
     @property
@@ -13139,7 +14240,12 @@ class ParticleContainer_pureSoA_8_0_default:
         arg2: Vector_BoxArray,
         arg3: Vector_IntVect,
     ) -> None: ...
-    def OK(self, lev_min: int = 0, lev_max: int = -1, nGrow: int = 0) -> bool: ...
+    def OK(
+        self,
+        lev_min: typing.SupportsInt = 0,
+        lev_max: typing.SupportsInt = -1,
+        nGrow: typing.SupportsInt = 0,
+    ) -> bool: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
@@ -13163,12 +14269,12 @@ class ParticleContainer_pureSoA_8_0_default:
         arg3: Vector_IntVect,
     ) -> None: ...
     @typing.overload
-    def add_int_comp(self, communicate: int = 1) -> None:
+    def add_int_comp(self, communicate: typing.SupportsInt = 1) -> None:
         """
         add a new runtime component with type Int
         """
     @typing.overload
-    def add_int_comp(self, name: str, communicate: int = 1) -> None:
+    def add_int_comp(self, name: str, communicate: typing.SupportsInt = 1) -> None:
         """
         add a new runtime component with type Int
         """
@@ -13176,15 +14282,18 @@ class ParticleContainer_pureSoA_8_0_default:
         self, other: ParticleContainer_pureSoA_8_0_default, local: bool = False
     ) -> None: ...
     def add_particles_at_level(
-        self, particles: ParticleTile_pureSoA_8_0_default, level: int, ngrow: int = 0
+        self,
+        particles: ParticleTile_pureSoA_8_0_default,
+        level: typing.SupportsInt,
+        ngrow: typing.SupportsInt = 0,
     ) -> None: ...
     @typing.overload
-    def add_real_comp(self, communicate: int = 1) -> None:
+    def add_real_comp(self, communicate: typing.SupportsInt = 1) -> None:
         """
         add a new runtime component with type Real
         """
     @typing.overload
-    def add_real_comp(self, name: str, communicate: int = 1) -> None:
+    def add_real_comp(self, name: str, communicate: typing.SupportsInt = 1) -> None:
         """
         add a new runtime component with type Real
         """
@@ -13194,7 +14303,7 @@ class ParticleContainer_pureSoA_8_0_default:
         Get the Integer SoA index of a component
         """
     def get_particles(
-        self, level: int
+        self, level: typing.SupportsInt
     ) -> dict[tuple[int, int], ParticleTile_pureSoA_8_0_default]: ...
     def get_real_comp_index(self, arg0: str) -> int:
         """
@@ -13208,41 +14317,47 @@ class ParticleContainer_pureSoA_8_0_default:
         """
         Check if a container has an ParticleReal component
         """
-    def increment(self, arg0: MultiFab, arg1: int) -> None: ...
+    def increment(self, arg0: MultiFab, arg1: typing.SupportsInt) -> None: ...
     def init_random(
         self,
-        arg0: int,
-        arg1: int,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
         arg2: ParticleInitType_pureSoA_8_0,
         arg3: bool,
         arg4: RealBox,
     ) -> None: ...
     def make_alike(self) -> ParticleContainer_pureSoA_8_0_default: ...
-    def num_local_tiles_at_level(self, arg0: int) -> int: ...
+    def num_local_tiles_at_level(self, arg0: typing.SupportsInt) -> int: ...
     def number_of_particles_at_level(
-        self, level: int, only_valid: bool = True, only_local: bool = False
+        self,
+        level: typing.SupportsInt,
+        only_valid: bool = True,
+        only_local: bool = False,
     ) -> int: ...
     def number_of_particles_in_grid(
-        self, level: int, only_valid: bool = True, only_local: bool = False
-    ) -> Vector_Long: ...
-    def print_capacity(
         self,
-    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)]: ...
+        level: typing.SupportsInt,
+        only_valid: bool = True,
+        only_local: bool = False,
+    ) -> Vector_Long: ...
+    def print_capacity(self) -> typing.Annotated[list[int], "FixedSize(3)"]: ...
     def redistribute(
         self,
-        lev_min: int = 0,
-        lev_max: int = -1,
-        nGrow: int = 0,
-        local: int = 0,
+        lev_min: typing.SupportsInt = 0,
+        lev_max: typing.SupportsInt = -1,
+        nGrow: typing.SupportsInt = 0,
+        local: typing.SupportsInt = 0,
         remove_negative: bool = True,
     ) -> None: ...
-    def remove_particles_at_level(self, arg0: int) -> None: ...
+    def remove_particles_at_level(self, arg0: typing.SupportsInt) -> None: ...
     def remove_particles_not_at_finestLevel(self) -> None: ...
     def reserve_data(self) -> None: ...
     def resize_data(self) -> None: ...
     def restart(self, dir: str, file: str) -> None: ...
     def restart_checkpoint(self, dir: str, file: str, is_checkpoint: bool) -> None: ...
-    def set_soa_compile_time_names(self, arg0: list[str], arg1: list[str]) -> None: ...
+    def set_soa_compile_time_names(
+        self, arg0: collections.abc.Sequence[str], arg1: collections.abc.Sequence[str]
+    ) -> None: ...
     def shrink_t_fit(self) -> None: ...
     def sort_particles_by_bin(self, arg0: IntVect3D) -> None: ...
     def sort_particles_by_cell(self) -> None: ...
@@ -13275,9 +14390,7 @@ class ParticleContainer_pureSoA_8_0_default:
     ) -> int: ...
     def write_plotfile(self, dir: str, name: str) -> None: ...
     @property
-    def byte_spread(
-        self,
-    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)]: ...
+    def byte_spread(self) -> typing.Annotated[list[int], "FixedSize(3)"]: ...
     @property
     def finest_level(self) -> int: ...
     @property
@@ -13341,7 +14454,12 @@ class ParticleContainer_pureSoA_8_0_pinned:
         arg2: Vector_BoxArray,
         arg3: Vector_IntVect,
     ) -> None: ...
-    def OK(self, lev_min: int = 0, lev_max: int = -1, nGrow: int = 0) -> bool: ...
+    def OK(
+        self,
+        lev_min: typing.SupportsInt = 0,
+        lev_max: typing.SupportsInt = -1,
+        nGrow: typing.SupportsInt = 0,
+    ) -> bool: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
@@ -13365,12 +14483,12 @@ class ParticleContainer_pureSoA_8_0_pinned:
         arg3: Vector_IntVect,
     ) -> None: ...
     @typing.overload
-    def add_int_comp(self, communicate: int = 1) -> None:
+    def add_int_comp(self, communicate: typing.SupportsInt = 1) -> None:
         """
         add a new runtime component with type Int
         """
     @typing.overload
-    def add_int_comp(self, name: str, communicate: int = 1) -> None:
+    def add_int_comp(self, name: str, communicate: typing.SupportsInt = 1) -> None:
         """
         add a new runtime component with type Int
         """
@@ -13378,15 +14496,18 @@ class ParticleContainer_pureSoA_8_0_pinned:
         self, other: ParticleContainer_pureSoA_8_0_pinned, local: bool = False
     ) -> None: ...
     def add_particles_at_level(
-        self, particles: ParticleTile_pureSoA_8_0_pinned, level: int, ngrow: int = 0
+        self,
+        particles: ParticleTile_pureSoA_8_0_pinned,
+        level: typing.SupportsInt,
+        ngrow: typing.SupportsInt = 0,
     ) -> None: ...
     @typing.overload
-    def add_real_comp(self, communicate: int = 1) -> None:
+    def add_real_comp(self, communicate: typing.SupportsInt = 1) -> None:
         """
         add a new runtime component with type Real
         """
     @typing.overload
-    def add_real_comp(self, name: str, communicate: int = 1) -> None:
+    def add_real_comp(self, name: str, communicate: typing.SupportsInt = 1) -> None:
         """
         add a new runtime component with type Real
         """
@@ -13396,7 +14517,7 @@ class ParticleContainer_pureSoA_8_0_pinned:
         Get the Integer SoA index of a component
         """
     def get_particles(
-        self, level: int
+        self, level: typing.SupportsInt
     ) -> dict[tuple[int, int], ParticleTile_pureSoA_8_0_pinned]: ...
     def get_real_comp_index(self, arg0: str) -> int:
         """
@@ -13410,41 +14531,47 @@ class ParticleContainer_pureSoA_8_0_pinned:
         """
         Check if a container has an ParticleReal component
         """
-    def increment(self, arg0: MultiFab, arg1: int) -> None: ...
+    def increment(self, arg0: MultiFab, arg1: typing.SupportsInt) -> None: ...
     def init_random(
         self,
-        arg0: int,
-        arg1: int,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
         arg2: ParticleInitType_pureSoA_8_0,
         arg3: bool,
         arg4: RealBox,
     ) -> None: ...
     def make_alike(self) -> ParticleContainer_pureSoA_8_0_pinned: ...
-    def num_local_tiles_at_level(self, arg0: int) -> int: ...
+    def num_local_tiles_at_level(self, arg0: typing.SupportsInt) -> int: ...
     def number_of_particles_at_level(
-        self, level: int, only_valid: bool = True, only_local: bool = False
+        self,
+        level: typing.SupportsInt,
+        only_valid: bool = True,
+        only_local: bool = False,
     ) -> int: ...
     def number_of_particles_in_grid(
-        self, level: int, only_valid: bool = True, only_local: bool = False
-    ) -> Vector_Long: ...
-    def print_capacity(
         self,
-    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)]: ...
+        level: typing.SupportsInt,
+        only_valid: bool = True,
+        only_local: bool = False,
+    ) -> Vector_Long: ...
+    def print_capacity(self) -> typing.Annotated[list[int], "FixedSize(3)"]: ...
     def redistribute(
         self,
-        lev_min: int = 0,
-        lev_max: int = -1,
-        nGrow: int = 0,
-        local: int = 0,
+        lev_min: typing.SupportsInt = 0,
+        lev_max: typing.SupportsInt = -1,
+        nGrow: typing.SupportsInt = 0,
+        local: typing.SupportsInt = 0,
         remove_negative: bool = True,
     ) -> None: ...
-    def remove_particles_at_level(self, arg0: int) -> None: ...
+    def remove_particles_at_level(self, arg0: typing.SupportsInt) -> None: ...
     def remove_particles_not_at_finestLevel(self) -> None: ...
     def reserve_data(self) -> None: ...
     def resize_data(self) -> None: ...
     def restart(self, dir: str, file: str) -> None: ...
     def restart_checkpoint(self, dir: str, file: str, is_checkpoint: bool) -> None: ...
-    def set_soa_compile_time_names(self, arg0: list[str], arg1: list[str]) -> None: ...
+    def set_soa_compile_time_names(
+        self, arg0: collections.abc.Sequence[str], arg1: collections.abc.Sequence[str]
+    ) -> None: ...
     def shrink_t_fit(self) -> None: ...
     def sort_particles_by_bin(self, arg0: IntVect3D) -> None: ...
     def sort_particles_by_cell(self) -> None: ...
@@ -13477,9 +14604,7 @@ class ParticleContainer_pureSoA_8_0_pinned:
     ) -> int: ...
     def write_plotfile(self, dir: str, name: str) -> None: ...
     @property
-    def byte_spread(
-        self,
-    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(3)]: ...
+    def byte_spread(self) -> typing.Annotated[list[int], "FixedSize(3)"]: ...
     @property
     def finest_level(self) -> int: ...
     @property
@@ -13517,72 +14642,158 @@ class ParticleContainer_pureSoA_8_0_pinned:
 
 class ParticleInitType_16_4_0_0:
     is_soa_particle: typing.ClassVar[bool] = False
-    int_array_data: typing.Annotated[
-        list[int], pybind11_stubgen.typing_ext.FixedSize(0)
-    ]
-    int_struct_data: typing.Annotated[
-        list[int], pybind11_stubgen.typing_ext.FixedSize(4)
-    ]
-    real_array_data: typing.Annotated[
-        list[float], pybind11_stubgen.typing_ext.FixedSize(0)
-    ]
-    real_struct_data: typing.Annotated[
-        list[float], pybind11_stubgen.typing_ext.FixedSize(16)
-    ]
     def __init__(self) -> None: ...
+    @property
+    def int_array_data(self) -> typing.Annotated[list[int], "FixedSize(0)"]: ...
+    @int_array_data.setter
+    def int_array_data(
+        self,
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(0)"
+        ],
+    ) -> None: ...
+    @property
+    def int_struct_data(self) -> typing.Annotated[list[int], "FixedSize(4)"]: ...
+    @int_struct_data.setter
+    def int_struct_data(
+        self,
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(4)"
+        ],
+    ) -> None: ...
+    @property
+    def real_array_data(self) -> typing.Annotated[list[float], "FixedSize(0)"]: ...
+    @real_array_data.setter
+    def real_array_data(
+        self,
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsFloat], "FixedSize(0)"
+        ],
+    ) -> None: ...
+    @property
+    def real_struct_data(self) -> typing.Annotated[list[float], "FixedSize(16)"]: ...
+    @real_struct_data.setter
+    def real_struct_data(
+        self,
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsFloat], "FixedSize(16)"
+        ],
+    ) -> None: ...
 
 class ParticleInitType_2_1_3_1:
     is_soa_particle: typing.ClassVar[bool] = False
-    int_array_data: typing.Annotated[
-        list[int], pybind11_stubgen.typing_ext.FixedSize(1)
-    ]
-    int_struct_data: typing.Annotated[
-        list[int], pybind11_stubgen.typing_ext.FixedSize(1)
-    ]
-    real_array_data: typing.Annotated[
-        list[float], pybind11_stubgen.typing_ext.FixedSize(3)
-    ]
-    real_struct_data: typing.Annotated[
-        list[float], pybind11_stubgen.typing_ext.FixedSize(2)
-    ]
     def __init__(self) -> None: ...
+    @property
+    def int_array_data(self) -> typing.Annotated[list[int], "FixedSize(1)"]: ...
+    @int_array_data.setter
+    def int_array_data(
+        self,
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(1)"
+        ],
+    ) -> None: ...
+    @property
+    def int_struct_data(self) -> typing.Annotated[list[int], "FixedSize(1)"]: ...
+    @int_struct_data.setter
+    def int_struct_data(
+        self,
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(1)"
+        ],
+    ) -> None: ...
+    @property
+    def real_array_data(self) -> typing.Annotated[list[float], "FixedSize(3)"]: ...
+    @real_array_data.setter
+    def real_array_data(
+        self,
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsFloat], "FixedSize(3)"
+        ],
+    ) -> None: ...
+    @property
+    def real_struct_data(self) -> typing.Annotated[list[float], "FixedSize(2)"]: ...
+    @real_struct_data.setter
+    def real_struct_data(
+        self,
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsFloat], "FixedSize(2)"
+        ],
+    ) -> None: ...
 
 class ParticleInitType_pureSoA_3_0:
     is_soa_particle: typing.ClassVar[bool] = True
-    int_array_data: typing.Annotated[
-        list[int], pybind11_stubgen.typing_ext.FixedSize(0)
-    ]
-    real_array_data: typing.Annotated[
-        list[float], pybind11_stubgen.typing_ext.FixedSize(3)
-    ]
     def __init__(self) -> None: ...
+    @property
+    def int_array_data(self) -> typing.Annotated[list[int], "FixedSize(0)"]: ...
+    @int_array_data.setter
+    def int_array_data(
+        self,
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(0)"
+        ],
+    ) -> None: ...
+    @property
+    def real_array_data(self) -> typing.Annotated[list[float], "FixedSize(3)"]: ...
+    @real_array_data.setter
+    def real_array_data(
+        self,
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsFloat], "FixedSize(3)"
+        ],
+    ) -> None: ...
 
 class ParticleInitType_pureSoA_7_0:
     is_soa_particle: typing.ClassVar[bool] = True
-    int_array_data: typing.Annotated[
-        list[int], pybind11_stubgen.typing_ext.FixedSize(0)
-    ]
-    real_array_data: typing.Annotated[
-        list[float], pybind11_stubgen.typing_ext.FixedSize(7)
-    ]
     def __init__(self) -> None: ...
+    @property
+    def int_array_data(self) -> typing.Annotated[list[int], "FixedSize(0)"]: ...
+    @int_array_data.setter
+    def int_array_data(
+        self,
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(0)"
+        ],
+    ) -> None: ...
+    @property
+    def real_array_data(self) -> typing.Annotated[list[float], "FixedSize(7)"]: ...
+    @real_array_data.setter
+    def real_array_data(
+        self,
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsFloat], "FixedSize(7)"
+        ],
+    ) -> None: ...
 
 class ParticleInitType_pureSoA_8_0:
     is_soa_particle: typing.ClassVar[bool] = True
-    int_array_data: typing.Annotated[
-        list[int], pybind11_stubgen.typing_ext.FixedSize(0)
-    ]
-    real_array_data: typing.Annotated[
-        list[float], pybind11_stubgen.typing_ext.FixedSize(8)
-    ]
     def __init__(self) -> None: ...
+    @property
+    def int_array_data(self) -> typing.Annotated[list[int], "FixedSize(0)"]: ...
+    @int_array_data.setter
+    def int_array_data(
+        self,
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(0)"
+        ],
+    ) -> None: ...
+    @property
+    def real_array_data(self) -> typing.Annotated[list[float], "FixedSize(8)"]: ...
+    @real_array_data.setter
+    def real_array_data(
+        self,
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsFloat], "FixedSize(8)"
+        ],
+    ) -> None: ...
 
 class ParticleTileData_16_4_0_0:
-    def __getitem__(self, arg0: int) -> Particle_16_4: ...
+    def __getitem__(self, arg0: typing.SupportsInt) -> Particle_16_4: ...
     def __init__(self) -> None: ...
-    def __setitem__(self, arg0: int, arg1: Particle_16_4) -> None: ...
-    def get_super_particle(self, arg0: int) -> Particle_16_4: ...
-    def set_super_particle(self, arg0: Particle_16_4, arg1: int) -> None: ...
+    def __setitem__(self, arg0: typing.SupportsInt, arg1: Particle_16_4) -> None: ...
+    def get_super_particle(self, arg0: typing.SupportsInt) -> Particle_16_4: ...
+    def set_super_particle(
+        self, arg0: Particle_16_4, arg1: typing.SupportsInt
+    ) -> None: ...
     @property
     def m_num_runtime_int(self) -> int: ...
     @property
@@ -13591,11 +14802,13 @@ class ParticleTileData_16_4_0_0:
     def m_size(self) -> int: ...
 
 class ParticleTileData_2_1_3_1:
-    def __getitem__(self, arg0: int) -> Particle_5_2: ...
+    def __getitem__(self, arg0: typing.SupportsInt) -> Particle_5_2: ...
     def __init__(self) -> None: ...
-    def __setitem__(self, arg0: int, arg1: Particle_5_2) -> None: ...
-    def get_super_particle(self, arg0: int) -> Particle_5_2: ...
-    def set_super_particle(self, arg0: Particle_5_2, arg1: int) -> None: ...
+    def __setitem__(self, arg0: typing.SupportsInt, arg1: Particle_5_2) -> None: ...
+    def get_super_particle(self, arg0: typing.SupportsInt) -> Particle_5_2: ...
+    def set_super_particle(
+        self, arg0: Particle_5_2, arg1: typing.SupportsInt
+    ) -> None: ...
     @property
     def m_num_runtime_int(self) -> int: ...
     @property
@@ -13604,11 +14817,13 @@ class ParticleTileData_2_1_3_1:
     def m_size(self) -> int: ...
 
 class ParticleTileData_pureSoA_3_0:
-    def __getitem__(self, arg0: int) -> Particle_3_0: ...
+    def __getitem__(self, arg0: typing.SupportsInt) -> Particle_3_0: ...
     def __init__(self) -> None: ...
-    def __setitem__(self, arg0: int, arg1: Particle_3_0) -> None: ...
-    def get_super_particle(self, arg0: int) -> Particle_3_0: ...
-    def set_super_particle(self, arg0: Particle_3_0, arg1: int) -> None: ...
+    def __setitem__(self, arg0: typing.SupportsInt, arg1: Particle_3_0) -> None: ...
+    def get_super_particle(self, arg0: typing.SupportsInt) -> Particle_3_0: ...
+    def set_super_particle(
+        self, arg0: Particle_3_0, arg1: typing.SupportsInt
+    ) -> None: ...
     @property
     def m_num_runtime_int(self) -> int: ...
     @property
@@ -13617,11 +14832,13 @@ class ParticleTileData_pureSoA_3_0:
     def m_size(self) -> int: ...
 
 class ParticleTileData_pureSoA_7_0:
-    def __getitem__(self, arg0: int) -> Particle_7_0: ...
+    def __getitem__(self, arg0: typing.SupportsInt) -> Particle_7_0: ...
     def __init__(self) -> None: ...
-    def __setitem__(self, arg0: int, arg1: Particle_7_0) -> None: ...
-    def get_super_particle(self, arg0: int) -> Particle_7_0: ...
-    def set_super_particle(self, arg0: Particle_7_0, arg1: int) -> None: ...
+    def __setitem__(self, arg0: typing.SupportsInt, arg1: Particle_7_0) -> None: ...
+    def get_super_particle(self, arg0: typing.SupportsInt) -> Particle_7_0: ...
+    def set_super_particle(
+        self, arg0: Particle_7_0, arg1: typing.SupportsInt
+    ) -> None: ...
     @property
     def m_num_runtime_int(self) -> int: ...
     @property
@@ -13630,11 +14847,13 @@ class ParticleTileData_pureSoA_7_0:
     def m_size(self) -> int: ...
 
 class ParticleTileData_pureSoA_8_0:
-    def __getitem__(self, arg0: int) -> Particle_8_0: ...
+    def __getitem__(self, arg0: typing.SupportsInt) -> Particle_8_0: ...
     def __init__(self) -> None: ...
-    def __setitem__(self, arg0: int, arg1: Particle_8_0) -> None: ...
-    def get_super_particle(self, arg0: int) -> Particle_8_0: ...
-    def set_super_particle(self, arg0: Particle_8_0, arg1: int) -> None: ...
+    def __setitem__(self, arg0: typing.SupportsInt, arg1: Particle_8_0) -> None: ...
+    def get_super_particle(self, arg0: typing.SupportsInt) -> Particle_8_0: ...
+    def set_super_particle(
+        self, arg0: Particle_8_0, arg1: typing.SupportsInt
+    ) -> None: ...
     @property
     def m_num_runtime_int(self) -> int: ...
     @property
@@ -13645,12 +14864,16 @@ class ParticleTileData_pureSoA_8_0:
 class ParticleTile_16_4_0_0_arena:
     NAI: typing.ClassVar[int] = 0
     NAR: typing.ClassVar[int] = 0
-    def __getitem__(self, arg0: int) -> Particle_16_4: ...
+    def __getitem__(self, arg0: typing.SupportsInt) -> Particle_16_4: ...
     def __init__(self) -> None: ...
-    def __setitem__(self, arg0: int, arg1: Particle_16_4) -> None: ...
+    def __setitem__(self, arg0: typing.SupportsInt, arg1: Particle_16_4) -> None: ...
     def capacity(self) -> int: ...
     def define(
-        self, arg0: int, arg1: int, arg2: list[str], arg3: list[str]
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: collections.abc.Sequence[str],
+        arg3: collections.abc.Sequence[str],
     ) -> None: ...
     def get_array_of_structs(self) -> ArrayOfStructs_16_4_arena: ...
     def get_num_neighbors(self) -> int: ...
@@ -13667,25 +14890,43 @@ class ParticleTile_16_4_0_0_arena:
         Add one particle to this tile.
         """
     @typing.overload
-    def push_back_int(self, arg0: int, arg1: int) -> None: ...
+    def push_back_int(
+        self, arg0: typing.SupportsInt, arg1: typing.SupportsInt
+    ) -> None: ...
     @typing.overload
     def push_back_int(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(0)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(0)"
+        ],
     ) -> None: ...
     @typing.overload
-    def push_back_int(self, arg0: int, arg1: int, arg2: int) -> None: ...
+    def push_back_int(
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: typing.SupportsInt,
+    ) -> None: ...
     @typing.overload
-    def push_back_real(self, arg0: int, arg1: float) -> None: ...
+    def push_back_real(
+        self, arg0: typing.SupportsInt, arg1: typing.SupportsFloat
+    ) -> None: ...
     @typing.overload
     def push_back_real(
         self,
-        arg0: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(0)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsFloat], "FixedSize(0)"
+        ],
     ) -> None: ...
     @typing.overload
-    def push_back_real(self, arg0: int, arg1: int, arg2: float) -> None: ...
-    def resize(self, arg0: int) -> None: ...
-    def set_num_neighbors(self, arg0: int) -> None: ...
+    def push_back_real(
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: typing.SupportsFloat,
+    ) -> None: ...
+    def resize(self, arg0: typing.SupportsInt) -> None: ...
+    def set_num_neighbors(self, arg0: typing.SupportsInt) -> None: ...
     def shrink_to_fit(self) -> None: ...
     def swap(self, arg0: ParticleTile_16_4_0_0_arena) -> None: ...
     @property
@@ -13712,12 +14953,16 @@ class ParticleTile_16_4_0_0_arena:
 class ParticleTile_16_4_0_0_default:
     NAI: typing.ClassVar[int] = 0
     NAR: typing.ClassVar[int] = 0
-    def __getitem__(self, arg0: int) -> Particle_16_4: ...
+    def __getitem__(self, arg0: typing.SupportsInt) -> Particle_16_4: ...
     def __init__(self) -> None: ...
-    def __setitem__(self, arg0: int, arg1: Particle_16_4) -> None: ...
+    def __setitem__(self, arg0: typing.SupportsInt, arg1: Particle_16_4) -> None: ...
     def capacity(self) -> int: ...
     def define(
-        self, arg0: int, arg1: int, arg2: list[str], arg3: list[str]
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: collections.abc.Sequence[str],
+        arg3: collections.abc.Sequence[str],
     ) -> None: ...
     def get_array_of_structs(self) -> ArrayOfStructs_16_4_default: ...
     def get_num_neighbors(self) -> int: ...
@@ -13734,25 +14979,43 @@ class ParticleTile_16_4_0_0_default:
         Add one particle to this tile.
         """
     @typing.overload
-    def push_back_int(self, arg0: int, arg1: int) -> None: ...
+    def push_back_int(
+        self, arg0: typing.SupportsInt, arg1: typing.SupportsInt
+    ) -> None: ...
     @typing.overload
     def push_back_int(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(0)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(0)"
+        ],
     ) -> None: ...
     @typing.overload
-    def push_back_int(self, arg0: int, arg1: int, arg2: int) -> None: ...
+    def push_back_int(
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: typing.SupportsInt,
+    ) -> None: ...
     @typing.overload
-    def push_back_real(self, arg0: int, arg1: float) -> None: ...
+    def push_back_real(
+        self, arg0: typing.SupportsInt, arg1: typing.SupportsFloat
+    ) -> None: ...
     @typing.overload
     def push_back_real(
         self,
-        arg0: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(0)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsFloat], "FixedSize(0)"
+        ],
     ) -> None: ...
     @typing.overload
-    def push_back_real(self, arg0: int, arg1: int, arg2: float) -> None: ...
-    def resize(self, arg0: int) -> None: ...
-    def set_num_neighbors(self, arg0: int) -> None: ...
+    def push_back_real(
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: typing.SupportsFloat,
+    ) -> None: ...
+    def resize(self, arg0: typing.SupportsInt) -> None: ...
+    def set_num_neighbors(self, arg0: typing.SupportsInt) -> None: ...
     def shrink_to_fit(self) -> None: ...
     def swap(self, arg0: ParticleTile_16_4_0_0_default) -> None: ...
     @property
@@ -13779,12 +15042,16 @@ class ParticleTile_16_4_0_0_default:
 class ParticleTile_16_4_0_0_pinned:
     NAI: typing.ClassVar[int] = 0
     NAR: typing.ClassVar[int] = 0
-    def __getitem__(self, arg0: int) -> Particle_16_4: ...
+    def __getitem__(self, arg0: typing.SupportsInt) -> Particle_16_4: ...
     def __init__(self) -> None: ...
-    def __setitem__(self, arg0: int, arg1: Particle_16_4) -> None: ...
+    def __setitem__(self, arg0: typing.SupportsInt, arg1: Particle_16_4) -> None: ...
     def capacity(self) -> int: ...
     def define(
-        self, arg0: int, arg1: int, arg2: list[str], arg3: list[str]
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: collections.abc.Sequence[str],
+        arg3: collections.abc.Sequence[str],
     ) -> None: ...
     def get_array_of_structs(self) -> ArrayOfStructs_16_4_pinned: ...
     def get_num_neighbors(self) -> int: ...
@@ -13801,25 +15068,43 @@ class ParticleTile_16_4_0_0_pinned:
         Add one particle to this tile.
         """
     @typing.overload
-    def push_back_int(self, arg0: int, arg1: int) -> None: ...
+    def push_back_int(
+        self, arg0: typing.SupportsInt, arg1: typing.SupportsInt
+    ) -> None: ...
     @typing.overload
     def push_back_int(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(0)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(0)"
+        ],
     ) -> None: ...
     @typing.overload
-    def push_back_int(self, arg0: int, arg1: int, arg2: int) -> None: ...
+    def push_back_int(
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: typing.SupportsInt,
+    ) -> None: ...
     @typing.overload
-    def push_back_real(self, arg0: int, arg1: float) -> None: ...
+    def push_back_real(
+        self, arg0: typing.SupportsInt, arg1: typing.SupportsFloat
+    ) -> None: ...
     @typing.overload
     def push_back_real(
         self,
-        arg0: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(0)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsFloat], "FixedSize(0)"
+        ],
     ) -> None: ...
     @typing.overload
-    def push_back_real(self, arg0: int, arg1: int, arg2: float) -> None: ...
-    def resize(self, arg0: int) -> None: ...
-    def set_num_neighbors(self, arg0: int) -> None: ...
+    def push_back_real(
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: typing.SupportsFloat,
+    ) -> None: ...
+    def resize(self, arg0: typing.SupportsInt) -> None: ...
+    def set_num_neighbors(self, arg0: typing.SupportsInt) -> None: ...
     def shrink_to_fit(self) -> None: ...
     def swap(self, arg0: ParticleTile_16_4_0_0_pinned) -> None: ...
     @property
@@ -13846,12 +15131,16 @@ class ParticleTile_16_4_0_0_pinned:
 class ParticleTile_2_1_3_1_arena:
     NAI: typing.ClassVar[int] = 1
     NAR: typing.ClassVar[int] = 3
-    def __getitem__(self, arg0: int) -> Particle_5_2: ...
+    def __getitem__(self, arg0: typing.SupportsInt) -> Particle_5_2: ...
     def __init__(self) -> None: ...
-    def __setitem__(self, arg0: int, arg1: Particle_5_2) -> None: ...
+    def __setitem__(self, arg0: typing.SupportsInt, arg1: Particle_5_2) -> None: ...
     def capacity(self) -> int: ...
     def define(
-        self, arg0: int, arg1: int, arg2: list[str], arg3: list[str]
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: collections.abc.Sequence[str],
+        arg3: collections.abc.Sequence[str],
     ) -> None: ...
     def get_array_of_structs(self) -> ArrayOfStructs_2_1_arena: ...
     def get_num_neighbors(self) -> int: ...
@@ -13868,25 +15157,43 @@ class ParticleTile_2_1_3_1_arena:
         Add one particle to this tile.
         """
     @typing.overload
-    def push_back_int(self, arg0: int, arg1: int) -> None: ...
+    def push_back_int(
+        self, arg0: typing.SupportsInt, arg1: typing.SupportsInt
+    ) -> None: ...
     @typing.overload
     def push_back_int(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(1)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(1)"
+        ],
     ) -> None: ...
     @typing.overload
-    def push_back_int(self, arg0: int, arg1: int, arg2: int) -> None: ...
+    def push_back_int(
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: typing.SupportsInt,
+    ) -> None: ...
     @typing.overload
-    def push_back_real(self, arg0: int, arg1: float) -> None: ...
+    def push_back_real(
+        self, arg0: typing.SupportsInt, arg1: typing.SupportsFloat
+    ) -> None: ...
     @typing.overload
     def push_back_real(
         self,
-        arg0: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(3)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsFloat], "FixedSize(3)"
+        ],
     ) -> None: ...
     @typing.overload
-    def push_back_real(self, arg0: int, arg1: int, arg2: float) -> None: ...
-    def resize(self, arg0: int) -> None: ...
-    def set_num_neighbors(self, arg0: int) -> None: ...
+    def push_back_real(
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: typing.SupportsFloat,
+    ) -> None: ...
+    def resize(self, arg0: typing.SupportsInt) -> None: ...
+    def set_num_neighbors(self, arg0: typing.SupportsInt) -> None: ...
     def shrink_to_fit(self) -> None: ...
     def swap(self, arg0: ParticleTile_2_1_3_1_arena) -> None: ...
     @property
@@ -13913,12 +15220,16 @@ class ParticleTile_2_1_3_1_arena:
 class ParticleTile_2_1_3_1_default:
     NAI: typing.ClassVar[int] = 1
     NAR: typing.ClassVar[int] = 3
-    def __getitem__(self, arg0: int) -> Particle_5_2: ...
+    def __getitem__(self, arg0: typing.SupportsInt) -> Particle_5_2: ...
     def __init__(self) -> None: ...
-    def __setitem__(self, arg0: int, arg1: Particle_5_2) -> None: ...
+    def __setitem__(self, arg0: typing.SupportsInt, arg1: Particle_5_2) -> None: ...
     def capacity(self) -> int: ...
     def define(
-        self, arg0: int, arg1: int, arg2: list[str], arg3: list[str]
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: collections.abc.Sequence[str],
+        arg3: collections.abc.Sequence[str],
     ) -> None: ...
     def get_array_of_structs(self) -> ArrayOfStructs_2_1_default: ...
     def get_num_neighbors(self) -> int: ...
@@ -13935,25 +15246,43 @@ class ParticleTile_2_1_3_1_default:
         Add one particle to this tile.
         """
     @typing.overload
-    def push_back_int(self, arg0: int, arg1: int) -> None: ...
+    def push_back_int(
+        self, arg0: typing.SupportsInt, arg1: typing.SupportsInt
+    ) -> None: ...
     @typing.overload
     def push_back_int(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(1)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(1)"
+        ],
     ) -> None: ...
     @typing.overload
-    def push_back_int(self, arg0: int, arg1: int, arg2: int) -> None: ...
+    def push_back_int(
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: typing.SupportsInt,
+    ) -> None: ...
     @typing.overload
-    def push_back_real(self, arg0: int, arg1: float) -> None: ...
+    def push_back_real(
+        self, arg0: typing.SupportsInt, arg1: typing.SupportsFloat
+    ) -> None: ...
     @typing.overload
     def push_back_real(
         self,
-        arg0: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(3)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsFloat], "FixedSize(3)"
+        ],
     ) -> None: ...
     @typing.overload
-    def push_back_real(self, arg0: int, arg1: int, arg2: float) -> None: ...
-    def resize(self, arg0: int) -> None: ...
-    def set_num_neighbors(self, arg0: int) -> None: ...
+    def push_back_real(
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: typing.SupportsFloat,
+    ) -> None: ...
+    def resize(self, arg0: typing.SupportsInt) -> None: ...
+    def set_num_neighbors(self, arg0: typing.SupportsInt) -> None: ...
     def shrink_to_fit(self) -> None: ...
     def swap(self, arg0: ParticleTile_2_1_3_1_default) -> None: ...
     @property
@@ -13980,12 +15309,16 @@ class ParticleTile_2_1_3_1_default:
 class ParticleTile_2_1_3_1_pinned:
     NAI: typing.ClassVar[int] = 1
     NAR: typing.ClassVar[int] = 3
-    def __getitem__(self, arg0: int) -> Particle_5_2: ...
+    def __getitem__(self, arg0: typing.SupportsInt) -> Particle_5_2: ...
     def __init__(self) -> None: ...
-    def __setitem__(self, arg0: int, arg1: Particle_5_2) -> None: ...
+    def __setitem__(self, arg0: typing.SupportsInt, arg1: Particle_5_2) -> None: ...
     def capacity(self) -> int: ...
     def define(
-        self, arg0: int, arg1: int, arg2: list[str], arg3: list[str]
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: collections.abc.Sequence[str],
+        arg3: collections.abc.Sequence[str],
     ) -> None: ...
     def get_array_of_structs(self) -> ArrayOfStructs_2_1_pinned: ...
     def get_num_neighbors(self) -> int: ...
@@ -14002,25 +15335,43 @@ class ParticleTile_2_1_3_1_pinned:
         Add one particle to this tile.
         """
     @typing.overload
-    def push_back_int(self, arg0: int, arg1: int) -> None: ...
+    def push_back_int(
+        self, arg0: typing.SupportsInt, arg1: typing.SupportsInt
+    ) -> None: ...
     @typing.overload
     def push_back_int(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(1)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(1)"
+        ],
     ) -> None: ...
     @typing.overload
-    def push_back_int(self, arg0: int, arg1: int, arg2: int) -> None: ...
+    def push_back_int(
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: typing.SupportsInt,
+    ) -> None: ...
     @typing.overload
-    def push_back_real(self, arg0: int, arg1: float) -> None: ...
+    def push_back_real(
+        self, arg0: typing.SupportsInt, arg1: typing.SupportsFloat
+    ) -> None: ...
     @typing.overload
     def push_back_real(
         self,
-        arg0: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(3)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsFloat], "FixedSize(3)"
+        ],
     ) -> None: ...
     @typing.overload
-    def push_back_real(self, arg0: int, arg1: int, arg2: float) -> None: ...
-    def resize(self, arg0: int) -> None: ...
-    def set_num_neighbors(self, arg0: int) -> None: ...
+    def push_back_real(
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: typing.SupportsFloat,
+    ) -> None: ...
+    def resize(self, arg0: typing.SupportsInt) -> None: ...
+    def set_num_neighbors(self, arg0: typing.SupportsInt) -> None: ...
     def shrink_to_fit(self) -> None: ...
     def swap(self, arg0: ParticleTile_2_1_3_1_pinned) -> None: ...
     @property
@@ -14047,12 +15398,16 @@ class ParticleTile_2_1_3_1_pinned:
 class ParticleTile_pureSoA_3_0_arena:
     NAI: typing.ClassVar[int] = 0
     NAR: typing.ClassVar[int] = 3
-    def __getitem__(self, arg0: int) -> Particle_3_0: ...
+    def __getitem__(self, arg0: typing.SupportsInt) -> Particle_3_0: ...
     def __init__(self) -> None: ...
-    def __setitem__(self, arg0: int, arg1: Particle_3_0) -> None: ...
+    def __setitem__(self, arg0: typing.SupportsInt, arg1: Particle_3_0) -> None: ...
     def capacity(self) -> int: ...
     def define(
-        self, arg0: int, arg1: int, arg2: list[str], arg3: list[str]
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: collections.abc.Sequence[str],
+        arg3: collections.abc.Sequence[str],
     ) -> None: ...
     def get_num_neighbors(self) -> int: ...
     def get_particle_tile_data(self) -> ParticleTileData_pureSoA_3_0: ...
@@ -14062,25 +15417,43 @@ class ParticleTile_pureSoA_3_0_arena:
         Add one particle to this tile.
         """
     @typing.overload
-    def push_back_int(self, arg0: int, arg1: int) -> None: ...
+    def push_back_int(
+        self, arg0: typing.SupportsInt, arg1: typing.SupportsInt
+    ) -> None: ...
     @typing.overload
     def push_back_int(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(0)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(0)"
+        ],
     ) -> None: ...
     @typing.overload
-    def push_back_int(self, arg0: int, arg1: int, arg2: int) -> None: ...
+    def push_back_int(
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: typing.SupportsInt,
+    ) -> None: ...
     @typing.overload
-    def push_back_real(self, arg0: int, arg1: float) -> None: ...
+    def push_back_real(
+        self, arg0: typing.SupportsInt, arg1: typing.SupportsFloat
+    ) -> None: ...
     @typing.overload
     def push_back_real(
         self,
-        arg0: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(3)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsFloat], "FixedSize(3)"
+        ],
     ) -> None: ...
     @typing.overload
-    def push_back_real(self, arg0: int, arg1: int, arg2: float) -> None: ...
-    def resize(self, arg0: int) -> None: ...
-    def set_num_neighbors(self, arg0: int) -> None: ...
+    def push_back_real(
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: typing.SupportsFloat,
+    ) -> None: ...
+    def resize(self, arg0: typing.SupportsInt) -> None: ...
+    def set_num_neighbors(self, arg0: typing.SupportsInt) -> None: ...
     def shrink_to_fit(self) -> None: ...
     def swap(self, arg0: ParticleTile_pureSoA_3_0_arena) -> None: ...
     @property
@@ -14107,12 +15480,16 @@ class ParticleTile_pureSoA_3_0_arena:
 class ParticleTile_pureSoA_3_0_default:
     NAI: typing.ClassVar[int] = 0
     NAR: typing.ClassVar[int] = 3
-    def __getitem__(self, arg0: int) -> Particle_3_0: ...
+    def __getitem__(self, arg0: typing.SupportsInt) -> Particle_3_0: ...
     def __init__(self) -> None: ...
-    def __setitem__(self, arg0: int, arg1: Particle_3_0) -> None: ...
+    def __setitem__(self, arg0: typing.SupportsInt, arg1: Particle_3_0) -> None: ...
     def capacity(self) -> int: ...
     def define(
-        self, arg0: int, arg1: int, arg2: list[str], arg3: list[str]
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: collections.abc.Sequence[str],
+        arg3: collections.abc.Sequence[str],
     ) -> None: ...
     def get_num_neighbors(self) -> int: ...
     def get_particle_tile_data(self) -> ParticleTileData_pureSoA_3_0: ...
@@ -14122,25 +15499,43 @@ class ParticleTile_pureSoA_3_0_default:
         Add one particle to this tile.
         """
     @typing.overload
-    def push_back_int(self, arg0: int, arg1: int) -> None: ...
+    def push_back_int(
+        self, arg0: typing.SupportsInt, arg1: typing.SupportsInt
+    ) -> None: ...
     @typing.overload
     def push_back_int(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(0)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(0)"
+        ],
     ) -> None: ...
     @typing.overload
-    def push_back_int(self, arg0: int, arg1: int, arg2: int) -> None: ...
+    def push_back_int(
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: typing.SupportsInt,
+    ) -> None: ...
     @typing.overload
-    def push_back_real(self, arg0: int, arg1: float) -> None: ...
+    def push_back_real(
+        self, arg0: typing.SupportsInt, arg1: typing.SupportsFloat
+    ) -> None: ...
     @typing.overload
     def push_back_real(
         self,
-        arg0: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(3)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsFloat], "FixedSize(3)"
+        ],
     ) -> None: ...
     @typing.overload
-    def push_back_real(self, arg0: int, arg1: int, arg2: float) -> None: ...
-    def resize(self, arg0: int) -> None: ...
-    def set_num_neighbors(self, arg0: int) -> None: ...
+    def push_back_real(
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: typing.SupportsFloat,
+    ) -> None: ...
+    def resize(self, arg0: typing.SupportsInt) -> None: ...
+    def set_num_neighbors(self, arg0: typing.SupportsInt) -> None: ...
     def shrink_to_fit(self) -> None: ...
     def swap(self, arg0: ParticleTile_pureSoA_3_0_default) -> None: ...
     @property
@@ -14167,12 +15562,16 @@ class ParticleTile_pureSoA_3_0_default:
 class ParticleTile_pureSoA_3_0_pinned:
     NAI: typing.ClassVar[int] = 0
     NAR: typing.ClassVar[int] = 3
-    def __getitem__(self, arg0: int) -> Particle_3_0: ...
+    def __getitem__(self, arg0: typing.SupportsInt) -> Particle_3_0: ...
     def __init__(self) -> None: ...
-    def __setitem__(self, arg0: int, arg1: Particle_3_0) -> None: ...
+    def __setitem__(self, arg0: typing.SupportsInt, arg1: Particle_3_0) -> None: ...
     def capacity(self) -> int: ...
     def define(
-        self, arg0: int, arg1: int, arg2: list[str], arg3: list[str]
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: collections.abc.Sequence[str],
+        arg3: collections.abc.Sequence[str],
     ) -> None: ...
     def get_num_neighbors(self) -> int: ...
     def get_particle_tile_data(self) -> ParticleTileData_pureSoA_3_0: ...
@@ -14182,25 +15581,43 @@ class ParticleTile_pureSoA_3_0_pinned:
         Add one particle to this tile.
         """
     @typing.overload
-    def push_back_int(self, arg0: int, arg1: int) -> None: ...
+    def push_back_int(
+        self, arg0: typing.SupportsInt, arg1: typing.SupportsInt
+    ) -> None: ...
     @typing.overload
     def push_back_int(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(0)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(0)"
+        ],
     ) -> None: ...
     @typing.overload
-    def push_back_int(self, arg0: int, arg1: int, arg2: int) -> None: ...
+    def push_back_int(
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: typing.SupportsInt,
+    ) -> None: ...
     @typing.overload
-    def push_back_real(self, arg0: int, arg1: float) -> None: ...
+    def push_back_real(
+        self, arg0: typing.SupportsInt, arg1: typing.SupportsFloat
+    ) -> None: ...
     @typing.overload
     def push_back_real(
         self,
-        arg0: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(3)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsFloat], "FixedSize(3)"
+        ],
     ) -> None: ...
     @typing.overload
-    def push_back_real(self, arg0: int, arg1: int, arg2: float) -> None: ...
-    def resize(self, arg0: int) -> None: ...
-    def set_num_neighbors(self, arg0: int) -> None: ...
+    def push_back_real(
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: typing.SupportsFloat,
+    ) -> None: ...
+    def resize(self, arg0: typing.SupportsInt) -> None: ...
+    def set_num_neighbors(self, arg0: typing.SupportsInt) -> None: ...
     def shrink_to_fit(self) -> None: ...
     def swap(self, arg0: ParticleTile_pureSoA_3_0_pinned) -> None: ...
     @property
@@ -14227,12 +15644,16 @@ class ParticleTile_pureSoA_3_0_pinned:
 class ParticleTile_pureSoA_7_0_arena:
     NAI: typing.ClassVar[int] = 0
     NAR: typing.ClassVar[int] = 7
-    def __getitem__(self, arg0: int) -> Particle_7_0: ...
+    def __getitem__(self, arg0: typing.SupportsInt) -> Particle_7_0: ...
     def __init__(self) -> None: ...
-    def __setitem__(self, arg0: int, arg1: Particle_7_0) -> None: ...
+    def __setitem__(self, arg0: typing.SupportsInt, arg1: Particle_7_0) -> None: ...
     def capacity(self) -> int: ...
     def define(
-        self, arg0: int, arg1: int, arg2: list[str], arg3: list[str]
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: collections.abc.Sequence[str],
+        arg3: collections.abc.Sequence[str],
     ) -> None: ...
     def get_num_neighbors(self) -> int: ...
     def get_particle_tile_data(self) -> ParticleTileData_pureSoA_7_0: ...
@@ -14242,25 +15663,43 @@ class ParticleTile_pureSoA_7_0_arena:
         Add one particle to this tile.
         """
     @typing.overload
-    def push_back_int(self, arg0: int, arg1: int) -> None: ...
+    def push_back_int(
+        self, arg0: typing.SupportsInt, arg1: typing.SupportsInt
+    ) -> None: ...
     @typing.overload
     def push_back_int(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(0)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(0)"
+        ],
     ) -> None: ...
     @typing.overload
-    def push_back_int(self, arg0: int, arg1: int, arg2: int) -> None: ...
+    def push_back_int(
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: typing.SupportsInt,
+    ) -> None: ...
     @typing.overload
-    def push_back_real(self, arg0: int, arg1: float) -> None: ...
+    def push_back_real(
+        self, arg0: typing.SupportsInt, arg1: typing.SupportsFloat
+    ) -> None: ...
     @typing.overload
     def push_back_real(
         self,
-        arg0: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(7)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsFloat], "FixedSize(7)"
+        ],
     ) -> None: ...
     @typing.overload
-    def push_back_real(self, arg0: int, arg1: int, arg2: float) -> None: ...
-    def resize(self, arg0: int) -> None: ...
-    def set_num_neighbors(self, arg0: int) -> None: ...
+    def push_back_real(
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: typing.SupportsFloat,
+    ) -> None: ...
+    def resize(self, arg0: typing.SupportsInt) -> None: ...
+    def set_num_neighbors(self, arg0: typing.SupportsInt) -> None: ...
     def shrink_to_fit(self) -> None: ...
     def swap(self, arg0: ParticleTile_pureSoA_7_0_arena) -> None: ...
     @property
@@ -14287,12 +15726,16 @@ class ParticleTile_pureSoA_7_0_arena:
 class ParticleTile_pureSoA_7_0_default:
     NAI: typing.ClassVar[int] = 0
     NAR: typing.ClassVar[int] = 7
-    def __getitem__(self, arg0: int) -> Particle_7_0: ...
+    def __getitem__(self, arg0: typing.SupportsInt) -> Particle_7_0: ...
     def __init__(self) -> None: ...
-    def __setitem__(self, arg0: int, arg1: Particle_7_0) -> None: ...
+    def __setitem__(self, arg0: typing.SupportsInt, arg1: Particle_7_0) -> None: ...
     def capacity(self) -> int: ...
     def define(
-        self, arg0: int, arg1: int, arg2: list[str], arg3: list[str]
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: collections.abc.Sequence[str],
+        arg3: collections.abc.Sequence[str],
     ) -> None: ...
     def get_num_neighbors(self) -> int: ...
     def get_particle_tile_data(self) -> ParticleTileData_pureSoA_7_0: ...
@@ -14302,25 +15745,43 @@ class ParticleTile_pureSoA_7_0_default:
         Add one particle to this tile.
         """
     @typing.overload
-    def push_back_int(self, arg0: int, arg1: int) -> None: ...
+    def push_back_int(
+        self, arg0: typing.SupportsInt, arg1: typing.SupportsInt
+    ) -> None: ...
     @typing.overload
     def push_back_int(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(0)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(0)"
+        ],
     ) -> None: ...
     @typing.overload
-    def push_back_int(self, arg0: int, arg1: int, arg2: int) -> None: ...
+    def push_back_int(
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: typing.SupportsInt,
+    ) -> None: ...
     @typing.overload
-    def push_back_real(self, arg0: int, arg1: float) -> None: ...
+    def push_back_real(
+        self, arg0: typing.SupportsInt, arg1: typing.SupportsFloat
+    ) -> None: ...
     @typing.overload
     def push_back_real(
         self,
-        arg0: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(7)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsFloat], "FixedSize(7)"
+        ],
     ) -> None: ...
     @typing.overload
-    def push_back_real(self, arg0: int, arg1: int, arg2: float) -> None: ...
-    def resize(self, arg0: int) -> None: ...
-    def set_num_neighbors(self, arg0: int) -> None: ...
+    def push_back_real(
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: typing.SupportsFloat,
+    ) -> None: ...
+    def resize(self, arg0: typing.SupportsInt) -> None: ...
+    def set_num_neighbors(self, arg0: typing.SupportsInt) -> None: ...
     def shrink_to_fit(self) -> None: ...
     def swap(self, arg0: ParticleTile_pureSoA_7_0_default) -> None: ...
     @property
@@ -14347,12 +15808,16 @@ class ParticleTile_pureSoA_7_0_default:
 class ParticleTile_pureSoA_7_0_pinned:
     NAI: typing.ClassVar[int] = 0
     NAR: typing.ClassVar[int] = 7
-    def __getitem__(self, arg0: int) -> Particle_7_0: ...
+    def __getitem__(self, arg0: typing.SupportsInt) -> Particle_7_0: ...
     def __init__(self) -> None: ...
-    def __setitem__(self, arg0: int, arg1: Particle_7_0) -> None: ...
+    def __setitem__(self, arg0: typing.SupportsInt, arg1: Particle_7_0) -> None: ...
     def capacity(self) -> int: ...
     def define(
-        self, arg0: int, arg1: int, arg2: list[str], arg3: list[str]
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: collections.abc.Sequence[str],
+        arg3: collections.abc.Sequence[str],
     ) -> None: ...
     def get_num_neighbors(self) -> int: ...
     def get_particle_tile_data(self) -> ParticleTileData_pureSoA_7_0: ...
@@ -14362,25 +15827,43 @@ class ParticleTile_pureSoA_7_0_pinned:
         Add one particle to this tile.
         """
     @typing.overload
-    def push_back_int(self, arg0: int, arg1: int) -> None: ...
+    def push_back_int(
+        self, arg0: typing.SupportsInt, arg1: typing.SupportsInt
+    ) -> None: ...
     @typing.overload
     def push_back_int(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(0)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(0)"
+        ],
     ) -> None: ...
     @typing.overload
-    def push_back_int(self, arg0: int, arg1: int, arg2: int) -> None: ...
+    def push_back_int(
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: typing.SupportsInt,
+    ) -> None: ...
     @typing.overload
-    def push_back_real(self, arg0: int, arg1: float) -> None: ...
+    def push_back_real(
+        self, arg0: typing.SupportsInt, arg1: typing.SupportsFloat
+    ) -> None: ...
     @typing.overload
     def push_back_real(
         self,
-        arg0: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(7)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsFloat], "FixedSize(7)"
+        ],
     ) -> None: ...
     @typing.overload
-    def push_back_real(self, arg0: int, arg1: int, arg2: float) -> None: ...
-    def resize(self, arg0: int) -> None: ...
-    def set_num_neighbors(self, arg0: int) -> None: ...
+    def push_back_real(
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: typing.SupportsFloat,
+    ) -> None: ...
+    def resize(self, arg0: typing.SupportsInt) -> None: ...
+    def set_num_neighbors(self, arg0: typing.SupportsInt) -> None: ...
     def shrink_to_fit(self) -> None: ...
     def swap(self, arg0: ParticleTile_pureSoA_7_0_pinned) -> None: ...
     @property
@@ -14407,12 +15890,16 @@ class ParticleTile_pureSoA_7_0_pinned:
 class ParticleTile_pureSoA_8_0_arena:
     NAI: typing.ClassVar[int] = 0
     NAR: typing.ClassVar[int] = 8
-    def __getitem__(self, arg0: int) -> Particle_8_0: ...
+    def __getitem__(self, arg0: typing.SupportsInt) -> Particle_8_0: ...
     def __init__(self) -> None: ...
-    def __setitem__(self, arg0: int, arg1: Particle_8_0) -> None: ...
+    def __setitem__(self, arg0: typing.SupportsInt, arg1: Particle_8_0) -> None: ...
     def capacity(self) -> int: ...
     def define(
-        self, arg0: int, arg1: int, arg2: list[str], arg3: list[str]
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: collections.abc.Sequence[str],
+        arg3: collections.abc.Sequence[str],
     ) -> None: ...
     def get_num_neighbors(self) -> int: ...
     def get_particle_tile_data(self) -> ParticleTileData_pureSoA_8_0: ...
@@ -14422,25 +15909,43 @@ class ParticleTile_pureSoA_8_0_arena:
         Add one particle to this tile.
         """
     @typing.overload
-    def push_back_int(self, arg0: int, arg1: int) -> None: ...
+    def push_back_int(
+        self, arg0: typing.SupportsInt, arg1: typing.SupportsInt
+    ) -> None: ...
     @typing.overload
     def push_back_int(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(0)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(0)"
+        ],
     ) -> None: ...
     @typing.overload
-    def push_back_int(self, arg0: int, arg1: int, arg2: int) -> None: ...
+    def push_back_int(
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: typing.SupportsInt,
+    ) -> None: ...
     @typing.overload
-    def push_back_real(self, arg0: int, arg1: float) -> None: ...
+    def push_back_real(
+        self, arg0: typing.SupportsInt, arg1: typing.SupportsFloat
+    ) -> None: ...
     @typing.overload
     def push_back_real(
         self,
-        arg0: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(8)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsFloat], "FixedSize(8)"
+        ],
     ) -> None: ...
     @typing.overload
-    def push_back_real(self, arg0: int, arg1: int, arg2: float) -> None: ...
-    def resize(self, arg0: int) -> None: ...
-    def set_num_neighbors(self, arg0: int) -> None: ...
+    def push_back_real(
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: typing.SupportsFloat,
+    ) -> None: ...
+    def resize(self, arg0: typing.SupportsInt) -> None: ...
+    def set_num_neighbors(self, arg0: typing.SupportsInt) -> None: ...
     def shrink_to_fit(self) -> None: ...
     def swap(self, arg0: ParticleTile_pureSoA_8_0_arena) -> None: ...
     @property
@@ -14467,12 +15972,16 @@ class ParticleTile_pureSoA_8_0_arena:
 class ParticleTile_pureSoA_8_0_default:
     NAI: typing.ClassVar[int] = 0
     NAR: typing.ClassVar[int] = 8
-    def __getitem__(self, arg0: int) -> Particle_8_0: ...
+    def __getitem__(self, arg0: typing.SupportsInt) -> Particle_8_0: ...
     def __init__(self) -> None: ...
-    def __setitem__(self, arg0: int, arg1: Particle_8_0) -> None: ...
+    def __setitem__(self, arg0: typing.SupportsInt, arg1: Particle_8_0) -> None: ...
     def capacity(self) -> int: ...
     def define(
-        self, arg0: int, arg1: int, arg2: list[str], arg3: list[str]
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: collections.abc.Sequence[str],
+        arg3: collections.abc.Sequence[str],
     ) -> None: ...
     def get_num_neighbors(self) -> int: ...
     def get_particle_tile_data(self) -> ParticleTileData_pureSoA_8_0: ...
@@ -14482,25 +15991,43 @@ class ParticleTile_pureSoA_8_0_default:
         Add one particle to this tile.
         """
     @typing.overload
-    def push_back_int(self, arg0: int, arg1: int) -> None: ...
+    def push_back_int(
+        self, arg0: typing.SupportsInt, arg1: typing.SupportsInt
+    ) -> None: ...
     @typing.overload
     def push_back_int(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(0)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(0)"
+        ],
     ) -> None: ...
     @typing.overload
-    def push_back_int(self, arg0: int, arg1: int, arg2: int) -> None: ...
+    def push_back_int(
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: typing.SupportsInt,
+    ) -> None: ...
     @typing.overload
-    def push_back_real(self, arg0: int, arg1: float) -> None: ...
+    def push_back_real(
+        self, arg0: typing.SupportsInt, arg1: typing.SupportsFloat
+    ) -> None: ...
     @typing.overload
     def push_back_real(
         self,
-        arg0: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(8)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsFloat], "FixedSize(8)"
+        ],
     ) -> None: ...
     @typing.overload
-    def push_back_real(self, arg0: int, arg1: int, arg2: float) -> None: ...
-    def resize(self, arg0: int) -> None: ...
-    def set_num_neighbors(self, arg0: int) -> None: ...
+    def push_back_real(
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: typing.SupportsFloat,
+    ) -> None: ...
+    def resize(self, arg0: typing.SupportsInt) -> None: ...
+    def set_num_neighbors(self, arg0: typing.SupportsInt) -> None: ...
     def shrink_to_fit(self) -> None: ...
     def swap(self, arg0: ParticleTile_pureSoA_8_0_default) -> None: ...
     @property
@@ -14527,12 +16054,16 @@ class ParticleTile_pureSoA_8_0_default:
 class ParticleTile_pureSoA_8_0_pinned:
     NAI: typing.ClassVar[int] = 0
     NAR: typing.ClassVar[int] = 8
-    def __getitem__(self, arg0: int) -> Particle_8_0: ...
+    def __getitem__(self, arg0: typing.SupportsInt) -> Particle_8_0: ...
     def __init__(self) -> None: ...
-    def __setitem__(self, arg0: int, arg1: Particle_8_0) -> None: ...
+    def __setitem__(self, arg0: typing.SupportsInt, arg1: Particle_8_0) -> None: ...
     def capacity(self) -> int: ...
     def define(
-        self, arg0: int, arg1: int, arg2: list[str], arg3: list[str]
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: collections.abc.Sequence[str],
+        arg3: collections.abc.Sequence[str],
     ) -> None: ...
     def get_num_neighbors(self) -> int: ...
     def get_particle_tile_data(self) -> ParticleTileData_pureSoA_8_0: ...
@@ -14542,25 +16073,43 @@ class ParticleTile_pureSoA_8_0_pinned:
         Add one particle to this tile.
         """
     @typing.overload
-    def push_back_int(self, arg0: int, arg1: int) -> None: ...
+    def push_back_int(
+        self, arg0: typing.SupportsInt, arg1: typing.SupportsInt
+    ) -> None: ...
     @typing.overload
     def push_back_int(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(0)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(0)"
+        ],
     ) -> None: ...
     @typing.overload
-    def push_back_int(self, arg0: int, arg1: int, arg2: int) -> None: ...
+    def push_back_int(
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: typing.SupportsInt,
+    ) -> None: ...
     @typing.overload
-    def push_back_real(self, arg0: int, arg1: float) -> None: ...
+    def push_back_real(
+        self, arg0: typing.SupportsInt, arg1: typing.SupportsFloat
+    ) -> None: ...
     @typing.overload
     def push_back_real(
         self,
-        arg0: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(8)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsFloat], "FixedSize(8)"
+        ],
     ) -> None: ...
     @typing.overload
-    def push_back_real(self, arg0: int, arg1: int, arg2: float) -> None: ...
-    def resize(self, arg0: int) -> None: ...
-    def set_num_neighbors(self, arg0: int) -> None: ...
+    def push_back_real(
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: typing.SupportsFloat,
+    ) -> None: ...
+    def resize(self, arg0: typing.SupportsInt) -> None: ...
+    def set_num_neighbors(self, arg0: typing.SupportsInt) -> None: ...
     def shrink_to_fit(self) -> None: ...
     def swap(self, arg0: ParticleTile_pureSoA_8_0_pinned) -> None: ...
     @property
@@ -14587,380 +16136,566 @@ class ParticleTile_pureSoA_8_0_pinned:
 class Particle_16_4:
     NInt: typing.ClassVar[int] = 4
     NReal: typing.ClassVar[int] = 16
-    x: float
-    y: float
-    z: float
     @typing.overload
     def NextID(self) -> int: ...
     @typing.overload
-    def NextID(self, arg0: int) -> None: ...
+    def NextID(self, arg0: typing.SupportsInt) -> None: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
-    def __init__(self, arg0: float, arg1: float, arg2: float) -> None: ...
+    def __init__(
+        self,
+        arg0: typing.SupportsFloat,
+        arg1: typing.SupportsFloat,
+        arg2: typing.SupportsFloat,
+    ) -> None: ...
     @typing.overload
-    def __init__(self, arg0: float, arg1: float, arg2: float, *args) -> None: ...
+    def __init__(
+        self,
+        arg0: typing.SupportsFloat,
+        arg1: typing.SupportsFloat,
+        arg2: typing.SupportsFloat,
+        *args,
+    ) -> None: ...
     @typing.overload
-    def __init__(self, arg0: float, arg1: float, arg2: float, **kwargs) -> None: ...
+    def __init__(
+        self,
+        arg0: typing.SupportsFloat,
+        arg1: typing.SupportsFloat,
+        arg2: typing.SupportsFloat,
+        **kwargs,
+    ) -> None: ...
     @typing.overload
     def __init__(self, **kwargs) -> None: ...
     def __repr__(self) -> str: ...
     def __str__(self) -> str: ...
     def cpu(self) -> int: ...
     @typing.overload
-    def get_idata(self, arg0: int) -> int: ...
+    def get_idata(self, arg0: typing.SupportsInt) -> int: ...
     @typing.overload
-    def get_idata(
-        self,
-    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(4)]: ...
+    def get_idata(self) -> typing.Annotated[list[int], "FixedSize(4)"]: ...
     @typing.overload
-    def get_rdata(self, arg0: int) -> float: ...
+    def get_rdata(self, arg0: typing.SupportsInt) -> float: ...
     @typing.overload
-    def get_rdata(
-        self,
-    ) -> typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(16)]: ...
+    def get_rdata(self) -> typing.Annotated[list[float], "FixedSize(16)"]: ...
     def id(self) -> int: ...
     @typing.overload
-    def pos(self, arg0: int) -> float: ...
+    def pos(self, arg0: typing.SupportsInt) -> float: ...
     @typing.overload
     def pos(self) -> RealVect: ...
     @typing.overload
-    def setPos(self, arg0: int, arg1: float) -> None: ...
+    def setPos(self, arg0: typing.SupportsInt, arg1: typing.SupportsFloat) -> None: ...
     @typing.overload
     def setPos(self, arg0: RealVect) -> None: ...
     @typing.overload
     def setPos(
         self,
-        arg0: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(3)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsFloat], "FixedSize(3)"
+        ],
     ) -> None: ...
     @typing.overload
-    def set_idata(self, arg0: int, arg1: int) -> None: ...
+    def set_idata(self, arg0: typing.SupportsInt, arg1: typing.SupportsInt) -> None: ...
     @typing.overload
     def set_idata(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(4)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(4)"
+        ],
     ) -> None: ...
     @typing.overload
-    def set_rdata(self, arg0: int, arg1: float) -> None: ...
+    def set_rdata(
+        self, arg0: typing.SupportsInt, arg1: typing.SupportsFloat
+    ) -> None: ...
     @typing.overload
     def set_rdata(
         self,
-        arg0: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(16)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsFloat], "FixedSize(16)"
+        ],
     ) -> None: ...
+    @property
+    def x(self) -> float: ...
+    @x.setter
+    def x(self, arg1: typing.SupportsFloat) -> None: ...
+    @property
+    def y(self) -> float: ...
+    @y.setter
+    def y(self, arg1: typing.SupportsFloat) -> None: ...
+    @property
+    def z(self) -> float: ...
+    @z.setter
+    def z(self, arg1: typing.SupportsFloat) -> None: ...
 
 class Particle_2_1:
     NInt: typing.ClassVar[int] = 1
     NReal: typing.ClassVar[int] = 2
-    x: float
-    y: float
-    z: float
     @typing.overload
     def NextID(self) -> int: ...
     @typing.overload
-    def NextID(self, arg0: int) -> None: ...
+    def NextID(self, arg0: typing.SupportsInt) -> None: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
-    def __init__(self, arg0: float, arg1: float, arg2: float) -> None: ...
+    def __init__(
+        self,
+        arg0: typing.SupportsFloat,
+        arg1: typing.SupportsFloat,
+        arg2: typing.SupportsFloat,
+    ) -> None: ...
     @typing.overload
-    def __init__(self, arg0: float, arg1: float, arg2: float, *args) -> None: ...
+    def __init__(
+        self,
+        arg0: typing.SupportsFloat,
+        arg1: typing.SupportsFloat,
+        arg2: typing.SupportsFloat,
+        *args,
+    ) -> None: ...
     @typing.overload
-    def __init__(self, arg0: float, arg1: float, arg2: float, **kwargs) -> None: ...
+    def __init__(
+        self,
+        arg0: typing.SupportsFloat,
+        arg1: typing.SupportsFloat,
+        arg2: typing.SupportsFloat,
+        **kwargs,
+    ) -> None: ...
     @typing.overload
     def __init__(self, **kwargs) -> None: ...
     def __repr__(self) -> str: ...
     def __str__(self) -> str: ...
     def cpu(self) -> int: ...
     @typing.overload
-    def get_idata(self, arg0: int) -> int: ...
+    def get_idata(self, arg0: typing.SupportsInt) -> int: ...
     @typing.overload
-    def get_idata(
-        self,
-    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(1)]: ...
+    def get_idata(self) -> typing.Annotated[list[int], "FixedSize(1)"]: ...
     @typing.overload
-    def get_rdata(self, arg0: int) -> float: ...
+    def get_rdata(self, arg0: typing.SupportsInt) -> float: ...
     @typing.overload
-    def get_rdata(
-        self,
-    ) -> typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(2)]: ...
+    def get_rdata(self) -> typing.Annotated[list[float], "FixedSize(2)"]: ...
     def id(self) -> int: ...
     @typing.overload
-    def pos(self, arg0: int) -> float: ...
+    def pos(self, arg0: typing.SupportsInt) -> float: ...
     @typing.overload
     def pos(self) -> RealVect: ...
     @typing.overload
-    def setPos(self, arg0: int, arg1: float) -> None: ...
+    def setPos(self, arg0: typing.SupportsInt, arg1: typing.SupportsFloat) -> None: ...
     @typing.overload
     def setPos(self, arg0: RealVect) -> None: ...
     @typing.overload
     def setPos(
         self,
-        arg0: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(3)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsFloat], "FixedSize(3)"
+        ],
     ) -> None: ...
     @typing.overload
-    def set_idata(self, arg0: int, arg1: int) -> None: ...
+    def set_idata(self, arg0: typing.SupportsInt, arg1: typing.SupportsInt) -> None: ...
     @typing.overload
     def set_idata(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(1)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(1)"
+        ],
     ) -> None: ...
     @typing.overload
-    def set_rdata(self, arg0: int, arg1: float) -> None: ...
+    def set_rdata(
+        self, arg0: typing.SupportsInt, arg1: typing.SupportsFloat
+    ) -> None: ...
     @typing.overload
     def set_rdata(
         self,
-        arg0: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(2)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsFloat], "FixedSize(2)"
+        ],
     ) -> None: ...
+    @property
+    def x(self) -> float: ...
+    @x.setter
+    def x(self, arg1: typing.SupportsFloat) -> None: ...
+    @property
+    def y(self) -> float: ...
+    @y.setter
+    def y(self, arg1: typing.SupportsFloat) -> None: ...
+    @property
+    def z(self) -> float: ...
+    @z.setter
+    def z(self, arg1: typing.SupportsFloat) -> None: ...
 
 class Particle_3_0:
     NInt: typing.ClassVar[int] = 0
     NReal: typing.ClassVar[int] = 3
-    x: float
-    y: float
-    z: float
     @typing.overload
     def NextID(self) -> int: ...
     @typing.overload
-    def NextID(self, arg0: int) -> None: ...
+    def NextID(self, arg0: typing.SupportsInt) -> None: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
-    def __init__(self, arg0: float, arg1: float, arg2: float) -> None: ...
+    def __init__(
+        self,
+        arg0: typing.SupportsFloat,
+        arg1: typing.SupportsFloat,
+        arg2: typing.SupportsFloat,
+    ) -> None: ...
     @typing.overload
-    def __init__(self, arg0: float, arg1: float, arg2: float, *args) -> None: ...
+    def __init__(
+        self,
+        arg0: typing.SupportsFloat,
+        arg1: typing.SupportsFloat,
+        arg2: typing.SupportsFloat,
+        *args,
+    ) -> None: ...
     @typing.overload
-    def __init__(self, arg0: float, arg1: float, arg2: float, **kwargs) -> None: ...
+    def __init__(
+        self,
+        arg0: typing.SupportsFloat,
+        arg1: typing.SupportsFloat,
+        arg2: typing.SupportsFloat,
+        **kwargs,
+    ) -> None: ...
     @typing.overload
     def __init__(self, **kwargs) -> None: ...
     def __repr__(self) -> str: ...
     def __str__(self) -> str: ...
     def cpu(self) -> int: ...
     @typing.overload
-    def get_idata(self, arg0: int) -> None: ...
+    def get_idata(self, arg0: typing.SupportsInt) -> None: ...
     @typing.overload
     def get_idata(self) -> None: ...
     @typing.overload
-    def get_rdata(self, arg0: int) -> float: ...
+    def get_rdata(self, arg0: typing.SupportsInt) -> float: ...
     @typing.overload
-    def get_rdata(
-        self,
-    ) -> typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(3)]: ...
+    def get_rdata(self) -> typing.Annotated[list[float], "FixedSize(3)"]: ...
     def id(self) -> int: ...
     @typing.overload
-    def pos(self, arg0: int) -> float: ...
+    def pos(self, arg0: typing.SupportsInt) -> float: ...
     @typing.overload
     def pos(self) -> RealVect: ...
     @typing.overload
-    def setPos(self, arg0: int, arg1: float) -> None: ...
+    def setPos(self, arg0: typing.SupportsInt, arg1: typing.SupportsFloat) -> None: ...
     @typing.overload
     def setPos(self, arg0: RealVect) -> None: ...
     @typing.overload
     def setPos(
         self,
-        arg0: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(3)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsFloat], "FixedSize(3)"
+        ],
     ) -> None: ...
     @typing.overload
-    def set_idata(self, arg0: int, arg1: int) -> None: ...
+    def set_idata(self, arg0: typing.SupportsInt, arg1: typing.SupportsInt) -> None: ...
     @typing.overload
     def set_idata(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(0)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(0)"
+        ],
     ) -> None: ...
     @typing.overload
-    def set_rdata(self, arg0: int, arg1: float) -> None: ...
+    def set_rdata(
+        self, arg0: typing.SupportsInt, arg1: typing.SupportsFloat
+    ) -> None: ...
     @typing.overload
     def set_rdata(
         self,
-        arg0: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(3)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsFloat], "FixedSize(3)"
+        ],
     ) -> None: ...
+    @property
+    def x(self) -> float: ...
+    @x.setter
+    def x(self, arg1: typing.SupportsFloat) -> None: ...
+    @property
+    def y(self) -> float: ...
+    @y.setter
+    def y(self, arg1: typing.SupportsFloat) -> None: ...
+    @property
+    def z(self) -> float: ...
+    @z.setter
+    def z(self, arg1: typing.SupportsFloat) -> None: ...
 
 class Particle_5_2:
     NInt: typing.ClassVar[int] = 2
     NReal: typing.ClassVar[int] = 5
-    x: float
-    y: float
-    z: float
     @typing.overload
     def NextID(self) -> int: ...
     @typing.overload
-    def NextID(self, arg0: int) -> None: ...
+    def NextID(self, arg0: typing.SupportsInt) -> None: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
-    def __init__(self, arg0: float, arg1: float, arg2: float) -> None: ...
+    def __init__(
+        self,
+        arg0: typing.SupportsFloat,
+        arg1: typing.SupportsFloat,
+        arg2: typing.SupportsFloat,
+    ) -> None: ...
     @typing.overload
-    def __init__(self, arg0: float, arg1: float, arg2: float, *args) -> None: ...
+    def __init__(
+        self,
+        arg0: typing.SupportsFloat,
+        arg1: typing.SupportsFloat,
+        arg2: typing.SupportsFloat,
+        *args,
+    ) -> None: ...
     @typing.overload
-    def __init__(self, arg0: float, arg1: float, arg2: float, **kwargs) -> None: ...
+    def __init__(
+        self,
+        arg0: typing.SupportsFloat,
+        arg1: typing.SupportsFloat,
+        arg2: typing.SupportsFloat,
+        **kwargs,
+    ) -> None: ...
     @typing.overload
     def __init__(self, **kwargs) -> None: ...
     def __repr__(self) -> str: ...
     def __str__(self) -> str: ...
     def cpu(self) -> int: ...
     @typing.overload
-    def get_idata(self, arg0: int) -> int: ...
+    def get_idata(self, arg0: typing.SupportsInt) -> int: ...
     @typing.overload
-    def get_idata(
-        self,
-    ) -> typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(2)]: ...
+    def get_idata(self) -> typing.Annotated[list[int], "FixedSize(2)"]: ...
     @typing.overload
-    def get_rdata(self, arg0: int) -> float: ...
+    def get_rdata(self, arg0: typing.SupportsInt) -> float: ...
     @typing.overload
-    def get_rdata(
-        self,
-    ) -> typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(5)]: ...
+    def get_rdata(self) -> typing.Annotated[list[float], "FixedSize(5)"]: ...
     def id(self) -> int: ...
     @typing.overload
-    def pos(self, arg0: int) -> float: ...
+    def pos(self, arg0: typing.SupportsInt) -> float: ...
     @typing.overload
     def pos(self) -> RealVect: ...
     @typing.overload
-    def setPos(self, arg0: int, arg1: float) -> None: ...
+    def setPos(self, arg0: typing.SupportsInt, arg1: typing.SupportsFloat) -> None: ...
     @typing.overload
     def setPos(self, arg0: RealVect) -> None: ...
     @typing.overload
     def setPos(
         self,
-        arg0: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(3)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsFloat], "FixedSize(3)"
+        ],
     ) -> None: ...
     @typing.overload
-    def set_idata(self, arg0: int, arg1: int) -> None: ...
+    def set_idata(self, arg0: typing.SupportsInt, arg1: typing.SupportsInt) -> None: ...
     @typing.overload
     def set_idata(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(2)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(2)"
+        ],
     ) -> None: ...
     @typing.overload
-    def set_rdata(self, arg0: int, arg1: float) -> None: ...
+    def set_rdata(
+        self, arg0: typing.SupportsInt, arg1: typing.SupportsFloat
+    ) -> None: ...
     @typing.overload
     def set_rdata(
         self,
-        arg0: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(5)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsFloat], "FixedSize(5)"
+        ],
     ) -> None: ...
+    @property
+    def x(self) -> float: ...
+    @x.setter
+    def x(self, arg1: typing.SupportsFloat) -> None: ...
+    @property
+    def y(self) -> float: ...
+    @y.setter
+    def y(self, arg1: typing.SupportsFloat) -> None: ...
+    @property
+    def z(self) -> float: ...
+    @z.setter
+    def z(self, arg1: typing.SupportsFloat) -> None: ...
 
 class Particle_7_0:
     NInt: typing.ClassVar[int] = 0
     NReal: typing.ClassVar[int] = 7
-    x: float
-    y: float
-    z: float
     @typing.overload
     def NextID(self) -> int: ...
     @typing.overload
-    def NextID(self, arg0: int) -> None: ...
+    def NextID(self, arg0: typing.SupportsInt) -> None: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
-    def __init__(self, arg0: float, arg1: float, arg2: float) -> None: ...
+    def __init__(
+        self,
+        arg0: typing.SupportsFloat,
+        arg1: typing.SupportsFloat,
+        arg2: typing.SupportsFloat,
+    ) -> None: ...
     @typing.overload
-    def __init__(self, arg0: float, arg1: float, arg2: float, *args) -> None: ...
+    def __init__(
+        self,
+        arg0: typing.SupportsFloat,
+        arg1: typing.SupportsFloat,
+        arg2: typing.SupportsFloat,
+        *args,
+    ) -> None: ...
     @typing.overload
-    def __init__(self, arg0: float, arg1: float, arg2: float, **kwargs) -> None: ...
+    def __init__(
+        self,
+        arg0: typing.SupportsFloat,
+        arg1: typing.SupportsFloat,
+        arg2: typing.SupportsFloat,
+        **kwargs,
+    ) -> None: ...
     @typing.overload
     def __init__(self, **kwargs) -> None: ...
     def __repr__(self) -> str: ...
     def __str__(self) -> str: ...
     def cpu(self) -> int: ...
     @typing.overload
-    def get_idata(self, arg0: int) -> None: ...
+    def get_idata(self, arg0: typing.SupportsInt) -> None: ...
     @typing.overload
     def get_idata(self) -> None: ...
     @typing.overload
-    def get_rdata(self, arg0: int) -> float: ...
+    def get_rdata(self, arg0: typing.SupportsInt) -> float: ...
     @typing.overload
-    def get_rdata(
-        self,
-    ) -> typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(7)]: ...
+    def get_rdata(self) -> typing.Annotated[list[float], "FixedSize(7)"]: ...
     def id(self) -> int: ...
     @typing.overload
-    def pos(self, arg0: int) -> float: ...
+    def pos(self, arg0: typing.SupportsInt) -> float: ...
     @typing.overload
     def pos(self) -> RealVect: ...
     @typing.overload
-    def setPos(self, arg0: int, arg1: float) -> None: ...
+    def setPos(self, arg0: typing.SupportsInt, arg1: typing.SupportsFloat) -> None: ...
     @typing.overload
     def setPos(self, arg0: RealVect) -> None: ...
     @typing.overload
     def setPos(
         self,
-        arg0: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(3)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsFloat], "FixedSize(3)"
+        ],
     ) -> None: ...
     @typing.overload
-    def set_idata(self, arg0: int, arg1: int) -> None: ...
+    def set_idata(self, arg0: typing.SupportsInt, arg1: typing.SupportsInt) -> None: ...
     @typing.overload
     def set_idata(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(0)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(0)"
+        ],
     ) -> None: ...
     @typing.overload
-    def set_rdata(self, arg0: int, arg1: float) -> None: ...
+    def set_rdata(
+        self, arg0: typing.SupportsInt, arg1: typing.SupportsFloat
+    ) -> None: ...
     @typing.overload
     def set_rdata(
         self,
-        arg0: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(7)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsFloat], "FixedSize(7)"
+        ],
     ) -> None: ...
+    @property
+    def x(self) -> float: ...
+    @x.setter
+    def x(self, arg1: typing.SupportsFloat) -> None: ...
+    @property
+    def y(self) -> float: ...
+    @y.setter
+    def y(self, arg1: typing.SupportsFloat) -> None: ...
+    @property
+    def z(self) -> float: ...
+    @z.setter
+    def z(self, arg1: typing.SupportsFloat) -> None: ...
 
 class Particle_8_0:
     NInt: typing.ClassVar[int] = 0
     NReal: typing.ClassVar[int] = 8
-    x: float
-    y: float
-    z: float
     @typing.overload
     def NextID(self) -> int: ...
     @typing.overload
-    def NextID(self, arg0: int) -> None: ...
+    def NextID(self, arg0: typing.SupportsInt) -> None: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
-    def __init__(self, arg0: float, arg1: float, arg2: float) -> None: ...
+    def __init__(
+        self,
+        arg0: typing.SupportsFloat,
+        arg1: typing.SupportsFloat,
+        arg2: typing.SupportsFloat,
+    ) -> None: ...
     @typing.overload
-    def __init__(self, arg0: float, arg1: float, arg2: float, *args) -> None: ...
+    def __init__(
+        self,
+        arg0: typing.SupportsFloat,
+        arg1: typing.SupportsFloat,
+        arg2: typing.SupportsFloat,
+        *args,
+    ) -> None: ...
     @typing.overload
-    def __init__(self, arg0: float, arg1: float, arg2: float, **kwargs) -> None: ...
+    def __init__(
+        self,
+        arg0: typing.SupportsFloat,
+        arg1: typing.SupportsFloat,
+        arg2: typing.SupportsFloat,
+        **kwargs,
+    ) -> None: ...
     @typing.overload
     def __init__(self, **kwargs) -> None: ...
     def __repr__(self) -> str: ...
     def __str__(self) -> str: ...
     def cpu(self) -> int: ...
     @typing.overload
-    def get_idata(self, arg0: int) -> None: ...
+    def get_idata(self, arg0: typing.SupportsInt) -> None: ...
     @typing.overload
     def get_idata(self) -> None: ...
     @typing.overload
-    def get_rdata(self, arg0: int) -> float: ...
+    def get_rdata(self, arg0: typing.SupportsInt) -> float: ...
     @typing.overload
-    def get_rdata(
-        self,
-    ) -> typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(8)]: ...
+    def get_rdata(self) -> typing.Annotated[list[float], "FixedSize(8)"]: ...
     def id(self) -> int: ...
     @typing.overload
-    def pos(self, arg0: int) -> float: ...
+    def pos(self, arg0: typing.SupportsInt) -> float: ...
     @typing.overload
     def pos(self) -> RealVect: ...
     @typing.overload
-    def setPos(self, arg0: int, arg1: float) -> None: ...
+    def setPos(self, arg0: typing.SupportsInt, arg1: typing.SupportsFloat) -> None: ...
     @typing.overload
     def setPos(self, arg0: RealVect) -> None: ...
     @typing.overload
     def setPos(
         self,
-        arg0: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(3)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsFloat], "FixedSize(3)"
+        ],
     ) -> None: ...
     @typing.overload
-    def set_idata(self, arg0: int, arg1: int) -> None: ...
+    def set_idata(self, arg0: typing.SupportsInt, arg1: typing.SupportsInt) -> None: ...
     @typing.overload
     def set_idata(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(0)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(0)"
+        ],
     ) -> None: ...
     @typing.overload
-    def set_rdata(self, arg0: int, arg1: float) -> None: ...
+    def set_rdata(
+        self, arg0: typing.SupportsInt, arg1: typing.SupportsFloat
+    ) -> None: ...
     @typing.overload
     def set_rdata(
         self,
-        arg0: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(8)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsFloat], "FixedSize(8)"
+        ],
     ) -> None: ...
+    @property
+    def x(self) -> float: ...
+    @x.setter
+    def x(self, arg1: typing.SupportsFloat) -> None: ...
+    @property
+    def y(self) -> float: ...
+    @y.setter
+    def y(self, arg1: typing.SupportsFloat) -> None: ...
+    @property
+    def z(self) -> float: ...
+    @z.setter
+    def z(self, arg1: typing.SupportsFloat) -> None: ...
 
 class Periodicity:
     __hash__: typing.ClassVar[None] = None
@@ -14970,13 +16705,13 @@ class Periodicity:
         Return the Periodicity object that is not periodic in any direction
         """
     def __eq__(self, arg0: Periodicity) -> bool: ...
-    def __getitem__(self, dir: int) -> bool: ...
+    def __getitem__(self, dir: typing.SupportsInt) -> bool: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
     def __init__(self, arg0: IntVect3D) -> None: ...
     def __repr__(self) -> str: ...
-    def is_periodic(self, dir: int) -> bool: ...
+    def is_periodic(self, dir: typing.SupportsInt) -> bool: ...
     @property
     def domain(self) -> Box:
         """
@@ -14990,37 +16725,33 @@ class Periodicity:
     def shift_IntVect(self, arg1: IntVect3D) -> list[IntVect3D]: ...
 
 class PlotFileData:
-    def DistributionMap(self, arg0: int) -> DistributionMapping: ...
+    def DistributionMap(self, arg0: typing.SupportsInt) -> DistributionMapping: ...
     def __init__(self, arg0: str) -> None: ...
-    def boxArray(self, arg0: int) -> BoxArray: ...
+    def boxArray(self, arg0: typing.SupportsInt) -> BoxArray: ...
     def cellSize(
-        self, arg0: int
-    ) -> typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(3)]: ...
+        self, arg0: typing.SupportsInt
+    ) -> typing.Annotated[list[float], "FixedSize(3)"]: ...
     def coordSys(self) -> int: ...
     def finestLevel(self) -> int: ...
     @typing.overload
-    def get(self, arg0: int) -> MultiFab: ...
+    def get(self, arg0: typing.SupportsInt) -> MultiFab: ...
     @typing.overload
-    def get(self, arg0: int, arg1: str) -> MultiFab: ...
-    def levelStep(self, arg0: int) -> int: ...
+    def get(self, arg0: typing.SupportsInt, arg1: str) -> MultiFab: ...
+    def levelStep(self, arg0: typing.SupportsInt) -> int: ...
     def nComp(self) -> int: ...
-    def nGrowVect(self, arg0: int) -> IntVect3D: ...
-    def probDomain(self, arg0: int) -> Box: ...
-    def probHi(
-        self,
-    ) -> typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(3)]: ...
-    def probLo(
-        self,
-    ) -> typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(3)]: ...
-    def probSize(
-        self,
-    ) -> typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(3)]: ...
-    def refRatio(self, arg0: int) -> int: ...
+    def nGrowVect(self, arg0: typing.SupportsInt) -> IntVect3D: ...
+    def probDomain(self, arg0: typing.SupportsInt) -> Box: ...
+    def probHi(self) -> typing.Annotated[list[float], "FixedSize(3)"]: ...
+    def probLo(self) -> typing.Annotated[list[float], "FixedSize(3)"]: ...
+    def probSize(self) -> typing.Annotated[list[float], "FixedSize(3)"]: ...
+    def refRatio(self, arg0: typing.SupportsInt) -> int: ...
     def spaceDim(self) -> int: ...
     @typing.overload
     def syncDistributionMap(self, arg0: PlotFileData) -> None: ...
     @typing.overload
-    def syncDistributionMap(self, arg0: int, arg1: PlotFileData) -> None: ...
+    def syncDistributionMap(
+        self, arg0: typing.SupportsInt, arg1: PlotFileData
+    ) -> None: ...
     def time(self) -> float: ...
     def varNames(self) -> Vector_string: ...
 
@@ -15030,57 +16761,67 @@ class RealBox:
     @typing.overload
     def __init__(
         self,
-        x_lo: float,
-        y_lo: float,
-        z_lo: float,
-        x_hi: float,
-        y_hi: float,
-        z_hi: float,
+        x_lo: typing.SupportsFloat,
+        y_lo: typing.SupportsFloat,
+        z_lo: typing.SupportsFloat,
+        x_hi: typing.SupportsFloat,
+        y_hi: typing.SupportsFloat,
+        z_hi: typing.SupportsFloat,
     ) -> None: ...
     @typing.overload
     def __init__(
         self,
-        a_lo: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(3)],
-        a_hi: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(3)],
+        a_lo: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsFloat], "FixedSize(3)"
+        ],
+        a_hi: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsFloat], "FixedSize(3)"
+        ],
     ) -> None: ...
     @typing.overload
     def __init__(
         self,
         bx: Box,
-        dx: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(3)],
-        base: typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(3)],
+        dx: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsFloat], "FixedSize(3)"
+        ],
+        base: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsFloat], "FixedSize(3)"
+        ],
     ) -> None: ...
     def __repr__(self) -> str: ...
     def __str(self) -> str: ...
     @typing.overload
-    def contains(self, rb: XDim3, eps: float = 0.0) -> bool:
+    def contains(self, rb: XDim3, eps: typing.SupportsFloat = 0.0) -> bool:
         """
         Determine if RealBox contains ``pt``, within tolerance ``eps``
         """
     @typing.overload
-    def contains(self, rb: RealVect, eps: float = 0.0) -> bool:
+    def contains(self, rb: RealVect, eps: typing.SupportsFloat = 0.0) -> bool:
         """
         Determine if RealBox contains ``pt``, within tolerance ``eps``
         """
     @typing.overload
-    def contains(self, rb: RealBox, eps: float = 0.0) -> bool:
+    def contains(self, rb: RealBox, eps: typing.SupportsFloat = 0.0) -> bool:
         """
         Determine if RealBox contains another RealBox, within tolerance ``eps``
         """
     @typing.overload
-    def contains(self, rb: list[float], eps: float = 0.0) -> bool:
+    def contains(
+        self,
+        rb: collections.abc.Sequence[typing.SupportsFloat],
+        eps: typing.SupportsFloat = 0.0,
+    ) -> bool:
         """
         Determine if RealBox contains ``pt``, within tolerance ``eps``
         """
     @typing.overload
-    def hi(self, arg0: int) -> float:
+    def hi(self, arg0: typing.SupportsInt) -> float:
         """
         Get ith component of ``xhi``
         """
     @typing.overload
-    def hi(
-        self,
-    ) -> typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(3)]:
+    def hi(self) -> typing.Annotated[list[float], "FixedSize(3)"]:
         """
         Get all components of ``xhi``
         """
@@ -15088,16 +16829,14 @@ class RealBox:
         """
         determine if box intersects with a box
         """
-    def length(self, arg0: int) -> float: ...
+    def length(self, arg0: typing.SupportsInt) -> float: ...
     @typing.overload
-    def lo(self, arg0: int) -> float:
+    def lo(self, arg0: typing.SupportsInt) -> float:
         """
         Get ith component of ``xlo``
         """
     @typing.overload
-    def lo(
-        self,
-    ) -> typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(3)]:
+    def lo(self) -> typing.Annotated[list[float], "FixedSize(3)"]:
         """
         Get all components of ``xlo``
         """
@@ -15106,34 +16845,30 @@ class RealBox:
         Determine if RealBox satisfies ``xlo[i]<xhi[i]`` for ``i=0,1,...,AMREX_SPACEDIM``.
         """
     @typing.overload
-    def setHi(self, arg0: list[float]) -> None:
+    def setHi(self, arg0: collections.abc.Sequence[typing.SupportsFloat]) -> None:
         """
         Get all components of ``xlo``
         """
     @typing.overload
-    def setHi(self, arg0: int, arg1: float) -> None:
+    def setHi(self, arg0: typing.SupportsInt, arg1: typing.SupportsFloat) -> None:
         """
         Get ith component of ``xhi``
         """
     @typing.overload
-    def setLo(self, arg0: list[float]) -> None:
+    def setLo(self, arg0: collections.abc.Sequence[typing.SupportsFloat]) -> None:
         """
         Get ith component of ``xlo``
         """
     @typing.overload
-    def setLo(self, arg0: int, arg1: float) -> None:
+    def setLo(self, arg0: typing.SupportsInt, arg1: typing.SupportsFloat) -> None:
         """
         Get all components of ``xlo``
         """
     def volume(self) -> float: ...
     @property
-    def xhi(
-        self,
-    ) -> typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(3)]: ...
+    def xhi(self) -> typing.Annotated[list[float], "FixedSize(3)"]: ...
     @property
-    def xlo(
-        self,
-    ) -> typing.Annotated[list[float], pybind11_stubgen.typing_ext.FixedSize(3)]: ...
+    def xlo(self) -> typing.Annotated[list[float], "FixedSize(3)"]: ...
 
 class RealVect:
     __hash__: typing.ClassVar[None] = None
@@ -15141,63 +16876,72 @@ class RealVect:
     def unit_vector() -> RealVect: ...
     @staticmethod
     def zero_vector() -> RealVect: ...
-    def BASISREALV(self: int) -> RealVect:
+    def BASISREALV(self: typing.SupportsInt) -> RealVect:
         """
         return basis vector in given coordinate direction
         """
     @typing.overload
-    def __add__(self, arg0: float) -> RealVect: ...
+    def __add__(self, arg0: typing.SupportsFloat) -> RealVect: ...
     @typing.overload
     def __add__(self, arg0: RealVect) -> RealVect: ...
     def __eq__(self, arg0: RealVect) -> bool: ...
     def __ge__(self, arg0: RealVect) -> bool: ...
-    def __getitem__(self, arg0: int) -> float: ...
+    def __getitem__(self, arg0: typing.SupportsInt) -> float: ...
     def __gt__(self, arg0: RealVect) -> bool: ...
     @typing.overload
-    def __iadd__(self, arg0: float) -> RealVect: ...
+    def __iadd__(self, arg0: typing.SupportsFloat) -> RealVect: ...
     @typing.overload
     def __iadd__(self, arg0: RealVect) -> RealVect: ...
     @typing.overload
-    def __imul__(self, arg0: float) -> RealVect: ...
+    def __imul__(self, arg0: typing.SupportsFloat) -> RealVect: ...
     @typing.overload
     def __imul__(self, arg0: RealVect) -> RealVect: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
-    def __init__(self, arg0: float, arg1: float, arg2: float) -> None: ...
+    def __init__(
+        self,
+        arg0: typing.SupportsFloat,
+        arg1: typing.SupportsFloat,
+        arg2: typing.SupportsFloat,
+    ) -> None: ...
     @typing.overload
     def __init__(self, arg0: IntVect3D) -> None: ...
     @typing.overload
-    def __init__(self, arg0: list[float]) -> None: ...
+    def __init__(
+        self, arg0: collections.abc.Sequence[typing.SupportsFloat]
+    ) -> None: ...
     @typing.overload
-    def __init__(self, arg0: float) -> None: ...
+    def __init__(self, arg0: typing.SupportsFloat) -> None: ...
     @typing.overload
-    def __isub__(self, arg0: float) -> RealVect: ...
+    def __isub__(self, arg0: typing.SupportsFloat) -> RealVect: ...
     @typing.overload
     def __isub__(self, arg0: RealVect) -> RealVect: ...
-    def __itruediv__(self, arg0: float) -> RealVect: ...
+    def __itruediv__(self, arg0: typing.SupportsFloat) -> RealVect: ...
     def __le__(self, arg0: RealVect) -> bool: ...
     def __lt__(self, arg0: RealVect) -> bool: ...
     @typing.overload
     def __mul__(self, arg0: RealVect) -> RealVect: ...
     @typing.overload
-    def __mul__(self, arg0: float) -> RealVect: ...
+    def __mul__(self, arg0: typing.SupportsFloat) -> RealVect: ...
     def __ne__(self, arg0: RealVect) -> bool: ...
     def __neg__(self) -> RealVect: ...
     def __pos__(self) -> RealVect: ...
-    def __radd__(self, arg0: float) -> RealVect: ...
+    def __radd__(self, arg0: typing.SupportsFloat) -> RealVect: ...
     def __repr__(self) -> str: ...
-    def __rmul__(self, arg0: float) -> RealVect: ...
-    def __rsub__(self, arg0: float) -> RealVect: ...
-    def __rtruediv__(self, arg0: float) -> RealVect: ...
-    def __setitem__(self, arg0: int, arg1: float) -> float: ...
+    def __rmul__(self, arg0: typing.SupportsFloat) -> RealVect: ...
+    def __rsub__(self, arg0: typing.SupportsFloat) -> RealVect: ...
+    def __rtruediv__(self, arg0: typing.SupportsFloat) -> RealVect: ...
+    def __setitem__(
+        self, arg0: typing.SupportsInt, arg1: typing.SupportsFloat
+    ) -> float: ...
     def __str(self) -> str: ...
     @typing.overload
     def __sub__(self, arg0: RealVect) -> RealVect: ...
     @typing.overload
-    def __sub__(self, arg0: float) -> RealVect: ...
+    def __sub__(self, arg0: typing.SupportsFloat) -> RealVect: ...
     @typing.overload
-    def __truediv__(self, arg0: float) -> RealVect: ...
+    def __truediv__(self, arg0: typing.SupportsFloat) -> RealVect: ...
     @typing.overload
     def __truediv__(self, arg0: RealVect) -> RealVect: ...
     def ceil(self) -> IntVect3D:
@@ -15236,7 +16980,7 @@ class RealVect:
         """
         Return an ``IntVect`` whose components are the std::round of the vector components
         """
-    def scale(self, arg0: float) -> RealVect:
+    def scale(self, arg0: typing.SupportsFloat) -> RealVect:
         """
         Multiplify each component of this vector by a scalar
         """
@@ -15270,34 +17014,42 @@ class SmallMatrix_1x6_F_SI1_double:
     @typing.overload
     def __getitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(2)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(2)"
+        ],
     ) -> float: ...
     @typing.overload
-    def __getitem__(self, arg0: int) -> float: ...
+    def __getitem__(self, arg0: typing.SupportsInt) -> float: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
     def __init__(self, arg0: SmallMatrix_1x6_F_SI1_double) -> None: ...
     @typing.overload
-    def __init__(self, arg0: numpy.ndarray[numpy.float64]) -> None: ...
-    def __mul__(self, arg0: float) -> SmallMatrix_1x6_F_SI1_double: ...
+    def __init__(
+        self, arg0: typing.Annotated[numpy.typing.ArrayLike, numpy.float64]
+    ) -> None: ...
+    def __mul__(self, arg0: typing.SupportsFloat) -> SmallMatrix_1x6_F_SI1_double: ...
     def __neg__(self) -> SmallMatrix_1x6_F_SI1_double: ...
     def __repr__(self) -> str: ...
-    def __rmul__(self, arg0: float) -> SmallMatrix_1x6_F_SI1_double: ...
+    def __rmul__(self, arg0: typing.SupportsFloat) -> SmallMatrix_1x6_F_SI1_double: ...
     @typing.overload
     def __setitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(2)],
-        arg1: float,
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(2)"
+        ],
+        arg1: typing.SupportsFloat,
     ) -> None: ...
     @typing.overload
-    def __setitem__(self, arg0: int, arg1: float) -> None: ...
+    def __setitem__(
+        self, arg0: typing.SupportsInt, arg1: typing.SupportsFloat
+    ) -> None: ...
     def __sub__(
         self, arg0: SmallMatrix_1x6_F_SI1_double
     ) -> SmallMatrix_1x6_F_SI1_double: ...
     def dot(self, arg0: SmallMatrix_1x6_F_SI1_double) -> float: ...
     def prod(self) -> float: ...
-    def set_val(self, arg0: float) -> SmallMatrix_1x6_F_SI1_double: ...
+    def set_val(self, arg0: typing.SupportsFloat) -> SmallMatrix_1x6_F_SI1_double: ...
     def sum(self) -> float: ...
     def to_cupy(self, copy=False, order="F"):
         """
@@ -15414,34 +17166,42 @@ class SmallMatrix_1x6_F_SI1_float:
     @typing.overload
     def __getitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(2)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(2)"
+        ],
     ) -> float: ...
     @typing.overload
-    def __getitem__(self, arg0: int) -> float: ...
+    def __getitem__(self, arg0: typing.SupportsInt) -> float: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
     def __init__(self, arg0: SmallMatrix_1x6_F_SI1_float) -> None: ...
     @typing.overload
-    def __init__(self, arg0: numpy.ndarray[numpy.float32]) -> None: ...
-    def __mul__(self, arg0: float) -> SmallMatrix_1x6_F_SI1_float: ...
+    def __init__(
+        self, arg0: typing.Annotated[numpy.typing.ArrayLike, numpy.float32]
+    ) -> None: ...
+    def __mul__(self, arg0: typing.SupportsFloat) -> SmallMatrix_1x6_F_SI1_float: ...
     def __neg__(self) -> SmallMatrix_1x6_F_SI1_float: ...
     def __repr__(self) -> str: ...
-    def __rmul__(self, arg0: float) -> SmallMatrix_1x6_F_SI1_float: ...
+    def __rmul__(self, arg0: typing.SupportsFloat) -> SmallMatrix_1x6_F_SI1_float: ...
     @typing.overload
     def __setitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(2)],
-        arg1: float,
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(2)"
+        ],
+        arg1: typing.SupportsFloat,
     ) -> None: ...
     @typing.overload
-    def __setitem__(self, arg0: int, arg1: float) -> None: ...
+    def __setitem__(
+        self, arg0: typing.SupportsInt, arg1: typing.SupportsFloat
+    ) -> None: ...
     def __sub__(
         self, arg0: SmallMatrix_1x6_F_SI1_float
     ) -> SmallMatrix_1x6_F_SI1_float: ...
     def dot(self, arg0: SmallMatrix_1x6_F_SI1_float) -> float: ...
     def prod(self) -> float: ...
-    def set_val(self, arg0: float) -> SmallMatrix_1x6_F_SI1_float: ...
+    def set_val(self, arg0: typing.SupportsFloat) -> SmallMatrix_1x6_F_SI1_float: ...
     def sum(self) -> float: ...
     def to_cupy(self, copy=False, order="F"):
         """
@@ -15558,34 +17318,48 @@ class SmallMatrix_1x6_F_SI1_longdouble:
     @typing.overload
     def __getitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(2)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(2)"
+        ],
     ) -> float: ...
     @typing.overload
-    def __getitem__(self, arg0: int) -> float: ...
+    def __getitem__(self, arg0: typing.SupportsInt) -> float: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
     def __init__(self, arg0: SmallMatrix_1x6_F_SI1_longdouble) -> None: ...
     @typing.overload
-    def __init__(self, arg0: numpy.ndarray[numpy.longdouble]) -> None: ...
-    def __mul__(self, arg0: float) -> SmallMatrix_1x6_F_SI1_longdouble: ...
+    def __init__(
+        self, arg0: typing.Annotated[numpy.typing.ArrayLike, numpy.longdouble]
+    ) -> None: ...
+    def __mul__(
+        self, arg0: typing.SupportsFloat
+    ) -> SmallMatrix_1x6_F_SI1_longdouble: ...
     def __neg__(self) -> SmallMatrix_1x6_F_SI1_longdouble: ...
     def __repr__(self) -> str: ...
-    def __rmul__(self, arg0: float) -> SmallMatrix_1x6_F_SI1_longdouble: ...
+    def __rmul__(
+        self, arg0: typing.SupportsFloat
+    ) -> SmallMatrix_1x6_F_SI1_longdouble: ...
     @typing.overload
     def __setitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(2)],
-        arg1: float,
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(2)"
+        ],
+        arg1: typing.SupportsFloat,
     ) -> None: ...
     @typing.overload
-    def __setitem__(self, arg0: int, arg1: float) -> None: ...
+    def __setitem__(
+        self, arg0: typing.SupportsInt, arg1: typing.SupportsFloat
+    ) -> None: ...
     def __sub__(
         self, arg0: SmallMatrix_1x6_F_SI1_longdouble
     ) -> SmallMatrix_1x6_F_SI1_longdouble: ...
     def dot(self, arg0: SmallMatrix_1x6_F_SI1_longdouble) -> float: ...
     def prod(self) -> float: ...
-    def set_val(self, arg0: float) -> SmallMatrix_1x6_F_SI1_longdouble: ...
+    def set_val(
+        self, arg0: typing.SupportsFloat
+    ) -> SmallMatrix_1x6_F_SI1_longdouble: ...
     def sum(self) -> float: ...
     def to_cupy(self, copy=False, order="F"):
         """
@@ -15702,34 +17476,42 @@ class SmallMatrix_6x1_F_SI1_double:
     @typing.overload
     def __getitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(2)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(2)"
+        ],
     ) -> float: ...
     @typing.overload
-    def __getitem__(self, arg0: int) -> float: ...
+    def __getitem__(self, arg0: typing.SupportsInt) -> float: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
     def __init__(self, arg0: SmallMatrix_6x1_F_SI1_double) -> None: ...
     @typing.overload
-    def __init__(self, arg0: numpy.ndarray[numpy.float64]) -> None: ...
-    def __mul__(self, arg0: float) -> SmallMatrix_6x1_F_SI1_double: ...
+    def __init__(
+        self, arg0: typing.Annotated[numpy.typing.ArrayLike, numpy.float64]
+    ) -> None: ...
+    def __mul__(self, arg0: typing.SupportsFloat) -> SmallMatrix_6x1_F_SI1_double: ...
     def __neg__(self) -> SmallMatrix_6x1_F_SI1_double: ...
     def __repr__(self) -> str: ...
-    def __rmul__(self, arg0: float) -> SmallMatrix_6x1_F_SI1_double: ...
+    def __rmul__(self, arg0: typing.SupportsFloat) -> SmallMatrix_6x1_F_SI1_double: ...
     @typing.overload
     def __setitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(2)],
-        arg1: float,
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(2)"
+        ],
+        arg1: typing.SupportsFloat,
     ) -> None: ...
     @typing.overload
-    def __setitem__(self, arg0: int, arg1: float) -> None: ...
+    def __setitem__(
+        self, arg0: typing.SupportsInt, arg1: typing.SupportsFloat
+    ) -> None: ...
     def __sub__(
         self, arg0: SmallMatrix_6x1_F_SI1_double
     ) -> SmallMatrix_6x1_F_SI1_double: ...
     def dot(self, arg0: SmallMatrix_6x1_F_SI1_double) -> float: ...
     def prod(self) -> float: ...
-    def set_val(self, arg0: float) -> SmallMatrix_6x1_F_SI1_double: ...
+    def set_val(self, arg0: typing.SupportsFloat) -> SmallMatrix_6x1_F_SI1_double: ...
     def sum(self) -> float: ...
     def to_cupy(self, copy=False, order="F"):
         """
@@ -15846,34 +17628,42 @@ class SmallMatrix_6x1_F_SI1_float:
     @typing.overload
     def __getitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(2)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(2)"
+        ],
     ) -> float: ...
     @typing.overload
-    def __getitem__(self, arg0: int) -> float: ...
+    def __getitem__(self, arg0: typing.SupportsInt) -> float: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
     def __init__(self, arg0: SmallMatrix_6x1_F_SI1_float) -> None: ...
     @typing.overload
-    def __init__(self, arg0: numpy.ndarray[numpy.float32]) -> None: ...
-    def __mul__(self, arg0: float) -> SmallMatrix_6x1_F_SI1_float: ...
+    def __init__(
+        self, arg0: typing.Annotated[numpy.typing.ArrayLike, numpy.float32]
+    ) -> None: ...
+    def __mul__(self, arg0: typing.SupportsFloat) -> SmallMatrix_6x1_F_SI1_float: ...
     def __neg__(self) -> SmallMatrix_6x1_F_SI1_float: ...
     def __repr__(self) -> str: ...
-    def __rmul__(self, arg0: float) -> SmallMatrix_6x1_F_SI1_float: ...
+    def __rmul__(self, arg0: typing.SupportsFloat) -> SmallMatrix_6x1_F_SI1_float: ...
     @typing.overload
     def __setitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(2)],
-        arg1: float,
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(2)"
+        ],
+        arg1: typing.SupportsFloat,
     ) -> None: ...
     @typing.overload
-    def __setitem__(self, arg0: int, arg1: float) -> None: ...
+    def __setitem__(
+        self, arg0: typing.SupportsInt, arg1: typing.SupportsFloat
+    ) -> None: ...
     def __sub__(
         self, arg0: SmallMatrix_6x1_F_SI1_float
     ) -> SmallMatrix_6x1_F_SI1_float: ...
     def dot(self, arg0: SmallMatrix_6x1_F_SI1_float) -> float: ...
     def prod(self) -> float: ...
-    def set_val(self, arg0: float) -> SmallMatrix_6x1_F_SI1_float: ...
+    def set_val(self, arg0: typing.SupportsFloat) -> SmallMatrix_6x1_F_SI1_float: ...
     def sum(self) -> float: ...
     def to_cupy(self, copy=False, order="F"):
         """
@@ -15990,34 +17780,48 @@ class SmallMatrix_6x1_F_SI1_longdouble:
     @typing.overload
     def __getitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(2)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(2)"
+        ],
     ) -> float: ...
     @typing.overload
-    def __getitem__(self, arg0: int) -> float: ...
+    def __getitem__(self, arg0: typing.SupportsInt) -> float: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
     def __init__(self, arg0: SmallMatrix_6x1_F_SI1_longdouble) -> None: ...
     @typing.overload
-    def __init__(self, arg0: numpy.ndarray[numpy.longdouble]) -> None: ...
-    def __mul__(self, arg0: float) -> SmallMatrix_6x1_F_SI1_longdouble: ...
+    def __init__(
+        self, arg0: typing.Annotated[numpy.typing.ArrayLike, numpy.longdouble]
+    ) -> None: ...
+    def __mul__(
+        self, arg0: typing.SupportsFloat
+    ) -> SmallMatrix_6x1_F_SI1_longdouble: ...
     def __neg__(self) -> SmallMatrix_6x1_F_SI1_longdouble: ...
     def __repr__(self) -> str: ...
-    def __rmul__(self, arg0: float) -> SmallMatrix_6x1_F_SI1_longdouble: ...
+    def __rmul__(
+        self, arg0: typing.SupportsFloat
+    ) -> SmallMatrix_6x1_F_SI1_longdouble: ...
     @typing.overload
     def __setitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(2)],
-        arg1: float,
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(2)"
+        ],
+        arg1: typing.SupportsFloat,
     ) -> None: ...
     @typing.overload
-    def __setitem__(self, arg0: int, arg1: float) -> None: ...
+    def __setitem__(
+        self, arg0: typing.SupportsInt, arg1: typing.SupportsFloat
+    ) -> None: ...
     def __sub__(
         self, arg0: SmallMatrix_6x1_F_SI1_longdouble
     ) -> SmallMatrix_6x1_F_SI1_longdouble: ...
     def dot(self, arg0: SmallMatrix_6x1_F_SI1_longdouble) -> float: ...
     def prod(self) -> float: ...
-    def set_val(self, arg0: float) -> SmallMatrix_6x1_F_SI1_longdouble: ...
+    def set_val(
+        self, arg0: typing.SupportsFloat
+    ) -> SmallMatrix_6x1_F_SI1_longdouble: ...
     def sum(self) -> float: ...
     def to_cupy(self, copy=False, order="F"):
         """
@@ -16135,16 +17939,20 @@ class SmallMatrix_6x6_F_SI1_double:
     ) -> SmallMatrix_6x6_F_SI1_double: ...
     def __getitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(2)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(2)"
+        ],
     ) -> float: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
     def __init__(self, arg0: SmallMatrix_6x6_F_SI1_double) -> None: ...
     @typing.overload
-    def __init__(self, arg0: numpy.ndarray[numpy.float64]) -> None: ...
+    def __init__(
+        self, arg0: typing.Annotated[numpy.typing.ArrayLike, numpy.float64]
+    ) -> None: ...
     @typing.overload
-    def __mul__(self, arg0: float) -> SmallMatrix_6x6_F_SI1_double: ...
+    def __mul__(self, arg0: typing.SupportsFloat) -> SmallMatrix_6x6_F_SI1_double: ...
     @typing.overload
     def __mul__(
         self, arg0: SmallMatrix_6x6_F_SI1_double
@@ -16156,22 +17964,24 @@ class SmallMatrix_6x6_F_SI1_double:
     def __neg__(self) -> SmallMatrix_6x6_F_SI1_double: ...
     def __repr__(self) -> str: ...
     @typing.overload
-    def __rmul__(self, arg0: float) -> SmallMatrix_6x6_F_SI1_double: ...
+    def __rmul__(self, arg0: typing.SupportsFloat) -> SmallMatrix_6x6_F_SI1_double: ...
     @typing.overload
     def __rmul__(
         self, arg0: SmallMatrix_1x6_F_SI1_double
     ) -> SmallMatrix_1x6_F_SI1_double: ...
     def __setitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(2)],
-        arg1: float,
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(2)"
+        ],
+        arg1: typing.SupportsFloat,
     ) -> None: ...
     def __sub__(
         self, arg0: SmallMatrix_6x6_F_SI1_double
     ) -> SmallMatrix_6x6_F_SI1_double: ...
     def dot(self, arg0: SmallMatrix_6x6_F_SI1_double) -> float: ...
     def prod(self) -> float: ...
-    def set_val(self, arg0: float) -> SmallMatrix_6x6_F_SI1_double: ...
+    def set_val(self, arg0: typing.SupportsFloat) -> SmallMatrix_6x6_F_SI1_double: ...
     def sum(self) -> float: ...
     def to_cupy(self, copy=False, order="F"):
         """
@@ -16291,16 +18101,20 @@ class SmallMatrix_6x6_F_SI1_float:
     ) -> SmallMatrix_6x6_F_SI1_float: ...
     def __getitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(2)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(2)"
+        ],
     ) -> float: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
     def __init__(self, arg0: SmallMatrix_6x6_F_SI1_float) -> None: ...
     @typing.overload
-    def __init__(self, arg0: numpy.ndarray[numpy.float32]) -> None: ...
+    def __init__(
+        self, arg0: typing.Annotated[numpy.typing.ArrayLike, numpy.float32]
+    ) -> None: ...
     @typing.overload
-    def __mul__(self, arg0: float) -> SmallMatrix_6x6_F_SI1_float: ...
+    def __mul__(self, arg0: typing.SupportsFloat) -> SmallMatrix_6x6_F_SI1_float: ...
     @typing.overload
     def __mul__(
         self, arg0: SmallMatrix_6x6_F_SI1_float
@@ -16312,22 +18126,24 @@ class SmallMatrix_6x6_F_SI1_float:
     def __neg__(self) -> SmallMatrix_6x6_F_SI1_float: ...
     def __repr__(self) -> str: ...
     @typing.overload
-    def __rmul__(self, arg0: float) -> SmallMatrix_6x6_F_SI1_float: ...
+    def __rmul__(self, arg0: typing.SupportsFloat) -> SmallMatrix_6x6_F_SI1_float: ...
     @typing.overload
     def __rmul__(
         self, arg0: SmallMatrix_1x6_F_SI1_float
     ) -> SmallMatrix_1x6_F_SI1_float: ...
     def __setitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(2)],
-        arg1: float,
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(2)"
+        ],
+        arg1: typing.SupportsFloat,
     ) -> None: ...
     def __sub__(
         self, arg0: SmallMatrix_6x6_F_SI1_float
     ) -> SmallMatrix_6x6_F_SI1_float: ...
     def dot(self, arg0: SmallMatrix_6x6_F_SI1_float) -> float: ...
     def prod(self) -> float: ...
-    def set_val(self, arg0: float) -> SmallMatrix_6x6_F_SI1_float: ...
+    def set_val(self, arg0: typing.SupportsFloat) -> SmallMatrix_6x6_F_SI1_float: ...
     def sum(self) -> float: ...
     def to_cupy(self, copy=False, order="F"):
         """
@@ -16447,16 +18263,22 @@ class SmallMatrix_6x6_F_SI1_longdouble:
     ) -> SmallMatrix_6x6_F_SI1_longdouble: ...
     def __getitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(2)],
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(2)"
+        ],
     ) -> float: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
     def __init__(self, arg0: SmallMatrix_6x6_F_SI1_longdouble) -> None: ...
     @typing.overload
-    def __init__(self, arg0: numpy.ndarray[numpy.longdouble]) -> None: ...
+    def __init__(
+        self, arg0: typing.Annotated[numpy.typing.ArrayLike, numpy.longdouble]
+    ) -> None: ...
     @typing.overload
-    def __mul__(self, arg0: float) -> SmallMatrix_6x6_F_SI1_longdouble: ...
+    def __mul__(
+        self, arg0: typing.SupportsFloat
+    ) -> SmallMatrix_6x6_F_SI1_longdouble: ...
     @typing.overload
     def __mul__(
         self, arg0: SmallMatrix_6x6_F_SI1_longdouble
@@ -16468,22 +18290,28 @@ class SmallMatrix_6x6_F_SI1_longdouble:
     def __neg__(self) -> SmallMatrix_6x6_F_SI1_longdouble: ...
     def __repr__(self) -> str: ...
     @typing.overload
-    def __rmul__(self, arg0: float) -> SmallMatrix_6x6_F_SI1_longdouble: ...
+    def __rmul__(
+        self, arg0: typing.SupportsFloat
+    ) -> SmallMatrix_6x6_F_SI1_longdouble: ...
     @typing.overload
     def __rmul__(
         self, arg0: SmallMatrix_1x6_F_SI1_longdouble
     ) -> SmallMatrix_1x6_F_SI1_longdouble: ...
     def __setitem__(
         self,
-        arg0: typing.Annotated[list[int], pybind11_stubgen.typing_ext.FixedSize(2)],
-        arg1: float,
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt], "FixedSize(2)"
+        ],
+        arg1: typing.SupportsFloat,
     ) -> None: ...
     def __sub__(
         self, arg0: SmallMatrix_6x6_F_SI1_longdouble
     ) -> SmallMatrix_6x6_F_SI1_longdouble: ...
     def dot(self, arg0: SmallMatrix_6x6_F_SI1_longdouble) -> float: ...
     def prod(self) -> float: ...
-    def set_val(self, arg0: float) -> SmallMatrix_6x6_F_SI1_longdouble: ...
+    def set_val(
+        self, arg0: typing.SupportsFloat
+    ) -> SmallMatrix_6x6_F_SI1_longdouble: ...
     def sum(self) -> float: ...
     def to_cupy(self, copy=False, order="F"):
         """
@@ -16600,19 +18428,21 @@ class StructOfArrays_0_0_arena:
         Get the number of particles
         """
     def define(
-        self, arg0: int, arg1: int, arg2: list[str], arg3: list[str]
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: collections.abc.Sequence[str],
+        arg3: collections.abc.Sequence[str],
     ) -> None: ...
     @typing.overload
     def get_int_data(
         self,
-    ) -> typing.Annotated[
-        list[PODVector_int_arena], pybind11_stubgen.typing_ext.FixedSize(0)
-    ]:
+    ) -> typing.Annotated[list[PODVector_int_arena], "FixedSize(0)"]:
         """
         Get access to the particle Int Arrays (only compile-time components)
         """
     @typing.overload
-    def get_int_data(self, index: int) -> PODVector_int_arena:
+    def get_int_data(self, index: typing.SupportsInt) -> PODVector_int_arena:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
@@ -16620,19 +18450,17 @@ class StructOfArrays_0_0_arena:
     @typing.overload
     def get_real_data(
         self,
-    ) -> typing.Annotated[
-        list[PODVector_real_arena], pybind11_stubgen.typing_ext.FixedSize(0)
-    ]:
+    ) -> typing.Annotated[list[PODVector_real_arena], "FixedSize(0)"]:
         """
         Get access to the particle Real Arrays (only compile-time components)
         """
     @typing.overload
-    def get_real_data(self, index: int) -> PODVector_real_arena:
+    def get_real_data(self, index: typing.SupportsInt) -> PODVector_real_arena:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
-    def resize(self, arg0: int) -> None: ...
-    def set_num_neighbors(self, arg0: int) -> None: ...
+    def resize(self, arg0: typing.SupportsInt) -> None: ...
+    def set_num_neighbors(self, arg0: typing.SupportsInt) -> None: ...
     def to_cupy(self, copy=False):
         """
 
@@ -16751,19 +18579,19 @@ class StructOfArrays_0_0_default:
         Get the number of particles
         """
     def define(
-        self, arg0: int, arg1: int, arg2: list[str], arg3: list[str]
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: collections.abc.Sequence[str],
+        arg3: collections.abc.Sequence[str],
     ) -> None: ...
     @typing.overload
-    def get_int_data(
-        self,
-    ) -> typing.Annotated[
-        list[PODVector_int_std], pybind11_stubgen.typing_ext.FixedSize(0)
-    ]:
+    def get_int_data(self) -> typing.Annotated[list[PODVector_int_std], "FixedSize(0)"]:
         """
         Get access to the particle Int Arrays (only compile-time components)
         """
     @typing.overload
-    def get_int_data(self, index: int) -> PODVector_int_std:
+    def get_int_data(self, index: typing.SupportsInt) -> PODVector_int_std:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
@@ -16771,19 +18599,17 @@ class StructOfArrays_0_0_default:
     @typing.overload
     def get_real_data(
         self,
-    ) -> typing.Annotated[
-        list[PODVector_real_std], pybind11_stubgen.typing_ext.FixedSize(0)
-    ]:
+    ) -> typing.Annotated[list[PODVector_real_std], "FixedSize(0)"]:
         """
         Get access to the particle Real Arrays (only compile-time components)
         """
     @typing.overload
-    def get_real_data(self, index: int) -> PODVector_real_std:
+    def get_real_data(self, index: typing.SupportsInt) -> PODVector_real_std:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
-    def resize(self, arg0: int) -> None: ...
-    def set_num_neighbors(self, arg0: int) -> None: ...
+    def resize(self, arg0: typing.SupportsInt) -> None: ...
+    def set_num_neighbors(self, arg0: typing.SupportsInt) -> None: ...
     def to_cupy(self, copy=False):
         """
 
@@ -16902,19 +18728,21 @@ class StructOfArrays_0_0_pinned:
         Get the number of particles
         """
     def define(
-        self, arg0: int, arg1: int, arg2: list[str], arg3: list[str]
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: collections.abc.Sequence[str],
+        arg3: collections.abc.Sequence[str],
     ) -> None: ...
     @typing.overload
     def get_int_data(
         self,
-    ) -> typing.Annotated[
-        list[PODVector_int_pinned], pybind11_stubgen.typing_ext.FixedSize(0)
-    ]:
+    ) -> typing.Annotated[list[PODVector_int_pinned], "FixedSize(0)"]:
         """
         Get access to the particle Int Arrays (only compile-time components)
         """
     @typing.overload
-    def get_int_data(self, index: int) -> PODVector_int_pinned:
+    def get_int_data(self, index: typing.SupportsInt) -> PODVector_int_pinned:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
@@ -16922,19 +18750,17 @@ class StructOfArrays_0_0_pinned:
     @typing.overload
     def get_real_data(
         self,
-    ) -> typing.Annotated[
-        list[PODVector_real_pinned], pybind11_stubgen.typing_ext.FixedSize(0)
-    ]:
+    ) -> typing.Annotated[list[PODVector_real_pinned], "FixedSize(0)"]:
         """
         Get access to the particle Real Arrays (only compile-time components)
         """
     @typing.overload
-    def get_real_data(self, index: int) -> PODVector_real_pinned:
+    def get_real_data(self, index: typing.SupportsInt) -> PODVector_real_pinned:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
-    def resize(self, arg0: int) -> None: ...
-    def set_num_neighbors(self, arg0: int) -> None: ...
+    def resize(self, arg0: typing.SupportsInt) -> None: ...
+    def set_num_neighbors(self, arg0: typing.SupportsInt) -> None: ...
     def to_cupy(self, copy=False):
         """
 
@@ -17053,7 +18879,11 @@ class StructOfArrays_3_0_idcpu_arena:
         Get the number of particles
         """
     def define(
-        self, arg0: int, arg1: int, arg2: list[str], arg3: list[str]
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: collections.abc.Sequence[str],
+        arg3: collections.abc.Sequence[str],
     ) -> None: ...
     def get_idcpu_data(self) -> PODVector_uint64_arena:
         """
@@ -17062,14 +18892,12 @@ class StructOfArrays_3_0_idcpu_arena:
     @typing.overload
     def get_int_data(
         self,
-    ) -> typing.Annotated[
-        list[PODVector_int_arena], pybind11_stubgen.typing_ext.FixedSize(0)
-    ]:
+    ) -> typing.Annotated[list[PODVector_int_arena], "FixedSize(0)"]:
         """
         Get access to the particle Int Arrays (only compile-time components)
         """
     @typing.overload
-    def get_int_data(self, index: int) -> PODVector_int_arena:
+    def get_int_data(self, index: typing.SupportsInt) -> PODVector_int_arena:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
@@ -17077,19 +18905,17 @@ class StructOfArrays_3_0_idcpu_arena:
     @typing.overload
     def get_real_data(
         self,
-    ) -> typing.Annotated[
-        list[PODVector_real_arena], pybind11_stubgen.typing_ext.FixedSize(3)
-    ]:
+    ) -> typing.Annotated[list[PODVector_real_arena], "FixedSize(3)"]:
         """
         Get access to the particle Real Arrays (only compile-time components)
         """
     @typing.overload
-    def get_real_data(self, index: int) -> PODVector_real_arena:
+    def get_real_data(self, index: typing.SupportsInt) -> PODVector_real_arena:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
-    def resize(self, arg0: int) -> None: ...
-    def set_num_neighbors(self, arg0: int) -> None: ...
+    def resize(self, arg0: typing.SupportsInt) -> None: ...
+    def set_num_neighbors(self, arg0: typing.SupportsInt) -> None: ...
     def to_cupy(self, copy=False):
         """
 
@@ -17208,23 +19034,23 @@ class StructOfArrays_3_0_idcpu_default:
         Get the number of particles
         """
     def define(
-        self, arg0: int, arg1: int, arg2: list[str], arg3: list[str]
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: collections.abc.Sequence[str],
+        arg3: collections.abc.Sequence[str],
     ) -> None: ...
     def get_idcpu_data(self) -> PODVector_uint64_std:
         """
         Get access to a particle IdCPU component Array
         """
     @typing.overload
-    def get_int_data(
-        self,
-    ) -> typing.Annotated[
-        list[PODVector_int_std], pybind11_stubgen.typing_ext.FixedSize(0)
-    ]:
+    def get_int_data(self) -> typing.Annotated[list[PODVector_int_std], "FixedSize(0)"]:
         """
         Get access to the particle Int Arrays (only compile-time components)
         """
     @typing.overload
-    def get_int_data(self, index: int) -> PODVector_int_std:
+    def get_int_data(self, index: typing.SupportsInt) -> PODVector_int_std:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
@@ -17232,19 +19058,17 @@ class StructOfArrays_3_0_idcpu_default:
     @typing.overload
     def get_real_data(
         self,
-    ) -> typing.Annotated[
-        list[PODVector_real_std], pybind11_stubgen.typing_ext.FixedSize(3)
-    ]:
+    ) -> typing.Annotated[list[PODVector_real_std], "FixedSize(3)"]:
         """
         Get access to the particle Real Arrays (only compile-time components)
         """
     @typing.overload
-    def get_real_data(self, index: int) -> PODVector_real_std:
+    def get_real_data(self, index: typing.SupportsInt) -> PODVector_real_std:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
-    def resize(self, arg0: int) -> None: ...
-    def set_num_neighbors(self, arg0: int) -> None: ...
+    def resize(self, arg0: typing.SupportsInt) -> None: ...
+    def set_num_neighbors(self, arg0: typing.SupportsInt) -> None: ...
     def to_cupy(self, copy=False):
         """
 
@@ -17363,7 +19187,11 @@ class StructOfArrays_3_0_idcpu_pinned:
         Get the number of particles
         """
     def define(
-        self, arg0: int, arg1: int, arg2: list[str], arg3: list[str]
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: collections.abc.Sequence[str],
+        arg3: collections.abc.Sequence[str],
     ) -> None: ...
     def get_idcpu_data(self) -> PODVector_uint64_pinned:
         """
@@ -17372,14 +19200,12 @@ class StructOfArrays_3_0_idcpu_pinned:
     @typing.overload
     def get_int_data(
         self,
-    ) -> typing.Annotated[
-        list[PODVector_int_pinned], pybind11_stubgen.typing_ext.FixedSize(0)
-    ]:
+    ) -> typing.Annotated[list[PODVector_int_pinned], "FixedSize(0)"]:
         """
         Get access to the particle Int Arrays (only compile-time components)
         """
     @typing.overload
-    def get_int_data(self, index: int) -> PODVector_int_pinned:
+    def get_int_data(self, index: typing.SupportsInt) -> PODVector_int_pinned:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
@@ -17387,19 +19213,17 @@ class StructOfArrays_3_0_idcpu_pinned:
     @typing.overload
     def get_real_data(
         self,
-    ) -> typing.Annotated[
-        list[PODVector_real_pinned], pybind11_stubgen.typing_ext.FixedSize(3)
-    ]:
+    ) -> typing.Annotated[list[PODVector_real_pinned], "FixedSize(3)"]:
         """
         Get access to the particle Real Arrays (only compile-time components)
         """
     @typing.overload
-    def get_real_data(self, index: int) -> PODVector_real_pinned:
+    def get_real_data(self, index: typing.SupportsInt) -> PODVector_real_pinned:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
-    def resize(self, arg0: int) -> None: ...
-    def set_num_neighbors(self, arg0: int) -> None: ...
+    def resize(self, arg0: typing.SupportsInt) -> None: ...
+    def set_num_neighbors(self, arg0: typing.SupportsInt) -> None: ...
     def to_cupy(self, copy=False):
         """
 
@@ -17518,19 +19342,21 @@ class StructOfArrays_3_1_arena:
         Get the number of particles
         """
     def define(
-        self, arg0: int, arg1: int, arg2: list[str], arg3: list[str]
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: collections.abc.Sequence[str],
+        arg3: collections.abc.Sequence[str],
     ) -> None: ...
     @typing.overload
     def get_int_data(
         self,
-    ) -> typing.Annotated[
-        list[PODVector_int_arena], pybind11_stubgen.typing_ext.FixedSize(1)
-    ]:
+    ) -> typing.Annotated[list[PODVector_int_arena], "FixedSize(1)"]:
         """
         Get access to the particle Int Arrays (only compile-time components)
         """
     @typing.overload
-    def get_int_data(self, index: int) -> PODVector_int_arena:
+    def get_int_data(self, index: typing.SupportsInt) -> PODVector_int_arena:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
@@ -17538,19 +19364,17 @@ class StructOfArrays_3_1_arena:
     @typing.overload
     def get_real_data(
         self,
-    ) -> typing.Annotated[
-        list[PODVector_real_arena], pybind11_stubgen.typing_ext.FixedSize(3)
-    ]:
+    ) -> typing.Annotated[list[PODVector_real_arena], "FixedSize(3)"]:
         """
         Get access to the particle Real Arrays (only compile-time components)
         """
     @typing.overload
-    def get_real_data(self, index: int) -> PODVector_real_arena:
+    def get_real_data(self, index: typing.SupportsInt) -> PODVector_real_arena:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
-    def resize(self, arg0: int) -> None: ...
-    def set_num_neighbors(self, arg0: int) -> None: ...
+    def resize(self, arg0: typing.SupportsInt) -> None: ...
+    def set_num_neighbors(self, arg0: typing.SupportsInt) -> None: ...
     def to_cupy(self, copy=False):
         """
 
@@ -17669,19 +19493,19 @@ class StructOfArrays_3_1_default:
         Get the number of particles
         """
     def define(
-        self, arg0: int, arg1: int, arg2: list[str], arg3: list[str]
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: collections.abc.Sequence[str],
+        arg3: collections.abc.Sequence[str],
     ) -> None: ...
     @typing.overload
-    def get_int_data(
-        self,
-    ) -> typing.Annotated[
-        list[PODVector_int_std], pybind11_stubgen.typing_ext.FixedSize(1)
-    ]:
+    def get_int_data(self) -> typing.Annotated[list[PODVector_int_std], "FixedSize(1)"]:
         """
         Get access to the particle Int Arrays (only compile-time components)
         """
     @typing.overload
-    def get_int_data(self, index: int) -> PODVector_int_std:
+    def get_int_data(self, index: typing.SupportsInt) -> PODVector_int_std:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
@@ -17689,19 +19513,17 @@ class StructOfArrays_3_1_default:
     @typing.overload
     def get_real_data(
         self,
-    ) -> typing.Annotated[
-        list[PODVector_real_std], pybind11_stubgen.typing_ext.FixedSize(3)
-    ]:
+    ) -> typing.Annotated[list[PODVector_real_std], "FixedSize(3)"]:
         """
         Get access to the particle Real Arrays (only compile-time components)
         """
     @typing.overload
-    def get_real_data(self, index: int) -> PODVector_real_std:
+    def get_real_data(self, index: typing.SupportsInt) -> PODVector_real_std:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
-    def resize(self, arg0: int) -> None: ...
-    def set_num_neighbors(self, arg0: int) -> None: ...
+    def resize(self, arg0: typing.SupportsInt) -> None: ...
+    def set_num_neighbors(self, arg0: typing.SupportsInt) -> None: ...
     def to_cupy(self, copy=False):
         """
 
@@ -17820,19 +19642,21 @@ class StructOfArrays_3_1_pinned:
         Get the number of particles
         """
     def define(
-        self, arg0: int, arg1: int, arg2: list[str], arg3: list[str]
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: collections.abc.Sequence[str],
+        arg3: collections.abc.Sequence[str],
     ) -> None: ...
     @typing.overload
     def get_int_data(
         self,
-    ) -> typing.Annotated[
-        list[PODVector_int_pinned], pybind11_stubgen.typing_ext.FixedSize(1)
-    ]:
+    ) -> typing.Annotated[list[PODVector_int_pinned], "FixedSize(1)"]:
         """
         Get access to the particle Int Arrays (only compile-time components)
         """
     @typing.overload
-    def get_int_data(self, index: int) -> PODVector_int_pinned:
+    def get_int_data(self, index: typing.SupportsInt) -> PODVector_int_pinned:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
@@ -17840,19 +19664,17 @@ class StructOfArrays_3_1_pinned:
     @typing.overload
     def get_real_data(
         self,
-    ) -> typing.Annotated[
-        list[PODVector_real_pinned], pybind11_stubgen.typing_ext.FixedSize(3)
-    ]:
+    ) -> typing.Annotated[list[PODVector_real_pinned], "FixedSize(3)"]:
         """
         Get access to the particle Real Arrays (only compile-time components)
         """
     @typing.overload
-    def get_real_data(self, index: int) -> PODVector_real_pinned:
+    def get_real_data(self, index: typing.SupportsInt) -> PODVector_real_pinned:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
-    def resize(self, arg0: int) -> None: ...
-    def set_num_neighbors(self, arg0: int) -> None: ...
+    def resize(self, arg0: typing.SupportsInt) -> None: ...
+    def set_num_neighbors(self, arg0: typing.SupportsInt) -> None: ...
     def to_cupy(self, copy=False):
         """
 
@@ -17971,7 +19793,11 @@ class StructOfArrays_7_0_idcpu_arena:
         Get the number of particles
         """
     def define(
-        self, arg0: int, arg1: int, arg2: list[str], arg3: list[str]
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: collections.abc.Sequence[str],
+        arg3: collections.abc.Sequence[str],
     ) -> None: ...
     def get_idcpu_data(self) -> PODVector_uint64_arena:
         """
@@ -17980,14 +19806,12 @@ class StructOfArrays_7_0_idcpu_arena:
     @typing.overload
     def get_int_data(
         self,
-    ) -> typing.Annotated[
-        list[PODVector_int_arena], pybind11_stubgen.typing_ext.FixedSize(0)
-    ]:
+    ) -> typing.Annotated[list[PODVector_int_arena], "FixedSize(0)"]:
         """
         Get access to the particle Int Arrays (only compile-time components)
         """
     @typing.overload
-    def get_int_data(self, index: int) -> PODVector_int_arena:
+    def get_int_data(self, index: typing.SupportsInt) -> PODVector_int_arena:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
@@ -17995,19 +19819,17 @@ class StructOfArrays_7_0_idcpu_arena:
     @typing.overload
     def get_real_data(
         self,
-    ) -> typing.Annotated[
-        list[PODVector_real_arena], pybind11_stubgen.typing_ext.FixedSize(7)
-    ]:
+    ) -> typing.Annotated[list[PODVector_real_arena], "FixedSize(7)"]:
         """
         Get access to the particle Real Arrays (only compile-time components)
         """
     @typing.overload
-    def get_real_data(self, index: int) -> PODVector_real_arena:
+    def get_real_data(self, index: typing.SupportsInt) -> PODVector_real_arena:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
-    def resize(self, arg0: int) -> None: ...
-    def set_num_neighbors(self, arg0: int) -> None: ...
+    def resize(self, arg0: typing.SupportsInt) -> None: ...
+    def set_num_neighbors(self, arg0: typing.SupportsInt) -> None: ...
     def to_cupy(self, copy=False):
         """
 
@@ -18126,23 +19948,23 @@ class StructOfArrays_7_0_idcpu_default:
         Get the number of particles
         """
     def define(
-        self, arg0: int, arg1: int, arg2: list[str], arg3: list[str]
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: collections.abc.Sequence[str],
+        arg3: collections.abc.Sequence[str],
     ) -> None: ...
     def get_idcpu_data(self) -> PODVector_uint64_std:
         """
         Get access to a particle IdCPU component Array
         """
     @typing.overload
-    def get_int_data(
-        self,
-    ) -> typing.Annotated[
-        list[PODVector_int_std], pybind11_stubgen.typing_ext.FixedSize(0)
-    ]:
+    def get_int_data(self) -> typing.Annotated[list[PODVector_int_std], "FixedSize(0)"]:
         """
         Get access to the particle Int Arrays (only compile-time components)
         """
     @typing.overload
-    def get_int_data(self, index: int) -> PODVector_int_std:
+    def get_int_data(self, index: typing.SupportsInt) -> PODVector_int_std:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
@@ -18150,19 +19972,17 @@ class StructOfArrays_7_0_idcpu_default:
     @typing.overload
     def get_real_data(
         self,
-    ) -> typing.Annotated[
-        list[PODVector_real_std], pybind11_stubgen.typing_ext.FixedSize(7)
-    ]:
+    ) -> typing.Annotated[list[PODVector_real_std], "FixedSize(7)"]:
         """
         Get access to the particle Real Arrays (only compile-time components)
         """
     @typing.overload
-    def get_real_data(self, index: int) -> PODVector_real_std:
+    def get_real_data(self, index: typing.SupportsInt) -> PODVector_real_std:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
-    def resize(self, arg0: int) -> None: ...
-    def set_num_neighbors(self, arg0: int) -> None: ...
+    def resize(self, arg0: typing.SupportsInt) -> None: ...
+    def set_num_neighbors(self, arg0: typing.SupportsInt) -> None: ...
     def to_cupy(self, copy=False):
         """
 
@@ -18281,7 +20101,11 @@ class StructOfArrays_7_0_idcpu_pinned:
         Get the number of particles
         """
     def define(
-        self, arg0: int, arg1: int, arg2: list[str], arg3: list[str]
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: collections.abc.Sequence[str],
+        arg3: collections.abc.Sequence[str],
     ) -> None: ...
     def get_idcpu_data(self) -> PODVector_uint64_pinned:
         """
@@ -18290,14 +20114,12 @@ class StructOfArrays_7_0_idcpu_pinned:
     @typing.overload
     def get_int_data(
         self,
-    ) -> typing.Annotated[
-        list[PODVector_int_pinned], pybind11_stubgen.typing_ext.FixedSize(0)
-    ]:
+    ) -> typing.Annotated[list[PODVector_int_pinned], "FixedSize(0)"]:
         """
         Get access to the particle Int Arrays (only compile-time components)
         """
     @typing.overload
-    def get_int_data(self, index: int) -> PODVector_int_pinned:
+    def get_int_data(self, index: typing.SupportsInt) -> PODVector_int_pinned:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
@@ -18305,19 +20127,17 @@ class StructOfArrays_7_0_idcpu_pinned:
     @typing.overload
     def get_real_data(
         self,
-    ) -> typing.Annotated[
-        list[PODVector_real_pinned], pybind11_stubgen.typing_ext.FixedSize(7)
-    ]:
+    ) -> typing.Annotated[list[PODVector_real_pinned], "FixedSize(7)"]:
         """
         Get access to the particle Real Arrays (only compile-time components)
         """
     @typing.overload
-    def get_real_data(self, index: int) -> PODVector_real_pinned:
+    def get_real_data(self, index: typing.SupportsInt) -> PODVector_real_pinned:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
-    def resize(self, arg0: int) -> None: ...
-    def set_num_neighbors(self, arg0: int) -> None: ...
+    def resize(self, arg0: typing.SupportsInt) -> None: ...
+    def set_num_neighbors(self, arg0: typing.SupportsInt) -> None: ...
     def to_cupy(self, copy=False):
         """
 
@@ -18436,7 +20256,11 @@ class StructOfArrays_8_0_idcpu_arena:
         Get the number of particles
         """
     def define(
-        self, arg0: int, arg1: int, arg2: list[str], arg3: list[str]
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: collections.abc.Sequence[str],
+        arg3: collections.abc.Sequence[str],
     ) -> None: ...
     def get_idcpu_data(self) -> PODVector_uint64_arena:
         """
@@ -18445,14 +20269,12 @@ class StructOfArrays_8_0_idcpu_arena:
     @typing.overload
     def get_int_data(
         self,
-    ) -> typing.Annotated[
-        list[PODVector_int_arena], pybind11_stubgen.typing_ext.FixedSize(0)
-    ]:
+    ) -> typing.Annotated[list[PODVector_int_arena], "FixedSize(0)"]:
         """
         Get access to the particle Int Arrays (only compile-time components)
         """
     @typing.overload
-    def get_int_data(self, index: int) -> PODVector_int_arena:
+    def get_int_data(self, index: typing.SupportsInt) -> PODVector_int_arena:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
@@ -18460,19 +20282,17 @@ class StructOfArrays_8_0_idcpu_arena:
     @typing.overload
     def get_real_data(
         self,
-    ) -> typing.Annotated[
-        list[PODVector_real_arena], pybind11_stubgen.typing_ext.FixedSize(8)
-    ]:
+    ) -> typing.Annotated[list[PODVector_real_arena], "FixedSize(8)"]:
         """
         Get access to the particle Real Arrays (only compile-time components)
         """
     @typing.overload
-    def get_real_data(self, index: int) -> PODVector_real_arena:
+    def get_real_data(self, index: typing.SupportsInt) -> PODVector_real_arena:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
-    def resize(self, arg0: int) -> None: ...
-    def set_num_neighbors(self, arg0: int) -> None: ...
+    def resize(self, arg0: typing.SupportsInt) -> None: ...
+    def set_num_neighbors(self, arg0: typing.SupportsInt) -> None: ...
     def to_cupy(self, copy=False):
         """
 
@@ -18591,23 +20411,23 @@ class StructOfArrays_8_0_idcpu_default:
         Get the number of particles
         """
     def define(
-        self, arg0: int, arg1: int, arg2: list[str], arg3: list[str]
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: collections.abc.Sequence[str],
+        arg3: collections.abc.Sequence[str],
     ) -> None: ...
     def get_idcpu_data(self) -> PODVector_uint64_std:
         """
         Get access to a particle IdCPU component Array
         """
     @typing.overload
-    def get_int_data(
-        self,
-    ) -> typing.Annotated[
-        list[PODVector_int_std], pybind11_stubgen.typing_ext.FixedSize(0)
-    ]:
+    def get_int_data(self) -> typing.Annotated[list[PODVector_int_std], "FixedSize(0)"]:
         """
         Get access to the particle Int Arrays (only compile-time components)
         """
     @typing.overload
-    def get_int_data(self, index: int) -> PODVector_int_std:
+    def get_int_data(self, index: typing.SupportsInt) -> PODVector_int_std:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
@@ -18615,19 +20435,17 @@ class StructOfArrays_8_0_idcpu_default:
     @typing.overload
     def get_real_data(
         self,
-    ) -> typing.Annotated[
-        list[PODVector_real_std], pybind11_stubgen.typing_ext.FixedSize(8)
-    ]:
+    ) -> typing.Annotated[list[PODVector_real_std], "FixedSize(8)"]:
         """
         Get access to the particle Real Arrays (only compile-time components)
         """
     @typing.overload
-    def get_real_data(self, index: int) -> PODVector_real_std:
+    def get_real_data(self, index: typing.SupportsInt) -> PODVector_real_std:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
-    def resize(self, arg0: int) -> None: ...
-    def set_num_neighbors(self, arg0: int) -> None: ...
+    def resize(self, arg0: typing.SupportsInt) -> None: ...
+    def set_num_neighbors(self, arg0: typing.SupportsInt) -> None: ...
     def to_cupy(self, copy=False):
         """
 
@@ -18746,7 +20564,11 @@ class StructOfArrays_8_0_idcpu_pinned:
         Get the number of particles
         """
     def define(
-        self, arg0: int, arg1: int, arg2: list[str], arg3: list[str]
+        self,
+        arg0: typing.SupportsInt,
+        arg1: typing.SupportsInt,
+        arg2: collections.abc.Sequence[str],
+        arg3: collections.abc.Sequence[str],
     ) -> None: ...
     def get_idcpu_data(self) -> PODVector_uint64_pinned:
         """
@@ -18755,14 +20577,12 @@ class StructOfArrays_8_0_idcpu_pinned:
     @typing.overload
     def get_int_data(
         self,
-    ) -> typing.Annotated[
-        list[PODVector_int_pinned], pybind11_stubgen.typing_ext.FixedSize(0)
-    ]:
+    ) -> typing.Annotated[list[PODVector_int_pinned], "FixedSize(0)"]:
         """
         Get access to the particle Int Arrays (only compile-time components)
         """
     @typing.overload
-    def get_int_data(self, index: int) -> PODVector_int_pinned:
+    def get_int_data(self, index: typing.SupportsInt) -> PODVector_int_pinned:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
@@ -18770,19 +20590,17 @@ class StructOfArrays_8_0_idcpu_pinned:
     @typing.overload
     def get_real_data(
         self,
-    ) -> typing.Annotated[
-        list[PODVector_real_pinned], pybind11_stubgen.typing_ext.FixedSize(8)
-    ]:
+    ) -> typing.Annotated[list[PODVector_real_pinned], "FixedSize(8)"]:
         """
         Get access to the particle Real Arrays (only compile-time components)
         """
     @typing.overload
-    def get_real_data(self, index: int) -> PODVector_real_pinned:
+    def get_real_data(self, index: typing.SupportsInt) -> PODVector_real_pinned:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
-    def resize(self, arg0: int) -> None: ...
-    def set_num_neighbors(self, arg0: int) -> None: ...
+    def resize(self, arg0: typing.SupportsInt) -> None: ...
+    def set_num_neighbors(self, arg0: typing.SupportsInt) -> None: ...
     def to_cupy(self, copy=False):
         """
 
@@ -18905,7 +20723,7 @@ class Vector_Box:
         Return true the container contains ``x``
         """
     @typing.overload
-    def __delitem__(self, arg0: int) -> None:
+    def __delitem__(self, arg0: typing.SupportsInt) -> None:
         """
         Delete the list elements at index ``i``
         """
@@ -18921,9 +20739,9 @@ class Vector_Box:
         Retrieve list elements using a slice object
         """
     @typing.overload
-    def __getitem__(self, arg0: int) -> Box: ...
+    def __getitem__(self, arg0: typing.SupportsInt) -> Box: ...
     @typing.overload
-    def __getitem__(self, arg0: int) -> Box: ...
+    def __getitem__(self, arg0: typing.SupportsInt) -> Box: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
@@ -18932,12 +20750,12 @@ class Vector_Box:
         Copy constructor
         """
     @typing.overload
-    def __init__(self, arg0: typing.Iterable) -> None: ...
+    def __init__(self, arg0: collections.abc.Iterable) -> None: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
     def __init__(self, arg0: Vector_Box) -> None: ...
-    def __iter__(self) -> typing.Iterator[Box]: ...
+    def __iter__(self) -> collections.abc.Iterator[Box]: ...
     def __len__(self) -> int: ...
     def __ne__(self, arg0: Vector_Box) -> bool: ...
     @typing.overload
@@ -18948,14 +20766,14 @@ class Vector_Box:
     @typing.overload
     def __repr__(self) -> str: ...
     @typing.overload
-    def __setitem__(self, arg0: int, arg1: Box) -> None: ...
+    def __setitem__(self, arg0: typing.SupportsInt, arg1: Box) -> None: ...
     @typing.overload
     def __setitem__(self, arg0: slice, arg1: Vector_Box) -> None:
         """
         Assign list elements using a slice object
         """
     @typing.overload
-    def __setitem__(self, arg0: int, arg1: Box) -> None: ...
+    def __setitem__(self, arg0: typing.SupportsInt, arg1: Box) -> None: ...
     def append(self, x: Box) -> None:
         """
         Add an item to the end of the list
@@ -18974,11 +20792,11 @@ class Vector_Box:
         Extend the list by appending all the items in the given list
         """
     @typing.overload
-    def extend(self, L: typing.Iterable) -> None:
+    def extend(self, L: collections.abc.Iterable) -> None:
         """
         Extend the list by appending all the items in the given list
         """
-    def insert(self, i: int, x: Box) -> None:
+    def insert(self, i: typing.SupportsInt, x: Box) -> None:
         """
         Insert an item at a given position.
         """
@@ -18988,7 +20806,7 @@ class Vector_Box:
         Remove and return the last item
         """
     @typing.overload
-    def pop(self, i: int) -> Box:
+    def pop(self, i: typing.SupportsInt) -> Box:
         """
         Remove and return the item at index ``i``
         """
@@ -19009,7 +20827,7 @@ class Vector_BoxArray:
         Return true the container contains ``x``
         """
     @typing.overload
-    def __delitem__(self, arg0: int) -> None:
+    def __delitem__(self, arg0: typing.SupportsInt) -> None:
         """
         Delete the list elements at index ``i``
         """
@@ -19025,9 +20843,9 @@ class Vector_BoxArray:
         Retrieve list elements using a slice object
         """
     @typing.overload
-    def __getitem__(self, arg0: int) -> BoxArray: ...
+    def __getitem__(self, arg0: typing.SupportsInt) -> BoxArray: ...
     @typing.overload
-    def __getitem__(self, arg0: int) -> BoxArray: ...
+    def __getitem__(self, arg0: typing.SupportsInt) -> BoxArray: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
@@ -19036,12 +20854,12 @@ class Vector_BoxArray:
         Copy constructor
         """
     @typing.overload
-    def __init__(self, arg0: typing.Iterable) -> None: ...
+    def __init__(self, arg0: collections.abc.Iterable) -> None: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
     def __init__(self, arg0: Vector_BoxArray) -> None: ...
-    def __iter__(self) -> typing.Iterator[BoxArray]: ...
+    def __iter__(self) -> collections.abc.Iterator[BoxArray]: ...
     def __len__(self) -> int: ...
     def __ne__(self, arg0: Vector_BoxArray) -> bool: ...
     @typing.overload
@@ -19052,14 +20870,14 @@ class Vector_BoxArray:
     @typing.overload
     def __repr__(self) -> str: ...
     @typing.overload
-    def __setitem__(self, arg0: int, arg1: BoxArray) -> None: ...
+    def __setitem__(self, arg0: typing.SupportsInt, arg1: BoxArray) -> None: ...
     @typing.overload
     def __setitem__(self, arg0: slice, arg1: Vector_BoxArray) -> None:
         """
         Assign list elements using a slice object
         """
     @typing.overload
-    def __setitem__(self, arg0: int, arg1: BoxArray) -> None: ...
+    def __setitem__(self, arg0: typing.SupportsInt, arg1: BoxArray) -> None: ...
     def append(self, x: BoxArray) -> None:
         """
         Add an item to the end of the list
@@ -19078,11 +20896,11 @@ class Vector_BoxArray:
         Extend the list by appending all the items in the given list
         """
     @typing.overload
-    def extend(self, L: typing.Iterable) -> None:
+    def extend(self, L: collections.abc.Iterable) -> None:
         """
         Extend the list by appending all the items in the given list
         """
-    def insert(self, i: int, x: BoxArray) -> None:
+    def insert(self, i: typing.SupportsInt, x: BoxArray) -> None:
         """
         Insert an item at a given position.
         """
@@ -19092,7 +20910,7 @@ class Vector_BoxArray:
         Remove and return the last item
         """
     @typing.overload
-    def pop(self, i: int) -> BoxArray:
+    def pop(self, i: typing.SupportsInt) -> BoxArray:
         """
         Remove and return the item at index ``i``
         """
@@ -19113,7 +20931,7 @@ class Vector_DistributionMapping:
         Return true the container contains ``x``
         """
     @typing.overload
-    def __delitem__(self, arg0: int) -> None:
+    def __delitem__(self, arg0: typing.SupportsInt) -> None:
         """
         Delete the list elements at index ``i``
         """
@@ -19129,9 +20947,9 @@ class Vector_DistributionMapping:
         Retrieve list elements using a slice object
         """
     @typing.overload
-    def __getitem__(self, arg0: int) -> DistributionMapping: ...
+    def __getitem__(self, arg0: typing.SupportsInt) -> DistributionMapping: ...
     @typing.overload
-    def __getitem__(self, arg0: int) -> DistributionMapping: ...
+    def __getitem__(self, arg0: typing.SupportsInt) -> DistributionMapping: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
@@ -19140,12 +20958,12 @@ class Vector_DistributionMapping:
         Copy constructor
         """
     @typing.overload
-    def __init__(self, arg0: typing.Iterable) -> None: ...
+    def __init__(self, arg0: collections.abc.Iterable) -> None: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
     def __init__(self, arg0: Vector_DistributionMapping) -> None: ...
-    def __iter__(self) -> typing.Iterator[DistributionMapping]: ...
+    def __iter__(self) -> collections.abc.Iterator[DistributionMapping]: ...
     def __len__(self) -> int: ...
     def __ne__(self, arg0: Vector_DistributionMapping) -> bool: ...
     @typing.overload
@@ -19156,14 +20974,18 @@ class Vector_DistributionMapping:
     @typing.overload
     def __repr__(self) -> str: ...
     @typing.overload
-    def __setitem__(self, arg0: int, arg1: DistributionMapping) -> None: ...
+    def __setitem__(
+        self, arg0: typing.SupportsInt, arg1: DistributionMapping
+    ) -> None: ...
     @typing.overload
     def __setitem__(self, arg0: slice, arg1: Vector_DistributionMapping) -> None:
         """
         Assign list elements using a slice object
         """
     @typing.overload
-    def __setitem__(self, arg0: int, arg1: DistributionMapping) -> None: ...
+    def __setitem__(
+        self, arg0: typing.SupportsInt, arg1: DistributionMapping
+    ) -> None: ...
     def append(self, x: DistributionMapping) -> None:
         """
         Add an item to the end of the list
@@ -19182,11 +21004,11 @@ class Vector_DistributionMapping:
         Extend the list by appending all the items in the given list
         """
     @typing.overload
-    def extend(self, L: typing.Iterable) -> None:
+    def extend(self, L: collections.abc.Iterable) -> None:
         """
         Extend the list by appending all the items in the given list
         """
-    def insert(self, i: int, x: DistributionMapping) -> None:
+    def insert(self, i: typing.SupportsInt, x: DistributionMapping) -> None:
         """
         Insert an item at a given position.
         """
@@ -19196,7 +21018,7 @@ class Vector_DistributionMapping:
         Remove and return the last item
         """
     @typing.overload
-    def pop(self, i: int) -> DistributionMapping:
+    def pop(self, i: typing.SupportsInt) -> DistributionMapping:
         """
         Remove and return the item at index ``i``
         """
@@ -19212,7 +21034,7 @@ class Vector_Geometry:
         Check whether the list is nonempty
         """
     @typing.overload
-    def __delitem__(self, arg0: int) -> None:
+    def __delitem__(self, arg0: typing.SupportsInt) -> None:
         """
         Delete the list elements at index ``i``
         """
@@ -19227,9 +21049,9 @@ class Vector_Geometry:
         Retrieve list elements using a slice object
         """
     @typing.overload
-    def __getitem__(self, arg0: int) -> Geometry: ...
+    def __getitem__(self, arg0: typing.SupportsInt) -> Geometry: ...
     @typing.overload
-    def __getitem__(self, arg0: int) -> Geometry: ...
+    def __getitem__(self, arg0: typing.SupportsInt) -> Geometry: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
@@ -19238,12 +21060,12 @@ class Vector_Geometry:
         Copy constructor
         """
     @typing.overload
-    def __init__(self, arg0: typing.Iterable) -> None: ...
+    def __init__(self, arg0: collections.abc.Iterable) -> None: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
     def __init__(self, arg0: Vector_Geometry) -> None: ...
-    def __iter__(self) -> typing.Iterator[Geometry]: ...
+    def __iter__(self) -> collections.abc.Iterator[Geometry]: ...
     def __len__(self) -> int: ...
     @typing.overload
     def __repr__(self) -> str:
@@ -19253,14 +21075,14 @@ class Vector_Geometry:
     @typing.overload
     def __repr__(self) -> str: ...
     @typing.overload
-    def __setitem__(self, arg0: int, arg1: Geometry) -> None: ...
+    def __setitem__(self, arg0: typing.SupportsInt, arg1: Geometry) -> None: ...
     @typing.overload
     def __setitem__(self, arg0: slice, arg1: Vector_Geometry) -> None:
         """
         Assign list elements using a slice object
         """
     @typing.overload
-    def __setitem__(self, arg0: int, arg1: Geometry) -> None: ...
+    def __setitem__(self, arg0: typing.SupportsInt, arg1: Geometry) -> None: ...
     def append(self, x: Geometry) -> None:
         """
         Add an item to the end of the list
@@ -19275,11 +21097,11 @@ class Vector_Geometry:
         Extend the list by appending all the items in the given list
         """
     @typing.overload
-    def extend(self, L: typing.Iterable) -> None:
+    def extend(self, L: collections.abc.Iterable) -> None:
         """
         Extend the list by appending all the items in the given list
         """
-    def insert(self, i: int, x: Geometry) -> None:
+    def insert(self, i: typing.SupportsInt, x: Geometry) -> None:
         """
         Insert an item at a given position.
         """
@@ -19289,7 +21111,7 @@ class Vector_Geometry:
         Remove and return the last item
         """
     @typing.overload
-    def pop(self, i: int) -> Geometry:
+    def pop(self, i: typing.SupportsInt) -> Geometry:
         """
         Remove and return the item at index ``i``
         """
@@ -19306,7 +21128,7 @@ class Vector_IntVect:
         Return true the container contains ``x``
         """
     @typing.overload
-    def __delitem__(self, arg0: int) -> None:
+    def __delitem__(self, arg0: typing.SupportsInt) -> None:
         """
         Delete the list elements at index ``i``
         """
@@ -19322,9 +21144,9 @@ class Vector_IntVect:
         Retrieve list elements using a slice object
         """
     @typing.overload
-    def __getitem__(self, arg0: int) -> IntVect3D: ...
+    def __getitem__(self, arg0: typing.SupportsInt) -> IntVect3D: ...
     @typing.overload
-    def __getitem__(self, arg0: int) -> IntVect3D: ...
+    def __getitem__(self, arg0: typing.SupportsInt) -> IntVect3D: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
@@ -19333,12 +21155,12 @@ class Vector_IntVect:
         Copy constructor
         """
     @typing.overload
-    def __init__(self, arg0: typing.Iterable) -> None: ...
+    def __init__(self, arg0: collections.abc.Iterable) -> None: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
     def __init__(self, arg0: Vector_IntVect) -> None: ...
-    def __iter__(self) -> typing.Iterator[IntVect3D]: ...
+    def __iter__(self) -> collections.abc.Iterator[IntVect3D]: ...
     def __len__(self) -> int: ...
     def __ne__(self, arg0: Vector_IntVect) -> bool: ...
     @typing.overload
@@ -19349,14 +21171,14 @@ class Vector_IntVect:
     @typing.overload
     def __repr__(self) -> str: ...
     @typing.overload
-    def __setitem__(self, arg0: int, arg1: IntVect3D) -> None: ...
+    def __setitem__(self, arg0: typing.SupportsInt, arg1: IntVect3D) -> None: ...
     @typing.overload
     def __setitem__(self, arg0: slice, arg1: Vector_IntVect) -> None:
         """
         Assign list elements using a slice object
         """
     @typing.overload
-    def __setitem__(self, arg0: int, arg1: IntVect3D) -> None: ...
+    def __setitem__(self, arg0: typing.SupportsInt, arg1: IntVect3D) -> None: ...
     def append(self, x: IntVect3D) -> None:
         """
         Add an item to the end of the list
@@ -19375,11 +21197,11 @@ class Vector_IntVect:
         Extend the list by appending all the items in the given list
         """
     @typing.overload
-    def extend(self, L: typing.Iterable) -> None:
+    def extend(self, L: collections.abc.Iterable) -> None:
         """
         Extend the list by appending all the items in the given list
         """
-    def insert(self, i: int, x: IntVect3D) -> None:
+    def insert(self, i: typing.SupportsInt, x: IntVect3D) -> None:
         """
         Insert an item at a given position.
         """
@@ -19389,7 +21211,7 @@ class Vector_IntVect:
         Remove and return the last item
         """
     @typing.overload
-    def pop(self, i: int) -> IntVect3D:
+    def pop(self, i: typing.SupportsInt) -> IntVect3D:
         """
         Remove and return the item at index ``i``
         """
@@ -19405,12 +21227,12 @@ class Vector_Long:
         """
         Check whether the list is nonempty
         """
-    def __contains__(self, x: int) -> bool:
+    def __contains__(self, x: typing.SupportsInt) -> bool:
         """
         Return true the container contains ``x``
         """
     @typing.overload
-    def __delitem__(self, arg0: int) -> None:
+    def __delitem__(self, arg0: typing.SupportsInt) -> None:
         """
         Delete the list elements at index ``i``
         """
@@ -19426,9 +21248,9 @@ class Vector_Long:
         Retrieve list elements using a slice object
         """
     @typing.overload
-    def __getitem__(self, arg0: int) -> int: ...
+    def __getitem__(self, arg0: typing.SupportsInt) -> int: ...
     @typing.overload
-    def __getitem__(self, arg0: int) -> int: ...
+    def __getitem__(self, arg0: typing.SupportsInt) -> int: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
@@ -19437,12 +21259,12 @@ class Vector_Long:
         Copy constructor
         """
     @typing.overload
-    def __init__(self, arg0: typing.Iterable) -> None: ...
+    def __init__(self, arg0: collections.abc.Iterable) -> None: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
     def __init__(self, arg0: Vector_Long) -> None: ...
-    def __iter__(self) -> typing.Iterator[int]: ...
+    def __iter__(self) -> collections.abc.Iterator[int]: ...
     def __len__(self) -> int: ...
     def __ne__(self, arg0: Vector_Long) -> bool: ...
     @typing.overload
@@ -19453,15 +21275,19 @@ class Vector_Long:
     @typing.overload
     def __repr__(self) -> str: ...
     @typing.overload
-    def __setitem__(self, arg0: int, arg1: int) -> None: ...
+    def __setitem__(
+        self, arg0: typing.SupportsInt, arg1: typing.SupportsInt
+    ) -> None: ...
     @typing.overload
     def __setitem__(self, arg0: slice, arg1: Vector_Long) -> None:
         """
         Assign list elements using a slice object
         """
     @typing.overload
-    def __setitem__(self, arg0: int, arg1: int) -> None: ...
-    def append(self, x: int) -> None:
+    def __setitem__(
+        self, arg0: typing.SupportsInt, arg1: typing.SupportsInt
+    ) -> None: ...
+    def append(self, x: typing.SupportsInt) -> None:
         """
         Add an item to the end of the list
         """
@@ -19469,7 +21295,7 @@ class Vector_Long:
         """
         Clear the contents
         """
-    def count(self, x: int) -> int:
+    def count(self, x: typing.SupportsInt) -> int:
         """
         Return the number of times ``x`` appears in the list
         """
@@ -19479,11 +21305,11 @@ class Vector_Long:
         Extend the list by appending all the items in the given list
         """
     @typing.overload
-    def extend(self, L: typing.Iterable) -> None:
+    def extend(self, L: collections.abc.Iterable) -> None:
         """
         Extend the list by appending all the items in the given list
         """
-    def insert(self, i: int, x: int) -> None:
+    def insert(self, i: typing.SupportsInt, x: typing.SupportsInt) -> None:
         """
         Insert an item at a given position.
         """
@@ -19493,11 +21319,11 @@ class Vector_Long:
         Remove and return the last item
         """
     @typing.overload
-    def pop(self, i: int) -> int:
+    def pop(self, i: typing.SupportsInt) -> int:
         """
         Remove and return the item at index ``i``
         """
-    def remove(self, x: int) -> None:
+    def remove(self, x: typing.SupportsInt) -> None:
         """
         Remove the first item from the list whose value is x. It is an error if there is no such item.
         """
@@ -19513,12 +21339,12 @@ class Vector_Real:
         """
         Check whether the list is nonempty
         """
-    def __contains__(self, x: float) -> bool:
+    def __contains__(self, x: typing.SupportsFloat) -> bool:
         """
         Return true the container contains ``x``
         """
     @typing.overload
-    def __delitem__(self, arg0: int) -> None:
+    def __delitem__(self, arg0: typing.SupportsInt) -> None:
         """
         Delete the list elements at index ``i``
         """
@@ -19534,9 +21360,9 @@ class Vector_Real:
         Retrieve list elements using a slice object
         """
     @typing.overload
-    def __getitem__(self, arg0: int) -> float: ...
+    def __getitem__(self, arg0: typing.SupportsInt) -> float: ...
     @typing.overload
-    def __getitem__(self, arg0: int) -> float: ...
+    def __getitem__(self, arg0: typing.SupportsInt) -> float: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
@@ -19545,12 +21371,12 @@ class Vector_Real:
         Copy constructor
         """
     @typing.overload
-    def __init__(self, arg0: typing.Iterable) -> None: ...
+    def __init__(self, arg0: collections.abc.Iterable) -> None: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
     def __init__(self, arg0: Vector_Real) -> None: ...
-    def __iter__(self) -> typing.Iterator[float]: ...
+    def __iter__(self) -> collections.abc.Iterator[float]: ...
     def __len__(self) -> int: ...
     def __ne__(self, arg0: Vector_Real) -> bool: ...
     @typing.overload
@@ -19561,15 +21387,19 @@ class Vector_Real:
     @typing.overload
     def __repr__(self) -> str: ...
     @typing.overload
-    def __setitem__(self, arg0: int, arg1: float) -> None: ...
+    def __setitem__(
+        self, arg0: typing.SupportsInt, arg1: typing.SupportsFloat
+    ) -> None: ...
     @typing.overload
     def __setitem__(self, arg0: slice, arg1: Vector_Real) -> None:
         """
         Assign list elements using a slice object
         """
     @typing.overload
-    def __setitem__(self, arg0: int, arg1: float) -> None: ...
-    def append(self, x: float) -> None:
+    def __setitem__(
+        self, arg0: typing.SupportsInt, arg1: typing.SupportsFloat
+    ) -> None: ...
+    def append(self, x: typing.SupportsFloat) -> None:
         """
         Add an item to the end of the list
         """
@@ -19577,7 +21407,7 @@ class Vector_Real:
         """
         Clear the contents
         """
-    def count(self, x: float) -> int:
+    def count(self, x: typing.SupportsFloat) -> int:
         """
         Return the number of times ``x`` appears in the list
         """
@@ -19587,11 +21417,11 @@ class Vector_Real:
         Extend the list by appending all the items in the given list
         """
     @typing.overload
-    def extend(self, L: typing.Iterable) -> None:
+    def extend(self, L: collections.abc.Iterable) -> None:
         """
         Extend the list by appending all the items in the given list
         """
-    def insert(self, i: int, x: float) -> None:
+    def insert(self, i: typing.SupportsInt, x: typing.SupportsFloat) -> None:
         """
         Insert an item at a given position.
         """
@@ -19601,11 +21431,11 @@ class Vector_Real:
         Remove and return the last item
         """
     @typing.overload
-    def pop(self, i: int) -> float:
+    def pop(self, i: typing.SupportsInt) -> float:
         """
         Remove and return the item at index ``i``
         """
-    def remove(self, x: float) -> None:
+    def remove(self, x: typing.SupportsFloat) -> None:
         """
         Remove the first item from the list whose value is x. It is an error if there is no such item.
         """
@@ -19621,12 +21451,12 @@ class Vector_int:
         """
         Check whether the list is nonempty
         """
-    def __contains__(self, x: int) -> bool:
+    def __contains__(self, x: typing.SupportsInt) -> bool:
         """
         Return true the container contains ``x``
         """
     @typing.overload
-    def __delitem__(self, arg0: int) -> None:
+    def __delitem__(self, arg0: typing.SupportsInt) -> None:
         """
         Delete the list elements at index ``i``
         """
@@ -19642,9 +21472,9 @@ class Vector_int:
         Retrieve list elements using a slice object
         """
     @typing.overload
-    def __getitem__(self, arg0: int) -> int: ...
+    def __getitem__(self, arg0: typing.SupportsInt) -> int: ...
     @typing.overload
-    def __getitem__(self, arg0: int) -> int: ...
+    def __getitem__(self, arg0: typing.SupportsInt) -> int: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
@@ -19653,12 +21483,12 @@ class Vector_int:
         Copy constructor
         """
     @typing.overload
-    def __init__(self, arg0: typing.Iterable) -> None: ...
+    def __init__(self, arg0: collections.abc.Iterable) -> None: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
     def __init__(self, arg0: Vector_int) -> None: ...
-    def __iter__(self) -> typing.Iterator[int]: ...
+    def __iter__(self) -> collections.abc.Iterator[int]: ...
     def __len__(self) -> int: ...
     def __ne__(self, arg0: Vector_int) -> bool: ...
     @typing.overload
@@ -19669,15 +21499,19 @@ class Vector_int:
     @typing.overload
     def __repr__(self) -> str: ...
     @typing.overload
-    def __setitem__(self, arg0: int, arg1: int) -> None: ...
+    def __setitem__(
+        self, arg0: typing.SupportsInt, arg1: typing.SupportsInt
+    ) -> None: ...
     @typing.overload
     def __setitem__(self, arg0: slice, arg1: Vector_int) -> None:
         """
         Assign list elements using a slice object
         """
     @typing.overload
-    def __setitem__(self, arg0: int, arg1: int) -> None: ...
-    def append(self, x: int) -> None:
+    def __setitem__(
+        self, arg0: typing.SupportsInt, arg1: typing.SupportsInt
+    ) -> None: ...
+    def append(self, x: typing.SupportsInt) -> None:
         """
         Add an item to the end of the list
         """
@@ -19685,7 +21519,7 @@ class Vector_int:
         """
         Clear the contents
         """
-    def count(self, x: int) -> int:
+    def count(self, x: typing.SupportsInt) -> int:
         """
         Return the number of times ``x`` appears in the list
         """
@@ -19695,11 +21529,11 @@ class Vector_int:
         Extend the list by appending all the items in the given list
         """
     @typing.overload
-    def extend(self, L: typing.Iterable) -> None:
+    def extend(self, L: collections.abc.Iterable) -> None:
         """
         Extend the list by appending all the items in the given list
         """
-    def insert(self, i: int, x: int) -> None:
+    def insert(self, i: typing.SupportsInt, x: typing.SupportsInt) -> None:
         """
         Insert an item at a given position.
         """
@@ -19709,11 +21543,11 @@ class Vector_int:
         Remove and return the last item
         """
     @typing.overload
-    def pop(self, i: int) -> int:
+    def pop(self, i: typing.SupportsInt) -> int:
         """
         Remove and return the item at index ``i``
         """
-    def remove(self, x: int) -> None:
+    def remove(self, x: typing.SupportsInt) -> None:
         """
         Remove the first item from the list whose value is x. It is an error if there is no such item.
         """
@@ -19734,7 +21568,7 @@ class Vector_string:
         Return true the container contains ``x``
         """
     @typing.overload
-    def __delitem__(self, arg0: int) -> None:
+    def __delitem__(self, arg0: typing.SupportsInt) -> None:
         """
         Delete the list elements at index ``i``
         """
@@ -19750,9 +21584,9 @@ class Vector_string:
         Retrieve list elements using a slice object
         """
     @typing.overload
-    def __getitem__(self, arg0: int) -> str: ...
+    def __getitem__(self, arg0: typing.SupportsInt) -> str: ...
     @typing.overload
-    def __getitem__(self, arg0: int) -> str: ...
+    def __getitem__(self, arg0: typing.SupportsInt) -> str: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
@@ -19761,12 +21595,12 @@ class Vector_string:
         Copy constructor
         """
     @typing.overload
-    def __init__(self, arg0: typing.Iterable) -> None: ...
+    def __init__(self, arg0: collections.abc.Iterable) -> None: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
     def __init__(self, arg0: Vector_string) -> None: ...
-    def __iter__(self) -> typing.Iterator[str]: ...
+    def __iter__(self) -> collections.abc.Iterator[str]: ...
     def __len__(self) -> int: ...
     def __ne__(self, arg0: Vector_string) -> bool: ...
     @typing.overload
@@ -19777,14 +21611,14 @@ class Vector_string:
     @typing.overload
     def __repr__(self) -> str: ...
     @typing.overload
-    def __setitem__(self, arg0: int, arg1: str) -> None: ...
+    def __setitem__(self, arg0: typing.SupportsInt, arg1: str) -> None: ...
     @typing.overload
     def __setitem__(self, arg0: slice, arg1: Vector_string) -> None:
         """
         Assign list elements using a slice object
         """
     @typing.overload
-    def __setitem__(self, arg0: int, arg1: str) -> None: ...
+    def __setitem__(self, arg0: typing.SupportsInt, arg1: str) -> None: ...
     def append(self, x: str) -> None:
         """
         Add an item to the end of the list
@@ -19803,11 +21637,11 @@ class Vector_string:
         Extend the list by appending all the items in the given list
         """
     @typing.overload
-    def extend(self, L: typing.Iterable) -> None:
+    def extend(self, L: collections.abc.Iterable) -> None:
         """
         Extend the list by appending all the items in the given list
         """
-    def insert(self, i: int, x: str) -> None:
+    def insert(self, i: typing.SupportsInt, x: str) -> None:
         """
         Insert an item at a given position.
         """
@@ -19817,7 +21651,7 @@ class Vector_string:
         Remove and return the last item
         """
     @typing.overload
-    def pop(self, i: int) -> str:
+    def pop(self, i: typing.SupportsInt) -> str:
         """
         Remove and return the item at index ``i``
         """
@@ -19847,10 +21681,24 @@ class VisMF:
         """
 
 class XDim3:
-    x: float
-    y: float
-    z: float
-    def __init__(self, arg0: float, arg1: float, arg2: float) -> None: ...
+    def __init__(
+        self,
+        arg0: typing.SupportsFloat,
+        arg1: typing.SupportsFloat,
+        arg2: typing.SupportsFloat,
+    ) -> None: ...
+    @property
+    def x(self) -> float: ...
+    @x.setter
+    def x(self, arg0: typing.SupportsFloat) -> None: ...
+    @property
+    def y(self) -> float: ...
+    @y.setter
+    def y(self, arg0: typing.SupportsFloat) -> None: ...
+    @property
+    def z(self) -> float: ...
+    @z.setter
+    def z(self, arg0: typing.SupportsFloat) -> None: ...
 
 class iMultiFab(FabArray_IArrayBox):
     @staticmethod
@@ -19909,8 +21757,8 @@ class iMultiFab(FabArray_IArrayBox):
         self,
         bxs: BoxArray,
         dm: DistributionMapping,
-        ncomp: int,
-        ngrow: int,
+        ncomp: typing.SupportsInt,
+        ngrow: typing.SupportsInt,
         info: MFInfo,
         factory: FabFactory_IArrayBox,
     ) -> None:
@@ -19942,36 +21790,9 @@ class iMultiFab(FabArray_IArrayBox):
         self,
         bxs: BoxArray,
         dm: DistributionMapping,
-        ncomp: int,
-        ngrow: int,
+        ncomp: typing.SupportsInt,
+        ngrow: typing.SupportsInt,
         info: MFInfo,
-    ) -> None:
-        """
-        Constructs an (i)MultiFab.
-
-        The size of the FArrayBox is given by the Box grown by \\p ngrow, and
-        the number of components is given by \\p ncomp. If \\p info is set to
-        not allocating memory, then no FArrayBoxes are allocated at
-        this time but can be defined later.
-
-        Parameters
-        ----------
-        bxs :
-          a valid region
-        dm :
-          a DistributionMapping
-        ncomp :
-          number of components
-        ngrow :
-          number of cells the region grows
-        info :
-          (i)MultiFab info, including allocation Arena
-        factory :
-          FArrayBoxFactory for embedded boundaries
-        """
-    @typing.overload
-    def __init__(
-        self, bxs: BoxArray, dm: DistributionMapping, ncomp: int, ngrow: int
     ) -> None:
         """
         Constructs an (i)MultiFab.
@@ -20001,7 +21822,38 @@ class iMultiFab(FabArray_IArrayBox):
         self,
         bxs: BoxArray,
         dm: DistributionMapping,
-        ncomp: int,
+        ncomp: typing.SupportsInt,
+        ngrow: typing.SupportsInt,
+    ) -> None:
+        """
+        Constructs an (i)MultiFab.
+
+        The size of the FArrayBox is given by the Box grown by \\p ngrow, and
+        the number of components is given by \\p ncomp. If \\p info is set to
+        not allocating memory, then no FArrayBoxes are allocated at
+        this time but can be defined later.
+
+        Parameters
+        ----------
+        bxs :
+          a valid region
+        dm :
+          a DistributionMapping
+        ncomp :
+          number of components
+        ngrow :
+          number of cells the region grows
+        info :
+          (i)MultiFab info, including allocation Arena
+        factory :
+          FArrayBoxFactory for embedded boundaries
+        """
+    @typing.overload
+    def __init__(
+        self,
+        bxs: BoxArray,
+        dm: DistributionMapping,
+        ncomp: typing.SupportsInt,
         ngrow: IntVect3D,
         info: MFInfo,
     ) -> None:
@@ -20033,7 +21885,7 @@ class iMultiFab(FabArray_IArrayBox):
         self,
         bxs: BoxArray,
         dm: DistributionMapping,
-        ncomp: int,
+        ncomp: typing.SupportsInt,
         ngrow: IntVect3D,
         info: MFInfo,
         factory: FabFactory_IArrayBox,
@@ -20063,7 +21915,11 @@ class iMultiFab(FabArray_IArrayBox):
         """
     @typing.overload
     def __init__(
-        self, bxs: BoxArray, dm: DistributionMapping, ncomp: int, ngrow: IntVect3D
+        self,
+        bxs: BoxArray,
+        dm: DistributionMapping,
+        ncomp: typing.SupportsInt,
+        ngrow: IntVect3D,
     ) -> None:
         """
         Constructs an (i)MultiFab.
@@ -20116,7 +21972,12 @@ class iMultiFab(FabArray_IArrayBox):
 
         """
     def add(
-        self, src: iMultiFab, srccomp: int, comp: int, numcomp: int, nghost: int
+        self,
+        src: iMultiFab,
+        srccomp: typing.SupportsInt,
+        comp: typing.SupportsInt,
+        numcomp: typing.SupportsInt,
+        nghost: typing.SupportsInt,
     ) -> None:
         """
         Add src to self including nghost ghost cells.
@@ -20140,14 +22001,23 @@ class iMultiFab(FabArray_IArrayBox):
 
         """
     def copymf(
-        self, src: iMultiFab, srccomp: int, dstcomp: int, numcomp: int, nghost: int
+        self,
+        src: iMultiFab,
+        srccomp: typing.SupportsInt,
+        dstcomp: typing.SupportsInt,
+        numcomp: typing.SupportsInt,
+        nghost: typing.SupportsInt,
     ) -> None:
         """
         Copy from src to self including nghost ghost cells.
         The two MultiFabs MUST have the same underlying BoxArray. The copy is local
         """
     def divi(
-        self, mf: iMultiFab, strt_comp: int, num_comp: int, nghost: int = 0
+        self,
+        mf: iMultiFab,
+        strt_comp: typing.SupportsInt,
+        num_comp: typing.SupportsInt,
+        nghost: typing.SupportsInt = 0,
     ) -> None:
         """
         This function divides the values of the cells in mf from the
@@ -20160,7 +22030,12 @@ class iMultiFab(FabArray_IArrayBox):
         against divide by zero.
         """
     def divide(
-        self, src: iMultiFab, srccomp: int, comp: int, numcomp: int, nghost: int
+        self,
+        src: iMultiFab,
+        srccomp: typing.SupportsInt,
+        comp: typing.SupportsInt,
+        numcomp: typing.SupportsInt,
+        nghost: typing.SupportsInt,
     ) -> None:
         """
         Divide self by src including nghost ghost cells.
@@ -20184,33 +22059,59 @@ class iMultiFab(FabArray_IArrayBox):
 
         """
     @typing.overload
-    def max(self, comp: int = 0, nghost: int = 0, local: bool = False) -> int:
+    def max(
+        self,
+        comp: typing.SupportsInt = 0,
+        nghost: typing.SupportsInt = 0,
+        local: bool = False,
+    ) -> int:
         """
         Returns the maximum value of the specified component of the (i)MultiFab.
         """
     @typing.overload
     def max(
-        self, region: Box, comp: int = 0, nghost: int = 0, local: bool = False
+        self,
+        region: Box,
+        comp: typing.SupportsInt = 0,
+        nghost: typing.SupportsInt = 0,
+        local: bool = False,
     ) -> int:
         """
         Returns the maximum value of the specified component of the (i)MultiFab over the region.
         """
-    def maxIndex(self, arg0: int, arg1: int) -> IntVect3D: ...
+    def maxIndex(
+        self, arg0: typing.SupportsInt, arg1: typing.SupportsInt
+    ) -> IntVect3D: ...
     @typing.overload
-    def min(self, comp: int = 0, nghost: int = 0, local: bool = False) -> int:
+    def min(
+        self,
+        comp: typing.SupportsInt = 0,
+        nghost: typing.SupportsInt = 0,
+        local: bool = False,
+    ) -> int:
         """
         Returns the minimum value of the specified component of the (i)MultiFab.
         """
     @typing.overload
     def min(
-        self, region: Box, comp: int = 0, nghost: int = 0, local: bool = False
+        self,
+        region: Box,
+        comp: typing.SupportsInt = 0,
+        nghost: typing.SupportsInt = 0,
+        local: bool = False,
     ) -> int:
         """
         Returns the minimum value of the specified component of the (i)MultiFab over the region.
         """
-    def minIndex(self, arg0: int, arg1: int) -> IntVect3D: ...
+    def minIndex(
+        self, arg0: typing.SupportsInt, arg1: typing.SupportsInt
+    ) -> IntVect3D: ...
     def minus(
-        self, mf: iMultiFab, strt_comp: int, num_comp: int, nghost: int = 0
+        self,
+        mf: iMultiFab,
+        strt_comp: typing.SupportsInt,
+        num_comp: typing.SupportsInt,
+        nghost: typing.SupportsInt = 0,
     ) -> None:
         """
         This function subtracts the values of the cells in mf from the
@@ -20222,7 +22123,7 @@ class iMultiFab(FabArray_IArrayBox):
         each FArrayBox will be modified.
         """
     @typing.overload
-    def mult(self, val: int, nghost: int = 0) -> None:
+    def mult(self, val: typing.SupportsInt, nghost: typing.SupportsInt = 0) -> None:
         """
         Scales the value of each cell in the valid region of each
         component of the MultiFab by the scalar val (a[i] <- a[i]*val).
@@ -20230,7 +22131,13 @@ class iMultiFab(FabArray_IArrayBox):
         boundary region that should be modified.
         """
     @typing.overload
-    def mult(self, val: int, comp: int, num_comp: int, nghost: int = 0) -> None:
+    def mult(
+        self,
+        val: typing.SupportsInt,
+        comp: typing.SupportsInt,
+        num_comp: typing.SupportsInt,
+        nghost: typing.SupportsInt = 0,
+    ) -> None:
         """
         Scales the value of each cell in the specified subregion of the
         MultiFab by the scalar val (a[i] <- a[i]*val). The subregion
@@ -20241,7 +22148,12 @@ class iMultiFab(FabArray_IArrayBox):
         """
     @typing.overload
     def mult(
-        self, val: int, region: Box, comp: int, num_comp: int, nghost: int = 0
+        self,
+        val: typing.SupportsInt,
+        region: Box,
+        comp: typing.SupportsInt,
+        num_comp: typing.SupportsInt,
+        nghost: typing.SupportsInt = 0,
     ) -> None:
         """
         Identical to the previous version of mult(), with the
@@ -20251,7 +22163,9 @@ class iMultiFab(FabArray_IArrayBox):
         the subregion that should be modified.
         """
     @typing.overload
-    def mult(self, val: int, region: Box, nghost: int = 0) -> None:
+    def mult(
+        self, val: typing.SupportsInt, region: Box, nghost: typing.SupportsInt = 0
+    ) -> None:
         """
         Scales the value of each cell in the valid region of each
         component of the MultiFab by the scalar val (a[i] <- a[i]*val),
@@ -20260,21 +22174,31 @@ class iMultiFab(FabArray_IArrayBox):
         FArrayBox in the subregion that should be modified.
         """
     def multiply(
-        self, src: iMultiFab, srccomp: int, comp: int, numcomp: int, nghost: int
+        self,
+        src: iMultiFab,
+        srccomp: typing.SupportsInt,
+        comp: typing.SupportsInt,
+        numcomp: typing.SupportsInt,
+        nghost: typing.SupportsInt,
     ) -> None:
         """
         Multiply self by src including nghost ghost cells.
         The two MultiFabs MUST have the same underlying BoxArray.
         """
     @typing.overload
-    def negate(self, nghost: int = 0) -> None:
+    def negate(self, nghost: typing.SupportsInt = 0) -> None:
         """
         Negates the value of each cell in the valid region of
         the MultiFab.  The value of nghost specifies the number of
         cells in the boundary region that should be modified.
         """
     @typing.overload
-    def negate(self, comp: int, num_comp: int, nghost: int = 0) -> None:
+    def negate(
+        self,
+        comp: typing.SupportsInt,
+        num_comp: typing.SupportsInt,
+        nghost: typing.SupportsInt = 0,
+    ) -> None:
         """
         Negates the value of each cell in the specified subregion of
         the MultiFab.  The subregion consists of the num_comp
@@ -20283,7 +22207,7 @@ class iMultiFab(FabArray_IArrayBox):
         FArrayBox in the subregion that should be modified.
         """
     @typing.overload
-    def negate(self, region: Box, nghost: int = 0) -> None:
+    def negate(self, region: Box, nghost: typing.SupportsInt = 0) -> None:
         """
         Negates the value of each cell in the valid region of
         the MultiFab that also intersects the Box region.  The value
@@ -20291,14 +22215,20 @@ class iMultiFab(FabArray_IArrayBox):
         that should be modified.
         """
     @typing.overload
-    def negate(self, region: Box, comp: int, num_comp: int, nghost: int = 0) -> None:
+    def negate(
+        self,
+        region: Box,
+        comp: typing.SupportsInt,
+        num_comp: typing.SupportsInt,
+        nghost: typing.SupportsInt = 0,
+    ) -> None:
         """
         Identical to the previous version of negate(), with the
         restriction that the subregion is further constrained to
         the intersection with Box region.
         """
     @typing.overload
-    def plus(self, val: int, nghost: int = 0) -> None:
+    def plus(self, val: typing.SupportsInt, nghost: typing.SupportsInt = 0) -> None:
         """
         Adds the scalar value val to the value of each cell in the
         valid region of each component of the MultiFab.  The value
@@ -20306,7 +22236,13 @@ class iMultiFab(FabArray_IArrayBox):
         region that should be modified.
         """
     @typing.overload
-    def plus(self, val: int, comp: int, num_comp: int, nghost: int = 0) -> None:
+    def plus(
+        self,
+        val: typing.SupportsInt,
+        comp: typing.SupportsInt,
+        num_comp: typing.SupportsInt,
+        nghost: typing.SupportsInt = 0,
+    ) -> None:
         """
         Adds the scalar value \\p val to the value of each cell in the
         specified subregion of the MultiFab.
@@ -20317,7 +22253,9 @@ class iMultiFab(FabArray_IArrayBox):
         be modified.
         """
     @typing.overload
-    def plus(self, val: int, region: Box, nghost: int = 0) -> None:
+    def plus(
+        self, val: typing.SupportsInt, region: Box, nghost: typing.SupportsInt = 0
+    ) -> None:
         """
         Adds the scalar value val to the value of each cell in the
         valid region of each component of the MultiFab, that also
@@ -20327,7 +22265,12 @@ class iMultiFab(FabArray_IArrayBox):
         """
     @typing.overload
     def plus(
-        self, val: int, region: Box, comp: int, num_comp: int, nghost: int = 0
+        self,
+        val: typing.SupportsInt,
+        region: Box,
+        comp: typing.SupportsInt,
+        num_comp: typing.SupportsInt,
+        nghost: typing.SupportsInt = 0,
     ) -> None:
         """
         Identical to the previous version of plus(), with the
@@ -20336,7 +22279,11 @@ class iMultiFab(FabArray_IArrayBox):
         """
     @typing.overload
     def plus(
-        self, mf: iMultiFab, strt_comp: int, num_comp: int, nghost: int = 0
+        self,
+        mf: iMultiFab,
+        strt_comp: typing.SupportsInt,
+        num_comp: typing.SupportsInt,
+        nghost: typing.SupportsInt = 0,
     ) -> None:
         """
         This function adds the values of the cells in mf to the corresponding
@@ -20348,19 +22295,26 @@ class iMultiFab(FabArray_IArrayBox):
         modified.
         """
     def subtract(
-        self, src: iMultiFab, srccomp: int, comp: int, numcomp: int, nghost: int
+        self,
+        src: iMultiFab,
+        srccomp: typing.SupportsInt,
+        comp: typing.SupportsInt,
+        numcomp: typing.SupportsInt,
+        nghost: typing.SupportsInt,
     ) -> None:
         """
         Subtract src from self including nghost ghost cells.
         The two MultiFabs MUST have the same underlying BoxArray.
         """
     @typing.overload
-    def sum(self, comp: int = 0, local: bool = False) -> int:
+    def sum(self, comp: typing.SupportsInt = 0, local: bool = False) -> int:
         """
         Returns the sum of component 'comp' over the (i)MultiFab -- no ghost cells are included.
         """
     @typing.overload
-    def sum(self, region: Box, comp: int = 0, local: bool = False) -> int:
+    def sum(
+        self, region: Box, comp: typing.SupportsInt = 0, local: bool = False
+    ) -> int:
         """
         Returns the sum of component 'comp' in the given 'region'. -- no ghost cells are included.
         """
@@ -20492,7 +22446,7 @@ class iMultiFab(FabArray_IArrayBox):
 
         """
 
-def AlmostEqual(rb1: RealBox, rb2: RealBox, eps: float = 0.0) -> bool:
+def AlmostEqual(rb1: RealBox, rb2: RealBox, eps: typing.SupportsFloat = 0.0) -> bool:
     """
     Determine if two boxes are equal to within a tolerance
     """
@@ -20510,27 +22464,31 @@ def The_Cpu_Arena() -> Arena: ...
 def The_Device_Arena() -> Arena: ...
 def The_Managed_Arena() -> Arena: ...
 def The_Pinned_Arena() -> Arena: ...
-def almost_equal(x: float, y: float, ulp: int = 2) -> bool: ...
+def almost_equal(
+    x: typing.SupportsFloat, y: typing.SupportsFloat, ulp: typing.SupportsInt = 2
+) -> bool: ...
 def begin(arg0: Box) -> Dim3: ...
 @typing.overload
 def coarsen(arg0: IntVect1D, arg1: IntVect1D) -> IntVect1D: ...
 @typing.overload
 def coarsen(arg0: Dim3, arg1: IntVect1D) -> Dim3: ...
 @typing.overload
-def coarsen(arg0: IntVect1D, arg1: int) -> IntVect1D: ...
+def coarsen(arg0: IntVect1D, arg1: typing.SupportsInt) -> IntVect1D: ...
 @typing.overload
 def coarsen(arg0: IntVect2D, arg1: IntVect2D) -> IntVect2D: ...
 @typing.overload
 def coarsen(arg0: Dim3, arg1: IntVect2D) -> Dim3: ...
 @typing.overload
-def coarsen(arg0: IntVect2D, arg1: int) -> IntVect2D: ...
+def coarsen(arg0: IntVect2D, arg1: typing.SupportsInt) -> IntVect2D: ...
 @typing.overload
 def coarsen(arg0: IntVect3D, arg1: IntVect3D) -> IntVect3D: ...
 @typing.overload
 def coarsen(arg0: Dim3, arg1: IntVect3D) -> Dim3: ...
 @typing.overload
-def coarsen(arg0: IntVect3D, arg1: int) -> IntVect3D: ...
-def concatenate(root: str, num: int, mindigits: int = 5) -> str:
+def coarsen(arg0: IntVect3D, arg1: typing.SupportsInt) -> IntVect3D: ...
+def concatenate(
+    root: str, num: typing.SupportsInt, mindigits: typing.SupportsInt = 5
+) -> str:
     """
     Builds plotfile name
     """
@@ -20539,31 +22497,36 @@ def concatenate(root: str, num: int, mindigits: int = 5) -> str:
 def copy_mfab(
     dst: iMultiFab,
     src: iMultiFab,
-    srccomp: int,
-    dstcomp: int,
-    numcomp: int,
-    nghost: int,
+    srccomp: typing.SupportsInt,
+    dstcomp: typing.SupportsInt,
+    numcomp: typing.SupportsInt,
+    nghost: typing.SupportsInt,
 ) -> None: ...
 @typing.overload
 def copy_mfab(
     dst: iMultiFab,
     src: iMultiFab,
-    srccomp: int,
-    dstcomp: int,
-    numcomp: int,
+    srccomp: typing.SupportsInt,
+    dstcomp: typing.SupportsInt,
+    numcomp: typing.SupportsInt,
     nghost: IntVect3D,
-) -> None: ...
-@typing.overload
-def copy_mfab(
-    dst: MultiFab, src: MultiFab, srccomp: int, dstcomp: int, numcomp: int, nghost: int
 ) -> None: ...
 @typing.overload
 def copy_mfab(
     dst: MultiFab,
     src: MultiFab,
-    srccomp: int,
-    dstcomp: int,
-    numcomp: int,
+    srccomp: typing.SupportsInt,
+    dstcomp: typing.SupportsInt,
+    numcomp: typing.SupportsInt,
+    nghost: typing.SupportsInt,
+) -> None: ...
+@typing.overload
+def copy_mfab(
+    dst: MultiFab,
+    src: MultiFab,
+    srccomp: typing.SupportsInt,
+    dstcomp: typing.SupportsInt,
+    numcomp: typing.SupportsInt,
     nghost: IntVect3D,
 ) -> None: ...
 @typing.overload
@@ -20576,9 +22539,9 @@ def dtoh_memcpy(dest: FabArray_FArrayBox, src: FabArray_FArrayBox) -> None:
 def dtoh_memcpy(
     dest: FabArray_FArrayBox,
     src: FabArray_FArrayBox,
-    scomp: int,
-    dcomp: int,
-    ncomp: int,
+    scomp: typing.SupportsInt,
+    dcomp: typing.SupportsInt,
+    ncomp: typing.SupportsInt,
 ) -> None:
     """
     Copy from a device to host FabArray for a specific (number of) component(s).
@@ -20599,9 +22562,9 @@ def htod_memcpy(dest: FabArray_FArrayBox, src: FabArray_FArrayBox) -> None:
 def htod_memcpy(
     dest: FabArray_FArrayBox,
     src: FabArray_FArrayBox,
-    scomp: int,
-    dcomp: int,
-    ncomp: int,
+    scomp: typing.SupportsInt,
+    dcomp: typing.SupportsInt,
+    ncomp: typing.SupportsInt,
 ) -> None:
     """
     Copy from a host to device FabArray for a specific (number of) component(s).
@@ -20618,7 +22581,7 @@ def initialized() -> bool:
     Returns true if there are any currently-active and initialized AMReX instances (i.e. one for which amrex::Initialize has been called, and amrex::Finalize has not). Otherwise false.
     """
 
-def is_valid(arg0: int) -> bool: ...
+def is_valid(arg0: typing.SupportsInt) -> bool: ...
 @typing.overload
 def lbound(arg0: Box) -> Dim3: ...
 @typing.overload
@@ -20727,15 +22690,17 @@ def length(arg0: Array4_uint_const) -> Dim3: ...
 def length(arg0: Array4_ulong_const) -> Dim3: ...
 @typing.overload
 def length(arg0: Array4_ulonglong_const) -> Dim3: ...
-def make_invalid(arg0: int) -> int: ...
-def make_valid(arg0: int) -> int: ...
+def make_invalid(arg0: typing.SupportsInt) -> int: ...
+def make_valid(arg0: typing.SupportsInt) -> int: ...
 def max(arg0: RealVect, arg1: RealVect) -> RealVect: ...
 def min(arg0: RealVect, arg1: RealVect) -> RealVect: ...
 def pack_cpus(
-    arg0: numpy.ndarray[numpy.uint64], arg1: numpy.ndarray[numpy.int32]
+    arg0: typing.Annotated[numpy.typing.ArrayLike, numpy.uint64],
+    arg1: typing.Annotated[numpy.typing.ArrayLike, numpy.int32],
 ) -> typing.Any: ...
 def pack_ids(
-    arg0: numpy.ndarray[numpy.uint64], arg1: numpy.ndarray[numpy.int64]
+    arg0: typing.Annotated[numpy.typing.ArrayLike, numpy.uint64],
+    arg1: typing.Annotated[numpy.typing.ArrayLike, numpy.int64],
 ) -> typing.Any: ...
 @typing.overload
 def refine(arg0: Dim3, arg1: IntVect1D) -> Dim3: ...
@@ -20802,15 +22767,19 @@ def ubound(arg0: Array4_uint_const) -> Dim3: ...
 def ubound(arg0: Array4_ulong_const) -> Dim3: ...
 @typing.overload
 def ubound(arg0: Array4_ulonglong_const) -> Dim3: ...
-def unpack_cpus(arg0: numpy.ndarray[numpy.uint64]) -> typing.Any: ...
-def unpack_ids(arg0: numpy.ndarray[numpy.uint64]) -> typing.Any: ...
+def unpack_cpus(
+    arg0: typing.Annotated[numpy.typing.ArrayLike, numpy.uint64],
+) -> typing.Any: ...
+def unpack_ids(
+    arg0: typing.Annotated[numpy.typing.ArrayLike, numpy.uint64],
+) -> typing.Any: ...
 def write_single_level_plotfile(
     plotfilename: str,
     mf: MultiFab,
     varnames: Vector_string,
     geom: Geometry,
-    time: float,
-    level_step: int,
+    time: typing.SupportsFloat,
+    level_step: typing.SupportsInt,
     versionName: str = "HyperCLaw-V1.1",
     levelPrefix: str = "Level_",
     mfPrefix: str = "Cell",
