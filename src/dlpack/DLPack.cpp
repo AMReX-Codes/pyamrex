@@ -10,7 +10,8 @@ void init_DLPack(py::module& m)
     // register types only if not already present, e.g., from another library
     // that also implements DLPack bindings and exposes the types
 
-    py::type pyDLDeviceType = false;  // TODO: py::type::of<DLDeviceType>();
+    // TODO: py::type pyDLDeviceType = py::type::of<DLDeviceType>();
+    bool pyDLDeviceType = false;
     if (!pyDLDeviceType) {
         py::native_enum<DLDeviceType>(m, "DLDeviceType", "enum.IntEnum")
             .value("kDLCPU", DLDeviceType::kDLCPU)
