@@ -29,10 +29,12 @@ void init_IndexType(py::module &m) {
 
     py::class_< IndexType > index_type(m, "IndexType");
 
-    py::enum_<IndexType::CellIndex>(index_type, "CellIndex")
+    py::native_enum<IndexType::CellIndex>(index_type, "CellIndex", "enum.IntEnum")
         .value("CELL", IndexType::CellIndex::CELL)
         .value("NODE", IndexType::CellIndex::NODE)
-        .export_values();
+        .export_values()
+        .finalize()
+    ;
 
     index_type.def("__repr__",
              [](py::object& obj) {

@@ -14,12 +14,14 @@ void init_CoordSys(py::module& m)
 
     py::class_<CoordSys> coord_sys(m, "CoordSys");
 
-    py::enum_<CoordSys::CoordType>(coord_sys, "CoordType")
+    py::native_enum<CoordSys::CoordType>(coord_sys, "CoordType", "enum.IntEnum")
         .value("undef", CoordSys::CoordType::undef)
         .value("cartesian", CoordSys::CoordType::cartesian)
         .value("RZ", CoordSys::CoordType::RZ)
         .value("SPHERICAL", CoordSys::CoordType::SPHERICAL)
-        .export_values();
+        .export_values()
+        .finalize()
+    ;
 
     coord_sys.def("__repr__",
              [](const CoordSys&) {
