@@ -6,7 +6,7 @@
 #pragma once
 
 #include "pyAMReX.H"
-#include "dlpack.h"
+#include "dlpack/dlpack.h"
 
 #include <AMReX_Array4.H>
 #include <AMReX_BLassert.H>
