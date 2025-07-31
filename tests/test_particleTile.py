@@ -111,7 +111,7 @@ def test_ptile_soa():
     ar1 = np.array(rdata[1], copy=False)
     ir0 = np.array(idata[0], copy=False)
     print(ar0.dtype)
-    assert ar0.dtype == "float"
+    assert ar0.dtype == "float" or ar0.dtype == "float32"
     assert ir0.dtype == "int32"
     print("---------")
     ir0[0] = -55

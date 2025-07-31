@@ -37,19 +37,31 @@ def test_particle_init():
 def test_particle_set():
     p1 = amr.Particle_8_0()
     p1.setPos(1, 1.5)
-    assert p1.pos(0) == 0 and p1.pos(1) == 1.5 and p1.pos(2) == 0
+    assert (
+        np.isclose(p1.pos(0), 0)
+        and np.isclose(p1.pos(1), 1.5)
+        and np.isclose(p1.pos(2), 0)
+    )
     p1.setPos([1.0, 1, 2])
-    assert p1.pos(0) == 1 and p1.pos(1) == 1 and p1.pos(2) == 2
+    assert (
+        np.isclose(p1.pos(0), 1)
+        and np.isclose(p1.pos(1), 1)
+        and np.isclose(p1.pos(2), 2)
+    )
     p1.setPos(amr.RealVect(2, 3.3, 4.2))
-    assert p1.pos(0) == 2 and p1.pos(1) == 3.3 and p1.pos(2) == 4.2
+    assert (
+        np.isclose(p1.pos(0), 2)
+        and np.isclose(p1.pos(1), 3.3)
+        and np.isclose(p1.pos(2), 4.2)
+    )
 
     print(p1.x, p1.y, p1.z)
     p1.x = 2.1
-    assert p1.x == 2.1
+    assert np.isclose(p1.x, 2.1)
     p1.y = 3.2
-    assert p1.y == 3.2
+    assert np.isclose(p1.y, 3.2)
     p1.z = 5.1
-    assert p1.z == 5.1
+    assert np.isclose(p1.z, 5.1)
 
 
 def test_rdata():

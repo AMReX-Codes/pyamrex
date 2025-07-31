@@ -79,7 +79,7 @@ def test_array_interface():
     assert (
         np.isclose(arr[0][0], 1.0)
         and np.isclose(arr[0][4], 5.2)
-        and np.isclose(arr[0][6], 6)
+        and np.isclose(arr[0][6], 6)  # fixme in SP: reads int32(0)
     )
     assert (
         np.isclose(arr[1][2], 10)

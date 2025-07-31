@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import os
 
+import numpy as np
+
 import amrex.space3d as amr
 
 
@@ -14,7 +16,7 @@ def test_parmparse():
     dopml = pp_param.get_bool("do_pml")
 
     assert dopml
-    assert dt == 1.0e-5
+    assert np.isclose(dt, 1.0e-5)
     assert ncell == 100
 
     pp.pretty_print_table()
