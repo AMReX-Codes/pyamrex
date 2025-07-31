@@ -76,15 +76,16 @@ def test_array_interface():
     # print('particle 2 from aos:\n',aos[1])
     # print('array interface\n', aos.__array_interface__)
     arr = aos.to_numpy()
+    int_arg = 7 if arr[0][0].dtype == "float32" else 6  # padding
     assert (
         np.isclose(arr[0][0], 1.0)
         and np.isclose(arr[0][4], 5.2)
-        and np.isclose(arr[0][6], 6)  # fixme in SP: reads int32(0)
+        and np.isclose(arr[0][int_arg], 6)  # fixme in SP: reads int32(0)
     )
     assert (
         np.isclose(arr[1][2], 10)
         and np.isclose(arr[1][3], 11.1)
-        and np.isclose(arr[1][6], 13)
+        and np.isclose(arr[1][int_arg], 13)
     )
 
     p3 = amr.Particle_2_1(x=-3)
@@ -102,10 +103,11 @@ def test_array_interface():
     assert aos[0].y == arr[0][1] == 0
     assert aos[0].z == arr[0][2] == 0
 
-    shape = amr.Config.spacedim + amr.Particle_2_1.NReal + amr.Particle_2_1.NInt + 1
-    for ii in range(shape):
-        arr[1][ii] = 0
-    arr[1][1] = -5  # np.array([0, -5, 0,0,0,0,0])
+    arr[1][0] = 0
+    arr[1][1] = -5
+    arr[1][2] = 0
+    arr[1][3] = 0
+    arr[1][4] = 0  # np.array([0, -5, 0,0,0,0,0, ...])
     print("array:", arr)
     print("aos[0]:", aos[0], "aos[1]:", aos[1])
     assert aos[1].y == arr[1][1] == -5

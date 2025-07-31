@@ -339,7 +339,7 @@ def test_particle_init(Npart, particle_container):
         aos = pt.get_array_of_structs()
         print(aos[0])
         assert aos[0].get_idata(0) == 2
-        assert real_arrays[1][0] == -1.2
+        assert np.isclose(real_arrays[1][0], -1.2)
         assert int_arrays[0][0] == -3
 
 
@@ -464,6 +464,10 @@ def test_pc_numpy(particle_container, Npart):
 @pytest.mark.skipif(
     importlib.util.find_spec("pandas") is None, reason="pandas is not available"
 )
+@pytest.mark.skipif(
+    amr.Config.precision_particles == "SINGLE",
+    reason="Requires DOUBLE precision particles",
+)
 def test_pc_df(particle_container, Npart):
     pc = particle_container
     print(f"pc={pc}")
@@ -551,6 +555,10 @@ def test_pc_empty_df(empty_particle_container, Npart):
 
 @pytest.mark.skipif(
     importlib.util.find_spec("pandas") is None, reason="pandas is not available"
+)
+@pytest.mark.skipif(
+    amr.Config.precision_particles == "SINGLE",
+    reason="Requires DOUBLE precision particles",
 )
 @pytest.mark.skipif(not amr.Config.have_mpi, reason="Requires AMReX_MPI=ON")
 def test_pc_df_mpi(particle_container, Npart):
