@@ -84,6 +84,24 @@ void init_AMReX(py::module& m)
                 return py::none();
 #endif
             })
+        .def_property_readonly_static(
+        "precision",
+        [](py::object){
+#ifdef AMREX_SINGLE_PRECISION
+                return "SINGLE";
+#else
+                return "DOUBLE";
+#endif
+        })
+        .def_property_readonly_static(
+            "precision_particles",
+            [](py::object){
+#ifdef AMREX_SINGLE_PRECISION_PARTICLES
+                return "SINGLE";
+#else
+                return "DOUBLE";
+#endif
+            })
         ;
 
     m.def("initialize",
