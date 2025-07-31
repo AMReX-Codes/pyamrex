@@ -85,8 +85,8 @@ void init_AMReX(py::module& m)
 #endif
             })
         .def_property_readonly_static(
-        "precision",
-        [](py::object){
+            "precision",
+            [](py::object){
 #ifdef AMREX_SINGLE_PRECISION
                 return "SINGLE";
 #else
