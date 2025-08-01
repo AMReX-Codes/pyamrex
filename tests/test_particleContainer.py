@@ -251,10 +251,10 @@ def test_pc_init():
 
             aos = pti.aos()
             aos_arr = aos.to_numpy()
-            assert aos[0].x == 0.30
-            assert aos[0].y == 0.35
-            assert aos[0].z == 0.40
-            assert aos_arr[0]["z"] == 0.40
+            assert np.isclose(aos[0].x, 0.30)
+            assert np.isclose(aos[0].y, 0.35)
+            assert np.isclose(aos[0].z, 0.40)
+            assert np.isclose(aos_arr[0]["z"], 0.40)
 
             soa = pti.soa()
             real_arrays = soa.get_real_data()
@@ -294,7 +294,9 @@ def test_particle_init(Npart, particle_container):
             assert int_arrays[0][0] == 1
             assert isinstance(aos_arr[0]["rdata_0"], np.floating)
             assert isinstance(aos_arr[0]["idata_0"], np.integer)
-            assert np.isclose(aos_arr[0]["rdata_0"], 0.5) and aos_arr[0]["idata_0"] == 5
+            assert (
+                np.isclose(aos_arr[0]["rdata_0"], 0.5) and aos_arr[0]["idata_0"] == 5
+            )  # fixme in SP: random value np.int32(-2147483648) == 5
 
             aos_arr[0]["idata_0"] = 2
             aos1 = pt.get_array_of_structs()
@@ -337,7 +339,7 @@ def test_particle_init(Npart, particle_container):
         aos = pt.get_array_of_structs()
         print(aos[0])
         assert aos[0].get_idata(0) == 2
-        assert real_arrays[1][0] == -1.2
+        assert np.isclose(real_arrays[1][0], -1.2)
         assert int_arrays[0][0] == -3
 
 
@@ -362,7 +364,7 @@ def test_per_cell(empty_particle_container, std_geometry, std_particle):
         pc.total_number_of_particles() == pc.number_of_particles_at_level(0) == ncells
     )
     print("npts * real_1", ncells * std_particle.real_array_data[1])
-    assert ncells * std_particle.real_array_data[1] == sum_1
+    assert np.isclose(ncells * std_particle.real_array_data[1], sum_1)
 
 
 def test_soa_pc_numpy(soa_particle_container, Npart):
@@ -462,6 +464,10 @@ def test_pc_numpy(particle_container, Npart):
 @pytest.mark.skipif(
     importlib.util.find_spec("pandas") is None, reason="pandas is not available"
 )
+@pytest.mark.skipif(
+    amr.Config.precision_particles == "SINGLE",
+    reason="Requires DOUBLE precision particles",
+)
 def test_pc_df(particle_container, Npart):
     pc = particle_container
     print(f"pc={pc}")
@@ -549,6 +555,10 @@ def test_pc_empty_df(empty_particle_container, Npart):
 
 @pytest.mark.skipif(
     importlib.util.find_spec("pandas") is None, reason="pandas is not available"
+)
+@pytest.mark.skipif(
+    amr.Config.precision_particles == "SINGLE",
+    reason="Requires DOUBLE precision particles",
 )
 @pytest.mark.skipif(not amr.Config.have_mpi, reason="Requires AMReX_MPI=ON")
 def test_pc_df_mpi(particle_container, Npart):

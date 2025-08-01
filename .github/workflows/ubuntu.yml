@@ -199,6 +199,56 @@ jobs:
       run: |
         python3 -m pytest tests/
 
+  clang_sp:
+    name: Clang@18.0 w/ SP
+    runs-on: ubuntu-24.04
+    env:
+      CXXFLAGS: "-Werror -Wshadow -Woverloaded-virtual -Wextra-semi -Wunreachable-code -fno-operator-names -Wno-pass-failed"
+      LDFLAGS: "-fuse-ld=lld"
+      CXX: "clang++"
+      CC: "clang"
+      AMReX_PRECISION: "SINGLE"
+      AMReX_PARTICLES_PRECISION: "SINGLE"
+    steps:
+      - uses: actions/checkout@v4
+      - name: Dependencies
+        run: |
+          .github/workflows/dependencies/dependencies_clang18.sh
+          .github/workflows/dependencies/dependencies_ccache.sh
+      - name: Set Up Cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ccache
+          key: ccache-${{ github.workflow }}-${{ github.job }}-git-${{ github.sha }}
+          restore-keys: |
+            ccache-${{ github.workflow }}-${{ github.job }}-git-
+      - name: Build & Install
+        run: |
+          export CCACHE_COMPRESS=1
+          export CCACHE_COMPRESSLEVEL=10
+          export CCACHE_MAXSIZE=300M
+          ccache -z
+
+          export CMAKE_BUILD_PARALLEL_LEVEL=4
+
+          export CC=$(which clang-18)
+          export CXX=$(which clang++-18)
+          python3 -m pip install -U pip
+          python3 -m pip install -U build packaging setuptools[core] wheel
+          python3 -m pip install -U cmake
+          python3 -m pip install -U pandas pytest
+          python3 -m pip install -v .
+          python3 -c "import amrex.space1d as amr; print(amr.__version__)"
+          python3 -c "import amrex.space2d as amr; print(amr.__version__)"
+          python3 -c "import amrex.space3d as amr; print(amr.__version__)"
+
+          ccache -s
+          du -hs ~/.cache/ccache
+
+      - name: Unit tests
+        run: |
+          python3 -m pytest tests/
+
   nvcc11:
     name: CUDA@12.2 GNU@10.5
     runs-on: ubuntu-24.04

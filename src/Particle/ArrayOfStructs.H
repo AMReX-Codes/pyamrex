@@ -43,17 +43,38 @@ namespace
 #if (AMREX_SPACEDIM >= 3)
         descr.append(py::make_tuple("z", py::format_descriptor<RealType>::format()));
 #endif
+
+        /* Note AMReX_Particle.H:
+         * struct alignas(sizeof(double)) Particle ...
+         *   aligns the ParticleBase member (pads the end if needed).
+         * in
+         * struct ParticleBase
+         * {
+         *   T m_pos[AMREX_SPACEDIM];
+         *   T m_rdata[NReal];
+         *   uint64_t m_idcpu = 0;
+         *   int m_idata[NInt];
+         * };
+         */
         if constexpr (ParticleType::NReal > 0) {
             for(int ii=0; ii < ParticleType::NReal; ii++) {
                 descr.append(py::make_tuple("rdata_"+std::to_string(ii),py::format_descriptor<RealType>::format()));
             }
         }
+#ifdef AMREX_SINGLE_PRECISION_PARTICLES
+        if constexpr ((AMREX_SPACEDIM + ParticleType::NReal) % 2 != 0) {  // alignas
+            descr.append(py::make_tuple("", "|V4"));  // empty space due to alignment
+        }
+#endif
         descr.append(py::make_tuple("idcpu", py::format_descriptor<uint64_t>::format()) );
         if constexpr (ParticleType::NInt > 0) {
             for(int ii=0; ii < ParticleType::NInt; ++ii) {
                 descr.append(py::make_tuple("idata_"+std::to_string(ii),py::format_descriptor<int>::format()));
             }
-        }
+        }/*
+        if constexpr (ParticleType::NInt % 2 != 0) {  // alignas
+            descr.append(py::make_tuple("", "|V4"));  // empty space due to alignment
+        }*/
 
         d["descr"] = descr;
         d["version"] = 3;

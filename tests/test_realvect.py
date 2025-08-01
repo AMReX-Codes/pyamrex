@@ -13,8 +13,8 @@ def test_realvect_init():
 
     for ii in range(amr.Config.spacedim):
         assert rv[ii] == 0
-        assert rv2[ii] == ii + 0.1
-        assert rv3[ii] == 0.3
+        assert np.isclose(rv2[ii], ii + 0.1)
+        assert np.isclose(rv3[ii], 0.3)
 
 
 @pytest.mark.skipif(amr.Config.spacedim != 1, reason="Requires AMREX_SPACEDIM = 1")
@@ -49,8 +49,8 @@ def test_rv_3d1():
     # Check indexing
     assert obj[0] == 1
     assert obj[1] == 2
-    assert obj[2] == 3.14
-    assert obj[-1] == 3.14
+    assert np.isclose(obj[2], 3.14)
+    assert np.isclose(obj[-1], 3.14)
     assert obj[-2] == 2
     assert obj[-3] == 1
     with pytest.raises(IndexError):
@@ -137,9 +137,13 @@ def test_subtraction():
         assert v4[ii] == v5[ii]
 
     # v - v
-    assert v5 - v3 == uv
+    res1 = v5 - v3
+    for ii in range(amr.Config.spacedim):
+        assert np.isclose(res1[ii], uv[ii])
     # r - v
-    assert 1.0 - v6 == amr.RealVect(2.0)
+    res2 = 1.0 - v6
+    for ii in range(amr.Config.spacedim):
+        assert np.isclose(res2[ii], 2.0)
 
 
 def test_multiplication():

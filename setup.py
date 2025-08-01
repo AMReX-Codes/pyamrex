@@ -95,7 +95,7 @@ class CMakeBuild(build_ext):
             "-DAMReX_GPU_BACKEND=" + AMReX_GPU_BACKEND,
             "-DAMReX_MPI:BOOL=" + AMReX_MPI,
             "-DAMReX_PRECISION=" + AMReX_PRECISION,
-            #'-DAMReX_PARTICLES_PRECISION=' + AMReX_PARTICLES_PRECISION,
+            "-DAMReX_PARTICLES_PRECISION=" + AMReX_PARTICLES_PRECISION,
             "-DpyAMReX_CCACHE=" + PYAMREX_CCACHE,
             "-DpyAMReX_IPO=" + PYAMREX_IPO,
             ## dependency control (developers & package managers)
@@ -174,6 +174,7 @@ AMReX_OMP = os.environ.get("AMREX_OMP", "OFF")
 AMReX_GPU_BACKEND = os.environ.get("AMREX_GPU_BACKEND", "NONE")
 AMReX_MPI = os.environ.get("AMREX_MPI", "OFF")
 AMReX_PRECISION = os.environ.get("AMREX_PRECISION", "DOUBLE")
+AMReX_PARTICLES_PRECISION = os.environ.get("AMREX_PARTICLES_PRECISION", "DOUBLE")
 #   single value or as a list 1;2;3
 AMReX_SPACEDIM = os.environ.get("AMREX_SPACEDIM", "1;2;3")
 BUILD_SHARED_LIBS = os.environ.get("AMREX_BUILD_SHARED_LIBS", "OFF")

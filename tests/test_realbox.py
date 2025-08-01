@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import numpy as np
+
 import amrex.space3d as amr
 from amrex.space3d import RealVect as RV
 from amrex.space3d import XDim3
@@ -14,9 +16,9 @@ def test_realbox_empty():
 
     rb.setLo([-1, -2, -3])
     rb.setHi([0, 0, 0])
-    assert rb.volume() == 6
+    assert np.isclose(rb.volume(), 6)
     rb.setHi(0, 1.2)
-    assert rb.hi(0) == 1.2
+    assert np.isclose(rb.hi(0), 1.2)
 
 
 def test_realbox_frombox(std_box):
