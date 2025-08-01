@@ -5478,6 +5478,8 @@ class Config:
     have_gpu: typing.ClassVar[bool] = False
     have_mpi: typing.ClassVar[bool] = True
     have_omp: typing.ClassVar[bool] = False
+    precision: typing.ClassVar[str] = "DOUBLE"
+    precision_particles: typing.ClassVar[str] = "DOUBLE"
     spacedim: typing.ClassVar[int] = 1
     verbose: typing.ClassVar[int] = 1
 
