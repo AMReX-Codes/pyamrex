@@ -71,10 +71,10 @@ namespace
             for(int ii=0; ii < ParticleType::NInt; ++ii) {
                 descr.append(py::make_tuple("idata_"+std::to_string(ii),py::format_descriptor<int>::format()));
             }
-        }
+        }/*
         if constexpr (ParticleType::NInt % 2 != 0) {  // alignas
             descr.append(py::make_tuple("", "|V4"));  // empty space due to alignment
-        }
+        }*/
 
         d["descr"] = descr;
         d["version"] = 3;
