@@ -3,6 +3,7 @@
 #include <AMReX.H>
 #include <AMReX_Vector.H>
 #include <AMReX_ParmParse.H>
+#include <AMReX_SIMD.H>
 
 #include <string>
 
@@ -61,7 +62,7 @@ void init_AMReX(py::module& m)
 #else
                 return false;
 #endif
-            })
+        })
         .def_property_readonly_static(
             "have_omp",
             [](py::object){
@@ -70,7 +71,21 @@ void init_AMReX(py::module& m)
 #else
                 return false;
 #endif
-            })
+        })
+        .def_property_readonly_static(
+            "have_simd",
+            [](py::object const &){
+#ifdef AMREX_USE_SIMD
+                return true;
+#else
+                return false;
+#endif
+        })
+        .def_property_readonly_static(
+            "simd_size",
+            [](py::object const &){
+                return amrex::simd::native_simd_size_real;
+        })
         .def_property_readonly_static(
             "gpu_backend",
             [](py::object){
