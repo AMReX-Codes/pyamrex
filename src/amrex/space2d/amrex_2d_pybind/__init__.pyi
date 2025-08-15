@@ -49,7 +49,7 @@ import numpy.typing
 
 from . import ParallelDescriptor
 
-__all__ = [
+__all__: list[str] = [
     "AMReX",
     "AlmostEqual",
     "AmrInfo",
@@ -5502,8 +5502,10 @@ class Config:
     have_gpu: typing.ClassVar[bool] = False
     have_mpi: typing.ClassVar[bool] = True
     have_omp: typing.ClassVar[bool] = False
+    have_simd: typing.ClassVar[bool] = False
     precision: typing.ClassVar[str] = "DOUBLE"
     precision_particles: typing.ClassVar[str] = "DOUBLE"
+    simd_size: typing.ClassVar[int] = 1
     spacedim: typing.ClassVar[int] = 2
     verbose: typing.ClassVar[int] = 1
 

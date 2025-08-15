@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-__all__ = ["IOProcessor", "IOProcessorNumber", "MyProc", "NProcs"]
+__all__: list[str] = ["IOProcessor", "IOProcessorNumber", "MyProc", "NProcs"]
 
 def IOProcessor() -> bool: ...
 def IOProcessorNumber() -> int: ...
