@@ -214,11 +214,6 @@ endforeach()
 # none needed - please use AMReX_Config.H
 
 
-# Warnings ####################################################################
-#
-set_cxx_warnings()
-
-
 # Generate Configuration and .pc Files ########################################
 #
 # these files are used if pyAMReX is installed and picked up by a downstream
@@ -359,6 +354,13 @@ if(pyAMReX_BUILD_TESTING)
     # set PYTHONPATH and PATH (for .dll files)
     pyamrex_test_set_pythonpath(pytest.AMReX)
 endif()
+
+
+# Warnings ####################################################################
+#
+foreach(D IN LISTS AMReX_SPACEDIM)
+    pyamrex_set_compile_warnings(pyAMReX_${D}d)
+endforeach()
 
 
 # Status Summary for Build Options ############################################
