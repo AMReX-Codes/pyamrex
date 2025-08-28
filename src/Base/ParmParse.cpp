@@ -9,8 +9,10 @@
 #include <AMReX_IntVect.H>
 #include <AMReX_ParmParse.H>
 
+#include <functional>
 #include <iostream>
 #include <string>
+#include <string_view>
 #include <vector>
 
 
@@ -103,5 +105,91 @@ void init_ParmParse(py::module &m)
         )
 
         // TODO: dumpTable, hasUnusedInputs, getUnusedInputs, getEntries
+
+        .def(
+            "to_dict",
+            [](ParmParse &pp) {
+                py::dict d;
+
+                auto g_table = pp.table();
+
+                // sort all keys
+                std::vector<std::string> sorted_names;
+                sorted_names.reserve(g_table.size());
+                for (auto const& [name, entry] : g_table) {
+                    sorted_names.push_back(name);
+                }
+                std::sort(sorted_names.begin(), sorted_names.end());
+
+                // helper function to unroll any nested parameter.sub.options into dict of dict of value
+                auto add_nested = [&d](auto && value, std::string_view s) {
+                    py::dict d_inner = d;  // just hold a handle to the current dict
+
+                    while (true) {
+                        auto pos = s.find('.');
+                        bool last = pos == std::string_view::npos;
+                        py::str key(s.substr(0, pos));
+
+                        if (last) {
+                            d_inner[key] = value;
+                            break;
+                        } else {
+                            // Create nested dict if missing or wrong type
+                            if (!d_inner.contains(key) ||
+                                !py::isinstance<py::dict>(d_inner[key])) {
+                                d_inner[key] = py::dict();
+                            }
+
+                            // Move one level deeper (safe, keeps reference alive)
+                            d_inner = d_inner[key].cast<py::dict>();
+                        }
+                        s.remove_prefix(pos + 1);
+                    }
+                };
+
+                for (auto const& name : sorted_names) {
+                    auto const& entry = g_table[name];
+                    for (auto const & vals : entry.m_vals) {
+                        if (vals.size() == 1) {
+                            std::visit(
+                                [&](auto&& arg) {
+                                    using T = std::remove_pointer_t<std::decay_t<decltype(arg)>>;
+                                    T v;
+                                    pp.get(name.c_str(), v);
+                                    add_nested(v, name);
+                                },
+                                entry.m_typehint
+                            );
+                        } else {
+                            std::visit(
+                                [&](auto&& arg) {
+                                    using T = std::remove_pointer_t<std::decay_t<decltype(arg)>>;
+                                    if constexpr (!std::is_same_v<T, bool>) {
+                                        std::vector<T> valarr;
+                                        pp.getarr(name.c_str(), valarr);
+                                        add_nested(valarr, name);
+                                    }
+                                },
+                                entry.m_typehint
+                            );
+                        }
+                    }
+                }
+
+                return d;
+            },
+            R"(Convert to a nested Python dictionary.
+
+.. code-block:: python
+
+    # Example: dump all ParmParse entries to YAML or TOML
+    import toml
+    import yaml
+
+    pp = amr.ParmParse("").to_dict()
+    yaml_string = yaml.dump(d)
+    toml_string = toml.dumps(d)
+)"
+        )
     ;
 }
