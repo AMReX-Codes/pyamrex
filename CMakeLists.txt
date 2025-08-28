@@ -358,9 +358,8 @@ endif()
 
 # Warnings ####################################################################
 #
-# FIXME _ALL_TARGETS is not defined
-foreach(pyamrex_tgt IN LISTS _ALL_TARGETS)
-    pyamrex_set_compile_warnings(${pyamrex_tgt})
+foreach(D IN LISTS AMReX_SPACEDIM)
+    pyamrex_set_compile_warnings(pyAMReX_${D}d)
 endforeach()
 
 
