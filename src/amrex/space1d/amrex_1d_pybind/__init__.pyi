@@ -11344,6 +11344,20 @@ class ParmParse:
         queries input values
         """
     def remove(self, arg0: str) -> int: ...
+    def to_dict(self) -> dict:
+        """
+        Convert to a nested Python dictionary.
+
+        .. code-block:: python
+
+            # Example: dump all ParmParse entries to YAML or TOML
+            import toml
+            import yaml
+
+            pp = amr.ParmParse("").to_dict()
+            yaml_string = yaml.dump(d)
+            toml_string = toml.dumps(d)
+        """
 
 class ParticleContainer_16_4_0_0_arena:
     is_soa_particle: typing.ClassVar[bool] = False
