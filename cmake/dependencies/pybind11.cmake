@@ -41,7 +41,7 @@ function(find_pybind11)
             mark_as_advanced(FETCHCONTENT_UPDATES_DISCONNECTED_FETCHEDpybind11)
         endif()
     elseif(NOT pyAMReX_pybind11_internal)
-        find_package(pybind11 3.0.0 CONFIG REQUIRED)
+        find_package(pybind11 ${pybind11_version} CONFIG REQUIRED)
         message(STATUS "pybind11: Found version '${pybind11_VERSION}'")
     endif()
 endfunction()
@@ -56,7 +56,13 @@ option(pyAMReX_pybind11_internal "Download & build pybind11" ON)
 set(pyAMReX_pybind11_repo "https://github.com/pybind/pybind11.git"
     CACHE STRING
     "Repository URI to pull and build pybind11 from if(pyAMReX_pybind11_internal)")
-set(pyAMReX_pybind11_branch "v3.0.0"
+
+# Parse AMReX version and commit information
+file(READ "${pyAMReX_SOURCE_DIR}/dependencies.json" dependencies_data)
+string(JSON pybind11_version GET "${dependencies_data}" version_pybind11)
+string(JSON pybind11_commit GET "${dependencies_data}" commit_pybind11)
+
+set(pyAMReX_pybind11_branch ${pybind11_commit}
     CACHE STRING
     "Repository branch for pyAMReX_pybind11_repo if(pyAMReX_pybind11_internal)")
 

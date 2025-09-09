@@ -5,6 +5,7 @@
 # Authors: Axel Huebl
 # License: BSD-3-Clause-LBNL
 #
+import json
 import os
 import platform
 import re
@@ -213,12 +214,18 @@ with open("./requirements.txt") as f:
     if AMReX_MPI == "ON":
         install_requires.append("mpi4py>=2.1.0")
 
+# Parse pyAMReX version information
+dependencies_file = "dependencies.json"
+with open(dependencies_file, "r") as file:
+    dependencies_data = json.load(file)
+pyamrex_version = dependencies_data.get("version_pyamrex")
+
 # keyword reference:
 #   https://packaging.python.org/guides/distributing-packages-using-setuptools
 setup(
     name="amrex",
     # note PEP-440 syntax: x.y.zaN but x.y.z.devN
-    version="25.09",
+    version=pyamrex_version,
     packages=["amrex"],
     # Python sources:
     package_dir={"": "src"},
