@@ -5,6 +5,7 @@
 # License: BSD-3-Clause-LBNL
 
 import argparse
+import copy
 import datetime
 import json
 import os
@@ -25,6 +26,14 @@ def update(args):
         repo_dict["amrex"]["tags"] = (
             "https://api.github.com/repos/AMReX-Codes/amrex/tags"
         )
+    if args.all or args.pybind11:
+        repo_dict["pybind11"] = {}
+        repo_dict["pybind11"]["commit"] = (
+            "https://api.github.com/repos/pybind/pybind11/commits/master"
+        )
+        repo_dict["pybind11"]["tags"] = (
+            "https://api.github.com/repos/pybind/pybind11/tags"
+        )
     if args.all or args.pyamrex:
         repo_dict["pyamrex"] = {}
         repo_dict["pyamrex"]["commit"] = (
@@ -37,6 +46,7 @@ def update(args):
     # list of repositories labels for logging convenience
     repo_labels = {
         "amrex": "AMReX",
+        "pybind11": "pybind11",
         "pyamrex": "pyAMReX",
     }
 
@@ -65,6 +75,7 @@ def update(args):
         tags_response = requests.get(repo_subdict["tags"])
         tags_list = tags_response.json()
         # filter out old-format tags for specific repositories
+        tags_list_filtered = copy.deepcopy(tags_list)
         if repo_name == "amrex":
             tags_list_filtered = [
                 tag_dict
@@ -115,6 +126,14 @@ if __name__ == "__main__":
         dest="amrex",
     )
 
+    # add arguments: pybind11 option
+    parser.add_argument(
+        "--pybind11",
+        help="Update pybind11 only",
+        action="store_true",
+        dest="pybind11",
+    )
+
     # add arguments: pyAMReX option
     parser.add_argument(
         "--pyamrex",
@@ -135,7 +154,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     # set args.all automatically
-    args.all = False if (args.amrex or args.pyamrex) else True
+    args.all = False if (args.amrex or args.pybind11 or args.pyamrex) else True
 
     # update
     update(args)
