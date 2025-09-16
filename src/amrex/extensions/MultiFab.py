@@ -312,7 +312,9 @@ def _process_index(self, index):
 
     if index == Ellipsis:
         index = []  # This will be filled in below to cover the valid cells
-    elif isinstance(index, slice) or isinstance(index, int) or isinstance(index, complex):
+    elif (
+        isinstance(index, slice) or isinstance(index, int) or isinstance(index, complex)
+    ):
         # If only one slice or integer passed in, it was not wrapped in a tuple
         index = [index]
     elif isinstance(index, tuple):
