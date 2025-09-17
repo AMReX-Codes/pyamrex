@@ -32,10 +32,14 @@ def aos_to_numpy(self, copy=False):
     if copy:
         # This supports a device-to-host copy.
         #
-        # todo: validate of the to_host() returned object
-        #       lifetime is always managed correctly by
-        #       Python's GC - otherwise copy twice via copy=True
-        return np.array(self.to_host(), copy=False)
+        # The to_host() returned object is a temporary, and
+        # np.array using the __array_interface__ protocol does
+        # not keep it alive automatically unless it is stored
+        # in an actual variable (tmp).
+        tmp = self.to_host()
+        ret = np.array(tmp, copy=False)
+        assert ret.base is tmp
+        return ret
     else:
         return np.array(self, copy=False)
 
