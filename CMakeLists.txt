@@ -1,7 +1,11 @@
+# Parse pyAMReX version information
+file(READ "${CMAKE_CURRENT_LIST_DIR}/dependencies.json" dependencies_data)
+string(JSON pyamrex_version GET "${dependencies_data}" version_pyamrex)
+
 # Preamble ####################################################################
 #
 cmake_minimum_required(VERSION 3.24.0)
-project(pyAMReX VERSION 25.09)
+project(pyAMReX VERSION ${pyamrex_version})
 
 include(${pyAMReX_SOURCE_DIR}/cmake/pyAMReXFunctions.cmake)
 

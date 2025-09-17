@@ -67,7 +67,7 @@ macro(find_amrex)
         message(STATUS "Searching for pre-installed AMReX ...")
         # https://amrex-codes.github.io/amrex/docs_html/BuildingAMReX.html#importing-amrex-into-your-cmake-project
         # not strictly required yet to compile pyAMReX: EB
-        find_package(AMReX 25.09 CONFIG REQUIRED COMPONENTS PARTICLES PIC)
+        find_package(AMReX ${amrex_version} CONFIG REQUIRED COMPONENTS PARTICLES PIC)
         message(STATUS "AMReX: Found version '${AMReX_VERSION}'")
 
         if(AMReX_GPU_BACKEND STREQUAL CUDA)
@@ -86,7 +86,13 @@ option(pyAMReX_amrex_internal "Download & build AMReX" ON)
 set(pyAMReX_amrex_repo "https://github.com/AMReX-Codes/amrex.git"
     CACHE STRING
     "Repository URI to pull and build AMReX from if(pyAMReX_amrex_internal)")
-set(pyAMReX_amrex_branch "25.09"
+
+# Parse AMReX version and commit information
+file(READ "${pyAMReX_SOURCE_DIR}/dependencies.json" dependencies_data)
+string(JSON amrex_version GET "${dependencies_data}" version_amrex)
+string(JSON amrex_commit GET "${dependencies_data}" commit_amrex)
+
+set(pyAMReX_amrex_branch ${amrex_commit}
     CACHE STRING
     "Repository branch for pyAMReX_amrex_repo if(pyAMReX_amrex_internal)")
 
