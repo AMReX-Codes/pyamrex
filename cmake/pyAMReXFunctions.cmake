@@ -205,7 +205,11 @@ function(pyamrex_set_compile_warnings tgt)
     elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "AppleClang")
         target_compile_options(${tgt} PRIVATE -Wall -Wextra -Wpedantic -Wshadow -Woverloaded-virtual -Wextra-semi -Wunreachable-code)
     elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
-        target_compile_options(${tgt} PRIVATE -Wall -Wextra -Wpedantic -Wshadow -Woverloaded-virtual -Wunreachable-code -Wno-array-bounds)
+        target_compile_options(${tgt} PRIVATE -Wall -Wextra -Wshadow -Woverloaded-virtual -Wunreachable-code -Wno-array-bounds)
+        if(NOT AMReX_GPU_BACKEND STREQUAL CUDA)
+            # In older NVCC, -Wpedantic causes "warning: style of line directive is a GCC extension"
+            target_compile_options(${tgt} PRIVATE -Wpedantic)
+        endif()
     elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
         # Warning C4503: "decorated name length exceeded, name was truncated"
         # Symbols longer than 4096 chars are truncated (and hashed instead)
