@@ -102,7 +102,7 @@ void init_AMReX(py::module& m)
         .def_property_readonly_static(
             "precision",
             [](py::object){
-#ifdef AMREX_SINGLE_PRECISION
+#ifdef AMREX_USE_FLOAT
                 return "SINGLE";
 #else
                 return "DOUBLE";
