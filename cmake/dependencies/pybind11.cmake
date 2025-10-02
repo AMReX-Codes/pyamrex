@@ -62,6 +62,9 @@ file(READ "${pyAMReX_SOURCE_DIR}/dependencies.json" dependencies_data)
 string(JSON pybind11_version GET "${dependencies_data}" version_pybind11)
 string(JSON pybind11_commit GET "${dependencies_data}" commit_pybind11)
 
+# Strip "v" prefix from version for find_package
+string(REGEX REPLACE "^v" "" pybind11_version "${pybind11_version}")
+
 set(pyAMReX_pybind11_branch ${pybind11_commit}
     CACHE STRING
     "Repository branch for pyAMReX_pybind11_repo if(pyAMReX_pybind11_internal)")
