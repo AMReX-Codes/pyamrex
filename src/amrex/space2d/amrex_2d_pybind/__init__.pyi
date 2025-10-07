@@ -5496,7 +5496,7 @@ class BoxArray:
     def size(self) -> int: ...
 
 class Config:
-    amrex_version: typing.ClassVar[str] = "25.10"
+    amrex_version: typing.ClassVar[str] = "25.10-11-g26054b26bb65"
     gpu_backend = None
     have_eb: typing.ClassVar[bool] = True
     have_gpu: typing.ClassVar[bool] = False
@@ -5939,13 +5939,17 @@ class FabArray_FArrayBox(FabArrayBase):
         Returns the sum of component "comp"
         """
     @typing.overload
-    def sum_boundary(self, period: Periodicity) -> None:
+    def sum_boundary(self, period: Periodicity, deterministic: bool = False) -> None:
         """
         Sum values in overlapped cells.  The destination is limited to valid cells.
         """
     @typing.overload
     def sum_boundary(
-        self, scomp: typing.SupportsInt, ncomp: typing.SupportsInt, period: Periodicity
+        self,
+        scomp: typing.SupportsInt,
+        ncomp: typing.SupportsInt,
+        period: Periodicity,
+        deterministic: bool = False,
     ) -> None:
         """
         Sum values in overlapped cells.  The destination is limited to valid cells.
@@ -5957,6 +5961,7 @@ class FabArray_FArrayBox(FabArrayBase):
         ncomp: typing.SupportsInt,
         nghost: IntVect2D,
         period: Periodicity,
+        deterministic: bool = False,
     ) -> None:
         """
         Sum values in overlapped cells.  The destination is limited to valid cells.
@@ -5969,6 +5974,7 @@ class FabArray_FArrayBox(FabArrayBase):
         nghost: IntVect2D,
         dst_nghost: IntVect2D,
         period: Periodicity,
+        deterministic: bool = False,
     ) -> None:
         """
         Sum values in overlapped cells.  The destination is limited to valid cells.
@@ -6286,13 +6292,17 @@ class FabArray_IArrayBox(FabArrayBase):
         Returns the sum of component "comp"
         """
     @typing.overload
-    def sum_boundary(self, period: Periodicity) -> None:
+    def sum_boundary(self, period: Periodicity, deterministic: bool = False) -> None:
         """
         Sum values in overlapped cells.  The destination is limited to valid cells.
         """
     @typing.overload
     def sum_boundary(
-        self, scomp: typing.SupportsInt, ncomp: typing.SupportsInt, period: Periodicity
+        self,
+        scomp: typing.SupportsInt,
+        ncomp: typing.SupportsInt,
+        period: Periodicity,
+        deterministic: bool = False,
     ) -> None:
         """
         Sum values in overlapped cells.  The destination is limited to valid cells.
@@ -6304,6 +6314,7 @@ class FabArray_IArrayBox(FabArrayBase):
         ncomp: typing.SupportsInt,
         nghost: IntVect2D,
         period: Periodicity,
+        deterministic: bool = False,
     ) -> None:
         """
         Sum values in overlapped cells.  The destination is limited to valid cells.
@@ -6316,6 +6327,7 @@ class FabArray_IArrayBox(FabArrayBase):
         nghost: IntVect2D,
         dst_nghost: IntVect2D,
         period: Periodicity,
+        deterministic: bool = False,
     ) -> None:
         """
         Sum values in overlapped cells.  The destination is limited to valid cells.
@@ -24678,5 +24690,5 @@ def write_single_level_plotfile(
 
 __author__: str = "Axel Huebl, Ryan T. Sandberg, Shreyas Ananthan, David P. Grote, Revathi Jambunathan, Edoardo Zoni, Remi Lehe, Andrew Myers, Weiqun Zhang"
 __license__: str = "BSD-3-Clause-LBNL"
-__version__: str = "25.10"
+__version__: str = "25.10-11-g26054b26bb65"
 IntVect = IntVect2D
