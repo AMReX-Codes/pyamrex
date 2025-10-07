@@ -165,20 +165,22 @@ namespace
                  "Returns the sum of component \"comp\""
             )
             .def("sum_boundary",
-                 py::overload_cast< Periodicity const & >(&FAT::SumBoundary),
-                 py::arg("period"),
+                 py::overload_cast< Periodicity const &, bool >(&FAT::SumBoundary),
+                 py::arg("period"), py::arg("deterministic") = false,
                  "Sum values in overlapped cells.  The destination is limited to valid cells."
             )
-            .def("sum_boundary", py::overload_cast< int, int, Periodicity const & >(&FAT::SumBoundary),
-                 py::arg("scomp"), py::arg("ncomp"), py::arg("period"),
+            .def("sum_boundary", py::overload_cast< int, int, Periodicity const &, bool >(&FAT::SumBoundary),
+                 py::arg("scomp"), py::arg("ncomp"), py::arg("period"), py::arg("deterministic") = false,
                  "Sum values in overlapped cells.  The destination is limited to valid cells."
             )
-            .def("sum_boundary", py::overload_cast< int, int, IntVect const&, Periodicity const & >(&FAT::SumBoundary),
+            .def("sum_boundary", py::overload_cast< int, int, IntVect const&, Periodicity const &, bool >(&FAT::SumBoundary),
                  py::arg("scomp"), py::arg("ncomp"), py::arg("nghost"), py::arg("period"),
+                 py::arg("deterministic") = false,
                  "Sum values in overlapped cells.  The destination is limited to valid cells."
             )
-            .def("sum_boundary", py::overload_cast< int, int, IntVect const&, IntVect const&, Periodicity const & >(&FAT::SumBoundary),
+            .def("sum_boundary", py::overload_cast< int, int, IntVect const&, IntVect const&, Periodicity const &, bool >(&FAT::SumBoundary),
                  py::arg("scomp"), py::arg("ncomp"), py::arg("nghost"), py::arg("dst_nghost"), py::arg("period"),
+                 py::arg("deterministic") = false,
                  "Sum values in overlapped cells.  The destination is limited to valid cells."
             )
         ;
