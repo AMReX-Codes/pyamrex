@@ -75,7 +75,9 @@ endmacro()
 #
 macro(pyamrex_set_default_install_dirs)
     if(CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
-        include(GNUInstallDirs)
+        if(NOT WIN32)
+            include(GNUInstallDirs)
+        endiF()
         if(NOT CMAKE_INSTALL_CMAKEDIR)
             set(CMAKE_INSTALL_CMAKEDIR "${CMAKE_INSTALL_LIBDIR}/cmake"
                 CACHE PATH "CMake config package location for installed targets")
