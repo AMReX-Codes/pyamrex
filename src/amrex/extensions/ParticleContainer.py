@@ -103,7 +103,7 @@ def pc_to_df(self, local=True, comm=None, root_rank=0):
     # local DataFrame(s)
     dfs_local = []
     for lvl in range(self.finest_level + 1):
-        for pti in self.const_iterator(self, level=lvl):
+        for pti in self.const_iterator(level=lvl):
             if pti.size == 0:
                 continue
 
