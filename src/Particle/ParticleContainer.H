@@ -477,9 +477,9 @@ void make_ParticleContainer_and_Iterators (py::module &m, std::string allocstr)
 
     // simpler particle iterator loops: return types of this particle box
     py_pc
-        .def_property_readonly_static("iterator", [](py::object /* pc */){ return py::type::of<iterator>(); },
+        .def_property_readonly_static("Iterator", [](py::object /* pc */){ return py::type::of<iterator>(); },
             "amrex iterator for particle boxes")
-        .def_property_readonly_static("const_iterator", [](py::object /* pc */){ return py::type::of<const_iterator>(); },
+        .def_property_readonly_static("ConstIterator", [](py::object /* pc */){ return py::type::of<const_iterator>(); },
             "amrex constant iterator for particle boxes (read-only)")
     ;
 }

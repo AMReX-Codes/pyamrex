@@ -387,13 +387,13 @@ def test_soa_pc_numpy(soa_particle_container, Npart):
             # compile-time and runtime attributes
             soa = pti.soa().to_xp()
 
-            # print all particle ids in the chunk
+            # print all particle ids in the tile
             print("idcpu =", soa.idcpu)
 
             x = soa.real["x"]
             y = soa.real["y"]
 
-            # write to all particles in the chunk
+            # write to all particles in the tile
             # note: careful, if you change particle positions, you might need to
             #       redistribute particles before continuing the simulation step
             soa.real["x"][:] = 0.30
@@ -409,6 +409,36 @@ def test_soa_pc_numpy(soa_particle_container, Npart):
             for soa_int in soa.int.values():
                 soa_int[:] = 12
     # Manual: Pure SoA Compute PC Detailed END
+
+    # Manual: Pure SoA Compute PC Simple pti START
+    # code-specific getter function, e.g.:
+    # pc = sim.get_particles()
+    # Config = sim.extension.Config
+
+    # iterate over particles on level 0
+    for pti in pc.iterator(level=0):
+        # print all particle ids in the tile
+        print("idcpu =", pti["idcpu"])
+
+        x = pti["x"]
+        y = pti["y"]
+
+        # write to all particles in the chunk
+        # note: careful, if you change particle positions, you might need to
+        #       redistribute particles before continuing the simulation step
+        pti["x"][:] = 0.30
+        pti["y"][:] = 0.35
+        pti["z"][:] = 0.40
+
+        pti["a"][:] = x[:] ** 2
+        pti["b"][:] = x[:] + y[:]
+        pti["c"][:] = 0.50
+        # ...
+
+        # int attributes
+        pti["i1"][:] = 12
+        pti["i2"][:] = 13
+    # Manual: Pure SoA Compute PC Simple pti END
 
 
 def test_pc_numpy(particle_container, Npart):
