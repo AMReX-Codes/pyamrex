@@ -8998,6 +8998,10 @@ class PODVector_uint64_std:
 
 class ParConstIterBase_16_4_0_0_arena(MFIter):
     is_soa_particle: typing.ClassVar[bool] = False
+    def __getitem__(self, name):
+        """
+        Access (read/write) particle vectors.
+        """
     def __init__(
         self,
         particle_container: ParticleContainer_16_4_0_0_arena,
@@ -9048,6 +9052,10 @@ class ParConstIterBase_16_4_0_0_arena(MFIter):
 
 class ParConstIterBase_16_4_0_0_default(MFIter):
     is_soa_particle: typing.ClassVar[bool] = False
+    def __getitem__(self, name):
+        """
+        Access (read/write) particle vectors.
+        """
     def __init__(
         self,
         particle_container: ParticleContainer_16_4_0_0_default,
@@ -9098,6 +9106,10 @@ class ParConstIterBase_16_4_0_0_default(MFIter):
 
 class ParConstIterBase_16_4_0_0_pinned(MFIter):
     is_soa_particle: typing.ClassVar[bool] = False
+    def __getitem__(self, name):
+        """
+        Access (read/write) particle vectors.
+        """
     def __init__(
         self,
         particle_container: ParticleContainer_16_4_0_0_pinned,
@@ -9148,6 +9160,10 @@ class ParConstIterBase_16_4_0_0_pinned(MFIter):
 
 class ParConstIterBase_2_1_3_1_arena(MFIter):
     is_soa_particle: typing.ClassVar[bool] = False
+    def __getitem__(self, name):
+        """
+        Access (read/write) particle vectors.
+        """
     def __init__(
         self,
         particle_container: ParticleContainer_2_1_3_1_arena,
@@ -9198,6 +9214,10 @@ class ParConstIterBase_2_1_3_1_arena(MFIter):
 
 class ParConstIterBase_2_1_3_1_default(MFIter):
     is_soa_particle: typing.ClassVar[bool] = False
+    def __getitem__(self, name):
+        """
+        Access (read/write) particle vectors.
+        """
     def __init__(
         self,
         particle_container: ParticleContainer_2_1_3_1_default,
@@ -9248,6 +9268,10 @@ class ParConstIterBase_2_1_3_1_default(MFIter):
 
 class ParConstIterBase_2_1_3_1_pinned(MFIter):
     is_soa_particle: typing.ClassVar[bool] = False
+    def __getitem__(self, name):
+        """
+        Access (read/write) particle vectors.
+        """
     def __init__(
         self,
         particle_container: ParticleContainer_2_1_3_1_pinned,
@@ -9298,6 +9322,10 @@ class ParConstIterBase_2_1_3_1_pinned(MFIter):
 
 class ParConstIterBase_pureSoA_2_0_arena(MFIter):
     is_soa_particle: typing.ClassVar[bool] = True
+    def __getitem__(self, name):
+        """
+        Access (read/write) particle vectors.
+        """
     def __init__(
         self,
         particle_container: ParticleContainer_pureSoA_2_0_arena,
@@ -9347,6 +9375,10 @@ class ParConstIterBase_pureSoA_2_0_arena(MFIter):
 
 class ParConstIterBase_pureSoA_2_0_default(MFIter):
     is_soa_particle: typing.ClassVar[bool] = True
+    def __getitem__(self, name):
+        """
+        Access (read/write) particle vectors.
+        """
     def __init__(
         self,
         particle_container: ParticleContainer_pureSoA_2_0_default,
@@ -9396,6 +9428,10 @@ class ParConstIterBase_pureSoA_2_0_default(MFIter):
 
 class ParConstIterBase_pureSoA_2_0_pinned(MFIter):
     is_soa_particle: typing.ClassVar[bool] = True
+    def __getitem__(self, name):
+        """
+        Access (read/write) particle vectors.
+        """
     def __init__(
         self,
         particle_container: ParticleContainer_pureSoA_2_0_pinned,
@@ -9445,6 +9481,10 @@ class ParConstIterBase_pureSoA_2_0_pinned(MFIter):
 
 class ParConstIterBase_pureSoA_6_0_arena(MFIter):
     is_soa_particle: typing.ClassVar[bool] = True
+    def __getitem__(self, name):
+        """
+        Access (read/write) particle vectors.
+        """
     def __init__(
         self,
         particle_container: ParticleContainer_pureSoA_6_0_arena,
@@ -9494,6 +9534,10 @@ class ParConstIterBase_pureSoA_6_0_arena(MFIter):
 
 class ParConstIterBase_pureSoA_6_0_default(MFIter):
     is_soa_particle: typing.ClassVar[bool] = True
+    def __getitem__(self, name):
+        """
+        Access (read/write) particle vectors.
+        """
     def __init__(
         self,
         particle_container: ParticleContainer_pureSoA_6_0_default,
@@ -9543,6 +9587,10 @@ class ParConstIterBase_pureSoA_6_0_default(MFIter):
 
 class ParConstIterBase_pureSoA_6_0_pinned(MFIter):
     is_soa_particle: typing.ClassVar[bool] = True
+    def __getitem__(self, name):
+        """
+        Access (read/write) particle vectors.
+        """
     def __init__(
         self,
         particle_container: ParticleContainer_pureSoA_6_0_pinned,
@@ -9592,6 +9640,10 @@ class ParConstIterBase_pureSoA_6_0_pinned(MFIter):
 
 class ParConstIterBase_pureSoA_7_0_arena(MFIter):
     is_soa_particle: typing.ClassVar[bool] = True
+    def __getitem__(self, name):
+        """
+        Access (read/write) particle vectors.
+        """
     def __init__(
         self,
         particle_container: ParticleContainer_pureSoA_7_0_arena,
@@ -9641,6 +9693,10 @@ class ParConstIterBase_pureSoA_7_0_arena(MFIter):
 
 class ParConstIterBase_pureSoA_7_0_default(MFIter):
     is_soa_particle: typing.ClassVar[bool] = True
+    def __getitem__(self, name):
+        """
+        Access (read/write) particle vectors.
+        """
     def __init__(
         self,
         particle_container: ParticleContainer_pureSoA_7_0_default,
@@ -9690,6 +9746,10 @@ class ParConstIterBase_pureSoA_7_0_default(MFIter):
 
 class ParConstIterBase_pureSoA_7_0_pinned(MFIter):
     is_soa_particle: typing.ClassVar[bool] = True
+    def __getitem__(self, name):
+        """
+        Access (read/write) particle vectors.
+        """
     def __init__(
         self,
         particle_container: ParticleContainer_pureSoA_7_0_pinned,
@@ -9739,6 +9799,10 @@ class ParConstIterBase_pureSoA_7_0_pinned(MFIter):
 
 class ParConstIterBase_pureSoA_8_0_arena(MFIter):
     is_soa_particle: typing.ClassVar[bool] = True
+    def __getitem__(self, name):
+        """
+        Access (read/write) particle vectors.
+        """
     def __init__(
         self,
         particle_container: ParticleContainer_pureSoA_8_0_arena,
@@ -9788,6 +9852,10 @@ class ParConstIterBase_pureSoA_8_0_arena(MFIter):
 
 class ParConstIterBase_pureSoA_8_0_default(MFIter):
     is_soa_particle: typing.ClassVar[bool] = True
+    def __getitem__(self, name):
+        """
+        Access (read/write) particle vectors.
+        """
     def __init__(
         self,
         particle_container: ParticleContainer_pureSoA_8_0_default,
@@ -9837,6 +9905,10 @@ class ParConstIterBase_pureSoA_8_0_default(MFIter):
 
 class ParConstIterBase_pureSoA_8_0_pinned(MFIter):
     is_soa_particle: typing.ClassVar[bool] = True
+    def __getitem__(self, name):
+        """
+        Access (read/write) particle vectors.
+        """
     def __init__(
         self,
         particle_container: ParticleContainer_pureSoA_8_0_pinned,
@@ -9886,6 +9958,10 @@ class ParConstIterBase_pureSoA_8_0_pinned(MFIter):
 
 class ParConstIter_16_4_0_0_arena(ParConstIterBase_16_4_0_0_arena):
     is_soa_particle: typing.ClassVar[bool] = False
+    def __getitem__(self, name):
+        """
+        Access (read/write) particle vectors.
+        """
     def __init__(
         self,
         particle_container: ParticleContainer_16_4_0_0_arena,
@@ -9914,6 +9990,10 @@ class ParConstIter_16_4_0_0_arena(ParConstIterBase_16_4_0_0_arena):
 
 class ParConstIter_16_4_0_0_default(ParConstIterBase_16_4_0_0_default):
     is_soa_particle: typing.ClassVar[bool] = False
+    def __getitem__(self, name):
+        """
+        Access (read/write) particle vectors.
+        """
     def __init__(
         self,
         particle_container: ParticleContainer_16_4_0_0_default,
@@ -9942,6 +10022,10 @@ class ParConstIter_16_4_0_0_default(ParConstIterBase_16_4_0_0_default):
 
 class ParConstIter_16_4_0_0_pinned(ParConstIterBase_16_4_0_0_pinned):
     is_soa_particle: typing.ClassVar[bool] = False
+    def __getitem__(self, name):
+        """
+        Access (read/write) particle vectors.
+        """
     def __init__(
         self,
         particle_container: ParticleContainer_16_4_0_0_pinned,
@@ -9970,6 +10054,10 @@ class ParConstIter_16_4_0_0_pinned(ParConstIterBase_16_4_0_0_pinned):
 
 class ParConstIter_2_1_3_1_arena(ParConstIterBase_2_1_3_1_arena):
     is_soa_particle: typing.ClassVar[bool] = False
+    def __getitem__(self, name):
+        """
+        Access (read/write) particle vectors.
+        """
     def __init__(
         self,
         particle_container: ParticleContainer_2_1_3_1_arena,
@@ -9998,6 +10086,10 @@ class ParConstIter_2_1_3_1_arena(ParConstIterBase_2_1_3_1_arena):
 
 class ParConstIter_2_1_3_1_default(ParConstIterBase_2_1_3_1_default):
     is_soa_particle: typing.ClassVar[bool] = False
+    def __getitem__(self, name):
+        """
+        Access (read/write) particle vectors.
+        """
     def __init__(
         self,
         particle_container: ParticleContainer_2_1_3_1_default,
@@ -10026,6 +10118,10 @@ class ParConstIter_2_1_3_1_default(ParConstIterBase_2_1_3_1_default):
 
 class ParConstIter_2_1_3_1_pinned(ParConstIterBase_2_1_3_1_pinned):
     is_soa_particle: typing.ClassVar[bool] = False
+    def __getitem__(self, name):
+        """
+        Access (read/write) particle vectors.
+        """
     def __init__(
         self,
         particle_container: ParticleContainer_2_1_3_1_pinned,
@@ -10054,6 +10150,10 @@ class ParConstIter_2_1_3_1_pinned(ParConstIterBase_2_1_3_1_pinned):
 
 class ParConstIter_pureSoA_2_0_arena(ParConstIterBase_pureSoA_2_0_arena):
     is_soa_particle: typing.ClassVar[bool] = True
+    def __getitem__(self, name):
+        """
+        Access (read/write) particle vectors.
+        """
     def __init__(
         self,
         particle_container: ParticleContainer_pureSoA_2_0_arena,
@@ -10082,6 +10182,10 @@ class ParConstIter_pureSoA_2_0_arena(ParConstIterBase_pureSoA_2_0_arena):
 
 class ParConstIter_pureSoA_2_0_default(ParConstIterBase_pureSoA_2_0_default):
     is_soa_particle: typing.ClassVar[bool] = True
+    def __getitem__(self, name):
+        """
+        Access (read/write) particle vectors.
+        """
     def __init__(
         self,
         particle_container: ParticleContainer_pureSoA_2_0_default,
@@ -10110,6 +10214,10 @@ class ParConstIter_pureSoA_2_0_default(ParConstIterBase_pureSoA_2_0_default):
 
 class ParConstIter_pureSoA_2_0_pinned(ParConstIterBase_pureSoA_2_0_pinned):
     is_soa_particle: typing.ClassVar[bool] = True
+    def __getitem__(self, name):
+        """
+        Access (read/write) particle vectors.
+        """
     def __init__(
         self,
         particle_container: ParticleContainer_pureSoA_2_0_pinned,
@@ -10138,6 +10246,10 @@ class ParConstIter_pureSoA_2_0_pinned(ParConstIterBase_pureSoA_2_0_pinned):
 
 class ParConstIter_pureSoA_6_0_arena(ParConstIterBase_pureSoA_6_0_arena):
     is_soa_particle: typing.ClassVar[bool] = True
+    def __getitem__(self, name):
+        """
+        Access (read/write) particle vectors.
+        """
     def __init__(
         self,
         particle_container: ParticleContainer_pureSoA_6_0_arena,
@@ -10166,6 +10278,10 @@ class ParConstIter_pureSoA_6_0_arena(ParConstIterBase_pureSoA_6_0_arena):
 
 class ParConstIter_pureSoA_6_0_default(ParConstIterBase_pureSoA_6_0_default):
     is_soa_particle: typing.ClassVar[bool] = True
+    def __getitem__(self, name):
+        """
+        Access (read/write) particle vectors.
+        """
     def __init__(
         self,
         particle_container: ParticleContainer_pureSoA_6_0_default,
@@ -10194,6 +10310,10 @@ class ParConstIter_pureSoA_6_0_default(ParConstIterBase_pureSoA_6_0_default):
 
 class ParConstIter_pureSoA_6_0_pinned(ParConstIterBase_pureSoA_6_0_pinned):
     is_soa_particle: typing.ClassVar[bool] = True
+    def __getitem__(self, name):
+        """
+        Access (read/write) particle vectors.
+        """
     def __init__(
         self,
         particle_container: ParticleContainer_pureSoA_6_0_pinned,
@@ -10222,6 +10342,10 @@ class ParConstIter_pureSoA_6_0_pinned(ParConstIterBase_pureSoA_6_0_pinned):
 
 class ParConstIter_pureSoA_7_0_arena(ParConstIterBase_pureSoA_7_0_arena):
     is_soa_particle: typing.ClassVar[bool] = True
+    def __getitem__(self, name):
+        """
+        Access (read/write) particle vectors.
+        """
     def __init__(
         self,
         particle_container: ParticleContainer_pureSoA_7_0_arena,
@@ -10250,6 +10374,10 @@ class ParConstIter_pureSoA_7_0_arena(ParConstIterBase_pureSoA_7_0_arena):
 
 class ParConstIter_pureSoA_7_0_default(ParConstIterBase_pureSoA_7_0_default):
     is_soa_particle: typing.ClassVar[bool] = True
+    def __getitem__(self, name):
+        """
+        Access (read/write) particle vectors.
+        """
     def __init__(
         self,
         particle_container: ParticleContainer_pureSoA_7_0_default,
@@ -10278,6 +10406,10 @@ class ParConstIter_pureSoA_7_0_default(ParConstIterBase_pureSoA_7_0_default):
 
 class ParConstIter_pureSoA_7_0_pinned(ParConstIterBase_pureSoA_7_0_pinned):
     is_soa_particle: typing.ClassVar[bool] = True
+    def __getitem__(self, name):
+        """
+        Access (read/write) particle vectors.
+        """
     def __init__(
         self,
         particle_container: ParticleContainer_pureSoA_7_0_pinned,
@@ -10306,6 +10438,10 @@ class ParConstIter_pureSoA_7_0_pinned(ParConstIterBase_pureSoA_7_0_pinned):
 
 class ParConstIter_pureSoA_8_0_arena(ParConstIterBase_pureSoA_8_0_arena):
     is_soa_particle: typing.ClassVar[bool] = True
+    def __getitem__(self, name):
+        """
+        Access (read/write) particle vectors.
+        """
     def __init__(
         self,
         particle_container: ParticleContainer_pureSoA_8_0_arena,
@@ -10334,6 +10470,10 @@ class ParConstIter_pureSoA_8_0_arena(ParConstIterBase_pureSoA_8_0_arena):
 
 class ParConstIter_pureSoA_8_0_default(ParConstIterBase_pureSoA_8_0_default):
     is_soa_particle: typing.ClassVar[bool] = True
+    def __getitem__(self, name):
+        """
+        Access (read/write) particle vectors.
+        """
     def __init__(
         self,
         particle_container: ParticleContainer_pureSoA_8_0_default,
@@ -10362,6 +10502,10 @@ class ParConstIter_pureSoA_8_0_default(ParConstIterBase_pureSoA_8_0_default):
 
 class ParConstIter_pureSoA_8_0_pinned(ParConstIterBase_pureSoA_8_0_pinned):
     is_soa_particle: typing.ClassVar[bool] = True
+    def __getitem__(self, name):
+        """
+        Access (read/write) particle vectors.
+        """
     def __init__(
         self,
         particle_container: ParticleContainer_pureSoA_8_0_pinned,
@@ -10390,6 +10534,10 @@ class ParConstIter_pureSoA_8_0_pinned(ParConstIterBase_pureSoA_8_0_pinned):
 
 class ParIterBase_16_4_0_0_arena(MFIter):
     is_soa_particle: typing.ClassVar[bool] = False
+    def __getitem__(self, name):
+        """
+        Access (read/write) particle vectors.
+        """
     def __init__(
         self,
         particle_container: ParticleContainer_16_4_0_0_arena,
@@ -10440,6 +10588,10 @@ class ParIterBase_16_4_0_0_arena(MFIter):
 
 class ParIterBase_16_4_0_0_default(MFIter):
     is_soa_particle: typing.ClassVar[bool] = False
+    def __getitem__(self, name):
+        """
+        Access (read/write) particle vectors.
+        """
     def __init__(
         self,
         particle_container: ParticleContainer_16_4_0_0_default,
@@ -10490,6 +10642,10 @@ class ParIterBase_16_4_0_0_default(MFIter):
 
 class ParIterBase_16_4_0_0_pinned(MFIter):
     is_soa_particle: typing.ClassVar[bool] = False
+    def __getitem__(self, name):
+        """
+        Access (read/write) particle vectors.
+        """
     def __init__(
         self,
         particle_container: ParticleContainer_16_4_0_0_pinned,
@@ -10540,6 +10696,10 @@ class ParIterBase_16_4_0_0_pinned(MFIter):
 
 class ParIterBase_2_1_3_1_arena(MFIter):
     is_soa_particle: typing.ClassVar[bool] = False
+    def __getitem__(self, name):
+        """
+        Access (read/write) particle vectors.
+        """
     def __init__(
         self,
         particle_container: ParticleContainer_2_1_3_1_arena,
@@ -10590,6 +10750,10 @@ class ParIterBase_2_1_3_1_arena(MFIter):
 
 class ParIterBase_2_1_3_1_default(MFIter):
     is_soa_particle: typing.ClassVar[bool] = False
+    def __getitem__(self, name):
+        """
+        Access (read/write) particle vectors.
+        """
     def __init__(
         self,
         particle_container: ParticleContainer_2_1_3_1_default,
@@ -10640,6 +10804,10 @@ class ParIterBase_2_1_3_1_default(MFIter):
 
 class ParIterBase_2_1_3_1_pinned(MFIter):
     is_soa_particle: typing.ClassVar[bool] = False
+    def __getitem__(self, name):
+        """
+        Access (read/write) particle vectors.
+        """
     def __init__(
         self,
         particle_container: ParticleContainer_2_1_3_1_pinned,
@@ -10690,6 +10858,10 @@ class ParIterBase_2_1_3_1_pinned(MFIter):
 
 class ParIterBase_pureSoA_2_0_arena(MFIter):
     is_soa_particle: typing.ClassVar[bool] = True
+    def __getitem__(self, name):
+        """
+        Access (read/write) particle vectors.
+        """
     def __init__(
         self,
         particle_container: ParticleContainer_pureSoA_2_0_arena,
@@ -10739,6 +10911,10 @@ class ParIterBase_pureSoA_2_0_arena(MFIter):
 
 class ParIterBase_pureSoA_2_0_default(MFIter):
     is_soa_particle: typing.ClassVar[bool] = True
+    def __getitem__(self, name):
+        """
+        Access (read/write) particle vectors.
+        """
     def __init__(
         self,
         particle_container: ParticleContainer_pureSoA_2_0_default,
@@ -10788,6 +10964,10 @@ class ParIterBase_pureSoA_2_0_default(MFIter):
 
 class ParIterBase_pureSoA_2_0_pinned(MFIter):
     is_soa_particle: typing.ClassVar[bool] = True
+    def __getitem__(self, name):
+        """
+        Access (read/write) particle vectors.
+        """
     def __init__(
         self,
         particle_container: ParticleContainer_pureSoA_2_0_pinned,
@@ -10837,6 +11017,10 @@ class ParIterBase_pureSoA_2_0_pinned(MFIter):
 
 class ParIterBase_pureSoA_6_0_arena(MFIter):
     is_soa_particle: typing.ClassVar[bool] = True
+    def __getitem__(self, name):
+        """
+        Access (read/write) particle vectors.
+        """
     def __init__(
         self,
         particle_container: ParticleContainer_pureSoA_6_0_arena,
@@ -10886,6 +11070,10 @@ class ParIterBase_pureSoA_6_0_arena(MFIter):
 
 class ParIterBase_pureSoA_6_0_default(MFIter):
     is_soa_particle: typing.ClassVar[bool] = True
+    def __getitem__(self, name):
+        """
+        Access (read/write) particle vectors.
+        """
     def __init__(
         self,
         particle_container: ParticleContainer_pureSoA_6_0_default,
@@ -10935,6 +11123,10 @@ class ParIterBase_pureSoA_6_0_default(MFIter):
 
 class ParIterBase_pureSoA_6_0_pinned(MFIter):
     is_soa_particle: typing.ClassVar[bool] = True
+    def __getitem__(self, name):
+        """
+        Access (read/write) particle vectors.
+        """
     def __init__(
         self,
         particle_container: ParticleContainer_pureSoA_6_0_pinned,
@@ -10984,6 +11176,10 @@ class ParIterBase_pureSoA_6_0_pinned(MFIter):
 
 class ParIterBase_pureSoA_7_0_arena(MFIter):
     is_soa_particle: typing.ClassVar[bool] = True
+    def __getitem__(self, name):
+        """
+        Access (read/write) particle vectors.
+        """
     def __init__(
         self,
         particle_container: ParticleContainer_pureSoA_7_0_arena,
@@ -11033,6 +11229,10 @@ class ParIterBase_pureSoA_7_0_arena(MFIter):
 
 class ParIterBase_pureSoA_7_0_default(MFIter):
     is_soa_particle: typing.ClassVar[bool] = True
+    def __getitem__(self, name):
+        """
+        Access (read/write) particle vectors.
+        """
     def __init__(
         self,
         particle_container: ParticleContainer_pureSoA_7_0_default,
@@ -11082,6 +11282,10 @@ class ParIterBase_pureSoA_7_0_default(MFIter):
 
 class ParIterBase_pureSoA_7_0_pinned(MFIter):
     is_soa_particle: typing.ClassVar[bool] = True
+    def __getitem__(self, name):
+        """
+        Access (read/write) particle vectors.
+        """
     def __init__(
         self,
         particle_container: ParticleContainer_pureSoA_7_0_pinned,
@@ -11131,6 +11335,10 @@ class ParIterBase_pureSoA_7_0_pinned(MFIter):
 
 class ParIterBase_pureSoA_8_0_arena(MFIter):
     is_soa_particle: typing.ClassVar[bool] = True
+    def __getitem__(self, name):
+        """
+        Access (read/write) particle vectors.
+        """
     def __init__(
         self,
         particle_container: ParticleContainer_pureSoA_8_0_arena,
@@ -11180,6 +11388,10 @@ class ParIterBase_pureSoA_8_0_arena(MFIter):
 
 class ParIterBase_pureSoA_8_0_default(MFIter):
     is_soa_particle: typing.ClassVar[bool] = True
+    def __getitem__(self, name):
+        """
+        Access (read/write) particle vectors.
+        """
     def __init__(
         self,
         particle_container: ParticleContainer_pureSoA_8_0_default,
@@ -11229,6 +11441,10 @@ class ParIterBase_pureSoA_8_0_default(MFIter):
 
 class ParIterBase_pureSoA_8_0_pinned(MFIter):
     is_soa_particle: typing.ClassVar[bool] = True
+    def __getitem__(self, name):
+        """
+        Access (read/write) particle vectors.
+        """
     def __init__(
         self,
         particle_container: ParticleContainer_pureSoA_8_0_pinned,
@@ -11278,6 +11494,10 @@ class ParIterBase_pureSoA_8_0_pinned(MFIter):
 
 class ParIter_16_4_0_0_arena(ParIterBase_16_4_0_0_arena):
     is_soa_particle: typing.ClassVar[bool] = False
+    def __getitem__(self, name):
+        """
+        Access (read/write) particle vectors.
+        """
     def __init__(
         self,
         particle_container: ParticleContainer_16_4_0_0_arena,
@@ -11306,6 +11526,10 @@ class ParIter_16_4_0_0_arena(ParIterBase_16_4_0_0_arena):
 
 class ParIter_16_4_0_0_default(ParIterBase_16_4_0_0_default):
     is_soa_particle: typing.ClassVar[bool] = False
+    def __getitem__(self, name):
+        """
+        Access (read/write) particle vectors.
+        """
     def __init__(
         self,
         particle_container: ParticleContainer_16_4_0_0_default,
@@ -11334,6 +11558,10 @@ class ParIter_16_4_0_0_default(ParIterBase_16_4_0_0_default):
 
 class ParIter_16_4_0_0_pinned(ParIterBase_16_4_0_0_pinned):
     is_soa_particle: typing.ClassVar[bool] = False
+    def __getitem__(self, name):
+        """
+        Access (read/write) particle vectors.
+        """
     def __init__(
         self,
         particle_container: ParticleContainer_16_4_0_0_pinned,
@@ -11362,6 +11590,10 @@ class ParIter_16_4_0_0_pinned(ParIterBase_16_4_0_0_pinned):
 
 class ParIter_2_1_3_1_arena(ParIterBase_2_1_3_1_arena):
     is_soa_particle: typing.ClassVar[bool] = False
+    def __getitem__(self, name):
+        """
+        Access (read/write) particle vectors.
+        """
     def __init__(
         self,
         particle_container: ParticleContainer_2_1_3_1_arena,
@@ -11390,6 +11622,10 @@ class ParIter_2_1_3_1_arena(ParIterBase_2_1_3_1_arena):
 
 class ParIter_2_1_3_1_default(ParIterBase_2_1_3_1_default):
     is_soa_particle: typing.ClassVar[bool] = False
+    def __getitem__(self, name):
+        """
+        Access (read/write) particle vectors.
+        """
     def __init__(
         self,
         particle_container: ParticleContainer_2_1_3_1_default,
@@ -11418,6 +11654,10 @@ class ParIter_2_1_3_1_default(ParIterBase_2_1_3_1_default):
 
 class ParIter_2_1_3_1_pinned(ParIterBase_2_1_3_1_pinned):
     is_soa_particle: typing.ClassVar[bool] = False
+    def __getitem__(self, name):
+        """
+        Access (read/write) particle vectors.
+        """
     def __init__(
         self,
         particle_container: ParticleContainer_2_1_3_1_pinned,
@@ -11446,6 +11686,10 @@ class ParIter_2_1_3_1_pinned(ParIterBase_2_1_3_1_pinned):
 
 class ParIter_pureSoA_2_0_arena(ParIterBase_pureSoA_2_0_arena):
     is_soa_particle: typing.ClassVar[bool] = True
+    def __getitem__(self, name):
+        """
+        Access (read/write) particle vectors.
+        """
     def __init__(
         self,
         particle_container: ParticleContainer_pureSoA_2_0_arena,
@@ -11474,6 +11718,10 @@ class ParIter_pureSoA_2_0_arena(ParIterBase_pureSoA_2_0_arena):
 
 class ParIter_pureSoA_2_0_default(ParIterBase_pureSoA_2_0_default):
     is_soa_particle: typing.ClassVar[bool] = True
+    def __getitem__(self, name):
+        """
+        Access (read/write) particle vectors.
+        """
     def __init__(
         self,
         particle_container: ParticleContainer_pureSoA_2_0_default,
@@ -11502,6 +11750,10 @@ class ParIter_pureSoA_2_0_default(ParIterBase_pureSoA_2_0_default):
 
 class ParIter_pureSoA_2_0_pinned(ParIterBase_pureSoA_2_0_pinned):
     is_soa_particle: typing.ClassVar[bool] = True
+    def __getitem__(self, name):
+        """
+        Access (read/write) particle vectors.
+        """
     def __init__(
         self,
         particle_container: ParticleContainer_pureSoA_2_0_pinned,
@@ -11530,6 +11782,10 @@ class ParIter_pureSoA_2_0_pinned(ParIterBase_pureSoA_2_0_pinned):
 
 class ParIter_pureSoA_6_0_arena(ParIterBase_pureSoA_6_0_arena):
     is_soa_particle: typing.ClassVar[bool] = True
+    def __getitem__(self, name):
+        """
+        Access (read/write) particle vectors.
+        """
     def __init__(
         self,
         particle_container: ParticleContainer_pureSoA_6_0_arena,
@@ -11558,6 +11814,10 @@ class ParIter_pureSoA_6_0_arena(ParIterBase_pureSoA_6_0_arena):
 
 class ParIter_pureSoA_6_0_default(ParIterBase_pureSoA_6_0_default):
     is_soa_particle: typing.ClassVar[bool] = True
+    def __getitem__(self, name):
+        """
+        Access (read/write) particle vectors.
+        """
     def __init__(
         self,
         particle_container: ParticleContainer_pureSoA_6_0_default,
@@ -11586,6 +11846,10 @@ class ParIter_pureSoA_6_0_default(ParIterBase_pureSoA_6_0_default):
 
 class ParIter_pureSoA_6_0_pinned(ParIterBase_pureSoA_6_0_pinned):
     is_soa_particle: typing.ClassVar[bool] = True
+    def __getitem__(self, name):
+        """
+        Access (read/write) particle vectors.
+        """
     def __init__(
         self,
         particle_container: ParticleContainer_pureSoA_6_0_pinned,
@@ -11614,6 +11878,10 @@ class ParIter_pureSoA_6_0_pinned(ParIterBase_pureSoA_6_0_pinned):
 
 class ParIter_pureSoA_7_0_arena(ParIterBase_pureSoA_7_0_arena):
     is_soa_particle: typing.ClassVar[bool] = True
+    def __getitem__(self, name):
+        """
+        Access (read/write) particle vectors.
+        """
     def __init__(
         self,
         particle_container: ParticleContainer_pureSoA_7_0_arena,
@@ -11642,6 +11910,10 @@ class ParIter_pureSoA_7_0_arena(ParIterBase_pureSoA_7_0_arena):
 
 class ParIter_pureSoA_7_0_default(ParIterBase_pureSoA_7_0_default):
     is_soa_particle: typing.ClassVar[bool] = True
+    def __getitem__(self, name):
+        """
+        Access (read/write) particle vectors.
+        """
     def __init__(
         self,
         particle_container: ParticleContainer_pureSoA_7_0_default,
@@ -11670,6 +11942,10 @@ class ParIter_pureSoA_7_0_default(ParIterBase_pureSoA_7_0_default):
 
 class ParIter_pureSoA_7_0_pinned(ParIterBase_pureSoA_7_0_pinned):
     is_soa_particle: typing.ClassVar[bool] = True
+    def __getitem__(self, name):
+        """
+        Access (read/write) particle vectors.
+        """
     def __init__(
         self,
         particle_container: ParticleContainer_pureSoA_7_0_pinned,
@@ -11698,6 +11974,10 @@ class ParIter_pureSoA_7_0_pinned(ParIterBase_pureSoA_7_0_pinned):
 
 class ParIter_pureSoA_8_0_arena(ParIterBase_pureSoA_8_0_arena):
     is_soa_particle: typing.ClassVar[bool] = True
+    def __getitem__(self, name):
+        """
+        Access (read/write) particle vectors.
+        """
     def __init__(
         self,
         particle_container: ParticleContainer_pureSoA_8_0_arena,
@@ -11726,6 +12006,10 @@ class ParIter_pureSoA_8_0_arena(ParIterBase_pureSoA_8_0_arena):
 
 class ParIter_pureSoA_8_0_default(ParIterBase_pureSoA_8_0_default):
     is_soa_particle: typing.ClassVar[bool] = True
+    def __getitem__(self, name):
+        """
+        Access (read/write) particle vectors.
+        """
     def __init__(
         self,
         particle_container: ParticleContainer_pureSoA_8_0_default,
@@ -11754,6 +12038,10 @@ class ParIter_pureSoA_8_0_default(ParIterBase_pureSoA_8_0_default):
 
 class ParIter_pureSoA_8_0_pinned(ParIterBase_pureSoA_8_0_pinned):
     is_soa_particle: typing.ClassVar[bool] = True
+    def __getitem__(self, name):
+        """
+        Access (read/write) particle vectors.
+        """
     def __init__(
         self,
         particle_container: ParticleContainer_pureSoA_8_0_pinned,
@@ -11871,8 +12159,8 @@ class ParticleContainer_16_4_0_0_arena:
     num_array_real: typing.ClassVar[int] = 0
     num_struct_int: typing.ClassVar[int] = 4
     num_struct_real: typing.ClassVar[int] = 16
-    const_iterator = ParConstIter_16_4_0_0_arena
-    iterator = ParIter_16_4_0_0_arena
+    ConstIterator = ParConstIter_16_4_0_0_arena
+    Iterator = ParIter_16_4_0_0_arena
     @typing.overload
     def Define(
         self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray
@@ -11951,6 +12239,29 @@ class ParticleContainer_16_4_0_0_arena:
         add a new runtime component with type Real
         """
     def clear_particles(self) -> None: ...
+    def const_iterator(self, *args, level=None):
+        """
+        Create an iterator over all particle tiles
+
+            Parameters
+            ----------
+            self : amrex.ParticleContainer_*
+                A ParticleContainer class in pyAMReX
+            args : deprecated positional argument
+            level : int | str, optional
+                The MR level. Allowed values are [0:self.finest_level+1) and "all".
+                If there is more than one MR level, the argument is required.
+
+            Returns
+            -------
+            Iterator over all particle tiles at the specified level.
+
+            Examples
+            --------
+            >>> pc.iterator(level="all")
+            >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
+
+        """
     def get_int_comp_index(self, arg0: str) -> int:
         """
         Get the Integer SoA index of a component
@@ -11992,6 +12303,29 @@ class ParticleContainer_16_4_0_0_arena:
         arg1: typing.SupportsInt,
         arg2: ParticleInitType_16_4_0_0,
     ) -> None: ...
+    def iterator(self, *args, level=None):
+        """
+        Create an iterator over all particle tiles
+
+            Parameters
+            ----------
+            self : amrex.ParticleContainer_*
+                A ParticleContainer class in pyAMReX
+            args : deprecated positional argument
+            level : int | str, optional
+                The MR level. Allowed values are [0:self.finest_level+1) and "all".
+                If there is more than one MR level, the argument is required.
+
+            Returns
+            -------
+            Iterator over all particle tiles at the specified level.
+
+            Examples
+            --------
+            >>> pc.iterator(level="all")
+            >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
+
+        """
     def make_alike(self) -> ParticleContainer_16_4_0_0_arena: ...
     def num_local_tiles_at_level(self, arg0: typing.SupportsInt) -> int: ...
     def number_of_particles_at_level(
@@ -12098,8 +12432,8 @@ class ParticleContainer_16_4_0_0_default:
     num_array_real: typing.ClassVar[int] = 0
     num_struct_int: typing.ClassVar[int] = 4
     num_struct_real: typing.ClassVar[int] = 16
-    const_iterator = ParConstIter_16_4_0_0_default
-    iterator = ParIter_16_4_0_0_default
+    ConstIterator = ParConstIter_16_4_0_0_default
+    Iterator = ParIter_16_4_0_0_default
     @typing.overload
     def Define(
         self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray
@@ -12178,6 +12512,29 @@ class ParticleContainer_16_4_0_0_default:
         add a new runtime component with type Real
         """
     def clear_particles(self) -> None: ...
+    def const_iterator(self, *args, level=None):
+        """
+        Create an iterator over all particle tiles
+
+            Parameters
+            ----------
+            self : amrex.ParticleContainer_*
+                A ParticleContainer class in pyAMReX
+            args : deprecated positional argument
+            level : int | str, optional
+                The MR level. Allowed values are [0:self.finest_level+1) and "all".
+                If there is more than one MR level, the argument is required.
+
+            Returns
+            -------
+            Iterator over all particle tiles at the specified level.
+
+            Examples
+            --------
+            >>> pc.iterator(level="all")
+            >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
+
+        """
     def get_int_comp_index(self, arg0: str) -> int:
         """
         Get the Integer SoA index of a component
@@ -12219,6 +12576,29 @@ class ParticleContainer_16_4_0_0_default:
         arg1: typing.SupportsInt,
         arg2: ParticleInitType_16_4_0_0,
     ) -> None: ...
+    def iterator(self, *args, level=None):
+        """
+        Create an iterator over all particle tiles
+
+            Parameters
+            ----------
+            self : amrex.ParticleContainer_*
+                A ParticleContainer class in pyAMReX
+            args : deprecated positional argument
+            level : int | str, optional
+                The MR level. Allowed values are [0:self.finest_level+1) and "all".
+                If there is more than one MR level, the argument is required.
+
+            Returns
+            -------
+            Iterator over all particle tiles at the specified level.
+
+            Examples
+            --------
+            >>> pc.iterator(level="all")
+            >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
+
+        """
     def make_alike(self) -> ParticleContainer_16_4_0_0_default: ...
     def num_local_tiles_at_level(self, arg0: typing.SupportsInt) -> int: ...
     def number_of_particles_at_level(
@@ -12325,8 +12705,8 @@ class ParticleContainer_16_4_0_0_pinned:
     num_array_real: typing.ClassVar[int] = 0
     num_struct_int: typing.ClassVar[int] = 4
     num_struct_real: typing.ClassVar[int] = 16
-    const_iterator = ParConstIter_16_4_0_0_pinned
-    iterator = ParIter_16_4_0_0_pinned
+    ConstIterator = ParConstIter_16_4_0_0_pinned
+    Iterator = ParIter_16_4_0_0_pinned
     @typing.overload
     def Define(
         self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray
@@ -12405,6 +12785,29 @@ class ParticleContainer_16_4_0_0_pinned:
         add a new runtime component with type Real
         """
     def clear_particles(self) -> None: ...
+    def const_iterator(self, *args, level=None):
+        """
+        Create an iterator over all particle tiles
+
+            Parameters
+            ----------
+            self : amrex.ParticleContainer_*
+                A ParticleContainer class in pyAMReX
+            args : deprecated positional argument
+            level : int | str, optional
+                The MR level. Allowed values are [0:self.finest_level+1) and "all".
+                If there is more than one MR level, the argument is required.
+
+            Returns
+            -------
+            Iterator over all particle tiles at the specified level.
+
+            Examples
+            --------
+            >>> pc.iterator(level="all")
+            >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
+
+        """
     def get_int_comp_index(self, arg0: str) -> int:
         """
         Get the Integer SoA index of a component
@@ -12446,6 +12849,29 @@ class ParticleContainer_16_4_0_0_pinned:
         arg1: typing.SupportsInt,
         arg2: ParticleInitType_16_4_0_0,
     ) -> None: ...
+    def iterator(self, *args, level=None):
+        """
+        Create an iterator over all particle tiles
+
+            Parameters
+            ----------
+            self : amrex.ParticleContainer_*
+                A ParticleContainer class in pyAMReX
+            args : deprecated positional argument
+            level : int | str, optional
+                The MR level. Allowed values are [0:self.finest_level+1) and "all".
+                If there is more than one MR level, the argument is required.
+
+            Returns
+            -------
+            Iterator over all particle tiles at the specified level.
+
+            Examples
+            --------
+            >>> pc.iterator(level="all")
+            >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
+
+        """
     def make_alike(self) -> ParticleContainer_16_4_0_0_pinned: ...
     def num_local_tiles_at_level(self, arg0: typing.SupportsInt) -> int: ...
     def number_of_particles_at_level(
@@ -12552,8 +12978,8 @@ class ParticleContainer_2_1_3_1_arena:
     num_array_real: typing.ClassVar[int] = 3
     num_struct_int: typing.ClassVar[int] = 1
     num_struct_real: typing.ClassVar[int] = 2
-    const_iterator = ParConstIter_2_1_3_1_arena
-    iterator = ParIter_2_1_3_1_arena
+    ConstIterator = ParConstIter_2_1_3_1_arena
+    Iterator = ParIter_2_1_3_1_arena
     @typing.overload
     def Define(
         self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray
@@ -12632,6 +13058,29 @@ class ParticleContainer_2_1_3_1_arena:
         add a new runtime component with type Real
         """
     def clear_particles(self) -> None: ...
+    def const_iterator(self, *args, level=None):
+        """
+        Create an iterator over all particle tiles
+
+            Parameters
+            ----------
+            self : amrex.ParticleContainer_*
+                A ParticleContainer class in pyAMReX
+            args : deprecated positional argument
+            level : int | str, optional
+                The MR level. Allowed values are [0:self.finest_level+1) and "all".
+                If there is more than one MR level, the argument is required.
+
+            Returns
+            -------
+            Iterator over all particle tiles at the specified level.
+
+            Examples
+            --------
+            >>> pc.iterator(level="all")
+            >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
+
+        """
     def get_int_comp_index(self, arg0: str) -> int:
         """
         Get the Integer SoA index of a component
@@ -12673,6 +13122,29 @@ class ParticleContainer_2_1_3_1_arena:
         arg1: typing.SupportsInt,
         arg2: ParticleInitType_2_1_3_1,
     ) -> None: ...
+    def iterator(self, *args, level=None):
+        """
+        Create an iterator over all particle tiles
+
+            Parameters
+            ----------
+            self : amrex.ParticleContainer_*
+                A ParticleContainer class in pyAMReX
+            args : deprecated positional argument
+            level : int | str, optional
+                The MR level. Allowed values are [0:self.finest_level+1) and "all".
+                If there is more than one MR level, the argument is required.
+
+            Returns
+            -------
+            Iterator over all particle tiles at the specified level.
+
+            Examples
+            --------
+            >>> pc.iterator(level="all")
+            >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
+
+        """
     def make_alike(self) -> ParticleContainer_2_1_3_1_arena: ...
     def num_local_tiles_at_level(self, arg0: typing.SupportsInt) -> int: ...
     def number_of_particles_at_level(
@@ -12779,8 +13251,8 @@ class ParticleContainer_2_1_3_1_default:
     num_array_real: typing.ClassVar[int] = 3
     num_struct_int: typing.ClassVar[int] = 1
     num_struct_real: typing.ClassVar[int] = 2
-    const_iterator = ParConstIter_2_1_3_1_default
-    iterator = ParIter_2_1_3_1_default
+    ConstIterator = ParConstIter_2_1_3_1_default
+    Iterator = ParIter_2_1_3_1_default
     @typing.overload
     def Define(
         self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray
@@ -12859,6 +13331,29 @@ class ParticleContainer_2_1_3_1_default:
         add a new runtime component with type Real
         """
     def clear_particles(self) -> None: ...
+    def const_iterator(self, *args, level=None):
+        """
+        Create an iterator over all particle tiles
+
+            Parameters
+            ----------
+            self : amrex.ParticleContainer_*
+                A ParticleContainer class in pyAMReX
+            args : deprecated positional argument
+            level : int | str, optional
+                The MR level. Allowed values are [0:self.finest_level+1) and "all".
+                If there is more than one MR level, the argument is required.
+
+            Returns
+            -------
+            Iterator over all particle tiles at the specified level.
+
+            Examples
+            --------
+            >>> pc.iterator(level="all")
+            >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
+
+        """
     def get_int_comp_index(self, arg0: str) -> int:
         """
         Get the Integer SoA index of a component
@@ -12900,6 +13395,29 @@ class ParticleContainer_2_1_3_1_default:
         arg1: typing.SupportsInt,
         arg2: ParticleInitType_2_1_3_1,
     ) -> None: ...
+    def iterator(self, *args, level=None):
+        """
+        Create an iterator over all particle tiles
+
+            Parameters
+            ----------
+            self : amrex.ParticleContainer_*
+                A ParticleContainer class in pyAMReX
+            args : deprecated positional argument
+            level : int | str, optional
+                The MR level. Allowed values are [0:self.finest_level+1) and "all".
+                If there is more than one MR level, the argument is required.
+
+            Returns
+            -------
+            Iterator over all particle tiles at the specified level.
+
+            Examples
+            --------
+            >>> pc.iterator(level="all")
+            >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
+
+        """
     def make_alike(self) -> ParticleContainer_2_1_3_1_default: ...
     def num_local_tiles_at_level(self, arg0: typing.SupportsInt) -> int: ...
     def number_of_particles_at_level(
@@ -13006,8 +13524,8 @@ class ParticleContainer_2_1_3_1_pinned:
     num_array_real: typing.ClassVar[int] = 3
     num_struct_int: typing.ClassVar[int] = 1
     num_struct_real: typing.ClassVar[int] = 2
-    const_iterator = ParConstIter_2_1_3_1_pinned
-    iterator = ParIter_2_1_3_1_pinned
+    ConstIterator = ParConstIter_2_1_3_1_pinned
+    Iterator = ParIter_2_1_3_1_pinned
     @typing.overload
     def Define(
         self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray
@@ -13086,6 +13604,29 @@ class ParticleContainer_2_1_3_1_pinned:
         add a new runtime component with type Real
         """
     def clear_particles(self) -> None: ...
+    def const_iterator(self, *args, level=None):
+        """
+        Create an iterator over all particle tiles
+
+            Parameters
+            ----------
+            self : amrex.ParticleContainer_*
+                A ParticleContainer class in pyAMReX
+            args : deprecated positional argument
+            level : int | str, optional
+                The MR level. Allowed values are [0:self.finest_level+1) and "all".
+                If there is more than one MR level, the argument is required.
+
+            Returns
+            -------
+            Iterator over all particle tiles at the specified level.
+
+            Examples
+            --------
+            >>> pc.iterator(level="all")
+            >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
+
+        """
     def get_int_comp_index(self, arg0: str) -> int:
         """
         Get the Integer SoA index of a component
@@ -13127,6 +13668,29 @@ class ParticleContainer_2_1_3_1_pinned:
         arg1: typing.SupportsInt,
         arg2: ParticleInitType_2_1_3_1,
     ) -> None: ...
+    def iterator(self, *args, level=None):
+        """
+        Create an iterator over all particle tiles
+
+            Parameters
+            ----------
+            self : amrex.ParticleContainer_*
+                A ParticleContainer class in pyAMReX
+            args : deprecated positional argument
+            level : int | str, optional
+                The MR level. Allowed values are [0:self.finest_level+1) and "all".
+                If there is more than one MR level, the argument is required.
+
+            Returns
+            -------
+            Iterator over all particle tiles at the specified level.
+
+            Examples
+            --------
+            >>> pc.iterator(level="all")
+            >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
+
+        """
     def make_alike(self) -> ParticleContainer_2_1_3_1_pinned: ...
     def num_local_tiles_at_level(self, arg0: typing.SupportsInt) -> int: ...
     def number_of_particles_at_level(
@@ -13233,8 +13797,8 @@ class ParticleContainer_pureSoA_2_0_arena:
     num_array_real: typing.ClassVar[int] = 2
     num_struct_int: typing.ClassVar[int] = 0
     num_struct_real: typing.ClassVar[int] = 0
-    const_iterator = ParConstIter_pureSoA_2_0_arena
-    iterator = ParIter_pureSoA_2_0_arena
+    ConstIterator = ParConstIter_pureSoA_2_0_arena
+    Iterator = ParIter_pureSoA_2_0_arena
     @typing.overload
     def Define(
         self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray
@@ -13313,6 +13877,29 @@ class ParticleContainer_pureSoA_2_0_arena:
         add a new runtime component with type Real
         """
     def clear_particles(self) -> None: ...
+    def const_iterator(self, *args, level=None):
+        """
+        Create an iterator over all particle tiles
+
+            Parameters
+            ----------
+            self : amrex.ParticleContainer_*
+                A ParticleContainer class in pyAMReX
+            args : deprecated positional argument
+            level : int | str, optional
+                The MR level. Allowed values are [0:self.finest_level+1) and "all".
+                If there is more than one MR level, the argument is required.
+
+            Returns
+            -------
+            Iterator over all particle tiles at the specified level.
+
+            Examples
+            --------
+            >>> pc.iterator(level="all")
+            >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
+
+        """
     def get_int_comp_index(self, arg0: str) -> int:
         """
         Get the Integer SoA index of a component
@@ -13341,6 +13928,29 @@ class ParticleContainer_pureSoA_2_0_arena:
         arg3: bool,
         arg4: RealBox,
     ) -> None: ...
+    def iterator(self, *args, level=None):
+        """
+        Create an iterator over all particle tiles
+
+            Parameters
+            ----------
+            self : amrex.ParticleContainer_*
+                A ParticleContainer class in pyAMReX
+            args : deprecated positional argument
+            level : int | str, optional
+                The MR level. Allowed values are [0:self.finest_level+1) and "all".
+                If there is more than one MR level, the argument is required.
+
+            Returns
+            -------
+            Iterator over all particle tiles at the specified level.
+
+            Examples
+            --------
+            >>> pc.iterator(level="all")
+            >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
+
+        """
     def make_alike(self) -> ParticleContainer_pureSoA_2_0_arena: ...
     def num_local_tiles_at_level(self, arg0: typing.SupportsInt) -> int: ...
     def number_of_particles_at_level(
@@ -13447,8 +14057,8 @@ class ParticleContainer_pureSoA_2_0_default:
     num_array_real: typing.ClassVar[int] = 2
     num_struct_int: typing.ClassVar[int] = 0
     num_struct_real: typing.ClassVar[int] = 0
-    const_iterator = ParConstIter_pureSoA_2_0_default
-    iterator = ParIter_pureSoA_2_0_default
+    ConstIterator = ParConstIter_pureSoA_2_0_default
+    Iterator = ParIter_pureSoA_2_0_default
     @typing.overload
     def Define(
         self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray
@@ -13527,6 +14137,29 @@ class ParticleContainer_pureSoA_2_0_default:
         add a new runtime component with type Real
         """
     def clear_particles(self) -> None: ...
+    def const_iterator(self, *args, level=None):
+        """
+        Create an iterator over all particle tiles
+
+            Parameters
+            ----------
+            self : amrex.ParticleContainer_*
+                A ParticleContainer class in pyAMReX
+            args : deprecated positional argument
+            level : int | str, optional
+                The MR level. Allowed values are [0:self.finest_level+1) and "all".
+                If there is more than one MR level, the argument is required.
+
+            Returns
+            -------
+            Iterator over all particle tiles at the specified level.
+
+            Examples
+            --------
+            >>> pc.iterator(level="all")
+            >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
+
+        """
     def get_int_comp_index(self, arg0: str) -> int:
         """
         Get the Integer SoA index of a component
@@ -13555,6 +14188,29 @@ class ParticleContainer_pureSoA_2_0_default:
         arg3: bool,
         arg4: RealBox,
     ) -> None: ...
+    def iterator(self, *args, level=None):
+        """
+        Create an iterator over all particle tiles
+
+            Parameters
+            ----------
+            self : amrex.ParticleContainer_*
+                A ParticleContainer class in pyAMReX
+            args : deprecated positional argument
+            level : int | str, optional
+                The MR level. Allowed values are [0:self.finest_level+1) and "all".
+                If there is more than one MR level, the argument is required.
+
+            Returns
+            -------
+            Iterator over all particle tiles at the specified level.
+
+            Examples
+            --------
+            >>> pc.iterator(level="all")
+            >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
+
+        """
     def make_alike(self) -> ParticleContainer_pureSoA_2_0_default: ...
     def num_local_tiles_at_level(self, arg0: typing.SupportsInt) -> int: ...
     def number_of_particles_at_level(
@@ -13661,8 +14317,8 @@ class ParticleContainer_pureSoA_2_0_pinned:
     num_array_real: typing.ClassVar[int] = 2
     num_struct_int: typing.ClassVar[int] = 0
     num_struct_real: typing.ClassVar[int] = 0
-    const_iterator = ParConstIter_pureSoA_2_0_pinned
-    iterator = ParIter_pureSoA_2_0_pinned
+    ConstIterator = ParConstIter_pureSoA_2_0_pinned
+    Iterator = ParIter_pureSoA_2_0_pinned
     @typing.overload
     def Define(
         self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray
@@ -13741,6 +14397,29 @@ class ParticleContainer_pureSoA_2_0_pinned:
         add a new runtime component with type Real
         """
     def clear_particles(self) -> None: ...
+    def const_iterator(self, *args, level=None):
+        """
+        Create an iterator over all particle tiles
+
+            Parameters
+            ----------
+            self : amrex.ParticleContainer_*
+                A ParticleContainer class in pyAMReX
+            args : deprecated positional argument
+            level : int | str, optional
+                The MR level. Allowed values are [0:self.finest_level+1) and "all".
+                If there is more than one MR level, the argument is required.
+
+            Returns
+            -------
+            Iterator over all particle tiles at the specified level.
+
+            Examples
+            --------
+            >>> pc.iterator(level="all")
+            >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
+
+        """
     def get_int_comp_index(self, arg0: str) -> int:
         """
         Get the Integer SoA index of a component
@@ -13769,6 +14448,29 @@ class ParticleContainer_pureSoA_2_0_pinned:
         arg3: bool,
         arg4: RealBox,
     ) -> None: ...
+    def iterator(self, *args, level=None):
+        """
+        Create an iterator over all particle tiles
+
+            Parameters
+            ----------
+            self : amrex.ParticleContainer_*
+                A ParticleContainer class in pyAMReX
+            args : deprecated positional argument
+            level : int | str, optional
+                The MR level. Allowed values are [0:self.finest_level+1) and "all".
+                If there is more than one MR level, the argument is required.
+
+            Returns
+            -------
+            Iterator over all particle tiles at the specified level.
+
+            Examples
+            --------
+            >>> pc.iterator(level="all")
+            >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
+
+        """
     def make_alike(self) -> ParticleContainer_pureSoA_2_0_pinned: ...
     def num_local_tiles_at_level(self, arg0: typing.SupportsInt) -> int: ...
     def number_of_particles_at_level(
@@ -13875,8 +14577,8 @@ class ParticleContainer_pureSoA_6_0_arena:
     num_array_real: typing.ClassVar[int] = 6
     num_struct_int: typing.ClassVar[int] = 0
     num_struct_real: typing.ClassVar[int] = 0
-    const_iterator = ParConstIter_pureSoA_6_0_arena
-    iterator = ParIter_pureSoA_6_0_arena
+    ConstIterator = ParConstIter_pureSoA_6_0_arena
+    Iterator = ParIter_pureSoA_6_0_arena
     @typing.overload
     def Define(
         self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray
@@ -13955,6 +14657,29 @@ class ParticleContainer_pureSoA_6_0_arena:
         add a new runtime component with type Real
         """
     def clear_particles(self) -> None: ...
+    def const_iterator(self, *args, level=None):
+        """
+        Create an iterator over all particle tiles
+
+            Parameters
+            ----------
+            self : amrex.ParticleContainer_*
+                A ParticleContainer class in pyAMReX
+            args : deprecated positional argument
+            level : int | str, optional
+                The MR level. Allowed values are [0:self.finest_level+1) and "all".
+                If there is more than one MR level, the argument is required.
+
+            Returns
+            -------
+            Iterator over all particle tiles at the specified level.
+
+            Examples
+            --------
+            >>> pc.iterator(level="all")
+            >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
+
+        """
     def get_int_comp_index(self, arg0: str) -> int:
         """
         Get the Integer SoA index of a component
@@ -13983,6 +14708,29 @@ class ParticleContainer_pureSoA_6_0_arena:
         arg3: bool,
         arg4: RealBox,
     ) -> None: ...
+    def iterator(self, *args, level=None):
+        """
+        Create an iterator over all particle tiles
+
+            Parameters
+            ----------
+            self : amrex.ParticleContainer_*
+                A ParticleContainer class in pyAMReX
+            args : deprecated positional argument
+            level : int | str, optional
+                The MR level. Allowed values are [0:self.finest_level+1) and "all".
+                If there is more than one MR level, the argument is required.
+
+            Returns
+            -------
+            Iterator over all particle tiles at the specified level.
+
+            Examples
+            --------
+            >>> pc.iterator(level="all")
+            >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
+
+        """
     def make_alike(self) -> ParticleContainer_pureSoA_6_0_arena: ...
     def num_local_tiles_at_level(self, arg0: typing.SupportsInt) -> int: ...
     def number_of_particles_at_level(
@@ -14089,8 +14837,8 @@ class ParticleContainer_pureSoA_6_0_default:
     num_array_real: typing.ClassVar[int] = 6
     num_struct_int: typing.ClassVar[int] = 0
     num_struct_real: typing.ClassVar[int] = 0
-    const_iterator = ParConstIter_pureSoA_6_0_default
-    iterator = ParIter_pureSoA_6_0_default
+    ConstIterator = ParConstIter_pureSoA_6_0_default
+    Iterator = ParIter_pureSoA_6_0_default
     @typing.overload
     def Define(
         self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray
@@ -14169,6 +14917,29 @@ class ParticleContainer_pureSoA_6_0_default:
         add a new runtime component with type Real
         """
     def clear_particles(self) -> None: ...
+    def const_iterator(self, *args, level=None):
+        """
+        Create an iterator over all particle tiles
+
+            Parameters
+            ----------
+            self : amrex.ParticleContainer_*
+                A ParticleContainer class in pyAMReX
+            args : deprecated positional argument
+            level : int | str, optional
+                The MR level. Allowed values are [0:self.finest_level+1) and "all".
+                If there is more than one MR level, the argument is required.
+
+            Returns
+            -------
+            Iterator over all particle tiles at the specified level.
+
+            Examples
+            --------
+            >>> pc.iterator(level="all")
+            >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
+
+        """
     def get_int_comp_index(self, arg0: str) -> int:
         """
         Get the Integer SoA index of a component
@@ -14197,6 +14968,29 @@ class ParticleContainer_pureSoA_6_0_default:
         arg3: bool,
         arg4: RealBox,
     ) -> None: ...
+    def iterator(self, *args, level=None):
+        """
+        Create an iterator over all particle tiles
+
+            Parameters
+            ----------
+            self : amrex.ParticleContainer_*
+                A ParticleContainer class in pyAMReX
+            args : deprecated positional argument
+            level : int | str, optional
+                The MR level. Allowed values are [0:self.finest_level+1) and "all".
+                If there is more than one MR level, the argument is required.
+
+            Returns
+            -------
+            Iterator over all particle tiles at the specified level.
+
+            Examples
+            --------
+            >>> pc.iterator(level="all")
+            >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
+
+        """
     def make_alike(self) -> ParticleContainer_pureSoA_6_0_default: ...
     def num_local_tiles_at_level(self, arg0: typing.SupportsInt) -> int: ...
     def number_of_particles_at_level(
@@ -14303,8 +15097,8 @@ class ParticleContainer_pureSoA_6_0_pinned:
     num_array_real: typing.ClassVar[int] = 6
     num_struct_int: typing.ClassVar[int] = 0
     num_struct_real: typing.ClassVar[int] = 0
-    const_iterator = ParConstIter_pureSoA_6_0_pinned
-    iterator = ParIter_pureSoA_6_0_pinned
+    ConstIterator = ParConstIter_pureSoA_6_0_pinned
+    Iterator = ParIter_pureSoA_6_0_pinned
     @typing.overload
     def Define(
         self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray
@@ -14383,6 +15177,29 @@ class ParticleContainer_pureSoA_6_0_pinned:
         add a new runtime component with type Real
         """
     def clear_particles(self) -> None: ...
+    def const_iterator(self, *args, level=None):
+        """
+        Create an iterator over all particle tiles
+
+            Parameters
+            ----------
+            self : amrex.ParticleContainer_*
+                A ParticleContainer class in pyAMReX
+            args : deprecated positional argument
+            level : int | str, optional
+                The MR level. Allowed values are [0:self.finest_level+1) and "all".
+                If there is more than one MR level, the argument is required.
+
+            Returns
+            -------
+            Iterator over all particle tiles at the specified level.
+
+            Examples
+            --------
+            >>> pc.iterator(level="all")
+            >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
+
+        """
     def get_int_comp_index(self, arg0: str) -> int:
         """
         Get the Integer SoA index of a component
@@ -14411,6 +15228,29 @@ class ParticleContainer_pureSoA_6_0_pinned:
         arg3: bool,
         arg4: RealBox,
     ) -> None: ...
+    def iterator(self, *args, level=None):
+        """
+        Create an iterator over all particle tiles
+
+            Parameters
+            ----------
+            self : amrex.ParticleContainer_*
+                A ParticleContainer class in pyAMReX
+            args : deprecated positional argument
+            level : int | str, optional
+                The MR level. Allowed values are [0:self.finest_level+1) and "all".
+                If there is more than one MR level, the argument is required.
+
+            Returns
+            -------
+            Iterator over all particle tiles at the specified level.
+
+            Examples
+            --------
+            >>> pc.iterator(level="all")
+            >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
+
+        """
     def make_alike(self) -> ParticleContainer_pureSoA_6_0_pinned: ...
     def num_local_tiles_at_level(self, arg0: typing.SupportsInt) -> int: ...
     def number_of_particles_at_level(
@@ -14517,8 +15357,8 @@ class ParticleContainer_pureSoA_7_0_arena:
     num_array_real: typing.ClassVar[int] = 7
     num_struct_int: typing.ClassVar[int] = 0
     num_struct_real: typing.ClassVar[int] = 0
-    const_iterator = ParConstIter_pureSoA_7_0_arena
-    iterator = ParIter_pureSoA_7_0_arena
+    ConstIterator = ParConstIter_pureSoA_7_0_arena
+    Iterator = ParIter_pureSoA_7_0_arena
     @typing.overload
     def Define(
         self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray
@@ -14597,6 +15437,29 @@ class ParticleContainer_pureSoA_7_0_arena:
         add a new runtime component with type Real
         """
     def clear_particles(self) -> None: ...
+    def const_iterator(self, *args, level=None):
+        """
+        Create an iterator over all particle tiles
+
+            Parameters
+            ----------
+            self : amrex.ParticleContainer_*
+                A ParticleContainer class in pyAMReX
+            args : deprecated positional argument
+            level : int | str, optional
+                The MR level. Allowed values are [0:self.finest_level+1) and "all".
+                If there is more than one MR level, the argument is required.
+
+            Returns
+            -------
+            Iterator over all particle tiles at the specified level.
+
+            Examples
+            --------
+            >>> pc.iterator(level="all")
+            >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
+
+        """
     def get_int_comp_index(self, arg0: str) -> int:
         """
         Get the Integer SoA index of a component
@@ -14625,6 +15488,29 @@ class ParticleContainer_pureSoA_7_0_arena:
         arg3: bool,
         arg4: RealBox,
     ) -> None: ...
+    def iterator(self, *args, level=None):
+        """
+        Create an iterator over all particle tiles
+
+            Parameters
+            ----------
+            self : amrex.ParticleContainer_*
+                A ParticleContainer class in pyAMReX
+            args : deprecated positional argument
+            level : int | str, optional
+                The MR level. Allowed values are [0:self.finest_level+1) and "all".
+                If there is more than one MR level, the argument is required.
+
+            Returns
+            -------
+            Iterator over all particle tiles at the specified level.
+
+            Examples
+            --------
+            >>> pc.iterator(level="all")
+            >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
+
+        """
     def make_alike(self) -> ParticleContainer_pureSoA_7_0_arena: ...
     def num_local_tiles_at_level(self, arg0: typing.SupportsInt) -> int: ...
     def number_of_particles_at_level(
@@ -14731,8 +15617,8 @@ class ParticleContainer_pureSoA_7_0_default:
     num_array_real: typing.ClassVar[int] = 7
     num_struct_int: typing.ClassVar[int] = 0
     num_struct_real: typing.ClassVar[int] = 0
-    const_iterator = ParConstIter_pureSoA_7_0_default
-    iterator = ParIter_pureSoA_7_0_default
+    ConstIterator = ParConstIter_pureSoA_7_0_default
+    Iterator = ParIter_pureSoA_7_0_default
     @typing.overload
     def Define(
         self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray
@@ -14811,6 +15697,29 @@ class ParticleContainer_pureSoA_7_0_default:
         add a new runtime component with type Real
         """
     def clear_particles(self) -> None: ...
+    def const_iterator(self, *args, level=None):
+        """
+        Create an iterator over all particle tiles
+
+            Parameters
+            ----------
+            self : amrex.ParticleContainer_*
+                A ParticleContainer class in pyAMReX
+            args : deprecated positional argument
+            level : int | str, optional
+                The MR level. Allowed values are [0:self.finest_level+1) and "all".
+                If there is more than one MR level, the argument is required.
+
+            Returns
+            -------
+            Iterator over all particle tiles at the specified level.
+
+            Examples
+            --------
+            >>> pc.iterator(level="all")
+            >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
+
+        """
     def get_int_comp_index(self, arg0: str) -> int:
         """
         Get the Integer SoA index of a component
@@ -14839,6 +15748,29 @@ class ParticleContainer_pureSoA_7_0_default:
         arg3: bool,
         arg4: RealBox,
     ) -> None: ...
+    def iterator(self, *args, level=None):
+        """
+        Create an iterator over all particle tiles
+
+            Parameters
+            ----------
+            self : amrex.ParticleContainer_*
+                A ParticleContainer class in pyAMReX
+            args : deprecated positional argument
+            level : int | str, optional
+                The MR level. Allowed values are [0:self.finest_level+1) and "all".
+                If there is more than one MR level, the argument is required.
+
+            Returns
+            -------
+            Iterator over all particle tiles at the specified level.
+
+            Examples
+            --------
+            >>> pc.iterator(level="all")
+            >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
+
+        """
     def make_alike(self) -> ParticleContainer_pureSoA_7_0_default: ...
     def num_local_tiles_at_level(self, arg0: typing.SupportsInt) -> int: ...
     def number_of_particles_at_level(
@@ -14945,8 +15877,8 @@ class ParticleContainer_pureSoA_7_0_pinned:
     num_array_real: typing.ClassVar[int] = 7
     num_struct_int: typing.ClassVar[int] = 0
     num_struct_real: typing.ClassVar[int] = 0
-    const_iterator = ParConstIter_pureSoA_7_0_pinned
-    iterator = ParIter_pureSoA_7_0_pinned
+    ConstIterator = ParConstIter_pureSoA_7_0_pinned
+    Iterator = ParIter_pureSoA_7_0_pinned
     @typing.overload
     def Define(
         self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray
@@ -15025,6 +15957,29 @@ class ParticleContainer_pureSoA_7_0_pinned:
         add a new runtime component with type Real
         """
     def clear_particles(self) -> None: ...
+    def const_iterator(self, *args, level=None):
+        """
+        Create an iterator over all particle tiles
+
+            Parameters
+            ----------
+            self : amrex.ParticleContainer_*
+                A ParticleContainer class in pyAMReX
+            args : deprecated positional argument
+            level : int | str, optional
+                The MR level. Allowed values are [0:self.finest_level+1) and "all".
+                If there is more than one MR level, the argument is required.
+
+            Returns
+            -------
+            Iterator over all particle tiles at the specified level.
+
+            Examples
+            --------
+            >>> pc.iterator(level="all")
+            >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
+
+        """
     def get_int_comp_index(self, arg0: str) -> int:
         """
         Get the Integer SoA index of a component
@@ -15053,6 +16008,29 @@ class ParticleContainer_pureSoA_7_0_pinned:
         arg3: bool,
         arg4: RealBox,
     ) -> None: ...
+    def iterator(self, *args, level=None):
+        """
+        Create an iterator over all particle tiles
+
+            Parameters
+            ----------
+            self : amrex.ParticleContainer_*
+                A ParticleContainer class in pyAMReX
+            args : deprecated positional argument
+            level : int | str, optional
+                The MR level. Allowed values are [0:self.finest_level+1) and "all".
+                If there is more than one MR level, the argument is required.
+
+            Returns
+            -------
+            Iterator over all particle tiles at the specified level.
+
+            Examples
+            --------
+            >>> pc.iterator(level="all")
+            >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
+
+        """
     def make_alike(self) -> ParticleContainer_pureSoA_7_0_pinned: ...
     def num_local_tiles_at_level(self, arg0: typing.SupportsInt) -> int: ...
     def number_of_particles_at_level(
@@ -15159,8 +16137,8 @@ class ParticleContainer_pureSoA_8_0_arena:
     num_array_real: typing.ClassVar[int] = 8
     num_struct_int: typing.ClassVar[int] = 0
     num_struct_real: typing.ClassVar[int] = 0
-    const_iterator = ParConstIter_pureSoA_8_0_arena
-    iterator = ParIter_pureSoA_8_0_arena
+    ConstIterator = ParConstIter_pureSoA_8_0_arena
+    Iterator = ParIter_pureSoA_8_0_arena
     @typing.overload
     def Define(
         self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray
@@ -15239,6 +16217,29 @@ class ParticleContainer_pureSoA_8_0_arena:
         add a new runtime component with type Real
         """
     def clear_particles(self) -> None: ...
+    def const_iterator(self, *args, level=None):
+        """
+        Create an iterator over all particle tiles
+
+            Parameters
+            ----------
+            self : amrex.ParticleContainer_*
+                A ParticleContainer class in pyAMReX
+            args : deprecated positional argument
+            level : int | str, optional
+                The MR level. Allowed values are [0:self.finest_level+1) and "all".
+                If there is more than one MR level, the argument is required.
+
+            Returns
+            -------
+            Iterator over all particle tiles at the specified level.
+
+            Examples
+            --------
+            >>> pc.iterator(level="all")
+            >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
+
+        """
     def get_int_comp_index(self, arg0: str) -> int:
         """
         Get the Integer SoA index of a component
@@ -15267,6 +16268,29 @@ class ParticleContainer_pureSoA_8_0_arena:
         arg3: bool,
         arg4: RealBox,
     ) -> None: ...
+    def iterator(self, *args, level=None):
+        """
+        Create an iterator over all particle tiles
+
+            Parameters
+            ----------
+            self : amrex.ParticleContainer_*
+                A ParticleContainer class in pyAMReX
+            args : deprecated positional argument
+            level : int | str, optional
+                The MR level. Allowed values are [0:self.finest_level+1) and "all".
+                If there is more than one MR level, the argument is required.
+
+            Returns
+            -------
+            Iterator over all particle tiles at the specified level.
+
+            Examples
+            --------
+            >>> pc.iterator(level="all")
+            >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
+
+        """
     def make_alike(self) -> ParticleContainer_pureSoA_8_0_arena: ...
     def num_local_tiles_at_level(self, arg0: typing.SupportsInt) -> int: ...
     def number_of_particles_at_level(
@@ -15373,8 +16397,8 @@ class ParticleContainer_pureSoA_8_0_default:
     num_array_real: typing.ClassVar[int] = 8
     num_struct_int: typing.ClassVar[int] = 0
     num_struct_real: typing.ClassVar[int] = 0
-    const_iterator = ParConstIter_pureSoA_8_0_default
-    iterator = ParIter_pureSoA_8_0_default
+    ConstIterator = ParConstIter_pureSoA_8_0_default
+    Iterator = ParIter_pureSoA_8_0_default
     @typing.overload
     def Define(
         self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray
@@ -15453,6 +16477,29 @@ class ParticleContainer_pureSoA_8_0_default:
         add a new runtime component with type Real
         """
     def clear_particles(self) -> None: ...
+    def const_iterator(self, *args, level=None):
+        """
+        Create an iterator over all particle tiles
+
+            Parameters
+            ----------
+            self : amrex.ParticleContainer_*
+                A ParticleContainer class in pyAMReX
+            args : deprecated positional argument
+            level : int | str, optional
+                The MR level. Allowed values are [0:self.finest_level+1) and "all".
+                If there is more than one MR level, the argument is required.
+
+            Returns
+            -------
+            Iterator over all particle tiles at the specified level.
+
+            Examples
+            --------
+            >>> pc.iterator(level="all")
+            >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
+
+        """
     def get_int_comp_index(self, arg0: str) -> int:
         """
         Get the Integer SoA index of a component
@@ -15481,6 +16528,29 @@ class ParticleContainer_pureSoA_8_0_default:
         arg3: bool,
         arg4: RealBox,
     ) -> None: ...
+    def iterator(self, *args, level=None):
+        """
+        Create an iterator over all particle tiles
+
+            Parameters
+            ----------
+            self : amrex.ParticleContainer_*
+                A ParticleContainer class in pyAMReX
+            args : deprecated positional argument
+            level : int | str, optional
+                The MR level. Allowed values are [0:self.finest_level+1) and "all".
+                If there is more than one MR level, the argument is required.
+
+            Returns
+            -------
+            Iterator over all particle tiles at the specified level.
+
+            Examples
+            --------
+            >>> pc.iterator(level="all")
+            >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
+
+        """
     def make_alike(self) -> ParticleContainer_pureSoA_8_0_default: ...
     def num_local_tiles_at_level(self, arg0: typing.SupportsInt) -> int: ...
     def number_of_particles_at_level(
@@ -15587,8 +16657,8 @@ class ParticleContainer_pureSoA_8_0_pinned:
     num_array_real: typing.ClassVar[int] = 8
     num_struct_int: typing.ClassVar[int] = 0
     num_struct_real: typing.ClassVar[int] = 0
-    const_iterator = ParConstIter_pureSoA_8_0_pinned
-    iterator = ParIter_pureSoA_8_0_pinned
+    ConstIterator = ParConstIter_pureSoA_8_0_pinned
+    Iterator = ParIter_pureSoA_8_0_pinned
     @typing.overload
     def Define(
         self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray
@@ -15667,6 +16737,29 @@ class ParticleContainer_pureSoA_8_0_pinned:
         add a new runtime component with type Real
         """
     def clear_particles(self) -> None: ...
+    def const_iterator(self, *args, level=None):
+        """
+        Create an iterator over all particle tiles
+
+            Parameters
+            ----------
+            self : amrex.ParticleContainer_*
+                A ParticleContainer class in pyAMReX
+            args : deprecated positional argument
+            level : int | str, optional
+                The MR level. Allowed values are [0:self.finest_level+1) and "all".
+                If there is more than one MR level, the argument is required.
+
+            Returns
+            -------
+            Iterator over all particle tiles at the specified level.
+
+            Examples
+            --------
+            >>> pc.iterator(level="all")
+            >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
+
+        """
     def get_int_comp_index(self, arg0: str) -> int:
         """
         Get the Integer SoA index of a component
@@ -15695,6 +16788,29 @@ class ParticleContainer_pureSoA_8_0_pinned:
         arg3: bool,
         arg4: RealBox,
     ) -> None: ...
+    def iterator(self, *args, level=None):
+        """
+        Create an iterator over all particle tiles
+
+            Parameters
+            ----------
+            self : amrex.ParticleContainer_*
+                A ParticleContainer class in pyAMReX
+            args : deprecated positional argument
+            level : int | str, optional
+                The MR level. Allowed values are [0:self.finest_level+1) and "all".
+                If there is more than one MR level, the argument is required.
+
+            Returns
+            -------
+            Iterator over all particle tiles at the specified level.
+
+            Examples
+            --------
+            >>> pc.iterator(level="all")
+            >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
+
+        """
     def make_alike(self) -> ParticleContainer_pureSoA_8_0_pinned: ...
     def num_local_tiles_at_level(self, arg0: typing.SupportsInt) -> int: ...
     def number_of_particles_at_level(
@@ -19882,6 +20998,11 @@ class StructOfArrays_0_0_arena:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
+    @typing.overload
+    def get_int_data(self, name: str) -> PODVector_int_arena:
+        """
+        Get access to a particle Real component Array (compile-time and runtime component)
+        """
     def get_num_neighbors(self) -> int: ...
     @typing.overload
     def get_real_data(
@@ -19892,6 +21013,11 @@ class StructOfArrays_0_0_arena:
         """
     @typing.overload
     def get_real_data(self, index: typing.SupportsInt) -> PODVector_real_arena:
+        """
+        Get access to a particle Real component Array (compile-time and runtime component)
+        """
+    @typing.overload
+    def get_real_data(self, name: str) -> PODVector_real_arena:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
@@ -20031,6 +21157,11 @@ class StructOfArrays_0_0_default:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
+    @typing.overload
+    def get_int_data(self, name: str) -> PODVector_int_std:
+        """
+        Get access to a particle Real component Array (compile-time and runtime component)
+        """
     def get_num_neighbors(self) -> int: ...
     @typing.overload
     def get_real_data(
@@ -20041,6 +21172,11 @@ class StructOfArrays_0_0_default:
         """
     @typing.overload
     def get_real_data(self, index: typing.SupportsInt) -> PODVector_real_std:
+        """
+        Get access to a particle Real component Array (compile-time and runtime component)
+        """
+    @typing.overload
+    def get_real_data(self, name: str) -> PODVector_real_std:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
@@ -20182,6 +21318,11 @@ class StructOfArrays_0_0_pinned:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
+    @typing.overload
+    def get_int_data(self, name: str) -> PODVector_int_pinned:
+        """
+        Get access to a particle Real component Array (compile-time and runtime component)
+        """
     def get_num_neighbors(self) -> int: ...
     @typing.overload
     def get_real_data(
@@ -20192,6 +21333,11 @@ class StructOfArrays_0_0_pinned:
         """
     @typing.overload
     def get_real_data(self, index: typing.SupportsInt) -> PODVector_real_pinned:
+        """
+        Get access to a particle Real component Array (compile-time and runtime component)
+        """
+    @typing.overload
+    def get_real_data(self, name: str) -> PODVector_real_pinned:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
@@ -20337,6 +21483,11 @@ class StructOfArrays_2_0_idcpu_arena:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
+    @typing.overload
+    def get_int_data(self, name: str) -> PODVector_int_arena:
+        """
+        Get access to a particle Real component Array (compile-time and runtime component)
+        """
     def get_num_neighbors(self) -> int: ...
     @typing.overload
     def get_real_data(
@@ -20347,6 +21498,11 @@ class StructOfArrays_2_0_idcpu_arena:
         """
     @typing.overload
     def get_real_data(self, index: typing.SupportsInt) -> PODVector_real_arena:
+        """
+        Get access to a particle Real component Array (compile-time and runtime component)
+        """
+    @typing.overload
+    def get_real_data(self, name: str) -> PODVector_real_arena:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
@@ -20490,6 +21646,11 @@ class StructOfArrays_2_0_idcpu_default:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
+    @typing.overload
+    def get_int_data(self, name: str) -> PODVector_int_std:
+        """
+        Get access to a particle Real component Array (compile-time and runtime component)
+        """
     def get_num_neighbors(self) -> int: ...
     @typing.overload
     def get_real_data(
@@ -20500,6 +21661,11 @@ class StructOfArrays_2_0_idcpu_default:
         """
     @typing.overload
     def get_real_data(self, index: typing.SupportsInt) -> PODVector_real_std:
+        """
+        Get access to a particle Real component Array (compile-time and runtime component)
+        """
+    @typing.overload
+    def get_real_data(self, name: str) -> PODVector_real_std:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
@@ -20645,6 +21811,11 @@ class StructOfArrays_2_0_idcpu_pinned:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
+    @typing.overload
+    def get_int_data(self, name: str) -> PODVector_int_pinned:
+        """
+        Get access to a particle Real component Array (compile-time and runtime component)
+        """
     def get_num_neighbors(self) -> int: ...
     @typing.overload
     def get_real_data(
@@ -20655,6 +21826,11 @@ class StructOfArrays_2_0_idcpu_pinned:
         """
     @typing.overload
     def get_real_data(self, index: typing.SupportsInt) -> PODVector_real_pinned:
+        """
+        Get access to a particle Real component Array (compile-time and runtime component)
+        """
+    @typing.overload
+    def get_real_data(self, name: str) -> PODVector_real_pinned:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
@@ -20796,6 +21972,11 @@ class StructOfArrays_3_1_arena:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
+    @typing.overload
+    def get_int_data(self, name: str) -> PODVector_int_arena:
+        """
+        Get access to a particle Real component Array (compile-time and runtime component)
+        """
     def get_num_neighbors(self) -> int: ...
     @typing.overload
     def get_real_data(
@@ -20806,6 +21987,11 @@ class StructOfArrays_3_1_arena:
         """
     @typing.overload
     def get_real_data(self, index: typing.SupportsInt) -> PODVector_real_arena:
+        """
+        Get access to a particle Real component Array (compile-time and runtime component)
+        """
+    @typing.overload
+    def get_real_data(self, name: str) -> PODVector_real_arena:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
@@ -20945,6 +22131,11 @@ class StructOfArrays_3_1_default:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
+    @typing.overload
+    def get_int_data(self, name: str) -> PODVector_int_std:
+        """
+        Get access to a particle Real component Array (compile-time and runtime component)
+        """
     def get_num_neighbors(self) -> int: ...
     @typing.overload
     def get_real_data(
@@ -20955,6 +22146,11 @@ class StructOfArrays_3_1_default:
         """
     @typing.overload
     def get_real_data(self, index: typing.SupportsInt) -> PODVector_real_std:
+        """
+        Get access to a particle Real component Array (compile-time and runtime component)
+        """
+    @typing.overload
+    def get_real_data(self, name: str) -> PODVector_real_std:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
@@ -21096,6 +22292,11 @@ class StructOfArrays_3_1_pinned:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
+    @typing.overload
+    def get_int_data(self, name: str) -> PODVector_int_pinned:
+        """
+        Get access to a particle Real component Array (compile-time and runtime component)
+        """
     def get_num_neighbors(self) -> int: ...
     @typing.overload
     def get_real_data(
@@ -21106,6 +22307,11 @@ class StructOfArrays_3_1_pinned:
         """
     @typing.overload
     def get_real_data(self, index: typing.SupportsInt) -> PODVector_real_pinned:
+        """
+        Get access to a particle Real component Array (compile-time and runtime component)
+        """
+    @typing.overload
+    def get_real_data(self, name: str) -> PODVector_real_pinned:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
@@ -21251,6 +22457,11 @@ class StructOfArrays_6_0_idcpu_arena:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
+    @typing.overload
+    def get_int_data(self, name: str) -> PODVector_int_arena:
+        """
+        Get access to a particle Real component Array (compile-time and runtime component)
+        """
     def get_num_neighbors(self) -> int: ...
     @typing.overload
     def get_real_data(
@@ -21261,6 +22472,11 @@ class StructOfArrays_6_0_idcpu_arena:
         """
     @typing.overload
     def get_real_data(self, index: typing.SupportsInt) -> PODVector_real_arena:
+        """
+        Get access to a particle Real component Array (compile-time and runtime component)
+        """
+    @typing.overload
+    def get_real_data(self, name: str) -> PODVector_real_arena:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
@@ -21404,6 +22620,11 @@ class StructOfArrays_6_0_idcpu_default:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
+    @typing.overload
+    def get_int_data(self, name: str) -> PODVector_int_std:
+        """
+        Get access to a particle Real component Array (compile-time and runtime component)
+        """
     def get_num_neighbors(self) -> int: ...
     @typing.overload
     def get_real_data(
@@ -21414,6 +22635,11 @@ class StructOfArrays_6_0_idcpu_default:
         """
     @typing.overload
     def get_real_data(self, index: typing.SupportsInt) -> PODVector_real_std:
+        """
+        Get access to a particle Real component Array (compile-time and runtime component)
+        """
+    @typing.overload
+    def get_real_data(self, name: str) -> PODVector_real_std:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
@@ -21559,6 +22785,11 @@ class StructOfArrays_6_0_idcpu_pinned:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
+    @typing.overload
+    def get_int_data(self, name: str) -> PODVector_int_pinned:
+        """
+        Get access to a particle Real component Array (compile-time and runtime component)
+        """
     def get_num_neighbors(self) -> int: ...
     @typing.overload
     def get_real_data(
@@ -21569,6 +22800,11 @@ class StructOfArrays_6_0_idcpu_pinned:
         """
     @typing.overload
     def get_real_data(self, index: typing.SupportsInt) -> PODVector_real_pinned:
+        """
+        Get access to a particle Real component Array (compile-time and runtime component)
+        """
+    @typing.overload
+    def get_real_data(self, name: str) -> PODVector_real_pinned:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
@@ -21714,6 +22950,11 @@ class StructOfArrays_7_0_idcpu_arena:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
+    @typing.overload
+    def get_int_data(self, name: str) -> PODVector_int_arena:
+        """
+        Get access to a particle Real component Array (compile-time and runtime component)
+        """
     def get_num_neighbors(self) -> int: ...
     @typing.overload
     def get_real_data(
@@ -21724,6 +22965,11 @@ class StructOfArrays_7_0_idcpu_arena:
         """
     @typing.overload
     def get_real_data(self, index: typing.SupportsInt) -> PODVector_real_arena:
+        """
+        Get access to a particle Real component Array (compile-time and runtime component)
+        """
+    @typing.overload
+    def get_real_data(self, name: str) -> PODVector_real_arena:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
@@ -21867,6 +23113,11 @@ class StructOfArrays_7_0_idcpu_default:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
+    @typing.overload
+    def get_int_data(self, name: str) -> PODVector_int_std:
+        """
+        Get access to a particle Real component Array (compile-time and runtime component)
+        """
     def get_num_neighbors(self) -> int: ...
     @typing.overload
     def get_real_data(
@@ -21877,6 +23128,11 @@ class StructOfArrays_7_0_idcpu_default:
         """
     @typing.overload
     def get_real_data(self, index: typing.SupportsInt) -> PODVector_real_std:
+        """
+        Get access to a particle Real component Array (compile-time and runtime component)
+        """
+    @typing.overload
+    def get_real_data(self, name: str) -> PODVector_real_std:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
@@ -22022,6 +23278,11 @@ class StructOfArrays_7_0_idcpu_pinned:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
+    @typing.overload
+    def get_int_data(self, name: str) -> PODVector_int_pinned:
+        """
+        Get access to a particle Real component Array (compile-time and runtime component)
+        """
     def get_num_neighbors(self) -> int: ...
     @typing.overload
     def get_real_data(
@@ -22032,6 +23293,11 @@ class StructOfArrays_7_0_idcpu_pinned:
         """
     @typing.overload
     def get_real_data(self, index: typing.SupportsInt) -> PODVector_real_pinned:
+        """
+        Get access to a particle Real component Array (compile-time and runtime component)
+        """
+    @typing.overload
+    def get_real_data(self, name: str) -> PODVector_real_pinned:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
@@ -22177,6 +23443,11 @@ class StructOfArrays_8_0_idcpu_arena:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
+    @typing.overload
+    def get_int_data(self, name: str) -> PODVector_int_arena:
+        """
+        Get access to a particle Real component Array (compile-time and runtime component)
+        """
     def get_num_neighbors(self) -> int: ...
     @typing.overload
     def get_real_data(
@@ -22187,6 +23458,11 @@ class StructOfArrays_8_0_idcpu_arena:
         """
     @typing.overload
     def get_real_data(self, index: typing.SupportsInt) -> PODVector_real_arena:
+        """
+        Get access to a particle Real component Array (compile-time and runtime component)
+        """
+    @typing.overload
+    def get_real_data(self, name: str) -> PODVector_real_arena:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
@@ -22330,6 +23606,11 @@ class StructOfArrays_8_0_idcpu_default:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
+    @typing.overload
+    def get_int_data(self, name: str) -> PODVector_int_std:
+        """
+        Get access to a particle Real component Array (compile-time and runtime component)
+        """
     def get_num_neighbors(self) -> int: ...
     @typing.overload
     def get_real_data(
@@ -22340,6 +23621,11 @@ class StructOfArrays_8_0_idcpu_default:
         """
     @typing.overload
     def get_real_data(self, index: typing.SupportsInt) -> PODVector_real_std:
+        """
+        Get access to a particle Real component Array (compile-time and runtime component)
+        """
+    @typing.overload
+    def get_real_data(self, name: str) -> PODVector_real_std:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
@@ -22485,6 +23771,11 @@ class StructOfArrays_8_0_idcpu_pinned:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
+    @typing.overload
+    def get_int_data(self, name: str) -> PODVector_int_pinned:
+        """
+        Get access to a particle Real component Array (compile-time and runtime component)
+        """
     def get_num_neighbors(self) -> int: ...
     @typing.overload
     def get_real_data(
@@ -22495,6 +23786,11 @@ class StructOfArrays_8_0_idcpu_pinned:
         """
     @typing.overload
     def get_real_data(self, index: typing.SupportsInt) -> PODVector_real_pinned:
+        """
+        Get access to a particle Real component Array (compile-time and runtime component)
+        """
+    @typing.overload
+    def get_real_data(self, name: str) -> PODVector_real_pinned:
         """
         Get access to a particle Real component Array (compile-time and runtime component)
         """
