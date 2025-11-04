@@ -63,7 +63,7 @@ def iterator(self, *args, level=None):
         return self.Iterator(self, level=level)
     else:
         raise ValueError(
-            f"level must be an integer in [0:{self.finest_level+1}) or 'all', but got: {level}"
+            f"level must be an integer in [0:{self.finest_level + 1}) or 'all', but got: {level}"
         )
 
 
