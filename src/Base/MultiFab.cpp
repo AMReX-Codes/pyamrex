@@ -20,7 +20,7 @@ void init_MultiFab(py::module &m, py::class_< amrex::MFIter > & py_MFIter)
 {
     using namespace amrex;
 
-    py::class_< MultiFab, FabArray<FArrayBox> > py_MultiFab(m, "MultiFab");
+    py::class_< MultiFab, FabArray<FArrayBox> > py_MultiFab(m, "MultiFab", py::dynamic_attr());
 
     py_MFIter
         .def("__repr__",
