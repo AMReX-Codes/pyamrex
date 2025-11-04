@@ -20,7 +20,7 @@ def iterator(self, *args, level=None):
         A ParticleContainer class in pyAMReX
     args : deprecated positional argument
     level : int | str, optional
-        The MR level. Allowed values are [0:finest_level+1) and "all".
+        The MR level. Allowed values are [0:self.finest_level+1) and "all".
         If there is more than one MR level, the argument is required.
 
     Returns
@@ -63,7 +63,7 @@ def iterator(self, *args, level=None):
         return self.Iterator(self, level=level)
     else:
         raise ValueError(
-            f"level must be an integer in [0:finest_level+1) or 'all', but got: {level}"
+            f"level must be an integer in [0:{self.finest_level+1}) or 'all', but got: {level}"
         )
 
 
