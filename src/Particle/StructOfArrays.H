@@ -55,6 +55,14 @@ void make_StructOfArrays(py::module &m, std::string allocstr)
              py::return_value_policy::reference_internal,
              py::arg("index"),
              "Get access to a particle Real component Array (compile-time and runtime component)")
+        .def("get_real_data", py::overload_cast<std::string const &>(&SOAType::GetRealData),
+             py::return_value_policy::reference_internal,
+             py::arg("name"),
+             "Get access to a particle Real component Array (compile-time and runtime component)")
+        .def("get_int_data", py::overload_cast<std::string const &>(&SOAType::GetIntData),
+             py::return_value_policy::reference_internal,
+             py::arg("name"),
+             "Get access to a particle Real component Array (compile-time and runtime component)")
 
         // names
         .def_property_readonly("real_names",

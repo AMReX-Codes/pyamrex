@@ -65,7 +65,7 @@ def particle_container(Rpart, std_geometry, distmap, boxarr, std_real_box):
     particles_tile_ct = 0
     # assign some values to runtime components
     for lvl in range(pc.finest_level + 1):
-        for pti in pc.iterator(pc, level=lvl):
+        for pti in pc.iterator(level=lvl):
             aos = pti.aos()
             aos_numpy = aos.to_numpy(copy=False)
             for i, p in enumerate(aos_numpy):
@@ -81,7 +81,7 @@ def check_particles_container(pc, reference_particles):
     Checks the contents of `pc` against `reference_particles`
     """
     for lvl in range(pc.finest_level + 1):
-        for i, pti in enumerate(pc.iterator(pc, level=lvl)):
+        for i, pti in enumerate(pc.iterator(level=lvl)):
             aos = pti.aos()
             for p in aos.to_numpy(copy=True):
                 ref = reference_particles[p["idata_0"]]

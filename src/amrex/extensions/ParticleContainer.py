@@ -6,7 +6,65 @@ Authors: Axel Huebl
 License: BSD-3-Clause-LBNL
 """
 
-from .Iterator import next
+import warnings
+
+from .Iterator import getitem, next
+
+
+def iterator(self, *args, level=None):
+    """Create an iterator over all particle tiles
+
+    Parameters
+    ----------
+    self : amrex.ParticleContainer_*
+        A ParticleContainer class in pyAMReX
+    args : deprecated positional argument
+    level : int | str, optional
+        The MR level. Allowed values are [0:self.finest_level+1) and "all".
+        If there is more than one MR level, the argument is required.
+
+    Returns
+    -------
+    Iterator over all particle tiles at the specified level.
+
+    Examples
+    --------
+    >>> pc.iterator(level="all")
+    >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
+    """
+    # Warn if a second positional argument is provided (ignored argument)
+    if len(args) > 0:
+        if len(args) == 1 and isinstance(args[0], int) and level is None:
+            level = args[0]
+        else:
+            warnings.warn(
+                "The second positional argument to iterator() is deprecated and ignored. "
+                "Please update your code to use iterator(self, level=...) instead.",
+                DeprecationWarning,
+                stacklevel=2,
+            )
+
+    has_mr = self.finest_level > 0
+
+    if level is None:
+        if has_mr:
+            raise ValueError(
+                "level must be specified for multi-level ParticleContainers"
+            )
+        else:
+            level = 0
+
+    if level == "all":
+        raise ValueError("level='all' is not yet supported for ParticleContainers")
+        # TODO: This does not work
+        # for lvl in range(self.finest_level + 1):
+        #     yield self.Iterator(self, level=lvl)
+    elif isinstance(level, int) and level >= 0:
+        return self.Iterator(self, level=level)
+    else:
+        raise ValueError(
+            f"level must be an integer in [0:{self.finest_level + 1}) or 'all', but got: {level}"
+        )
 
 
 def pc_to_df(self, local=True, comm=None, root_rank=0):
@@ -45,7 +103,7 @@ def pc_to_df(self, local=True, comm=None, root_rank=0):
     # local DataFrame(s)
     dfs_local = []
     for lvl in range(self.finest_level + 1):
-        for pti in self.const_iterator(self, level=lvl):
+        for pti in self.const_iterator(level=lvl):
             if pti.size == 0:
                 continue
 
@@ -130,6 +188,7 @@ def register_ParticleContainer_extension(amr):
     ):
         ParIter_type.__next__ = next
         ParIter_type.__iter__ = lambda self: self
+        ParIter_type.__getitem__ = getitem
 
     # register member functions for every ParticleContainer_* type
     for _, ParticleContainer_type in inspect.getmembers(
@@ -138,4 +197,8 @@ def register_ParticleContainer_extension(amr):
         and member.__module__ == amr.__name__
         and member.__name__.startswith("ParticleContainer_"),
     ):
+        ParticleContainer_type.iterator = iterator
+        ParticleContainer_type.const_iterator = (
+            iterator  # TODO: simplified, code duplication
+        )
         ParticleContainer_type.to_df = pc_to_df

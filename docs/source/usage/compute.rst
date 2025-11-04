@@ -92,7 +92,23 @@ Here is the general structure for computing on particles:
 
       .. tab-set::
 
-         .. tab-item:: Simple: Pandas (read-only)
+         .. tab-item:: Simple
+
+            .. literalinclude:: ../../../tests/test_particleContainer.py
+               :language: python3
+               :dedent: 4
+               :start-after: # Manual: Pure SoA Compute PC Simple pti START
+               :end-before: # Manual: Pure SoA Compute PC Simple pti END
+
+         .. tab-item:: Detailed
+
+            .. literalinclude:: ../../../tests/test_particleContainer.py
+               :language: python3
+               :dedent: 4
+               :start-after: # Manual: Pure SoA Compute PC Detailed START
+               :end-before: # Manual: Pure SoA Compute PC Detailed END
+
+         .. tab-item:: Pandas (read-only)
 
             .. literalinclude:: ../../../tests/test_particleContainer.py
                :language: python3
@@ -100,13 +116,6 @@ Here is the general structure for computing on particles:
                :start-after: # Manual: Pure SoA Compute PC Pandas START
                :end-before: # Manual: Pure SoA Compute PC Pandas END
 
-         .. tab-item:: Detailed (read and write)
-
-            .. literalinclude:: ../../../tests/test_particleContainer.py
-               :language: python3
-               :dedent: 4
-               :start-after: # Manual: Pure SoA Compute PC Detailed START
-               :end-before: # Manual: Pure SoA Compute PC Detailed END
 
    .. tab-item:: Legacy (AoS + SoA) Layout
 
