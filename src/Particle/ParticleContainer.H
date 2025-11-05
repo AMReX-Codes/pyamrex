@@ -324,7 +324,7 @@ void make_ParticleContainer_and_Iterators (py::module &m, std::string allocstr)
                 // Long TotalNumberOfParticles (bool only_valid=true, bool only_local=false) const;
         .def("number_of_particles",
             [](ParticleContainerType const & pc, bool only_local){
-                return pc.TotalNumberOfParticles(only_local);
+                return pc.TotalNumberOfParticles(true, only_local);
             },
             py::arg("only_local")=false,
             "Return the number of valid particles on all MPI ranks, unless only_local is specified."
@@ -335,7 +335,7 @@ void make_ParticleContainer_and_Iterators (py::module &m, std::string allocstr)
         )
         .def_property_readonly("size",
             [](ParticleContainerType const & pc){
-                return pc.TotalNumberOfParticles(false);
+                return pc.TotalNumberOfParticles(true, false);
             },
             "Return the number of valid particles on all MPI ranks"
         )
