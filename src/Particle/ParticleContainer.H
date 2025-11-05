@@ -285,7 +285,10 @@ void make_ParticleContainer_and_Iterators (py::module &m, std::string allocstr)
                                     const Vector<IntVect>&>
                 (&ParticleContainerType::Define))
 
-        .def("num_local_tiles_at_level", &ParticleContainerType::numLocalTilesAtLevel)
+        .def("num_local_tiles_at_level",
+            &ParticleContainerType::numLocalTilesAtLevel,
+            py::arg("level")
+        )
 
         .def("reserve_data", &ParticleContainerType::reserveData)
         .def("resize_data", &ParticleContainerType::resizeData)
@@ -319,8 +322,23 @@ void make_ParticleContainer_and_Iterators (py::module &m, std::string allocstr)
             //     py::overload_cast<int, int, int>
             //     (&ParticleContainerType::DefineAndReturnParticleTile))
                 // Long TotalNumberOfParticles (bool only_valid=true, bool only_local=false) const;
+        .def("number_of_particles",
+            [](ParticleContainerType const & pc, bool only_local){
+                return pc.TotalNumberOfParticles(only_local);
+            },
+            py::arg("only_local")=false,
+            "Return the number of valid particles on all MPI ranks, unless only_local is specified."
+        )
         .def("total_number_of_particles", &ParticleContainerType::TotalNumberOfParticles,
-            py::arg("only_valid")=true, py::arg("only_local")=false)
+            py::arg("only_valid")=true, py::arg("only_local")=false,
+            "Return the number of particles (only valid or including invalid) on all MPI ranks, unless only_local is specified."
+        )
+        .def_property_readonly("size",
+            [](ParticleContainerType const & pc){
+                return pc.TotalNumberOfParticles(false);
+            },
+            "Return the number of valid particles on all MPI ranks"
+        )
         .def("remove_particles_at_level", &ParticleContainerType::RemoveParticlesAtLevel)
         .def("remove_particles_not_at_finestLevel", &ParticleContainerType::RemoveParticlesNotAtFinestLevel)
         // void CreateVirtualParticles (int level, AoS& virts) const;
