@@ -11785,7 +11785,11 @@ class ParticleContainer_16_4_0_0_arena:
 
         """
     def make_alike(self) -> ParticleContainer_16_4_0_0_arena: ...
-    def num_local_tiles_at_level(self, arg0: typing.SupportsInt) -> int: ...
+    def num_local_tiles_at_level(self, level: typing.SupportsInt) -> int: ...
+    def number_of_particles(self, only_local: bool = False) -> int:
+        """
+        Return the number of valid particles on all MPI ranks, unless only_local is specified.
+        """
     def number_of_particles_at_level(
         self,
         level: typing.SupportsInt,
@@ -11845,7 +11849,10 @@ class ParticleContainer_16_4_0_0_arena:
         """
     def total_number_of_particles(
         self, only_valid: bool = True, only_local: bool = False
-    ) -> int: ...
+    ) -> int:
+        """
+        Return the number of particles (only valid or including invalid) on all MPI ranks, unless only_local is specified.
+        """
     def write_plotfile(self, dir: str, name: str) -> None: ...
     @property
     def byte_spread(self) -> typing.Annotated[list[int], "FixedSize(3)"]: ...
@@ -11882,6 +11889,11 @@ class ParticleContainer_16_4_0_0_arena:
     def real_soa_names(self) -> list[str]:
         """
         Get the names for the Real SoA components
+        """
+    @property
+    def size(self) -> int:
+        """
+        Return the number of valid particles on all MPI ranks
         """
 
 class ParticleContainer_16_4_0_0_default:
@@ -12058,7 +12070,11 @@ class ParticleContainer_16_4_0_0_default:
 
         """
     def make_alike(self) -> ParticleContainer_16_4_0_0_default: ...
-    def num_local_tiles_at_level(self, arg0: typing.SupportsInt) -> int: ...
+    def num_local_tiles_at_level(self, level: typing.SupportsInt) -> int: ...
+    def number_of_particles(self, only_local: bool = False) -> int:
+        """
+        Return the number of valid particles on all MPI ranks, unless only_local is specified.
+        """
     def number_of_particles_at_level(
         self,
         level: typing.SupportsInt,
@@ -12118,7 +12134,10 @@ class ParticleContainer_16_4_0_0_default:
         """
     def total_number_of_particles(
         self, only_valid: bool = True, only_local: bool = False
-    ) -> int: ...
+    ) -> int:
+        """
+        Return the number of particles (only valid or including invalid) on all MPI ranks, unless only_local is specified.
+        """
     def write_plotfile(self, dir: str, name: str) -> None: ...
     @property
     def byte_spread(self) -> typing.Annotated[list[int], "FixedSize(3)"]: ...
@@ -12155,6 +12174,11 @@ class ParticleContainer_16_4_0_0_default:
     def real_soa_names(self) -> list[str]:
         """
         Get the names for the Real SoA components
+        """
+    @property
+    def size(self) -> int:
+        """
+        Return the number of valid particles on all MPI ranks
         """
 
 class ParticleContainer_16_4_0_0_pinned:
@@ -12331,7 +12355,11 @@ class ParticleContainer_16_4_0_0_pinned:
 
         """
     def make_alike(self) -> ParticleContainer_16_4_0_0_pinned: ...
-    def num_local_tiles_at_level(self, arg0: typing.SupportsInt) -> int: ...
+    def num_local_tiles_at_level(self, level: typing.SupportsInt) -> int: ...
+    def number_of_particles(self, only_local: bool = False) -> int:
+        """
+        Return the number of valid particles on all MPI ranks, unless only_local is specified.
+        """
     def number_of_particles_at_level(
         self,
         level: typing.SupportsInt,
@@ -12391,7 +12419,10 @@ class ParticleContainer_16_4_0_0_pinned:
         """
     def total_number_of_particles(
         self, only_valid: bool = True, only_local: bool = False
-    ) -> int: ...
+    ) -> int:
+        """
+        Return the number of particles (only valid or including invalid) on all MPI ranks, unless only_local is specified.
+        """
     def write_plotfile(self, dir: str, name: str) -> None: ...
     @property
     def byte_spread(self) -> typing.Annotated[list[int], "FixedSize(3)"]: ...
@@ -12428,6 +12459,11 @@ class ParticleContainer_16_4_0_0_pinned:
     def real_soa_names(self) -> list[str]:
         """
         Get the names for the Real SoA components
+        """
+    @property
+    def size(self) -> int:
+        """
+        Return the number of valid particles on all MPI ranks
         """
 
 class ParticleContainer_2_1_3_1_arena:
@@ -12604,7 +12640,11 @@ class ParticleContainer_2_1_3_1_arena:
 
         """
     def make_alike(self) -> ParticleContainer_2_1_3_1_arena: ...
-    def num_local_tiles_at_level(self, arg0: typing.SupportsInt) -> int: ...
+    def num_local_tiles_at_level(self, level: typing.SupportsInt) -> int: ...
+    def number_of_particles(self, only_local: bool = False) -> int:
+        """
+        Return the number of valid particles on all MPI ranks, unless only_local is specified.
+        """
     def number_of_particles_at_level(
         self,
         level: typing.SupportsInt,
@@ -12664,7 +12704,10 @@ class ParticleContainer_2_1_3_1_arena:
         """
     def total_number_of_particles(
         self, only_valid: bool = True, only_local: bool = False
-    ) -> int: ...
+    ) -> int:
+        """
+        Return the number of particles (only valid or including invalid) on all MPI ranks, unless only_local is specified.
+        """
     def write_plotfile(self, dir: str, name: str) -> None: ...
     @property
     def byte_spread(self) -> typing.Annotated[list[int], "FixedSize(3)"]: ...
@@ -12701,6 +12744,11 @@ class ParticleContainer_2_1_3_1_arena:
     def real_soa_names(self) -> list[str]:
         """
         Get the names for the Real SoA components
+        """
+    @property
+    def size(self) -> int:
+        """
+        Return the number of valid particles on all MPI ranks
         """
 
 class ParticleContainer_2_1_3_1_default:
@@ -12877,7 +12925,11 @@ class ParticleContainer_2_1_3_1_default:
 
         """
     def make_alike(self) -> ParticleContainer_2_1_3_1_default: ...
-    def num_local_tiles_at_level(self, arg0: typing.SupportsInt) -> int: ...
+    def num_local_tiles_at_level(self, level: typing.SupportsInt) -> int: ...
+    def number_of_particles(self, only_local: bool = False) -> int:
+        """
+        Return the number of valid particles on all MPI ranks, unless only_local is specified.
+        """
     def number_of_particles_at_level(
         self,
         level: typing.SupportsInt,
@@ -12937,7 +12989,10 @@ class ParticleContainer_2_1_3_1_default:
         """
     def total_number_of_particles(
         self, only_valid: bool = True, only_local: bool = False
-    ) -> int: ...
+    ) -> int:
+        """
+        Return the number of particles (only valid or including invalid) on all MPI ranks, unless only_local is specified.
+        """
     def write_plotfile(self, dir: str, name: str) -> None: ...
     @property
     def byte_spread(self) -> typing.Annotated[list[int], "FixedSize(3)"]: ...
@@ -12974,6 +13029,11 @@ class ParticleContainer_2_1_3_1_default:
     def real_soa_names(self) -> list[str]:
         """
         Get the names for the Real SoA components
+        """
+    @property
+    def size(self) -> int:
+        """
+        Return the number of valid particles on all MPI ranks
         """
 
 class ParticleContainer_2_1_3_1_pinned:
@@ -13150,7 +13210,11 @@ class ParticleContainer_2_1_3_1_pinned:
 
         """
     def make_alike(self) -> ParticleContainer_2_1_3_1_pinned: ...
-    def num_local_tiles_at_level(self, arg0: typing.SupportsInt) -> int: ...
+    def num_local_tiles_at_level(self, level: typing.SupportsInt) -> int: ...
+    def number_of_particles(self, only_local: bool = False) -> int:
+        """
+        Return the number of valid particles on all MPI ranks, unless only_local is specified.
+        """
     def number_of_particles_at_level(
         self,
         level: typing.SupportsInt,
@@ -13210,7 +13274,10 @@ class ParticleContainer_2_1_3_1_pinned:
         """
     def total_number_of_particles(
         self, only_valid: bool = True, only_local: bool = False
-    ) -> int: ...
+    ) -> int:
+        """
+        Return the number of particles (only valid or including invalid) on all MPI ranks, unless only_local is specified.
+        """
     def write_plotfile(self, dir: str, name: str) -> None: ...
     @property
     def byte_spread(self) -> typing.Annotated[list[int], "FixedSize(3)"]: ...
@@ -13247,6 +13314,11 @@ class ParticleContainer_2_1_3_1_pinned:
     def real_soa_names(self) -> list[str]:
         """
         Get the names for the Real SoA components
+        """
+    @property
+    def size(self) -> int:
+        """
+        Return the number of valid particles on all MPI ranks
         """
 
 class ParticleContainer_pureSoA_1_0_arena:
@@ -13410,7 +13482,11 @@ class ParticleContainer_pureSoA_1_0_arena:
 
         """
     def make_alike(self) -> ParticleContainer_pureSoA_1_0_arena: ...
-    def num_local_tiles_at_level(self, arg0: typing.SupportsInt) -> int: ...
+    def num_local_tiles_at_level(self, level: typing.SupportsInt) -> int: ...
+    def number_of_particles(self, only_local: bool = False) -> int:
+        """
+        Return the number of valid particles on all MPI ranks, unless only_local is specified.
+        """
     def number_of_particles_at_level(
         self,
         level: typing.SupportsInt,
@@ -13470,7 +13546,10 @@ class ParticleContainer_pureSoA_1_0_arena:
         """
     def total_number_of_particles(
         self, only_valid: bool = True, only_local: bool = False
-    ) -> int: ...
+    ) -> int:
+        """
+        Return the number of particles (only valid or including invalid) on all MPI ranks, unless only_local is specified.
+        """
     def write_plotfile(self, dir: str, name: str) -> None: ...
     @property
     def byte_spread(self) -> typing.Annotated[list[int], "FixedSize(3)"]: ...
@@ -13507,6 +13586,11 @@ class ParticleContainer_pureSoA_1_0_arena:
     def real_soa_names(self) -> list[str]:
         """
         Get the names for the Real SoA components
+        """
+    @property
+    def size(self) -> int:
+        """
+        Return the number of valid particles on all MPI ranks
         """
 
 class ParticleContainer_pureSoA_1_0_default:
@@ -13670,7 +13754,11 @@ class ParticleContainer_pureSoA_1_0_default:
 
         """
     def make_alike(self) -> ParticleContainer_pureSoA_1_0_default: ...
-    def num_local_tiles_at_level(self, arg0: typing.SupportsInt) -> int: ...
+    def num_local_tiles_at_level(self, level: typing.SupportsInt) -> int: ...
+    def number_of_particles(self, only_local: bool = False) -> int:
+        """
+        Return the number of valid particles on all MPI ranks, unless only_local is specified.
+        """
     def number_of_particles_at_level(
         self,
         level: typing.SupportsInt,
@@ -13730,7 +13818,10 @@ class ParticleContainer_pureSoA_1_0_default:
         """
     def total_number_of_particles(
         self, only_valid: bool = True, only_local: bool = False
-    ) -> int: ...
+    ) -> int:
+        """
+        Return the number of particles (only valid or including invalid) on all MPI ranks, unless only_local is specified.
+        """
     def write_plotfile(self, dir: str, name: str) -> None: ...
     @property
     def byte_spread(self) -> typing.Annotated[list[int], "FixedSize(3)"]: ...
@@ -13767,6 +13858,11 @@ class ParticleContainer_pureSoA_1_0_default:
     def real_soa_names(self) -> list[str]:
         """
         Get the names for the Real SoA components
+        """
+    @property
+    def size(self) -> int:
+        """
+        Return the number of valid particles on all MPI ranks
         """
 
 class ParticleContainer_pureSoA_1_0_pinned:
@@ -13930,7 +14026,11 @@ class ParticleContainer_pureSoA_1_0_pinned:
 
         """
     def make_alike(self) -> ParticleContainer_pureSoA_1_0_pinned: ...
-    def num_local_tiles_at_level(self, arg0: typing.SupportsInt) -> int: ...
+    def num_local_tiles_at_level(self, level: typing.SupportsInt) -> int: ...
+    def number_of_particles(self, only_local: bool = False) -> int:
+        """
+        Return the number of valid particles on all MPI ranks, unless only_local is specified.
+        """
     def number_of_particles_at_level(
         self,
         level: typing.SupportsInt,
@@ -13990,7 +14090,10 @@ class ParticleContainer_pureSoA_1_0_pinned:
         """
     def total_number_of_particles(
         self, only_valid: bool = True, only_local: bool = False
-    ) -> int: ...
+    ) -> int:
+        """
+        Return the number of particles (only valid or including invalid) on all MPI ranks, unless only_local is specified.
+        """
     def write_plotfile(self, dir: str, name: str) -> None: ...
     @property
     def byte_spread(self) -> typing.Annotated[list[int], "FixedSize(3)"]: ...
@@ -14027,6 +14130,11 @@ class ParticleContainer_pureSoA_1_0_pinned:
     def real_soa_names(self) -> list[str]:
         """
         Get the names for the Real SoA components
+        """
+    @property
+    def size(self) -> int:
+        """
+        Return the number of valid particles on all MPI ranks
         """
 
 class ParticleContainer_pureSoA_5_0_arena:
@@ -14190,7 +14298,11 @@ class ParticleContainer_pureSoA_5_0_arena:
 
         """
     def make_alike(self) -> ParticleContainer_pureSoA_5_0_arena: ...
-    def num_local_tiles_at_level(self, arg0: typing.SupportsInt) -> int: ...
+    def num_local_tiles_at_level(self, level: typing.SupportsInt) -> int: ...
+    def number_of_particles(self, only_local: bool = False) -> int:
+        """
+        Return the number of valid particles on all MPI ranks, unless only_local is specified.
+        """
     def number_of_particles_at_level(
         self,
         level: typing.SupportsInt,
@@ -14250,7 +14362,10 @@ class ParticleContainer_pureSoA_5_0_arena:
         """
     def total_number_of_particles(
         self, only_valid: bool = True, only_local: bool = False
-    ) -> int: ...
+    ) -> int:
+        """
+        Return the number of particles (only valid or including invalid) on all MPI ranks, unless only_local is specified.
+        """
     def write_plotfile(self, dir: str, name: str) -> None: ...
     @property
     def byte_spread(self) -> typing.Annotated[list[int], "FixedSize(3)"]: ...
@@ -14287,6 +14402,11 @@ class ParticleContainer_pureSoA_5_0_arena:
     def real_soa_names(self) -> list[str]:
         """
         Get the names for the Real SoA components
+        """
+    @property
+    def size(self) -> int:
+        """
+        Return the number of valid particles on all MPI ranks
         """
 
 class ParticleContainer_pureSoA_5_0_default:
@@ -14450,7 +14570,11 @@ class ParticleContainer_pureSoA_5_0_default:
 
         """
     def make_alike(self) -> ParticleContainer_pureSoA_5_0_default: ...
-    def num_local_tiles_at_level(self, arg0: typing.SupportsInt) -> int: ...
+    def num_local_tiles_at_level(self, level: typing.SupportsInt) -> int: ...
+    def number_of_particles(self, only_local: bool = False) -> int:
+        """
+        Return the number of valid particles on all MPI ranks, unless only_local is specified.
+        """
     def number_of_particles_at_level(
         self,
         level: typing.SupportsInt,
@@ -14510,7 +14634,10 @@ class ParticleContainer_pureSoA_5_0_default:
         """
     def total_number_of_particles(
         self, only_valid: bool = True, only_local: bool = False
-    ) -> int: ...
+    ) -> int:
+        """
+        Return the number of particles (only valid or including invalid) on all MPI ranks, unless only_local is specified.
+        """
     def write_plotfile(self, dir: str, name: str) -> None: ...
     @property
     def byte_spread(self) -> typing.Annotated[list[int], "FixedSize(3)"]: ...
@@ -14547,6 +14674,11 @@ class ParticleContainer_pureSoA_5_0_default:
     def real_soa_names(self) -> list[str]:
         """
         Get the names for the Real SoA components
+        """
+    @property
+    def size(self) -> int:
+        """
+        Return the number of valid particles on all MPI ranks
         """
 
 class ParticleContainer_pureSoA_5_0_pinned:
@@ -14710,7 +14842,11 @@ class ParticleContainer_pureSoA_5_0_pinned:
 
         """
     def make_alike(self) -> ParticleContainer_pureSoA_5_0_pinned: ...
-    def num_local_tiles_at_level(self, arg0: typing.SupportsInt) -> int: ...
+    def num_local_tiles_at_level(self, level: typing.SupportsInt) -> int: ...
+    def number_of_particles(self, only_local: bool = False) -> int:
+        """
+        Return the number of valid particles on all MPI ranks, unless only_local is specified.
+        """
     def number_of_particles_at_level(
         self,
         level: typing.SupportsInt,
@@ -14770,7 +14906,10 @@ class ParticleContainer_pureSoA_5_0_pinned:
         """
     def total_number_of_particles(
         self, only_valid: bool = True, only_local: bool = False
-    ) -> int: ...
+    ) -> int:
+        """
+        Return the number of particles (only valid or including invalid) on all MPI ranks, unless only_local is specified.
+        """
     def write_plotfile(self, dir: str, name: str) -> None: ...
     @property
     def byte_spread(self) -> typing.Annotated[list[int], "FixedSize(3)"]: ...
@@ -14807,6 +14946,11 @@ class ParticleContainer_pureSoA_5_0_pinned:
     def real_soa_names(self) -> list[str]:
         """
         Get the names for the Real SoA components
+        """
+    @property
+    def size(self) -> int:
+        """
+        Return the number of valid particles on all MPI ranks
         """
 
 class ParticleContainer_pureSoA_8_0_arena:
@@ -14970,7 +15114,11 @@ class ParticleContainer_pureSoA_8_0_arena:
 
         """
     def make_alike(self) -> ParticleContainer_pureSoA_8_0_arena: ...
-    def num_local_tiles_at_level(self, arg0: typing.SupportsInt) -> int: ...
+    def num_local_tiles_at_level(self, level: typing.SupportsInt) -> int: ...
+    def number_of_particles(self, only_local: bool = False) -> int:
+        """
+        Return the number of valid particles on all MPI ranks, unless only_local is specified.
+        """
     def number_of_particles_at_level(
         self,
         level: typing.SupportsInt,
@@ -15030,7 +15178,10 @@ class ParticleContainer_pureSoA_8_0_arena:
         """
     def total_number_of_particles(
         self, only_valid: bool = True, only_local: bool = False
-    ) -> int: ...
+    ) -> int:
+        """
+        Return the number of particles (only valid or including invalid) on all MPI ranks, unless only_local is specified.
+        """
     def write_plotfile(self, dir: str, name: str) -> None: ...
     @property
     def byte_spread(self) -> typing.Annotated[list[int], "FixedSize(3)"]: ...
@@ -15067,6 +15218,11 @@ class ParticleContainer_pureSoA_8_0_arena:
     def real_soa_names(self) -> list[str]:
         """
         Get the names for the Real SoA components
+        """
+    @property
+    def size(self) -> int:
+        """
+        Return the number of valid particles on all MPI ranks
         """
 
 class ParticleContainer_pureSoA_8_0_default:
@@ -15230,7 +15386,11 @@ class ParticleContainer_pureSoA_8_0_default:
 
         """
     def make_alike(self) -> ParticleContainer_pureSoA_8_0_default: ...
-    def num_local_tiles_at_level(self, arg0: typing.SupportsInt) -> int: ...
+    def num_local_tiles_at_level(self, level: typing.SupportsInt) -> int: ...
+    def number_of_particles(self, only_local: bool = False) -> int:
+        """
+        Return the number of valid particles on all MPI ranks, unless only_local is specified.
+        """
     def number_of_particles_at_level(
         self,
         level: typing.SupportsInt,
@@ -15290,7 +15450,10 @@ class ParticleContainer_pureSoA_8_0_default:
         """
     def total_number_of_particles(
         self, only_valid: bool = True, only_local: bool = False
-    ) -> int: ...
+    ) -> int:
+        """
+        Return the number of particles (only valid or including invalid) on all MPI ranks, unless only_local is specified.
+        """
     def write_plotfile(self, dir: str, name: str) -> None: ...
     @property
     def byte_spread(self) -> typing.Annotated[list[int], "FixedSize(3)"]: ...
@@ -15327,6 +15490,11 @@ class ParticleContainer_pureSoA_8_0_default:
     def real_soa_names(self) -> list[str]:
         """
         Get the names for the Real SoA components
+        """
+    @property
+    def size(self) -> int:
+        """
+        Return the number of valid particles on all MPI ranks
         """
 
 class ParticleContainer_pureSoA_8_0_pinned:
@@ -15490,7 +15658,11 @@ class ParticleContainer_pureSoA_8_0_pinned:
 
         """
     def make_alike(self) -> ParticleContainer_pureSoA_8_0_pinned: ...
-    def num_local_tiles_at_level(self, arg0: typing.SupportsInt) -> int: ...
+    def num_local_tiles_at_level(self, level: typing.SupportsInt) -> int: ...
+    def number_of_particles(self, only_local: bool = False) -> int:
+        """
+        Return the number of valid particles on all MPI ranks, unless only_local is specified.
+        """
     def number_of_particles_at_level(
         self,
         level: typing.SupportsInt,
@@ -15550,7 +15722,10 @@ class ParticleContainer_pureSoA_8_0_pinned:
         """
     def total_number_of_particles(
         self, only_valid: bool = True, only_local: bool = False
-    ) -> int: ...
+    ) -> int:
+        """
+        Return the number of particles (only valid or including invalid) on all MPI ranks, unless only_local is specified.
+        """
     def write_plotfile(self, dir: str, name: str) -> None: ...
     @property
     def byte_spread(self) -> typing.Annotated[list[int], "FixedSize(3)"]: ...
@@ -15587,6 +15762,11 @@ class ParticleContainer_pureSoA_8_0_pinned:
     def real_soa_names(self) -> list[str]:
         """
         Get the names for the Real SoA components
+        """
+    @property
+    def size(self) -> int:
+        """
+        Return the number of valid particles on all MPI ranks
         """
 
 class ParticleInitType_16_4_0_0:
