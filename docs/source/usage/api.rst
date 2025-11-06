@@ -280,3 +280,19 @@ This is for the legacy, AoS + SoA particle containers only:
 .. autoclass:: amrex.space3d.Particle_2_1
    :members:
    :undoc-members:
+
+.. _usage-api-eb:
+
+Embedded Boundaries
+-------------------
+
+Embedded boundary (EB) support is still experimental. To build pyAMReX with
+EB support, you need to add ``-DAMReX_EB=ON`` to CMake build options.
+
+.. autofunction:: amrex.space3d.EB2_Build
+
+.. autoclass:: amrex.space3d.EBFArrayBoxFactory
+   :members:
+   :undoc-members:
+
+.. autofunction:: amrex.space3d.makeEBFabFactory
