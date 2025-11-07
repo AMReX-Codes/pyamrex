@@ -150,11 +150,14 @@ void make_PODVector(py::module &m, std::string typestr)
 #endif
 }
 
-void init_PODVector(py::module& m) {
-    py::enum_<GrowthStrategy>(m, "GrowthStrategy")
+void init_PODVector(py::module& m)
+{
+    py::native_enum<GrowthStrategy>(m, "GrowthStrategy", "enum.IntEnum")
         .value("Poisson", GrowthStrategy::Poisson)
         .value("Exact", GrowthStrategy::Exact)
         .value("Geometric", GrowthStrategy::Geometric)
+        .export_values()
+        .finalize()
     ;
 
     make_PODVector<ParticleReal> (m, "real");
