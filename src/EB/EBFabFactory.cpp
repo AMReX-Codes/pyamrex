@@ -17,10 +17,13 @@ void init_EBFabFactory (py::module& m)
             py::return_value_policy::reference_internal,
             "Return volume faction MultiFab");
 
-    py::enum_<EBSupport>(m, "EBSupport")
+    py::native_enum<EBSupport>(m, "EBSupport", "enum.Enum")
         .value("basic", EBSupport::basic)
         .value("volume", EBSupport::volume)
-        .value("full", EBSupport::full);
+        .value("full", EBSupport::full)
+        .export_values()
+        .finalize()
+    ;
 
     m.def(
         "makeEBFabFactory",
