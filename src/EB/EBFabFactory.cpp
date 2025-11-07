@@ -26,7 +26,7 @@ void init_EBFabFactory (py::module& m)
             return makeEBFabFactory(geom, ba, dm, ngrow, support);
         },
         py::arg("geom"), py::arg("ba"), py::arg("dm"), py::arg("ngrow"),
-        py::arg("support").
+        py::arg("support"),
         "Make EBFArrayBoxFactory for given Geometry, BoxArray and DistributionMapping"
     );
 }
