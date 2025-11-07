@@ -72,9 +72,12 @@ void make_PODVector(py::module &m, std::string typestr, std::string allocstr)
         // .def("max_size", &PODVector_type::max_size)
         .def("capacity", &PODVector_type::capacity)
         .def("empty", &PODVector_type::empty)
-        .def("resize", py::overload_cast<std::size_t>(&PODVector_type::resize))
-        .def("resize", py::overload_cast<std::size_t, const T&>(&PODVector_type::resize))
-        .def("reserve", &PODVector_type::reserve)
+        .def("resize", [](PODVector_type const & pv, std::size_t new_size){
+            pv.resize(new_size); })
+        .def("resize", [](PODVector_type const & pv, std::size_t new_size, const T& init_val){
+            pv.resize(new_size, init_val); })
+        .def("reserve", [](PODVector_type const & pv, std::size_t new_capacity){
+            pv.reserve(new_capacity); })
         .def("shrink_to_fit", &PODVector_type::shrink_to_fit)
         .def("to_host", [](PODVector_type const & pv) {
             PODVector<T, amrex::PinnedArenaAllocator<T>> h_data(pv.size());
