@@ -29,6 +29,8 @@ void init_DLPack(py::module& m)
             .value("kDLWebGPU", DLDeviceType::kDLWebGPU)
             .value("kDLHexagon", DLDeviceType::kDLHexagon)
             .value("kDLMAIA", DLDeviceType::kDLMAIA)
+            .export_values()
+            .finalize()
         ;
     }
 
