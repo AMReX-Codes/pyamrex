@@ -101,7 +101,8 @@ void make_ParticleTile(py::module &m, std::string allocstr)
 
         .def("set_num_neighbors", &ParticleTileType::setNumNeighbors)
         .def("get_num_neighbors", &ParticleTileType::getNumNeighbors)
-        .def("resize", &ParticleTileType::resize)
+        .def("resize", [](ParticleTileType & pt, std::size_t new_size){
+            pt.resize(new_size); })
     ;
 
     if constexpr (!T_ParticleType::is_soa_particle) {
