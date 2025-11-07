@@ -152,7 +152,7 @@ void make_PODVector(py::module &m, std::string typestr)
 
 void init_PODVector(py::module& m)
 {
-    py::native_enum<GrowthStrategy>(m, "GrowthStrategy", "enum.IntEnum")
+    py::native_enum<GrowthStrategy>(m, "GrowthStrategy", "enum.Enum")
         .value("Poisson", GrowthStrategy::Poisson)
         .value("Exact", GrowthStrategy::Exact)
         .value("Geometric", GrowthStrategy::Geometric)
