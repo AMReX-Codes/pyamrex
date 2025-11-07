@@ -12,10 +12,12 @@ def test_makeEBFabFactory():
     max_grid_size = 16
 
     # Build Geometry
-    domain = amr.Box(amr.IntVect(0,0,0), amr.IntVect(n_cell-1, n_cell-1, n_cell-1))
-    real_box = amr.RealBox([0., 0., 0.], [1. , 1., 1.])
+    domain = amr.Box(
+        amr.IntVect(0, 0, 0), amr.IntVect(n_cell - 1, n_cell - 1, n_cell - 1)
+    )
+    real_box = amr.RealBox([0.0, 0.0, 0.0], [1.0, 1.0, 1.0])
     coord = 0  # Cartesian
-    is_per = [1, 1, 1] # is periodic?
+    is_per = [1, 1, 1]  # is periodic?
     geom = amr.Geometry(domain, real_box, coord, is_per)
 
     # EB parameters
@@ -39,13 +41,13 @@ def test_makeEBFabFactory():
     dm = amr.DistributionMapping(ba)
 
     # Make EB Factory
-    ng = amr.Vector_int([1,1,1])
+    ng = amr.Vector_int([1, 1, 1])
     factory = amr.makeEBFabFactory(geom, ba, dm, ng, amr.EBSupport.full)
 
     # Get EB data
     vfrac = factory.getVolFrac()
 
     dx = geom.data().CellSize()
-    total_vol = vfrac.sum()*dx[0]*dx[1]*dx[2]
-    sphere_vol = 4./3.*numpy.pi*rsphere**3
-    assert abs(sphere_vol-total_vol)/sphere_vol < 2.e-3
+    total_vol = vfrac.sum() * dx[0] * dx[1] * dx[2]
+    sphere_vol = 4.0 / 3.0 * numpy.pi * rsphere**3
+    assert abs(sphere_vol - total_vol) / sphere_vol < 2.0e-3
