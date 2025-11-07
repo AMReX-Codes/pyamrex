@@ -1,3 +1,8 @@
+/* Copyright 2022 The AMReX Community
+ *
+ * Authors: Weiqun Zhang, Axel Huebl
+ * License: BSD-3-Clause-LBNL
+ */
 #include "pyAMReX.H"
 
 #include <AMReX_EB2.H>
