@@ -15,7 +15,13 @@ void init_VectorPoisson3D(py::module& m)
 {
     // BoundaryHandler
     py::class_<BoundaryHandler>(m, "BoundaryHandler")
-        .def(py::init<>())
+        .def(py::init<bool>(),
+             py::arg("periodic_axial") = false,
+             "Initialize boundary handler for vector Poisson equation.\n\n"
+             "Parameters\n"
+             "----------\n"
+             "periodic_axial : bool, optional\n"
+             "    If True, set axial (z) boundaries to periodic else Neumann. Default is False.\n")
         .def_readwrite("lobc", &BoundaryHandler::lobc)
         .def_readwrite("hibc", &BoundaryHandler::hibc);
 

@@ -17,21 +17,17 @@ struct BoundaryHandler {
     amrex::Array<amrex::Array<amrex::LinOpBCType, AMREX_SPACEDIM>, 3> lobc;
     amrex::Array<amrex::Array<amrex::LinOpBCType, AMREX_SPACEDIM>, 3> hibc;
 
-    BoundaryHandler() {
-        // Default: homogeneous Dirichlet on all boundaries
-        for (int adim = 0; adim < 3; ++adim) {
-            for (int idim = 0; idim < AMREX_SPACEDIM; ++idim) {
-                lobc[adim][idim] = amrex::LinOpBCType::Dirichlet;
-                hibc[adim][idim] = amrex::LinOpBCType::Dirichlet;
-            }
-        }
-
-        //For Phoenix
+    BoundaryHandler(bool periodic_axial = false) {
         for (int adim = 0; adim < 3; ++adim) {
             lobc[adim][0] = amrex::LinOpBCType::Neumann;  // r=0
             hibc[adim][0] = amrex::LinOpBCType::Dirichlet; // r=rmax
-            lobc[adim][1] = amrex::LinOpBCType::Neumann;  // z=zmin
-            hibc[adim][1] = amrex::LinOpBCType::Neumann;  // z=zmax
+            if (periodic_axial) {
+                lobc[adim][1] = amrex::LinOpBCType::Periodic;  // z=zmin
+                hibc[adim][1] = amrex::LinOpBCType::Periodic;  // z=zmax
+            } else {
+                lobc[adim][1] = amrex::LinOpBCType::Neumann;  // z=zmin
+                hibc[adim][1] = amrex::LinOpBCType::Neumann;  // z=zmax
+            }
         }
     }
 };
