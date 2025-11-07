@@ -1,4 +1,7 @@
 foreach(D IN LISTS AMReX_SPACEDIM)
+    if (NOT AMReX_EB)
+        return()
+    endif()
     if (D EQUAL 1)
         return()
     endif()
