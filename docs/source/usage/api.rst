@@ -286,7 +286,7 @@ This is for the legacy, AoS + SoA particle containers only:
 Embedded Boundaries
 -------------------
 
-Embedded boundary (EB) support is still experimental. To build pyAMReX with
+Embedded boundary (EB) support in pyAMReX is still minimal. To build pyAMReX with
 EB support, you need to add ``-DAMReX_EB=ON`` to CMake build options.
 
 .. autofunction:: amrex.space3d.EB2_Build
