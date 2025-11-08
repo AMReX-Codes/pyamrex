@@ -254,7 +254,7 @@ setup(
     ext_modules=cxx_modules,
     cmdclass=cmdclass,
     zip_safe=False,
-    python_requires=">=3.8",  # left for CI, truly ">=3.9"
+    python_requires=">=3.8",  # left for CI, truly ">=3.10"
     tests_require=["pytest"],
     install_requires=install_requires,
     # cmdclass={'test': PyTest},
@@ -274,14 +274,11 @@ setup(
         "Topic :: Software Development :: Libraries",
         "Programming Language :: C++",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
         "Programming Language :: Python :: 3.12",
         "Programming Language :: Python :: 3.13",
-        (
-            "License :: OSI Approved :: BSD License"
-        ),  # TODO: use real SPDX: BSD-3-Clause-LBNL
+        "Programming Language :: Python :: 3.14",
     ],
     # new PEP 639 format
     license="BSD-3-Clause-LBNL",
