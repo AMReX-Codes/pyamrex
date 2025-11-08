@@ -26,6 +26,7 @@ set(pyAMReX_CUDA                      @AMReX_CUDA@)
 set(pyAMReX_SYCL                      @AMReX_SYCL@)
 set(pyAMReX_HIP                       @AMReX_HIP@)
 set(pyAMReX_GPU_BACKEND               @AMReX_GPU_BACKEND@)
+set(pyAMReX_EB                        @AMReX_EB@)
 
 # define central pyAMReX::pyAMReX_${D}d targets
 include("${CMAKE_CURRENT_LIST_DIR}/pyAMReXTargets.cmake")
