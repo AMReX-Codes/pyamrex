@@ -84,7 +84,11 @@ void make_StructOfArrays(py::module &m, std::string allocstr)
 
         .def("set_num_neighbors", &SOAType::setNumNeighbors)
         .def("get_num_neighbors", &SOAType::getNumNeighbors)
-        .def("resize", &SOAType::resize)
+        .def("resize",
+            &SOAType::resize,
+            py::arg("new_size"),
+            py::arg("strategy") = GrowthStrategy::Poisson
+        )
     ;
     if (use64BitIdCpu)
         py_SoA.def("get_idcpu_data", py::overload_cast<>(&SOAType::GetIdCPUData),

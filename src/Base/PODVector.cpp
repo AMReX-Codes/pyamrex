@@ -72,9 +72,22 @@ void make_PODVector(py::module &m, std::string typestr, std::string allocstr)
         // .def("max_size", &PODVector_type::max_size)
         .def("capacity", &PODVector_type::capacity)
         .def("empty", &PODVector_type::empty)
-        .def("resize", py::overload_cast<std::size_t>(&PODVector_type::resize))
-        .def("resize", py::overload_cast<std::size_t, const T&>(&PODVector_type::resize))
-        .def("reserve", &PODVector_type::reserve)
+        .def("resize",
+            py::overload_cast<std::size_t, GrowthStrategy>(&PODVector_type::resize),
+            py::arg("new_size"),
+            py::arg("strategy") = GrowthStrategy::Poisson
+        )
+        .def("resize",
+            py::overload_cast<std::size_t, const T&, GrowthStrategy>(&PODVector_type::resize),
+            py::arg("new_size"),
+            py::arg("value"),
+            py::arg("strategy") = GrowthStrategy::Poisson
+        )
+        .def("reserve",
+            &PODVector_type::reserve,
+            py::arg("capacity"),
+            py::arg("strategy") = GrowthStrategy::Poisson
+        )
         .def("shrink_to_fit", &PODVector_type::shrink_to_fit)
         .def("to_host", [](PODVector_type const & pv) {
             PODVector<T, amrex::PinnedArenaAllocator<T>> h_data(pv.size());
@@ -137,7 +150,16 @@ void make_PODVector(py::module &m, std::string typestr)
 #endif
 }
 
-void init_PODVector(py::module& m) {
+void init_PODVector(py::module& m)
+{
+    py::native_enum<GrowthStrategy>(m, "GrowthStrategy", "enum.Enum")
+        .value("Poisson", GrowthStrategy::Poisson)
+        .value("Exact", GrowthStrategy::Exact)
+        .value("Geometric", GrowthStrategy::Geometric)
+        .export_values()
+        .finalize()
+    ;
+
     make_PODVector<ParticleReal> (m, "real");
     make_PODVector<int> (m, "int");
     make_PODVector<uint64_t> (m, "uint64");

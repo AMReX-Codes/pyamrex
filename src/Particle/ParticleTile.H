@@ -101,7 +101,11 @@ void make_ParticleTile(py::module &m, std::string allocstr)
 
         .def("set_num_neighbors", &ParticleTileType::setNumNeighbors)
         .def("get_num_neighbors", &ParticleTileType::getNumNeighbors)
-        .def("resize", &ParticleTileType::resize)
+        .def("resize",
+            &ParticleTileType::resize,
+            py::arg("count"),
+            py::arg("strategy") = GrowthStrategy::Poisson
+        )
     ;
 
     if constexpr (!T_ParticleType::is_soa_particle) {
