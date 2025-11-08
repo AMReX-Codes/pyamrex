@@ -1,14 +1,13 @@
-foreach(D IN LISTS AMReX_SPACEDIM)
-    if (NOT AMReX_EB)
-        return()
-    endif()
-    if (D EQUAL 1)
-        return()
-    endif()
+if (NOT AMReX_EB)
+    return()
+endif()
 
-    target_sources(pyAMReX_${D}d
-      PRIVATE
-        EB.cpp
-        EBFabFactory.cpp
-    )
+foreach(D IN LISTS AMReX_SPACEDIM)
+    if (D GREATER 1)
+        target_sources(pyAMReX_${D}d
+          PRIVATE
+            EB.cpp
+            EBFabFactory.cpp
+        )
+    endif()
 endforeach()
