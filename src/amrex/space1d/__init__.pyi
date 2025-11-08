@@ -103,6 +103,7 @@ from amrex.space1d.amrex_1d_pybind import (
     FArrayBox,
     Geometry,
     GeometryData,
+    GrowthStrategy,
     IndexType,
     IntVect1D,
     IntVect2D,
@@ -360,14 +361,17 @@ __all__: list[str] = [
     "Dim3",
     "Direction",
     "DistributionMapping",
+    "Exact",
     "FArrayBox",
     "FabArrayBase",
     "FabArray_FArrayBox",
     "FabArray_IArrayBox",
     "FabFactory_FArrayBox",
     "FabFactory_IArrayBox",
+    "Geometric",
     "Geometry",
     "GeometryData",
+    "GrowthStrategy",
     "IndexType",
     "IntVect",
     "IntVect1D",
@@ -504,6 +508,7 @@ __all__: list[str] = [
     "Particle_8_0",
     "Periodicity",
     "PlotFileData",
+    "Poisson",
     "Print",
     "RealBox",
     "RealVect",
@@ -598,6 +603,9 @@ def d_decl(x, y, z):
     Return a tuple of the first passed element
     """
 
+Exact: amrex_1d_pybind.GrowthStrategy  # value = <GrowthStrategy.Exact: 1>
+Geometric: amrex_1d_pybind.GrowthStrategy  # value = <GrowthStrategy.Geometric: 2>
+Poisson: amrex_1d_pybind.GrowthStrategy  # value = <GrowthStrategy.Poisson: 0>
 __author__: str = "Axel Huebl, Ryan T. Sandberg, Shreyas Ananthan, David P. Grote, Revathi Jambunathan, Edoardo Zoni, Remi Lehe, Andrew Myers, Weiqun Zhang"
 __license__: str = "BSD-3-Clause-LBNL"
-__version__: str = "25.11"
+__version__: str = "25.11-15-g4dad1664d746"
