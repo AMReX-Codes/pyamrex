@@ -95,6 +95,9 @@ from amrex.space2d.amrex_2d_pybind import (
     Dim3,
     Direction,
     DistributionMapping,
+    EB2_Build,
+    EBFArrayBoxFactory,
+    EBSupport,
     FabArray_FArrayBox,
     FabArray_IArrayBox,
     FabArrayBase,
@@ -324,6 +327,7 @@ from amrex.space2d.amrex_2d_pybind import (
     length,
     make_invalid,
     make_valid,
+    makeEBFabFactory,
     max,
     min,
     pack_cpus,
@@ -385,6 +389,9 @@ __all__: list[str] = [
     "Dim3",
     "Direction",
     "DistributionMapping",
+    "EB2_Build",
+    "EBFArrayBoxFactory",
+    "EBSupport",
     "Exact",
     "FArrayBox",
     "FabArrayBase",
@@ -603,6 +610,7 @@ __all__: list[str] = [
     "XDim3",
     "almost_equal",
     "amrex_2d_pybind",
+    "basic",
     "begin",
     "coarsen",
     "concatenate",
@@ -611,6 +619,7 @@ __all__: list[str] = [
     "dtoh_memcpy",
     "end",
     "finalize",
+    "full",
     "htod_memcpy",
     "iMultiFab",
     "initialize",
@@ -619,6 +628,7 @@ __all__: list[str] = [
     "is_valid",
     "lbound",
     "length",
+    "makeEBFabFactory",
     "make_invalid",
     "make_valid",
     "max",
@@ -638,6 +648,7 @@ __all__: list[str] = [
     "ubound",
     "unpack_cpus",
     "unpack_ids",
+    "volume",
     "write_single_level_plotfile",
 ]
 
@@ -657,3 +668,6 @@ Poisson: amrex_2d_pybind.GrowthStrategy  # value = <GrowthStrategy.Poisson: 0>
 __author__: str = "Axel Huebl, Ryan T. Sandberg, Shreyas Ananthan, David P. Grote, Revathi Jambunathan, Edoardo Zoni, Remi Lehe, Andrew Myers, Weiqun Zhang"
 __license__: str = "BSD-3-Clause-LBNL"
 __version__: str = "25.11-15-g4dad1664d746"
+basic: amrex_2d_pybind.EBSupport  # value = <EBSupport.basic: 1>
+full: amrex_2d_pybind.EBSupport  # value = <EBSupport.full: 3>
+volume: amrex_2d_pybind.EBSupport  # value = <EBSupport.volume: 2>

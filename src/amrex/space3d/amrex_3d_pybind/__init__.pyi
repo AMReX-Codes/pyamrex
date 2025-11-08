@@ -97,6 +97,9 @@ __all__: list[str] = [
     "Dim3",
     "Direction",
     "DistributionMapping",
+    "EB2_Build",
+    "EBFArrayBoxFactory",
+    "EBSupport",
     "Exact",
     "FArrayBox",
     "FabArrayBase",
@@ -289,6 +292,7 @@ __all__: list[str] = [
     "VisMF",
     "XDim3",
     "almost_equal",
+    "basic",
     "begin",
     "coarsen",
     "concatenate",
@@ -296,6 +300,7 @@ __all__: list[str] = [
     "dtoh_memcpy",
     "end",
     "finalize",
+    "full",
     "htod_memcpy",
     "iMultiFab",
     "initialize",
@@ -304,6 +309,7 @@ __all__: list[str] = [
     "is_valid",
     "lbound",
     "length",
+    "makeEBFabFactory",
     "make_invalid",
     "make_valid",
     "max",
@@ -315,6 +321,7 @@ __all__: list[str] = [
     "ubound",
     "unpack_cpus",
     "unpack_ids",
+    "volume",
     "write_single_level_plotfile",
 ]
 
@@ -5576,6 +5583,21 @@ class DistributionMapping:
     def link_count(self) -> int: ...
     @property
     def size(self) -> int: ...
+
+class EBFArrayBoxFactory(FabFactory_FArrayBox):
+    def getVolFrac(self) -> MultiFab:
+        """
+        Return volume faction MultiFab
+        """
+
+class EBSupport(enum.Enum):
+    """
+    An enumeration.
+    """
+
+    basic: typing.ClassVar[EBSupport]  # value = <EBSupport.basic: 1>
+    full: typing.ClassVar[EBSupport]  # value = <EBSupport.full: 3>
+    volume: typing.ClassVar[EBSupport]  # value = <EBSupport.volume: 2>
 
 class FArrayBox(BaseFab_Real):
     @typing.overload
@@ -24008,6 +24030,19 @@ def AlmostEqual(rb1: RealBox, rb2: RealBox, eps: typing.SupportsFloat = 0.0) -> 
     Determine if two boxes are equal to within a tolerance
     """
 
+def EB2_Build(
+    geom: Geometry,
+    required_coarsening_level: typing.SupportsInt,
+    max_coarsening_level: typing.SupportsInt,
+    ngrow: typing.SupportsInt = 4,
+    build_coarse_level_by_coarsening: bool = True,
+    extend_domain_face: bool = True,
+    num_coarsen_opt: typing.SupportsInt = 0,
+) -> None:
+    """
+    EB generation
+    """
+
 def MPMD_AppNum() -> int: ...
 def MPMD_Finalize() -> None: ...
 def MPMD_Initialize_without_split(arg0: list) -> None: ...
@@ -24247,6 +24282,17 @@ def length(arg0: Array4_uint_const) -> Dim3: ...
 def length(arg0: Array4_ulong_const) -> Dim3: ...
 @typing.overload
 def length(arg0: Array4_ulonglong_const) -> Dim3: ...
+def makeEBFabFactory(
+    geom: Geometry,
+    ba: BoxArray,
+    dm: DistributionMapping,
+    ngrow: Vector_int,
+    support: EBSupport,
+) -> EBFArrayBoxFactory:
+    """
+    Make EBFArrayBoxFactory for given Geometry, BoxArray and DistributionMapping
+    """
+
 def make_invalid(arg0: typing.SupportsInt) -> int: ...
 def make_valid(arg0: typing.SupportsInt) -> int: ...
 def max(arg0: RealVect, arg1: RealVect) -> RealVect: ...
@@ -24352,4 +24398,7 @@ Poisson: GrowthStrategy  # value = <GrowthStrategy.Poisson: 0>
 __author__: str = "Axel Huebl, Ryan T. Sandberg, Shreyas Ananthan, David P. Grote, Revathi Jambunathan, Edoardo Zoni, Remi Lehe, Andrew Myers, Weiqun Zhang"
 __license__: str = "BSD-3-Clause-LBNL"
 __version__: str = "25.11-15-g4dad1664d746"
+basic: EBSupport  # value = <EBSupport.basic: 1>
+full: EBSupport  # value = <EBSupport.full: 3>
+volume: EBSupport  # value = <EBSupport.volume: 2>
 IntVect = IntVect3D
