@@ -5,9 +5,8 @@
  */
 #include "pyAMReX.H"
 
-#ifdef AMREX_USE_EB
-
 #include <AMReX_EB2.H>
+
 
 void init_EBFabFactory (py::module& m);
 
@@ -33,5 +32,3 @@ void init_EB (py::module& m)
 
     init_EBFabFactory(m);
 }
-
-#endif

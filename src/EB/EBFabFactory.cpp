@@ -5,10 +5,9 @@
  */
 #include "pyAMReX.H"
 
-#ifdef AMREX_USE_EB
-
 #include <AMReX_EBFabFactory.H>
 #include <AMReX_MultiFab.H>
+
 
 void init_EBFabFactory (py::module& m)
 {
@@ -39,5 +38,3 @@ void init_EBFabFactory (py::module& m)
         "Make EBFArrayBoxFactory for given Geometry, BoxArray and DistributionMapping"
     );
 }
-
-#endif
