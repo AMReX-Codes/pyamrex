@@ -201,6 +201,11 @@ void make_ParticleContainer_and_Iterators (py::module &m, std::string allocstr)
     py_pc
         .def("make_alike", &ParticleContainerType::template make_alike<Allocator>)
 
+        .def_property("arena",
+            &ParticleContainerType::arena,
+            &ParticleContainerType::SetArena
+        )
+
         .def_property_readonly_static("is_soa_particle", [](const py::object&){return ParticleType::is_soa_particle;})
         .def_property_readonly_static("num_struct_real", [](const py::object&){return ParticleContainerType::NStructReal; })
         .def_property_readonly_static("num_struct_int", [](const py::object&){return ParticleContainerType::NStructInt; })
