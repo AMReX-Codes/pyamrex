@@ -515,7 +515,7 @@ void make_ParticleContainer_and_Iterators (py::module &m, std::string allocstr)
 /** Create ParticleContainers and Iterators
  */
 template <typename T_ParticleType, int T_NArrayReal=0, int T_NArrayInt=0>
-void make_ParticleContainer_and_Iterators (py::module &m)
+void make_ParticleContainer_and_Iterators (py::module &m, bool only_polymorphic=false)
 {
     if constexpr (T_ParticleType::is_soa_particle) {
         make_Particle<T_NArrayReal, T_NArrayInt>(m);
@@ -542,38 +542,41 @@ void make_ParticleContainer_and_Iterators (py::module &m)
     make_ParticleInitData<T_ParticleType, T_NArrayReal, T_NArrayInt>(m);
 
     // first, because used as copy target in methods in containers with other allocators
-    make_ParticleContainer_and_Iterators<T_ParticleType, T_NArrayReal, T_NArrayInt,
-            amrex::PinnedArenaAllocator>(m, "pinned");
+    if (!only_polymorphic) {
+        make_ParticleContainer_and_Iterators<T_ParticleType, T_NArrayReal, T_NArrayInt,
+                amrex::PinnedArenaAllocator>(m, "pinned");
 
-    // see Src/Base/AMReX_GpuContainers.H
-    //   !AMREX_USE_GPU: DefaultAllocator = std::allocator
-    //    AMREX_USE_GPU: DefaultAllocator = amrex::ArenaAllocator
+        // see Src/Base/AMReX_GpuContainers.H
+        //   !AMREX_USE_GPU: DefaultAllocator = std::allocator
+        //    AMREX_USE_GPU: DefaultAllocator = amrex::ArenaAllocator
 
-    //   work-around for https://github.com/pybind/pybind11/pull/4581
-    //make_ParticleContainer_and_Iterators<T_ParticleType, T_NArrayReal, T_NArrayInt,
-    //                                     std::allocator>(m, "std");            // CPU DefaultAllocator
-    //make_ParticleContainer_and_Iterators<T_ParticleType, T_NArrayReal, T_NArrayInt,
-    //                                     amrex::ArenaAllocator>(m, "arena");   // GPU DefaultAllocator
+        //   work-around for https://github.com/pybind/pybind11/pull/4581
+        //make_ParticleContainer_and_Iterators<T_ParticleType, T_NArrayReal, T_NArrayInt,
+        //                                     std::allocator>(m, "std");            // CPU DefaultAllocator
+        //make_ParticleContainer_and_Iterators<T_ParticleType, T_NArrayReal, T_NArrayInt,
+        //                                     amrex::ArenaAllocator>(m, "arena");   // GPU DefaultAllocator
 #ifdef AMREX_USE_GPU
-    make_ParticleContainer_and_Iterators<T_ParticleType, T_NArrayReal, T_NArrayInt,
-                                         std::allocator>(m, "std");
-    make_ParticleContainer_and_Iterators<T_ParticleType, T_NArrayReal, T_NArrayInt,
-                                         amrex::DefaultAllocator>(m, "default");   // amrex::ArenaAllocator
+        make_ParticleContainer_and_Iterators<T_ParticleType, T_NArrayReal, T_NArrayInt,
+                                             std::allocator>(m, "std");
+        make_ParticleContainer_and_Iterators<T_ParticleType, T_NArrayReal, T_NArrayInt,
+                                             amrex::DefaultAllocator>(m, "default");   // amrex::ArenaAllocator
 #else
-    make_ParticleContainer_and_Iterators<T_ParticleType, T_NArrayReal, T_NArrayInt,
-            amrex::DefaultAllocator>(m, "default");   // std::allocator
-    make_ParticleContainer_and_Iterators<T_ParticleType, T_NArrayReal, T_NArrayInt,
-            amrex::ArenaAllocator>(m, "arena");
+        make_ParticleContainer_and_Iterators<T_ParticleType, T_NArrayReal, T_NArrayInt,
+                amrex::DefaultAllocator>(m, "default");   // std::allocator
+        make_ParticleContainer_and_Iterators<T_ParticleType, T_NArrayReal, T_NArrayInt,
+                amrex::ArenaAllocator>(m, "arena");
 #endif
-    //   end work-around
+        //   end work-around
 #ifdef AMREX_USE_GPU
-    make_ParticleContainer_and_Iterators<T_ParticleType, T_NArrayReal, T_NArrayInt,
-                                         amrex::DeviceArenaAllocator>(m, "device");
-    make_ParticleContainer_and_Iterators<T_ParticleType, T_NArrayReal, T_NArrayInt,
-                                         amrex::ManagedArenaAllocator>(m, "managed");
-    make_ParticleContainer_and_Iterators<T_ParticleType, T_NArrayReal, T_NArrayInt,
-                                         amrex::AsyncArenaAllocator>(m, "async");
+        make_ParticleContainer_and_Iterators<T_ParticleType, T_NArrayReal, T_NArrayInt,
+                                             amrex::DeviceArenaAllocator>(m, "device");
+        make_ParticleContainer_and_Iterators<T_ParticleType, T_NArrayReal, T_NArrayInt,
+                                             amrex::ManagedArenaAllocator>(m, "managed");
+        make_ParticleContainer_and_Iterators<T_ParticleType, T_NArrayReal, T_NArrayInt,
+                                             amrex::AsyncArenaAllocator>(m, "async");
 #endif
+    }  // if (!only_polymorphic)
+
     make_ParticleContainer_and_Iterators<T_ParticleType, T_NArrayReal, T_NArrayInt,
                                          amrex::PolymorphicArenaAllocator>(m, "polymorphic");
 }
