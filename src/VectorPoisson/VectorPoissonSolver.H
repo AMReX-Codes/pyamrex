@@ -19,16 +19,30 @@ struct BoundaryHandler {
 
     BoundaryHandler(bool periodic_axial = false) {
         for (int adim = 0; adim < 3; ++adim) {
+            // Symmetry boundary ar r=0
             lobc[adim][0] = amrex::LinOpBCType::Neumann;  // r=0
-            hibc[adim][0] = amrex::LinOpBCType::Dirichlet; // r=rmax
-            if (periodic_axial) {
-                lobc[adim][1] = amrex::LinOpBCType::Periodic;  // z=zmin
-                hibc[adim][1] = amrex::LinOpBCType::Periodic;  // z=zmax
+
+            // PEC boundary at r_max
+            if (adim == 0) {
+                hibc[adim][0] = amrex::LinOpBCType::Neumann; // r=rmax for A_r
             } else {
-                lobc[adim][1] = amrex::LinOpBCType::Neumann;  // z=zmin
-                hibc[adim][1] = amrex::LinOpBCType::Neumann;  // z=zmax
+                hibc[adim][0] = amrex::LinOpBCType::Dirichlet;   // r=rmax for A_theta, A_z
+            }
+            
+            // Default is pure Neumann in axial direction
+            lobc[adim][1] = amrex::LinOpBCType::Neumann;   // z=zmin for A_z
+            hibc[adim][1] = amrex::LinOpBCType::Neumann;   // z=zmax for A_z
+
+        }
+
+        // If periodic in axial direction, override BCs to periodic
+        if (periodic_axial) {
+            for (int adim = 0; adim < 3; ++adim) {
+                lobc[adim][1] = amrex::LinOpBCType::Periodic;
+                hibc[adim][1] = amrex::LinOpBCType::Periodic;
             }
         }
+        
     }
 };
 
