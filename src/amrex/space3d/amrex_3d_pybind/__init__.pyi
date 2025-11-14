@@ -23550,6 +23550,7 @@ class iMultiFab(FabArray_IArrayBox):
                 Input value to assign to the specified slice of the MultiFab
 
         """
+    @typing.overload
     def add(
         self,
         src: iMultiFab,
@@ -23557,6 +23558,19 @@ class iMultiFab(FabArray_IArrayBox):
         comp: typing.SupportsInt,
         numcomp: typing.SupportsInt,
         nghost: typing.SupportsInt,
+    ) -> None:
+        """
+        Add src to self including nghost ghost cells.
+        The two MultiFabs MUST have the same underlying BoxArray.
+        """
+    @typing.overload
+    def add(
+        self,
+        src: iMultiFab,
+        srccomp: typing.SupportsInt,
+        comp: typing.SupportsInt,
+        numcomp: typing.SupportsInt,
+        nghost: IntVect3D,
     ) -> None:
         """
         Add src to self including nghost ghost cells.
@@ -23608,6 +23622,7 @@ class iMultiFab(FabArray_IArrayBox):
         each FArrayBox will be modified.  Note, nothing is done to protect
         against divide by zero.
         """
+    @typing.overload
     def divide(
         self,
         src: iMultiFab,
@@ -23615,6 +23630,19 @@ class iMultiFab(FabArray_IArrayBox):
         comp: typing.SupportsInt,
         numcomp: typing.SupportsInt,
         nghost: typing.SupportsInt,
+    ) -> None:
+        """
+        Divide self by src including nghost ghost cells.
+        The two MultiFabs MUST have the same underlying BoxArray.
+        """
+    @typing.overload
+    def divide(
+        self,
+        src: iMultiFab,
+        srccomp: typing.SupportsInt,
+        comp: typing.SupportsInt,
+        numcomp: typing.SupportsInt,
+        nghost: IntVect3D,
     ) -> None:
         """
         Divide self by src including nghost ghost cells.
@@ -23752,6 +23780,7 @@ class iMultiFab(FabArray_IArrayBox):
         specifies the number of cells in the boundary region of each
         FArrayBox in the subregion that should be modified.
         """
+    @typing.overload
     def multiply(
         self,
         src: iMultiFab,
@@ -23759,6 +23788,19 @@ class iMultiFab(FabArray_IArrayBox):
         comp: typing.SupportsInt,
         numcomp: typing.SupportsInt,
         nghost: typing.SupportsInt,
+    ) -> None:
+        """
+        Multiply self by src including nghost ghost cells.
+        The two MultiFabs MUST have the same underlying BoxArray.
+        """
+    @typing.overload
+    def multiply(
+        self,
+        src: iMultiFab,
+        srccomp: typing.SupportsInt,
+        comp: typing.SupportsInt,
+        numcomp: typing.SupportsInt,
+        nghost: IntVect3D,
     ) -> None:
         """
         Multiply self by src including nghost ghost cells.
@@ -23873,6 +23915,7 @@ class iMultiFab(FabArray_IArrayBox):
         If nghost == 0, only the valid region of each FArrayBox will be
         modified.
         """
+    @typing.overload
     def subtract(
         self,
         src: iMultiFab,
@@ -23880,6 +23923,19 @@ class iMultiFab(FabArray_IArrayBox):
         comp: typing.SupportsInt,
         numcomp: typing.SupportsInt,
         nghost: typing.SupportsInt,
+    ) -> None:
+        """
+        Subtract src from self including nghost ghost cells.
+        The two MultiFabs MUST have the same underlying BoxArray.
+        """
+    @typing.overload
+    def subtract(
+        self,
+        src: iMultiFab,
+        srccomp: typing.SupportsInt,
+        comp: typing.SupportsInt,
+        numcomp: typing.SupportsInt,
+        nghost: IntVect3D,
     ) -> None:
         """
         Subtract src from self including nghost ghost cells.
@@ -23896,6 +23952,34 @@ class iMultiFab(FabArray_IArrayBox):
     ) -> int:
         """
         Returns the sum of component 'comp' in the given 'region'. -- no ghost cells are included.
+        """
+    @typing.overload
+    def swap(
+        self,
+        src: iMultiFab,
+        srccomp: typing.SupportsInt,
+        comp: typing.SupportsInt,
+        numcomp: typing.SupportsInt,
+        nghost: typing.SupportsInt,
+    ) -> None:
+        """
+        Swap from src to self including nghost ghost cells.
+        The two MultiFabs MUST have the same underlying BoxArray.
+        The swap is local.
+        """
+    @typing.overload
+    def swap(
+        self,
+        src: iMultiFab,
+        srccomp: typing.SupportsInt,
+        comp: typing.SupportsInt,
+        numcomp: typing.SupportsInt,
+        nghost: IntVect3D,
+    ) -> None:
+        """
+        Swap from src to self including nghost ghost cells.
+        The two MultiFabs MUST have the same underlying BoxArray.
+        The swap is local.
         """
     def to_cupy(self, copy=False, order="F"):
         """
