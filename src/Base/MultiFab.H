@@ -477,23 +477,14 @@ factory :
              "Add src to self including nghost ghost cells.\n"
              "The two MultiFabs MUST have the same underlying BoxArray."
         )
-    ;
-
-    // TODO: Missing in iMultiFab https://github.com/AMReX-Codes/amrex/issues/4317
-    if constexpr (std::is_same_v<T, MultiFab>) {
-        py_MultiFab
-            .def("add",
-                 [](T &self, T const &src, int srccomp, int comp, int numcomp, IntVect const &nghost) {
-                     T::Add(self, src, srccomp, comp, numcomp, nghost);
-                 },
-                 py::arg("src"), py::arg("srccomp"), py::arg("comp"), py::arg("numcomp"), py::arg("nghost"),
-                 "Add src to self including nghost ghost cells.\n"
-                 "The two MultiFabs MUST have the same underlying BoxArray."
-            )
-        ;
-    }
-
-    py_MultiFab
+        .def("add",
+             [](T &self, T const &src, int srccomp, int comp, int numcomp, IntVect const &nghost) {
+                 T::Add(self, src, srccomp, comp, numcomp, nghost);
+             },
+             py::arg("src"), py::arg("srccomp"), py::arg("comp"), py::arg("numcomp"), py::arg("nghost"),
+             "Add src to self including nghost ghost cells.\n"
+             "The two MultiFabs MUST have the same underlying BoxArray."
+        )
         .def("copymf",
             [](T &self, T const &src, int srccomp, int dstcomp, int numcomp, int nghost) {
                 T::Copy(self, src, srccomp, dstcomp, numcomp, nghost);
@@ -527,23 +518,14 @@ factory :
              "Subtract src from self including nghost ghost cells.\n"
              "The two MultiFabs MUST have the same underlying BoxArray."
         )
-    ;
-
-    // TODO: Missing in iMultiFab https://github.com/AMReX-Codes/amrex/issues/4317
-    if constexpr (std::is_same_v<T, MultiFab>) {
-        py_MultiFab
-            .def("subtract",
-                 [](T & self, T const & src, int srccomp, int comp, int numcomp, IntVect const & nghost) {
-                     T::Subtract(self, src, srccomp, comp, numcomp, nghost);
-                 },
-                 py::arg("src"), py::arg("srccomp"), py::arg("comp"), py::arg("numcomp"), py::arg("nghost"),
-                 "Subtract src from self including nghost ghost cells.\n"
-                 "The two MultiFabs MUST have the same underlying BoxArray."
-            )
-        ;
-    }
-
-    py_MultiFab
+        .def("subtract",
+             [](T & self, T const & src, int srccomp, int comp, int numcomp, IntVect const & nghost) {
+                 T::Subtract(self, src, srccomp, comp, numcomp, nghost);
+             },
+             py::arg("src"), py::arg("srccomp"), py::arg("comp"), py::arg("numcomp"), py::arg("nghost"),
+             "Subtract src from self including nghost ghost cells.\n"
+             "The two MultiFabs MUST have the same underlying BoxArray."
+        )
         .def("multiply",
              [](T & self, T const & src, int srccomp, int comp, int numcomp, int nghost) {
                  T::Multiply(self, src, srccomp, comp, numcomp, nghost);
@@ -552,22 +534,14 @@ factory :
              "Multiply self by src including nghost ghost cells.\n"
              "The two MultiFabs MUST have the same underlying BoxArray."
         )
-    ;
-
-    // TODO: Missing in iMultiFab
-    if constexpr (std::is_same_v<T, MultiFab>) {
-        py_MultiFab
-            .def("multiply",
-                 [](T &self, T const &src, int srccomp, int comp, int numcomp, IntVect const &nghost) {
-                     T::Multiply(self, src, srccomp, comp, numcomp, nghost);
-                 },
-                 py::arg("src"), py::arg("srccomp"), py::arg("comp"), py::arg("numcomp"), py::arg("nghost"),
-                 "Multiply self by src including nghost ghost cells.\n"
-                 "The two MultiFabs MUST have the same underlying BoxArray."
-            );
-    }
-
-    py_MultiFab
+        .def("multiply",
+             [](T &self, T const &src, int srccomp, int comp, int numcomp, IntVect const &nghost) {
+                 T::Multiply(self, src, srccomp, comp, numcomp, nghost);
+             },
+             py::arg("src"), py::arg("srccomp"), py::arg("comp"), py::arg("numcomp"), py::arg("nghost"),
+             "Multiply self by src including nghost ghost cells.\n"
+             "The two MultiFabs MUST have the same underlying BoxArray."
+        )
         .def("divide",
              [](T & self, T const & src, int srccomp, int comp, int numcomp, int nghost) {
                  T::Divide(self, src, srccomp, comp, numcomp, nghost);
@@ -576,38 +550,37 @@ factory :
              "Divide self by src including nghost ghost cells.\n"
              "The two MultiFabs MUST have the same underlying BoxArray."
         )
+        .def("divide",  /* TODO: Missing in iMultiFab https://github.com/AMReX-Codes/amrex/issues/4317 */
+             [](T &self, T const &src, int srccomp, int comp, int numcomp, IntVect const &nghost) {
+                 T::Divide(self, src, srccomp, comp, numcomp, nghost);
+             },
+             py::arg("src"), py::arg("srccomp"), py::arg("comp"), py::arg("numcomp"), py::arg("nghost"),
+             "Divide self by src including nghost ghost cells.\n"
+             "The two MultiFabs MUST have the same underlying BoxArray."
+        )
+
+        .def("swap",  /* TODO: Missing in iMultiFab https://github.com/AMReX-Codes/amrex/issues/4317 */
+             [](T &self, T &src, int srccomp, int comp, int numcomp, int nghost) {
+                 T::Swap(self, src, srccomp, comp, numcomp, nghost);
+             },
+             py::arg("src"), py::arg("srccomp"), py::arg("comp"), py::arg("numcomp"), py::arg("nghost"),
+             "Swap from src to self including nghost ghost cells.\n"
+             "The two MultiFabs MUST have the same underlying BoxArray.\n"
+             "The swap is local."
+        )
+        .def("swap",  /* TODO: Missing in iMultiFab https://github.com/AMReX-Codes/amrex/issues/4317 */
+             [](T &self, T &src, int srccomp, int comp, int numcomp, IntVect const &nghost) {
+                 T::Swap(self, src, srccomp, comp, numcomp, nghost);
+             },
+             py::arg("src"), py::arg("srccomp"), py::arg("comp"), py::arg("numcomp"), py::arg("nghost"),
+             "Swap from src to self including nghost ghost cells.\n"
+             "The two MultiFabs MUST have the same underlying BoxArray.\n"
+             "The swap is local."
+        )
     ;
 
     if constexpr (std::is_same_v<T, MultiFab>) {
         py_MultiFab
-            .def("divide",  /* TODO: Missing in iMultiFab https://github.com/AMReX-Codes/amrex/issues/4317 */
-                 [](T &self, T const &src, int srccomp, int comp, int numcomp, IntVect const &nghost) {
-                     T::Divide(self, src, srccomp, comp, numcomp, nghost);
-                 },
-                 py::arg("src"), py::arg("srccomp"), py::arg("comp"), py::arg("numcomp"), py::arg("nghost"),
-                 "Divide self by src including nghost ghost cells.\n"
-                 "The two MultiFabs MUST have the same underlying BoxArray."
-            )
-
-            .def("swap",  /* TODO: Missing in iMultiFab https://github.com/AMReX-Codes/amrex/issues/4317 */
-                 [](T &self, T &src, int srccomp, int comp, int numcomp, int nghost) {
-                     T::Swap(self, src, srccomp, comp, numcomp, nghost);
-                 },
-                 py::arg("src"), py::arg("srccomp"), py::arg("comp"), py::arg("numcomp"), py::arg("nghost"),
-                 "Swap from src to self including nghost ghost cells.\n"
-                 "The two MultiFabs MUST have the same underlying BoxArray.\n"
-                 "The swap is local."
-            )
-            .def("swap",  /* TODO: Missing in iMultiFab https://github.com/AMReX-Codes/amrex/issues/4317 */
-                 [](T &self, T &src, int srccomp, int comp, int numcomp, IntVect const &nghost) {
-                     T::Swap(self, src, srccomp, comp, numcomp, nghost);
-                 },
-                 py::arg("src"), py::arg("srccomp"), py::arg("comp"), py::arg("numcomp"), py::arg("nghost"),
-                 "Swap from src to self including nghost ghost cells.\n"
-                 "The two MultiFabs MUST have the same underlying BoxArray.\n"
-                 "The swap is local."
-            )
-
             .def("saxpy",
                  [](T & self, value_type a, T const & src, int srccomp, int comp, int numcomp, int nghost) {
                      T::Saxpy(self, a, src, srccomp, comp, numcomp, nghost);
