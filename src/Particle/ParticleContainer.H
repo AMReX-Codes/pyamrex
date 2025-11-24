@@ -44,22 +44,56 @@ std::string particle_type_suffix ()
     return suffix;
 }
 
-template <bool is_const, typename T_ParIterBase>
-void make_Base_Iterators (py::module &m, std::string allocstr)
+template <bool is_const, typename T_ParIter, template<class> class Allocator=amrex::DefaultAllocator>
+auto  // std::tuple<py_it, py_it_base>
+define_Iterators (py::module &m, std::string allocstr)
 {
     using namespace amrex;
 
-    using iterator_base = T_ParIterBase;
-    using container = typename iterator_base::ContainerType;
+    using iterator = T_ParIter;
+    using container = typename iterator::ContainerType;
     using ParticleType = typename container::ParticleType;
     constexpr int NArrayReal = container::NArrayReal;
     constexpr int NArrayInt = container::NArrayInt;
+    using iterator_base = amrex::ParIterBase_impl<is_const, ParticleType, NArrayReal, NArrayInt, Allocator>;
 
     std::string const suffix = particle_type_suffix<ParticleType, NArrayReal, NArrayInt>();
+
     std::string particle_it_base_name = std::string("Par");
     if (is_const) particle_it_base_name += "Const";
     particle_it_base_name += "IterBase_" + suffix + "_" + allocstr;
-    auto py_it_base = py::class_<iterator_base, MFIter>(m, particle_it_base_name.c_str(), py::dynamic_attr())
+    auto py_it_base = py::class_<iterator_base, MFIter>(m, particle_it_base_name.c_str(), py::dynamic_attr());
+
+    auto particle_it_name = std::string("Par");
+    if (is_const) particle_it_name += "Const";
+    particle_it_name += std::string("Iter_") + suffix + "_" + allocstr;
+    auto py_it = py::class_<iterator, iterator_base>(m, particle_it_name.c_str())
+        .def("__repr__",
+             [particle_it_name](iterator const & pti) {
+                 std::string r = "<amrex." + particle_it_name + " (";
+                 if( !pti.isValid() ) { r.append("in"); }
+                 r.append("valid)>");
+                 return r;
+             }
+        )
+    ;
+    return std::tuple(py_it, py_it_base);
+}
+
+template <typename T_PyParIter, typename T_PyParIterBase>
+void make_Iterators (
+    T_PyParIter & py_it,
+    T_PyParIterBase & py_it_base
+)
+{
+    using namespace amrex;
+
+    using iterator = typename T_PyParIter::type;
+    using container = typename iterator::ContainerType;
+    using ParticleType = typename container::ParticleType;
+    using iterator_base = typename T_PyParIterBase::type;
+
+    py_it_base
         .def(py::init<container&, int>(),
             // while the created iterator (argument 1: this) exists,
             // keep the ParticleContainer (argument 2) alive
@@ -95,35 +129,8 @@ void make_Base_Iterators (py::module &m, std::string allocstr)
         py_it_base.def("aos",
                        &iterator_base::GetArrayOfStructs,
                        py::return_value_policy::reference_internal);
-}
 
-template <bool is_const, typename T_ParIter, template<class> class Allocator=amrex::DefaultAllocator>
-void make_Iterators (py::module &m, std::string allocstr)
-{
-    using namespace amrex;
-
-    using iterator = T_ParIter;
-    using container = typename iterator::ContainerType;
-    using ParticleType = typename container::ParticleType;
-    constexpr int NArrayReal = container::NArrayReal;
-    constexpr int NArrayInt = container::NArrayInt;
-
-    using iterator_base = amrex::ParIterBase_impl<is_const, ParticleType, NArrayReal, NArrayInt, Allocator>;
-    make_Base_Iterators< is_const, iterator_base >(m, allocstr);
-
-    std::string const suffix = particle_type_suffix<ParticleType, NArrayReal, NArrayInt>();
-    auto particle_it_name = std::string("Par");
-    if (is_const) particle_it_name += "Const";
-    particle_it_name += std::string("Iter_") + suffix + "_" + allocstr;
-    py::class_<iterator, iterator_base>(m, particle_it_name.c_str())
-        .def("__repr__",
-             [particle_it_name](iterator const & pti) {
-                 std::string r = "<amrex." + particle_it_name + " (";
-                 if( !pti.isValid() ) { r.append("in"); }
-                 r.append("valid)>");
-                 return r;
-             }
-        )
+    py_it
         .def(py::init<container&, int>(),
              py::arg("particle_container"), py::arg("level"))
         //.def(py::init<container&, int, MFItInfo&>(),
@@ -171,6 +178,11 @@ void make_ParticleContainer_and_Iterators (py::module &m, std::string allocstr)
     >;
     using ParticleInitData = typename ParticleContainerType::ParticleInitData;
     using ParticleTileType = typename ParticleContainerType::ParticleTileType;
+
+    using iterator = amrex::ParIter_impl<ParticleType, T_NArrayReal, T_NArrayInt, Allocator>;
+    using const_iterator = amrex::ParConstIter_impl<ParticleType, T_NArrayReal, T_NArrayInt, Allocator>;
+    auto [py_it, py_it_base] = define_Iterators< false, iterator, Allocator >(m, allocstr);
+    auto [py_const_it, py_const_it_base] = define_Iterators< true, const_iterator, Allocator >(m, allocstr);
 
     std::string const suffix = particle_type_suffix<T_ParticleType, T_NArrayReal, T_NArrayInt>();
     auto const particle_container_type = std::string("ParticleContainer_") + suffix + "_" + allocstr;
@@ -488,10 +500,8 @@ void make_ParticleContainer_and_Iterators (py::module &m, std::string allocstr)
         ;
     }
 
-    using iterator = amrex::ParIter_impl<ParticleType, T_NArrayReal, T_NArrayInt, Allocator>;
-    make_Iterators< false, iterator, Allocator >(m, allocstr);
-    using const_iterator = amrex::ParConstIter_impl<ParticleType, T_NArrayReal, T_NArrayInt, Allocator>;
-    make_Iterators< true, const_iterator, Allocator >(m, allocstr);
+    make_Iterators(py_it, py_it_base);
+    make_Iterators(py_const_it, py_const_it_base);
 
     // simpler particle iterator loops: return types of this particle box
     py_pc
