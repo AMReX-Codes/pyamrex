@@ -25,7 +25,7 @@ def empty_particle_container(std_geometry, distmap, boxarr):
 
 @pytest.fixture(scope="function")
 def empty_soa_particle_container(std_geometry, distmap, boxarr):
-    pc = amr.ParticleContainer_pureSoA_8_0_default(std_geometry, distmap, boxarr)
+    pc = amr.ParticleContainer_pureSoA_11_0_default(std_geometry, distmap, boxarr)
     return pc
 
 
@@ -74,16 +74,18 @@ def particle_container(Npart, std_geometry, distmap, boxarr, std_real_box):
 
 @pytest.fixture(scope="function")
 def soa_particle_container(Npart, std_geometry, distmap, boxarr, std_real_box):
-    pc = amr.ParticleContainer_pureSoA_8_0_default(std_geometry, distmap, boxarr)
-    myt = amr.ParticleInitType_pureSoA_8_0()
-    myt.real_array_data = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8]
+    pc = amr.ParticleContainer_pureSoA_11_0_default(std_geometry, distmap, boxarr)
+    myt = amr.ParticleInitType_pureSoA_11_0()
+    myt.real_array_data = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.1, 1.2]
     myt.int_array_data = []
 
     with pytest.raises(Exception):
         pc.set_soa_compile_time_names(
-            ["x", "y", "z", "z", "b", "c", "d", "e"], []
+            ["x", "y", "z", "z", "b", "c", "d", "e", "f", "g", "h"], []
         )  # error: z added twice
-    pc.set_soa_compile_time_names(["x", "y", "z", "a", "b", "c", "d", "e"], [])
+    pc.set_soa_compile_time_names(
+        ["x", "y", "z", "a", "b", "c", "d", "e", "f", "g", "h"], []
+    )
 
     iseed = 1
     pc.init_random(Npart, iseed, myt, False, std_real_box)
@@ -91,7 +93,7 @@ def soa_particle_container(Npart, std_geometry, distmap, boxarr, std_real_box):
     # add runtime components: 1 real 2 int
     with pytest.raises(Exception):
         pc.add_real_comp("a", True)  # already used as a compile-time component
-    pc.add_real_comp("f", True)
+    pc.add_real_comp("w", True)
     pc.add_int_comp("i1", True)
     pc.add_int_comp("i2", True)
 
@@ -99,7 +101,7 @@ def soa_particle_container(Npart, std_geometry, distmap, boxarr, std_real_box):
     for lvl in range(pc.finest_level + 1):
         for pti in pc.iterator(level=lvl):
             soa = pti.soa()
-            soa.get_real_data(8).assign(1.2345)
+            soa.get_real_data(11).assign(1.2345)
             soa.get_int_data(0).assign(42)
             soa.get_int_data(1).assign(33)
 
