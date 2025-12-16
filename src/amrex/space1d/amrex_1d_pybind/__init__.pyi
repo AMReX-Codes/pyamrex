@@ -138,60 +138,60 @@ __all__: list[str] = [
     "ParConstIterBase_2_1_3_1_arena",
     "ParConstIterBase_2_1_3_1_default",
     "ParConstIterBase_2_1_3_1_pinned",
+    "ParConstIterBase_pureSoA_11_0_arena",
+    "ParConstIterBase_pureSoA_11_0_default",
+    "ParConstIterBase_pureSoA_11_0_pinned",
     "ParConstIterBase_pureSoA_1_0_arena",
     "ParConstIterBase_pureSoA_1_0_default",
     "ParConstIterBase_pureSoA_1_0_pinned",
     "ParConstIterBase_pureSoA_5_0_arena",
     "ParConstIterBase_pureSoA_5_0_default",
     "ParConstIterBase_pureSoA_5_0_pinned",
-    "ParConstIterBase_pureSoA_8_0_arena",
-    "ParConstIterBase_pureSoA_8_0_default",
-    "ParConstIterBase_pureSoA_8_0_pinned",
     "ParConstIter_16_4_0_0_arena",
     "ParConstIter_16_4_0_0_default",
     "ParConstIter_16_4_0_0_pinned",
     "ParConstIter_2_1_3_1_arena",
     "ParConstIter_2_1_3_1_default",
     "ParConstIter_2_1_3_1_pinned",
+    "ParConstIter_pureSoA_11_0_arena",
+    "ParConstIter_pureSoA_11_0_default",
+    "ParConstIter_pureSoA_11_0_pinned",
     "ParConstIter_pureSoA_1_0_arena",
     "ParConstIter_pureSoA_1_0_default",
     "ParConstIter_pureSoA_1_0_pinned",
     "ParConstIter_pureSoA_5_0_arena",
     "ParConstIter_pureSoA_5_0_default",
     "ParConstIter_pureSoA_5_0_pinned",
-    "ParConstIter_pureSoA_8_0_arena",
-    "ParConstIter_pureSoA_8_0_default",
-    "ParConstIter_pureSoA_8_0_pinned",
     "ParIterBase_16_4_0_0_arena",
     "ParIterBase_16_4_0_0_default",
     "ParIterBase_16_4_0_0_pinned",
     "ParIterBase_2_1_3_1_arena",
     "ParIterBase_2_1_3_1_default",
     "ParIterBase_2_1_3_1_pinned",
+    "ParIterBase_pureSoA_11_0_arena",
+    "ParIterBase_pureSoA_11_0_default",
+    "ParIterBase_pureSoA_11_0_pinned",
     "ParIterBase_pureSoA_1_0_arena",
     "ParIterBase_pureSoA_1_0_default",
     "ParIterBase_pureSoA_1_0_pinned",
     "ParIterBase_pureSoA_5_0_arena",
     "ParIterBase_pureSoA_5_0_default",
     "ParIterBase_pureSoA_5_0_pinned",
-    "ParIterBase_pureSoA_8_0_arena",
-    "ParIterBase_pureSoA_8_0_default",
-    "ParIterBase_pureSoA_8_0_pinned",
     "ParIter_16_4_0_0_arena",
     "ParIter_16_4_0_0_default",
     "ParIter_16_4_0_0_pinned",
     "ParIter_2_1_3_1_arena",
     "ParIter_2_1_3_1_default",
     "ParIter_2_1_3_1_pinned",
+    "ParIter_pureSoA_11_0_arena",
+    "ParIter_pureSoA_11_0_default",
+    "ParIter_pureSoA_11_0_pinned",
     "ParIter_pureSoA_1_0_arena",
     "ParIter_pureSoA_1_0_default",
     "ParIter_pureSoA_1_0_pinned",
     "ParIter_pureSoA_5_0_arena",
     "ParIter_pureSoA_5_0_default",
     "ParIter_pureSoA_5_0_pinned",
-    "ParIter_pureSoA_8_0_arena",
-    "ParIter_pureSoA_8_0_default",
-    "ParIter_pureSoA_8_0_pinned",
     "ParallelDescriptor",
     "ParmParse",
     "ParticleContainer_16_4_0_0_arena",
@@ -200,46 +200,46 @@ __all__: list[str] = [
     "ParticleContainer_2_1_3_1_arena",
     "ParticleContainer_2_1_3_1_default",
     "ParticleContainer_2_1_3_1_pinned",
+    "ParticleContainer_pureSoA_11_0_arena",
+    "ParticleContainer_pureSoA_11_0_default",
+    "ParticleContainer_pureSoA_11_0_pinned",
     "ParticleContainer_pureSoA_1_0_arena",
     "ParticleContainer_pureSoA_1_0_default",
     "ParticleContainer_pureSoA_1_0_pinned",
     "ParticleContainer_pureSoA_5_0_arena",
     "ParticleContainer_pureSoA_5_0_default",
     "ParticleContainer_pureSoA_5_0_pinned",
-    "ParticleContainer_pureSoA_8_0_arena",
-    "ParticleContainer_pureSoA_8_0_default",
-    "ParticleContainer_pureSoA_8_0_pinned",
     "ParticleInitType_16_4_0_0",
     "ParticleInitType_2_1_3_1",
+    "ParticleInitType_pureSoA_11_0",
     "ParticleInitType_pureSoA_1_0",
     "ParticleInitType_pureSoA_5_0",
-    "ParticleInitType_pureSoA_8_0",
     "ParticleTileData_16_4_0_0",
     "ParticleTileData_2_1_3_1",
+    "ParticleTileData_pureSoA_11_0",
     "ParticleTileData_pureSoA_1_0",
     "ParticleTileData_pureSoA_5_0",
-    "ParticleTileData_pureSoA_8_0",
     "ParticleTile_16_4_0_0_arena",
     "ParticleTile_16_4_0_0_default",
     "ParticleTile_16_4_0_0_pinned",
     "ParticleTile_2_1_3_1_arena",
     "ParticleTile_2_1_3_1_default",
     "ParticleTile_2_1_3_1_pinned",
+    "ParticleTile_pureSoA_11_0_arena",
+    "ParticleTile_pureSoA_11_0_default",
+    "ParticleTile_pureSoA_11_0_pinned",
     "ParticleTile_pureSoA_1_0_arena",
     "ParticleTile_pureSoA_1_0_default",
     "ParticleTile_pureSoA_1_0_pinned",
     "ParticleTile_pureSoA_5_0_arena",
     "ParticleTile_pureSoA_5_0_default",
     "ParticleTile_pureSoA_5_0_pinned",
-    "ParticleTile_pureSoA_8_0_arena",
-    "ParticleTile_pureSoA_8_0_default",
-    "ParticleTile_pureSoA_8_0_pinned",
+    "Particle_11_0",
     "Particle_16_4",
     "Particle_1_0",
     "Particle_2_1",
     "Particle_5_0",
     "Particle_5_2",
-    "Particle_8_0",
     "Periodicity",
     "PlotFileData",
     "Poisson",
@@ -257,6 +257,9 @@ __all__: list[str] = [
     "StructOfArrays_0_0_arena",
     "StructOfArrays_0_0_default",
     "StructOfArrays_0_0_pinned",
+    "StructOfArrays_11_0_idcpu_arena",
+    "StructOfArrays_11_0_idcpu_default",
+    "StructOfArrays_11_0_idcpu_pinned",
     "StructOfArrays_1_0_idcpu_arena",
     "StructOfArrays_1_0_idcpu_default",
     "StructOfArrays_1_0_idcpu_pinned",
@@ -266,9 +269,6 @@ __all__: list[str] = [
     "StructOfArrays_5_0_idcpu_arena",
     "StructOfArrays_5_0_idcpu_default",
     "StructOfArrays_5_0_idcpu_pinned",
-    "StructOfArrays_8_0_idcpu_arena",
-    "StructOfArrays_8_0_idcpu_default",
-    "StructOfArrays_8_0_idcpu_pinned",
     "The_Arena",
     "The_Async_Arena",
     "The_Cpu_Arena",
@@ -19378,9 +19378,9 @@ class ParticleContainer_16_4_0_0_arena:
         Return the number of valid particles on all MPI ranks
         """
 
-class Particle_8_0:
+class Particle_11_0:
     NInt: typing.ClassVar[int] = 0
-    NReal: typing.ClassVar[int] = 8
+    NReal: typing.ClassVar[int] = 11
     @typing.overload
     def NextID(self) -> int: ...
     @typing.overload
@@ -19405,7 +19405,7 @@ class Particle_8_0:
     @typing.overload
     def get_rdata(self, arg0: typing.SupportsInt) -> float: ...
     @typing.overload
-    def get_rdata(self) -> typing.Annotated[list[float], "FixedSize(8)"]: ...
+    def get_rdata(self) -> typing.Annotated[list[float], "FixedSize(11)"]: ...
     def id(self) -> int: ...
     @typing.overload
     def pos(self, arg0: typing.SupportsInt) -> float: ...
@@ -19439,7 +19439,7 @@ class Particle_8_0:
     def set_rdata(
         self,
         arg0: typing.Annotated[
-            collections.abc.Sequence[typing.SupportsFloat], "FixedSize(8)"
+            collections.abc.Sequence[typing.SupportsFloat], "FixedSize(11)"
         ],
     ) -> None: ...
     @property
@@ -19447,7 +19447,7 @@ class Particle_8_0:
     @x.setter
     def x(self, arg1: typing.SupportsFloat) -> None: ...
 
-class StructOfArrays_8_0_idcpu_pinned:
+class StructOfArrays_11_0_idcpu_pinned:
     def __init__(self) -> None: ...
     def __len__(self) -> int:
         """
@@ -19485,7 +19485,7 @@ class StructOfArrays_8_0_idcpu_pinned:
     @typing.overload
     def get_real_data(
         self,
-    ) -> typing.Annotated[list[PODVector_real_pinned], "FixedSize(8)"]:
+    ) -> typing.Annotated[list[PODVector_real_pinned], "FixedSize(11)"]:
         """
         Get access to the particle Real Arrays (only compile-time components)
         """
@@ -19616,7 +19616,7 @@ class StructOfArrays_8_0_idcpu_pinned:
         Get the number of particles
         """
 
-class StructOfArrays_8_0_idcpu_default:
+class StructOfArrays_11_0_idcpu_default:
     def __init__(self) -> None: ...
     def __len__(self) -> int:
         """
@@ -19652,7 +19652,7 @@ class StructOfArrays_8_0_idcpu_default:
     @typing.overload
     def get_real_data(
         self,
-    ) -> typing.Annotated[list[PODVector_real_std], "FixedSize(8)"]:
+    ) -> typing.Annotated[list[PODVector_real_std], "FixedSize(11)"]:
         """
         Get access to the particle Real Arrays (only compile-time components)
         """
@@ -19783,7 +19783,7 @@ class StructOfArrays_8_0_idcpu_default:
         Get the number of particles
         """
 
-class StructOfArrays_8_0_idcpu_arena:
+class StructOfArrays_11_0_idcpu_arena:
     def __init__(self) -> None: ...
     def __len__(self) -> int:
         """
@@ -19821,7 +19821,7 @@ class StructOfArrays_8_0_idcpu_arena:
     @typing.overload
     def get_real_data(
         self,
-    ) -> typing.Annotated[list[PODVector_real_arena], "FixedSize(8)"]:
+    ) -> typing.Annotated[list[PODVector_real_arena], "FixedSize(11)"]:
         """
         Get access to the particle Real Arrays (only compile-time components)
         """
@@ -19952,13 +19952,13 @@ class StructOfArrays_8_0_idcpu_arena:
         Get the number of particles
         """
 
-class ParticleTileData_pureSoA_8_0:
-    def __getitem__(self, arg0: typing.SupportsInt) -> Particle_8_0: ...
+class ParticleTileData_pureSoA_11_0:
+    def __getitem__(self, arg0: typing.SupportsInt) -> Particle_11_0: ...
     def __init__(self) -> None: ...
-    def __setitem__(self, arg0: typing.SupportsInt, arg1: Particle_8_0) -> None: ...
-    def get_super_particle(self, arg0: typing.SupportsInt) -> Particle_8_0: ...
+    def __setitem__(self, arg0: typing.SupportsInt, arg1: Particle_11_0) -> None: ...
+    def get_super_particle(self, arg0: typing.SupportsInt) -> Particle_11_0: ...
     def set_super_particle(
-        self, arg0: Particle_8_0, arg1: typing.SupportsInt
+        self, arg0: Particle_11_0, arg1: typing.SupportsInt
     ) -> None: ...
     @property
     def m_num_runtime_int(self) -> int: ...
@@ -19967,12 +19967,12 @@ class ParticleTileData_pureSoA_8_0:
     @property
     def m_size(self) -> int: ...
 
-class ParticleTile_pureSoA_8_0_pinned:
+class ParticleTile_pureSoA_11_0_pinned:
     NAI: typing.ClassVar[int] = 0
-    NAR: typing.ClassVar[int] = 8
-    def __getitem__(self, arg0: typing.SupportsInt) -> Particle_8_0: ...
+    NAR: typing.ClassVar[int] = 11
+    def __getitem__(self, arg0: typing.SupportsInt) -> Particle_11_0: ...
     def __init__(self) -> None: ...
-    def __setitem__(self, arg0: typing.SupportsInt, arg1: Particle_8_0) -> None: ...
+    def __setitem__(self, arg0: typing.SupportsInt, arg1: Particle_11_0) -> None: ...
     def capacity(self) -> int: ...
     def define(
         self,
@@ -19983,9 +19983,9 @@ class ParticleTile_pureSoA_8_0_pinned:
         arg4: Arena,
     ) -> None: ...
     def get_num_neighbors(self) -> int: ...
-    def get_particle_tile_data(self) -> ParticleTileData_pureSoA_8_0: ...
-    def get_struct_of_arrays(self) -> StructOfArrays_8_0_idcpu_pinned: ...
-    def push_back(self, arg0: Particle_8_0) -> None:
+    def get_particle_tile_data(self) -> ParticleTileData_pureSoA_11_0: ...
+    def get_struct_of_arrays(self) -> StructOfArrays_11_0_idcpu_pinned: ...
+    def push_back(self, arg0: Particle_11_0) -> None:
         """
         Add one particle to this tile.
         """
@@ -20015,7 +20015,7 @@ class ParticleTile_pureSoA_8_0_pinned:
     def push_back_real(
         self,
         arg0: typing.Annotated[
-            collections.abc.Sequence[typing.SupportsFloat], "FixedSize(8)"
+            collections.abc.Sequence[typing.SupportsFloat], "FixedSize(11)"
         ],
     ) -> None: ...
     @typing.overload
@@ -20032,7 +20032,7 @@ class ParticleTile_pureSoA_8_0_pinned:
     ) -> None: ...
     def set_num_neighbors(self, arg0: typing.SupportsInt) -> None: ...
     def shrink_to_fit(self) -> None: ...
-    def swap(self, arg0: ParticleTile_pureSoA_8_0_pinned) -> None: ...
+    def swap(self, arg0: ParticleTile_pureSoA_11_0_pinned) -> None: ...
     @property
     def empty(self) -> bool: ...
     @property
@@ -20054,12 +20054,12 @@ class ParticleTile_pureSoA_8_0_pinned:
     @property
     def size(self) -> int: ...
 
-class ParticleTile_pureSoA_8_0_default:
+class ParticleTile_pureSoA_11_0_default:
     NAI: typing.ClassVar[int] = 0
-    NAR: typing.ClassVar[int] = 8
-    def __getitem__(self, arg0: typing.SupportsInt) -> Particle_8_0: ...
+    NAR: typing.ClassVar[int] = 11
+    def __getitem__(self, arg0: typing.SupportsInt) -> Particle_11_0: ...
     def __init__(self) -> None: ...
-    def __setitem__(self, arg0: typing.SupportsInt, arg1: Particle_8_0) -> None: ...
+    def __setitem__(self, arg0: typing.SupportsInt, arg1: Particle_11_0) -> None: ...
     def capacity(self) -> int: ...
     def define(
         self,
@@ -20070,9 +20070,9 @@ class ParticleTile_pureSoA_8_0_default:
         arg4: Arena,
     ) -> None: ...
     def get_num_neighbors(self) -> int: ...
-    def get_particle_tile_data(self) -> ParticleTileData_pureSoA_8_0: ...
-    def get_struct_of_arrays(self) -> StructOfArrays_8_0_idcpu_default: ...
-    def push_back(self, arg0: Particle_8_0) -> None:
+    def get_particle_tile_data(self) -> ParticleTileData_pureSoA_11_0: ...
+    def get_struct_of_arrays(self) -> StructOfArrays_11_0_idcpu_default: ...
+    def push_back(self, arg0: Particle_11_0) -> None:
         """
         Add one particle to this tile.
         """
@@ -20102,7 +20102,7 @@ class ParticleTile_pureSoA_8_0_default:
     def push_back_real(
         self,
         arg0: typing.Annotated[
-            collections.abc.Sequence[typing.SupportsFloat], "FixedSize(8)"
+            collections.abc.Sequence[typing.SupportsFloat], "FixedSize(11)"
         ],
     ) -> None: ...
     @typing.overload
@@ -20119,7 +20119,7 @@ class ParticleTile_pureSoA_8_0_default:
     ) -> None: ...
     def set_num_neighbors(self, arg0: typing.SupportsInt) -> None: ...
     def shrink_to_fit(self) -> None: ...
-    def swap(self, arg0: ParticleTile_pureSoA_8_0_default) -> None: ...
+    def swap(self, arg0: ParticleTile_pureSoA_11_0_default) -> None: ...
     @property
     def empty(self) -> bool: ...
     @property
@@ -20141,12 +20141,12 @@ class ParticleTile_pureSoA_8_0_default:
     @property
     def size(self) -> int: ...
 
-class ParticleTile_pureSoA_8_0_arena:
+class ParticleTile_pureSoA_11_0_arena:
     NAI: typing.ClassVar[int] = 0
-    NAR: typing.ClassVar[int] = 8
-    def __getitem__(self, arg0: typing.SupportsInt) -> Particle_8_0: ...
+    NAR: typing.ClassVar[int] = 11
+    def __getitem__(self, arg0: typing.SupportsInt) -> Particle_11_0: ...
     def __init__(self) -> None: ...
-    def __setitem__(self, arg0: typing.SupportsInt, arg1: Particle_8_0) -> None: ...
+    def __setitem__(self, arg0: typing.SupportsInt, arg1: Particle_11_0) -> None: ...
     def capacity(self) -> int: ...
     def define(
         self,
@@ -20157,9 +20157,9 @@ class ParticleTile_pureSoA_8_0_arena:
         arg4: Arena,
     ) -> None: ...
     def get_num_neighbors(self) -> int: ...
-    def get_particle_tile_data(self) -> ParticleTileData_pureSoA_8_0: ...
-    def get_struct_of_arrays(self) -> StructOfArrays_8_0_idcpu_arena: ...
-    def push_back(self, arg0: Particle_8_0) -> None:
+    def get_particle_tile_data(self) -> ParticleTileData_pureSoA_11_0: ...
+    def get_struct_of_arrays(self) -> StructOfArrays_11_0_idcpu_arena: ...
+    def push_back(self, arg0: Particle_11_0) -> None:
         """
         Add one particle to this tile.
         """
@@ -20189,7 +20189,7 @@ class ParticleTile_pureSoA_8_0_arena:
     def push_back_real(
         self,
         arg0: typing.Annotated[
-            collections.abc.Sequence[typing.SupportsFloat], "FixedSize(8)"
+            collections.abc.Sequence[typing.SupportsFloat], "FixedSize(11)"
         ],
     ) -> None: ...
     @typing.overload
@@ -20206,7 +20206,7 @@ class ParticleTile_pureSoA_8_0_arena:
     ) -> None: ...
     def set_num_neighbors(self, arg0: typing.SupportsInt) -> None: ...
     def shrink_to_fit(self) -> None: ...
-    def swap(self, arg0: ParticleTile_pureSoA_8_0_arena) -> None: ...
+    def swap(self, arg0: ParticleTile_pureSoA_11_0_arena) -> None: ...
     @property
     def empty(self) -> bool: ...
     @property
@@ -20228,7 +20228,7 @@ class ParticleTile_pureSoA_8_0_arena:
     @property
     def size(self) -> int: ...
 
-class ParticleInitType_pureSoA_8_0:
+class ParticleInitType_pureSoA_11_0:
     is_soa_particle: typing.ClassVar[bool] = True
     def __init__(self) -> None: ...
     @property
@@ -20241,16 +20241,16 @@ class ParticleInitType_pureSoA_8_0:
         ],
     ) -> None: ...
     @property
-    def real_array_data(self) -> typing.Annotated[list[float], "FixedSize(8)"]: ...
+    def real_array_data(self) -> typing.Annotated[list[float], "FixedSize(11)"]: ...
     @real_array_data.setter
     def real_array_data(
         self,
         arg0: typing.Annotated[
-            collections.abc.Sequence[typing.SupportsFloat], "FixedSize(8)"
+            collections.abc.Sequence[typing.SupportsFloat], "FixedSize(11)"
         ],
     ) -> None: ...
 
-class ParIterBase_pureSoA_8_0_pinned(MFIter):
+class ParIterBase_pureSoA_11_0_pinned(MFIter):
     is_soa_particle: typing.ClassVar[bool] = True
     def __getitem__(self, name):
         """
@@ -20258,7 +20258,7 @@ class ParIterBase_pureSoA_8_0_pinned(MFIter):
         """
     def __init__(
         self,
-        particle_container: ParticleContainer_pureSoA_8_0_pinned,
+        particle_container: ParticleContainer_pureSoA_11_0_pinned,
         level: typing.SupportsInt,
     ) -> None: ...
     def __iter__(self): ...
@@ -20283,8 +20283,8 @@ class ParIterBase_pureSoA_8_0_pinned(MFIter):
     def _incr(self) -> None: ...
     def finalize(self) -> None: ...
     def geom(self, level: typing.SupportsInt) -> Geometry: ...
-    def particle_tile(self) -> ParticleTile_pureSoA_8_0_pinned: ...
-    def soa(self) -> StructOfArrays_8_0_idcpu_pinned: ...
+    def particle_tile(self) -> ParticleTile_pureSoA_11_0_pinned: ...
+    def soa(self) -> StructOfArrays_11_0_idcpu_pinned: ...
     @property
     def is_valid(self) -> bool: ...
     @property
@@ -20303,7 +20303,7 @@ class ParIterBase_pureSoA_8_0_pinned(MFIter):
         the number of particles on this tile
         """
 
-class ParIter_pureSoA_8_0_pinned(ParIterBase_pureSoA_8_0_pinned):
+class ParIter_pureSoA_11_0_pinned(ParIterBase_pureSoA_11_0_pinned):
     is_soa_particle: typing.ClassVar[bool] = True
     def __getitem__(self, name):
         """
@@ -20311,7 +20311,7 @@ class ParIter_pureSoA_8_0_pinned(ParIterBase_pureSoA_8_0_pinned):
         """
     def __init__(
         self,
-        particle_container: ParticleContainer_pureSoA_8_0_pinned,
+        particle_container: ParticleContainer_pureSoA_11_0_pinned,
         level: typing.SupportsInt,
     ) -> None: ...
     def __iter__(self): ...
@@ -20335,7 +20335,7 @@ class ParIter_pureSoA_8_0_pinned(ParIterBase_pureSoA_8_0_pinned):
         """
     def __repr__(self) -> str: ...
 
-class ParConstIterBase_pureSoA_8_0_pinned(MFIter):
+class ParConstIterBase_pureSoA_11_0_pinned(MFIter):
     is_soa_particle: typing.ClassVar[bool] = True
     def __getitem__(self, name):
         """
@@ -20343,7 +20343,7 @@ class ParConstIterBase_pureSoA_8_0_pinned(MFIter):
         """
     def __init__(
         self,
-        particle_container: ParticleContainer_pureSoA_8_0_pinned,
+        particle_container: ParticleContainer_pureSoA_11_0_pinned,
         level: typing.SupportsInt,
     ) -> None: ...
     def __iter__(self): ...
@@ -20368,8 +20368,8 @@ class ParConstIterBase_pureSoA_8_0_pinned(MFIter):
     def _incr(self) -> None: ...
     def finalize(self) -> None: ...
     def geom(self, level: typing.SupportsInt) -> Geometry: ...
-    def particle_tile(self) -> ParticleTile_pureSoA_8_0_pinned: ...
-    def soa(self) -> StructOfArrays_8_0_idcpu_pinned: ...
+    def particle_tile(self) -> ParticleTile_pureSoA_11_0_pinned: ...
+    def soa(self) -> StructOfArrays_11_0_idcpu_pinned: ...
     @property
     def is_valid(self) -> bool: ...
     @property
@@ -20388,7 +20388,7 @@ class ParConstIterBase_pureSoA_8_0_pinned(MFIter):
         the number of particles on this tile
         """
 
-class ParConstIter_pureSoA_8_0_pinned(ParConstIterBase_pureSoA_8_0_pinned):
+class ParConstIter_pureSoA_11_0_pinned(ParConstIterBase_pureSoA_11_0_pinned):
     is_soa_particle: typing.ClassVar[bool] = True
     def __getitem__(self, name):
         """
@@ -20396,7 +20396,7 @@ class ParConstIter_pureSoA_8_0_pinned(ParConstIterBase_pureSoA_8_0_pinned):
         """
     def __init__(
         self,
-        particle_container: ParticleContainer_pureSoA_8_0_pinned,
+        particle_container: ParticleContainer_pureSoA_11_0_pinned,
         level: typing.SupportsInt,
     ) -> None: ...
     def __iter__(self): ...
@@ -20420,14 +20420,14 @@ class ParConstIter_pureSoA_8_0_pinned(ParConstIterBase_pureSoA_8_0_pinned):
         """
     def __repr__(self) -> str: ...
 
-class ParticleContainer_pureSoA_8_0_pinned:
+class ParticleContainer_pureSoA_11_0_pinned:
     is_soa_particle: typing.ClassVar[bool] = True
     num_array_int: typing.ClassVar[int] = 0
-    num_array_real: typing.ClassVar[int] = 8
+    num_array_real: typing.ClassVar[int] = 11
     num_struct_int: typing.ClassVar[int] = 0
     num_struct_real: typing.ClassVar[int] = 0
-    ConstIterator = ParConstIter_pureSoA_8_0_pinned
-    Iterator = ParIter_pureSoA_8_0_pinned
+    ConstIterator = ParConstIter_pureSoA_11_0_pinned
+    Iterator = ParIter_pureSoA_11_0_pinned
     @typing.overload
     def Define(
         self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray
@@ -20487,11 +20487,11 @@ class ParticleContainer_pureSoA_8_0_pinned:
         add a new runtime component with type Int
         """
     def add_particles(
-        self, other: ParticleContainer_pureSoA_8_0_pinned, local: bool = False
+        self, other: ParticleContainer_pureSoA_11_0_pinned, local: bool = False
     ) -> None: ...
     def add_particles_at_level(
         self,
-        particles: ParticleTile_pureSoA_8_0_pinned,
+        particles: ParticleTile_pureSoA_11_0_pinned,
         level: typing.SupportsInt,
         ngrow: typing.SupportsInt = 0,
     ) -> None: ...
@@ -20535,7 +20535,7 @@ class ParticleContainer_pureSoA_8_0_pinned:
         """
     def get_particles(
         self, level: typing.SupportsInt
-    ) -> dict[tuple[int, int], ParticleTile_pureSoA_8_0_pinned]: ...
+    ) -> dict[tuple[int, int], ParticleTile_pureSoA_11_0_pinned]: ...
     def get_real_comp_index(self, arg0: str) -> int:
         """
         Get the ParticleReal SoA index of a component
@@ -20553,7 +20553,7 @@ class ParticleContainer_pureSoA_8_0_pinned:
         self,
         arg0: typing.SupportsInt,
         arg1: typing.SupportsInt,
-        arg2: ParticleInitType_pureSoA_8_0,
+        arg2: ParticleInitType_pureSoA_11_0,
         arg3: bool,
         arg4: RealBox,
     ) -> None: ...
@@ -20580,7 +20580,7 @@ class ParticleContainer_pureSoA_8_0_pinned:
             >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
 
         """
-    def make_alike(self) -> ParticleContainer_pureSoA_8_0_pinned: ...
+    def make_alike(self) -> ParticleContainer_pureSoA_11_0_pinned: ...
     def num_local_tiles_at_level(self, level: typing.SupportsInt) -> int: ...
     def number_of_particles(self, only_local: bool = False) -> int:
         """
@@ -20692,7 +20692,7 @@ class ParticleContainer_pureSoA_8_0_pinned:
         Return the number of valid particles on all MPI ranks
         """
 
-class ParIterBase_pureSoA_8_0_default(MFIter):
+class ParIterBase_pureSoA_11_0_default(MFIter):
     is_soa_particle: typing.ClassVar[bool] = True
     def __getitem__(self, name):
         """
@@ -20700,7 +20700,7 @@ class ParIterBase_pureSoA_8_0_default(MFIter):
         """
     def __init__(
         self,
-        particle_container: ParticleContainer_pureSoA_8_0_default,
+        particle_container: ParticleContainer_pureSoA_11_0_default,
         level: typing.SupportsInt,
     ) -> None: ...
     def __iter__(self): ...
@@ -20725,8 +20725,8 @@ class ParIterBase_pureSoA_8_0_default(MFIter):
     def _incr(self) -> None: ...
     def finalize(self) -> None: ...
     def geom(self, level: typing.SupportsInt) -> Geometry: ...
-    def particle_tile(self) -> ParticleTile_pureSoA_8_0_default: ...
-    def soa(self) -> StructOfArrays_8_0_idcpu_default: ...
+    def particle_tile(self) -> ParticleTile_pureSoA_11_0_default: ...
+    def soa(self) -> StructOfArrays_11_0_idcpu_default: ...
     @property
     def is_valid(self) -> bool: ...
     @property
@@ -20745,7 +20745,7 @@ class ParIterBase_pureSoA_8_0_default(MFIter):
         the number of particles on this tile
         """
 
-class ParIter_pureSoA_8_0_default(ParIterBase_pureSoA_8_0_default):
+class ParIter_pureSoA_11_0_default(ParIterBase_pureSoA_11_0_default):
     is_soa_particle: typing.ClassVar[bool] = True
     def __getitem__(self, name):
         """
@@ -20753,7 +20753,7 @@ class ParIter_pureSoA_8_0_default(ParIterBase_pureSoA_8_0_default):
         """
     def __init__(
         self,
-        particle_container: ParticleContainer_pureSoA_8_0_default,
+        particle_container: ParticleContainer_pureSoA_11_0_default,
         level: typing.SupportsInt,
     ) -> None: ...
     def __iter__(self): ...
@@ -20777,7 +20777,7 @@ class ParIter_pureSoA_8_0_default(ParIterBase_pureSoA_8_0_default):
         """
     def __repr__(self) -> str: ...
 
-class ParConstIterBase_pureSoA_8_0_default(MFIter):
+class ParConstIterBase_pureSoA_11_0_default(MFIter):
     is_soa_particle: typing.ClassVar[bool] = True
     def __getitem__(self, name):
         """
@@ -20785,7 +20785,7 @@ class ParConstIterBase_pureSoA_8_0_default(MFIter):
         """
     def __init__(
         self,
-        particle_container: ParticleContainer_pureSoA_8_0_default,
+        particle_container: ParticleContainer_pureSoA_11_0_default,
         level: typing.SupportsInt,
     ) -> None: ...
     def __iter__(self): ...
@@ -20810,8 +20810,8 @@ class ParConstIterBase_pureSoA_8_0_default(MFIter):
     def _incr(self) -> None: ...
     def finalize(self) -> None: ...
     def geom(self, level: typing.SupportsInt) -> Geometry: ...
-    def particle_tile(self) -> ParticleTile_pureSoA_8_0_default: ...
-    def soa(self) -> StructOfArrays_8_0_idcpu_default: ...
+    def particle_tile(self) -> ParticleTile_pureSoA_11_0_default: ...
+    def soa(self) -> StructOfArrays_11_0_idcpu_default: ...
     @property
     def is_valid(self) -> bool: ...
     @property
@@ -20830,7 +20830,7 @@ class ParConstIterBase_pureSoA_8_0_default(MFIter):
         the number of particles on this tile
         """
 
-class ParConstIter_pureSoA_8_0_default(ParConstIterBase_pureSoA_8_0_default):
+class ParConstIter_pureSoA_11_0_default(ParConstIterBase_pureSoA_11_0_default):
     is_soa_particle: typing.ClassVar[bool] = True
     def __getitem__(self, name):
         """
@@ -20838,7 +20838,7 @@ class ParConstIter_pureSoA_8_0_default(ParConstIterBase_pureSoA_8_0_default):
         """
     def __init__(
         self,
-        particle_container: ParticleContainer_pureSoA_8_0_default,
+        particle_container: ParticleContainer_pureSoA_11_0_default,
         level: typing.SupportsInt,
     ) -> None: ...
     def __iter__(self): ...
@@ -20862,14 +20862,14 @@ class ParConstIter_pureSoA_8_0_default(ParConstIterBase_pureSoA_8_0_default):
         """
     def __repr__(self) -> str: ...
 
-class ParticleContainer_pureSoA_8_0_default:
+class ParticleContainer_pureSoA_11_0_default:
     is_soa_particle: typing.ClassVar[bool] = True
     num_array_int: typing.ClassVar[int] = 0
-    num_array_real: typing.ClassVar[int] = 8
+    num_array_real: typing.ClassVar[int] = 11
     num_struct_int: typing.ClassVar[int] = 0
     num_struct_real: typing.ClassVar[int] = 0
-    ConstIterator = ParConstIter_pureSoA_8_0_default
-    Iterator = ParIter_pureSoA_8_0_default
+    ConstIterator = ParConstIter_pureSoA_11_0_default
+    Iterator = ParIter_pureSoA_11_0_default
     @typing.overload
     def Define(
         self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray
@@ -20929,11 +20929,11 @@ class ParticleContainer_pureSoA_8_0_default:
         add a new runtime component with type Int
         """
     def add_particles(
-        self, other: ParticleContainer_pureSoA_8_0_default, local: bool = False
+        self, other: ParticleContainer_pureSoA_11_0_default, local: bool = False
     ) -> None: ...
     def add_particles_at_level(
         self,
-        particles: ParticleTile_pureSoA_8_0_default,
+        particles: ParticleTile_pureSoA_11_0_default,
         level: typing.SupportsInt,
         ngrow: typing.SupportsInt = 0,
     ) -> None: ...
@@ -20977,7 +20977,7 @@ class ParticleContainer_pureSoA_8_0_default:
         """
     def get_particles(
         self, level: typing.SupportsInt
-    ) -> dict[tuple[int, int], ParticleTile_pureSoA_8_0_default]: ...
+    ) -> dict[tuple[int, int], ParticleTile_pureSoA_11_0_default]: ...
     def get_real_comp_index(self, arg0: str) -> int:
         """
         Get the ParticleReal SoA index of a component
@@ -20995,7 +20995,7 @@ class ParticleContainer_pureSoA_8_0_default:
         self,
         arg0: typing.SupportsInt,
         arg1: typing.SupportsInt,
-        arg2: ParticleInitType_pureSoA_8_0,
+        arg2: ParticleInitType_pureSoA_11_0,
         arg3: bool,
         arg4: RealBox,
     ) -> None: ...
@@ -21022,7 +21022,7 @@ class ParticleContainer_pureSoA_8_0_default:
             >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
 
         """
-    def make_alike(self) -> ParticleContainer_pureSoA_8_0_default: ...
+    def make_alike(self) -> ParticleContainer_pureSoA_11_0_default: ...
     def num_local_tiles_at_level(self, level: typing.SupportsInt) -> int: ...
     def number_of_particles(self, only_local: bool = False) -> int:
         """
@@ -21134,7 +21134,7 @@ class ParticleContainer_pureSoA_8_0_default:
         Return the number of valid particles on all MPI ranks
         """
 
-class ParIterBase_pureSoA_8_0_arena(MFIter):
+class ParIterBase_pureSoA_11_0_arena(MFIter):
     is_soa_particle: typing.ClassVar[bool] = True
     def __getitem__(self, name):
         """
@@ -21142,7 +21142,7 @@ class ParIterBase_pureSoA_8_0_arena(MFIter):
         """
     def __init__(
         self,
-        particle_container: ParticleContainer_pureSoA_8_0_arena,
+        particle_container: ParticleContainer_pureSoA_11_0_arena,
         level: typing.SupportsInt,
     ) -> None: ...
     def __iter__(self): ...
@@ -21167,8 +21167,8 @@ class ParIterBase_pureSoA_8_0_arena(MFIter):
     def _incr(self) -> None: ...
     def finalize(self) -> None: ...
     def geom(self, level: typing.SupportsInt) -> Geometry: ...
-    def particle_tile(self) -> ParticleTile_pureSoA_8_0_arena: ...
-    def soa(self) -> StructOfArrays_8_0_idcpu_arena: ...
+    def particle_tile(self) -> ParticleTile_pureSoA_11_0_arena: ...
+    def soa(self) -> StructOfArrays_11_0_idcpu_arena: ...
     @property
     def is_valid(self) -> bool: ...
     @property
@@ -21187,7 +21187,7 @@ class ParIterBase_pureSoA_8_0_arena(MFIter):
         the number of particles on this tile
         """
 
-class ParIter_pureSoA_8_0_arena(ParIterBase_pureSoA_8_0_arena):
+class ParIter_pureSoA_11_0_arena(ParIterBase_pureSoA_11_0_arena):
     is_soa_particle: typing.ClassVar[bool] = True
     def __getitem__(self, name):
         """
@@ -21195,7 +21195,7 @@ class ParIter_pureSoA_8_0_arena(ParIterBase_pureSoA_8_0_arena):
         """
     def __init__(
         self,
-        particle_container: ParticleContainer_pureSoA_8_0_arena,
+        particle_container: ParticleContainer_pureSoA_11_0_arena,
         level: typing.SupportsInt,
     ) -> None: ...
     def __iter__(self): ...
@@ -21219,7 +21219,7 @@ class ParIter_pureSoA_8_0_arena(ParIterBase_pureSoA_8_0_arena):
         """
     def __repr__(self) -> str: ...
 
-class ParConstIterBase_pureSoA_8_0_arena(MFIter):
+class ParConstIterBase_pureSoA_11_0_arena(MFIter):
     is_soa_particle: typing.ClassVar[bool] = True
     def __getitem__(self, name):
         """
@@ -21227,7 +21227,7 @@ class ParConstIterBase_pureSoA_8_0_arena(MFIter):
         """
     def __init__(
         self,
-        particle_container: ParticleContainer_pureSoA_8_0_arena,
+        particle_container: ParticleContainer_pureSoA_11_0_arena,
         level: typing.SupportsInt,
     ) -> None: ...
     def __iter__(self): ...
@@ -21252,8 +21252,8 @@ class ParConstIterBase_pureSoA_8_0_arena(MFIter):
     def _incr(self) -> None: ...
     def finalize(self) -> None: ...
     def geom(self, level: typing.SupportsInt) -> Geometry: ...
-    def particle_tile(self) -> ParticleTile_pureSoA_8_0_arena: ...
-    def soa(self) -> StructOfArrays_8_0_idcpu_arena: ...
+    def particle_tile(self) -> ParticleTile_pureSoA_11_0_arena: ...
+    def soa(self) -> StructOfArrays_11_0_idcpu_arena: ...
     @property
     def is_valid(self) -> bool: ...
     @property
@@ -21272,7 +21272,7 @@ class ParConstIterBase_pureSoA_8_0_arena(MFIter):
         the number of particles on this tile
         """
 
-class ParConstIter_pureSoA_8_0_arena(ParConstIterBase_pureSoA_8_0_arena):
+class ParConstIter_pureSoA_11_0_arena(ParConstIterBase_pureSoA_11_0_arena):
     is_soa_particle: typing.ClassVar[bool] = True
     def __getitem__(self, name):
         """
@@ -21280,7 +21280,7 @@ class ParConstIter_pureSoA_8_0_arena(ParConstIterBase_pureSoA_8_0_arena):
         """
     def __init__(
         self,
-        particle_container: ParticleContainer_pureSoA_8_0_arena,
+        particle_container: ParticleContainer_pureSoA_11_0_arena,
         level: typing.SupportsInt,
     ) -> None: ...
     def __iter__(self): ...
@@ -21304,14 +21304,14 @@ class ParConstIter_pureSoA_8_0_arena(ParConstIterBase_pureSoA_8_0_arena):
         """
     def __repr__(self) -> str: ...
 
-class ParticleContainer_pureSoA_8_0_arena:
+class ParticleContainer_pureSoA_11_0_arena:
     is_soa_particle: typing.ClassVar[bool] = True
     num_array_int: typing.ClassVar[int] = 0
-    num_array_real: typing.ClassVar[int] = 8
+    num_array_real: typing.ClassVar[int] = 11
     num_struct_int: typing.ClassVar[int] = 0
     num_struct_real: typing.ClassVar[int] = 0
-    ConstIterator = ParConstIter_pureSoA_8_0_arena
-    Iterator = ParIter_pureSoA_8_0_arena
+    ConstIterator = ParConstIter_pureSoA_11_0_arena
+    Iterator = ParIter_pureSoA_11_0_arena
     @typing.overload
     def Define(
         self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray
@@ -21371,11 +21371,11 @@ class ParticleContainer_pureSoA_8_0_arena:
         add a new runtime component with type Int
         """
     def add_particles(
-        self, other: ParticleContainer_pureSoA_8_0_arena, local: bool = False
+        self, other: ParticleContainer_pureSoA_11_0_arena, local: bool = False
     ) -> None: ...
     def add_particles_at_level(
         self,
-        particles: ParticleTile_pureSoA_8_0_arena,
+        particles: ParticleTile_pureSoA_11_0_arena,
         level: typing.SupportsInt,
         ngrow: typing.SupportsInt = 0,
     ) -> None: ...
@@ -21419,7 +21419,7 @@ class ParticleContainer_pureSoA_8_0_arena:
         """
     def get_particles(
         self, level: typing.SupportsInt
-    ) -> dict[tuple[int, int], ParticleTile_pureSoA_8_0_arena]: ...
+    ) -> dict[tuple[int, int], ParticleTile_pureSoA_11_0_arena]: ...
     def get_real_comp_index(self, arg0: str) -> int:
         """
         Get the ParticleReal SoA index of a component
@@ -21437,7 +21437,7 @@ class ParticleContainer_pureSoA_8_0_arena:
         self,
         arg0: typing.SupportsInt,
         arg1: typing.SupportsInt,
-        arg2: ParticleInitType_pureSoA_8_0,
+        arg2: ParticleInitType_pureSoA_11_0,
         arg3: bool,
         arg4: RealBox,
     ) -> None: ...
@@ -21464,7 +21464,7 @@ class ParticleContainer_pureSoA_8_0_arena:
             >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
 
         """
-    def make_alike(self) -> ParticleContainer_pureSoA_8_0_arena: ...
+    def make_alike(self) -> ParticleContainer_pureSoA_11_0_arena: ...
     def num_local_tiles_at_level(self, level: typing.SupportsInt) -> int: ...
     def number_of_particles(self, only_local: bool = False) -> int:
         """
