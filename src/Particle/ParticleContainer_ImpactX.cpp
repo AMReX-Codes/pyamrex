@@ -14,5 +14,5 @@ void init_ParticleContainer_ImpactX(py::module& m) {
 
     // TODO: we might need to move all or most of the defines in here into a
     //       test/example submodule, so they do not collide with downstream projects
-    make_ParticleContainer_and_Iterators<SoAParticle<8, 0>, 8, 0>(m);  // ImpactX 24.03+
+    make_ParticleContainer_and_Iterators<SoAParticle<11, 0>, 11, 0>(m);  // ImpactX 26.01+
 }
