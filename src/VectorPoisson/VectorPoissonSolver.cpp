@@ -73,83 +73,75 @@ void VectorPoissonSolver::solve(
         if (verbose > 0) {
             Print() << "Solving for A component " << adim << "...\n";
         }
-        
-        if (adim == 1) {
             
-            // Create the linear operator with overset mask if provided
-            MLABecLaplacian linop;
-            if (mask != nullptr) {
-                // Use overset mask constructor: mask=1 means solve, mask=0 means fixed
-                linop.define({m_geom}, {m_grids}, {m_dmap}, {mask}, info);
-            } else {
-                // Standard constructor without mask
-                linop.define({m_geom}, {m_grids}, {m_dmap}, info);
-            }
-            
-            linop.setScalars(1.0, 1.0);
-            
-            // Create 'a' coefficient = 1/r²
-            MultiFab acoef(m_grids, m_dmap, 1, 0);
-            
-            for (MFIter mfi(acoef); mfi.isValid(); ++mfi) {
-                const Box& bx = mfi.validbox();
-                Array4<Real> const& a = acoef.array(mfi);
-                
-                ParallelFor(bx, [=] AMREX_GPU_DEVICE (int i, int j, int k) {
-                    Real r = prob_lo[0] + (i + 0.5) * dx[0];
-                    if (r > 1e-10) {
-                        a(i,j,k) = 1.0 / (r * r);
-                    } else {
-                        a(i,j,k) = 0.0;
-                    }
-                });
-            }
-            
-            linop.setACoeffs(0, acoef);
-            
-            // Set 'b' coefficient = 1.0
-            Array<MultiFab,AMREX_SPACEDIM> face_bcoef;
-            for (int idim = 0; idim < AMREX_SPACEDIM; ++idim) {
-                BoxArray ba_face = m_grids;
-                ba_face.surroundingNodes(idim);
-                face_bcoef[idim].define(ba_face, m_dmap, 1, 0);
-                face_bcoef[idim].setVal(1.0);
-            }
-            linop.setBCoeffs(0, amrex::GetArrOfConstPtrs(face_bcoef));
-            
-            // Set domain BC types
-            linop.setDomainBC(m_bc_handler.lobc[adim], m_bc_handler.hibc[adim]);
-            
-            // If using mask, set the fixed values in A before solving
-            // The overset mask will automatically handle them
-            A[adim]->FillBoundary(m_geom.periodicity());
-            linop.setLevelBC(0, A[adim]);
-            
-            // Create RHS = μ₀J_θ
-            MultiFab rhs(J[adim]->boxArray(), J[adim]->DistributionMap(), 1, 0);
-            MultiFab::Copy(rhs, *J[adim], 0, 0, 1, 0);
-            rhs.mult(mu0);
-            
-            // Solve - the overset mask automatically enforces fixed values
-            MLMG mlmg(linop);
-            mlmg.setVerbose(verbose);
-            mlmg.setMaxIter(max_iter);
-            
-            final_residual[adim] = mlmg.solve({A[adim]}, {&rhs}, relative_tol, absolute_tol);
-            num_iters[adim] = mlmg.getNumIters();
-            
-            // Fill boundary for consistency
-            A[adim]->FillBoundary(m_geom.periodicity());
-            
-            if (verbose > 0) {
-                Print() << "  Component " << adim << " converged in " << num_iters[adim]
-                        << " iterations with residual = " << final_residual[adim] << "\n";
-            }
-            
+        // Create the linear operator with overset mask if provided
+        MLABecLaplacian linop;
+        if (mask != nullptr) {
+            // Use overset mask constructor: mask=1 means solve, mask=0 means fixed
+            linop.define({m_geom}, {m_grids}, {m_dmap}, {mask}, info);
         } else {
-            A[adim]->setVal(0.0);
-            num_iters[adim] = 0;
-            final_residual[adim] = 0.0;
+            // Standard constructor without mask
+            linop.define({m_geom}, {m_grids}, {m_dmap}, info);
+        }
+        
+        linop.setScalars(1.0, 1.0);
+        
+        // Create 'a' coefficient = 1/r²
+        MultiFab acoef(m_grids, m_dmap, 1, 0);
+        
+        for (MFIter mfi(acoef); mfi.isValid(); ++mfi) {
+            const Box& bx = mfi.validbox();
+            Array4<Real> const& a = acoef.array(mfi);
+            
+            ParallelFor(bx, [=] AMREX_GPU_DEVICE (int i, int j, int k) {
+                Real r = prob_lo[0] + (i + 0.5) * dx[0];
+                if (r > 1e-10 and adim !=2) {
+                    a(i,j,k) = 1.0 / (r * r);
+                } else {
+                    a(i,j,k) = 0.0;
+                }
+            });
+        }
+        
+        linop.setACoeffs(0, acoef);
+        
+        // Set 'b' coefficient = 1.0
+        Array<MultiFab,AMREX_SPACEDIM> face_bcoef;
+        for (int idim = 0; idim < AMREX_SPACEDIM; ++idim) {
+            BoxArray ba_face = m_grids;
+            ba_face.surroundingNodes(idim);
+            face_bcoef[idim].define(ba_face, m_dmap, 1, 0);
+            face_bcoef[idim].setVal(1.0);
+        }
+        linop.setBCoeffs(0, amrex::GetArrOfConstPtrs(face_bcoef));
+        
+        // Set domain BC types
+        linop.setDomainBC(m_bc_handler.lobc[adim], m_bc_handler.hibc[adim]);
+        
+        // If using mask, set the fixed values in A before solving
+        // The overset mask will automatically handle them
+        A[adim]->FillBoundary(m_geom.periodicity());
+        linop.setLevelBC(0, A[adim]);
+        
+        // Create RHS = μ₀J_θ
+        MultiFab rhs(J[adim]->boxArray(), J[adim]->DistributionMap(), 1, 0);
+        MultiFab::Copy(rhs, *J[adim], 0, 0, 1, 0);
+        rhs.mult(mu0);
+        
+        // Solve - the overset mask automatically enforces fixed values
+        MLMG mlmg(linop);
+        mlmg.setVerbose(verbose);
+        mlmg.setMaxIter(max_iter);
+        
+        final_residual[adim] = mlmg.solve({A[adim]}, {&rhs}, relative_tol, absolute_tol);
+        num_iters[adim] = mlmg.getNumIters();
+        
+        // Fill boundary for consistency
+        A[adim]->FillBoundary(m_geom.periodicity());
+        
+        if (verbose > 0) {
+            Print() << "  Component " << adim << " converged in " << num_iters[adim]
+                    << " iterations with residual = " << final_residual[adim] << "\n";
         }
     }
     
