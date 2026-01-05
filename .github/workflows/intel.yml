@@ -11,7 +11,7 @@ jobs:
     name: oneAPI SYCL 3D
     runs-on: ubuntu-22.04
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
     - name: Dependencies
       run: |
         .github/workflows/dependencies/dpcpp.sh
@@ -60,7 +60,7 @@ jobs:
     name: ICPX
     runs-on: ubuntu-22.04
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
     - name: Dependencies
       run: |
         .github/workflows/dependencies/dpcpp.sh

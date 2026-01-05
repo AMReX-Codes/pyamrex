@@ -24,10 +24,10 @@ jobs:
       OMP_NUM_THREAD: 4
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
       if: github.event_name != 'push' || github.repository != 'AMReX-Codes/pyamrex' || github.ref != 'refs/heads/development'
 
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
       if: github.event_name == 'push' && github.repository == 'AMReX-Codes/pyamrex' && github.ref == 'refs/heads/development'
       with:
         token: ${{ secrets.PYAMREX_PUSH_TOKEN }}

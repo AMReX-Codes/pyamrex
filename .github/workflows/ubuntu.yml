@@ -16,7 +16,7 @@ jobs:
       CXX: g++-10
       CXXFLAGS: "-Werror -Wshadow -Woverloaded-virtual -Wunreachable-code -fno-operator-names -Wno-array-bounds"
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
     - uses: actions/setup-python@v5
       name: Install Python
       with:
@@ -61,7 +61,7 @@ jobs:
     runs-on: ubuntu-24.04
     env: {CXXFLAGS: "-Werror -Wno-error=deprecated-declarations -Wshadow -Woverloaded-virtual -Wunreachable-code -fno-operator-names"}
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
     - name: Dependencies
       run: |
         .github/workflows/dependencies/dependencies_gcc14.sh
@@ -113,7 +113,7 @@ jobs:
     runs-on: ubuntu-24.04
     env: {CXXFLAGS: "-Werror -Wshadow -Woverloaded-virtual -Wextra-semi -Wunreachable-code -fno-operator-names -Wno-pass-failed"}
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
     - name: Dependencies
       run: |
         .github/workflows/dependencies/dependencies_clang14_libcpp.sh
@@ -160,7 +160,7 @@ jobs:
       CXX: "clang++"
       CC: "clang"
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
     - name: Dependencies
       run: |
         .github/workflows/dependencies/dependencies_clang18.sh
@@ -210,7 +210,7 @@ jobs:
       AMReX_PRECISION: "SINGLE"
       AMReX_PARTICLES_PRECISION: "SINGLE"
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Dependencies
         run: |
           .github/workflows/dependencies/dependencies_clang18.sh
@@ -254,7 +254,7 @@ jobs:
     runs-on: ubuntu-24.04
     env: {CXXFLAGS: "-fno-operator-names"}
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
     - name: Dependencies
       run: |
         .github/workflows/dependencies/dependencies_nvcc12.sh
