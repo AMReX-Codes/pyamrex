@@ -1,7 +1,7 @@
 {
-    "version_pyamrex": "25.12",
-    "version_amrex": "25.12",
+    "version_pyamrex": "26.01",
+    "version_amrex": "26.01",
     "version_pybind11": "v3.0.1",
-    "commit_amrex": "25.12",
+    "commit_amrex": "26.01",
     "commit_pybind11": "v3.0.1"
 }
