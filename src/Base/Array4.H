@@ -128,7 +128,9 @@ namespace pyAMReX
                  }
             )
     #if defined(AMREX_DEBUG) || defined(AMREX_BOUND_CHECK)
-            .def("index_assert", &Array4<T>::index_assert)
+            .def("index_assert", [](Array4<T> const& a4, int i, int j, int k, int n) noexcept {
+                return a4.index_assert(IntVectND<4>{i,j,k,n});
+            }, py::arg("i"), py::arg("j"), py::arg("k"), py::arg("n"))
     #endif
 
             .def_property_readonly("size", &Array4<T>::size)
