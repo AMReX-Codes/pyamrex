@@ -36,8 +36,8 @@ def test_parmparse():
     # type hints
     d = pp.to_dict()
     assert isinstance(d["param"]["ncell"], int)  # overwritten
-    assert isinstance(d["param"]["dt"], str)  # file
-    assert isinstance(d["param"]["do_pml"], str)  # file
+    assert isinstance(d["param"]["dt"], float)  # file
+    assert isinstance(d["param"]["do_pml"], bool)  # file
     assert isinstance(d["param"]["question"], str)
     assert isinstance(d["param"]["answer"], int)
     assert d["param"]["answer"] == 42  # last wins
