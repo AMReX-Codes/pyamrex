@@ -63,7 +63,8 @@ namespace pyAMReX
     {
         auto d = py::dict();
         // F->C index conversion here
-        // p[(i-begin[0])+(j-begin[1])*nstride[0]+(k-begin[2])*nstride[1]+n*nstride[2]];
+        // p[(i-begin[0])+(j-begin[1])*jstride+(k-begin[2])*kstride+n*nstride];
+        // Here [jkn]stride is obtained with get_stride<[123]>(). (0: is the unit stride i-direction.)
         // Buffer dimensions: zero-size shall not skip dimension
         auto shape = py::make_tuple(
             py::ssize_t(a4.end[3] <= a4.begin[3] ? 1 : a4.end[3]-a4.begin[3]),
@@ -73,9 +74,9 @@ namespace pyAMReX
         );
         // buffer protocol strides are in bytes, AMReX strides are elements
         auto const strides = py::make_tuple(
-            py::ssize_t(sizeof(T) * a4.nstride[2]),
-            py::ssize_t(sizeof(T) * a4.nstride[1]),
-            py::ssize_t(sizeof(T) * a4.nstride[0]),
+            py::ssize_t(sizeof(T) * a4.template get_stride<3>()),
+            py::ssize_t(sizeof(T) * a4.template get_stride<2>()),
+            py::ssize_t(sizeof(T) * a4.template get_stride<1>()),
             py::ssize_t(sizeof(T))  // fastest varying index
         );
         bool const read_only = false;  // note: we could decide on is_not_const,
@@ -165,16 +166,17 @@ namespace pyAMReX
                 a4.get()->p = static_cast<T*>(buf.ptr);
                 a4.get()->begin = IntVectND<4>{0, 0, 0, 0};
                 // C->F index conversion here
-                // p[(i-begin[0])+(j-begin[1])*nstride[0]+(k-begin[2])*nstride[1]+n*nstride[2]];
+                // p[(i-begin[0])+(j-begin[1])*jstride+(k-begin[2])*kstride+n*nstride];
+                // Here [jkn]stride is obtained with get_stride<[123]>(). (0: is the unit stride i-direction.)
                 a4.get()->end[0] = (int)buf.shape.at(2); // fastest varying index
                 a4.get()->end[1] = (int)buf.shape.at(1);
                 a4.get()->end[2] = (int)buf.shape.at(0);
                 a4.get()->end[3] = 1;
                 // buffer protocol strides are in bytes, AMReX strides are elements
-                a4.get()->nstride[0] = (int)buf.strides.at(1) / sizeof(T); // fastest varying index
-                a4.get()->nstride[1] = (int)buf.strides.at(0) / sizeof(T);
+                a4.get()->template get_stride<1>() = (int)buf.strides.at(1) / sizeof(T); // fastest varying index
+                a4.get()->template get_stride<2>() = (int)buf.strides.at(0) / sizeof(T);
                 // 3D == no component: stride here should not matter
-                a4.get()->nstride[2] = a4.get()->nstride[1] * (int)buf.shape.at(0);
+                a4.get()->template get_stride<3>() = a4.get()->get_stride<2>() * (int)buf.shape.at(0);
 
                 // todo: we could check and store here if the array buffer we got is read-only
 
