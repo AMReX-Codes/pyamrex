@@ -176,7 +176,7 @@ namespace pyAMReX
                 // which we do not need to set. For py::buffer_info, 2 is
                 // the unit stride direction. If AMReX has a set function,
                 // we would do
-                //  a4.set_stride<0>(buf.strides.at(2)); // not needed.,
+                //  a4.set_stride<0>(buf.strides.at(2)); // not needed
                 //  a4.set_stride<1>(buf.strides.at(1));
                 //  a4.set_stride<2>(buf.strides.at(0));
                 // Unfortunately, amrex::Array4 does not have a public function for setting
