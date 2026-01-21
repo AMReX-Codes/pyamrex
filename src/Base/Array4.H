@@ -171,10 +171,17 @@ namespace pyAMReX
                 a4.get()->end[1] = (int)buf.shape.at(1);
                 a4.get()->end[2] = (int)buf.shape.at(0);
                 a4.get()->end[3] = 1;
-                // buffer protocol strides are in bytes, AMReX strides are elements
-                // Unfortunately, amrex::Array4 does not have a public function for
-                // setting strides. Note that stride.a[0] is get_stride<1>().
-                a4.get()->stride.a[0] = (int)buf.strides.at(1) / sizeof(T); // fastest varying index
+                // buffer protocol strides are in bytes, AMReX strides are
+                // elements.  In AMReX, 0 is the unit stride direction,
+                // which we do not need to set. For py::buffer_info, 2 is
+                // the unit stride direction. If AMReX has a set function,
+                // we would do
+                //  a4.set_stride<0>(buf.strides.at(2)); // not needed.,
+                //  a4.set_stride<1>(buf.strides.at(1));
+                //  a4.set_stride<2>(buf.strides.at(0));
+                // Unfortunately, amrex::Array4 does not have a public function for setting
+                // strides, and stride<n> is stored at stride.a[n-1].
+                a4.get()->stride.a[0] = (int)buf.strides.at(1) / sizeof(T);
                 a4.get()->stride.a[1] = (int)buf.strides.at(0) / sizeof(T);
                 // 3D == no component: stride here should not matter
                 a4.get()->stride.a[2] = a4.get()->template get_stride<2>() * (int)buf.shape.at(0);
