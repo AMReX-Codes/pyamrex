@@ -176,7 +176,7 @@ namespace pyAMReX
                 a4.get()->template get_stride<1>() = (int)buf.strides.at(1) / sizeof(T); // fastest varying index
                 a4.get()->template get_stride<2>() = (int)buf.strides.at(0) / sizeof(T);
                 // 3D == no component: stride here should not matter
-                a4.get()->template get_stride<3>() = a4.get()->get_stride<2>() * (int)buf.shape.at(0);
+                a4.get()->template get_stride<3>() = a4.get()->template get_stride<2>() * (int)buf.shape.at(0);
 
                 // todo: we could check and store here if the array buffer we got is read-only
 
