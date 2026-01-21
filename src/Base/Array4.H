@@ -64,7 +64,7 @@ namespace pyAMReX
         auto d = py::dict();
         // F->C index conversion here
         // p[(i-begin[0])+(j-begin[1])*jstride+(k-begin[2])*kstride+n*nstride];
-        // Here [jkn]stride is obtained with get_stride<[123]>(). (0: is the unit stride i-direction.)
+        // Here [jkn]stride is obtained with get_stride<[123]>(). (0 is the unit stride i-direction.)
         // Buffer dimensions: zero-size shall not skip dimension
         auto shape = py::make_tuple(
             py::ssize_t(a4.end[3] <= a4.begin[3] ? 1 : a4.end[3]-a4.begin[3]),
@@ -167,7 +167,7 @@ namespace pyAMReX
                 a4.get()->begin = IntVectND<4>{0, 0, 0, 0};
                 // C->F index conversion here
                 // p[(i-begin[0])+(j-begin[1])*jstride+(k-begin[2])*kstride+n*nstride];
-                // Here [jkn]stride is obtained with get_stride<[123]>(). (0: is the unit stride i-direction.)
+                // Here [jkn]stride is obtained with get_stride<[123]>(). (0 is the unit stride i-direction.)
                 a4.get()->end[0] = (int)buf.shape.at(2); // fastest varying index
                 a4.get()->end[1] = (int)buf.shape.at(1);
                 a4.get()->end[2] = (int)buf.shape.at(0);
