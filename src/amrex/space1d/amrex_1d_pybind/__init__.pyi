@@ -327,7 +327,7 @@ class AMReX:
     def top() -> AMReX: ...
 
 class Config:
-    amrex_version: typing.ClassVar[str] = "26.01-17-g909028cb95b3"
+    amrex_version: typing.ClassVar[str] = "26.01-26-g667b7362c88c"
     gpu_backend = None
     have_eb: typing.ClassVar[bool] = False
     have_gpu: typing.ClassVar[bool] = False
@@ -24177,5 +24177,5 @@ Geometric: GrowthStrategy  # value = <GrowthStrategy.Geometric: 2>
 Poisson: GrowthStrategy  # value = <GrowthStrategy.Poisson: 0>
 __author__: str = "Axel Huebl, Ryan T. Sandberg, Shreyas Ananthan, David P. Grote, Revathi Jambunathan, Edoardo Zoni, Remi Lehe, Andrew Myers, Weiqun Zhang"
 __license__: str = "BSD-3-Clause-LBNL"
-__version__: str = "26.01-17-g909028cb95b3"
+__version__: str = "26.01-26-g667b7362c88c"
 IntVect = IntVect1D
