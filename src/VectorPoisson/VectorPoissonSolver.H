@@ -20,7 +20,11 @@ struct BoundaryHandler {
     BoundaryHandler(bool periodic_axial = false) {
         for (int adim = 0; adim < 3; ++adim) {
             // Symmetry boundary ar r=0
-            lobc[adim][0] = amrex::LinOpBCType::Neumann;  // r=0
+            if (adim == 2) {
+                lobc[adim][0] = amrex::LinOpBCType::Neumann; // A_z is a slip boundary at r=0
+            } else {
+                lobc[adim][0] = amrex::LinOpBCType::Dirichlet;   // A_r, A_theta have zero derivative at r=0
+            }
 
             // PEC boundary at r_max
             if (adim == 0) {
