@@ -14,3 +14,9 @@ global-exclude *.pyc
 # see .gitignore
 prune cmake-build*
 prune .spack-env*
+
+# exclude diagnostics output directories (see .gitignore)
+prune plt*
+prune chk*
+prune **/plt*
+prune **/chk*
