@@ -44,7 +44,7 @@ class CopyPreBuild(build):
             PYAMREX_libdir,
             dst_path,
             dirs_exist_ok=True,
-            ignore=shutil.ignore_patterns("plt*", "chk*"),
+            ignore=shutil.ignore_patterns("chk*", "diags*", "plt*"),
         )
 
 

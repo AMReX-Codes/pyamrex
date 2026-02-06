@@ -16,7 +16,9 @@ prune cmake-build*
 prune .spack-env*
 
 # exclude diagnostics output directories (see .gitignore)
+prune diags*
 prune plt*
 prune chk*
+prune **/diags*
 prune **/plt*
 prune **/chk*
