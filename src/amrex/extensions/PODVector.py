@@ -106,9 +106,11 @@ def register_PODVector_extension(amr):
     # register member functions for every PODVector_* type
     for _, POD_type in inspect.getmembers(
         sys.modules[amr.__name__],
-        lambda member: inspect.isclass(member)
-        and member.__module__ == amr.__name__
-        and member.__name__.startswith("PODVector_"),
+        lambda member: (
+            inspect.isclass(member)
+            and member.__module__ == amr.__name__
+            and member.__name__.startswith("PODVector_")
+        ),
     ):
         POD_type.to_numpy = podvector_to_numpy
         POD_type.to_cupy = podvector_to_cupy

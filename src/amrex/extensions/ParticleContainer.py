@@ -179,11 +179,13 @@ def register_ParticleContainer_extension(amr):
     # register member functions for every Par(Const)Iter* type
     for _, ParIter_type in inspect.getmembers(
         sys.modules[amr.__name__],
-        lambda member: inspect.isclass(member)
-        and member.__module__ == amr.__name__
-        and (
-            member.__name__.startswith("ParIter")
-            or member.__name__.startswith("ParConstIter")
+        lambda member: (
+            inspect.isclass(member)
+            and member.__module__ == amr.__name__
+            and (
+                member.__name__.startswith("ParIter")
+                or member.__name__.startswith("ParConstIter")
+            )
         ),
     ):
         ParIter_type.__next__ = next
@@ -193,9 +195,11 @@ def register_ParticleContainer_extension(amr):
     # register member functions for every ParticleContainer_* type
     for _, ParticleContainer_type in inspect.getmembers(
         sys.modules[amr.__name__],
-        lambda member: inspect.isclass(member)
-        and member.__module__ == amr.__name__
-        and member.__name__.startswith("ParticleContainer_"),
+        lambda member: (
+            inspect.isclass(member)
+            and member.__module__ == amr.__name__
+            and member.__name__.startswith("ParticleContainer_")
+        ),
     ):
         ParticleContainer_type.iterator = iterator
         ParticleContainer_type.const_iterator = (
