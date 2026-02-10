@@ -27,9 +27,16 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
 
-      - name: Clean Out
-        run: |
-          .github/workflows/dependencies/ubuntu_free_disk_space.sh
+      - name: Free More Disk Space
+        uses: ax3l/free-disk-space@main
+        with:
+          tool-cache: false
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: false  # apt takes ~1:30min
+          docker-images: true
+          swap-storage: false
 
       - name: Install Packages (C++)
         if: ${{ matrix.language == 'cpp' }}
