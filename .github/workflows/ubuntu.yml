@@ -254,6 +254,16 @@ jobs:
     runs-on: ubuntu-24.04
     env: {CXXFLAGS: "-fno-operator-names"}
     steps:
+    - name: Free More Disk Space
+      uses: ax3l/free-disk-space@main
+      with:
+        tool-cache: false
+        android: true
+        dotnet: true
+        haskell: true
+        large-packages: false  # apt takes ~1:30min
+        docker-images: true
+        swap-storage: false
     - uses: actions/checkout@v6
     - name: Dependencies
       run: |
