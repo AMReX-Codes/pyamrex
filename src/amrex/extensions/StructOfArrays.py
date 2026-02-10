@@ -155,9 +155,11 @@ def register_SoA_extension(amr):
     # register member functions for every StructOfArrays_* type
     for _, SoA_type in inspect.getmembers(
         sys.modules[amr.__name__],
-        lambda member: inspect.isclass(member)
-        and member.__module__ == amr.__name__
-        and member.__name__.startswith("StructOfArrays_"),
+        lambda member: (
+            inspect.isclass(member)
+            and member.__module__ == amr.__name__
+            and member.__name__.startswith("StructOfArrays_")
+        ),
     ):
         # converters
         SoA_type.to_numpy = soa_to_numpy

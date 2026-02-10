@@ -138,9 +138,11 @@ def register_Array4_extension(amr):
     # register member functions for every Array4_* type
     for _, Array4_type in inspect.getmembers(
         sys.modules[amr.__name__],
-        lambda member: inspect.isclass(member)
-        and member.__module__ == amr.__name__
-        and member.__name__.startswith("Array4_"),
+        lambda member: (
+            inspect.isclass(member)
+            and member.__module__ == amr.__name__
+            and member.__name__.startswith("Array4_")
+        ),
     ):
         Array4_type.to_numpy = array4_to_numpy
         Array4_type.to_cupy = array4_to_cupy

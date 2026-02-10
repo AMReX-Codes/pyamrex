@@ -108,9 +108,11 @@ def register_AoS_extension(amr):
     # register member functions for every ArrayOfStructs_* type
     for _, AoS_type in inspect.getmembers(
         sys.modules[amr.__name__],
-        lambda member: inspect.isclass(member)
-        and member.__module__ == amr.__name__
-        and member.__name__.startswith("ArrayOfStructs_"),
+        lambda member: (
+            inspect.isclass(member)
+            and member.__module__ == amr.__name__
+            and member.__name__.startswith("ArrayOfStructs_")
+        ),
     ):
         AoS_type.to_numpy = aos_to_numpy
         AoS_type.to_cupy = aos_to_cupy

@@ -133,9 +133,11 @@ def register_SmallMatrix_extension(amr):
     # register member functions for every Array4_* type
     for _, SmallMatrix_type in inspect.getmembers(
         sys.modules[amr.__name__],
-        lambda member: inspect.isclass(member)
-        and member.__module__ == amr.__name__
-        and member.__name__.startswith("SmallMatrix_"),
+        lambda member: (
+            inspect.isclass(member)
+            and member.__module__ == amr.__name__
+            and member.__name__.startswith("SmallMatrix_")
+        ),
     ):
         SmallMatrix_type.to_numpy = smallmatrix_to_numpy
         SmallMatrix_type.to_cupy = smallmatrix_to_cupy
