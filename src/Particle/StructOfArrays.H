@@ -97,30 +97,32 @@ void make_StructOfArrays(py::module &m, std::string allocstr)
 }
 
 template <int NReal, int NInt, bool use64BitIdCpu=false>
-void make_StructOfArrays(py::module &m)
+void make_StructOfArrays(py::module &m, bool only_polymorphic=false)
 {
-    // first, because used as copy target in methods in containers with other allocators
-    make_StructOfArrays<NReal, NInt, amrex::PinnedArenaAllocator, use64BitIdCpu>(m, "pinned");
+    if (!only_polymorphic) {
+        // first, because used as copy target in methods in containers with other allocators
+        make_StructOfArrays<NReal, NInt, amrex::PinnedArenaAllocator, use64BitIdCpu>(m, "pinned");
 
-    // see Src/Base/AMReX_GpuContainers.H
-    //   !AMREX_USE_GPU: DefaultAllocator = std::allocator
-    //    AMREX_USE_GPU: DefaultAllocator = amrex::ArenaAllocator
+        // see Src/Base/AMReX_GpuContainers.H
+        //   !AMREX_USE_GPU: DefaultAllocator = std::allocator
+        //    AMREX_USE_GPU: DefaultAllocator = amrex::ArenaAllocator
 
-    //   work-around for https://github.com/pybind/pybind11/pull/4581
-    //make_StructOfArrays<NReal, NInt, std::allocator, use64BitIdCpu>(m, "std");
-    //make_StructOfArrays<NReal, NInt, amrex::ArenaAllocator, use64BitIdCpu>(m, "arena");
+        //   work-around for https://github.com/pybind/pybind11/pull/4581
+        //make_StructOfArrays<NReal, NInt, std::allocator, use64BitIdCpu>(m, "std");
+        //make_StructOfArrays<NReal, NInt, amrex::ArenaAllocator, use64BitIdCpu>(m, "arena");
 #ifdef AMREX_USE_GPU
-    make_StructOfArrays<NReal, NInt, std::allocator, use64BitIdCpu>(m, "std");
-    make_StructOfArrays<NReal, NInt, amrex::DefaultAllocator, use64BitIdCpu> (m, "default");  // amrex::ArenaAllocator
+        make_StructOfArrays<NReal, NInt, std::allocator, use64BitIdCpu>(m, "std");
+        make_StructOfArrays<NReal, NInt, amrex::DefaultAllocator, use64BitIdCpu> (m, "default");  // amrex::ArenaAllocator
 #else
-    make_StructOfArrays<NReal, NInt, amrex::DefaultAllocator, use64BitIdCpu> (m, "default");  // std::allocator
-    make_StructOfArrays<NReal, NInt, amrex::ArenaAllocator, use64BitIdCpu>(m, "arena");
+        make_StructOfArrays<NReal, NInt, amrex::DefaultAllocator, use64BitIdCpu> (m, "default");  // std::allocator
+        make_StructOfArrays<NReal, NInt, amrex::ArenaAllocator, use64BitIdCpu>(m, "arena");
 #endif
-    //   end work-around
+        //   end work-around
 #ifdef AMREX_USE_GPU
-    make_StructOfArrays<NReal, NInt, amrex::DeviceArenaAllocator, use64BitIdCpu>(m, "device");
-    make_StructOfArrays<NReal, NInt, amrex::ManagedArenaAllocator, use64BitIdCpu>(m, "managed");
-    make_StructOfArrays<NReal, NInt, amrex::AsyncArenaAllocator, use64BitIdCpu>(m, "async");
+        make_StructOfArrays<NReal, NInt, amrex::DeviceArenaAllocator, use64BitIdCpu>(m, "device");
+        make_StructOfArrays<NReal, NInt, amrex::ManagedArenaAllocator, use64BitIdCpu>(m, "managed");
+        make_StructOfArrays<NReal, NInt, amrex::AsyncArenaAllocator, use64BitIdCpu>(m, "async");
 #endif
+    }
     make_StructOfArrays<NReal, NInt, amrex::PolymorphicArenaAllocator, use64BitIdCpu>(m, "polymorphic");
 }

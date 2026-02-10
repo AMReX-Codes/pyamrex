@@ -157,35 +157,37 @@ void make_ArrayOfStructs(py::module &m, std::string allocstr)
 }
 
 template <int NReal, int NInt>
-void make_ArrayOfStructs(py::module &m)
+void make_ArrayOfStructs(py::module &m, bool only_polymorphic=false)
 {
     using namespace amrex;
 
     // AMReX legacy AoS position + id/cpu particle ype
     using ParticleType = Particle<NReal, NInt>;
 
-    // first, because used as copy target in methods in containers with other allocators
-    make_ArrayOfStructs<ParticleType, amrex::PinnedArenaAllocator> (m, "pinned");
+    if (!only_polymorphic) {
+        // first, because used as copy target in methods in containers with other allocators
+        make_ArrayOfStructs<ParticleType, amrex::PinnedArenaAllocator> (m, "pinned");
 
-    // see Src/Base/AMReX_GpuContainers.H
-    //   !AMREX_USE_GPU: DefaultAllocator = std::allocator
-    //    AMREX_USE_GPU: DefaultAllocator = amrex::ArenaAllocator
+        // see Src/Base/AMReX_GpuContainers.H
+        //   !AMREX_USE_GPU: DefaultAllocator = std::allocator
+        //    AMREX_USE_GPU: DefaultAllocator = amrex::ArenaAllocator
 
-    //   work-around for https://github.com/pybind/pybind11/pull/4581
-    //make_ArrayOfStructs<ParticleType, std::allocator> (m, "std");
-    //make_ArrayOfStructs<ParticleType, amrex::ArenaAllocator> (m, "arena");
+        //   work-around for https://github.com/pybind/pybind11/pull/4581
+        //make_ArrayOfStructs<ParticleType, std::allocator> (m, "std");
+        //make_ArrayOfStructs<ParticleType, amrex::ArenaAllocator> (m, "arena");
 #ifdef AMREX_USE_GPU
-    make_ArrayOfStructs<ParticleType, std::allocator> (m, "std");
-    make_ArrayOfStructs<ParticleType, amrex::DefaultAllocator> (m, "default");  // amrex::ArenaAllocator
+        make_ArrayOfStructs<ParticleType, std::allocator> (m, "std");
+        make_ArrayOfStructs<ParticleType, amrex::DefaultAllocator> (m, "default");  // amrex::ArenaAllocator
 #else
-    make_ArrayOfStructs<ParticleType, amrex::DefaultAllocator> (m, "default");  // std::allocator
-    make_ArrayOfStructs<ParticleType, amrex::ArenaAllocator> (m, "arena");
+        make_ArrayOfStructs<ParticleType, amrex::DefaultAllocator> (m, "default");  // std::allocator
+        make_ArrayOfStructs<ParticleType, amrex::ArenaAllocator> (m, "arena");
 #endif
-    //   end work-around
+        //   end work-around
 #ifdef AMREX_USE_GPU
-    make_ArrayOfStructs<ParticleType, amrex::DeviceArenaAllocator> (m, "device");
-    make_ArrayOfStructs<ParticleType, amrex::ManagedArenaAllocator> (m, "managed");
-    make_ArrayOfStructs<ParticleType, amrex::AsyncArenaAllocator> (m, "async");
+        make_ArrayOfStructs<ParticleType, amrex::DeviceArenaAllocator> (m, "device");
+        make_ArrayOfStructs<ParticleType, amrex::ManagedArenaAllocator> (m, "managed");
+        make_ArrayOfStructs<ParticleType, amrex::AsyncArenaAllocator> (m, "async");
 #endif
+    }
     make_ArrayOfStructs<ParticleType, amrex::PolymorphicArenaAllocator> (m, "polymorphic");
 }
