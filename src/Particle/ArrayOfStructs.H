@@ -156,15 +156,15 @@ void make_ArrayOfStructs(py::module &m, std::string allocstr)
     ;
 }
 
-template <int NReal, int NInt>
-void make_ArrayOfStructs(py::module &m, bool only_polymorphic=false)
+template <int NReal, int NInt, bool only_polymorphic=false>
+void make_ArrayOfStructs(py::module &m)
 {
     using namespace amrex;
 
     // AMReX legacy AoS position + id/cpu particle ype
     using ParticleType = Particle<NReal, NInt>;
 
-    if (!only_polymorphic) {
+    if constexpr (!only_polymorphic) {
         // first, because used as copy target in methods in containers with other allocators
         make_ArrayOfStructs<ParticleType, amrex::PinnedArenaAllocator> (m, "pinned");
 

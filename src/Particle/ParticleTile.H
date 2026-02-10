@@ -159,8 +159,8 @@ void make_ParticleTile(py::module &m, std::string allocstr)
     }
 }
 
-template <typename T_ParticleType, int NArrayReal, int NArrayInt>
-void make_ParticleTile(py::module &m, bool only_polymorphic=false)
+template <typename T_ParticleType, int NArrayReal, int NArrayInt, bool only_polymorphic=false>
+void make_ParticleTile(py::module &m)
 {
     if constexpr (T_ParticleType::is_soa_particle) {
         make_ParticleTileData<amrex::SoAParticleBase, NArrayReal, NArrayInt>(m);
@@ -169,7 +169,7 @@ void make_ParticleTile(py::module &m, bool only_polymorphic=false)
         make_ParticleTileData<T_ParticleType, NArrayReal, NArrayInt>(m);
     }
 
-    if (!only_polymorphic) {
+    if constexpr (!only_polymorphic) {
         // first, because used as copy target in methods in containers with other allocators
         make_ParticleTile<T_ParticleType, NArrayReal, NArrayInt,
                           amrex::PinnedArenaAllocator>(m, "pinned");

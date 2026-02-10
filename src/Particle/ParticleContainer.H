@@ -519,12 +519,12 @@ void make_ParticleContainer_and_Iterators (py::module &m, std::string allocstr)
 
 /** Create ParticleContainers and Iterators
  */
-template <typename T_ParticleType, int T_NArrayReal=0, int T_NArrayInt=0>
-void make_ParticleContainer_and_Iterators (py::module &m, bool only_polymorphic=false)
+template <typename T_ParticleType, int T_NArrayReal=0, int T_NArrayInt=0, bool only_polymorphic=false>
+void make_ParticleContainer_and_Iterators (py::module &m)
 {
     if constexpr (T_ParticleType::is_soa_particle) {
         make_Particle<T_NArrayReal, T_NArrayInt>(m);
-        make_StructOfArrays<T_NArrayReal, T_NArrayInt, true> (m, only_polymorphic);
+        make_StructOfArrays<T_NArrayReal, T_NArrayInt, true, only_polymorphic> (m);
     } else {
 
         make_Particle<  // particle
@@ -538,15 +538,15 @@ void make_ParticleContainer_and_Iterators (py::module &m, bool only_polymorphic=
             >(m);
         }
 
-        make_ArrayOfStructs<T_ParticleType::NReal, T_ParticleType::NInt> (m, only_polymorphic);
-        make_StructOfArrays<T_NArrayReal, T_NArrayInt> (m, only_polymorphic);
+        make_ArrayOfStructs<T_ParticleType::NReal, T_ParticleType::NInt, only_polymorphic> (m);
+        make_StructOfArrays<T_NArrayReal, T_NArrayInt, false, only_polymorphic> (m);
     }
 
-    make_ParticleTile<T_ParticleType, T_NArrayReal, T_NArrayInt> (m, only_polymorphic);
+    make_ParticleTile<T_ParticleType, T_NArrayReal, T_NArrayInt, only_polymorphic> (m);
 
     make_ParticleInitData<T_ParticleType, T_NArrayReal, T_NArrayInt>(m);
 
-    if (!only_polymorphic) {
+    if constexpr (!only_polymorphic) {
         // first, because used as copy target in methods in containers with other allocators
         make_ParticleContainer_and_Iterators<T_ParticleType, T_NArrayReal, T_NArrayInt,
                 amrex::PinnedArenaAllocator>(m, "pinned");

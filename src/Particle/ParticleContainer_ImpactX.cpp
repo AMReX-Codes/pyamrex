@@ -12,9 +12,9 @@
 void init_ParticleContainer_ImpactX(py::module& m) {
     using namespace amrex;
 
-    bool const only_polymorphic = true;
+    constexpr bool only_polymorphic = true;
 
     // TODO: we might need to move all or most of the defines in here into a
     //       test/example submodule, so they do not collide with downstream projects
-    make_ParticleContainer_and_Iterators<SoAParticle<11, 0>, 11, 0>(m, only_polymorphic);  // ImpactX 26.01+
+    make_ParticleContainer_and_Iterators<SoAParticle<11, 0>, 11, 0, only_polymorphic>(m);  // ImpactX 26.01+
 }

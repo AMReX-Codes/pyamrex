@@ -96,10 +96,10 @@ void make_StructOfArrays(py::module &m, std::string allocstr)
                    "Get access to a particle IdCPU component Array");
 }
 
-template <int NReal, int NInt, bool use64BitIdCpu=false>
-void make_StructOfArrays(py::module &m, bool only_polymorphic=false)
+template <int NReal, int NInt, bool use64BitIdCpu=false, bool only_polymorphic=false>
+void make_StructOfArrays(py::module &m)
 {
-    if (!only_polymorphic) {
+    if constexpr (!only_polymorphic) {
         // first, because used as copy target in methods in containers with other allocators
         make_StructOfArrays<NReal, NInt, amrex::PinnedArenaAllocator, use64BitIdCpu>(m, "pinned");
 

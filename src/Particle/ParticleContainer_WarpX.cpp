@@ -11,16 +11,16 @@
 void init_ParticleContainer_WarpX(py::module& m) {
     using namespace amrex;
 
-    bool const only_polymorphic = true;
+    constexpr bool only_polymorphic = true;
 
     // TODO: we might need to move all or most of the defines in here into a
     //       test/example submodule, so they do not collide with downstream projects
 #if AMREX_SPACEDIM == 1
-    make_ParticleContainer_and_Iterators<SoAParticle<5, 0>, 5, 0>(m, only_polymorphic);  // WarpX 24.03+ 1D
+    make_ParticleContainer_and_Iterators<SoAParticle<5, 0>, 5, 0, only_polymorphic>(m);  // WarpX 24.03+ 1D
 #elif AMREX_SPACEDIM == 2
-    make_ParticleContainer_and_Iterators<SoAParticle<6, 0>, 6, 0>(m, only_polymorphic);  // WarpX 24.03+ 2D
-    make_ParticleContainer_and_Iterators<SoAParticle<7, 0>, 7, 0>(m, only_polymorphic);  // WarpX 24.03+ RZ
+    make_ParticleContainer_and_Iterators<SoAParticle<6, 0>, 6, 0, only_polymorphic>(m);  // WarpX 24.03+ 2D
+    make_ParticleContainer_and_Iterators<SoAParticle<7, 0>, 7, 0, only_polymorphic>(m);  // WarpX 24.03+ RZ
 #elif AMREX_SPACEDIM == 3
-    make_ParticleContainer_and_Iterators<SoAParticle<7, 0>, 7, 0>(m, only_polymorphic);  // WarpX 24.03+ 3D
+    make_ParticleContainer_and_Iterators<SoAParticle<7, 0>, 7, 0, only_polymorphic>(m);  // WarpX 24.03+ 3D
 #endif
 }
