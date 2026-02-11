@@ -82,6 +82,8 @@ namespace
 }
 
 // forward declarations
+void init_ParticleContainer_soa(py::module& m);
+void init_ParticleContainer_tests(py::module& m);
 void init_ParticleContainer_FHDeX(py::module& m);
 void init_ParticleContainer_ImpactX(py::module& m);
 void init_ParticleContainer_WarpX(py::module& m);
@@ -94,15 +96,12 @@ void init_ParticleContainer(py::module& m) {
 
     // most common case: ND particle + runtime attributes
     //   pure SoA
-    make_ParticleContainer_and_Iterators<
-        SoAParticle<AMREX_SPACEDIM, 0>,
-                    AMREX_SPACEDIM, 0
-    >(m);
+    init_ParticleContainer_soa(m);
     //   legacy AoS + SoA
     //make_ParticleContainer_and_Iterators<Particle<0, 0>, 0, 0>(m);
 
     // used in tests
-    make_ParticleContainer_and_Iterators<Particle<2, 1>, 3, 1>(m);
+    init_ParticleContainer_tests(m);
 
     // application codes
     init_ParticleContainer_FHDeX(m);
