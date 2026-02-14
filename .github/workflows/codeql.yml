@@ -89,7 +89,7 @@ jobs:
           export CCACHE_MAXSIZE=400M
           ccache -z
 
-          $CMAKE --build build -j 4
+          $CMAKE --build build -j 3
 
           ccache -s
           du -hs ~/.cache/ccache
@@ -97,7 +97,7 @@ jobs:
           # Make sure CodeQL has something to do
           touch src/pyAMReX.cpp
           export CCACHE_DISABLE=1
-          $CMAKE --build build -j 4
+          $CMAKE --build build -j 3
 
           # claim back disk space
           rm -rf build

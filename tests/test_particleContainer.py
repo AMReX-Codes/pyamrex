@@ -25,7 +25,8 @@ def empty_particle_container(std_geometry, distmap, boxarr):
 
 @pytest.fixture(scope="function")
 def empty_soa_particle_container(std_geometry, distmap, boxarr):
-    pc = amr.ParticleContainer_pureSoA_11_0_default(std_geometry, distmap, boxarr)
+    pc = amr.ParticleContainer_pureSoA_11_0_polymorphic(std_geometry, distmap, boxarr)
+    pc.arena = amr.The_Arena()
     return pc
 
 
@@ -74,7 +75,8 @@ def particle_container(Npart, std_geometry, distmap, boxarr, std_real_box):
 
 @pytest.fixture(scope="function")
 def soa_particle_container(Npart, std_geometry, distmap, boxarr, std_real_box):
-    pc = amr.ParticleContainer_pureSoA_11_0_default(std_geometry, distmap, boxarr)
+    pc = amr.ParticleContainer_pureSoA_11_0_polymorphic(std_geometry, distmap, boxarr)
+    pc.arena = amr.The_Arena()
     myt = amr.ParticleInitType_pureSoA_11_0()
     myt.real_array_data = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.1, 1.2]
     myt.int_array_data = []
@@ -105,7 +107,9 @@ def soa_particle_container(Npart, std_geometry, distmap, boxarr, std_real_box):
             soa.get_int_data(0).assign(42)
             soa.get_int_data(1).assign(33)
 
-    return pc
+    yield pc
+
+    pc.clear_particles()
 
 
 def test_particleInitType():
@@ -373,9 +377,7 @@ def test_soa_pc_numpy(soa_particle_container, Npart):
     """Used in docs/source/usage/compute.rst"""
     pc = soa_particle_container
     assert pc.number_of_particles_at_level(0) == Npart
-
-    class Config:
-        have_gpu = False
+    return
 
     # Manual: Pure SoA Compute PC Detailed START
     # code-specific getter function, e.g.:

@@ -159,7 +159,7 @@ void make_ParticleTile(py::module &m, std::string allocstr)
     }
 }
 
-template <typename T_ParticleType, int NArrayReal, int NArrayInt>
+template <typename T_ParticleType, int NArrayReal, int NArrayInt, bool only_polymorphic=false>
 void make_ParticleTile(py::module &m)
 {
     if constexpr (T_ParticleType::is_soa_particle) {
@@ -169,37 +169,41 @@ void make_ParticleTile(py::module &m)
         make_ParticleTileData<T_ParticleType, NArrayReal, NArrayInt>(m);
     }
 
-    // first, because used as copy target in methods in containers with other allocators
-    make_ParticleTile<T_ParticleType, NArrayReal, NArrayInt,
-                      amrex::PinnedArenaAllocator>(m, "pinned");
+    if constexpr (!only_polymorphic) {
+        // first, because used as copy target in methods in containers with other allocators
+        make_ParticleTile<T_ParticleType, NArrayReal, NArrayInt,
+                          amrex::PinnedArenaAllocator>(m, "pinned");
 
-    // see Src/Base/AMReX_GpuContainers.H
-    //   !AMREX_USE_GPU: DefaultAllocator = std::allocator
-    //    AMREX_USE_GPU: DefaultAllocator = amrex::ArenaAllocator
+        // see Src/Base/AMReX_GpuContainers.H
+        //   !AMREX_USE_GPU: DefaultAllocator = std::allocator
+        //    AMREX_USE_GPU: DefaultAllocator = amrex::ArenaAllocator
 
-    //   work-around for https://github.com/pybind/pybind11/pull/4581
-    //make_ParticleTile<T_ParticleType, NArrayReal, NArrayInt,
-    //                  std::allocator>(m, "std");
-    //make_ParticleTile<T_ParticleType, NArrayReal, NArrayInt,
-    //                  amrex::ArenaAllocator>(m, "arena");
+        //   work-around for https://github.com/pybind/pybind11/pull/4581
+        //make_ParticleTile<T_ParticleType, NArrayReal, NArrayInt,
+        //                  std::allocator>(m, "std");
+        //make_ParticleTile<T_ParticleType, NArrayReal, NArrayInt,
+        //                  amrex::ArenaAllocator>(m, "arena");
 #ifdef AMREX_USE_GPU
-    make_ParticleTile<T_ParticleType, NArrayReal, NArrayInt,
-                      std::allocator>(m, "std");
-    make_ParticleTile<T_ParticleType, NArrayReal, NArrayInt,
-                      amrex::DefaultAllocator>(m, "default");  // amrex::ArenaAllocator
+        make_ParticleTile<T_ParticleType, NArrayReal, NArrayInt,
+                          std::allocator>(m, "std");
+        make_ParticleTile<T_ParticleType, NArrayReal, NArrayInt,
+                          amrex::DefaultAllocator>(m, "default");  // amrex::ArenaAllocator
 #else
-    make_ParticleTile<T_ParticleType, NArrayReal, NArrayInt,
-                      amrex::DefaultAllocator>(m, "default");  // std::allocator
-    make_ParticleTile<T_ParticleType, NArrayReal, NArrayInt,
-                      amrex::ArenaAllocator>(m, "arena");
+        make_ParticleTile<T_ParticleType, NArrayReal, NArrayInt,
+                          amrex::DefaultAllocator>(m, "default");  // std::allocator
+        make_ParticleTile<T_ParticleType, NArrayReal, NArrayInt,
+                          amrex::ArenaAllocator>(m, "arena");
 #endif
-    //   end work-around
+        //   end work-around
 #ifdef AMREX_USE_GPU
-    make_ParticleTile<T_ParticleType, NArrayReal, NArrayInt,
-                      amrex::DeviceArenaAllocator>(m, "device");
-    make_ParticleTile<T_ParticleType, NArrayReal, NArrayInt,
-                      amrex::ManagedArenaAllocator>(m, "managed");
-    make_ParticleTile<T_ParticleType, NArrayReal, NArrayInt,
-                      amrex::AsyncArenaAllocator>(m, "async");
+        make_ParticleTile<T_ParticleType, NArrayReal, NArrayInt,
+                          amrex::DeviceArenaAllocator>(m, "device");
+        make_ParticleTile<T_ParticleType, NArrayReal, NArrayInt,
+                          amrex::ManagedArenaAllocator>(m, "managed");
+        make_ParticleTile<T_ParticleType, NArrayReal, NArrayInt,
+                          amrex::AsyncArenaAllocator>(m, "async");
 #endif
+    }
+    make_ParticleTile<T_ParticleType, NArrayReal, NArrayInt,
+                      amrex::PolymorphicArenaAllocator>(m, "polymorphic");
 }
