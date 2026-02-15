@@ -40,7 +40,12 @@ class CopyPreBuild(build):
 
         # copy Python module artifacts and sources
         dst_path = os.path.join(self.build_lib, "amrex")
-        shutil.copytree(PYAMREX_libdir, dst_path, dirs_exist_ok=True)
+        shutil.copytree(
+            PYAMREX_libdir,
+            dst_path,
+            dirs_exist_ok=True,
+            ignore=shutil.ignore_patterns("chk*", "diags*", "plt*"),
+        )
 
 
 class CMakeExtension(Extension):
