@@ -50,11 +50,13 @@ void make_PODVector(py::module &m, std::string typestr, std::string allocstr)
                  s << pv.size();
                  rs << "<amrex.PODVector of type '" + typestr +
                         "' and size '" + s.str() + "'>\n";
+                 /* generally not possible, e.g., device arenas:
                  rs << "[ ";
                  for (int ii = 0; ii < int(pv.size()); ii++) {
                      rs << pv[ii] << " ";
                  }
                  rs << "]\n";
+                 */
                  return rs.str();
              }
         )
