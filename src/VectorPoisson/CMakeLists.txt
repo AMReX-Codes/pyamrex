@@ -13,6 +13,7 @@ endif()
 target_sources(${PYAMREX_TARGET}
     PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/VectorPoissonSolver.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/VectorPoissonSolverNodal.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/PyVectorPoisson.cpp
 )
 
