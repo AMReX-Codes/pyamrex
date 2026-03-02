@@ -107,7 +107,7 @@ namespace
         return d;
     }
 
-template<class SM>
+    template<class SM>
     void add_matrix_methods (py::class_<SM> & py_sm)
     {
         using T = typename SM::value_type;
@@ -338,9 +338,6 @@ template<class SM>
 
         ;
 
-        // methods, getter, setter
-        add_matrix_methods(py_sm);
-
         // vector setter/getter
         if constexpr (column_size == 1 || row_size == 1) {
             add_get_set_Vector(py_sm);
@@ -372,8 +369,13 @@ namespace pyAMReX
         using RowVec = SmallMatrix<T, 1, NRows, Order::F, StartIndex>;
 
         py::class_<SM> py_sm = make_SmallMatrix_or_Vector<SM>(m, typestr);
-        make_SmallMatrix_or_Vector<ColVec>(m, typestr);
-        make_SmallMatrix_or_Vector<RowVec>(m, typestr);
+        py::class_<SM> py_svc = make_SmallMatrix_or_Vector<ColVec>(m, typestr);
+        py::class_<SM> py_svr = make_SmallMatrix_or_Vector<RowVec>(m, typestr);
+
+        // methods, getter, setter
+        add_matrix_methods(py_sm);
+        add_matrix_methods(py_svc);
+        add_matrix_methods(py_svr);
 
         // operators for matrix-vector & vector-matrix
         py_sm
@@ -395,8 +397,12 @@ namespace pyAMReX
             using OutColVec = SmallMatrix<T, NRows, 1, Order::F, StartIndex>;
             using OutRowVec = SmallMatrix<T, 1, NCols, Order::F, StartIndex>;
 
-            make_SmallMatrix_or_Vector<OutColVec>(m, typestr);
-            make_SmallMatrix_or_Vector<OutRowVec>(m, typestr);
+            py::class_<SM> py_svoc = make_SmallMatrix_or_Vector<OutColVec>(m, typestr);
+            py::class_<SM> py_svor = make_SmallMatrix_or_Vector<OutRowVec>(m, typestr);
+
+            // methods, getter, setter
+            add_matrix_methods(py_svoc);
+            add_matrix_methods(py_svor);
         }
     }
 }
