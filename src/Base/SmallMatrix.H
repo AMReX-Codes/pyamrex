@@ -370,17 +370,15 @@ namespace pyAMReX
         using RowVec = SmallMatrix<T, 1, NRows, Order::F, StartIndex>;
 
         py::class_<SM> py_sm = make_SmallMatrix_or_Vector<SM>(m, typestr);
-        py::class_<SM> py_svc = make_SmallMatrix_or_Vector<ColVec>(m, typestr);
-        py::class_<SM> py_svr = make_SmallMatrix_or_Vector<RowVec>(m, typestr);
+        py::class_<ColVec> py_svc = make_SmallMatrix_or_Vector<ColVec>(m, typestr);
+        py::class_<RowVec> py_svr = make_SmallMatrix_or_Vector<RowVec>(m, typestr);
 
         // methods, getter, setter
         if constexpr (NRows != NCols) {
-            py::class_<SM> py_sm_T = make_SmallMatrix_or_Vector<SM_T>(m, typestr);
+            py::class_<SM_T> py_sm_T = make_SmallMatrix_or_Vector<SM_T>(m, typestr);
             add_matrix_methods(py_sm_T);
         }
         add_matrix_methods(py_sm);
-        add_matrix_methods(py_svc);
-        add_matrix_methods(py_svr);
 
         // operators for matrix-matrix (square matrices only)
         if constexpr (NRows == NCols) {
@@ -396,13 +394,18 @@ namespace pyAMReX
             using OutColVec = SmallMatrix<T, NRows, 1, Order::F, StartIndex>;
             using OutRowVec = SmallMatrix<T, 1, NCols, Order::F, StartIndex>;
 
-            py::class_<SM> py_svoc = make_SmallMatrix_or_Vector<OutColVec>(m, typestr);
-            py::class_<SM> py_svor = make_SmallMatrix_or_Vector<OutRowVec>(m, typestr);
+            py::class_<OutColVec> py_svoc = make_SmallMatrix_or_Vector<OutColVec>(m, typestr);
+            py::class_<OutRowVec> py_svor = make_SmallMatrix_or_Vector<OutRowVec>(m, typestr);
 
             // methods, getter, setter
             add_matrix_methods(py_svoc);
             add_matrix_methods(py_svor);
         }
+
+
+        // methods, getter, setter
+        add_matrix_methods(py_svc);
+        add_matrix_methods(py_svr);
 
         // operators for matrix-vector & vector-matrix
         py_sm
