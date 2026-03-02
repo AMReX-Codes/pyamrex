@@ -32,6 +32,16 @@ namespace
         d["version"] = 3;
         return d;
     }
+
+    std::string
+    str_PODVector(std::string typestr, std::string allocstr)
+    {
+        auto const podv_name = std::string("PODVector_")
+            .append(typestr)
+            .append("_")
+            .append(allocstr);
+        return podv_name;
+    }
 }
 
 template <class T, class Allocator = std::allocator<T> >
@@ -40,8 +50,7 @@ void make_PODVector(py::module &m, std::string typestr, std::string allocstr)
     using namespace amrex;
 
     using PODVector_type = PODVector<T, Allocator>;
-    auto const podv_name = std::string("PODVector_").append(typestr)
-                           .append("_").append(allocstr);
+    auto const podv_name = str_PODVector(typestr, allocstr);
 
     auto const podv_doc = std::string(
         "A plain-old-data (POD) vector of '")
@@ -161,18 +170,13 @@ void make_PODVector(py::module &m, std::string typestr)
 
     // Alias matching Gpu::DeviceVector<T> — resolves per platform:
     //   CPU: PODVector_<type>_std,  GPU: PODVector_<type>_arena
-    auto const default_name = std::string("PODVector_")
-        .append(typestr)
-        .append("_default");
-    m.attr(default_name.c_str()) = m
-        .attr(std::string("PODVector_")
-        .append(typestr)
+    auto const default_name = str_PODVector(typestr, "default");
+    m.attr(default_name.c_str()) =
 #ifdef AMREX_USE_GPU
-        .append("_arena")
+        m.attr(str_PODVector(typestr, "arena").c_str());
 #else
-        .append("_std")
+        m.attr(str_PODVector(typestr, "std").c_str());
 #endif
-        .c_str());
 }
 
 void init_PODVector(py::module& m)
