@@ -151,6 +151,21 @@ void make_PODVector(py::module &m, std::string typestr)
     make_PODVector<T, amrex::AsyncArenaAllocator<T>> (m, typestr, "async");
 #endif
     make_PODVector<T, amrex::PolymorphicArenaAllocator<T>> (m, typestr, "polymorphic");
+
+    // Alias matching Gpu::DeviceVector<T> — resolves per platform:
+    //   CPU: PODVector_<type>_std,  GPU: PODVector_<type>_arena
+    auto const default_name = std::string("PODVector_")
+        .append(typestr)
+        .append("_default");
+    m.attr(default_name.c_str()) = m
+        .attr(std::string("PODVector_")
+        .append(typestr)
+#ifdef AMREX_USE_GPU
+        .append("_arena")
+#else
+        .append("_std")
+#endif
+        .c_str());
 }
 
 void init_PODVector(py::module& m)

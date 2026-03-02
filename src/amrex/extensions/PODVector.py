@@ -103,12 +103,6 @@ def register_PODVector_extension(amr):
     import inspect
     import sys
 
-    # The parent package (e.g., amrex.space3d) does `from .amrex_3d_pybind
-    # import *` before calling this function.  That star-import is a one-time
-    # snapshot, so new attributes added to the pybind sub-module (amr) won't
-    # be visible on the package.  We therefore also set aliases on the parent.
-    _parent = sys.modules.get(amr.__name__.rsplit(".", 1)[0], None)
-
     # register member functions for every PODVector_* type
     for _, POD_type in inspect.getmembers(
         sys.modules[amr.__name__],
@@ -121,14 +115,3 @@ def register_PODVector_extension(amr):
         POD_type.to_numpy = podvector_to_numpy
         POD_type.to_cupy = podvector_to_cupy
         POD_type.to_xp = podvector_to_xp
-
-        # Provide a platform-agnostic alias matching Gpu::DeviceVector<T>:
-        #   CPU: PODVector_<type>_std  -> PODVector_<type>_default
-        #   GPU: PODVector_<type>_arena -> PODVector_<type>_default
-        _gpu_suffix = "_arena" if amr.Config.have_gpu else "_std"
-        _name = POD_type.__name__
-        if _name.endswith(_gpu_suffix):
-            _default_name = _name[: -len(_gpu_suffix)] + "_default"
-            setattr(amr, _default_name, POD_type)
-            if _parent is not None:
-                setattr(_parent, _default_name, POD_type)
