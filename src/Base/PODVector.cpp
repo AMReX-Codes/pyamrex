@@ -43,7 +43,14 @@ void make_PODVector(py::module &m, std::string typestr, std::string allocstr)
     auto const podv_name = std::string("PODVector_").append(typestr)
                            .append("_").append(allocstr);
 
-    py::class_<PODVector_type>(m, podv_name.c_str())
+    auto const podv_doc = std::string(
+        "A plain-old-data (POD) vector of '")
+        .append(typestr)
+        .append("' elements with '")
+        .append(allocstr)
+        .append("' allocation.");
+
+    py::class_<PODVector_type>(m, podv_name.c_str(), podv_doc.c_str())
         .def("__repr__",
              [typestr](PODVector_type const & pv) {
                  std::stringstream s, rs;
