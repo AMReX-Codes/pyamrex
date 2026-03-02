@@ -361,6 +361,7 @@ namespace pyAMReX
         using namespace amrex;
 
         using SM = SmallMatrix<T, NRows, NCols, ORDER, StartIndex>;
+        using SM_T = SmallMatrix<T, NCols, NRows, ORDER, StartIndex>;  // transposed
 
         // Input vectors for matrix-vector and vector-matrix multiplication:
         //   SM * ColVec = (NRows x NCols) * (NCols x 1)
@@ -373,15 +374,13 @@ namespace pyAMReX
         py::class_<SM> py_svr = make_SmallMatrix_or_Vector<RowVec>(m, typestr);
 
         // methods, getter, setter
+        if constexpr (NRows != NCols) {
+            py::class_<SM> py_sm_T = make_SmallMatrix_or_Vector<SM_T>(m, typestr);
+            add_matrix_methods(py_sm_T);
+        }
         add_matrix_methods(py_sm);
         add_matrix_methods(py_svc);
         add_matrix_methods(py_svr);
-
-        // operators for matrix-vector & vector-matrix
-        py_sm
-            .def(py::self * ColVec())
-            .def(RowVec() * py::self)
-        ;
 
         // operators for matrix-matrix (square matrices only)
         if constexpr (NRows == NCols) {
@@ -404,5 +403,11 @@ namespace pyAMReX
             add_matrix_methods(py_svoc);
             add_matrix_methods(py_svor);
         }
+
+        // operators for matrix-vector & vector-matrix
+        py_sm
+            .def(py::self * ColVec())
+            .def(RowVec() * py::self)
+        ;
     }
 }
