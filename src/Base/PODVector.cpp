@@ -32,6 +32,16 @@ namespace
         d["version"] = 3;
         return d;
     }
+
+    std::string
+    str_PODVector(std::string typestr, std::string allocstr)
+    {
+        auto const podv_name = std::string("PODVector_")
+            .append(typestr)
+            .append("_")
+            .append(allocstr);
+        return podv_name;
+    }
 }
 
 template <class T, class Allocator = std::allocator<T> >
@@ -40,10 +50,16 @@ void make_PODVector(py::module &m, std::string typestr, std::string allocstr)
     using namespace amrex;
 
     using PODVector_type = PODVector<T, Allocator>;
-    auto const podv_name = std::string("PODVector_").append(typestr)
-                           .append("_").append(allocstr);
+    auto const podv_name = str_PODVector(typestr, allocstr);
 
-    py::class_<PODVector_type>(m, podv_name.c_str())
+    auto const podv_doc = std::string(
+        "A plain-old-data (POD) vector of '")
+        .append(typestr)
+        .append("' elements with '")
+        .append(allocstr)
+        .append("' allocation.");
+
+    py::class_<PODVector_type>(m, podv_name.c_str(), podv_doc.c_str())
         .def("__repr__",
              [typestr](PODVector_type const & pv) {
                  std::stringstream s, rs;
@@ -151,6 +167,16 @@ void make_PODVector(py::module &m, std::string typestr)
     make_PODVector<T, amrex::AsyncArenaAllocator<T>> (m, typestr, "async");
 #endif
     make_PODVector<T, amrex::PolymorphicArenaAllocator<T>> (m, typestr, "polymorphic");
+
+    // Alias matching Gpu::DeviceVector<T> — resolves per platform:
+    //   CPU: PODVector_<type>_std,  GPU: PODVector_<type>_arena
+    auto const default_name = str_PODVector(typestr, "default");
+    m.attr(default_name.c_str()) =
+#ifdef AMREX_USE_GPU
+        m.attr(str_PODVector(typestr, "arena").c_str());
+#else
+        m.attr(str_PODVector(typestr, "std").c_str());
+#endif
 }
 
 void init_PODVector(py::module& m)
