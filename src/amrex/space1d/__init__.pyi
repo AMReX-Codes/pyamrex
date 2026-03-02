@@ -310,6 +310,11 @@ from amrex.space1d.amrex_1d_pybind import (
     write_single_level_plotfile,
 )
 from amrex.space1d.amrex_1d_pybind import IntVect1D as IntVect
+from amrex.space1d.amrex_1d_pybind import PODVector_int_std as PODVector_int_default
+from amrex.space1d.amrex_1d_pybind import PODVector_real_std as PODVector_real_default
+from amrex.space1d.amrex_1d_pybind import (
+    PODVector_uint64_std as PODVector_uint64_default,
+)
 
 from . import amrex_1d_pybind
 
@@ -390,14 +395,17 @@ __all__: list[str] = [
     "MPMD_NProcs",
     "MultiFab",
     "PODVector_int_arena",
+    "PODVector_int_default",
     "PODVector_int_pinned",
     "PODVector_int_polymorphic",
     "PODVector_int_std",
     "PODVector_real_arena",
+    "PODVector_real_default",
     "PODVector_real_pinned",
     "PODVector_real_polymorphic",
     "PODVector_real_std",
     "PODVector_uint64_arena",
+    "PODVector_uint64_default",
     "PODVector_uint64_pinned",
     "PODVector_uint64_polymorphic",
     "PODVector_uint64_std",

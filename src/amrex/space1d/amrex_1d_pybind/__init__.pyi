@@ -126,14 +126,17 @@ __all__: list[str] = [
     "MPMD_NProcs",
     "MultiFab",
     "PODVector_int_arena",
+    "PODVector_int_default",
     "PODVector_int_pinned",
     "PODVector_int_polymorphic",
     "PODVector_int_std",
     "PODVector_real_arena",
+    "PODVector_real_default",
     "PODVector_real_pinned",
     "PODVector_real_polymorphic",
     "PODVector_real_std",
     "PODVector_uint64_arena",
+    "PODVector_uint64_default",
     "PODVector_uint64_pinned",
     "PODVector_uint64_polymorphic",
     "PODVector_uint64_std",
@@ -11666,6 +11669,9 @@ class GrowthStrategy(enum.Enum):
     Poisson: typing.ClassVar[GrowthStrategy]  # value = <GrowthStrategy.Poisson: 0>
 
 class PODVector_real_pinned:
+    """
+    A plain-old-data (POD) vector of 'real' elements with 'pinned' allocation.
+    """
     def __getitem__(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> float: ...
     @typing.overload
     def __init__(self) -> None: ...
@@ -11779,6 +11785,9 @@ class PODVector_real_pinned:
     def __cuda_array_interface__(self) -> dict: ...
 
 class PODVector_real_arena:
+    """
+    A plain-old-data (POD) vector of 'real' elements with 'arena' allocation.
+    """
     def __getitem__(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> float: ...
     @typing.overload
     def __init__(self) -> None: ...
@@ -11892,6 +11901,9 @@ class PODVector_real_arena:
     def __cuda_array_interface__(self) -> dict: ...
 
 class PODVector_real_std:
+    """
+    A plain-old-data (POD) vector of 'real' elements with 'std' allocation.
+    """
     def __getitem__(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> float: ...
     @typing.overload
     def __init__(self) -> None: ...
@@ -12005,6 +12017,9 @@ class PODVector_real_std:
     def __cuda_array_interface__(self) -> dict: ...
 
 class PODVector_real_polymorphic:
+    """
+    A plain-old-data (POD) vector of 'real' elements with 'polymorphic' allocation.
+    """
     def __getitem__(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> float: ...
     @typing.overload
     def __init__(self) -> None: ...
@@ -12118,6 +12133,9 @@ class PODVector_real_polymorphic:
     def __cuda_array_interface__(self) -> dict: ...
 
 class PODVector_int_pinned:
+    """
+    A plain-old-data (POD) vector of 'int' elements with 'pinned' allocation.
+    """
     def __getitem__(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> int: ...
     @typing.overload
     def __init__(self) -> None: ...
@@ -12231,6 +12249,9 @@ class PODVector_int_pinned:
     def __cuda_array_interface__(self) -> dict: ...
 
 class PODVector_int_arena:
+    """
+    A plain-old-data (POD) vector of 'int' elements with 'arena' allocation.
+    """
     def __getitem__(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> int: ...
     @typing.overload
     def __init__(self) -> None: ...
@@ -12344,6 +12365,9 @@ class PODVector_int_arena:
     def __cuda_array_interface__(self) -> dict: ...
 
 class PODVector_int_std:
+    """
+    A plain-old-data (POD) vector of 'int' elements with 'std' allocation.
+    """
     def __getitem__(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> int: ...
     @typing.overload
     def __init__(self) -> None: ...
@@ -12457,6 +12481,9 @@ class PODVector_int_std:
     def __cuda_array_interface__(self) -> dict: ...
 
 class PODVector_int_polymorphic:
+    """
+    A plain-old-data (POD) vector of 'int' elements with 'polymorphic' allocation.
+    """
     def __getitem__(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> int: ...
     @typing.overload
     def __init__(self) -> None: ...
@@ -12570,6 +12597,9 @@ class PODVector_int_polymorphic:
     def __cuda_array_interface__(self) -> dict: ...
 
 class PODVector_uint64_pinned:
+    """
+    A plain-old-data (POD) vector of 'uint64' elements with 'pinned' allocation.
+    """
     def __getitem__(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> int: ...
     @typing.overload
     def __init__(self) -> None: ...
@@ -12683,6 +12713,9 @@ class PODVector_uint64_pinned:
     def __cuda_array_interface__(self) -> dict: ...
 
 class PODVector_uint64_arena:
+    """
+    A plain-old-data (POD) vector of 'uint64' elements with 'arena' allocation.
+    """
     def __getitem__(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> int: ...
     @typing.overload
     def __init__(self) -> None: ...
@@ -12796,6 +12829,9 @@ class PODVector_uint64_arena:
     def __cuda_array_interface__(self) -> dict: ...
 
 class PODVector_uint64_std:
+    """
+    A plain-old-data (POD) vector of 'uint64' elements with 'std' allocation.
+    """
     def __getitem__(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> int: ...
     @typing.overload
     def __init__(self) -> None: ...
@@ -12909,6 +12945,9 @@ class PODVector_uint64_std:
     def __cuda_array_interface__(self) -> dict: ...
 
 class PODVector_uint64_polymorphic:
+    """
+    A plain-old-data (POD) vector of 'uint64' elements with 'polymorphic' allocation.
+    """
     def __getitem__(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> int: ...
     @typing.overload
     def __init__(self) -> None: ...
@@ -25488,3 +25527,6 @@ __author__: str = "Axel Huebl, Ryan T. Sandberg, Shreyas Ananthan, David P. Grot
 __license__: str = "BSD-3-Clause-LBNL"
 __version__: str = "26.02"
 IntVect = IntVect1D
+PODVector_real_default = PODVector_real_std
+PODVector_int_default = PODVector_int_std
+PODVector_uint64_default = PODVector_uint64_std
