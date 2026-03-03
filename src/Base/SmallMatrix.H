@@ -108,10 +108,103 @@ namespace
     }
 
     template<class SM>
+    void add_matrix_methods (py::class_<SM> & py_sm)
+    {
+        using T = typename SM::value_type;
+        using T_no_cv = std::remove_cv_t<T>;
+        static constexpr int row_size = SM::row_size;
+        static constexpr int column_size = SM::column_size;
+        static constexpr int starting_index = SM::starting_index;
+
+        py_sm
+            .def("dot", &SM::dot)
+            .def("prod", &SM::product)  // NumPy name
+            .def("set_val", &SM::setVal)
+            .def("sum", &SM::sum)
+            .def_property_readonly("T", &SM::transpose)   // NumPy name
+
+            // operators
+            .def(py::self + py::self)
+            .def(py::self - py::self)
+            .def(py::self * amrex::Real())
+            .def(amrex::Real() * py::self)
+            .def(-py::self)
+
+            // getter
+            .def("__getitem__", [](SM & sm, std::array<int, 2> const & key){
+                if (key[0] < starting_index || key[0] >= row_size + starting_index ||
+                    key[1] < starting_index || key[1] >= column_size + starting_index)
+                    throw std::runtime_error(
+                        "Index out of bounds: [" +
+                        std::to_string(key[0]) + ", " +
+                        std::to_string(key[1]) + "]");
+                return sm(key[0], key[1]);
+            })
+        ;
+
+        // setter
+        if constexpr (is_not_const<T>())
+        {
+            py_sm
+                .def("__setitem__", [](SM & sm, std::array<int, 2> const & key, T_no_cv const value){
+                    if (key[0] < SM::starting_index || key[0] >= SM::row_size + SM::starting_index ||
+                        key[1] < SM::starting_index || key[1] >= SM::column_size + SM::starting_index)
+                    {
+                        throw std::runtime_error(
+                            "Index out of bounds: [" +
+                            std::to_string(key[0]) + ", " +
+                            std::to_string(key[1]) + "]");
+                    }
+                    sm(key[0], key[1]) = value;
+                })
+            ;
+        }
+
+        // square matrix
+        if constexpr (row_size == column_size)
+        {
+            py_sm
+                .def_static("identity", []() { return SM::Identity(); })
+                .def("trace", [](SM & sm){ return sm.trace(); })
+                .def("transpose_in_place", [](SM & sm){ return sm.transposeInPlace(); })
+            ;
+        }
+    }
+
+    template<class T_SV>
+    void add_get_set_Vector (py::class_<T_SV> &py_v)
+    {
+        using self = T_SV;
+        using T = typename T_SV::value_type;
+        using T_no_cv = std::remove_cv_t<T>;
+
+        py_v
+            .def("__getitem__", [](self & sm, int key){
+                if (key < self::starting_index || key >= self::column_size * self::row_size + self::starting_index)
+                    throw std::runtime_error("Index out of bounds: " + std::to_string(key));
+                return sm(key);
+            })
+            .def("__setitem__", [](self & sm, int key, T_no_cv const value){
+                if (key < self::starting_index || key >= self::column_size * self::row_size + self::starting_index)
+                    throw std::runtime_error("Index out of bounds: " + std::to_string(key));
+                sm(key) = value;
+            })
+        ;
+    }
+
+    template<class SM>
     py::class_<SM>
     make_SmallMatrix_or_Vector (py::module &m, std::string typestr)
     {
         using namespace amrex;
+
+        // If this type was already registered (e.g., a shared vector type
+        // between different matrix sizes), return the existing binding.
+        if (auto *tinfo = py::detail::get_type_info(typeid(SM))) {
+            return py::reinterpret_borrow<py::class_<SM>>(
+                py::handle(reinterpret_cast<PyObject*>(tinfo->type))
+            );
+        }
 
         using T = typename SM::value_type;
         using T_no_cv = std::remove_cv_t<T>;
@@ -245,92 +338,12 @@ namespace
 
         ;
 
+        // vector setter/getter
+        if constexpr (column_size == 1 || row_size == 1) {
+            add_get_set_Vector(py_sm);
+        }
+
         return py_sm;
-    }
-
-    template<class SM>
-    void add_matrix_methods (py::class_<SM> & py_sm)
-    {
-        using T = typename SM::value_type;
-        using T_no_cv = std::remove_cv_t<T>;
-        static constexpr int row_size = SM::row_size;
-        static constexpr int column_size = SM::column_size;
-        static constexpr int starting_index = SM::starting_index;
-
-        py_sm
-            .def("dot", &SM::dot)
-            .def("prod", &SM::product)  // NumPy name
-            .def("set_val", &SM::setVal)
-            .def("sum", &SM::sum)
-            .def_property_readonly("T", &SM::transpose)   // NumPy name
-
-            // operators
-            .def(py::self + py::self)
-            .def(py::self - py::self)
-            .def(py::self * amrex::Real())
-            .def(amrex::Real() * py::self)
-            .def(-py::self)
-
-            // getter
-            .def("__getitem__", [](SM & sm, std::array<int, 2> const & key){
-                if (key[0] < starting_index || key[0] >= row_size + starting_index ||
-                    key[1] < starting_index || key[1] >= column_size + starting_index)
-                    throw std::runtime_error(
-                        "Index out of bounds: [" +
-                        std::to_string(key[0]) + ", " +
-                        std::to_string(key[1]) + "]");
-                return sm(key[0], key[1]);
-            })
-        ;
-
-        // setter
-        if constexpr (is_not_const<T>())
-        {
-            py_sm
-                .def("__setitem__", [](SM & sm, std::array<int, 2> const & key, T_no_cv const value){
-                    if (key[0] < SM::starting_index || key[0] >= SM::row_size + SM::starting_index ||
-                        key[1] < SM::starting_index || key[1] >= SM::column_size + SM::starting_index)
-                    {
-                        throw std::runtime_error(
-                            "Index out of bounds: [" +
-                            std::to_string(key[0]) + ", " +
-                            std::to_string(key[1]) + "]");
-                    }
-                    sm(key[0], key[1]) = value;
-                })
-            ;
-        }
-
-        // square matrix
-        if constexpr (row_size == column_size)
-        {
-            py_sm
-                .def_static("identity", []() { return SM::Identity(); })
-                .def("trace", [](SM & sm){ return sm.trace(); })
-                .def("transpose_in_place", [](SM & sm){ return sm.transposeInPlace(); })
-            ;
-        }
-    }
-
-    template<class T_SV>
-    void add_get_set_Vector (py::class_<T_SV> &py_v)
-    {
-        using self = T_SV;
-        using T = typename T_SV::value_type;
-        using T_no_cv = std::remove_cv_t<T>;
-
-        py_v
-            .def("__getitem__", [](self & sm, int key){
-                if (key < self::starting_index || key >= self::column_size * self::row_size + self::starting_index)
-                    throw std::runtime_error("Index out of bounds: " + std::to_string(key));
-                return sm(key);
-            })
-            .def("__setitem__", [](self & sm, int key, T_no_cv const value){
-                if (key < self::starting_index || key >= self::column_size * self::row_size + self::starting_index)
-                    throw std::runtime_error("Index out of bounds: " + std::to_string(key));
-                sm(key) = value;
-            })
-        ;
     }
 }
 
@@ -348,27 +361,56 @@ namespace pyAMReX
         using namespace amrex;
 
         using SM = SmallMatrix<T, NRows, NCols, ORDER, StartIndex>;
-        using SV = SmallMatrix<T, NRows, 1, Order::F, StartIndex>;
-        using SRV = SmallMatrix<T, 1, NCols, Order::F, StartIndex>;
+        using SM_T = SmallMatrix<T, NCols, NRows, ORDER, StartIndex>;  // transposed
+
+        // Input vectors for matrix-vector and vector-matrix multiplication:
+        //   SM * ColVec = (NRows x NCols) * (NCols x 1)
+        //   RowVec * SM = (1 x NRows) * (NRows x NCols)
+        using ColVec = SmallMatrix<T, NCols, 1, Order::F, StartIndex>;
+        using RowVec = SmallMatrix<T, 1, NRows, Order::F, StartIndex>;
 
         py::class_<SM> py_sm = make_SmallMatrix_or_Vector<SM>(m, typestr);
-        py::class_<SV> py_sv = make_SmallMatrix_or_Vector<SV>(m, typestr);
-        py::class_<SRV> py_srv = make_SmallMatrix_or_Vector<SRV>(m, typestr);
+        py::class_<ColVec> py_svc = make_SmallMatrix_or_Vector<ColVec>(m, typestr);
+        py::class_<RowVec> py_svr = make_SmallMatrix_or_Vector<RowVec>(m, typestr);
 
         // methods, getter, setter
+        if constexpr (NRows != NCols) {
+            py::class_<SM_T> py_sm_T = make_SmallMatrix_or_Vector<SM_T>(m, typestr);
+            add_matrix_methods(py_sm_T);
+        }
         add_matrix_methods(py_sm);
-        add_matrix_methods(py_sv);
-        add_matrix_methods(py_srv);
 
-        // vector setter/getter
-        add_get_set_Vector(py_sv);
-        add_get_set_Vector(py_srv);
+        // operators for matrix-matrix (square matrices only)
+        if constexpr (NRows == NCols) {
+            py_sm
+                .def(py::self * py::self)
+            ;
+        }
+        // For non-square matrices, the output vectors have different
+        // dimensions than the input vectors.
+        //   (NRows x NCols) * (NCols x 1) = (NRows x 1)
+        //   (1 x NRows) * (NRows x NCols) = (1 x NCols)
+        else {
+            using OutColVec = SmallMatrix<T, NRows, 1, Order::F, StartIndex>;
+            using OutRowVec = SmallMatrix<T, 1, NCols, Order::F, StartIndex>;
 
-        // operators for matrix-matrix & matrix-vector
+            py::class_<OutColVec> py_svoc = make_SmallMatrix_or_Vector<OutColVec>(m, typestr);
+            py::class_<OutRowVec> py_svor = make_SmallMatrix_or_Vector<OutRowVec>(m, typestr);
+
+            // methods, getter, setter
+            add_matrix_methods(py_svoc);
+            add_matrix_methods(py_svor);
+        }
+
+
+        // methods, getter, setter
+        add_matrix_methods(py_svc);
+        add_matrix_methods(py_svr);
+
+        // operators for matrix-vector & vector-matrix
         py_sm
-            .def(py::self * py::self)
-            .def(py::self * SV())
-            .def(SRV() * py::self)
+            .def(py::self * ColVec())
+            .def(RowVec() * py::self)
         ;
     }
 }
