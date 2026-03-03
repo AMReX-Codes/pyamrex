@@ -250,12 +250,24 @@ __all__: list[str] = [
     "Poisson",
     "RealBox",
     "RealVect",
+    "SmallMatrix_1x3_F_SI1_double",
+    "SmallMatrix_1x3_F_SI1_float",
+    "SmallMatrix_1x3_F_SI1_longdouble",
     "SmallMatrix_1x6_F_SI1_double",
     "SmallMatrix_1x6_F_SI1_float",
     "SmallMatrix_1x6_F_SI1_longdouble",
+    "SmallMatrix_3x1_F_SI1_double",
+    "SmallMatrix_3x1_F_SI1_float",
+    "SmallMatrix_3x1_F_SI1_longdouble",
+    "SmallMatrix_3x6_F_SI1_double",
+    "SmallMatrix_3x6_F_SI1_float",
+    "SmallMatrix_3x6_F_SI1_longdouble",
     "SmallMatrix_6x1_F_SI1_double",
     "SmallMatrix_6x1_F_SI1_float",
     "SmallMatrix_6x1_F_SI1_longdouble",
+    "SmallMatrix_6x3_F_SI1_double",
+    "SmallMatrix_6x3_F_SI1_float",
+    "SmallMatrix_6x3_F_SI1_longdouble",
     "SmallMatrix_6x6_F_SI1_double",
     "SmallMatrix_6x6_F_SI1_float",
     "SmallMatrix_6x6_F_SI1_longdouble",
@@ -5893,9 +5905,16 @@ class SmallMatrix_6x6_F_SI1_float:
 class SmallMatrix_6x1_F_SI1_float:
     @staticmethod
     def zero() -> SmallMatrix_6x1_F_SI1_float: ...
+    @typing.overload
     def __add__(
         self, arg0: SmallMatrix_6x1_F_SI1_float
     ) -> SmallMatrix_6x1_F_SI1_float: ...
+    @typing.overload
+    def __add__(
+        self, arg0: SmallMatrix_6x1_F_SI1_float
+    ) -> SmallMatrix_6x1_F_SI1_float: ...
+    @typing.overload
+    def __getitem__(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> float: ...
     @typing.overload
     def __getitem__(
         self,
@@ -5905,7 +5924,13 @@ class SmallMatrix_6x1_F_SI1_float:
         ],
     ) -> float: ...
     @typing.overload
-    def __getitem__(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> float: ...
+    def __getitem__(
+        self,
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt | typing.SupportsIndex],
+            "FixedSize(2)",
+        ],
+    ) -> float: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
@@ -5914,14 +5939,33 @@ class SmallMatrix_6x1_F_SI1_float:
     def __init__(
         self, arg0: typing.Annotated[numpy.typing.ArrayLike, numpy.float32]
     ) -> None: ...
+    @typing.overload
     def __mul__(
         self, arg0: typing.SupportsFloat | typing.SupportsIndex
     ) -> SmallMatrix_6x1_F_SI1_float: ...
+    @typing.overload
+    def __mul__(
+        self, arg0: typing.SupportsFloat | typing.SupportsIndex
+    ) -> SmallMatrix_6x1_F_SI1_float: ...
+    @typing.overload
+    def __neg__(self) -> SmallMatrix_6x1_F_SI1_float: ...
+    @typing.overload
     def __neg__(self) -> SmallMatrix_6x1_F_SI1_float: ...
     def __repr__(self) -> str: ...
+    @typing.overload
     def __rmul__(
         self, arg0: typing.SupportsFloat | typing.SupportsIndex
     ) -> SmallMatrix_6x1_F_SI1_float: ...
+    @typing.overload
+    def __rmul__(
+        self, arg0: typing.SupportsFloat | typing.SupportsIndex
+    ) -> SmallMatrix_6x1_F_SI1_float: ...
+    @typing.overload
+    def __setitem__(
+        self,
+        arg0: typing.SupportsInt | typing.SupportsIndex,
+        arg1: typing.SupportsFloat | typing.SupportsIndex,
+    ) -> None: ...
     @typing.overload
     def __setitem__(
         self,
@@ -5934,17 +5978,39 @@ class SmallMatrix_6x1_F_SI1_float:
     @typing.overload
     def __setitem__(
         self,
-        arg0: typing.SupportsInt | typing.SupportsIndex,
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt | typing.SupportsIndex],
+            "FixedSize(2)",
+        ],
         arg1: typing.SupportsFloat | typing.SupportsIndex,
     ) -> None: ...
+    @typing.overload
     def __sub__(
         self, arg0: SmallMatrix_6x1_F_SI1_float
     ) -> SmallMatrix_6x1_F_SI1_float: ...
+    @typing.overload
+    def __sub__(
+        self, arg0: SmallMatrix_6x1_F_SI1_float
+    ) -> SmallMatrix_6x1_F_SI1_float: ...
+    @typing.overload
     def dot(self, arg0: SmallMatrix_6x1_F_SI1_float) -> float: ...
+    @typing.overload
+    def dot(self, arg0: SmallMatrix_6x1_F_SI1_float) -> float: ...
+    @typing.overload
     def prod(self) -> float: ...
+    @typing.overload
+    def prod(self) -> float: ...
+    @typing.overload
     def set_val(
         self, arg0: typing.SupportsFloat | typing.SupportsIndex
     ) -> SmallMatrix_6x1_F_SI1_float: ...
+    @typing.overload
+    def set_val(
+        self, arg0: typing.SupportsFloat | typing.SupportsIndex
+    ) -> SmallMatrix_6x1_F_SI1_float: ...
+    @typing.overload
+    def sum(self) -> float: ...
+    @typing.overload
     def sum(self) -> float: ...
     def to_cupy(self, copy=False, order="F"):
         """
@@ -6055,9 +6121,16 @@ class SmallMatrix_6x1_F_SI1_float:
 class SmallMatrix_1x6_F_SI1_float:
     @staticmethod
     def zero() -> SmallMatrix_1x6_F_SI1_float: ...
+    @typing.overload
     def __add__(
         self, arg0: SmallMatrix_1x6_F_SI1_float
     ) -> SmallMatrix_1x6_F_SI1_float: ...
+    @typing.overload
+    def __add__(
+        self, arg0: SmallMatrix_1x6_F_SI1_float
+    ) -> SmallMatrix_1x6_F_SI1_float: ...
+    @typing.overload
+    def __getitem__(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> float: ...
     @typing.overload
     def __getitem__(
         self,
@@ -6067,7 +6140,13 @@ class SmallMatrix_1x6_F_SI1_float:
         ],
     ) -> float: ...
     @typing.overload
-    def __getitem__(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> float: ...
+    def __getitem__(
+        self,
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt | typing.SupportsIndex],
+            "FixedSize(2)",
+        ],
+    ) -> float: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
@@ -6076,14 +6155,33 @@ class SmallMatrix_1x6_F_SI1_float:
     def __init__(
         self, arg0: typing.Annotated[numpy.typing.ArrayLike, numpy.float32]
     ) -> None: ...
+    @typing.overload
     def __mul__(
         self, arg0: typing.SupportsFloat | typing.SupportsIndex
     ) -> SmallMatrix_1x6_F_SI1_float: ...
+    @typing.overload
+    def __mul__(
+        self, arg0: typing.SupportsFloat | typing.SupportsIndex
+    ) -> SmallMatrix_1x6_F_SI1_float: ...
+    @typing.overload
+    def __neg__(self) -> SmallMatrix_1x6_F_SI1_float: ...
+    @typing.overload
     def __neg__(self) -> SmallMatrix_1x6_F_SI1_float: ...
     def __repr__(self) -> str: ...
+    @typing.overload
     def __rmul__(
         self, arg0: typing.SupportsFloat | typing.SupportsIndex
     ) -> SmallMatrix_1x6_F_SI1_float: ...
+    @typing.overload
+    def __rmul__(
+        self, arg0: typing.SupportsFloat | typing.SupportsIndex
+    ) -> SmallMatrix_1x6_F_SI1_float: ...
+    @typing.overload
+    def __setitem__(
+        self,
+        arg0: typing.SupportsInt | typing.SupportsIndex,
+        arg1: typing.SupportsFloat | typing.SupportsIndex,
+    ) -> None: ...
     @typing.overload
     def __setitem__(
         self,
@@ -6096,17 +6194,39 @@ class SmallMatrix_1x6_F_SI1_float:
     @typing.overload
     def __setitem__(
         self,
-        arg0: typing.SupportsInt | typing.SupportsIndex,
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt | typing.SupportsIndex],
+            "FixedSize(2)",
+        ],
         arg1: typing.SupportsFloat | typing.SupportsIndex,
     ) -> None: ...
+    @typing.overload
     def __sub__(
         self, arg0: SmallMatrix_1x6_F_SI1_float
     ) -> SmallMatrix_1x6_F_SI1_float: ...
+    @typing.overload
+    def __sub__(
+        self, arg0: SmallMatrix_1x6_F_SI1_float
+    ) -> SmallMatrix_1x6_F_SI1_float: ...
+    @typing.overload
     def dot(self, arg0: SmallMatrix_1x6_F_SI1_float) -> float: ...
+    @typing.overload
+    def dot(self, arg0: SmallMatrix_1x6_F_SI1_float) -> float: ...
+    @typing.overload
     def prod(self) -> float: ...
+    @typing.overload
+    def prod(self) -> float: ...
+    @typing.overload
     def set_val(
         self, arg0: typing.SupportsFloat | typing.SupportsIndex
     ) -> SmallMatrix_1x6_F_SI1_float: ...
+    @typing.overload
+    def set_val(
+        self, arg0: typing.SupportsFloat | typing.SupportsIndex
+    ) -> SmallMatrix_1x6_F_SI1_float: ...
+    @typing.overload
+    def sum(self) -> float: ...
+    @typing.overload
     def sum(self) -> float: ...
     def to_cupy(self, copy=False, order="F"):
         """
@@ -6387,9 +6507,16 @@ class SmallMatrix_6x6_F_SI1_double:
 class SmallMatrix_6x1_F_SI1_double:
     @staticmethod
     def zero() -> SmallMatrix_6x1_F_SI1_double: ...
+    @typing.overload
     def __add__(
         self, arg0: SmallMatrix_6x1_F_SI1_double
     ) -> SmallMatrix_6x1_F_SI1_double: ...
+    @typing.overload
+    def __add__(
+        self, arg0: SmallMatrix_6x1_F_SI1_double
+    ) -> SmallMatrix_6x1_F_SI1_double: ...
+    @typing.overload
+    def __getitem__(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> float: ...
     @typing.overload
     def __getitem__(
         self,
@@ -6399,7 +6526,13 @@ class SmallMatrix_6x1_F_SI1_double:
         ],
     ) -> float: ...
     @typing.overload
-    def __getitem__(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> float: ...
+    def __getitem__(
+        self,
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt | typing.SupportsIndex],
+            "FixedSize(2)",
+        ],
+    ) -> float: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
@@ -6408,14 +6541,33 @@ class SmallMatrix_6x1_F_SI1_double:
     def __init__(
         self, arg0: typing.Annotated[numpy.typing.ArrayLike, numpy.float64]
     ) -> None: ...
+    @typing.overload
     def __mul__(
         self, arg0: typing.SupportsFloat | typing.SupportsIndex
     ) -> SmallMatrix_6x1_F_SI1_double: ...
+    @typing.overload
+    def __mul__(
+        self, arg0: typing.SupportsFloat | typing.SupportsIndex
+    ) -> SmallMatrix_6x1_F_SI1_double: ...
+    @typing.overload
+    def __neg__(self) -> SmallMatrix_6x1_F_SI1_double: ...
+    @typing.overload
     def __neg__(self) -> SmallMatrix_6x1_F_SI1_double: ...
     def __repr__(self) -> str: ...
+    @typing.overload
     def __rmul__(
         self, arg0: typing.SupportsFloat | typing.SupportsIndex
     ) -> SmallMatrix_6x1_F_SI1_double: ...
+    @typing.overload
+    def __rmul__(
+        self, arg0: typing.SupportsFloat | typing.SupportsIndex
+    ) -> SmallMatrix_6x1_F_SI1_double: ...
+    @typing.overload
+    def __setitem__(
+        self,
+        arg0: typing.SupportsInt | typing.SupportsIndex,
+        arg1: typing.SupportsFloat | typing.SupportsIndex,
+    ) -> None: ...
     @typing.overload
     def __setitem__(
         self,
@@ -6428,17 +6580,39 @@ class SmallMatrix_6x1_F_SI1_double:
     @typing.overload
     def __setitem__(
         self,
-        arg0: typing.SupportsInt | typing.SupportsIndex,
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt | typing.SupportsIndex],
+            "FixedSize(2)",
+        ],
         arg1: typing.SupportsFloat | typing.SupportsIndex,
     ) -> None: ...
+    @typing.overload
     def __sub__(
         self, arg0: SmallMatrix_6x1_F_SI1_double
     ) -> SmallMatrix_6x1_F_SI1_double: ...
+    @typing.overload
+    def __sub__(
+        self, arg0: SmallMatrix_6x1_F_SI1_double
+    ) -> SmallMatrix_6x1_F_SI1_double: ...
+    @typing.overload
     def dot(self, arg0: SmallMatrix_6x1_F_SI1_double) -> float: ...
+    @typing.overload
+    def dot(self, arg0: SmallMatrix_6x1_F_SI1_double) -> float: ...
+    @typing.overload
     def prod(self) -> float: ...
+    @typing.overload
+    def prod(self) -> float: ...
+    @typing.overload
     def set_val(
         self, arg0: typing.SupportsFloat | typing.SupportsIndex
     ) -> SmallMatrix_6x1_F_SI1_double: ...
+    @typing.overload
+    def set_val(
+        self, arg0: typing.SupportsFloat | typing.SupportsIndex
+    ) -> SmallMatrix_6x1_F_SI1_double: ...
+    @typing.overload
+    def sum(self) -> float: ...
+    @typing.overload
     def sum(self) -> float: ...
     def to_cupy(self, copy=False, order="F"):
         """
@@ -6549,9 +6723,16 @@ class SmallMatrix_6x1_F_SI1_double:
 class SmallMatrix_1x6_F_SI1_double:
     @staticmethod
     def zero() -> SmallMatrix_1x6_F_SI1_double: ...
+    @typing.overload
     def __add__(
         self, arg0: SmallMatrix_1x6_F_SI1_double
     ) -> SmallMatrix_1x6_F_SI1_double: ...
+    @typing.overload
+    def __add__(
+        self, arg0: SmallMatrix_1x6_F_SI1_double
+    ) -> SmallMatrix_1x6_F_SI1_double: ...
+    @typing.overload
+    def __getitem__(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> float: ...
     @typing.overload
     def __getitem__(
         self,
@@ -6561,7 +6742,13 @@ class SmallMatrix_1x6_F_SI1_double:
         ],
     ) -> float: ...
     @typing.overload
-    def __getitem__(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> float: ...
+    def __getitem__(
+        self,
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt | typing.SupportsIndex],
+            "FixedSize(2)",
+        ],
+    ) -> float: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
@@ -6570,14 +6757,33 @@ class SmallMatrix_1x6_F_SI1_double:
     def __init__(
         self, arg0: typing.Annotated[numpy.typing.ArrayLike, numpy.float64]
     ) -> None: ...
+    @typing.overload
     def __mul__(
         self, arg0: typing.SupportsFloat | typing.SupportsIndex
     ) -> SmallMatrix_1x6_F_SI1_double: ...
+    @typing.overload
+    def __mul__(
+        self, arg0: typing.SupportsFloat | typing.SupportsIndex
+    ) -> SmallMatrix_1x6_F_SI1_double: ...
+    @typing.overload
+    def __neg__(self) -> SmallMatrix_1x6_F_SI1_double: ...
+    @typing.overload
     def __neg__(self) -> SmallMatrix_1x6_F_SI1_double: ...
     def __repr__(self) -> str: ...
+    @typing.overload
     def __rmul__(
         self, arg0: typing.SupportsFloat | typing.SupportsIndex
     ) -> SmallMatrix_1x6_F_SI1_double: ...
+    @typing.overload
+    def __rmul__(
+        self, arg0: typing.SupportsFloat | typing.SupportsIndex
+    ) -> SmallMatrix_1x6_F_SI1_double: ...
+    @typing.overload
+    def __setitem__(
+        self,
+        arg0: typing.SupportsInt | typing.SupportsIndex,
+        arg1: typing.SupportsFloat | typing.SupportsIndex,
+    ) -> None: ...
     @typing.overload
     def __setitem__(
         self,
@@ -6590,17 +6796,39 @@ class SmallMatrix_1x6_F_SI1_double:
     @typing.overload
     def __setitem__(
         self,
-        arg0: typing.SupportsInt | typing.SupportsIndex,
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt | typing.SupportsIndex],
+            "FixedSize(2)",
+        ],
         arg1: typing.SupportsFloat | typing.SupportsIndex,
     ) -> None: ...
+    @typing.overload
     def __sub__(
         self, arg0: SmallMatrix_1x6_F_SI1_double
     ) -> SmallMatrix_1x6_F_SI1_double: ...
+    @typing.overload
+    def __sub__(
+        self, arg0: SmallMatrix_1x6_F_SI1_double
+    ) -> SmallMatrix_1x6_F_SI1_double: ...
+    @typing.overload
     def dot(self, arg0: SmallMatrix_1x6_F_SI1_double) -> float: ...
+    @typing.overload
+    def dot(self, arg0: SmallMatrix_1x6_F_SI1_double) -> float: ...
+    @typing.overload
     def prod(self) -> float: ...
+    @typing.overload
+    def prod(self) -> float: ...
+    @typing.overload
     def set_val(
         self, arg0: typing.SupportsFloat | typing.SupportsIndex
     ) -> SmallMatrix_1x6_F_SI1_double: ...
+    @typing.overload
+    def set_val(
+        self, arg0: typing.SupportsFloat | typing.SupportsIndex
+    ) -> SmallMatrix_1x6_F_SI1_double: ...
+    @typing.overload
+    def sum(self) -> float: ...
+    @typing.overload
     def sum(self) -> float: ...
     def to_cupy(self, copy=False, order="F"):
         """
@@ -6881,9 +7109,16 @@ class SmallMatrix_6x6_F_SI1_longdouble:
 class SmallMatrix_6x1_F_SI1_longdouble:
     @staticmethod
     def zero() -> SmallMatrix_6x1_F_SI1_longdouble: ...
+    @typing.overload
     def __add__(
         self, arg0: SmallMatrix_6x1_F_SI1_longdouble
     ) -> SmallMatrix_6x1_F_SI1_longdouble: ...
+    @typing.overload
+    def __add__(
+        self, arg0: SmallMatrix_6x1_F_SI1_longdouble
+    ) -> SmallMatrix_6x1_F_SI1_longdouble: ...
+    @typing.overload
+    def __getitem__(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> float: ...
     @typing.overload
     def __getitem__(
         self,
@@ -6893,7 +7128,13 @@ class SmallMatrix_6x1_F_SI1_longdouble:
         ],
     ) -> float: ...
     @typing.overload
-    def __getitem__(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> float: ...
+    def __getitem__(
+        self,
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt | typing.SupportsIndex],
+            "FixedSize(2)",
+        ],
+    ) -> float: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
@@ -6902,14 +7143,33 @@ class SmallMatrix_6x1_F_SI1_longdouble:
     def __init__(
         self, arg0: typing.Annotated[numpy.typing.ArrayLike, numpy.longdouble]
     ) -> None: ...
+    @typing.overload
     def __mul__(
         self, arg0: typing.SupportsFloat | typing.SupportsIndex
     ) -> SmallMatrix_6x1_F_SI1_longdouble: ...
+    @typing.overload
+    def __mul__(
+        self, arg0: typing.SupportsFloat | typing.SupportsIndex
+    ) -> SmallMatrix_6x1_F_SI1_longdouble: ...
+    @typing.overload
+    def __neg__(self) -> SmallMatrix_6x1_F_SI1_longdouble: ...
+    @typing.overload
     def __neg__(self) -> SmallMatrix_6x1_F_SI1_longdouble: ...
     def __repr__(self) -> str: ...
+    @typing.overload
     def __rmul__(
         self, arg0: typing.SupportsFloat | typing.SupportsIndex
     ) -> SmallMatrix_6x1_F_SI1_longdouble: ...
+    @typing.overload
+    def __rmul__(
+        self, arg0: typing.SupportsFloat | typing.SupportsIndex
+    ) -> SmallMatrix_6x1_F_SI1_longdouble: ...
+    @typing.overload
+    def __setitem__(
+        self,
+        arg0: typing.SupportsInt | typing.SupportsIndex,
+        arg1: typing.SupportsFloat | typing.SupportsIndex,
+    ) -> None: ...
     @typing.overload
     def __setitem__(
         self,
@@ -6922,17 +7182,39 @@ class SmallMatrix_6x1_F_SI1_longdouble:
     @typing.overload
     def __setitem__(
         self,
-        arg0: typing.SupportsInt | typing.SupportsIndex,
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt | typing.SupportsIndex],
+            "FixedSize(2)",
+        ],
         arg1: typing.SupportsFloat | typing.SupportsIndex,
     ) -> None: ...
+    @typing.overload
     def __sub__(
         self, arg0: SmallMatrix_6x1_F_SI1_longdouble
     ) -> SmallMatrix_6x1_F_SI1_longdouble: ...
+    @typing.overload
+    def __sub__(
+        self, arg0: SmallMatrix_6x1_F_SI1_longdouble
+    ) -> SmallMatrix_6x1_F_SI1_longdouble: ...
+    @typing.overload
     def dot(self, arg0: SmallMatrix_6x1_F_SI1_longdouble) -> float: ...
+    @typing.overload
+    def dot(self, arg0: SmallMatrix_6x1_F_SI1_longdouble) -> float: ...
+    @typing.overload
     def prod(self) -> float: ...
+    @typing.overload
+    def prod(self) -> float: ...
+    @typing.overload
     def set_val(
         self, arg0: typing.SupportsFloat | typing.SupportsIndex
     ) -> SmallMatrix_6x1_F_SI1_longdouble: ...
+    @typing.overload
+    def set_val(
+        self, arg0: typing.SupportsFloat | typing.SupportsIndex
+    ) -> SmallMatrix_6x1_F_SI1_longdouble: ...
+    @typing.overload
+    def sum(self) -> float: ...
+    @typing.overload
     def sum(self) -> float: ...
     def to_cupy(self, copy=False, order="F"):
         """
@@ -7043,9 +7325,16 @@ class SmallMatrix_6x1_F_SI1_longdouble:
 class SmallMatrix_1x6_F_SI1_longdouble:
     @staticmethod
     def zero() -> SmallMatrix_1x6_F_SI1_longdouble: ...
+    @typing.overload
     def __add__(
         self, arg0: SmallMatrix_1x6_F_SI1_longdouble
     ) -> SmallMatrix_1x6_F_SI1_longdouble: ...
+    @typing.overload
+    def __add__(
+        self, arg0: SmallMatrix_1x6_F_SI1_longdouble
+    ) -> SmallMatrix_1x6_F_SI1_longdouble: ...
+    @typing.overload
+    def __getitem__(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> float: ...
     @typing.overload
     def __getitem__(
         self,
@@ -7055,7 +7344,13 @@ class SmallMatrix_1x6_F_SI1_longdouble:
         ],
     ) -> float: ...
     @typing.overload
-    def __getitem__(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> float: ...
+    def __getitem__(
+        self,
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt | typing.SupportsIndex],
+            "FixedSize(2)",
+        ],
+    ) -> float: ...
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
@@ -7064,14 +7359,33 @@ class SmallMatrix_1x6_F_SI1_longdouble:
     def __init__(
         self, arg0: typing.Annotated[numpy.typing.ArrayLike, numpy.longdouble]
     ) -> None: ...
+    @typing.overload
     def __mul__(
         self, arg0: typing.SupportsFloat | typing.SupportsIndex
     ) -> SmallMatrix_1x6_F_SI1_longdouble: ...
+    @typing.overload
+    def __mul__(
+        self, arg0: typing.SupportsFloat | typing.SupportsIndex
+    ) -> SmallMatrix_1x6_F_SI1_longdouble: ...
+    @typing.overload
+    def __neg__(self) -> SmallMatrix_1x6_F_SI1_longdouble: ...
+    @typing.overload
     def __neg__(self) -> SmallMatrix_1x6_F_SI1_longdouble: ...
     def __repr__(self) -> str: ...
+    @typing.overload
     def __rmul__(
         self, arg0: typing.SupportsFloat | typing.SupportsIndex
     ) -> SmallMatrix_1x6_F_SI1_longdouble: ...
+    @typing.overload
+    def __rmul__(
+        self, arg0: typing.SupportsFloat | typing.SupportsIndex
+    ) -> SmallMatrix_1x6_F_SI1_longdouble: ...
+    @typing.overload
+    def __setitem__(
+        self,
+        arg0: typing.SupportsInt | typing.SupportsIndex,
+        arg1: typing.SupportsFloat | typing.SupportsIndex,
+    ) -> None: ...
     @typing.overload
     def __setitem__(
         self,
@@ -7084,17 +7398,39 @@ class SmallMatrix_1x6_F_SI1_longdouble:
     @typing.overload
     def __setitem__(
         self,
-        arg0: typing.SupportsInt | typing.SupportsIndex,
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt | typing.SupportsIndex],
+            "FixedSize(2)",
+        ],
         arg1: typing.SupportsFloat | typing.SupportsIndex,
     ) -> None: ...
+    @typing.overload
     def __sub__(
         self, arg0: SmallMatrix_1x6_F_SI1_longdouble
     ) -> SmallMatrix_1x6_F_SI1_longdouble: ...
+    @typing.overload
+    def __sub__(
+        self, arg0: SmallMatrix_1x6_F_SI1_longdouble
+    ) -> SmallMatrix_1x6_F_SI1_longdouble: ...
+    @typing.overload
     def dot(self, arg0: SmallMatrix_1x6_F_SI1_longdouble) -> float: ...
+    @typing.overload
+    def dot(self, arg0: SmallMatrix_1x6_F_SI1_longdouble) -> float: ...
+    @typing.overload
     def prod(self) -> float: ...
+    @typing.overload
+    def prod(self) -> float: ...
+    @typing.overload
     def set_val(
         self, arg0: typing.SupportsFloat | typing.SupportsIndex
     ) -> SmallMatrix_1x6_F_SI1_longdouble: ...
+    @typing.overload
+    def set_val(
+        self, arg0: typing.SupportsFloat | typing.SupportsIndex
+    ) -> SmallMatrix_1x6_F_SI1_longdouble: ...
+    @typing.overload
+    def sum(self) -> float: ...
+    @typing.overload
     def sum(self) -> float: ...
     def to_cupy(self, copy=False, order="F"):
         """
@@ -7187,6 +7523,1920 @@ class SmallMatrix_1x6_F_SI1_longdouble:
         """
     @property
     def T(self) -> SmallMatrix_6x1_F_SI1_longdouble: ...
+    @property
+    def __array_interface__(self) -> dict: ...
+    @property
+    def __cuda_array_interface__(self) -> dict: ...
+    @property
+    def column_size(self) -> int: ...
+    @property
+    def order(self) -> str: ...
+    @property
+    def row_size(self) -> int: ...
+    @property
+    def size(self) -> int: ...
+    @property
+    def starting_index(self) -> int: ...
+
+class SmallMatrix_3x6_F_SI1_float:
+    @staticmethod
+    def zero() -> SmallMatrix_3x6_F_SI1_float: ...
+    def __add__(
+        self, arg0: SmallMatrix_3x6_F_SI1_float
+    ) -> SmallMatrix_3x6_F_SI1_float: ...
+    def __getitem__(
+        self,
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt | typing.SupportsIndex],
+            "FixedSize(2)",
+        ],
+    ) -> float: ...
+    @typing.overload
+    def __init__(self) -> None: ...
+    @typing.overload
+    def __init__(self, arg0: SmallMatrix_3x6_F_SI1_float) -> None: ...
+    @typing.overload
+    def __init__(
+        self, arg0: typing.Annotated[numpy.typing.ArrayLike, numpy.float32]
+    ) -> None: ...
+    @typing.overload
+    def __mul__(
+        self, arg0: typing.SupportsFloat | typing.SupportsIndex
+    ) -> SmallMatrix_3x6_F_SI1_float: ...
+    @typing.overload
+    def __mul__(
+        self, arg0: SmallMatrix_6x1_F_SI1_float
+    ) -> SmallMatrix_3x1_F_SI1_float: ...
+    def __neg__(self) -> SmallMatrix_3x6_F_SI1_float: ...
+    def __repr__(self) -> str: ...
+    @typing.overload
+    def __rmul__(
+        self, arg0: typing.SupportsFloat | typing.SupportsIndex
+    ) -> SmallMatrix_3x6_F_SI1_float: ...
+    @typing.overload
+    def __rmul__(
+        self, arg0: SmallMatrix_1x3_F_SI1_float
+    ) -> SmallMatrix_1x6_F_SI1_float: ...
+    def __setitem__(
+        self,
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt | typing.SupportsIndex],
+            "FixedSize(2)",
+        ],
+        arg1: typing.SupportsFloat | typing.SupportsIndex,
+    ) -> None: ...
+    def __sub__(
+        self, arg0: SmallMatrix_3x6_F_SI1_float
+    ) -> SmallMatrix_3x6_F_SI1_float: ...
+    def dot(self, arg0: SmallMatrix_3x6_F_SI1_float) -> float: ...
+    def prod(self) -> float: ...
+    def set_val(
+        self, arg0: typing.SupportsFloat | typing.SupportsIndex
+    ) -> SmallMatrix_3x6_F_SI1_float: ...
+    def sum(self) -> float: ...
+    def to_cupy(self, copy=False, order="F"):
+        """
+
+        Provide a CuPy view into an SmallMatrix.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.SmallMatrix_*
+            A SmallMatrix class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        cupy.array
+            A cupy 2-dimensional array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if cupy is not installed
+
+        """
+    def to_numpy(self, copy=False, order="F"):
+        """
+
+        Provide a NumPy view into an SmallMatrix.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.SmallMatrix_*
+            A SmallMatrix class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        np.array
+            A NumPy 2-dimensional array.
+
+        """
+    def to_xp(self, copy=False, order="F"):
+        """
+
+        Provide a NumPy or CuPy view into a SmallMatrix, depending on amr.Config.have_gpu .
+
+        This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
+        https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.SmallMatrix_*
+            A SmallMatrix class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        xp.array
+            A NumPy or CuPy 2-dimensional array.
+
+        """
+    @property
+    def T(self) -> SmallMatrix_6x3_F_SI1_float: ...
+    @property
+    def __array_interface__(self) -> dict: ...
+    @property
+    def __cuda_array_interface__(self) -> dict: ...
+    @property
+    def column_size(self) -> int: ...
+    @property
+    def order(self) -> str: ...
+    @property
+    def row_size(self) -> int: ...
+    @property
+    def size(self) -> int: ...
+    @property
+    def starting_index(self) -> int: ...
+
+class SmallMatrix_1x3_F_SI1_float:
+    @staticmethod
+    def zero() -> SmallMatrix_1x3_F_SI1_float: ...
+    def __add__(
+        self, arg0: SmallMatrix_1x3_F_SI1_float
+    ) -> SmallMatrix_1x3_F_SI1_float: ...
+    @typing.overload
+    def __getitem__(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> float: ...
+    @typing.overload
+    def __getitem__(
+        self,
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt | typing.SupportsIndex],
+            "FixedSize(2)",
+        ],
+    ) -> float: ...
+    @typing.overload
+    def __init__(self) -> None: ...
+    @typing.overload
+    def __init__(self, arg0: SmallMatrix_1x3_F_SI1_float) -> None: ...
+    @typing.overload
+    def __init__(
+        self, arg0: typing.Annotated[numpy.typing.ArrayLike, numpy.float32]
+    ) -> None: ...
+    def __mul__(
+        self, arg0: typing.SupportsFloat | typing.SupportsIndex
+    ) -> SmallMatrix_1x3_F_SI1_float: ...
+    def __neg__(self) -> SmallMatrix_1x3_F_SI1_float: ...
+    def __repr__(self) -> str: ...
+    def __rmul__(
+        self, arg0: typing.SupportsFloat | typing.SupportsIndex
+    ) -> SmallMatrix_1x3_F_SI1_float: ...
+    @typing.overload
+    def __setitem__(
+        self,
+        arg0: typing.SupportsInt | typing.SupportsIndex,
+        arg1: typing.SupportsFloat | typing.SupportsIndex,
+    ) -> None: ...
+    @typing.overload
+    def __setitem__(
+        self,
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt | typing.SupportsIndex],
+            "FixedSize(2)",
+        ],
+        arg1: typing.SupportsFloat | typing.SupportsIndex,
+    ) -> None: ...
+    def __sub__(
+        self, arg0: SmallMatrix_1x3_F_SI1_float
+    ) -> SmallMatrix_1x3_F_SI1_float: ...
+    def dot(self, arg0: SmallMatrix_1x3_F_SI1_float) -> float: ...
+    def prod(self) -> float: ...
+    def set_val(
+        self, arg0: typing.SupportsFloat | typing.SupportsIndex
+    ) -> SmallMatrix_1x3_F_SI1_float: ...
+    def sum(self) -> float: ...
+    def to_cupy(self, copy=False, order="F"):
+        """
+
+        Provide a CuPy view into an SmallMatrix.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.SmallMatrix_*
+            A SmallMatrix class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        cupy.array
+            A cupy 2-dimensional array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if cupy is not installed
+
+        """
+    def to_numpy(self, copy=False, order="F"):
+        """
+
+        Provide a NumPy view into an SmallMatrix.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.SmallMatrix_*
+            A SmallMatrix class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        np.array
+            A NumPy 2-dimensional array.
+
+        """
+    def to_xp(self, copy=False, order="F"):
+        """
+
+        Provide a NumPy or CuPy view into a SmallMatrix, depending on amr.Config.have_gpu .
+
+        This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
+        https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.SmallMatrix_*
+            A SmallMatrix class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        xp.array
+            A NumPy or CuPy 2-dimensional array.
+
+        """
+    @property
+    def T(self) -> SmallMatrix_3x1_F_SI1_float: ...
+    @property
+    def __array_interface__(self) -> dict: ...
+    @property
+    def __cuda_array_interface__(self) -> dict: ...
+    @property
+    def column_size(self) -> int: ...
+    @property
+    def order(self) -> str: ...
+    @property
+    def row_size(self) -> int: ...
+    @property
+    def size(self) -> int: ...
+    @property
+    def starting_index(self) -> int: ...
+
+class SmallMatrix_6x3_F_SI1_float:
+    @staticmethod
+    def zero() -> SmallMatrix_6x3_F_SI1_float: ...
+    def __add__(
+        self, arg0: SmallMatrix_6x3_F_SI1_float
+    ) -> SmallMatrix_6x3_F_SI1_float: ...
+    def __getitem__(
+        self,
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt | typing.SupportsIndex],
+            "FixedSize(2)",
+        ],
+    ) -> float: ...
+    @typing.overload
+    def __init__(self) -> None: ...
+    @typing.overload
+    def __init__(self, arg0: SmallMatrix_6x3_F_SI1_float) -> None: ...
+    @typing.overload
+    def __init__(
+        self, arg0: typing.Annotated[numpy.typing.ArrayLike, numpy.float32]
+    ) -> None: ...
+    def __mul__(
+        self, arg0: typing.SupportsFloat | typing.SupportsIndex
+    ) -> SmallMatrix_6x3_F_SI1_float: ...
+    def __neg__(self) -> SmallMatrix_6x3_F_SI1_float: ...
+    def __repr__(self) -> str: ...
+    def __rmul__(
+        self, arg0: typing.SupportsFloat | typing.SupportsIndex
+    ) -> SmallMatrix_6x3_F_SI1_float: ...
+    def __setitem__(
+        self,
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt | typing.SupportsIndex],
+            "FixedSize(2)",
+        ],
+        arg1: typing.SupportsFloat | typing.SupportsIndex,
+    ) -> None: ...
+    def __sub__(
+        self, arg0: SmallMatrix_6x3_F_SI1_float
+    ) -> SmallMatrix_6x3_F_SI1_float: ...
+    def dot(self, arg0: SmallMatrix_6x3_F_SI1_float) -> float: ...
+    def prod(self) -> float: ...
+    def set_val(
+        self, arg0: typing.SupportsFloat | typing.SupportsIndex
+    ) -> SmallMatrix_6x3_F_SI1_float: ...
+    def sum(self) -> float: ...
+    def to_cupy(self, copy=False, order="F"):
+        """
+
+        Provide a CuPy view into an SmallMatrix.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.SmallMatrix_*
+            A SmallMatrix class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        cupy.array
+            A cupy 2-dimensional array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if cupy is not installed
+
+        """
+    def to_numpy(self, copy=False, order="F"):
+        """
+
+        Provide a NumPy view into an SmallMatrix.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.SmallMatrix_*
+            A SmallMatrix class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        np.array
+            A NumPy 2-dimensional array.
+
+        """
+    def to_xp(self, copy=False, order="F"):
+        """
+
+        Provide a NumPy or CuPy view into a SmallMatrix, depending on amr.Config.have_gpu .
+
+        This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
+        https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.SmallMatrix_*
+            A SmallMatrix class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        xp.array
+            A NumPy or CuPy 2-dimensional array.
+
+        """
+    @property
+    def T(self) -> SmallMatrix_3x6_F_SI1_float: ...
+    @property
+    def __array_interface__(self) -> dict: ...
+    @property
+    def __cuda_array_interface__(self) -> dict: ...
+    @property
+    def column_size(self) -> int: ...
+    @property
+    def order(self) -> str: ...
+    @property
+    def row_size(self) -> int: ...
+    @property
+    def size(self) -> int: ...
+    @property
+    def starting_index(self) -> int: ...
+
+class SmallMatrix_3x1_F_SI1_float:
+    @staticmethod
+    def zero() -> SmallMatrix_3x1_F_SI1_float: ...
+    def __add__(
+        self, arg0: SmallMatrix_3x1_F_SI1_float
+    ) -> SmallMatrix_3x1_F_SI1_float: ...
+    @typing.overload
+    def __getitem__(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> float: ...
+    @typing.overload
+    def __getitem__(
+        self,
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt | typing.SupportsIndex],
+            "FixedSize(2)",
+        ],
+    ) -> float: ...
+    @typing.overload
+    def __init__(self) -> None: ...
+    @typing.overload
+    def __init__(self, arg0: SmallMatrix_3x1_F_SI1_float) -> None: ...
+    @typing.overload
+    def __init__(
+        self, arg0: typing.Annotated[numpy.typing.ArrayLike, numpy.float32]
+    ) -> None: ...
+    def __mul__(
+        self, arg0: typing.SupportsFloat | typing.SupportsIndex
+    ) -> SmallMatrix_3x1_F_SI1_float: ...
+    def __neg__(self) -> SmallMatrix_3x1_F_SI1_float: ...
+    def __repr__(self) -> str: ...
+    def __rmul__(
+        self, arg0: typing.SupportsFloat | typing.SupportsIndex
+    ) -> SmallMatrix_3x1_F_SI1_float: ...
+    @typing.overload
+    def __setitem__(
+        self,
+        arg0: typing.SupportsInt | typing.SupportsIndex,
+        arg1: typing.SupportsFloat | typing.SupportsIndex,
+    ) -> None: ...
+    @typing.overload
+    def __setitem__(
+        self,
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt | typing.SupportsIndex],
+            "FixedSize(2)",
+        ],
+        arg1: typing.SupportsFloat | typing.SupportsIndex,
+    ) -> None: ...
+    def __sub__(
+        self, arg0: SmallMatrix_3x1_F_SI1_float
+    ) -> SmallMatrix_3x1_F_SI1_float: ...
+    def dot(self, arg0: SmallMatrix_3x1_F_SI1_float) -> float: ...
+    def prod(self) -> float: ...
+    def set_val(
+        self, arg0: typing.SupportsFloat | typing.SupportsIndex
+    ) -> SmallMatrix_3x1_F_SI1_float: ...
+    def sum(self) -> float: ...
+    def to_cupy(self, copy=False, order="F"):
+        """
+
+        Provide a CuPy view into an SmallMatrix.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.SmallMatrix_*
+            A SmallMatrix class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        cupy.array
+            A cupy 2-dimensional array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if cupy is not installed
+
+        """
+    def to_numpy(self, copy=False, order="F"):
+        """
+
+        Provide a NumPy view into an SmallMatrix.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.SmallMatrix_*
+            A SmallMatrix class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        np.array
+            A NumPy 2-dimensional array.
+
+        """
+    def to_xp(self, copy=False, order="F"):
+        """
+
+        Provide a NumPy or CuPy view into a SmallMatrix, depending on amr.Config.have_gpu .
+
+        This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
+        https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.SmallMatrix_*
+            A SmallMatrix class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        xp.array
+            A NumPy or CuPy 2-dimensional array.
+
+        """
+    @property
+    def T(self) -> SmallMatrix_1x3_F_SI1_float: ...
+    @property
+    def __array_interface__(self) -> dict: ...
+    @property
+    def __cuda_array_interface__(self) -> dict: ...
+    @property
+    def column_size(self) -> int: ...
+    @property
+    def order(self) -> str: ...
+    @property
+    def row_size(self) -> int: ...
+    @property
+    def size(self) -> int: ...
+    @property
+    def starting_index(self) -> int: ...
+
+class SmallMatrix_3x6_F_SI1_double:
+    @staticmethod
+    def zero() -> SmallMatrix_3x6_F_SI1_double: ...
+    def __add__(
+        self, arg0: SmallMatrix_3x6_F_SI1_double
+    ) -> SmallMatrix_3x6_F_SI1_double: ...
+    def __getitem__(
+        self,
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt | typing.SupportsIndex],
+            "FixedSize(2)",
+        ],
+    ) -> float: ...
+    @typing.overload
+    def __init__(self) -> None: ...
+    @typing.overload
+    def __init__(self, arg0: SmallMatrix_3x6_F_SI1_double) -> None: ...
+    @typing.overload
+    def __init__(
+        self, arg0: typing.Annotated[numpy.typing.ArrayLike, numpy.float64]
+    ) -> None: ...
+    @typing.overload
+    def __mul__(
+        self, arg0: typing.SupportsFloat | typing.SupportsIndex
+    ) -> SmallMatrix_3x6_F_SI1_double: ...
+    @typing.overload
+    def __mul__(
+        self, arg0: SmallMatrix_6x1_F_SI1_double
+    ) -> SmallMatrix_3x1_F_SI1_double: ...
+    def __neg__(self) -> SmallMatrix_3x6_F_SI1_double: ...
+    def __repr__(self) -> str: ...
+    @typing.overload
+    def __rmul__(
+        self, arg0: typing.SupportsFloat | typing.SupportsIndex
+    ) -> SmallMatrix_3x6_F_SI1_double: ...
+    @typing.overload
+    def __rmul__(
+        self, arg0: SmallMatrix_1x3_F_SI1_double
+    ) -> SmallMatrix_1x6_F_SI1_double: ...
+    def __setitem__(
+        self,
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt | typing.SupportsIndex],
+            "FixedSize(2)",
+        ],
+        arg1: typing.SupportsFloat | typing.SupportsIndex,
+    ) -> None: ...
+    def __sub__(
+        self, arg0: SmallMatrix_3x6_F_SI1_double
+    ) -> SmallMatrix_3x6_F_SI1_double: ...
+    def dot(self, arg0: SmallMatrix_3x6_F_SI1_double) -> float: ...
+    def prod(self) -> float: ...
+    def set_val(
+        self, arg0: typing.SupportsFloat | typing.SupportsIndex
+    ) -> SmallMatrix_3x6_F_SI1_double: ...
+    def sum(self) -> float: ...
+    def to_cupy(self, copy=False, order="F"):
+        """
+
+        Provide a CuPy view into an SmallMatrix.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.SmallMatrix_*
+            A SmallMatrix class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        cupy.array
+            A cupy 2-dimensional array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if cupy is not installed
+
+        """
+    def to_numpy(self, copy=False, order="F"):
+        """
+
+        Provide a NumPy view into an SmallMatrix.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.SmallMatrix_*
+            A SmallMatrix class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        np.array
+            A NumPy 2-dimensional array.
+
+        """
+    def to_xp(self, copy=False, order="F"):
+        """
+
+        Provide a NumPy or CuPy view into a SmallMatrix, depending on amr.Config.have_gpu .
+
+        This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
+        https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.SmallMatrix_*
+            A SmallMatrix class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        xp.array
+            A NumPy or CuPy 2-dimensional array.
+
+        """
+    @property
+    def T(self) -> SmallMatrix_6x3_F_SI1_double: ...
+    @property
+    def __array_interface__(self) -> dict: ...
+    @property
+    def __cuda_array_interface__(self) -> dict: ...
+    @property
+    def column_size(self) -> int: ...
+    @property
+    def order(self) -> str: ...
+    @property
+    def row_size(self) -> int: ...
+    @property
+    def size(self) -> int: ...
+    @property
+    def starting_index(self) -> int: ...
+
+class SmallMatrix_1x3_F_SI1_double:
+    @staticmethod
+    def zero() -> SmallMatrix_1x3_F_SI1_double: ...
+    def __add__(
+        self, arg0: SmallMatrix_1x3_F_SI1_double
+    ) -> SmallMatrix_1x3_F_SI1_double: ...
+    @typing.overload
+    def __getitem__(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> float: ...
+    @typing.overload
+    def __getitem__(
+        self,
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt | typing.SupportsIndex],
+            "FixedSize(2)",
+        ],
+    ) -> float: ...
+    @typing.overload
+    def __init__(self) -> None: ...
+    @typing.overload
+    def __init__(self, arg0: SmallMatrix_1x3_F_SI1_double) -> None: ...
+    @typing.overload
+    def __init__(
+        self, arg0: typing.Annotated[numpy.typing.ArrayLike, numpy.float64]
+    ) -> None: ...
+    def __mul__(
+        self, arg0: typing.SupportsFloat | typing.SupportsIndex
+    ) -> SmallMatrix_1x3_F_SI1_double: ...
+    def __neg__(self) -> SmallMatrix_1x3_F_SI1_double: ...
+    def __repr__(self) -> str: ...
+    def __rmul__(
+        self, arg0: typing.SupportsFloat | typing.SupportsIndex
+    ) -> SmallMatrix_1x3_F_SI1_double: ...
+    @typing.overload
+    def __setitem__(
+        self,
+        arg0: typing.SupportsInt | typing.SupportsIndex,
+        arg1: typing.SupportsFloat | typing.SupportsIndex,
+    ) -> None: ...
+    @typing.overload
+    def __setitem__(
+        self,
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt | typing.SupportsIndex],
+            "FixedSize(2)",
+        ],
+        arg1: typing.SupportsFloat | typing.SupportsIndex,
+    ) -> None: ...
+    def __sub__(
+        self, arg0: SmallMatrix_1x3_F_SI1_double
+    ) -> SmallMatrix_1x3_F_SI1_double: ...
+    def dot(self, arg0: SmallMatrix_1x3_F_SI1_double) -> float: ...
+    def prod(self) -> float: ...
+    def set_val(
+        self, arg0: typing.SupportsFloat | typing.SupportsIndex
+    ) -> SmallMatrix_1x3_F_SI1_double: ...
+    def sum(self) -> float: ...
+    def to_cupy(self, copy=False, order="F"):
+        """
+
+        Provide a CuPy view into an SmallMatrix.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.SmallMatrix_*
+            A SmallMatrix class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        cupy.array
+            A cupy 2-dimensional array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if cupy is not installed
+
+        """
+    def to_numpy(self, copy=False, order="F"):
+        """
+
+        Provide a NumPy view into an SmallMatrix.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.SmallMatrix_*
+            A SmallMatrix class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        np.array
+            A NumPy 2-dimensional array.
+
+        """
+    def to_xp(self, copy=False, order="F"):
+        """
+
+        Provide a NumPy or CuPy view into a SmallMatrix, depending on amr.Config.have_gpu .
+
+        This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
+        https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.SmallMatrix_*
+            A SmallMatrix class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        xp.array
+            A NumPy or CuPy 2-dimensional array.
+
+        """
+    @property
+    def T(self) -> SmallMatrix_3x1_F_SI1_double: ...
+    @property
+    def __array_interface__(self) -> dict: ...
+    @property
+    def __cuda_array_interface__(self) -> dict: ...
+    @property
+    def column_size(self) -> int: ...
+    @property
+    def order(self) -> str: ...
+    @property
+    def row_size(self) -> int: ...
+    @property
+    def size(self) -> int: ...
+    @property
+    def starting_index(self) -> int: ...
+
+class SmallMatrix_6x3_F_SI1_double:
+    @staticmethod
+    def zero() -> SmallMatrix_6x3_F_SI1_double: ...
+    def __add__(
+        self, arg0: SmallMatrix_6x3_F_SI1_double
+    ) -> SmallMatrix_6x3_F_SI1_double: ...
+    def __getitem__(
+        self,
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt | typing.SupportsIndex],
+            "FixedSize(2)",
+        ],
+    ) -> float: ...
+    @typing.overload
+    def __init__(self) -> None: ...
+    @typing.overload
+    def __init__(self, arg0: SmallMatrix_6x3_F_SI1_double) -> None: ...
+    @typing.overload
+    def __init__(
+        self, arg0: typing.Annotated[numpy.typing.ArrayLike, numpy.float64]
+    ) -> None: ...
+    def __mul__(
+        self, arg0: typing.SupportsFloat | typing.SupportsIndex
+    ) -> SmallMatrix_6x3_F_SI1_double: ...
+    def __neg__(self) -> SmallMatrix_6x3_F_SI1_double: ...
+    def __repr__(self) -> str: ...
+    def __rmul__(
+        self, arg0: typing.SupportsFloat | typing.SupportsIndex
+    ) -> SmallMatrix_6x3_F_SI1_double: ...
+    def __setitem__(
+        self,
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt | typing.SupportsIndex],
+            "FixedSize(2)",
+        ],
+        arg1: typing.SupportsFloat | typing.SupportsIndex,
+    ) -> None: ...
+    def __sub__(
+        self, arg0: SmallMatrix_6x3_F_SI1_double
+    ) -> SmallMatrix_6x3_F_SI1_double: ...
+    def dot(self, arg0: SmallMatrix_6x3_F_SI1_double) -> float: ...
+    def prod(self) -> float: ...
+    def set_val(
+        self, arg0: typing.SupportsFloat | typing.SupportsIndex
+    ) -> SmallMatrix_6x3_F_SI1_double: ...
+    def sum(self) -> float: ...
+    def to_cupy(self, copy=False, order="F"):
+        """
+
+        Provide a CuPy view into an SmallMatrix.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.SmallMatrix_*
+            A SmallMatrix class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        cupy.array
+            A cupy 2-dimensional array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if cupy is not installed
+
+        """
+    def to_numpy(self, copy=False, order="F"):
+        """
+
+        Provide a NumPy view into an SmallMatrix.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.SmallMatrix_*
+            A SmallMatrix class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        np.array
+            A NumPy 2-dimensional array.
+
+        """
+    def to_xp(self, copy=False, order="F"):
+        """
+
+        Provide a NumPy or CuPy view into a SmallMatrix, depending on amr.Config.have_gpu .
+
+        This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
+        https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.SmallMatrix_*
+            A SmallMatrix class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        xp.array
+            A NumPy or CuPy 2-dimensional array.
+
+        """
+    @property
+    def T(self) -> SmallMatrix_3x6_F_SI1_double: ...
+    @property
+    def __array_interface__(self) -> dict: ...
+    @property
+    def __cuda_array_interface__(self) -> dict: ...
+    @property
+    def column_size(self) -> int: ...
+    @property
+    def order(self) -> str: ...
+    @property
+    def row_size(self) -> int: ...
+    @property
+    def size(self) -> int: ...
+    @property
+    def starting_index(self) -> int: ...
+
+class SmallMatrix_3x1_F_SI1_double:
+    @staticmethod
+    def zero() -> SmallMatrix_3x1_F_SI1_double: ...
+    def __add__(
+        self, arg0: SmallMatrix_3x1_F_SI1_double
+    ) -> SmallMatrix_3x1_F_SI1_double: ...
+    @typing.overload
+    def __getitem__(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> float: ...
+    @typing.overload
+    def __getitem__(
+        self,
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt | typing.SupportsIndex],
+            "FixedSize(2)",
+        ],
+    ) -> float: ...
+    @typing.overload
+    def __init__(self) -> None: ...
+    @typing.overload
+    def __init__(self, arg0: SmallMatrix_3x1_F_SI1_double) -> None: ...
+    @typing.overload
+    def __init__(
+        self, arg0: typing.Annotated[numpy.typing.ArrayLike, numpy.float64]
+    ) -> None: ...
+    def __mul__(
+        self, arg0: typing.SupportsFloat | typing.SupportsIndex
+    ) -> SmallMatrix_3x1_F_SI1_double: ...
+    def __neg__(self) -> SmallMatrix_3x1_F_SI1_double: ...
+    def __repr__(self) -> str: ...
+    def __rmul__(
+        self, arg0: typing.SupportsFloat | typing.SupportsIndex
+    ) -> SmallMatrix_3x1_F_SI1_double: ...
+    @typing.overload
+    def __setitem__(
+        self,
+        arg0: typing.SupportsInt | typing.SupportsIndex,
+        arg1: typing.SupportsFloat | typing.SupportsIndex,
+    ) -> None: ...
+    @typing.overload
+    def __setitem__(
+        self,
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt | typing.SupportsIndex],
+            "FixedSize(2)",
+        ],
+        arg1: typing.SupportsFloat | typing.SupportsIndex,
+    ) -> None: ...
+    def __sub__(
+        self, arg0: SmallMatrix_3x1_F_SI1_double
+    ) -> SmallMatrix_3x1_F_SI1_double: ...
+    def dot(self, arg0: SmallMatrix_3x1_F_SI1_double) -> float: ...
+    def prod(self) -> float: ...
+    def set_val(
+        self, arg0: typing.SupportsFloat | typing.SupportsIndex
+    ) -> SmallMatrix_3x1_F_SI1_double: ...
+    def sum(self) -> float: ...
+    def to_cupy(self, copy=False, order="F"):
+        """
+
+        Provide a CuPy view into an SmallMatrix.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.SmallMatrix_*
+            A SmallMatrix class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        cupy.array
+            A cupy 2-dimensional array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if cupy is not installed
+
+        """
+    def to_numpy(self, copy=False, order="F"):
+        """
+
+        Provide a NumPy view into an SmallMatrix.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.SmallMatrix_*
+            A SmallMatrix class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        np.array
+            A NumPy 2-dimensional array.
+
+        """
+    def to_xp(self, copy=False, order="F"):
+        """
+
+        Provide a NumPy or CuPy view into a SmallMatrix, depending on amr.Config.have_gpu .
+
+        This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
+        https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.SmallMatrix_*
+            A SmallMatrix class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        xp.array
+            A NumPy or CuPy 2-dimensional array.
+
+        """
+    @property
+    def T(self) -> SmallMatrix_1x3_F_SI1_double: ...
+    @property
+    def __array_interface__(self) -> dict: ...
+    @property
+    def __cuda_array_interface__(self) -> dict: ...
+    @property
+    def column_size(self) -> int: ...
+    @property
+    def order(self) -> str: ...
+    @property
+    def row_size(self) -> int: ...
+    @property
+    def size(self) -> int: ...
+    @property
+    def starting_index(self) -> int: ...
+
+class SmallMatrix_3x6_F_SI1_longdouble:
+    @staticmethod
+    def zero() -> SmallMatrix_3x6_F_SI1_longdouble: ...
+    def __add__(
+        self, arg0: SmallMatrix_3x6_F_SI1_longdouble
+    ) -> SmallMatrix_3x6_F_SI1_longdouble: ...
+    def __getitem__(
+        self,
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt | typing.SupportsIndex],
+            "FixedSize(2)",
+        ],
+    ) -> float: ...
+    @typing.overload
+    def __init__(self) -> None: ...
+    @typing.overload
+    def __init__(self, arg0: SmallMatrix_3x6_F_SI1_longdouble) -> None: ...
+    @typing.overload
+    def __init__(
+        self, arg0: typing.Annotated[numpy.typing.ArrayLike, numpy.longdouble]
+    ) -> None: ...
+    @typing.overload
+    def __mul__(
+        self, arg0: typing.SupportsFloat | typing.SupportsIndex
+    ) -> SmallMatrix_3x6_F_SI1_longdouble: ...
+    @typing.overload
+    def __mul__(
+        self, arg0: SmallMatrix_6x1_F_SI1_longdouble
+    ) -> SmallMatrix_3x1_F_SI1_longdouble: ...
+    def __neg__(self) -> SmallMatrix_3x6_F_SI1_longdouble: ...
+    def __repr__(self) -> str: ...
+    @typing.overload
+    def __rmul__(
+        self, arg0: typing.SupportsFloat | typing.SupportsIndex
+    ) -> SmallMatrix_3x6_F_SI1_longdouble: ...
+    @typing.overload
+    def __rmul__(
+        self, arg0: SmallMatrix_1x3_F_SI1_longdouble
+    ) -> SmallMatrix_1x6_F_SI1_longdouble: ...
+    def __setitem__(
+        self,
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt | typing.SupportsIndex],
+            "FixedSize(2)",
+        ],
+        arg1: typing.SupportsFloat | typing.SupportsIndex,
+    ) -> None: ...
+    def __sub__(
+        self, arg0: SmallMatrix_3x6_F_SI1_longdouble
+    ) -> SmallMatrix_3x6_F_SI1_longdouble: ...
+    def dot(self, arg0: SmallMatrix_3x6_F_SI1_longdouble) -> float: ...
+    def prod(self) -> float: ...
+    def set_val(
+        self, arg0: typing.SupportsFloat | typing.SupportsIndex
+    ) -> SmallMatrix_3x6_F_SI1_longdouble: ...
+    def sum(self) -> float: ...
+    def to_cupy(self, copy=False, order="F"):
+        """
+
+        Provide a CuPy view into an SmallMatrix.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.SmallMatrix_*
+            A SmallMatrix class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        cupy.array
+            A cupy 2-dimensional array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if cupy is not installed
+
+        """
+    def to_numpy(self, copy=False, order="F"):
+        """
+
+        Provide a NumPy view into an SmallMatrix.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.SmallMatrix_*
+            A SmallMatrix class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        np.array
+            A NumPy 2-dimensional array.
+
+        """
+    def to_xp(self, copy=False, order="F"):
+        """
+
+        Provide a NumPy or CuPy view into a SmallMatrix, depending on amr.Config.have_gpu .
+
+        This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
+        https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.SmallMatrix_*
+            A SmallMatrix class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        xp.array
+            A NumPy or CuPy 2-dimensional array.
+
+        """
+    @property
+    def T(self) -> SmallMatrix_6x3_F_SI1_longdouble: ...
+    @property
+    def __array_interface__(self) -> dict: ...
+    @property
+    def __cuda_array_interface__(self) -> dict: ...
+    @property
+    def column_size(self) -> int: ...
+    @property
+    def order(self) -> str: ...
+    @property
+    def row_size(self) -> int: ...
+    @property
+    def size(self) -> int: ...
+    @property
+    def starting_index(self) -> int: ...
+
+class SmallMatrix_1x3_F_SI1_longdouble:
+    @staticmethod
+    def zero() -> SmallMatrix_1x3_F_SI1_longdouble: ...
+    def __add__(
+        self, arg0: SmallMatrix_1x3_F_SI1_longdouble
+    ) -> SmallMatrix_1x3_F_SI1_longdouble: ...
+    @typing.overload
+    def __getitem__(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> float: ...
+    @typing.overload
+    def __getitem__(
+        self,
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt | typing.SupportsIndex],
+            "FixedSize(2)",
+        ],
+    ) -> float: ...
+    @typing.overload
+    def __init__(self) -> None: ...
+    @typing.overload
+    def __init__(self, arg0: SmallMatrix_1x3_F_SI1_longdouble) -> None: ...
+    @typing.overload
+    def __init__(
+        self, arg0: typing.Annotated[numpy.typing.ArrayLike, numpy.longdouble]
+    ) -> None: ...
+    def __mul__(
+        self, arg0: typing.SupportsFloat | typing.SupportsIndex
+    ) -> SmallMatrix_1x3_F_SI1_longdouble: ...
+    def __neg__(self) -> SmallMatrix_1x3_F_SI1_longdouble: ...
+    def __repr__(self) -> str: ...
+    def __rmul__(
+        self, arg0: typing.SupportsFloat | typing.SupportsIndex
+    ) -> SmallMatrix_1x3_F_SI1_longdouble: ...
+    @typing.overload
+    def __setitem__(
+        self,
+        arg0: typing.SupportsInt | typing.SupportsIndex,
+        arg1: typing.SupportsFloat | typing.SupportsIndex,
+    ) -> None: ...
+    @typing.overload
+    def __setitem__(
+        self,
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt | typing.SupportsIndex],
+            "FixedSize(2)",
+        ],
+        arg1: typing.SupportsFloat | typing.SupportsIndex,
+    ) -> None: ...
+    def __sub__(
+        self, arg0: SmallMatrix_1x3_F_SI1_longdouble
+    ) -> SmallMatrix_1x3_F_SI1_longdouble: ...
+    def dot(self, arg0: SmallMatrix_1x3_F_SI1_longdouble) -> float: ...
+    def prod(self) -> float: ...
+    def set_val(
+        self, arg0: typing.SupportsFloat | typing.SupportsIndex
+    ) -> SmallMatrix_1x3_F_SI1_longdouble: ...
+    def sum(self) -> float: ...
+    def to_cupy(self, copy=False, order="F"):
+        """
+
+        Provide a CuPy view into an SmallMatrix.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.SmallMatrix_*
+            A SmallMatrix class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        cupy.array
+            A cupy 2-dimensional array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if cupy is not installed
+
+        """
+    def to_numpy(self, copy=False, order="F"):
+        """
+
+        Provide a NumPy view into an SmallMatrix.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.SmallMatrix_*
+            A SmallMatrix class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        np.array
+            A NumPy 2-dimensional array.
+
+        """
+    def to_xp(self, copy=False, order="F"):
+        """
+
+        Provide a NumPy or CuPy view into a SmallMatrix, depending on amr.Config.have_gpu .
+
+        This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
+        https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.SmallMatrix_*
+            A SmallMatrix class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        xp.array
+            A NumPy or CuPy 2-dimensional array.
+
+        """
+    @property
+    def T(self) -> SmallMatrix_3x1_F_SI1_longdouble: ...
+    @property
+    def __array_interface__(self) -> dict: ...
+    @property
+    def __cuda_array_interface__(self) -> dict: ...
+    @property
+    def column_size(self) -> int: ...
+    @property
+    def order(self) -> str: ...
+    @property
+    def row_size(self) -> int: ...
+    @property
+    def size(self) -> int: ...
+    @property
+    def starting_index(self) -> int: ...
+
+class SmallMatrix_6x3_F_SI1_longdouble:
+    @staticmethod
+    def zero() -> SmallMatrix_6x3_F_SI1_longdouble: ...
+    def __add__(
+        self, arg0: SmallMatrix_6x3_F_SI1_longdouble
+    ) -> SmallMatrix_6x3_F_SI1_longdouble: ...
+    def __getitem__(
+        self,
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt | typing.SupportsIndex],
+            "FixedSize(2)",
+        ],
+    ) -> float: ...
+    @typing.overload
+    def __init__(self) -> None: ...
+    @typing.overload
+    def __init__(self, arg0: SmallMatrix_6x3_F_SI1_longdouble) -> None: ...
+    @typing.overload
+    def __init__(
+        self, arg0: typing.Annotated[numpy.typing.ArrayLike, numpy.longdouble]
+    ) -> None: ...
+    def __mul__(
+        self, arg0: typing.SupportsFloat | typing.SupportsIndex
+    ) -> SmallMatrix_6x3_F_SI1_longdouble: ...
+    def __neg__(self) -> SmallMatrix_6x3_F_SI1_longdouble: ...
+    def __repr__(self) -> str: ...
+    def __rmul__(
+        self, arg0: typing.SupportsFloat | typing.SupportsIndex
+    ) -> SmallMatrix_6x3_F_SI1_longdouble: ...
+    def __setitem__(
+        self,
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt | typing.SupportsIndex],
+            "FixedSize(2)",
+        ],
+        arg1: typing.SupportsFloat | typing.SupportsIndex,
+    ) -> None: ...
+    def __sub__(
+        self, arg0: SmallMatrix_6x3_F_SI1_longdouble
+    ) -> SmallMatrix_6x3_F_SI1_longdouble: ...
+    def dot(self, arg0: SmallMatrix_6x3_F_SI1_longdouble) -> float: ...
+    def prod(self) -> float: ...
+    def set_val(
+        self, arg0: typing.SupportsFloat | typing.SupportsIndex
+    ) -> SmallMatrix_6x3_F_SI1_longdouble: ...
+    def sum(self) -> float: ...
+    def to_cupy(self, copy=False, order="F"):
+        """
+
+        Provide a CuPy view into an SmallMatrix.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.SmallMatrix_*
+            A SmallMatrix class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        cupy.array
+            A cupy 2-dimensional array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if cupy is not installed
+
+        """
+    def to_numpy(self, copy=False, order="F"):
+        """
+
+        Provide a NumPy view into an SmallMatrix.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.SmallMatrix_*
+            A SmallMatrix class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        np.array
+            A NumPy 2-dimensional array.
+
+        """
+    def to_xp(self, copy=False, order="F"):
+        """
+
+        Provide a NumPy or CuPy view into a SmallMatrix, depending on amr.Config.have_gpu .
+
+        This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
+        https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.SmallMatrix_*
+            A SmallMatrix class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        xp.array
+            A NumPy or CuPy 2-dimensional array.
+
+        """
+    @property
+    def T(self) -> SmallMatrix_3x6_F_SI1_longdouble: ...
+    @property
+    def __array_interface__(self) -> dict: ...
+    @property
+    def __cuda_array_interface__(self) -> dict: ...
+    @property
+    def column_size(self) -> int: ...
+    @property
+    def order(self) -> str: ...
+    @property
+    def row_size(self) -> int: ...
+    @property
+    def size(self) -> int: ...
+    @property
+    def starting_index(self) -> int: ...
+
+class SmallMatrix_3x1_F_SI1_longdouble:
+    @staticmethod
+    def zero() -> SmallMatrix_3x1_F_SI1_longdouble: ...
+    def __add__(
+        self, arg0: SmallMatrix_3x1_F_SI1_longdouble
+    ) -> SmallMatrix_3x1_F_SI1_longdouble: ...
+    @typing.overload
+    def __getitem__(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> float: ...
+    @typing.overload
+    def __getitem__(
+        self,
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt | typing.SupportsIndex],
+            "FixedSize(2)",
+        ],
+    ) -> float: ...
+    @typing.overload
+    def __init__(self) -> None: ...
+    @typing.overload
+    def __init__(self, arg0: SmallMatrix_3x1_F_SI1_longdouble) -> None: ...
+    @typing.overload
+    def __init__(
+        self, arg0: typing.Annotated[numpy.typing.ArrayLike, numpy.longdouble]
+    ) -> None: ...
+    def __mul__(
+        self, arg0: typing.SupportsFloat | typing.SupportsIndex
+    ) -> SmallMatrix_3x1_F_SI1_longdouble: ...
+    def __neg__(self) -> SmallMatrix_3x1_F_SI1_longdouble: ...
+    def __repr__(self) -> str: ...
+    def __rmul__(
+        self, arg0: typing.SupportsFloat | typing.SupportsIndex
+    ) -> SmallMatrix_3x1_F_SI1_longdouble: ...
+    @typing.overload
+    def __setitem__(
+        self,
+        arg0: typing.SupportsInt | typing.SupportsIndex,
+        arg1: typing.SupportsFloat | typing.SupportsIndex,
+    ) -> None: ...
+    @typing.overload
+    def __setitem__(
+        self,
+        arg0: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt | typing.SupportsIndex],
+            "FixedSize(2)",
+        ],
+        arg1: typing.SupportsFloat | typing.SupportsIndex,
+    ) -> None: ...
+    def __sub__(
+        self, arg0: SmallMatrix_3x1_F_SI1_longdouble
+    ) -> SmallMatrix_3x1_F_SI1_longdouble: ...
+    def dot(self, arg0: SmallMatrix_3x1_F_SI1_longdouble) -> float: ...
+    def prod(self) -> float: ...
+    def set_val(
+        self, arg0: typing.SupportsFloat | typing.SupportsIndex
+    ) -> SmallMatrix_3x1_F_SI1_longdouble: ...
+    def sum(self) -> float: ...
+    def to_cupy(self, copy=False, order="F"):
+        """
+
+        Provide a CuPy view into an SmallMatrix.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.SmallMatrix_*
+            A SmallMatrix class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        cupy.array
+            A cupy 2-dimensional array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if cupy is not installed
+
+        """
+    def to_numpy(self, copy=False, order="F"):
+        """
+
+        Provide a NumPy view into an SmallMatrix.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.SmallMatrix_*
+            A SmallMatrix class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        np.array
+            A NumPy 2-dimensional array.
+
+        """
+    def to_xp(self, copy=False, order="F"):
+        """
+
+        Provide a NumPy or CuPy view into a SmallMatrix, depending on amr.Config.have_gpu .
+
+        This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
+        https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as cupy.
+        The order="C" option will index as z,y,x and perform better with cupy.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.SmallMatrix_*
+            A SmallMatrix class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        xp.array
+            A NumPy or CuPy 2-dimensional array.
+
+        """
+    @property
+    def T(self) -> SmallMatrix_1x3_F_SI1_longdouble: ...
     @property
     def __array_interface__(self) -> dict: ...
     @property
