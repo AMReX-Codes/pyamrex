@@ -864,12 +864,11 @@ class Vector_IntVect:
 
 class IndexType:
     class CellIndex(enum.IntEnum):
-        """
-        An enumeration.
-        """
-
         CELL: typing.ClassVar[IndexType.CellIndex]  # value = <CellIndex.CELL: 0>
         NODE: typing.ClassVar[IndexType.CellIndex]  # value = <CellIndex.NODE: 1>
+        @classmethod
+        def __new__(cls, value): ...
+        def __format__(self, format_spec): ...
 
     CELL: typing.ClassVar[IndexType.CellIndex]  # value = <CellIndex.CELL: 0>
     NODE: typing.ClassVar[IndexType.CellIndex]  # value = <CellIndex.NODE: 1>
@@ -10326,10 +10325,6 @@ class ParmParse:
 
 class CoordSys:
     class CoordType(enum.IntEnum):
-        """
-        An enumeration.
-        """
-
         RZ: typing.ClassVar[CoordSys.CoordType]  # value = <CoordType.RZ: 1>
         SPHERICAL: typing.ClassVar[
             CoordSys.CoordType
@@ -10338,6 +10333,9 @@ class CoordSys:
             CoordSys.CoordType
         ]  # value = <CoordType.cartesian: 0>
         undef: typing.ClassVar[CoordSys.CoordType]  # value = <CoordType.undef: -1>
+        @classmethod
+        def __new__(cls, value): ...
+        def __format__(self, format_spec): ...
 
     RZ: typing.ClassVar[CoordSys.CoordType]  # value = <CoordType.RZ: 1>
     SPHERICAL: typing.ClassVar[CoordSys.CoordType]  # value = <CoordType.SPHERICAL: 2>
@@ -13943,10 +13941,6 @@ class MultiFab(FabArray_FArrayBox):
         """
 
 class GrowthStrategy(enum.Enum):
-    """
-    An enumeration.
-    """
-
     Exact: typing.ClassVar[GrowthStrategy]  # value = <GrowthStrategy.Exact: 1>
     Geometric: typing.ClassVar[GrowthStrategy]  # value = <GrowthStrategy.Geometric: 2>
     Poisson: typing.ClassVar[GrowthStrategy]  # value = <GrowthStrategy.Poisson: 0>
@@ -28415,10 +28409,6 @@ class EBFArrayBoxFactory(FabFactory_FArrayBox):
         """
 
 class EBSupport(enum.Enum):
-    """
-    An enumeration.
-    """
-
     basic: typing.ClassVar[EBSupport]  # value = <EBSupport.basic: 1>
     full: typing.ClassVar[EBSupport]  # value = <EBSupport.full: 3>
     volume: typing.ClassVar[EBSupport]  # value = <EBSupport.volume: 2>
