@@ -9,7 +9,7 @@ concurrency:
 jobs:
   tests-oneapi-sycl:
     name: oneAPI SYCL 3D
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
     - uses: actions/checkout@v6
     - name: Dependencies
@@ -58,7 +58,7 @@ jobs:
 
   tests-icpx:
     name: ICPX
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
     - uses: actions/checkout@v6
     - name: Dependencies
