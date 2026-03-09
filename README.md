@@ -1,7 +1,6 @@
 # pyAMReX
 
 [![Python3][api-py3]](https://www.python.org/)
-![Python3 API: Beta][dev-beta]
 [![Documentation Status](https://readthedocs.org/projects/pyamrex/badge/?version=latest)](https://pyamrex.readthedocs.io)
 [![Discussions](https://img.shields.io/badge/chat-discussions-turquoise.svg)](https://github.com/AMReX-Codes/pyamrex/discussions)
 ![Linux](https://github.com/AMReX-Codes/pyamrex/actions/workflows/ubuntu.yml/badge.svg?branch=development)
@@ -11,7 +10,6 @@
 [![DOI (source)](https://img.shields.io/badge/DOI%20(source)-10.5281/zenodo.8408733-blue.svg)](https://doi.org/10.5281/zenodo.8408733)
 
 [api-py3]: https://img.shields.io/badge/language-Python3-yellowgreen "Python3 API"
-[dev-beta]: https://img.shields.io/badge/phase-beta-yellowgreen "Status: Beta"
 
 The Python binding pyAMReX bridges the compute in AMReX block-structured codes and data science:
 it provides zero-copy application GPU data access for AI/ML, in situ analysis, application coupling and enables rapid, massively parallel prototyping.

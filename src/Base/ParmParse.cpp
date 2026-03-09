@@ -35,30 +35,29 @@ void init_ParmParse(py::module &m)
 
         .def_static("addfile", &ParmParse::addfile)
 
-        .def("add", py::overload_cast<char const*, bool const>(&ParmParse::add))
-        .def("add", py::overload_cast<char const*, int const>(&ParmParse::add))
-        .def("add", py::overload_cast<char const*, long const>(&ParmParse::add))
-        .def("add", py::overload_cast<char const*, long long const>(&ParmParse::add))
-        .def("add", py::overload_cast<char const*, float const>(&ParmParse::add))
-        .def("add", py::overload_cast<char const*, double const>(&ParmParse::add))
-        .def("add", py::overload_cast<char const*, std::string const &>(&ParmParse::add))
-        .def("add", py::overload_cast<char const*, amrex::IntVect const &>(&ParmParse::add))
-        .def("add", py::overload_cast<char const*, amrex::Box const &>(&ParmParse::add))
-
-        .def("addarr", py::overload_cast<char const*, std::vector<int> const &>(&ParmParse::addarr))
-        .def("addarr", py::overload_cast<char const*, std::vector<long> const &>(&ParmParse::addarr))
-        .def("addarr", py::overload_cast<char const*, std::vector<long long> const &>(&ParmParse::addarr))
-        .def("addarr", py::overload_cast<char const*, std::vector<float> const &>(&ParmParse::addarr))
-        .def("addarr", py::overload_cast<char const*, std::vector<double> const &>(&ParmParse::addarr))
-        .def("addarr", py::overload_cast<char const*, std::vector<std::string> const &>(&ParmParse::addarr))
-        .def("addarr", py::overload_cast<char const*, std::vector<amrex::IntVect> const &>(&ParmParse::addarr))
-        .def("addarr", py::overload_cast<char const*, std::vector<amrex::Box> const &>(&ParmParse::addarr))
+        .def("add", [](ParmParse &pp, std::string_view name, bool val) { pp.add(name, val); })
+        .def("add", [](ParmParse &pp, std::string_view name, int val) { pp.add(name, val); })
+        .def("add", [](ParmParse &pp, std::string_view name, long val) { pp.add(name, val); })
+        .def("add", [](ParmParse &pp, std::string_view name, long long val) { pp.add(name, val); })
+        .def("add", [](ParmParse &pp, std::string_view name, float val) { pp.add(name, val); })
+        .def("add", [](ParmParse &pp, std::string_view name, double val) { pp.add(name, val); })
+        .def("add", [](ParmParse &pp, std::string_view name, std::string const &val) { pp.add(name, val); })
+        .def("add", [](ParmParse &pp, std::string_view name, amrex::IntVect const &val) { pp.add(name, val); })
+        .def("add", [](ParmParse &pp, std::string_view name, amrex::Box const &val) { pp.add(name, val); })
+        .def("addarr", py::overload_cast<std::string_view, std::vector<int> const &>(&ParmParse::addarr))
+        .def("addarr", py::overload_cast<std::string_view, std::vector<long> const &>(&ParmParse::addarr))
+        .def("addarr", py::overload_cast<std::string_view, std::vector<long long> const &>(&ParmParse::addarr))
+        .def("addarr", py::overload_cast<std::string_view, std::vector<float> const &>(&ParmParse::addarr))
+        .def("addarr", py::overload_cast<std::string_view, std::vector<double> const &>(&ParmParse::addarr))
+        .def("addarr", py::overload_cast<std::string_view, std::vector<std::string> const &>(&ParmParse::addarr))
+        .def("addarr", py::overload_cast<std::string_view, std::vector<amrex::IntVect> const &>(&ParmParse::addarr))
+        .def("addarr", py::overload_cast<std::string_view, std::vector<amrex::Box> const &>(&ParmParse::addarr))
 
         // TODO: getters and queries
         .def("get_bool",
             [](ParmParse &pp, std::string name, int ival) {
                 bool ref;
-                pp.get(name.c_str(), ref, ival);
+                pp.get(name, ref, ival);
                 return ref;
             },
             "parses input values", py::arg("name"), py::arg("ival")=0
@@ -67,7 +66,7 @@ void init_ParmParse(py::module &m)
         .def("get_int",
             [](ParmParse &pp, std::string name, int ival) {
                 int ref;
-                pp.get(name.c_str(), ref, ival);
+                pp.get(name, ref, ival);
                 return ref;
             },
             "parses input values", py::arg("name"), py::arg("ival")=0
@@ -76,7 +75,7 @@ void init_ParmParse(py::module &m)
         .def("get_real",
             [](ParmParse &pp, std::string name, int ival) {
                 amrex::Real ref;
-                pp.get(name.c_str(), ref, ival);
+                pp.get(name, ref, ival);
                 return ref;
             },
             "parses input values", py::arg("name"), py::arg("ival")=0
@@ -85,7 +84,7 @@ void init_ParmParse(py::module &m)
         .def("query_int",
             [](ParmParse &pp, std::string name, int ival) {
                 int ref;
-                bool exist = pp.query(name.c_str(), ref, ival);
+                bool exist = pp.query(name, ref, ival);
                 return std::make_tuple(exist,ref);
             },
             "queries input values", py::arg("name"), py::arg("ival")=0
@@ -155,7 +154,7 @@ void init_ParmParse(py::module &m)
                                 [&](auto&& arg) {
                                     using T = std::remove_pointer_t<std::decay_t<decltype(arg)>>;
                                     T v;
-                                    pp.get(name.c_str(), v);
+                                    pp.get(name, v);
                                     add_nested(v, name);
                                 },
                                 entry.m_typehint
@@ -166,7 +165,7 @@ void init_ParmParse(py::module &m)
                                     using T = std::remove_pointer_t<std::decay_t<decltype(arg)>>;
                                     if constexpr (!std::is_same_v<T, bool>) {
                                         std::vector<T> valarr;
-                                        pp.getarr(name.c_str(), valarr);
+                                        pp.getarr(name, valarr);
                                         add_nested(valarr, name);
                                     }
                                 },

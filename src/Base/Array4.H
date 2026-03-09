@@ -62,21 +62,21 @@ namespace pyAMReX
     array_interface (Array4<T> const & a4)
     {
         auto d = py::dict();
-        auto const len = length(a4);
         // F->C index conversion here
-        // p[(i-begin.x)+(j-begin.y)*jstride+(k-begin.z)*kstride+n*nstride];
+        // p[(i-begin[0])+(j-begin[1])*jstride+(k-begin[2])*kstride+n*nstride];
+        // Here [jkn]stride is obtained with get_stride<[123]>(). (0 is the unit stride i-direction.)
         // Buffer dimensions: zero-size shall not skip dimension
         auto shape = py::make_tuple(
-            py::ssize_t(a4.ncomp),
-            py::ssize_t(len.z <= 0 ? 1 : len.z),
-            py::ssize_t(len.y <= 0 ? 1 : len.y),
-            py::ssize_t(len.x <= 0 ? 1 : len.x)  // fastest varying index
+            py::ssize_t(a4.end[3] <= a4.begin[3] ? 1 : a4.end[3]-a4.begin[3]),
+            py::ssize_t(a4.end[2] <= a4.begin[2] ? 1 : a4.end[2]-a4.begin[2]),
+            py::ssize_t(a4.end[1] <= a4.begin[1] ? 1 : a4.end[1]-a4.begin[1]),
+            py::ssize_t(a4.end[0] <= a4.begin[0] ? 1 : a4.end[0]-a4.begin[0]) // fastest varying index
         );
         // buffer protocol strides are in bytes, AMReX strides are elements
         auto const strides = py::make_tuple(
-            py::ssize_t(sizeof(T) * a4.nstride),
-            py::ssize_t(sizeof(T) * a4.kstride),
-            py::ssize_t(sizeof(T) * a4.jstride),
+            py::ssize_t(sizeof(T) * a4.template get_stride<3>()),
+            py::ssize_t(sizeof(T) * a4.template get_stride<2>()),
+            py::ssize_t(sizeof(T) * a4.template get_stride<1>()),
             py::ssize_t(sizeof(T))  // fastest varying index
         );
         bool const read_only = false;  // note: we could decide on is_not_const,
@@ -129,7 +129,9 @@ namespace pyAMReX
                  }
             )
     #if defined(AMREX_DEBUG) || defined(AMREX_BOUND_CHECK)
-            .def("index_assert", &Array4<T>::index_assert)
+            .def("index_assert", [](Array4<T> const& a4, int i, int j, int k, int n) noexcept {
+                return a4.index_assert(IntVectND<4>{i,j,k,n});
+            }, py::arg("i"), py::arg("j"), py::arg("k"), py::arg("n"))
     #endif
 
             .def_property_readonly("size", &Array4<T>::size)
@@ -162,18 +164,27 @@ namespace pyAMReX
 
                 auto a4 = std::make_unique< Array4<T> >();
                 a4.get()->p = static_cast<T*>(buf.ptr);
-                a4.get()->begin = Dim3{0, 0, 0};
+                a4.get()->begin = IntVectND<4>{0, 0, 0, 0};
                 // C->F index conversion here
-                // p[(i-begin.x)+(j-begin.y)*jstride+(k-begin.z)*kstride+n*nstride];
-                a4.get()->end.x = (int)buf.shape.at(2); // fastest varying index
-                a4.get()->end.y = (int)buf.shape.at(1);
-                a4.get()->end.z = (int)buf.shape.at(0);
-                a4.get()->ncomp = 1;
-                // buffer protocol strides are in bytes, AMReX strides are elements
-                a4.get()->jstride = (int)buf.strides.at(1) / sizeof(T); // fastest varying index
-                a4.get()->kstride = (int)buf.strides.at(0) / sizeof(T);
+                // p[(i-begin[0])+(j-begin[1])*jstride+(k-begin[2])*kstride+n*nstride];
+                a4.get()->end[0] = (int)buf.shape.at(2); // fastest varying index
+                a4.get()->end[1] = (int)buf.shape.at(1);
+                a4.get()->end[2] = (int)buf.shape.at(0);
+                a4.get()->end[3] = 1;
+                // buffer protocol strides are in bytes, AMReX strides are
+                // elements.  In AMReX, 0 is the unit stride direction,
+                // which we do not need to set. For py::buffer_info, 2 is
+                // the unit stride direction. If AMReX has a set function,
+                // we would do
+                //  a4.set_stride<0>(buf.strides.at(2)); // not needed
+                //  a4.set_stride<1>(buf.strides.at(1));
+                //  a4.set_stride<2>(buf.strides.at(0));
+                // Unfortunately, amrex::Array4 does not have a public function for setting
+                // strides, and stride<n> is stored at stride.a[n-1].
+                a4.get()->stride.a[0] = (int)buf.strides.at(1) / sizeof(T);
+                a4.get()->stride.a[1] = (int)buf.strides.at(0) / sizeof(T);
                 // 3D == no component: stride here should not matter
-                a4.get()->nstride = a4.get()->kstride * (int)buf.shape.at(0);
+                a4.get()->stride.a[2] = a4.get()->template get_stride<2>() * (int)buf.shape.at(0);
 
                 // todo: we could check and store here if the array buffer we got is read-only
 
@@ -248,9 +259,15 @@ namespace pyAMReX
             }, py::return_value_policy::move)
 
             //.def("__contains__", &Array4<T>::contains)  // syntax: "other in b"
-            .def("contains", py::overload_cast<int, int, int>(&Array4<T>::contains, py::const_))
-            .def("contains", py::overload_cast<IntVect const &>(&Array4<T>::contains, py::const_))
-            .def("contains", py::overload_cast<Dim3 const &>(&Array4<T>::contains, py::const_))
+            .def("contains", [](Array4<T> const& a4, int i, int j, int k) noexcept {
+                return a4.contains(i,j,k);
+            }, py::arg("i"), py::arg("j"), py::arg("k"))
+            .def("contains", [](Array4<T> const& a4, IntVect const& iv) noexcept {
+                return a4.contains(iv);
+            }, py::arg("iv"))
+            .def("contains", [](Array4<T> const& a4, Dim3 const& cell) noexcept {
+                return a4.contains(cell);
+            }, py::arg("cell"))
 
             // getter
             .def("__getitem__", [](Array4<T> & a4, IntVect const & v){ return a4(v); })

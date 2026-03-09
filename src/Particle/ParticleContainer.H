@@ -44,22 +44,56 @@ std::string particle_type_suffix ()
     return suffix;
 }
 
-template <bool is_const, typename T_ParIterBase>
-void make_Base_Iterators (py::module &m, std::string allocstr)
+template <bool is_const, typename T_ParIter, template<class> class Allocator=amrex::DefaultAllocator>
+auto  // std::tuple<py_it, py_it_base>
+define_Iterators (py::module &m, std::string allocstr)
 {
     using namespace amrex;
 
-    using iterator_base = T_ParIterBase;
-    using container = typename iterator_base::ContainerType;
+    using iterator = T_ParIter;
+    using container = typename iterator::ContainerType;
     using ParticleType = typename container::ParticleType;
     constexpr int NArrayReal = container::NArrayReal;
     constexpr int NArrayInt = container::NArrayInt;
+    using iterator_base = amrex::ParIterBase_impl<is_const, ParticleType, NArrayReal, NArrayInt, Allocator>;
 
     std::string const suffix = particle_type_suffix<ParticleType, NArrayReal, NArrayInt>();
+
     std::string particle_it_base_name = std::string("Par");
     if (is_const) particle_it_base_name += "Const";
     particle_it_base_name += "IterBase_" + suffix + "_" + allocstr;
-    auto py_it_base = py::class_<iterator_base, MFIter>(m, particle_it_base_name.c_str(), py::dynamic_attr())
+    auto py_it_base = py::class_<iterator_base, MFIter>(m, particle_it_base_name.c_str(), py::dynamic_attr());
+
+    auto particle_it_name = std::string("Par");
+    if (is_const) particle_it_name += "Const";
+    particle_it_name += std::string("Iter_") + suffix + "_" + allocstr;
+    auto py_it = py::class_<iterator, iterator_base>(m, particle_it_name.c_str())
+        .def("__repr__",
+             [particle_it_name](iterator const & pti) {
+                 std::string r = "<amrex." + particle_it_name + " (";
+                 if( !pti.isValid() ) { r.append("in"); }
+                 r.append("valid)>");
+                 return r;
+             }
+        )
+    ;
+    return std::tuple(py_it, py_it_base);
+}
+
+template <typename T_PyParIter, typename T_PyParIterBase>
+void make_Iterators (
+    T_PyParIter & py_it,
+    T_PyParIterBase & py_it_base
+)
+{
+    using namespace amrex;
+
+    using iterator = typename T_PyParIter::type;
+    using container = typename iterator::ContainerType;
+    using ParticleType = typename container::ParticleType;
+    using iterator_base = typename T_PyParIterBase::type;
+
+    py_it_base
         .def(py::init<container&, int>(),
             // while the created iterator (argument 1: this) exists,
             // keep the ParticleContainer (argument 2) alive
@@ -95,35 +129,8 @@ void make_Base_Iterators (py::module &m, std::string allocstr)
         py_it_base.def("aos",
                        &iterator_base::GetArrayOfStructs,
                        py::return_value_policy::reference_internal);
-}
 
-template <bool is_const, typename T_ParIter, template<class> class Allocator=amrex::DefaultAllocator>
-void make_Iterators (py::module &m, std::string allocstr)
-{
-    using namespace amrex;
-
-    using iterator = T_ParIter;
-    using container = typename iterator::ContainerType;
-    using ParticleType = typename container::ParticleType;
-    constexpr int NArrayReal = container::NArrayReal;
-    constexpr int NArrayInt = container::NArrayInt;
-
-    using iterator_base = amrex::ParIterBase_impl<is_const, ParticleType, NArrayReal, NArrayInt, Allocator>;
-    make_Base_Iterators< is_const, iterator_base >(m, allocstr);
-
-    std::string const suffix = particle_type_suffix<ParticleType, NArrayReal, NArrayInt>();
-    auto particle_it_name = std::string("Par");
-    if (is_const) particle_it_name += "Const";
-    particle_it_name += std::string("Iter_") + suffix + "_" + allocstr;
-    py::class_<iterator, iterator_base>(m, particle_it_name.c_str())
-        .def("__repr__",
-             [particle_it_name](iterator const & pti) {
-                 std::string r = "<amrex." + particle_it_name + " (";
-                 if( !pti.isValid() ) { r.append("in"); }
-                 r.append("valid)>");
-                 return r;
-             }
-        )
+    py_it
         .def(py::init<container&, int>(),
              py::arg("particle_container"), py::arg("level"))
         //.def(py::init<container&, int, MFItInfo&>(),
@@ -172,6 +179,11 @@ void make_ParticleContainer_and_Iterators (py::module &m, std::string allocstr)
     using ParticleInitData = typename ParticleContainerType::ParticleInitData;
     using ParticleTileType = typename ParticleContainerType::ParticleTileType;
 
+    using iterator = amrex::ParIter_impl<ParticleType, T_NArrayReal, T_NArrayInt, Allocator>;
+    using const_iterator = amrex::ParConstIter_impl<ParticleType, T_NArrayReal, T_NArrayInt, Allocator>;
+    auto [py_it, py_it_base] = define_Iterators< false, iterator, Allocator >(m, allocstr);
+    auto [py_const_it, py_const_it_base] = define_Iterators< true, const_iterator, Allocator >(m, allocstr);
+
     std::string const suffix = particle_type_suffix<T_ParticleType, T_NArrayReal, T_NArrayInt>();
     auto const particle_container_type = std::string("ParticleContainer_") + suffix + "_" + allocstr;
     auto py_pc = py::class_<ParticleContainerType>(m, particle_container_type.c_str())
@@ -188,6 +200,11 @@ void make_ParticleContainer_and_Iterators (py::module &m, std::string allocstr)
     ;
     py_pc
         .def("make_alike", &ParticleContainerType::template make_alike<Allocator>)
+
+        .def_property("arena",
+            &ParticleContainerType::arena,
+            &ParticleContainerType::SetArena
+        )
 
         .def_property_readonly_static("is_soa_particle", [](const py::object&){return ParticleType::is_soa_particle;})
         .def_property_readonly_static("num_struct_real", [](const py::object&){return ParticleContainerType::NStructReal; })
@@ -285,7 +302,10 @@ void make_ParticleContainer_and_Iterators (py::module &m, std::string allocstr)
                                     const Vector<IntVect>&>
                 (&ParticleContainerType::Define))
 
-        .def("num_local_tiles_at_level", &ParticleContainerType::numLocalTilesAtLevel)
+        .def("num_local_tiles_at_level",
+            &ParticleContainerType::numLocalTilesAtLevel,
+            py::arg("level")
+        )
 
         .def("reserve_data", &ParticleContainerType::reserveData)
         .def("resize_data", &ParticleContainerType::resizeData)
@@ -319,8 +339,23 @@ void make_ParticleContainer_and_Iterators (py::module &m, std::string allocstr)
             //     py::overload_cast<int, int, int>
             //     (&ParticleContainerType::DefineAndReturnParticleTile))
                 // Long TotalNumberOfParticles (bool only_valid=true, bool only_local=false) const;
+        .def("number_of_particles",
+            [](ParticleContainerType const & pc, bool only_local){
+                return pc.TotalNumberOfParticles(true, only_local);
+            },
+            py::arg("only_local")=false,
+            "Return the number of valid particles on all MPI ranks, unless only_local is specified."
+        )
         .def("total_number_of_particles", &ParticleContainerType::TotalNumberOfParticles,
-            py::arg("only_valid")=true, py::arg("only_local")=false)
+            py::arg("only_valid")=true, py::arg("only_local")=false,
+            "Return the number of particles (only valid or including invalid) on all MPI ranks, unless only_local is specified."
+        )
+        .def_property_readonly("size",
+            [](ParticleContainerType const & pc){
+                return pc.TotalNumberOfParticles(true, false);
+            },
+            "Return the number of valid particles on all MPI ranks"
+        )
         .def("remove_particles_at_level", &ParticleContainerType::RemoveParticlesAtLevel)
         .def("remove_particles_not_at_finestLevel", &ParticleContainerType::RemoveParticlesNotAtFinestLevel)
         // void CreateVirtualParticles (int level, AoS& virts) const;
@@ -470,28 +505,26 @@ void make_ParticleContainer_and_Iterators (py::module &m, std::string allocstr)
         ;
     }
 
-    using iterator = amrex::ParIter_impl<ParticleType, T_NArrayReal, T_NArrayInt, Allocator>;
-    make_Iterators< false, iterator, Allocator >(m, allocstr);
-    using const_iterator = amrex::ParConstIter_impl<ParticleType, T_NArrayReal, T_NArrayInt, Allocator>;
-    make_Iterators< true, const_iterator, Allocator >(m, allocstr);
+    make_Iterators(py_it, py_it_base);
+    make_Iterators(py_const_it, py_const_it_base);
 
     // simpler particle iterator loops: return types of this particle box
     py_pc
-        .def_property_readonly_static("iterator", [](py::object /* pc */){ return py::type::of<iterator>(); },
+        .def_property_readonly_static("Iterator", [](py::object /* pc */){ return py::type::of<iterator>(); },
             "amrex iterator for particle boxes")
-        .def_property_readonly_static("const_iterator", [](py::object /* pc */){ return py::type::of<const_iterator>(); },
+        .def_property_readonly_static("ConstIterator", [](py::object /* pc */){ return py::type::of<const_iterator>(); },
             "amrex constant iterator for particle boxes (read-only)")
     ;
 }
 
 /** Create ParticleContainers and Iterators
  */
-template <typename T_ParticleType, int T_NArrayReal=0, int T_NArrayInt=0>
+template <typename T_ParticleType, int T_NArrayReal=0, int T_NArrayInt=0, bool only_polymorphic=false>
 void make_ParticleContainer_and_Iterators (py::module &m)
 {
     if constexpr (T_ParticleType::is_soa_particle) {
         make_Particle<T_NArrayReal, T_NArrayInt>(m);
-        make_StructOfArrays<T_NArrayReal, T_NArrayInt, true> (m);
+        make_StructOfArrays<T_NArrayReal, T_NArrayInt, true, only_polymorphic> (m);
     } else {
 
         make_Particle<  // particle
@@ -505,45 +538,50 @@ void make_ParticleContainer_and_Iterators (py::module &m)
             >(m);
         }
 
-        make_ArrayOfStructs<T_ParticleType::NReal, T_ParticleType::NInt> (m);
-        make_StructOfArrays<T_NArrayReal, T_NArrayInt> (m);
+        make_ArrayOfStructs<T_ParticleType::NReal, T_ParticleType::NInt, only_polymorphic> (m);
+        make_StructOfArrays<T_NArrayReal, T_NArrayInt, false, only_polymorphic> (m);
     }
 
-    make_ParticleTile<T_ParticleType, T_NArrayReal, T_NArrayInt> (m);
+    make_ParticleTile<T_ParticleType, T_NArrayReal, T_NArrayInt, only_polymorphic> (m);
 
     make_ParticleInitData<T_ParticleType, T_NArrayReal, T_NArrayInt>(m);
 
-    // first, because used as copy target in methods in containers with other allocators
-    make_ParticleContainer_and_Iterators<T_ParticleType, T_NArrayReal, T_NArrayInt,
-            amrex::PinnedArenaAllocator>(m, "pinned");
+    if constexpr (!only_polymorphic) {
+        // first, because used as copy target in methods in containers with other allocators
+        make_ParticleContainer_and_Iterators<T_ParticleType, T_NArrayReal, T_NArrayInt,
+                amrex::PinnedArenaAllocator>(m, "pinned");
 
-    // see Src/Base/AMReX_GpuContainers.H
-    //   !AMREX_USE_GPU: DefaultAllocator = std::allocator
-    //    AMREX_USE_GPU: DefaultAllocator = amrex::ArenaAllocator
+        // see Src/Base/AMReX_GpuContainers.H
+        //   !AMREX_USE_GPU: DefaultAllocator = std::allocator
+        //    AMREX_USE_GPU: DefaultAllocator = amrex::ArenaAllocator
 
-    //   work-around for https://github.com/pybind/pybind11/pull/4581
-    //make_ParticleContainer_and_Iterators<T_ParticleType, T_NArrayReal, T_NArrayInt,
-    //                                     std::allocator>(m, "std");            // CPU DefaultAllocator
-    //make_ParticleContainer_and_Iterators<T_ParticleType, T_NArrayReal, T_NArrayInt,
-    //                                     amrex::ArenaAllocator>(m, "arena");   // GPU DefaultAllocator
+        //   work-around for https://github.com/pybind/pybind11/pull/4581
+        //make_ParticleContainer_and_Iterators<T_ParticleType, T_NArrayReal, T_NArrayInt,
+        //                                     std::allocator>(m, "std");            // CPU DefaultAllocator
+        //make_ParticleContainer_and_Iterators<T_ParticleType, T_NArrayReal, T_NArrayInt,
+        //                                     amrex::ArenaAllocator>(m, "arena");   // GPU DefaultAllocator
 #ifdef AMREX_USE_GPU
-    make_ParticleContainer_and_Iterators<T_ParticleType, T_NArrayReal, T_NArrayInt,
-                                         std::allocator>(m, "std");
-    make_ParticleContainer_and_Iterators<T_ParticleType, T_NArrayReal, T_NArrayInt,
-                                         amrex::DefaultAllocator>(m, "default");   // amrex::ArenaAllocator
+        make_ParticleContainer_and_Iterators<T_ParticleType, T_NArrayReal, T_NArrayInt,
+                                             std::allocator>(m, "std");
+        make_ParticleContainer_and_Iterators<T_ParticleType, T_NArrayReal, T_NArrayInt,
+                                             amrex::DefaultAllocator>(m, "default");   // amrex::ArenaAllocator
 #else
-    make_ParticleContainer_and_Iterators<T_ParticleType, T_NArrayReal, T_NArrayInt,
-            amrex::DefaultAllocator>(m, "default");   // std::allocator
-    make_ParticleContainer_and_Iterators<T_ParticleType, T_NArrayReal, T_NArrayInt,
-            amrex::ArenaAllocator>(m, "arena");
+        make_ParticleContainer_and_Iterators<T_ParticleType, T_NArrayReal, T_NArrayInt,
+                amrex::DefaultAllocator>(m, "default");   // std::allocator
+        make_ParticleContainer_and_Iterators<T_ParticleType, T_NArrayReal, T_NArrayInt,
+                amrex::ArenaAllocator>(m, "arena");
 #endif
-    //   end work-around
+        //   end work-around
 #ifdef AMREX_USE_GPU
-    make_ParticleContainer_and_Iterators<T_ParticleType, T_NArrayReal, T_NArrayInt,
-                                         amrex::DeviceArenaAllocator>(m, "device");
-    make_ParticleContainer_and_Iterators<T_ParticleType, T_NArrayReal, T_NArrayInt,
-                                         amrex::ManagedArenaAllocator>(m, "managed");
-    make_ParticleContainer_and_Iterators<T_ParticleType, T_NArrayReal, T_NArrayInt,
-                                         amrex::AsyncArenaAllocator>(m, "async");
+        make_ParticleContainer_and_Iterators<T_ParticleType, T_NArrayReal, T_NArrayInt,
+                                             amrex::DeviceArenaAllocator>(m, "device");
+        make_ParticleContainer_and_Iterators<T_ParticleType, T_NArrayReal, T_NArrayInt,
+                                             amrex::ManagedArenaAllocator>(m, "managed");
+        make_ParticleContainer_and_Iterators<T_ParticleType, T_NArrayReal, T_NArrayInt,
+                                             amrex::AsyncArenaAllocator>(m, "async");
 #endif
+    }  // if (!only_polymorphic)
+
+    make_ParticleContainer_and_Iterators<T_ParticleType, T_NArrayReal, T_NArrayInt,
+                                         amrex::PolymorphicArenaAllocator>(m, "polymorphic");
 }

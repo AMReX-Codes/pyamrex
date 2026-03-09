@@ -40,7 +40,12 @@ class CopyPreBuild(build):
 
         # copy Python module artifacts and sources
         dst_path = os.path.join(self.build_lib, "amrex")
-        shutil.copytree(PYAMREX_libdir, dst_path, dirs_exist_ok=True)
+        shutil.copytree(
+            PYAMREX_libdir,
+            dst_path,
+            dirs_exist_ok=True,
+            ignore=shutil.ignore_patterns("chk*", "diags*", "plt*"),
+        )
 
 
 class CMakeExtension(Extension):
@@ -97,6 +102,7 @@ class CMakeBuild(build_ext):
             "-DAMReX_MPI:BOOL=" + AMReX_MPI,
             "-DAMReX_PRECISION=" + AMReX_PRECISION,
             "-DAMReX_PARTICLES_PRECISION=" + AMReX_PARTICLES_PRECISION,
+            "-DAMReX_EB:BOOL=" + AMReX_EB,
             "-DpyAMReX_CCACHE=" + PYAMREX_CCACHE,
             "-DpyAMReX_IPO=" + PYAMREX_IPO,
             ## dependency control (developers & package managers)
@@ -176,6 +182,7 @@ AMReX_GPU_BACKEND = os.environ.get("AMREX_GPU_BACKEND", "NONE")
 AMReX_MPI = os.environ.get("AMREX_MPI", "OFF")
 AMReX_PRECISION = os.environ.get("AMREX_PRECISION", "DOUBLE")
 AMReX_PARTICLES_PRECISION = os.environ.get("AMREX_PARTICLES_PRECISION", "DOUBLE")
+AMReX_EB = os.environ.get("AMREX_EB", "OFF")
 #   single value or as a list 1;2;3
 AMReX_SPACEDIM = os.environ.get("AMREX_SPACEDIM", "1;2;3")
 BUILD_SHARED_LIBS = os.environ.get("AMREX_BUILD_SHARED_LIBS", "OFF")
@@ -252,13 +259,13 @@ setup(
     ext_modules=cxx_modules,
     cmdclass=cmdclass,
     zip_safe=False,
-    python_requires=">=3.8",  # left for CI, truly ">=3.9"
+    python_requires=">=3.11",
     tests_require=["pytest"],
     install_requires=install_requires,
     # cmdclass={'test': PyTest},
     # platforms='any',
     classifiers=[
-        "Development Status :: 4 - Beta",
+        "Development Status :: 5 - Production/Stable",
         "Natural Language :: English",
         "Environment :: Console",
         "Environment :: GPU",
@@ -272,14 +279,10 @@ setup(
         "Topic :: Software Development :: Libraries",
         "Programming Language :: C++",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.9",
-        "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
         "Programming Language :: Python :: 3.12",
         "Programming Language :: Python :: 3.13",
-        (
-            "License :: OSI Approved :: BSD License"
-        ),  # TODO: use real SPDX: BSD-3-Clause-LBNL
+        "Programming Language :: Python :: 3.14",
     ],
     # new PEP 639 format
     license="BSD-3-Clause-LBNL",

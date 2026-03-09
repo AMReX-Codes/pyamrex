@@ -334,17 +334,17 @@ add_custom_target(${pyAMReX_CUSTOM_TARGET_PREFIX}pip_install_nodeps
         ${pyAMReX_CUSTOM_TARGET_PREFIX}pip_wheel
 )
 
+# copy Python wrapper library to build directory
+add_custom_command(TARGET pyAMReX_${AMReX_SPACEDIM_LAST}d POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+        ${pyAMReX_SOURCE_DIR}/src/amrex
+        $<TARGET_FILE_DIR:pyAMReX_${AMReX_SPACEDIM_LAST}d>/..
+)
+
 
 # Tests #######################################################################
 #
 if(pyAMReX_BUILD_TESTING)
-    # copy Python wrapper library to build directory
-    add_custom_command(TARGET pyAMReX_${AMReX_SPACEDIM_LAST}d POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_directory
-            ${pyAMReX_SOURCE_DIR}/src/amrex
-            $<TARGET_FILE_DIR:pyAMReX_${AMReX_SPACEDIM_LAST}d>/..
-    )
-
     add_test(NAME pytest.AMReX
         COMMAND ${Python_EXECUTABLE} -m pytest -s -vvvv
             ${pyAMReX_SOURCE_DIR}/tests

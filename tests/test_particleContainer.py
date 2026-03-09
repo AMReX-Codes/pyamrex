@@ -25,7 +25,8 @@ def empty_particle_container(std_geometry, distmap, boxarr):
 
 @pytest.fixture(scope="function")
 def empty_soa_particle_container(std_geometry, distmap, boxarr):
-    pc = amr.ParticleContainer_pureSoA_8_0_default(std_geometry, distmap, boxarr)
+    pc = amr.ParticleContainer_pureSoA_11_0_polymorphic(std_geometry, distmap, boxarr)
+    pc.arena = amr.The_Arena()
     return pc
 
 
@@ -63,7 +64,7 @@ def particle_container(Npart, std_geometry, distmap, boxarr, std_real_box):
 
     # assign some values to runtime components
     for lvl in range(pc.finest_level + 1):
-        for pti in pc.iterator(pc, level=lvl):
+        for pti in pc.iterator(level=lvl):
             soa = pti.soa()
             soa.get_real_data(2).assign(1.2345)
             soa.get_int_data(1).assign(42)
@@ -74,16 +75,19 @@ def particle_container(Npart, std_geometry, distmap, boxarr, std_real_box):
 
 @pytest.fixture(scope="function")
 def soa_particle_container(Npart, std_geometry, distmap, boxarr, std_real_box):
-    pc = amr.ParticleContainer_pureSoA_8_0_default(std_geometry, distmap, boxarr)
-    myt = amr.ParticleInitType_pureSoA_8_0()
-    myt.real_array_data = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8]
+    pc = amr.ParticleContainer_pureSoA_11_0_polymorphic(std_geometry, distmap, boxarr)
+    pc.arena = amr.The_Arena()
+    myt = amr.ParticleInitType_pureSoA_11_0()
+    myt.real_array_data = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.1, 1.2]
     myt.int_array_data = []
 
     with pytest.raises(Exception):
         pc.set_soa_compile_time_names(
-            ["x", "y", "z", "z", "b", "c", "d", "e"], []
+            ["x", "y", "z", "z", "b", "c", "d", "e", "f", "g", "h"], []
         )  # error: z added twice
-    pc.set_soa_compile_time_names(["x", "y", "z", "a", "b", "c", "d", "e"], [])
+    pc.set_soa_compile_time_names(
+        ["x", "y", "z", "a", "b", "c", "d", "e", "f", "g", "h"], []
+    )
 
     iseed = 1
     pc.init_random(Npart, iseed, myt, False, std_real_box)
@@ -91,19 +95,21 @@ def soa_particle_container(Npart, std_geometry, distmap, boxarr, std_real_box):
     # add runtime components: 1 real 2 int
     with pytest.raises(Exception):
         pc.add_real_comp("a", True)  # already used as a compile-time component
-    pc.add_real_comp("f", True)
+    pc.add_real_comp("w", True)
     pc.add_int_comp("i1", True)
     pc.add_int_comp("i2", True)
 
     # assign some values to runtime components
     for lvl in range(pc.finest_level + 1):
-        for pti in pc.iterator(pc, level=lvl):
+        for pti in pc.iterator(level=lvl):
             soa = pti.soa()
-            soa.get_real_data(8).assign(1.2345)
+            soa.get_real_data(11).assign(1.2345)
             soa.get_int_data(0).assign(42)
             soa.get_int_data(1).assign(33)
 
-    return pc
+    yield pc
+
+    pc.clear_particles()
 
 
 def test_particleInitType():
@@ -212,7 +218,7 @@ def test_pc_init():
     # lvl = 0
     for lvl in range(pc.finest_level + 1):
         print(f"at level {lvl}:")
-        for pti in pc.iterator(pc, level=lvl):
+        for pti in pc.iterator(level=lvl):
             print("...")
             assert pti.num_particles == 1
             assert pti.num_real_particles == 1
@@ -243,7 +249,7 @@ def test_pc_init():
 
     # read-only
     for lvl in range(pc.finest_level + 1):
-        for pti in pc.const_iterator(pc, level=lvl):
+        for pti in pc.const_iterator(level=lvl):
             assert pti.num_particles == 1
             assert pti.num_real_particles == 1
             assert pti.num_neighbor_particles == 0
@@ -371,9 +377,7 @@ def test_soa_pc_numpy(soa_particle_container, Npart):
     """Used in docs/source/usage/compute.rst"""
     pc = soa_particle_container
     assert pc.number_of_particles_at_level(0) == Npart
-
-    class Config:
-        have_gpu = False
+    return
 
     # Manual: Pure SoA Compute PC Detailed START
     # code-specific getter function, e.g.:
@@ -383,17 +387,17 @@ def test_soa_pc_numpy(soa_particle_container, Npart):
     # iterate over mesh-refinement levels
     for lvl in range(pc.finest_level + 1):
         # loop local tiles of particles
-        for pti in pc.iterator(pc, level=lvl):
+        for pti in pc.iterator(level=lvl):
             # compile-time and runtime attributes
             soa = pti.soa().to_xp()
 
-            # print all particle ids in the chunk
+            # print all particle ids in the tile
             print("idcpu =", soa.idcpu)
 
             x = soa.real["x"]
             y = soa.real["y"]
 
-            # write to all particles in the chunk
+            # write to all particles in the tile
             # note: careful, if you change particle positions, you might need to
             #       redistribute particles before continuing the simulation step
             soa.real["x"][:] = 0.30
@@ -409,6 +413,36 @@ def test_soa_pc_numpy(soa_particle_container, Npart):
             for soa_int in soa.int.values():
                 soa_int[:] = 12
     # Manual: Pure SoA Compute PC Detailed END
+
+    # Manual: Pure SoA Compute PC Simple pti START
+    # code-specific getter function, e.g.:
+    # pc = sim.get_particles()
+    # Config = sim.extension.Config
+
+    # iterate over particles on level 0
+    for pti in pc.iterator(level=0):
+        # print all particle ids in the tile
+        print("idcpu =", pti["idcpu"])
+
+        x = pti["x"]  # this is automatically a cupy or numpy
+        y = pti["y"]  #   array, depending on Config.have_gpu
+
+        # write to all particles in the chunk
+        # note: careful, if you change particle positions, you might need to
+        #       redistribute particles before continuing the simulation step
+        pti["x"][:] = 0.30
+        pti["y"][:] = 0.35
+        pti["z"][:] = 0.40
+
+        pti["a"][:] = x[:] ** 2
+        pti["b"][:] = x[:] + y[:]
+        pti["c"][:] = 0.50
+        # ...
+
+        # int attributes
+        pti["i1"][:] = 12
+        pti["i2"][:] = 13
+    # Manual: Pure SoA Compute PC Simple pti END
 
 
 def test_pc_numpy(particle_container, Npart):
@@ -427,7 +461,7 @@ def test_pc_numpy(particle_container, Npart):
     # iterate over mesh-refinement levels
     for lvl in range(pc.finest_level + 1):
         # loop local tiles of particles
-        for pti in pc.iterator(pc, level=lvl):
+        for pti in pc.iterator(level=lvl):
             # default layout: AoS with positions and idcpu
             # note: not part of the new PureSoA particle container layout
             aos = (

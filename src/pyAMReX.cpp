@@ -49,6 +49,9 @@ void init_Vector(py::module &);
 void init_Version(py::module &);
 void init_VisMF(py::module &);
 void init_VectorPoisson3D(py::module&);
+#ifdef AMREX_USE_EB
+void init_EB(py::module &);
+#endif
 
 #if AMREX_SPACEDIM == 1
 PYBIND11_MODULE(amrex_1d_pybind, m) {
@@ -140,6 +143,10 @@ PYBIND11_MODULE(amrex_3d_pybind, m) {
     init_Version(m);
     init_VisMF(m);
     init_VectorPoisson3D(m);
+
+#ifdef AMREX_USE_EB
+    init_EB(m);
+#endif
 
     // authors
     m.attr("__author__") =

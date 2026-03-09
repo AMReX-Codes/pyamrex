@@ -16,7 +16,7 @@ jobs:
   # Build and install libamrex as AMReX CMake project
   stubs:
     name: Stubs
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     env:
       CC: gcc
       CXX: g++
@@ -24,10 +24,10 @@ jobs:
       OMP_NUM_THREAD: 4
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
       if: github.event_name != 'push' || github.repository != 'AMReX-Codes/pyamrex' || github.ref != 'refs/heads/development'
 
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
       if: github.event_name == 'push' && github.repository == 'AMReX-Codes/pyamrex' && github.ref == 'refs/heads/development'
       with:
         token: ${{ secrets.PYAMREX_PUSH_TOKEN }}
@@ -39,7 +39,7 @@ jobs:
     - uses: actions/setup-python@v5
       name: Install Python
       with:
-        python-version: '3.9'
+        python-version: '3.11'
 
     - name: Dependencies
       run: |
@@ -62,8 +62,9 @@ jobs:
         ccache -z
 
         python3 -m pip install -U pip setuptools[core] wheel
-        python3 -m pip install -U pip mpi4py pytest pybind11-stubgen pre-commit
-        cmake -S . -B build -DAMReX_SPACEDIM="1;2;3" -DpyAMReX_IPO=OFF
+        python3 -m pip install -U mpi4py pytest pre-commit
+        python3 -m pip install -U "pybind11-stubgen @ git+https://github.com/ax3l/pybind11-stubgen.git@fix-class-sorting"
+        cmake -S . -B build -DAMReX_SPACEDIM="1;2;3" -DAMReX_EB=ON -DpyAMReX_IPO=OFF
         cmake --build build -j 4 --target pip_install
 
         ccache -s

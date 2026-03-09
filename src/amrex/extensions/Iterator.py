@@ -38,3 +38,18 @@ def next(self):
         raise StopIteration
 
     return self
+
+
+def getitem(self, name):
+    """Access (read/write) particle vectors."""
+    if not self.is_soa_particle:
+        raise ValueError("Only pure SoA particle containers support pti.__get__")
+
+    if name == "idcpu":
+        return self.soa().get_idcpu_data().to_xp(copy=False)
+    elif name in self.soa().real_names:
+        return self.soa().get_real_data(name).to_xp(copy=False)
+    elif name in self.soa().int_names:
+        return self.soa().get_int_data(name).to_xp(copy=False)
+    else:
+        raise KeyError(f"Unknown particle attribute name: {name}")
