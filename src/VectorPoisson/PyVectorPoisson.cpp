@@ -9,10 +9,13 @@
 #include <AMReX_BoxArray.H>
 #include <AMReX_DistributionMapping.H>
 
+#ifdef AMREX_USE_EB
+#include <AMReX_EBFabFactory.H>
+#endif
+
 namespace py = pybind11;
 using namespace VectorPoisson3D;
 
-// Helper to extract Array<MultiFab*, 3> from a Python list, shared by both solvers
 static amrex::Array<amrex::MultiFab*, 3>
 mfab_list_to_array(py::list lst, const char* name)
 {
@@ -27,7 +30,6 @@ mfab_list_to_array(py::list lst, const char* name)
     return arr;
 }
 
-// Helper to extract optional mask, shared by both solvers
 static amrex::iMultiFab*
 extract_mask(py::object mask_obj)
 {
@@ -37,9 +39,9 @@ extract_mask(py::object mask_obj)
 
 void init_VectorPoisson3D(py::module& m)
 {
-    // -------------------------------------------------------------------------
-    // BoundaryHandler
-    // -------------------------------------------------------------------------
+    // ================================================================
+    // Cell-centered boundary handler
+    // ================================================================
     py::class_<BoundaryHandler>(m, "BoundaryHandler")
         .def(py::init<bool>(),
              py::arg("periodic_axial") = false,
@@ -51,9 +53,9 @@ void init_VectorPoisson3D(py::module& m)
         .def_readwrite("lobc", &BoundaryHandler::lobc)
         .def_readwrite("hibc", &BoundaryHandler::hibc);
 
-    // -------------------------------------------------------------------------
-    // VectorPoissonSolver (cell-centered, MLABecLaplacian)
-    // -------------------------------------------------------------------------
+    // ================================================================
+    // Cell-centered solver
+    // ================================================================
     py::class_<VectorPoissonSolver>(m, "VectorPoissonSolver")
         .def(py::init<const amrex::Geometry&,
                       const amrex::BoxArray&,
@@ -114,62 +116,104 @@ void init_VectorPoisson3D(py::module& m)
              py::arg("component"),
              "Get final residual for a given component (0=r, 1=theta, 2=z).");
 
-    // -------------------------------------------------------------------------
-    // VectorPoissonSolverNodal (nodal, MLEBNodeFDLaplacian)
-    // -------------------------------------------------------------------------
+    // ================================================================
+    // Nodal boundary handler 
+    // ================================================================
+    py::class_<NodalBoundaryHandler>(m, "NodalBoundaryHandler")
+        .def(py::init<bool, bool, bool>(),
+             py::arg("periodic_axial") = false,
+             py::arg("axial_dirichlet") = false,
+             py::arg("is_cartesian") = false,
+             R"(Initialize boundary handler for nodal vector Poisson equation.
+
+             Parameters
+             ----------
+             periodic_axial : bool, optional
+                 If True, set axial (z) boundaries to periodic. Default is False.
+             axial_dirichlet : bool, optional
+                 If True (and not periodic), set axial boundaries to Dirichlet
+                 instead of Neumann. Default is False.
+             )");
+
+    // ================================================================
+    // Nodal solver
+    // ================================================================
     py::class_<VectorPoissonSolverNodal>(m, "VectorPoissonSolverNodal")
-        .def(py::init<const amrex::Geometry&,
-                      const amrex::BoxArray&,
-                      const amrex::DistributionMapping&,
-                      const BoundaryHandler&>(),
+        .def(py::init(
+             [](const amrex::Geometry& geom,
+                const amrex::BoxArray& grids,
+                const amrex::DistributionMapping& dmap,
+                const NodalBoundaryHandler& bc_handler,
+                bool is_rz,
+                bool eb_enabled
+#ifdef AMREX_USE_EB
+                , py::object eb_factory_obj
+#endif
+                ) {
+#ifdef AMREX_USE_EB
+                 const amrex::EBFArrayBoxFactory* eb_factory = nullptr;
+                 if (!eb_factory_obj.is_none()) {
+                     eb_factory = py::cast<const amrex::EBFArrayBoxFactory*>(eb_factory_obj);
+                 }
+                 return std::make_unique<VectorPoissonSolverNodal>(
+                     geom, grids, dmap, bc_handler, is_rz, eb_enabled, eb_factory);
+#else
+                 return std::make_unique<VectorPoissonSolverNodal>(
+                     geom, grids, dmap, bc_handler, is_rz, eb_enabled);
+#endif
+             }),
              py::arg("geom"),
              py::arg("grids"),
              py::arg("dmap"),
              py::arg("bc_handler"),
-             R"(Initialize the nodal vector Poisson solver.
+             py::arg("is_rz") = true,
+             py::arg("eb_enabled") = false
+#ifdef AMREX_USE_EB
+             , py::arg("eb_factory") = py::none()
+#endif
+             , R"(Create a nodal vector Poisson solver.
 
              Parameters
              ----------
              geom : Geometry
-                 AMReX Geometry object.
+                 AMReX Geometry object describing the domain.
              grids : BoxArray
-                 Cell-centered BoxArray. The solver converts to nodal internally.
+                 Cell-centered AMReX BoxArray for the level.
              dmap : DistributionMapping
-                 AMReX DistributionMapping.
-             bc_handler : BoundaryHandler
-                 Boundary condition handler.
-
-             Notes
-             -----
-             A, J, and mask passed to solve() must be defined on the nodal
-             BoxArray: grids.surroundingNodes() (all directions in 2D RZ).
-             )")
+                 AMReX DistributionMapping for the level.
+             bc_handler : NodalBoundaryHandler
+                 Boundary conditions for each vector component.
+             is_rz : bool, optional
+                 Use RZ (cylindrical) coordinates. Default is True.
+             eb_enabled : bool, optional
+                 Enable embedded boundary support. Default is False.
+             eb_factory : EBFArrayBoxFactory or None, optional
+                 EB factory (required if eb_enabled is True). Default is None.
+             )"
+        )
         .def("solve",
              [](VectorPoissonSolverNodal& self,
                 py::list A_list,
                 py::list J_list,
-                py::object mask_obj,
                 amrex::Real relative_tol,
                 amrex::Real absolute_tol,
                 int max_iter,
                 int verbose) {
                  auto A = mfab_list_to_array(A_list, "A");
                  auto J = mfab_list_to_array(J_list, "J");
-                 self.solve(A, J, extract_mask(mask_obj),
-                            relative_tol, absolute_tol, max_iter, verbose);
+                 self.solve(A, J, relative_tol, absolute_tol, max_iter, verbose);
              },
              py::arg("A"),
              py::arg("J"),
-             py::arg("mask") = py::none(),
              py::arg("relative_tol") = 1.0e-10,
              py::arg("absolute_tol") = 0.0,
              py::arg("max_iter") = 100,
              py::arg("verbose") = 2,
              R"(Solve the nodal vector Poisson equation for RZ geometry.
 
-             Uses MLEBNodeFDLaplacian with setRZ(True). The 1/r² geometric
-             correction is applied to A_r and A_theta only; A_z receives no
-             correction term.
+             Uses MLEBNodeFDLaplacian. When is_rz is True, setRZ(True) is
+             called and the 1/r² geometric correction (setAlpha) is applied
+             to A_r and A_theta only; A_z receives no correction term.
 
              Parameters
              ----------
@@ -177,9 +221,6 @@ void init_VectorPoisson3D(py::module& m)
                  Solution vector potential [A_r, A_theta, A_z]. Must be NODAL.
              J : list of MultiFab
                  Source current density [J_r, J_theta, J_z]. Must be NODAL.
-             mask : iMultiFab or None, optional
-                 Overset mask (nodal) where 1 = solve, 0 = fixed value.
-                 If provided, set fixed values in A before calling solve.
              relative_tol : float
                  Relative tolerance for solver.
              absolute_tol : float
@@ -188,16 +229,13 @@ void init_VectorPoisson3D(py::module& m)
                  Maximum number of iterations.
              verbose : int
                  Verbosity level.
-
-             Notes
-             -----
-             A, J, and mask must be allocated on grids.surroundingNodes().
-             Passing cell-centered MultiFabs will produce incorrect results.
              )")
-        .def("getNumIters", &VectorPoissonSolverNodal::getNumIters,
+        .def("getNumIters",
+             py::overload_cast<int>(&VectorPoissonSolverNodal::getNumIters, py::const_),
              py::arg("component"),
              "Get number of iterations for a given component (0=r, 1=theta, 2=z).")
-        .def("getResidual", &VectorPoissonSolverNodal::getResidual,
+        .def("getResidual",
+             py::overload_cast<int>(&VectorPoissonSolverNodal::getResidual, py::const_),
              py::arg("component"),
              "Get final residual for a given component (0=r, 1=theta, 2=z).");
 }
