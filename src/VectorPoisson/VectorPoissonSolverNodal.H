@@ -20,30 +20,15 @@
 
 namespace VectorPoisson3D {
 
-/**
- * @brief Boundary condition handler for the nodal vector Poisson solver.
- *
- * Separate from BoundaryHandler because the nodal solver supports
- * different operator types and the constructor offers an additional
- * axial_dirichlet option.
- */
 struct NodalBoundaryHandler
 {
     amrex::Array<amrex::Array<amrex::LinOpBCType, AMREX_SPACEDIM>, 3> lobc;
     amrex::Array<amrex::Array<amrex::LinOpBCType, AMREX_SPACEDIM>, 3> hibc;
 
-    /**
-     * @brief Construct with default RZ boundary conditions.
-     *
-     * @param periodic_axial  If true, axial (z) direction uses periodic BCs.
-     * @param axial_dirichlet If true (and not periodic), axial BCs are Dirichlet
-     *                        instead of Neumann.
-     */
     NodalBoundaryHandler (bool periodic_axial = false, bool axial_dirichlet = false,
-                        bool is_cartesian = false)
+                          bool is_cartesian = false)
     {
         if (is_cartesian) {
-            // Cartesian: Dirichlet on all boundaries
             for (int adim = 0; adim < 3; ++adim) {
                 for (int d = 0; d < AMREX_SPACEDIM; ++d) {
                     lobc[adim][d] = amrex::LinOpBCType::Dirichlet;
@@ -51,7 +36,6 @@ struct NodalBoundaryHandler
                 }
             }
         } else {
-            // RZ geometry
             for (int adim = 0; adim < 3; ++adim) {
                 lobc[adim][0] = amrex::LinOpBCType::Neumann;
                 hibc[adim][0] = amrex::LinOpBCType::Dirichlet;
@@ -71,12 +55,47 @@ struct NodalBoundaryHandler
     }
 };
 
-/**
- * @brief Nodal vector Poisson solver for RZ geometry using MLEBNodeFDLaplacian.
- */
 class VectorPoissonSolverNodal
 {
 public:
+    struct CoilSpec {
+        amrex::Real z_lo, z_hi;
+        amrex::Real r1c;              // inner radius at z_lo
+        amrex::Real r2c;              // inner radius at z_hi
+        amrex::Real drc;              // radial thickness (constant)
+        amrex::Real psi;              // flux value for this coil
+    };
+
+    struct EBCoilFunctor
+    {
+        const CoilSpec* coils;
+        int ncoils;
+
+        AMREX_GPU_DEVICE
+        amrex::Real operator() (AMREX_D_DECL(amrex::Real r, amrex::Real z, amrex::Real /*unused*/)) const
+        {
+    #if (AMREX_SPACEDIM >= 2)
+            for (int ic = 0; ic < ncoils; ++ic) {
+                if (z >= coils[ic].z_lo && z <= coils[ic].z_hi) {
+                    amrex::Real dz_coil = coils[ic].z_hi - coils[ic].z_lo;
+                    amrex::Real tau = (dz_coil > amrex::Real(0.0))
+                        ? (z - coils[ic].z_lo) / dz_coil
+                        : amrex::Real(0.0);
+                    amrex::Real r_inner = coils[ic].r1c
+                        + (coils[ic].r2c - coils[ic].r1c) * tau;
+                    amrex::Real r_outer = r_inner + coils[ic].drc;
+                    if (r >= r_inner && r <= r_outer && r > amrex::Real(0.0)) {
+                        return coils[ic].psi / r;
+                    }
+                }
+            }
+    #else
+            amrex::ignore_unused(r, coils, ncoils);
+    #endif
+            return amrex::Real(0.0);
+        }
+    };
+
     VectorPoissonSolverNodal (
         const amrex::Geometry& geom,
         const amrex::BoxArray& grids,
@@ -103,6 +122,8 @@ public:
     [[nodiscard]] amrex::Array<amrex::Real, 3> getFinalResidual () const { return m_final_residual; }
     [[nodiscard]] amrex::Array<amrex::MLMG*, 3> getMLMG ();
 
+    void setEBCoils(int component, const std::vector<CoilSpec>& coils);
+
 private:
     amrex::Geometry m_geom;
     amrex::BoxArray m_grids;
@@ -121,6 +142,9 @@ private:
 
     amrex::Array<std::unique_ptr<amrex::MLEBNodeFDLaplacian>, 3> m_linop;
     amrex::Array<std::unique_ptr<amrex::MLMG>, 3> m_mlmg;
+
+    std::array<std::vector<CoilSpec>, 3> m_coils;
+    std::array<amrex::Gpu::DeviceVector<CoilSpec>, 3> m_d_coils;
 };
 
 } // namespace VectorPoisson3D

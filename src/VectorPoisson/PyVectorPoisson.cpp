@@ -117,7 +117,7 @@ void init_VectorPoisson3D(py::module& m)
              "Get final residual for a given component (0=r, 1=theta, 2=z).");
 
     // ================================================================
-    // Nodal boundary handler 
+    // Nodal boundary handler
     // ================================================================
     py::class_<NodalBoundaryHandler>(m, "NodalBoundaryHandler")
         .def(py::init<bool, bool, bool>(),
@@ -138,7 +138,7 @@ void init_VectorPoisson3D(py::module& m)
     // ================================================================
     // Nodal solver
     // ================================================================
-    py::class_<VectorPoissonSolverNodal>(m, "VectorPoissonSolverNodal")
+    auto solver_cls = py::class_<VectorPoissonSolverNodal>(m, "VectorPoissonSolverNodal")
         .def(py::init(
              [](const amrex::Geometry& geom,
                 const amrex::BoxArray& grids,
@@ -237,5 +237,28 @@ void init_VectorPoisson3D(py::module& m)
         .def("getResidual",
              py::overload_cast<int>(&VectorPoissonSolverNodal::getResidual, py::const_),
              py::arg("component"),
-             "Get final residual for a given component (0=r, 1=theta, 2=z).");
+             "Get final residual for a given component (0=r, 1=theta, 2=z).")
+        .def("setEBCoils", &VectorPoissonSolverNodal::setEBCoils,
+             py::arg("component"), py::arg("coils"),
+             R"(Set EB Dirichlet values for coil regions.
+
+             Parameters
+             ----------
+             component : int
+                 Vector component (0=r, 1=theta, 2=z).
+             coils : list of CoilSpec
+                 List of coil specifications with geometry and prescribed psi values.
+             )");
+
+    // ================================================================
+    // CoilSpec — nested under VectorPoissonSolverNodal
+    // ================================================================
+    py::class_<VectorPoissonSolverNodal::CoilSpec>(solver_cls, "CoilSpec")
+        .def(py::init<>())
+        .def_readwrite("z_lo", &VectorPoissonSolverNodal::CoilSpec::z_lo)
+        .def_readwrite("z_hi", &VectorPoissonSolverNodal::CoilSpec::z_hi)
+        .def_readwrite("r1c",  &VectorPoissonSolverNodal::CoilSpec::r1c)
+        .def_readwrite("r2c",  &VectorPoissonSolverNodal::CoilSpec::r2c)
+        .def_readwrite("drc",  &VectorPoissonSolverNodal::CoilSpec::drc)
+        .def_readwrite("psi",  &VectorPoissonSolverNodal::CoilSpec::psi);
 }

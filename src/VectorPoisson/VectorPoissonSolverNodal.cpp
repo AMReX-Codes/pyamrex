@@ -46,6 +46,13 @@ VectorPoissonSolverNodal::VectorPoissonSolverNodal (
 #endif
 }
 
+void VectorPoissonSolverNodal::setEBCoils(int component, 
+                                           const std::vector<CoilSpec>& coils)
+{
+    AMREX_ALWAYS_ASSERT(component >= 0 && component < 3);
+    m_coils[component] = coils;
+}
+
 void VectorPoissonSolverNodal::solve (
     const amrex::Array<amrex::MultiFab*, 3>& A,
     const amrex::Array<amrex::MultiFab*, 3>& J,
@@ -140,10 +147,26 @@ void VectorPoissonSolverNodal::solve (
         // Isotropic Laplacian: sigma = 1 in all directions
         m_linop[adim]->setSigma({AMREX_D_DECL(1.0_rt, 1.0_rt, 1.0_rt)});
 
-        // Homogeneous Dirichlet on embedded boundaries
+        // Set EB Dirichlet conditions if EB is enabled
 #ifdef AMREX_USE_EB
         if (m_eb_enabled) {
-            m_linop[adim]->setEBDirichlet(0.0_rt);
+            if (!m_coils[adim].empty()) {
+                auto const& coils = m_coils[adim];
+                int ncoils = static_cast<int>(coils.size());
+
+                m_d_coils[adim].resize(ncoils);
+                amrex::Gpu::copy(amrex::Gpu::hostToDevice,
+                                 coils.begin(), coils.end(),
+                                 m_d_coils[adim].begin());
+
+                EBCoilFunctor func;
+                func.coils = m_d_coils[adim].data();
+                func.ncoils = ncoils;
+
+                m_linop[adim]->setEBDirichlet(func);
+            } else {
+                m_linop[adim]->setEBDirichlet(0.0_rt);
+            }
         }
 #endif
 
@@ -174,7 +197,8 @@ void VectorPoissonSolverNodal::solve (
 
         // Skip components with zero source, except theta (adim==1) which may
         // have a BC-driven solution
-        if (norm_J == 0.0 && adim != 1) {
+        // if (norm_J == 0.0 && adim != 1) {
+        if (norm_J == 0.0 && m_coils[adim].empty()) {
             if (verbose > 0) {
                 Print() << "VectorPoissonSolverNodal: Component " << adim
                         << " has zero source, skipping...\n";
@@ -221,9 +245,9 @@ void VectorPoissonSolverNodal::solve (
         m_mlmg[adim]->setVerbose(verbose);
         m_mlmg[adim]->setMaxIter(max_iter);
 
-        m_mlmg[adim]->setBottomSolver(MLMG::BottomSolver::bicgstab);
+        // m_mlmg[adim]->setBottomSolver(MLMG::BottomSolver::bicgstab);
         m_mlmg[adim]->setBottomVerbose(0);
-        m_mlmg[adim]->setBottomMaxIter(200);
+        m_mlmg[adim]->setBottomMaxIter(1000);
         m_mlmg[adim]->setBottomTolerance(1.0e-4);
 
         m_mlmg[adim]->setConvergenceNormType(
