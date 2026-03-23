@@ -7,6 +7,7 @@
 #include <AMReX_DistributionMapping.H>
 #include <AMReX_Geometry.H>
 #include <AMReX_LO_BCTYPES.H>
+#include <AMReX_Math.H>
 #include <AMReX_MLEBNodeFDLaplacian.H>
 #include <AMReX_MLMG.H>
 #include <AMReX_MultiFab.H>
@@ -17,6 +18,7 @@
 #endif
 
 #include <memory>
+#include <vector>
 
 namespace VectorPoisson3D {
 
@@ -37,8 +39,16 @@ struct NodalBoundaryHandler
             }
         } else {
             for (int adim = 0; adim < 3; ++adim) {
+                // In AMReX RZ nodal operator, lo-r must be Neumann.
                 lobc[adim][0] = amrex::LinOpBCType::Neumann;
-                hibc[adim][0] = amrex::LinOpBCType::Dirichlet;
+
+                // PEC boundary at r_max
+                if (adim == 0) {
+                    hibc[adim][0] = amrex::LinOpBCType::Neumann; // r=rmax for A_r
+                } else {
+                    hibc[adim][0] = amrex::LinOpBCType::Dirichlet;   // r=rmax for A_theta, A_z
+                }
+                
 
                 if (periodic_axial) {
                     lobc[adim][1] = amrex::LinOpBCType::Periodic;
@@ -70,27 +80,56 @@ public:
     {
         const CoilSpec* coils;
         int ncoils;
+        amrex::Real problo_r;
+        amrex::Real problo_z;
+        amrex::Real inv_dr;
+        amrex::Real inv_dz;
 
         AMREX_GPU_DEVICE
         amrex::Real operator() (AMREX_D_DECL(amrex::Real r, amrex::Real z, amrex::Real /*unused*/)) const
         {
     #if (AMREX_SPACEDIM >= 2)
+            int best_ic = -1;
+            amrex::Real best_d2 = amrex::Real(1.0e300);
+
             for (int ic = 0; ic < ncoils; ++ic) {
-                if (z >= coils[ic].z_lo && z <= coils[ic].z_hi) {
-                    amrex::Real dz_coil = coils[ic].z_hi - coils[ic].z_lo;
-                    amrex::Real tau = (dz_coil > amrex::Real(0.0))
-                        ? (z - coils[ic].z_lo) / dz_coil
-                        : amrex::Real(0.0);
-                    amrex::Real r_inner = coils[ic].r1c
-                        + (coils[ic].r2c - coils[ic].r1c) * tau;
-                    amrex::Real r_outer = r_inner + coils[ic].drc;
-                    if (r >= r_inner && r <= r_outer && r > amrex::Real(0.0)) {
-                        return coils[ic].psi / r;
-                    }
+                amrex::Real dz_coil = coils[ic].z_hi - coils[ic].z_lo;
+                amrex::Real tau = amrex::Real(0.0);
+                if (dz_coil > amrex::Real(0.0)) {
+                    tau = (z - coils[ic].z_lo) / dz_coil;
+                    tau = amrex::max(amrex::Real(0.0), amrex::min(amrex::Real(1.0), tau));
+                }
+
+                amrex::Real r_inner = coils[ic].r1c
+                    + (coils[ic].r2c - coils[ic].r1c) * tau;
+                amrex::Real r_outer = r_inner + coils[ic].drc;
+
+                amrex::Real dr_out = amrex::Real(0.0);
+                if (r < r_inner) {
+                    dr_out = r_inner - r;
+                } else if (r > r_outer) {
+                    dr_out = r - r_outer;
+                }
+
+                amrex::Real dz_out = amrex::Real(0.0);
+                if (z < coils[ic].z_lo) {
+                    dz_out = coils[ic].z_lo - z;
+                } else if (z > coils[ic].z_hi) {
+                    dz_out = z - coils[ic].z_hi;
+                }
+
+                amrex::Real d2 = dr_out * dr_out + dz_out * dz_out;
+                if (d2 < best_d2) {
+                    best_d2 = d2;
+                    best_ic = ic;
                 }
             }
+
+            if (best_ic >= 0 && r > amrex::Real(0.0)) {
+                return coils[best_ic].psi / r;
+            }
     #else
-            amrex::ignore_unused(r, coils, ncoils);
+            amrex::ignore_unused(r, coils, ncoils, problo_r, problo_z, inv_dr, inv_dz);
     #endif
             return amrex::Real(0.0);
         }

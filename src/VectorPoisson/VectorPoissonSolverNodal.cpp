@@ -5,6 +5,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <stdexcept>
 
 namespace VectorPoisson3D {
 
@@ -64,6 +65,12 @@ void VectorPoissonSolverNodal::solve (
     using namespace amrex;
 
     constexpr Real mu0 = 1.25663706212e-6;
+
+
+    for (int adim=0; adim < 3; ++adim) {
+        // Synchronize ghost cells
+        J[adim]->FillBoundary(m_geom.periodicity());
+    }
 
     // ----------------------------------------------------------------
     // Determine if current is zero everywhere (across all components)
@@ -162,6 +169,12 @@ void VectorPoissonSolverNodal::solve (
                 EBCoilFunctor func;
                 func.coils = m_d_coils[adim].data();
                 func.ncoils = ncoils;
+                auto const problo = m_geom.ProbLoArray();
+                auto const cell_size = m_geom.CellSizeArray();
+                func.problo_r = problo[0];
+                func.problo_z = problo[1];
+                func.inv_dr = (cell_size[0] > 0.0_rt) ? (1.0_rt / cell_size[0]) : 0.0_rt;
+                func.inv_dz = (cell_size[1] > 0.0_rt) ? (1.0_rt / cell_size[1]) : 0.0_rt;
 
                 m_linop[adim]->setEBDirichlet(func);
             } else {
@@ -245,18 +258,30 @@ void VectorPoissonSolverNodal::solve (
         m_mlmg[adim]->setVerbose(verbose);
         m_mlmg[adim]->setMaxIter(max_iter);
 
-        // m_mlmg[adim]->setBottomSolver(MLMG::BottomSolver::bicgstab);
+        m_mlmg[adim]->setBottomSolver(MLMG::BottomSolver::bicgstab);
         m_mlmg[adim]->setBottomVerbose(0);
         m_mlmg[adim]->setBottomMaxIter(1000);
         m_mlmg[adim]->setBottomTolerance(1.0e-4);
+        m_mlmg[adim]->setThrowException(true);
 
         m_mlmg[adim]->setConvergenceNormType(
             always_use_bnorm ? MLMGNormType::bnorm : MLMGNormType::greater);
 
         // Solve
-        m_final_residual[adim] = m_mlmg[adim]->solve(
-            {A[adim]}, {&rhs}, relative_tol, absolute_tol);
-        m_num_iters[adim] = m_mlmg[adim]->getNumIters();
+        try {
+            m_final_residual[adim] = m_mlmg[adim]->solve(
+                {A[adim]}, {&rhs}, relative_tol, absolute_tol);
+            m_num_iters[adim] = m_mlmg[adim]->getNumIters();
+        } catch (std::exception const& ex) {
+            amrex::Print() << "VectorPoissonSolverNodal: MLMG failure for component "
+                           << adim << " (rtol=" << relative_tol
+                           << ", atol=" << absolute_tol
+                           << ", max_iter=" << max_iter
+                           << "). " << ex.what() << "\n";
+            throw std::runtime_error(
+                "VectorPoissonSolverNodal MLMG failure for component "
+                + std::to_string(adim) + ": " + ex.what());
+        }
 
         // Synchronize ghost cells
         A[adim]->FillBoundary(m_geom.periodicity());

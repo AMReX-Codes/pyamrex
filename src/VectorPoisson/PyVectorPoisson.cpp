@@ -156,7 +156,8 @@ void init_VectorPoisson3D(py::module& m)
                      eb_factory = py::cast<const amrex::EBFArrayBoxFactory*>(eb_factory_obj);
                  }
                  return std::make_unique<VectorPoissonSolverNodal>(
-                     geom, grids, dmap, bc_handler, is_rz, eb_enabled, eb_factory);
+                     geom, grids, dmap, bc_handler, is_rz, eb_enabled,
+                     eb_factory);
 #else
                  return std::make_unique<VectorPoissonSolverNodal>(
                      geom, grids, dmap, bc_handler, is_rz, eb_enabled);

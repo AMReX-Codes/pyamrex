@@ -71,15 +71,38 @@ def run_solve(ncell):
     ba.max_size(max(ncell, 32))
     dm = amr.DistributionMapping(ba)
 
+    pp = amr.ParmParse("eb2")
+    for key in ("geom_type", "parser_function"):
+        try:
+            pp.remove(key)
+        except Exception:
+            pass
+    pp.add("geom_type", "all_regular")
+
     amr.EB2_Build(geom, required_coarsening_level=0,
                   max_coarsening_level=0, ngrow=4)
 
-    eb_factory = amr.makeEBFabFactory(
-        geom, ba, dm, amr.Vector_int([1, 1, 1]), amr.EBSupport.full
-    )
-
     dx = [geom.ProbLength(d) / geom.domain.length(d) for d in range(2)]
     dr, dz = dx[0], dx[1]
+    problo = geom.ProbLo()
+
+    nr_nodal = geom.domain.length(0) + 1
+    nz_nodal = geom.domain.length(1) + 1
+    r_nodal = problo[0] + xp.arange(nr_nodal, dtype=xp.float64) * dr
+    z_nodal = problo[1] + xp.arange(nz_nodal, dtype=xp.float64) * dz
+    rr, zz = xp.meshgrid(r_nodal, z_nodal, indexing="ij")
+
+    nodal_mask = xp.zeros((nr_nodal, nz_nodal), dtype=bool)
+    for c in COILS:
+        r_lo, r_hi = coil_r_bounds(c)
+        nodal_mask |= (
+            (rr >= r_lo) & (rr <= r_hi) &
+            (zz >= c["z_lo"]) & (zz <= c["z_hi"])
+        )
+
+    eb_factory = amr.makeStaircaseEBFabFactoryFromCupy(
+        geom, ba, dm, nodal_mask, amr.Vector_int([1, 1, 1]), amr.EBSupport.full
+    )
 
     ba_nd = amr.BoxArray(ba)
     ba_nd.convert(amr.IntVect(1, 1))
@@ -235,18 +258,7 @@ def main():
 
 
 if __name__ == "__main__":
-    parser_func = (
-        "max("
-        "min(min(x-0.30, 0.70-x), min(y-0.60, 0.80-y)),"
-        "min(min(x-0.30, 0.70-x), min(y-0.20, 0.40-y)))"
-    )
-    amr.initialize(
-        [
-            "",
-            "eb2.geom_type=parser",
-            "eb2.parser_function=" + '"' + parser_func + '"',
-        ]
-    )
+    amr.initialize([""])
     try:
         main()
     finally:
