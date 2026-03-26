@@ -124,7 +124,14 @@ def run_solve(ncell):
         cs.psi = c['psi']
         coil_specs.append(cs)
 
-    bc = amr.NodalBoundaryHandler(periodic_axial=False, axial_dirichlet=True)
+    bc = amr.NodalBoundaryHandler(False)
+    lobc = bc.lobc
+    hibc = bc.hibc
+    for adim in range(3):
+        lobc[adim][1] = amr.LinOpBCType.Dirichlet
+        hibc[adim][1] = amr.LinOpBCType.Dirichlet
+    bc.lobc = lobc
+    bc.hibc = hibc
     solver = amr.VectorPoissonSolverNodal(
         geom, ba, dm, bc,
         is_rz=True,

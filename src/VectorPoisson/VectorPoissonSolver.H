@@ -17,7 +17,7 @@ struct BoundaryHandler {
     amrex::Array<amrex::Array<amrex::LinOpBCType, AMREX_SPACEDIM>, 3> lobc;
     amrex::Array<amrex::Array<amrex::LinOpBCType, AMREX_SPACEDIM>, 3> hibc;
 
-    BoundaryHandler(bool periodic_axial = false) {
+    BoundaryHandler() {
         for (int adim = 0; adim < 3; ++adim) {
             // Symmetry boundary ar r=0
             if (adim == 2) {
@@ -38,16 +38,13 @@ struct BoundaryHandler {
             hibc[adim][1] = amrex::LinOpBCType::Neumann;   // z=zmax for A_z
 
         }
-
-        // If periodic in axial direction, override BCs to periodic
-        if (periodic_axial) {
-            for (int adim = 0; adim < 3; ++adim) {
-                lobc[adim][1] = amrex::LinOpBCType::Periodic;
-                hibc[adim][1] = amrex::LinOpBCType::Periodic;
-            }
-        }
-        
     }
+
+    BoundaryHandler (
+        amrex::Array<amrex::Array<amrex::LinOpBCType, AMREX_SPACEDIM>, 3> const& lo,
+        amrex::Array<amrex::Array<amrex::LinOpBCType, AMREX_SPACEDIM>, 3> const& hi)
+        : lobc(lo), hibc(hi)
+    {}
 };
 
 /**

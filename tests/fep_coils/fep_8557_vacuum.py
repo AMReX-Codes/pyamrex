@@ -172,7 +172,7 @@ def setup_solver(coils_list, Nr, Nz, rmax, zmax):
         A[d].set_val(0.0)
         J[d].set_val(0.0)
 
-    bc = amr.NodalBoundaryHandler(periodic_axial=False, axial_dirichlet=False)
+    bc = amr.NodalBoundaryHandler(False)
     solver = amr.VectorPoissonSolverNodal(
         geom, ba, dm, bc,
         is_rz=True, eb_enabled=True, eb_factory=eb_factory,
