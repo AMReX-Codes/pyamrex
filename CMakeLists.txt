@@ -72,6 +72,16 @@ pyamrex_set_default_install_dirs()
 
 # Options and Variants ########################################################
 #
+set(pyAMReX_CODES_VALUES SoA tests FHDeX ImpactX WarpX)
+set(pyAMReX_CODES "SoA;tests;FHDeX;ImpactX;WarpX" CACHE STRING "Fine-tune the pre-compiled particle containers for downstream codes <SoA;tests;FHDeX;ImpactX;WarpX>")
+list(REMOVE_DUPLICATES pyAMReX_CODES)
+foreach(PC IN LISTS pyAMReX_CODES)
+    if(NOT PC IN_LIST pyAMReX_CODES_VALUES)
+        message(FATAL_ERROR "pyAMReX_CODES=${PC} is not allowed."
+                " Must be one of ${pyAMReX_CODES_VALUES}")
+    endif()
+endforeach()
+
 set(_pyAMReX_IPO_DEFAULT ON)
 if(DEFINED CMAKE_INTERPROCEDURAL_OPTIMIZATION)
     set(_pyAMReX_IPO_DEFAULT ${CMAKE_INTERPROCEDURAL_OPTIMIZATION})
@@ -215,7 +225,17 @@ endforeach()
 
 # Defines #####################################################################
 #
-# none needed - please use AMReX_Config.H
+# Please primarily use AMReX_Config.H
+
+# temporary: this is primarily to save compile-time
+#   mainly used in src/Particle for compile-time PC variants of downstream
+#   codes, see https://github.com/AMReX-Codes/pyamrex/issues/460 for future
+#   evolution
+foreach(D IN LISTS AMReX_SPACEDIM)
+    foreach(PC IN LISTS pyAMReX_CODES)
+        target_compile_definitions(pyAMReX_${D}d PRIVATE PYAMREX_CODES_${PC}=1)
+    endforeach()
+endforeach()
 
 
 # Generate Configuration and .pc Files ########################################
