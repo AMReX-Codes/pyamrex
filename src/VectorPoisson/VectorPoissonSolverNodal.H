@@ -27,8 +27,7 @@ struct NodalBoundaryHandler
     amrex::Array<amrex::Array<amrex::LinOpBCType, AMREX_SPACEDIM>, 3> lobc;
     amrex::Array<amrex::Array<amrex::LinOpBCType, AMREX_SPACEDIM>, 3> hibc;
 
-    NodalBoundaryHandler (bool periodic_axial = false, bool axial_dirichlet = false,
-                          bool is_cartesian = false)
+    NodalBoundaryHandler (bool is_cartesian = false)
     {
         if (is_cartesian) {
             for (int adim = 0; adim < 3; ++adim) {
@@ -50,19 +49,17 @@ struct NodalBoundaryHandler
                 }
                 
 
-                if (periodic_axial) {
-                    lobc[adim][1] = amrex::LinOpBCType::Periodic;
-                    hibc[adim][1] = amrex::LinOpBCType::Periodic;
-                } else if (axial_dirichlet) {
-                    lobc[adim][1] = amrex::LinOpBCType::Dirichlet;
-                    hibc[adim][1] = amrex::LinOpBCType::Dirichlet;
-                } else {
-                    lobc[adim][1] = amrex::LinOpBCType::Neumann;
-                    hibc[adim][1] = amrex::LinOpBCType::Neumann;
-                }
+                lobc[adim][1] = amrex::LinOpBCType::Neumann;
+                hibc[adim][1] = amrex::LinOpBCType::Neumann;
             }
         }
     }
+
+    NodalBoundaryHandler (
+        amrex::Array<amrex::Array<amrex::LinOpBCType, AMREX_SPACEDIM>, 3> const& lo,
+        amrex::Array<amrex::Array<amrex::LinOpBCType, AMREX_SPACEDIM>, 3> const& hi)
+        : lobc(lo), hibc(hi)
+    {}
 };
 
 class VectorPoissonSolverNodal

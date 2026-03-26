@@ -39,17 +39,44 @@ extract_mask(py::object mask_obj)
 
 void init_VectorPoisson3D(py::module& m)
 {
+    py::enum_<amrex::LinOpBCType>(m, "LinOpBCType")
+        .value("interior", amrex::LinOpBCType::interior)
+        .value("Dirichlet", amrex::LinOpBCType::Dirichlet)
+        .value("Neumann", amrex::LinOpBCType::Neumann)
+        .value("reflect_odd", amrex::LinOpBCType::reflect_odd)
+        .value("Marshak", amrex::LinOpBCType::Marshak)
+        .value("SanchezPomraning", amrex::LinOpBCType::SanchezPomraning)
+        .value("inflow", amrex::LinOpBCType::inflow)
+        .value("inhomogNeumann", amrex::LinOpBCType::inhomogNeumann)
+        .value("Robin", amrex::LinOpBCType::Robin)
+        .value("symmetry", amrex::LinOpBCType::symmetry)
+        .value("Periodic", amrex::LinOpBCType::Periodic)
+        .value("bogus", amrex::LinOpBCType::bogus);
+
     // ================================================================
     // Cell-centered boundary handler
     // ================================================================
     py::class_<BoundaryHandler>(m, "BoundaryHandler")
-        .def(py::init<bool>(),
-             py::arg("periodic_axial") = false,
-             "Initialize boundary handler for vector Poisson equation.\n\n"
-             "Parameters\n"
-             "----------\n"
-             "periodic_axial : bool, optional\n"
-             "    If True, set axial (z) boundaries to periodic else Neumann. Default is False.\n")
+        .def(py::init<>(),
+             "Initialize boundary handler with default RZ BCs.\n\n"
+             "Defaults:\n"
+             "- lo-r: (A_r/A_theta Dirichlet, A_z Neumann)\n"
+             "- hi-r: (A_r Neumann, A_theta/A_z Dirichlet)\n"
+             "- lo-z/hi-z: Neumann\n")
+        .def(py::init<
+             const amrex::Array<amrex::Array<amrex::LinOpBCType, AMREX_SPACEDIM>, 3>&,
+             const amrex::Array<amrex::Array<amrex::LinOpBCType, AMREX_SPACEDIM>, 3>&>(),
+             py::arg("lobc"),
+             py::arg("hibc"),
+             R"(Initialize boundary handler from per-side BC arrays.
+
+             Parameters
+             ----------
+             lobc : list[list[LinOpBCType]]
+                 Low-side BCs indexed as [component][dimension].
+             hibc : list[list[LinOpBCType]]
+                 High-side BCs indexed as [component][dimension].
+             )")
         .def_readwrite("lobc", &BoundaryHandler::lobc)
         .def_readwrite("hibc", &BoundaryHandler::hibc);
 
@@ -120,20 +147,35 @@ void init_VectorPoisson3D(py::module& m)
     // Nodal boundary handler
     // ================================================================
     py::class_<NodalBoundaryHandler>(m, "NodalBoundaryHandler")
-        .def(py::init<bool, bool, bool>(),
-             py::arg("periodic_axial") = false,
-             py::arg("axial_dirichlet") = false,
+        .def(py::init<bool>(),
              py::arg("is_cartesian") = false,
-             R"(Initialize boundary handler for nodal vector Poisson equation.
+             R"(Initialize nodal boundary handler with default RZ/cartesian BCs.
 
              Parameters
              ----------
-             periodic_axial : bool, optional
-                 If True, set axial (z) boundaries to periodic. Default is False.
-             axial_dirichlet : bool, optional
-                 If True (and not periodic), set axial boundaries to Dirichlet
-                 instead of Neumann. Default is False.
-             )");
+             is_cartesian : bool, optional
+                 If True, initialize all boundaries as Dirichlet. If False,
+                 initialize with default RZ settings:
+                 - lo-r: Neumann
+                 - hi-r: (A_r Neumann, A_theta/A_z Dirichlet)
+                 - lo-z/hi-z: Neumann
+             )")
+        .def(py::init<
+             const amrex::Array<amrex::Array<amrex::LinOpBCType, AMREX_SPACEDIM>, 3>&,
+             const amrex::Array<amrex::Array<amrex::LinOpBCType, AMREX_SPACEDIM>, 3>&>(),
+             py::arg("lobc"),
+             py::arg("hibc"),
+             R"(Initialize nodal boundary handler from per-side BC arrays.
+
+             Parameters
+             ----------
+             lobc : list[list[LinOpBCType]]
+                 Low-side BCs indexed as [component][dimension].
+             hibc : list[list[LinOpBCType]]
+                 High-side BCs indexed as [component][dimension].
+             )")
+        .def_readwrite("lobc", &NodalBoundaryHandler::lobc)
+        .def_readwrite("hibc", &NodalBoundaryHandler::hibc);
 
     // ================================================================
     // Nodal solver
