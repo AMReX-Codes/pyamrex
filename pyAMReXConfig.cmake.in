@@ -11,6 +11,10 @@ if(POLICY CMP0074)
 endif()
 
 # General options
+set(pyAMReX_CODES                     @pyAMReX_CODES@)
+foreach(PC IN LISTS pyAMReX_CODES)
+    set(pyAMReX_CODES_${PC}_FOUND   ON)
+endforeach()
 set(pyAMReX_SPACEDIM                  @AMReX_SPACEDIM@)
 set(_search_amrex_dim)
 foreach(D IN LISTS AMReX_SPACEDIM)

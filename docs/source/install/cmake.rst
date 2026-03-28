@@ -104,11 +104,12 @@ pyAMReX can be configured in further detail with options from AMReX, which are d
 **Developers** might be interested in additional options that control dependencies of pyAMReX.
 By default, the most important dependencies of pyAMReX are automatically downloaded for convenience:
 
-============================= ============================================== ===========================================================
+============================= ============================================== ===================================================================
 CMake Option                  Default & Values                               Description
-============================= ============================================== ===========================================================
+============================= ============================================== ===================================================================
 ``BUILD_SHARED_LIBS``         ON/**OFF**                                     Build shared libraries for dependencies
 ``pyAMReX_CCACHE``            **ON**/OFF                                     Search and use CCache to speed up rebuilds.
+``pyAMReX_CODES``             ``"SoA;tests;FHDeX;ImpactX;WarpX"``            Fine-tune the pre-compiled particle containers for downstream codes
 ``pyAMReX_IPO``               **ON**/OFF                                     Compile with interprocedural/link optimization (IPO/LTO)
 ``pyAMReX_amrex_src``         *None*                                         Path to AMReX source directory (preferred if set)
 ``pyAMReX_amrex_repo``        ``https://github.com/AMReX-Codes/amrex.git``   Repository URI to pull and build AMReX from
@@ -118,7 +119,7 @@ CMake Option                  Default & Values                               Des
 ``pyAMReX_pybind11_repo``     ``https://github.com/pybind/pybind11.git``     Repository URI to pull and build pybind11 from
 ``pyAMReX_pybind11_branch``   *we set and maintain a compatible commit*      Repository branch for ``pyAMReX_pybind11_repo``
 ``pyAMReX_pybind11_internal`` **ON**/OFF                                     Needs a pre-installed pybind11 module if set to ``OFF``
-============================= ============================================== ===========================================================
+============================= ============================================== ===================================================================
 
 For example, one can also build against a local AMReX copy.
 Assuming AMReX' source is located in ``$HOME/src/amrex``, add the ``cmake`` argument ``-DpyAMReX_amrex_src=$HOME/src/amrex``.
