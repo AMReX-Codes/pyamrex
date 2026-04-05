@@ -42,6 +42,78 @@ namespace
             .append(allocstr);
         return podv_name;
     }
+
+    template <class T, class Allocator>
+    bool
+    is_host_accessible(PODVector<T, Allocator> const & podvector)
+    {
+#ifdef AMREX_USE_GPU
+        if constexpr (IsArenaAllocator<Allocator>::value) {
+            return static_cast<Allocator const &>(podvector)
+                .arena()
+                ->isHostAccessible();
+        } else
+#endif
+        {
+            return true;
+        }
+    }
+
+    template <class PODVector_type>
+    std::size_t
+    checked_index(PODVector_type const & podvector, int const v)
+    {
+        auto index = static_cast<std::ptrdiff_t>(v);
+        auto const size = static_cast<std::ptrdiff_t>(podvector.size());
+        if (index < 0) {
+            index += size;
+        }
+        if (index < 0 || index >= size) {
+            throw py::index_error("PODVector index out of range");
+        }
+        return static_cast<std::size_t>(index);
+    }
+
+    template <class T, class Allocator>
+    T
+    get_item(PODVector<T, Allocator> const & podvector, int const v)
+    {
+        auto const index = checked_index(podvector, v);
+#ifdef AMREX_USE_GPU
+        if (!is_host_accessible(podvector)) {
+            T value;
+            Gpu::copyAsync(
+                Gpu::deviceToHost,
+                podvector.begin() + index,
+                podvector.begin() + index + 1,
+                &value
+            );
+            Gpu::streamSynchronize();
+            return value;
+        }
+#endif
+        return podvector[index];
+    }
+
+    template <class T, class Allocator>
+    void
+    set_item(PODVector<T, Allocator> & podvector, int const v, T const value)
+    {
+        auto const index = checked_index(podvector, v);
+#ifdef AMREX_USE_GPU
+        if (!is_host_accessible(podvector)) {
+            Gpu::copyAsync(
+                Gpu::hostToDevice,
+                &value,
+                &value + 1,
+                podvector.begin() + index
+            );
+            Gpu::streamSynchronize();
+            return;
+        }
+#endif
+        podvector[index] = value;
+    }
 }
 
 template <class T, class Allocator = std::allocator<T> >
@@ -149,8 +221,8 @@ void make_PODVector(py::module &m, std::string typestr, std::string allocstr)
             return d;
         })
         // setter & getter
-        .def("__setitem__", [](PODVector_type & podvector, int const v, T const value){ podvector[v] = value; })
-        .def("__getitem__", [](PODVector_type & pv, int const v){ return pv[v]; })
+        .def("__setitem__", &set_item<T, Allocator>)
+        .def("__getitem__", &get_item<T, Allocator>)
     ;
 }
 
