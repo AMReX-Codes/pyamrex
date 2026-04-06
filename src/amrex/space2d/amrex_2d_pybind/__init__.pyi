@@ -89,11 +89,17 @@ __all__: list[str] = [
     "ArrayOfStructs_2_1_default",
     "ArrayOfStructs_2_1_pinned",
     "ArrayOfStructs_2_1_polymorphic",
+    "AsyncVector_int",
+    "AsyncVector_real",
+    "AsyncVector_uint64",
     "BaseFab_Real",
     "Box",
     "BoxArray",
     "Config",
     "CoordSys",
+    "DeviceVector_int",
+    "DeviceVector_real",
+    "DeviceVector_uint64",
     "Dim3",
     "Direction",
     "DistributionMapping",
@@ -111,6 +117,9 @@ __all__: list[str] = [
     "Geometry",
     "GeometryData",
     "GrowthStrategy",
+    "HostVector_int",
+    "HostVector_real",
+    "HostVector_uint64",
     "IndexType",
     "IntVect",
     "IntVect1D",
@@ -127,7 +136,16 @@ __all__: list[str] = [
     "MPMD_MyProc",
     "MPMD_MyProgId",
     "MPMD_NProcs",
+    "ManagedDeviceVector_int",
+    "ManagedDeviceVector_real",
+    "ManagedDeviceVector_uint64",
+    "ManagedVector_int",
+    "ManagedVector_real",
+    "ManagedVector_uint64",
     "MultiFab",
+    "NonManagedDeviceVector_int",
+    "NonManagedDeviceVector_real",
+    "NonManagedDeviceVector_uint64",
     "PODVector_int_arena",
     "PODVector_int_default",
     "PODVector_int_pinned",
@@ -255,6 +273,9 @@ __all__: list[str] = [
     "Particle_6_0",
     "Particle_7_0",
     "Periodicity",
+    "PinnedVector_int",
+    "PinnedVector_real",
+    "PinnedVector_uint64",
     "PlotFileData",
     "Poisson",
     "RealBox",
@@ -28802,6 +28823,27 @@ basic: EBSupport  # value = <EBSupport.basic: 1>
 full: EBSupport  # value = <EBSupport.full: 3>
 volume: EBSupport  # value = <EBSupport.volume: 2>
 IntVect = IntVect2D
+DeviceVector_real = PODVector_real_std
+NonManagedDeviceVector_real = PODVector_real_std
+ManagedVector_real = PODVector_real_std
+ManagedDeviceVector_real = PODVector_real_std
+PinnedVector_real = PODVector_real_std
+AsyncVector_real = PODVector_real_std
+HostVector_real = PODVector_real_std
 PODVector_real_default = PODVector_real_std
+DeviceVector_int = PODVector_int_std
+NonManagedDeviceVector_int = PODVector_int_std
+ManagedVector_int = PODVector_int_std
+ManagedDeviceVector_int = PODVector_int_std
+PinnedVector_int = PODVector_int_std
+AsyncVector_int = PODVector_int_std
+HostVector_int = PODVector_int_std
 PODVector_int_default = PODVector_int_std
+DeviceVector_uint64 = PODVector_uint64_std
+NonManagedDeviceVector_uint64 = PODVector_uint64_std
+ManagedVector_uint64 = PODVector_uint64_std
+ManagedDeviceVector_uint64 = PODVector_uint64_std
+PinnedVector_uint64 = PODVector_uint64_std
+AsyncVector_uint64 = PODVector_uint64_std
+HostVector_uint64 = PODVector_uint64_std
 PODVector_uint64_default = PODVector_uint64_std

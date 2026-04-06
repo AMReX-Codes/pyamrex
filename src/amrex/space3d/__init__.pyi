@@ -326,11 +326,40 @@ from amrex.space3d.amrex_3d_pybind import (
     write_single_level_plotfile,
 )
 from amrex.space3d.amrex_3d_pybind import IntVect3D as IntVect
+from amrex.space3d.amrex_3d_pybind import PODVector_int_std as AsyncVector_int
+from amrex.space3d.amrex_3d_pybind import PODVector_int_std as DeviceVector_int
+from amrex.space3d.amrex_3d_pybind import PODVector_int_std as HostVector_int
+from amrex.space3d.amrex_3d_pybind import PODVector_int_std as ManagedDeviceVector_int
+from amrex.space3d.amrex_3d_pybind import PODVector_int_std as ManagedVector_int
+from amrex.space3d.amrex_3d_pybind import (
+    PODVector_int_std as NonManagedDeviceVector_int,
+)
 from amrex.space3d.amrex_3d_pybind import PODVector_int_std as PODVector_int_default
+from amrex.space3d.amrex_3d_pybind import PODVector_int_std as PinnedVector_int
+from amrex.space3d.amrex_3d_pybind import PODVector_real_std as AsyncVector_real
+from amrex.space3d.amrex_3d_pybind import PODVector_real_std as DeviceVector_real
+from amrex.space3d.amrex_3d_pybind import PODVector_real_std as HostVector_real
+from amrex.space3d.amrex_3d_pybind import PODVector_real_std as ManagedDeviceVector_real
+from amrex.space3d.amrex_3d_pybind import PODVector_real_std as ManagedVector_real
+from amrex.space3d.amrex_3d_pybind import (
+    PODVector_real_std as NonManagedDeviceVector_real,
+)
 from amrex.space3d.amrex_3d_pybind import PODVector_real_std as PODVector_real_default
+from amrex.space3d.amrex_3d_pybind import PODVector_real_std as PinnedVector_real
+from amrex.space3d.amrex_3d_pybind import PODVector_uint64_std as AsyncVector_uint64
+from amrex.space3d.amrex_3d_pybind import PODVector_uint64_std as DeviceVector_uint64
+from amrex.space3d.amrex_3d_pybind import PODVector_uint64_std as HostVector_uint64
+from amrex.space3d.amrex_3d_pybind import (
+    PODVector_uint64_std as ManagedDeviceVector_uint64,
+)
+from amrex.space3d.amrex_3d_pybind import PODVector_uint64_std as ManagedVector_uint64
+from amrex.space3d.amrex_3d_pybind import (
+    PODVector_uint64_std as NonManagedDeviceVector_uint64,
+)
 from amrex.space3d.amrex_3d_pybind import (
     PODVector_uint64_std as PODVector_uint64_default,
 )
+from amrex.space3d.amrex_3d_pybind import PODVector_uint64_std as PinnedVector_uint64
 
 from . import amrex_3d_pybind
 
@@ -374,11 +403,17 @@ __all__: list[str] = [
     "ArrayOfStructs_2_1_default",
     "ArrayOfStructs_2_1_pinned",
     "ArrayOfStructs_2_1_polymorphic",
+    "AsyncVector_int",
+    "AsyncVector_real",
+    "AsyncVector_uint64",
     "BaseFab_Real",
     "Box",
     "BoxArray",
     "Config",
     "CoordSys",
+    "DeviceVector_int",
+    "DeviceVector_real",
+    "DeviceVector_uint64",
     "Dim3",
     "Direction",
     "DistributionMapping",
@@ -396,6 +431,9 @@ __all__: list[str] = [
     "Geometry",
     "GeometryData",
     "GrowthStrategy",
+    "HostVector_int",
+    "HostVector_real",
+    "HostVector_uint64",
     "IndexType",
     "IntVect",
     "IntVect1D",
@@ -412,7 +450,16 @@ __all__: list[str] = [
     "MPMD_MyProc",
     "MPMD_MyProgId",
     "MPMD_NProcs",
+    "ManagedDeviceVector_int",
+    "ManagedDeviceVector_real",
+    "ManagedDeviceVector_uint64",
+    "ManagedVector_int",
+    "ManagedVector_real",
+    "ManagedVector_uint64",
     "MultiFab",
+    "NonManagedDeviceVector_int",
+    "NonManagedDeviceVector_real",
+    "NonManagedDeviceVector_uint64",
     "PODVector_int_arena",
     "PODVector_int_default",
     "PODVector_int_pinned",
@@ -531,6 +578,9 @@ __all__: list[str] = [
     "Particle_5_2",
     "Particle_7_0",
     "Periodicity",
+    "PinnedVector_int",
+    "PinnedVector_real",
+    "PinnedVector_uint64",
     "PlotFileData",
     "Poisson",
     "Print",
