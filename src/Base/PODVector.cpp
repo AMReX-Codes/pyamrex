@@ -168,8 +168,29 @@ void make_PODVector(py::module &m, std::string typestr)
 #endif
     make_PODVector<T, amrex::PolymorphicArenaAllocator<T>> (m, typestr, "polymorphic");
 
-    // Alias matching Gpu::DeviceVector<T> — resolves per platform:
-    //   CPU: PODVector_<type>_std,  GPU: PODVector_<type>_arena
+    // Implement AMReX_GpuContainers.H
+    // Alias matching Gpu::DeviceVector<T> etc. — resolves per platform:
+    //   CPU: PODVector_<type>_std, GPU: PODVector_<type>_arena
+    constexpr auto cstr = [](std::string const & a, std::string const & b) { return a + "_" + b; };
+#ifdef AMREX_USE_GPU
+    m.attr(cstr("DeviceVector", typestr).c_str()) = m.attr(str_PODVector(typestr, "arena").c_str());
+    m.attr(cstr("NonManagedDeviceVector", typestr).c_str()) = m.attr(str_PODVector(typestr, "device").c_str());
+    m.attr(cstr("ManagedVector", typestr).c_str()) = m.attr(str_PODVector(typestr, "managed").c_str());
+    m.attr(cstr("ManagedDeviceVector", typestr).c_str()) = m.attr(str_PODVector(typestr, "managed").c_str());
+    m.attr(cstr("PinnedVector", typestr).c_str()) = m.attr(str_PODVector(typestr, "pinned").c_str());
+    m.attr(cstr("AsyncVector", typestr).c_str()) = m.attr(str_PODVector(typestr, "async").c_str());
+    m.attr(cstr("HostVector", typestr).c_str()) = m.attr(str_PODVector(typestr, "pinned").c_str());
+#else
+    py::object const std_pod = m.attr(str_PODVector(typestr, "std").c_str());
+    m.attr(cstr("DeviceVector", typestr).c_str()) = std_pod;
+    m.attr(cstr("NonManagedDeviceVector", typestr).c_str()) = std_pod;
+    m.attr(cstr("ManagedVector", typestr).c_str()) = std_pod;
+    m.attr(cstr("ManagedDeviceVector", typestr).c_str()) = std_pod;
+    m.attr(cstr("PinnedVector", typestr).c_str()) = std_pod;
+    m.attr(cstr("AsyncVector", typestr).c_str()) = std_pod;
+    m.attr(cstr("HostVector", typestr).c_str()) = std_pod;
+#endif
+
     auto const default_name = str_PODVector(typestr, "default");
     m.attr(default_name.c_str()) =
 #ifdef AMREX_USE_GPU
