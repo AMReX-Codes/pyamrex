@@ -12260,7 +12260,7 @@ class iMultiFab(FabArray_IArrayBox):
         Add src to self including nghost ghost cells.
         The two MultiFabs MUST have the same underlying BoxArray.
         """
-    def box_array(self: FabArrayBase) -> BoxArray: ...
+    def box_array(self) -> BoxArray: ...
     def copy(self):
         """
 
@@ -12332,7 +12332,7 @@ class iMultiFab(FabArray_IArrayBox):
         Divide self by src including nghost ghost cells.
         The two MultiFabs MUST have the same underlying BoxArray.
         """
-    def dm(self: FabArrayBase) -> DistributionMapping: ...
+    def dm(self) -> DistributionMapping: ...
     def imesh(self, idir, include_ghosts=False):
         """
         Returns the integer mesh along the specified direction with the appropriate centering.
@@ -13144,7 +13144,7 @@ class MultiFab(FabArray_FArrayBox):
         self += src1 * src2
         """
     def average_sync(self, arg0: Periodicity) -> None: ...
-    def box_array(self: FabArrayBase) -> BoxArray: ...
+    def box_array(self) -> BoxArray: ...
     @typing.overload
     def contains_inf(self, local: bool = False) -> bool: ...
     @typing.overload
@@ -13266,7 +13266,7 @@ class MultiFab(FabArray_FArrayBox):
         Divide self by src including nghost ghost cells.
         The two MultiFabs MUST have the same underlying BoxArray.
         """
-    def dm(self: FabArrayBase) -> DistributionMapping: ...
+    def dm(self) -> DistributionMapping: ...
     @typing.overload
     def dot(
         self,
