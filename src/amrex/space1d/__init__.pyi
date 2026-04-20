@@ -1,5 +1,4 @@
 """
-
 amrex
 -----
 .. currentmodule:: amrex
@@ -681,9 +680,9 @@ def d_decl(x, y, z):
     Return a tuple of the first passed element
     """
 
-Exact: amrex_1d_pybind.GrowthStrategy  # value = <GrowthStrategy.Exact: 1>
-Geometric: amrex_1d_pybind.GrowthStrategy  # value = <GrowthStrategy.Geometric: 2>
-Poisson: amrex_1d_pybind.GrowthStrategy  # value = <GrowthStrategy.Poisson: 0>
+Exact: amrex_1d_pybind.GrowthStrategy
+Geometric: amrex_1d_pybind.GrowthStrategy
+Poisson: amrex_1d_pybind.GrowthStrategy
 __author__: str = "Axel Huebl, Ryan T. Sandberg, Shreyas Ananthan, David P. Grote, Revathi Jambunathan, Edoardo Zoni, Remi Lehe, Andrew Myers, Weiqun Zhang"
 __license__: str = "BSD-3-Clause-LBNL"
 __version__: str = "26.04"

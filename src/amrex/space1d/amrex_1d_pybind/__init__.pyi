@@ -1,5 +1,4 @@
 """
-
 amrex
 -----
 .. currentmodule:: amrex
@@ -40,12 +39,15 @@ amrex
 
 from __future__ import annotations
 
+import builtins
 import collections.abc
 import enum
 import typing
 
 import numpy
 import numpy.typing
+
+import amrex.space1d
 
 from . import ParallelDescriptor
 
@@ -868,14 +870,41 @@ class Vector_IntVect:
 
 class IndexType:
     class CellIndex(enum.IntEnum):
-        CELL: typing.ClassVar[IndexType.CellIndex]  # value = <CellIndex.CELL: 0>
-        NODE: typing.ClassVar[IndexType.CellIndex]  # value = <CellIndex.NODE: 1>
+        CELL: typing.ClassVar[IndexType.CellIndex]
+        NODE: typing.ClassVar[IndexType.CellIndex]
+        __pybind11_native_enum__: typing.ClassVar[typing.Any]
+        _member_map_: typing.ClassVar[dict]
+        _member_names_: typing.ClassVar[list] = ["CELL", "NODE"]
+        _unhashable_values_: typing.ClassVar[list] = list()
+        _use_args_: typing.ClassVar[bool] = True
+        _value2member_map_: typing.ClassVar[dict]
+        _member_type_ = builtins.int
+        @staticmethod
+        def _generate_next_value_(name, start, count, last_values):
+            """
+            Generate the next value when not given.
+
+            name: the name of the member
+            start: the initial start value or None
+            count: the number of existing members
+            last_values: the list of values assigned
+
+            """
+        @staticmethod
+        def _new_member_(type, *args, **kwargs):
+            """
+            Create and return a new object.  See help(type) for accurate signature.
+            """
         @classmethod
         def __new__(cls, value): ...
         def __format__(self, format_spec): ...
+        def _value_repr_(self):
+            """
+            Return repr(self).
+            """
 
-    CELL: typing.ClassVar[IndexType.CellIndex]  # value = <CellIndex.CELL: 0>
-    NODE: typing.ClassVar[IndexType.CellIndex]  # value = <CellIndex.NODE: 1>
+    CELL: typing.ClassVar[IndexType.CellIndex]
+    NODE: typing.ClassVar[IndexType.CellIndex]
     __hash__: typing.ClassVar[None] = None
     @staticmethod
     def cell_type() -> IndexType: ...
@@ -1413,7 +1442,6 @@ class Array4_float:
     def contains(self, cell: Dim3) -> bool: ...
     def to_cupy(self, copy=False, order="F"):
         """
-
         Provide a CuPy view into an Array4.
 
         This includes ngrow guard cells of the box.
@@ -1448,7 +1476,6 @@ class Array4_float:
     def to_host(self) -> numpy.typing.NDArray[numpy.float32]: ...
     def to_numpy(self, copy=False, order="F"):
         """
-
         Provide a NumPy view into an Array4.
 
         This includes ngrow guard cells of the box.
@@ -1477,7 +1504,6 @@ class Array4_float:
         """
     def to_xp(self, copy=False, order="F"):
         """
-
         Provide a NumPy or CuPy view into an Array4, depending on amr.Config.have_gpu .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
@@ -1592,7 +1618,6 @@ class Array4_double:
     def contains(self, cell: Dim3) -> bool: ...
     def to_cupy(self, copy=False, order="F"):
         """
-
         Provide a CuPy view into an Array4.
 
         This includes ngrow guard cells of the box.
@@ -1627,7 +1652,6 @@ class Array4_double:
     def to_host(self) -> numpy.typing.NDArray[numpy.float64]: ...
     def to_numpy(self, copy=False, order="F"):
         """
-
         Provide a NumPy view into an Array4.
 
         This includes ngrow guard cells of the box.
@@ -1656,7 +1680,6 @@ class Array4_double:
         """
     def to_xp(self, copy=False, order="F"):
         """
-
         Provide a NumPy or CuPy view into an Array4, depending on amr.Config.have_gpu .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
@@ -1771,7 +1794,6 @@ class Array4_longdouble:
     def contains(self, cell: Dim3) -> bool: ...
     def to_cupy(self, copy=False, order="F"):
         """
-
         Provide a CuPy view into an Array4.
 
         This includes ngrow guard cells of the box.
@@ -1806,7 +1828,6 @@ class Array4_longdouble:
     def to_host(self) -> numpy.typing.NDArray[numpy.longdouble]: ...
     def to_numpy(self, copy=False, order="F"):
         """
-
         Provide a NumPy view into an Array4.
 
         This includes ngrow guard cells of the box.
@@ -1835,7 +1856,6 @@ class Array4_longdouble:
         """
     def to_xp(self, copy=False, order="F"):
         """
-
         Provide a NumPy or CuPy view into an Array4, depending on amr.Config.have_gpu .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
@@ -1928,7 +1948,6 @@ class Array4_float_const:
     def contains(self, cell: Dim3) -> bool: ...
     def to_cupy(self, copy=False, order="F"):
         """
-
         Provide a CuPy view into an Array4.
 
         This includes ngrow guard cells of the box.
@@ -1963,7 +1982,6 @@ class Array4_float_const:
     def to_host(self) -> numpy.typing.NDArray[numpy.float32]: ...
     def to_numpy(self, copy=False, order="F"):
         """
-
         Provide a NumPy view into an Array4.
 
         This includes ngrow guard cells of the box.
@@ -1992,7 +2010,6 @@ class Array4_float_const:
         """
     def to_xp(self, copy=False, order="F"):
         """
-
         Provide a NumPy or CuPy view into an Array4, depending on amr.Config.have_gpu .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
@@ -2085,7 +2102,6 @@ class Array4_double_const:
     def contains(self, cell: Dim3) -> bool: ...
     def to_cupy(self, copy=False, order="F"):
         """
-
         Provide a CuPy view into an Array4.
 
         This includes ngrow guard cells of the box.
@@ -2120,7 +2136,6 @@ class Array4_double_const:
     def to_host(self) -> numpy.typing.NDArray[numpy.float64]: ...
     def to_numpy(self, copy=False, order="F"):
         """
-
         Provide a NumPy view into an Array4.
 
         This includes ngrow guard cells of the box.
@@ -2149,7 +2164,6 @@ class Array4_double_const:
         """
     def to_xp(self, copy=False, order="F"):
         """
-
         Provide a NumPy or CuPy view into an Array4, depending on amr.Config.have_gpu .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
@@ -2244,7 +2258,6 @@ class Array4_longdouble_const:
     def contains(self, cell: Dim3) -> bool: ...
     def to_cupy(self, copy=False, order="F"):
         """
-
         Provide a CuPy view into an Array4.
 
         This includes ngrow guard cells of the box.
@@ -2279,7 +2292,6 @@ class Array4_longdouble_const:
     def to_host(self) -> numpy.typing.NDArray[numpy.longdouble]: ...
     def to_numpy(self, copy=False, order="F"):
         """
-
         Provide a NumPy view into an Array4.
 
         This includes ngrow guard cells of the box.
@@ -2308,7 +2320,6 @@ class Array4_longdouble_const:
         """
     def to_xp(self, copy=False, order="F"):
         """
-
         Provide a NumPy or CuPy view into an Array4, depending on amr.Config.have_gpu .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
@@ -2425,7 +2436,6 @@ class Array4_cfloat:
     def contains(self, cell: Dim3) -> bool: ...
     def to_cupy(self, copy=False, order="F"):
         """
-
         Provide a CuPy view into an Array4.
 
         This includes ngrow guard cells of the box.
@@ -2460,7 +2470,6 @@ class Array4_cfloat:
     def to_host(self) -> numpy.typing.NDArray[numpy.complex64]: ...
     def to_numpy(self, copy=False, order="F"):
         """
-
         Provide a NumPy view into an Array4.
 
         This includes ngrow guard cells of the box.
@@ -2489,7 +2498,6 @@ class Array4_cfloat:
         """
     def to_xp(self, copy=False, order="F"):
         """
-
         Provide a NumPy or CuPy view into an Array4, depending on amr.Config.have_gpu .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
@@ -2606,7 +2614,6 @@ class Array4_cdouble:
     def contains(self, cell: Dim3) -> bool: ...
     def to_cupy(self, copy=False, order="F"):
         """
-
         Provide a CuPy view into an Array4.
 
         This includes ngrow guard cells of the box.
@@ -2641,7 +2648,6 @@ class Array4_cdouble:
     def to_host(self) -> numpy.typing.NDArray[numpy.complex128]: ...
     def to_numpy(self, copy=False, order="F"):
         """
-
         Provide a NumPy view into an Array4.
 
         This includes ngrow guard cells of the box.
@@ -2670,7 +2676,6 @@ class Array4_cdouble:
         """
     def to_xp(self, copy=False, order="F"):
         """
-
         Provide a NumPy or CuPy view into an Array4, depending on amr.Config.have_gpu .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
@@ -2767,7 +2772,6 @@ class Array4_cfloat_const:
     def contains(self, cell: Dim3) -> bool: ...
     def to_cupy(self, copy=False, order="F"):
         """
-
         Provide a CuPy view into an Array4.
 
         This includes ngrow guard cells of the box.
@@ -2802,7 +2806,6 @@ class Array4_cfloat_const:
     def to_host(self) -> numpy.typing.NDArray[numpy.complex64]: ...
     def to_numpy(self, copy=False, order="F"):
         """
-
         Provide a NumPy view into an Array4.
 
         This includes ngrow guard cells of the box.
@@ -2831,7 +2834,6 @@ class Array4_cfloat_const:
         """
     def to_xp(self, copy=False, order="F"):
         """
-
         Provide a NumPy or CuPy view into an Array4, depending on amr.Config.have_gpu .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
@@ -2930,7 +2932,6 @@ class Array4_cdouble_const:
     def contains(self, cell: Dim3) -> bool: ...
     def to_cupy(self, copy=False, order="F"):
         """
-
         Provide a CuPy view into an Array4.
 
         This includes ngrow guard cells of the box.
@@ -2965,7 +2966,6 @@ class Array4_cdouble_const:
     def to_host(self) -> numpy.typing.NDArray[numpy.complex128]: ...
     def to_numpy(self, copy=False, order="F"):
         """
-
         Provide a NumPy view into an Array4.
 
         This includes ngrow guard cells of the box.
@@ -2994,7 +2994,6 @@ class Array4_cdouble_const:
         """
     def to_xp(self, copy=False, order="F"):
         """
-
         Provide a NumPy or CuPy view into an Array4, depending on amr.Config.have_gpu .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
@@ -3109,7 +3108,6 @@ class Array4_short:
     def contains(self, cell: Dim3) -> bool: ...
     def to_cupy(self, copy=False, order="F"):
         """
-
         Provide a CuPy view into an Array4.
 
         This includes ngrow guard cells of the box.
@@ -3144,7 +3142,6 @@ class Array4_short:
     def to_host(self) -> numpy.typing.NDArray[numpy.int16]: ...
     def to_numpy(self, copy=False, order="F"):
         """
-
         Provide a NumPy view into an Array4.
 
         This includes ngrow guard cells of the box.
@@ -3173,7 +3170,6 @@ class Array4_short:
         """
     def to_xp(self, copy=False, order="F"):
         """
-
         Provide a NumPy or CuPy view into an Array4, depending on amr.Config.have_gpu .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
@@ -3288,7 +3284,6 @@ class Array4_int:
     def contains(self, cell: Dim3) -> bool: ...
     def to_cupy(self, copy=False, order="F"):
         """
-
         Provide a CuPy view into an Array4.
 
         This includes ngrow guard cells of the box.
@@ -3323,7 +3318,6 @@ class Array4_int:
     def to_host(self) -> numpy.typing.NDArray[numpy.int32]: ...
     def to_numpy(self, copy=False, order="F"):
         """
-
         Provide a NumPy view into an Array4.
 
         This includes ngrow guard cells of the box.
@@ -3352,7 +3346,6 @@ class Array4_int:
         """
     def to_xp(self, copy=False, order="F"):
         """
-
         Provide a NumPy or CuPy view into an Array4, depending on amr.Config.have_gpu .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
@@ -3467,7 +3460,6 @@ class Array4_long:
     def contains(self, cell: Dim3) -> bool: ...
     def to_cupy(self, copy=False, order="F"):
         """
-
         Provide a CuPy view into an Array4.
 
         This includes ngrow guard cells of the box.
@@ -3502,7 +3494,6 @@ class Array4_long:
     def to_host(self) -> numpy.typing.NDArray[numpy.int64]: ...
     def to_numpy(self, copy=False, order="F"):
         """
-
         Provide a NumPy view into an Array4.
 
         This includes ngrow guard cells of the box.
@@ -3531,7 +3522,6 @@ class Array4_long:
         """
     def to_xp(self, copy=False, order="F"):
         """
-
         Provide a NumPy or CuPy view into an Array4, depending on amr.Config.have_gpu .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
@@ -3646,7 +3636,6 @@ class Array4_longlong:
     def contains(self, cell: Dim3) -> bool: ...
     def to_cupy(self, copy=False, order="F"):
         """
-
         Provide a CuPy view into an Array4.
 
         This includes ngrow guard cells of the box.
@@ -3681,7 +3670,6 @@ class Array4_longlong:
     def to_host(self) -> numpy.typing.NDArray[numpy.int64]: ...
     def to_numpy(self, copy=False, order="F"):
         """
-
         Provide a NumPy view into an Array4.
 
         This includes ngrow guard cells of the box.
@@ -3710,7 +3698,6 @@ class Array4_longlong:
         """
     def to_xp(self, copy=False, order="F"):
         """
-
         Provide a NumPy or CuPy view into an Array4, depending on amr.Config.have_gpu .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
@@ -3803,7 +3790,6 @@ class Array4_short_const:
     def contains(self, cell: Dim3) -> bool: ...
     def to_cupy(self, copy=False, order="F"):
         """
-
         Provide a CuPy view into an Array4.
 
         This includes ngrow guard cells of the box.
@@ -3838,7 +3824,6 @@ class Array4_short_const:
     def to_host(self) -> numpy.typing.NDArray[numpy.int16]: ...
     def to_numpy(self, copy=False, order="F"):
         """
-
         Provide a NumPy view into an Array4.
 
         This includes ngrow guard cells of the box.
@@ -3867,7 +3852,6 @@ class Array4_short_const:
         """
     def to_xp(self, copy=False, order="F"):
         """
-
         Provide a NumPy or CuPy view into an Array4, depending on amr.Config.have_gpu .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
@@ -3960,7 +3944,6 @@ class Array4_int_const:
     def contains(self, cell: Dim3) -> bool: ...
     def to_cupy(self, copy=False, order="F"):
         """
-
         Provide a CuPy view into an Array4.
 
         This includes ngrow guard cells of the box.
@@ -3995,7 +3978,6 @@ class Array4_int_const:
     def to_host(self) -> numpy.typing.NDArray[numpy.int32]: ...
     def to_numpy(self, copy=False, order="F"):
         """
-
         Provide a NumPy view into an Array4.
 
         This includes ngrow guard cells of the box.
@@ -4024,7 +4006,6 @@ class Array4_int_const:
         """
     def to_xp(self, copy=False, order="F"):
         """
-
         Provide a NumPy or CuPy view into an Array4, depending on amr.Config.have_gpu .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
@@ -4117,7 +4098,6 @@ class Array4_long_const:
     def contains(self, cell: Dim3) -> bool: ...
     def to_cupy(self, copy=False, order="F"):
         """
-
         Provide a CuPy view into an Array4.
 
         This includes ngrow guard cells of the box.
@@ -4152,7 +4132,6 @@ class Array4_long_const:
     def to_host(self) -> numpy.typing.NDArray[numpy.int64]: ...
     def to_numpy(self, copy=False, order="F"):
         """
-
         Provide a NumPy view into an Array4.
 
         This includes ngrow guard cells of the box.
@@ -4181,7 +4160,6 @@ class Array4_long_const:
         """
     def to_xp(self, copy=False, order="F"):
         """
-
         Provide a NumPy or CuPy view into an Array4, depending on amr.Config.have_gpu .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
@@ -4276,7 +4254,6 @@ class Array4_longlong_const:
     def contains(self, cell: Dim3) -> bool: ...
     def to_cupy(self, copy=False, order="F"):
         """
-
         Provide a CuPy view into an Array4.
 
         This includes ngrow guard cells of the box.
@@ -4311,7 +4288,6 @@ class Array4_longlong_const:
     def to_host(self) -> numpy.typing.NDArray[numpy.int64]: ...
     def to_numpy(self, copy=False, order="F"):
         """
-
         Provide a NumPy view into an Array4.
 
         This includes ngrow guard cells of the box.
@@ -4340,7 +4316,6 @@ class Array4_longlong_const:
         """
     def to_xp(self, copy=False, order="F"):
         """
-
         Provide a NumPy or CuPy view into an Array4, depending on amr.Config.have_gpu .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
@@ -4455,7 +4430,6 @@ class Array4_ushort:
     def contains(self, cell: Dim3) -> bool: ...
     def to_cupy(self, copy=False, order="F"):
         """
-
         Provide a CuPy view into an Array4.
 
         This includes ngrow guard cells of the box.
@@ -4490,7 +4464,6 @@ class Array4_ushort:
     def to_host(self) -> numpy.typing.NDArray[numpy.uint16]: ...
     def to_numpy(self, copy=False, order="F"):
         """
-
         Provide a NumPy view into an Array4.
 
         This includes ngrow guard cells of the box.
@@ -4519,7 +4492,6 @@ class Array4_ushort:
         """
     def to_xp(self, copy=False, order="F"):
         """
-
         Provide a NumPy or CuPy view into an Array4, depending on amr.Config.have_gpu .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
@@ -4634,7 +4606,6 @@ class Array4_uint:
     def contains(self, cell: Dim3) -> bool: ...
     def to_cupy(self, copy=False, order="F"):
         """
-
         Provide a CuPy view into an Array4.
 
         This includes ngrow guard cells of the box.
@@ -4669,7 +4640,6 @@ class Array4_uint:
     def to_host(self) -> numpy.typing.NDArray[numpy.uint32]: ...
     def to_numpy(self, copy=False, order="F"):
         """
-
         Provide a NumPy view into an Array4.
 
         This includes ngrow guard cells of the box.
@@ -4698,7 +4668,6 @@ class Array4_uint:
         """
     def to_xp(self, copy=False, order="F"):
         """
-
         Provide a NumPy or CuPy view into an Array4, depending on amr.Config.have_gpu .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
@@ -4813,7 +4782,6 @@ class Array4_ulong:
     def contains(self, cell: Dim3) -> bool: ...
     def to_cupy(self, copy=False, order="F"):
         """
-
         Provide a CuPy view into an Array4.
 
         This includes ngrow guard cells of the box.
@@ -4848,7 +4816,6 @@ class Array4_ulong:
     def to_host(self) -> numpy.typing.NDArray[numpy.uint64]: ...
     def to_numpy(self, copy=False, order="F"):
         """
-
         Provide a NumPy view into an Array4.
 
         This includes ngrow guard cells of the box.
@@ -4877,7 +4844,6 @@ class Array4_ulong:
         """
     def to_xp(self, copy=False, order="F"):
         """
-
         Provide a NumPy or CuPy view into an Array4, depending on amr.Config.have_gpu .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
@@ -4992,7 +4958,6 @@ class Array4_ulonglong:
     def contains(self, cell: Dim3) -> bool: ...
     def to_cupy(self, copy=False, order="F"):
         """
-
         Provide a CuPy view into an Array4.
 
         This includes ngrow guard cells of the box.
@@ -5027,7 +4992,6 @@ class Array4_ulonglong:
     def to_host(self) -> numpy.typing.NDArray[numpy.uint64]: ...
     def to_numpy(self, copy=False, order="F"):
         """
-
         Provide a NumPy view into an Array4.
 
         This includes ngrow guard cells of the box.
@@ -5056,7 +5020,6 @@ class Array4_ulonglong:
         """
     def to_xp(self, copy=False, order="F"):
         """
-
         Provide a NumPy or CuPy view into an Array4, depending on amr.Config.have_gpu .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
@@ -5149,7 +5112,6 @@ class Array4_ushort_const:
     def contains(self, cell: Dim3) -> bool: ...
     def to_cupy(self, copy=False, order="F"):
         """
-
         Provide a CuPy view into an Array4.
 
         This includes ngrow guard cells of the box.
@@ -5184,7 +5146,6 @@ class Array4_ushort_const:
     def to_host(self) -> numpy.typing.NDArray[numpy.uint16]: ...
     def to_numpy(self, copy=False, order="F"):
         """
-
         Provide a NumPy view into an Array4.
 
         This includes ngrow guard cells of the box.
@@ -5213,7 +5174,6 @@ class Array4_ushort_const:
         """
     def to_xp(self, copy=False, order="F"):
         """
-
         Provide a NumPy or CuPy view into an Array4, depending on amr.Config.have_gpu .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
@@ -5306,7 +5266,6 @@ class Array4_uint_const:
     def contains(self, cell: Dim3) -> bool: ...
     def to_cupy(self, copy=False, order="F"):
         """
-
         Provide a CuPy view into an Array4.
 
         This includes ngrow guard cells of the box.
@@ -5341,7 +5300,6 @@ class Array4_uint_const:
     def to_host(self) -> numpy.typing.NDArray[numpy.uint32]: ...
     def to_numpy(self, copy=False, order="F"):
         """
-
         Provide a NumPy view into an Array4.
 
         This includes ngrow guard cells of the box.
@@ -5370,7 +5328,6 @@ class Array4_uint_const:
         """
     def to_xp(self, copy=False, order="F"):
         """
-
         Provide a NumPy or CuPy view into an Array4, depending on amr.Config.have_gpu .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
@@ -5463,7 +5420,6 @@ class Array4_ulong_const:
     def contains(self, cell: Dim3) -> bool: ...
     def to_cupy(self, copy=False, order="F"):
         """
-
         Provide a CuPy view into an Array4.
 
         This includes ngrow guard cells of the box.
@@ -5498,7 +5454,6 @@ class Array4_ulong_const:
     def to_host(self) -> numpy.typing.NDArray[numpy.uint64]: ...
     def to_numpy(self, copy=False, order="F"):
         """
-
         Provide a NumPy view into an Array4.
 
         This includes ngrow guard cells of the box.
@@ -5527,7 +5482,6 @@ class Array4_ulong_const:
         """
     def to_xp(self, copy=False, order="F"):
         """
-
         Provide a NumPy or CuPy view into an Array4, depending on amr.Config.have_gpu .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
@@ -5622,7 +5576,6 @@ class Array4_ulonglong_const:
     def contains(self, cell: Dim3) -> bool: ...
     def to_cupy(self, copy=False, order="F"):
         """
-
         Provide a CuPy view into an Array4.
 
         This includes ngrow guard cells of the box.
@@ -5657,7 +5610,6 @@ class Array4_ulonglong_const:
     def to_host(self) -> numpy.typing.NDArray[numpy.uint64]: ...
     def to_numpy(self, copy=False, order="F"):
         """
-
         Provide a NumPy view into an Array4.
 
         This includes ngrow guard cells of the box.
@@ -5686,7 +5638,6 @@ class Array4_ulonglong_const:
         """
     def to_xp(self, copy=False, order="F"):
         """
-
         Provide a NumPy or CuPy view into an Array4, depending on amr.Config.have_gpu .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
@@ -5791,7 +5742,6 @@ class SmallMatrix_6x6_F_SI1_float:
     def sum(self) -> float: ...
     def to_cupy(self, copy=False, order="F"):
         """
-
         Provide a CuPy view into an SmallMatrix.
 
         Note on the order of indices:
@@ -5823,7 +5773,6 @@ class SmallMatrix_6x6_F_SI1_float:
         """
     def to_numpy(self, copy=False, order="F"):
         """
-
         Provide a NumPy view into an SmallMatrix.
 
         Note on the order of indices:
@@ -5850,7 +5799,6 @@ class SmallMatrix_6x6_F_SI1_float:
         """
     def to_xp(self, copy=False, order="F"):
         """
-
         Provide a NumPy or CuPy view into a SmallMatrix, depending on amr.Config.have_gpu .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
@@ -6009,7 +5957,6 @@ class SmallMatrix_6x1_F_SI1_float:
     def sum(self) -> float: ...
     def to_cupy(self, copy=False, order="F"):
         """
-
         Provide a CuPy view into an SmallMatrix.
 
         Note on the order of indices:
@@ -6041,7 +5988,6 @@ class SmallMatrix_6x1_F_SI1_float:
         """
     def to_numpy(self, copy=False, order="F"):
         """
-
         Provide a NumPy view into an SmallMatrix.
 
         Note on the order of indices:
@@ -6068,7 +6014,6 @@ class SmallMatrix_6x1_F_SI1_float:
         """
     def to_xp(self, copy=False, order="F"):
         """
-
         Provide a NumPy or CuPy view into a SmallMatrix, depending on amr.Config.have_gpu .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
@@ -6225,7 +6170,6 @@ class SmallMatrix_1x6_F_SI1_float:
     def sum(self) -> float: ...
     def to_cupy(self, copy=False, order="F"):
         """
-
         Provide a CuPy view into an SmallMatrix.
 
         Note on the order of indices:
@@ -6257,7 +6201,6 @@ class SmallMatrix_1x6_F_SI1_float:
         """
     def to_numpy(self, copy=False, order="F"):
         """
-
         Provide a NumPy view into an SmallMatrix.
 
         Note on the order of indices:
@@ -6284,7 +6227,6 @@ class SmallMatrix_1x6_F_SI1_float:
         """
     def to_xp(self, copy=False, order="F"):
         """
-
         Provide a NumPy or CuPy view into a SmallMatrix, depending on amr.Config.have_gpu .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
@@ -6393,7 +6335,6 @@ class SmallMatrix_6x6_F_SI1_double:
     def sum(self) -> float: ...
     def to_cupy(self, copy=False, order="F"):
         """
-
         Provide a CuPy view into an SmallMatrix.
 
         Note on the order of indices:
@@ -6425,7 +6366,6 @@ class SmallMatrix_6x6_F_SI1_double:
         """
     def to_numpy(self, copy=False, order="F"):
         """
-
         Provide a NumPy view into an SmallMatrix.
 
         Note on the order of indices:
@@ -6452,7 +6392,6 @@ class SmallMatrix_6x6_F_SI1_double:
         """
     def to_xp(self, copy=False, order="F"):
         """
-
         Provide a NumPy or CuPy view into a SmallMatrix, depending on amr.Config.have_gpu .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
@@ -6611,7 +6550,6 @@ class SmallMatrix_6x1_F_SI1_double:
     def sum(self) -> float: ...
     def to_cupy(self, copy=False, order="F"):
         """
-
         Provide a CuPy view into an SmallMatrix.
 
         Note on the order of indices:
@@ -6643,7 +6581,6 @@ class SmallMatrix_6x1_F_SI1_double:
         """
     def to_numpy(self, copy=False, order="F"):
         """
-
         Provide a NumPy view into an SmallMatrix.
 
         Note on the order of indices:
@@ -6670,7 +6607,6 @@ class SmallMatrix_6x1_F_SI1_double:
         """
     def to_xp(self, copy=False, order="F"):
         """
-
         Provide a NumPy or CuPy view into a SmallMatrix, depending on amr.Config.have_gpu .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
@@ -6827,7 +6763,6 @@ class SmallMatrix_1x6_F_SI1_double:
     def sum(self) -> float: ...
     def to_cupy(self, copy=False, order="F"):
         """
-
         Provide a CuPy view into an SmallMatrix.
 
         Note on the order of indices:
@@ -6859,7 +6794,6 @@ class SmallMatrix_1x6_F_SI1_double:
         """
     def to_numpy(self, copy=False, order="F"):
         """
-
         Provide a NumPy view into an SmallMatrix.
 
         Note on the order of indices:
@@ -6886,7 +6820,6 @@ class SmallMatrix_1x6_F_SI1_double:
         """
     def to_xp(self, copy=False, order="F"):
         """
-
         Provide a NumPy or CuPy view into a SmallMatrix, depending on amr.Config.have_gpu .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
@@ -6995,7 +6928,6 @@ class SmallMatrix_6x6_F_SI1_longdouble:
     def sum(self) -> float: ...
     def to_cupy(self, copy=False, order="F"):
         """
-
         Provide a CuPy view into an SmallMatrix.
 
         Note on the order of indices:
@@ -7027,7 +6959,6 @@ class SmallMatrix_6x6_F_SI1_longdouble:
         """
     def to_numpy(self, copy=False, order="F"):
         """
-
         Provide a NumPy view into an SmallMatrix.
 
         Note on the order of indices:
@@ -7054,7 +6985,6 @@ class SmallMatrix_6x6_F_SI1_longdouble:
         """
     def to_xp(self, copy=False, order="F"):
         """
-
         Provide a NumPy or CuPy view into a SmallMatrix, depending on amr.Config.have_gpu .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
@@ -7213,7 +7143,6 @@ class SmallMatrix_6x1_F_SI1_longdouble:
     def sum(self) -> float: ...
     def to_cupy(self, copy=False, order="F"):
         """
-
         Provide a CuPy view into an SmallMatrix.
 
         Note on the order of indices:
@@ -7245,7 +7174,6 @@ class SmallMatrix_6x1_F_SI1_longdouble:
         """
     def to_numpy(self, copy=False, order="F"):
         """
-
         Provide a NumPy view into an SmallMatrix.
 
         Note on the order of indices:
@@ -7272,7 +7200,6 @@ class SmallMatrix_6x1_F_SI1_longdouble:
         """
     def to_xp(self, copy=False, order="F"):
         """
-
         Provide a NumPy or CuPy view into a SmallMatrix, depending on amr.Config.have_gpu .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
@@ -7429,7 +7356,6 @@ class SmallMatrix_1x6_F_SI1_longdouble:
     def sum(self) -> float: ...
     def to_cupy(self, copy=False, order="F"):
         """
-
         Provide a CuPy view into an SmallMatrix.
 
         Note on the order of indices:
@@ -7461,7 +7387,6 @@ class SmallMatrix_1x6_F_SI1_longdouble:
         """
     def to_numpy(self, copy=False, order="F"):
         """
-
         Provide a NumPy view into an SmallMatrix.
 
         Note on the order of indices:
@@ -7488,7 +7413,6 @@ class SmallMatrix_1x6_F_SI1_longdouble:
         """
     def to_xp(self, copy=False, order="F"):
         """
-
         Provide a NumPy or CuPy view into a SmallMatrix, depending on amr.Config.have_gpu .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
@@ -7591,7 +7515,6 @@ class SmallMatrix_3x6_F_SI1_float:
     def sum(self) -> float: ...
     def to_cupy(self, copy=False, order="F"):
         """
-
         Provide a CuPy view into an SmallMatrix.
 
         Note on the order of indices:
@@ -7623,7 +7546,6 @@ class SmallMatrix_3x6_F_SI1_float:
         """
     def to_numpy(self, copy=False, order="F"):
         """
-
         Provide a NumPy view into an SmallMatrix.
 
         Note on the order of indices:
@@ -7650,7 +7572,6 @@ class SmallMatrix_3x6_F_SI1_float:
         """
     def to_xp(self, copy=False, order="F"):
         """
-
         Provide a NumPy or CuPy view into a SmallMatrix, depending on amr.Config.have_gpu .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
@@ -7753,7 +7674,6 @@ class SmallMatrix_1x3_F_SI1_float:
     def sum(self) -> float: ...
     def to_cupy(self, copy=False, order="F"):
         """
-
         Provide a CuPy view into an SmallMatrix.
 
         Note on the order of indices:
@@ -7785,7 +7705,6 @@ class SmallMatrix_1x3_F_SI1_float:
         """
     def to_numpy(self, copy=False, order="F"):
         """
-
         Provide a NumPy view into an SmallMatrix.
 
         Note on the order of indices:
@@ -7812,7 +7731,6 @@ class SmallMatrix_1x3_F_SI1_float:
         """
     def to_xp(self, copy=False, order="F"):
         """
-
         Provide a NumPy or CuPy view into a SmallMatrix, depending on amr.Config.have_gpu .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
@@ -7905,7 +7823,6 @@ class SmallMatrix_6x3_F_SI1_float:
     def sum(self) -> float: ...
     def to_cupy(self, copy=False, order="F"):
         """
-
         Provide a CuPy view into an SmallMatrix.
 
         Note on the order of indices:
@@ -7937,7 +7854,6 @@ class SmallMatrix_6x3_F_SI1_float:
         """
     def to_numpy(self, copy=False, order="F"):
         """
-
         Provide a NumPy view into an SmallMatrix.
 
         Note on the order of indices:
@@ -7964,7 +7880,6 @@ class SmallMatrix_6x3_F_SI1_float:
         """
     def to_xp(self, copy=False, order="F"):
         """
-
         Provide a NumPy or CuPy view into a SmallMatrix, depending on amr.Config.have_gpu .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
@@ -8067,7 +7982,6 @@ class SmallMatrix_3x1_F_SI1_float:
     def sum(self) -> float: ...
     def to_cupy(self, copy=False, order="F"):
         """
-
         Provide a CuPy view into an SmallMatrix.
 
         Note on the order of indices:
@@ -8099,7 +8013,6 @@ class SmallMatrix_3x1_F_SI1_float:
         """
     def to_numpy(self, copy=False, order="F"):
         """
-
         Provide a NumPy view into an SmallMatrix.
 
         Note on the order of indices:
@@ -8126,7 +8039,6 @@ class SmallMatrix_3x1_F_SI1_float:
         """
     def to_xp(self, copy=False, order="F"):
         """
-
         Provide a NumPy or CuPy view into a SmallMatrix, depending on amr.Config.have_gpu .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
@@ -8229,7 +8141,6 @@ class SmallMatrix_3x6_F_SI1_double:
     def sum(self) -> float: ...
     def to_cupy(self, copy=False, order="F"):
         """
-
         Provide a CuPy view into an SmallMatrix.
 
         Note on the order of indices:
@@ -8261,7 +8172,6 @@ class SmallMatrix_3x6_F_SI1_double:
         """
     def to_numpy(self, copy=False, order="F"):
         """
-
         Provide a NumPy view into an SmallMatrix.
 
         Note on the order of indices:
@@ -8288,7 +8198,6 @@ class SmallMatrix_3x6_F_SI1_double:
         """
     def to_xp(self, copy=False, order="F"):
         """
-
         Provide a NumPy or CuPy view into a SmallMatrix, depending on amr.Config.have_gpu .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
@@ -8391,7 +8300,6 @@ class SmallMatrix_1x3_F_SI1_double:
     def sum(self) -> float: ...
     def to_cupy(self, copy=False, order="F"):
         """
-
         Provide a CuPy view into an SmallMatrix.
 
         Note on the order of indices:
@@ -8423,7 +8331,6 @@ class SmallMatrix_1x3_F_SI1_double:
         """
     def to_numpy(self, copy=False, order="F"):
         """
-
         Provide a NumPy view into an SmallMatrix.
 
         Note on the order of indices:
@@ -8450,7 +8357,6 @@ class SmallMatrix_1x3_F_SI1_double:
         """
     def to_xp(self, copy=False, order="F"):
         """
-
         Provide a NumPy or CuPy view into a SmallMatrix, depending on amr.Config.have_gpu .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
@@ -8543,7 +8449,6 @@ class SmallMatrix_6x3_F_SI1_double:
     def sum(self) -> float: ...
     def to_cupy(self, copy=False, order="F"):
         """
-
         Provide a CuPy view into an SmallMatrix.
 
         Note on the order of indices:
@@ -8575,7 +8480,6 @@ class SmallMatrix_6x3_F_SI1_double:
         """
     def to_numpy(self, copy=False, order="F"):
         """
-
         Provide a NumPy view into an SmallMatrix.
 
         Note on the order of indices:
@@ -8602,7 +8506,6 @@ class SmallMatrix_6x3_F_SI1_double:
         """
     def to_xp(self, copy=False, order="F"):
         """
-
         Provide a NumPy or CuPy view into a SmallMatrix, depending on amr.Config.have_gpu .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
@@ -8705,7 +8608,6 @@ class SmallMatrix_3x1_F_SI1_double:
     def sum(self) -> float: ...
     def to_cupy(self, copy=False, order="F"):
         """
-
         Provide a CuPy view into an SmallMatrix.
 
         Note on the order of indices:
@@ -8737,7 +8639,6 @@ class SmallMatrix_3x1_F_SI1_double:
         """
     def to_numpy(self, copy=False, order="F"):
         """
-
         Provide a NumPy view into an SmallMatrix.
 
         Note on the order of indices:
@@ -8764,7 +8665,6 @@ class SmallMatrix_3x1_F_SI1_double:
         """
     def to_xp(self, copy=False, order="F"):
         """
-
         Provide a NumPy or CuPy view into a SmallMatrix, depending on amr.Config.have_gpu .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
@@ -8867,7 +8767,6 @@ class SmallMatrix_3x6_F_SI1_longdouble:
     def sum(self) -> float: ...
     def to_cupy(self, copy=False, order="F"):
         """
-
         Provide a CuPy view into an SmallMatrix.
 
         Note on the order of indices:
@@ -8899,7 +8798,6 @@ class SmallMatrix_3x6_F_SI1_longdouble:
         """
     def to_numpy(self, copy=False, order="F"):
         """
-
         Provide a NumPy view into an SmallMatrix.
 
         Note on the order of indices:
@@ -8926,7 +8824,6 @@ class SmallMatrix_3x6_F_SI1_longdouble:
         """
     def to_xp(self, copy=False, order="F"):
         """
-
         Provide a NumPy or CuPy view into a SmallMatrix, depending on amr.Config.have_gpu .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
@@ -9029,7 +8926,6 @@ class SmallMatrix_1x3_F_SI1_longdouble:
     def sum(self) -> float: ...
     def to_cupy(self, copy=False, order="F"):
         """
-
         Provide a CuPy view into an SmallMatrix.
 
         Note on the order of indices:
@@ -9061,7 +8957,6 @@ class SmallMatrix_1x3_F_SI1_longdouble:
         """
     def to_numpy(self, copy=False, order="F"):
         """
-
         Provide a NumPy view into an SmallMatrix.
 
         Note on the order of indices:
@@ -9088,7 +8983,6 @@ class SmallMatrix_1x3_F_SI1_longdouble:
         """
     def to_xp(self, copy=False, order="F"):
         """
-
         Provide a NumPy or CuPy view into a SmallMatrix, depending on amr.Config.have_gpu .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
@@ -9181,7 +9075,6 @@ class SmallMatrix_6x3_F_SI1_longdouble:
     def sum(self) -> float: ...
     def to_cupy(self, copy=False, order="F"):
         """
-
         Provide a CuPy view into an SmallMatrix.
 
         Note on the order of indices:
@@ -9213,7 +9106,6 @@ class SmallMatrix_6x3_F_SI1_longdouble:
         """
     def to_numpy(self, copy=False, order="F"):
         """
-
         Provide a NumPy view into an SmallMatrix.
 
         Note on the order of indices:
@@ -9240,7 +9132,6 @@ class SmallMatrix_6x3_F_SI1_longdouble:
         """
     def to_xp(self, copy=False, order="F"):
         """
-
         Provide a NumPy or CuPy view into a SmallMatrix, depending on amr.Config.have_gpu .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
@@ -9343,7 +9234,6 @@ class SmallMatrix_3x1_F_SI1_longdouble:
     def sum(self) -> float: ...
     def to_cupy(self, copy=False, order="F"):
         """
-
         Provide a CuPy view into an SmallMatrix.
 
         Note on the order of indices:
@@ -9375,7 +9265,6 @@ class SmallMatrix_3x1_F_SI1_longdouble:
         """
     def to_numpy(self, copy=False, order="F"):
         """
-
         Provide a NumPy view into an SmallMatrix.
 
         Note on the order of indices:
@@ -9402,7 +9291,6 @@ class SmallMatrix_3x1_F_SI1_longdouble:
         """
     def to_xp(self, copy=False, order="F"):
         """
-
         Provide a NumPy or CuPy view into a SmallMatrix, depending on amr.Config.have_gpu .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
@@ -10319,22 +10207,50 @@ class ParmParse:
 
 class CoordSys:
     class CoordType(enum.IntEnum):
-        RZ: typing.ClassVar[CoordSys.CoordType]  # value = <CoordType.RZ: 1>
-        SPHERICAL: typing.ClassVar[
-            CoordSys.CoordType
-        ]  # value = <CoordType.SPHERICAL: 2>
-        cartesian: typing.ClassVar[
-            CoordSys.CoordType
-        ]  # value = <CoordType.cartesian: 0>
-        undef: typing.ClassVar[CoordSys.CoordType]  # value = <CoordType.undef: -1>
+        RZ: typing.ClassVar[CoordSys.CoordType]
+        SPHERICAL: typing.ClassVar[CoordSys.CoordType]
+        __pybind11_native_enum__: typing.ClassVar[typing.Any]
+        _member_map_: typing.ClassVar[dict]
+        _member_names_: typing.ClassVar[list] = [
+            "undef",
+            "cartesian",
+            "RZ",
+            "SPHERICAL",
+        ]
+        _unhashable_values_: typing.ClassVar[list] = list()
+        _use_args_: typing.ClassVar[bool] = True
+        _value2member_map_: typing.ClassVar[dict]
+        cartesian: typing.ClassVar[CoordSys.CoordType]
+        undef: typing.ClassVar[CoordSys.CoordType]
+        _member_type_ = builtins.int
+        @staticmethod
+        def _generate_next_value_(name, start, count, last_values):
+            """
+            Generate the next value when not given.
+
+            name: the name of the member
+            start: the initial start value or None
+            count: the number of existing members
+            last_values: the list of values assigned
+
+            """
+        @staticmethod
+        def _new_member_(type, *args, **kwargs):
+            """
+            Create and return a new object.  See help(type) for accurate signature.
+            """
         @classmethod
         def __new__(cls, value): ...
         def __format__(self, format_spec): ...
+        def _value_repr_(self):
+            """
+            Return repr(self).
+            """
 
-    RZ: typing.ClassVar[CoordSys.CoordType]  # value = <CoordType.RZ: 1>
-    SPHERICAL: typing.ClassVar[CoordSys.CoordType]  # value = <CoordType.SPHERICAL: 2>
-    cartesian: typing.ClassVar[CoordSys.CoordType]  # value = <CoordType.cartesian: 0>
-    undef: typing.ClassVar[CoordSys.CoordType]  # value = <CoordType.undef: -1>
+    RZ: typing.ClassVar[CoordSys.CoordType]
+    SPHERICAL: typing.ClassVar[CoordSys.CoordType]
+    cartesian: typing.ClassVar[CoordSys.CoordType]
+    undef: typing.ClassVar[CoordSys.CoordType]
     def Coord(self) -> CoordSys.CoordType: ...
     def CoordInt(self) -> int: ...
     def IsCartesian(self) -> bool: ...
@@ -12230,7 +12146,6 @@ class iMultiFab(FabArray_IArrayBox):
     def box_array(self) -> BoxArray: ...
     def copy(self):
         """
-
         Create a copy of this MultiFab, using the same Arena.
 
         Parameters
@@ -12659,7 +12574,6 @@ class iMultiFab(FabArray_IArrayBox):
         """
     def to_cupy(self, copy=False, order="F"):
         """
-
         Provide a CuPy view into a MultiFab.
 
         This includes ngrow guard cells of each box.
@@ -12694,7 +12608,6 @@ class iMultiFab(FabArray_IArrayBox):
         """
     def to_numpy(self, copy=False, order="F"):
         """
-
         Provide a NumPy view into a MultiFab.
 
         This includes ngrow guard cells of each box.
@@ -12724,7 +12637,6 @@ class iMultiFab(FabArray_IArrayBox):
         """
     def to_xp(self, copy=False, order="F"):
         """
-
         Provide a NumPy or CuPy view into a MultiFab,
         depending on amr.Config.have_gpu .
 
@@ -13150,7 +13062,6 @@ class MultiFab(FabArray_FArrayBox):
     ) -> bool: ...
     def copy(self):
         """
-
         Create a copy of this MultiFab, using the same Arena.
 
         Parameters
@@ -13789,7 +13700,6 @@ class MultiFab(FabArray_FArrayBox):
         """
     def to_cupy(self, copy=False, order="F"):
         """
-
         Provide a CuPy view into a MultiFab.
 
         This includes ngrow guard cells of each box.
@@ -13824,7 +13734,6 @@ class MultiFab(FabArray_FArrayBox):
         """
     def to_numpy(self, copy=False, order="F"):
         """
-
         Provide a NumPy view into a MultiFab.
 
         This includes ngrow guard cells of each box.
@@ -13854,7 +13763,6 @@ class MultiFab(FabArray_FArrayBox):
         """
     def to_xp(self, copy=False, order="F"):
         """
-
         Provide a NumPy or CuPy view into a MultiFab,
         depending on amr.Config.have_gpu .
 
@@ -13929,9 +13837,35 @@ class MultiFab(FabArray_FArrayBox):
         """
 
 class GrowthStrategy(enum.Enum):
-    Exact: typing.ClassVar[GrowthStrategy]  # value = <GrowthStrategy.Exact: 1>
-    Geometric: typing.ClassVar[GrowthStrategy]  # value = <GrowthStrategy.Geometric: 2>
-    Poisson: typing.ClassVar[GrowthStrategy]  # value = <GrowthStrategy.Poisson: 0>
+    Exact: typing.ClassVar[GrowthStrategy]
+    Geometric: typing.ClassVar[GrowthStrategy]
+    Poisson: typing.ClassVar[GrowthStrategy]
+    __pybind11_native_enum__: typing.ClassVar[typing.Any]
+    _member_map_: typing.ClassVar[dict]
+    _member_names_: typing.ClassVar[list] = ["Poisson", "Exact", "Geometric"]
+    _unhashable_values_: typing.ClassVar[list] = list()
+    _use_args_: typing.ClassVar[bool] = False
+    _value2member_map_: typing.ClassVar[dict]
+    _value_repr_ = None
+    _member_type_ = builtins.object
+    @staticmethod
+    def _generate_next_value_(name, start, count, last_values):
+        """
+        Generate the next value when not given.
+
+        name: the name of the member
+        start: the initial start value or None
+        count: the number of existing members
+        last_values: the list of values assigned
+
+        """
+    @staticmethod
+    def _new_member_(type, *args, **kwargs):
+        """
+        Create and return a new object.  See help(type) for accurate signature.
+        """
+    @classmethod
+    def __new__(cls, value): ...
 
 class PODVector_real_pinned:
     """
@@ -13963,26 +13897,25 @@ class PODVector_real_pinned:
     def reserve(
         self,
         capacity: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
+        strategy: GrowthStrategy = amrex.space1d.GrowthStrategy.Poisson,
     ) -> None: ...
     @typing.overload
     def resize(
         self,
         new_size: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
+        strategy: GrowthStrategy = amrex.space1d.GrowthStrategy.Poisson,
     ) -> None: ...
     @typing.overload
     def resize(
         self,
         new_size: typing.SupportsInt | typing.SupportsIndex,
         value: typing.SupportsFloat | typing.SupportsIndex,
-        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
+        strategy: GrowthStrategy = amrex.space1d.GrowthStrategy.Poisson,
     ) -> None: ...
     def shrink_to_fit(self) -> None: ...
     def size(self) -> int: ...
     def to_cupy(self, copy=False):
         """
-
         Provide a CuPy view into a PODVector (e.g., RealVector, IntVector).
 
         Parameters
@@ -14006,7 +13939,6 @@ class PODVector_real_pinned:
     def to_host(self) -> PODVector_real_pinned: ...
     def to_numpy(self, copy=False):
         """
-
         Provide a NumPy view into a PODVector (e.g., RealVector, IntVector).
 
         Parameters
@@ -14024,7 +13956,6 @@ class PODVector_real_pinned:
         """
     def to_xp(self, copy=False):
         """
-
         Provide a NumPy or CuPy view into a PODVector (e.g., RealVector, IntVector),
         depending on amr.Config.have_gpu .
 
@@ -14079,26 +14010,25 @@ class PODVector_real_arena:
     def reserve(
         self,
         capacity: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
+        strategy: GrowthStrategy = amrex.space1d.GrowthStrategy.Poisson,
     ) -> None: ...
     @typing.overload
     def resize(
         self,
         new_size: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
+        strategy: GrowthStrategy = amrex.space1d.GrowthStrategy.Poisson,
     ) -> None: ...
     @typing.overload
     def resize(
         self,
         new_size: typing.SupportsInt | typing.SupportsIndex,
         value: typing.SupportsFloat | typing.SupportsIndex,
-        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
+        strategy: GrowthStrategy = amrex.space1d.GrowthStrategy.Poisson,
     ) -> None: ...
     def shrink_to_fit(self) -> None: ...
     def size(self) -> int: ...
     def to_cupy(self, copy=False):
         """
-
         Provide a CuPy view into a PODVector (e.g., RealVector, IntVector).
 
         Parameters
@@ -14122,7 +14052,6 @@ class PODVector_real_arena:
     def to_host(self) -> PODVector_real_pinned: ...
     def to_numpy(self, copy=False):
         """
-
         Provide a NumPy view into a PODVector (e.g., RealVector, IntVector).
 
         Parameters
@@ -14140,7 +14069,6 @@ class PODVector_real_arena:
         """
     def to_xp(self, copy=False):
         """
-
         Provide a NumPy or CuPy view into a PODVector (e.g., RealVector, IntVector),
         depending on amr.Config.have_gpu .
 
@@ -14195,26 +14123,25 @@ class PODVector_real_std:
     def reserve(
         self,
         capacity: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
+        strategy: GrowthStrategy = amrex.space1d.GrowthStrategy.Poisson,
     ) -> None: ...
     @typing.overload
     def resize(
         self,
         new_size: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
+        strategy: GrowthStrategy = amrex.space1d.GrowthStrategy.Poisson,
     ) -> None: ...
     @typing.overload
     def resize(
         self,
         new_size: typing.SupportsInt | typing.SupportsIndex,
         value: typing.SupportsFloat | typing.SupportsIndex,
-        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
+        strategy: GrowthStrategy = amrex.space1d.GrowthStrategy.Poisson,
     ) -> None: ...
     def shrink_to_fit(self) -> None: ...
     def size(self) -> int: ...
     def to_cupy(self, copy=False):
         """
-
         Provide a CuPy view into a PODVector (e.g., RealVector, IntVector).
 
         Parameters
@@ -14238,7 +14165,6 @@ class PODVector_real_std:
     def to_host(self) -> PODVector_real_pinned: ...
     def to_numpy(self, copy=False):
         """
-
         Provide a NumPy view into a PODVector (e.g., RealVector, IntVector).
 
         Parameters
@@ -14256,7 +14182,6 @@ class PODVector_real_std:
         """
     def to_xp(self, copy=False):
         """
-
         Provide a NumPy or CuPy view into a PODVector (e.g., RealVector, IntVector),
         depending on amr.Config.have_gpu .
 
@@ -14311,26 +14236,25 @@ class PODVector_real_polymorphic:
     def reserve(
         self,
         capacity: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
+        strategy: GrowthStrategy = amrex.space1d.GrowthStrategy.Poisson,
     ) -> None: ...
     @typing.overload
     def resize(
         self,
         new_size: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
+        strategy: GrowthStrategy = amrex.space1d.GrowthStrategy.Poisson,
     ) -> None: ...
     @typing.overload
     def resize(
         self,
         new_size: typing.SupportsInt | typing.SupportsIndex,
         value: typing.SupportsFloat | typing.SupportsIndex,
-        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
+        strategy: GrowthStrategy = amrex.space1d.GrowthStrategy.Poisson,
     ) -> None: ...
     def shrink_to_fit(self) -> None: ...
     def size(self) -> int: ...
     def to_cupy(self, copy=False):
         """
-
         Provide a CuPy view into a PODVector (e.g., RealVector, IntVector).
 
         Parameters
@@ -14354,7 +14278,6 @@ class PODVector_real_polymorphic:
     def to_host(self) -> PODVector_real_pinned: ...
     def to_numpy(self, copy=False):
         """
-
         Provide a NumPy view into a PODVector (e.g., RealVector, IntVector).
 
         Parameters
@@ -14372,7 +14295,6 @@ class PODVector_real_polymorphic:
         """
     def to_xp(self, copy=False):
         """
-
         Provide a NumPy or CuPy view into a PODVector (e.g., RealVector, IntVector),
         depending on amr.Config.have_gpu .
 
@@ -14427,26 +14349,25 @@ class PODVector_int_pinned:
     def reserve(
         self,
         capacity: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
+        strategy: GrowthStrategy = amrex.space1d.GrowthStrategy.Poisson,
     ) -> None: ...
     @typing.overload
     def resize(
         self,
         new_size: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
+        strategy: GrowthStrategy = amrex.space1d.GrowthStrategy.Poisson,
     ) -> None: ...
     @typing.overload
     def resize(
         self,
         new_size: typing.SupportsInt | typing.SupportsIndex,
         value: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
+        strategy: GrowthStrategy = amrex.space1d.GrowthStrategy.Poisson,
     ) -> None: ...
     def shrink_to_fit(self) -> None: ...
     def size(self) -> int: ...
     def to_cupy(self, copy=False):
         """
-
         Provide a CuPy view into a PODVector (e.g., RealVector, IntVector).
 
         Parameters
@@ -14470,7 +14391,6 @@ class PODVector_int_pinned:
     def to_host(self) -> PODVector_int_pinned: ...
     def to_numpy(self, copy=False):
         """
-
         Provide a NumPy view into a PODVector (e.g., RealVector, IntVector).
 
         Parameters
@@ -14488,7 +14408,6 @@ class PODVector_int_pinned:
         """
     def to_xp(self, copy=False):
         """
-
         Provide a NumPy or CuPy view into a PODVector (e.g., RealVector, IntVector),
         depending on amr.Config.have_gpu .
 
@@ -14543,26 +14462,25 @@ class PODVector_int_arena:
     def reserve(
         self,
         capacity: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
+        strategy: GrowthStrategy = amrex.space1d.GrowthStrategy.Poisson,
     ) -> None: ...
     @typing.overload
     def resize(
         self,
         new_size: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
+        strategy: GrowthStrategy = amrex.space1d.GrowthStrategy.Poisson,
     ) -> None: ...
     @typing.overload
     def resize(
         self,
         new_size: typing.SupportsInt | typing.SupportsIndex,
         value: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
+        strategy: GrowthStrategy = amrex.space1d.GrowthStrategy.Poisson,
     ) -> None: ...
     def shrink_to_fit(self) -> None: ...
     def size(self) -> int: ...
     def to_cupy(self, copy=False):
         """
-
         Provide a CuPy view into a PODVector (e.g., RealVector, IntVector).
 
         Parameters
@@ -14586,7 +14504,6 @@ class PODVector_int_arena:
     def to_host(self) -> PODVector_int_pinned: ...
     def to_numpy(self, copy=False):
         """
-
         Provide a NumPy view into a PODVector (e.g., RealVector, IntVector).
 
         Parameters
@@ -14604,7 +14521,6 @@ class PODVector_int_arena:
         """
     def to_xp(self, copy=False):
         """
-
         Provide a NumPy or CuPy view into a PODVector (e.g., RealVector, IntVector),
         depending on amr.Config.have_gpu .
 
@@ -14659,26 +14575,25 @@ class PODVector_int_std:
     def reserve(
         self,
         capacity: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
+        strategy: GrowthStrategy = amrex.space1d.GrowthStrategy.Poisson,
     ) -> None: ...
     @typing.overload
     def resize(
         self,
         new_size: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
+        strategy: GrowthStrategy = amrex.space1d.GrowthStrategy.Poisson,
     ) -> None: ...
     @typing.overload
     def resize(
         self,
         new_size: typing.SupportsInt | typing.SupportsIndex,
         value: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
+        strategy: GrowthStrategy = amrex.space1d.GrowthStrategy.Poisson,
     ) -> None: ...
     def shrink_to_fit(self) -> None: ...
     def size(self) -> int: ...
     def to_cupy(self, copy=False):
         """
-
         Provide a CuPy view into a PODVector (e.g., RealVector, IntVector).
 
         Parameters
@@ -14702,7 +14617,6 @@ class PODVector_int_std:
     def to_host(self) -> PODVector_int_pinned: ...
     def to_numpy(self, copy=False):
         """
-
         Provide a NumPy view into a PODVector (e.g., RealVector, IntVector).
 
         Parameters
@@ -14720,7 +14634,6 @@ class PODVector_int_std:
         """
     def to_xp(self, copy=False):
         """
-
         Provide a NumPy or CuPy view into a PODVector (e.g., RealVector, IntVector),
         depending on amr.Config.have_gpu .
 
@@ -14775,26 +14688,25 @@ class PODVector_int_polymorphic:
     def reserve(
         self,
         capacity: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
+        strategy: GrowthStrategy = amrex.space1d.GrowthStrategy.Poisson,
     ) -> None: ...
     @typing.overload
     def resize(
         self,
         new_size: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
+        strategy: GrowthStrategy = amrex.space1d.GrowthStrategy.Poisson,
     ) -> None: ...
     @typing.overload
     def resize(
         self,
         new_size: typing.SupportsInt | typing.SupportsIndex,
         value: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
+        strategy: GrowthStrategy = amrex.space1d.GrowthStrategy.Poisson,
     ) -> None: ...
     def shrink_to_fit(self) -> None: ...
     def size(self) -> int: ...
     def to_cupy(self, copy=False):
         """
-
         Provide a CuPy view into a PODVector (e.g., RealVector, IntVector).
 
         Parameters
@@ -14818,7 +14730,6 @@ class PODVector_int_polymorphic:
     def to_host(self) -> PODVector_int_pinned: ...
     def to_numpy(self, copy=False):
         """
-
         Provide a NumPy view into a PODVector (e.g., RealVector, IntVector).
 
         Parameters
@@ -14836,7 +14747,6 @@ class PODVector_int_polymorphic:
         """
     def to_xp(self, copy=False):
         """
-
         Provide a NumPy or CuPy view into a PODVector (e.g., RealVector, IntVector),
         depending on amr.Config.have_gpu .
 
@@ -14891,26 +14801,25 @@ class PODVector_uint64_pinned:
     def reserve(
         self,
         capacity: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
+        strategy: GrowthStrategy = amrex.space1d.GrowthStrategy.Poisson,
     ) -> None: ...
     @typing.overload
     def resize(
         self,
         new_size: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
+        strategy: GrowthStrategy = amrex.space1d.GrowthStrategy.Poisson,
     ) -> None: ...
     @typing.overload
     def resize(
         self,
         new_size: typing.SupportsInt | typing.SupportsIndex,
         value: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
+        strategy: GrowthStrategy = amrex.space1d.GrowthStrategy.Poisson,
     ) -> None: ...
     def shrink_to_fit(self) -> None: ...
     def size(self) -> int: ...
     def to_cupy(self, copy=False):
         """
-
         Provide a CuPy view into a PODVector (e.g., RealVector, IntVector).
 
         Parameters
@@ -14934,7 +14843,6 @@ class PODVector_uint64_pinned:
     def to_host(self) -> PODVector_uint64_pinned: ...
     def to_numpy(self, copy=False):
         """
-
         Provide a NumPy view into a PODVector (e.g., RealVector, IntVector).
 
         Parameters
@@ -14952,7 +14860,6 @@ class PODVector_uint64_pinned:
         """
     def to_xp(self, copy=False):
         """
-
         Provide a NumPy or CuPy view into a PODVector (e.g., RealVector, IntVector),
         depending on amr.Config.have_gpu .
 
@@ -15007,26 +14914,25 @@ class PODVector_uint64_arena:
     def reserve(
         self,
         capacity: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
+        strategy: GrowthStrategy = amrex.space1d.GrowthStrategy.Poisson,
     ) -> None: ...
     @typing.overload
     def resize(
         self,
         new_size: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
+        strategy: GrowthStrategy = amrex.space1d.GrowthStrategy.Poisson,
     ) -> None: ...
     @typing.overload
     def resize(
         self,
         new_size: typing.SupportsInt | typing.SupportsIndex,
         value: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
+        strategy: GrowthStrategy = amrex.space1d.GrowthStrategy.Poisson,
     ) -> None: ...
     def shrink_to_fit(self) -> None: ...
     def size(self) -> int: ...
     def to_cupy(self, copy=False):
         """
-
         Provide a CuPy view into a PODVector (e.g., RealVector, IntVector).
 
         Parameters
@@ -15050,7 +14956,6 @@ class PODVector_uint64_arena:
     def to_host(self) -> PODVector_uint64_pinned: ...
     def to_numpy(self, copy=False):
         """
-
         Provide a NumPy view into a PODVector (e.g., RealVector, IntVector).
 
         Parameters
@@ -15068,7 +14973,6 @@ class PODVector_uint64_arena:
         """
     def to_xp(self, copy=False):
         """
-
         Provide a NumPy or CuPy view into a PODVector (e.g., RealVector, IntVector),
         depending on amr.Config.have_gpu .
 
@@ -15123,26 +15027,25 @@ class PODVector_uint64_std:
     def reserve(
         self,
         capacity: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
+        strategy: GrowthStrategy = amrex.space1d.GrowthStrategy.Poisson,
     ) -> None: ...
     @typing.overload
     def resize(
         self,
         new_size: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
+        strategy: GrowthStrategy = amrex.space1d.GrowthStrategy.Poisson,
     ) -> None: ...
     @typing.overload
     def resize(
         self,
         new_size: typing.SupportsInt | typing.SupportsIndex,
         value: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
+        strategy: GrowthStrategy = amrex.space1d.GrowthStrategy.Poisson,
     ) -> None: ...
     def shrink_to_fit(self) -> None: ...
     def size(self) -> int: ...
     def to_cupy(self, copy=False):
         """
-
         Provide a CuPy view into a PODVector (e.g., RealVector, IntVector).
 
         Parameters
@@ -15166,7 +15069,6 @@ class PODVector_uint64_std:
     def to_host(self) -> PODVector_uint64_pinned: ...
     def to_numpy(self, copy=False):
         """
-
         Provide a NumPy view into a PODVector (e.g., RealVector, IntVector).
 
         Parameters
@@ -15184,7 +15086,6 @@ class PODVector_uint64_std:
         """
     def to_xp(self, copy=False):
         """
-
         Provide a NumPy or CuPy view into a PODVector (e.g., RealVector, IntVector),
         depending on amr.Config.have_gpu .
 
@@ -15239,26 +15140,25 @@ class PODVector_uint64_polymorphic:
     def reserve(
         self,
         capacity: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
+        strategy: GrowthStrategy = amrex.space1d.GrowthStrategy.Poisson,
     ) -> None: ...
     @typing.overload
     def resize(
         self,
         new_size: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
+        strategy: GrowthStrategy = amrex.space1d.GrowthStrategy.Poisson,
     ) -> None: ...
     @typing.overload
     def resize(
         self,
         new_size: typing.SupportsInt | typing.SupportsIndex,
         value: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
+        strategy: GrowthStrategy = amrex.space1d.GrowthStrategy.Poisson,
     ) -> None: ...
     def shrink_to_fit(self) -> None: ...
     def size(self) -> int: ...
     def to_cupy(self, copy=False):
         """
-
         Provide a CuPy view into a PODVector (e.g., RealVector, IntVector).
 
         Parameters
@@ -15282,7 +15182,6 @@ class PODVector_uint64_polymorphic:
     def to_host(self) -> PODVector_uint64_pinned: ...
     def to_numpy(self, copy=False):
         """
-
         Provide a NumPy view into a PODVector (e.g., RealVector, IntVector).
 
         Parameters
@@ -15300,7 +15199,6 @@ class PODVector_uint64_polymorphic:
         """
     def to_xp(self, copy=False):
         """
-
         Provide a NumPy or CuPy view into a PODVector (e.g., RealVector, IntVector),
         depending on amr.Config.have_gpu .
 
@@ -15470,14 +15368,13 @@ class StructOfArrays_1_0_idcpu_pinned:
     def resize(
         self,
         new_size: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
+        strategy: GrowthStrategy = amrex.space1d.GrowthStrategy.Poisson,
     ) -> None: ...
     def set_num_neighbors(
         self, arg0: typing.SupportsInt | typing.SupportsIndex
     ) -> None: ...
     def to_cupy(self, copy=False):
         """
-
         Provide CuPy views into a StructOfArrays.
 
         Parameters
@@ -15504,7 +15401,6 @@ class StructOfArrays_1_0_idcpu_pinned:
         """
     def to_numpy(self, copy=False):
         """
-
         Provide NumPy views into a StructOfArrays.
 
         Parameters
@@ -15526,7 +15422,6 @@ class StructOfArrays_1_0_idcpu_pinned:
         """
     def to_xp(self, copy=False):
         """
-
         Provide NumPy or CuPy views into a StructOfArrays, depending on amr.Config.have_gpu .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
@@ -15643,14 +15538,13 @@ class StructOfArrays_1_0_idcpu_default:
     def resize(
         self,
         new_size: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
+        strategy: GrowthStrategy = amrex.space1d.GrowthStrategy.Poisson,
     ) -> None: ...
     def set_num_neighbors(
         self, arg0: typing.SupportsInt | typing.SupportsIndex
     ) -> None: ...
     def to_cupy(self, copy=False):
         """
-
         Provide CuPy views into a StructOfArrays.
 
         Parameters
@@ -15677,7 +15571,6 @@ class StructOfArrays_1_0_idcpu_default:
         """
     def to_numpy(self, copy=False):
         """
-
         Provide NumPy views into a StructOfArrays.
 
         Parameters
@@ -15699,7 +15592,6 @@ class StructOfArrays_1_0_idcpu_default:
         """
     def to_xp(self, copy=False):
         """
-
         Provide NumPy or CuPy views into a StructOfArrays, depending on amr.Config.have_gpu .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
@@ -15818,14 +15710,13 @@ class StructOfArrays_1_0_idcpu_arena:
     def resize(
         self,
         new_size: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
+        strategy: GrowthStrategy = amrex.space1d.GrowthStrategy.Poisson,
     ) -> None: ...
     def set_num_neighbors(
         self, arg0: typing.SupportsInt | typing.SupportsIndex
     ) -> None: ...
     def to_cupy(self, copy=False):
         """
-
         Provide CuPy views into a StructOfArrays.
 
         Parameters
@@ -15852,7 +15743,6 @@ class StructOfArrays_1_0_idcpu_arena:
         """
     def to_numpy(self, copy=False):
         """
-
         Provide NumPy views into a StructOfArrays.
 
         Parameters
@@ -15874,7 +15764,6 @@ class StructOfArrays_1_0_idcpu_arena:
         """
     def to_xp(self, copy=False):
         """
-
         Provide NumPy or CuPy views into a StructOfArrays, depending on amr.Config.have_gpu .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
@@ -15993,14 +15882,13 @@ class StructOfArrays_1_0_idcpu_polymorphic:
     def resize(
         self,
         new_size: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
+        strategy: GrowthStrategy = amrex.space1d.GrowthStrategy.Poisson,
     ) -> None: ...
     def set_num_neighbors(
         self, arg0: typing.SupportsInt | typing.SupportsIndex
     ) -> None: ...
     def to_cupy(self, copy=False):
         """
-
         Provide CuPy views into a StructOfArrays.
 
         Parameters
@@ -16027,7 +15915,6 @@ class StructOfArrays_1_0_idcpu_polymorphic:
         """
     def to_numpy(self, copy=False):
         """
-
         Provide NumPy views into a StructOfArrays.
 
         Parameters
@@ -16049,7 +15936,6 @@ class StructOfArrays_1_0_idcpu_polymorphic:
         """
     def to_xp(self, copy=False):
         """
-
         Provide NumPy or CuPy views into a StructOfArrays, depending on amr.Config.have_gpu .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
@@ -16201,7 +16087,7 @@ class ParticleTile_pureSoA_1_0_pinned:
     def resize(
         self,
         count: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
+        strategy: GrowthStrategy = amrex.space1d.GrowthStrategy.Poisson,
     ) -> None: ...
     def set_num_neighbors(
         self, arg0: typing.SupportsInt | typing.SupportsIndex
@@ -16300,7 +16186,7 @@ class ParticleTile_pureSoA_1_0_default:
     def resize(
         self,
         count: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
+        strategy: GrowthStrategy = amrex.space1d.GrowthStrategy.Poisson,
     ) -> None: ...
     def set_num_neighbors(
         self, arg0: typing.SupportsInt | typing.SupportsIndex
@@ -16399,7 +16285,7 @@ class ParticleTile_pureSoA_1_0_arena:
     def resize(
         self,
         count: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
+        strategy: GrowthStrategy = amrex.space1d.GrowthStrategy.Poisson,
     ) -> None: ...
     def set_num_neighbors(
         self, arg0: typing.SupportsInt | typing.SupportsIndex
@@ -16498,7 +16384,7 @@ class ParticleTile_pureSoA_1_0_polymorphic:
     def resize(
         self,
         count: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
+        strategy: GrowthStrategy = amrex.space1d.GrowthStrategy.Poisson,
     ) -> None: ...
     def set_num_neighbors(
         self, arg0: typing.SupportsInt | typing.SupportsIndex
@@ -16936,7 +16822,6 @@ class ParticleContainer_pureSoA_1_0_pinned:
     def sort_particles_by_cell(self) -> None: ...
     def to_df(self, local=True, comm=None, root_rank=0):
         """
-
         Copy all particles into a pandas.DataFrame
 
         Parameters
@@ -17393,7 +17278,6 @@ class ParticleContainer_pureSoA_1_0_default:
     def sort_particles_by_cell(self) -> None: ...
     def to_df(self, local=True, comm=None, root_rank=0):
         """
-
         Copy all particles into a pandas.DataFrame
 
         Parameters
@@ -17850,7 +17734,6 @@ class ParticleContainer_pureSoA_1_0_arena:
     def sort_particles_by_cell(self) -> None: ...
     def to_df(self, local=True, comm=None, root_rank=0):
         """
-
         Copy all particles into a pandas.DataFrame
 
         Parameters
@@ -18307,7 +18190,6 @@ class ParticleContainer_pureSoA_1_0_polymorphic:
     def sort_particles_by_cell(self) -> None: ...
     def to_df(self, local=True, comm=None, root_rank=0):
         """
-
         Copy all particles into a pandas.DataFrame
 
         Parameters
@@ -18581,7 +18463,6 @@ class ArrayOfStructs_2_1_pinned:
     def size(self) -> int: ...
     def to_cupy(self, copy=False):
         """
-
         Provide CuPy views into a ArrayOfStructs.
 
         Parameters
@@ -18606,7 +18487,6 @@ class ArrayOfStructs_2_1_pinned:
     def to_host(self) -> ArrayOfStructs_2_1_pinned: ...
     def to_numpy(self, copy=False):
         """
-
         Provide NumPy views into a ArrayOfStructs.
 
         Parameters
@@ -18625,7 +18505,6 @@ class ArrayOfStructs_2_1_pinned:
         """
     def to_xp(self, copy=False):
         """
-
         Provide NumPy or CuPy views into a ArrayOfStructs, depending on amr.Config.have_gpu .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
@@ -18681,7 +18560,6 @@ class ArrayOfStructs_2_1_default:
     def size(self) -> int: ...
     def to_cupy(self, copy=False):
         """
-
         Provide CuPy views into a ArrayOfStructs.
 
         Parameters
@@ -18706,7 +18584,6 @@ class ArrayOfStructs_2_1_default:
     def to_host(self) -> ArrayOfStructs_2_1_pinned: ...
     def to_numpy(self, copy=False):
         """
-
         Provide NumPy views into a ArrayOfStructs.
 
         Parameters
@@ -18725,7 +18602,6 @@ class ArrayOfStructs_2_1_default:
         """
     def to_xp(self, copy=False):
         """
-
         Provide NumPy or CuPy views into a ArrayOfStructs, depending on amr.Config.have_gpu .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
@@ -18781,7 +18657,6 @@ class ArrayOfStructs_2_1_arena:
     def size(self) -> int: ...
     def to_cupy(self, copy=False):
         """
-
         Provide CuPy views into a ArrayOfStructs.
 
         Parameters
@@ -18806,7 +18681,6 @@ class ArrayOfStructs_2_1_arena:
     def to_host(self) -> ArrayOfStructs_2_1_pinned: ...
     def to_numpy(self, copy=False):
         """
-
         Provide NumPy views into a ArrayOfStructs.
 
         Parameters
@@ -18825,7 +18699,6 @@ class ArrayOfStructs_2_1_arena:
         """
     def to_xp(self, copy=False):
         """
-
         Provide NumPy or CuPy views into a ArrayOfStructs, depending on amr.Config.have_gpu .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
@@ -18881,7 +18754,6 @@ class ArrayOfStructs_2_1_polymorphic:
     def size(self) -> int: ...
     def to_cupy(self, copy=False):
         """
-
         Provide CuPy views into a ArrayOfStructs.
 
         Parameters
@@ -18906,7 +18778,6 @@ class ArrayOfStructs_2_1_polymorphic:
     def to_host(self) -> ArrayOfStructs_2_1_pinned: ...
     def to_numpy(self, copy=False):
         """
-
         Provide NumPy views into a ArrayOfStructs.
 
         Parameters
@@ -18925,7 +18796,6 @@ class ArrayOfStructs_2_1_polymorphic:
         """
     def to_xp(self, copy=False):
         """
-
         Provide NumPy or CuPy views into a ArrayOfStructs, depending on amr.Config.have_gpu .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
@@ -19005,14 +18875,13 @@ class StructOfArrays_3_1_pinned:
     def resize(
         self,
         new_size: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
+        strategy: GrowthStrategy = amrex.space1d.GrowthStrategy.Poisson,
     ) -> None: ...
     def set_num_neighbors(
         self, arg0: typing.SupportsInt | typing.SupportsIndex
     ) -> None: ...
     def to_cupy(self, copy=False):
         """
-
         Provide CuPy views into a StructOfArrays.
 
         Parameters
@@ -19039,7 +18908,6 @@ class StructOfArrays_3_1_pinned:
         """
     def to_numpy(self, copy=False):
         """
-
         Provide NumPy views into a StructOfArrays.
 
         Parameters
@@ -19061,7 +18929,6 @@ class StructOfArrays_3_1_pinned:
         """
     def to_xp(self, copy=False):
         """
-
         Provide NumPy or CuPy views into a StructOfArrays, depending on amr.Config.have_gpu .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
@@ -19174,14 +19041,13 @@ class StructOfArrays_3_1_default:
     def resize(
         self,
         new_size: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
+        strategy: GrowthStrategy = amrex.space1d.GrowthStrategy.Poisson,
     ) -> None: ...
     def set_num_neighbors(
         self, arg0: typing.SupportsInt | typing.SupportsIndex
     ) -> None: ...
     def to_cupy(self, copy=False):
         """
-
         Provide CuPy views into a StructOfArrays.
 
         Parameters
@@ -19208,7 +19074,6 @@ class StructOfArrays_3_1_default:
         """
     def to_numpy(self, copy=False):
         """
-
         Provide NumPy views into a StructOfArrays.
 
         Parameters
@@ -19230,7 +19095,6 @@ class StructOfArrays_3_1_default:
         """
     def to_xp(self, copy=False):
         """
-
         Provide NumPy or CuPy views into a StructOfArrays, depending on amr.Config.have_gpu .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
@@ -19345,14 +19209,13 @@ class StructOfArrays_3_1_arena:
     def resize(
         self,
         new_size: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
+        strategy: GrowthStrategy = amrex.space1d.GrowthStrategy.Poisson,
     ) -> None: ...
     def set_num_neighbors(
         self, arg0: typing.SupportsInt | typing.SupportsIndex
     ) -> None: ...
     def to_cupy(self, copy=False):
         """
-
         Provide CuPy views into a StructOfArrays.
 
         Parameters
@@ -19379,7 +19242,6 @@ class StructOfArrays_3_1_arena:
         """
     def to_numpy(self, copy=False):
         """
-
         Provide NumPy views into a StructOfArrays.
 
         Parameters
@@ -19401,7 +19263,6 @@ class StructOfArrays_3_1_arena:
         """
     def to_xp(self, copy=False):
         """
-
         Provide NumPy or CuPy views into a StructOfArrays, depending on amr.Config.have_gpu .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
@@ -19516,14 +19377,13 @@ class StructOfArrays_3_1_polymorphic:
     def resize(
         self,
         new_size: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
+        strategy: GrowthStrategy = amrex.space1d.GrowthStrategy.Poisson,
     ) -> None: ...
     def set_num_neighbors(
         self, arg0: typing.SupportsInt | typing.SupportsIndex
     ) -> None: ...
     def to_cupy(self, copy=False):
         """
-
         Provide CuPy views into a StructOfArrays.
 
         Parameters
@@ -19550,7 +19410,6 @@ class StructOfArrays_3_1_polymorphic:
         """
     def to_numpy(self, copy=False):
         """
-
         Provide NumPy views into a StructOfArrays.
 
         Parameters
@@ -19572,7 +19431,6 @@ class StructOfArrays_3_1_polymorphic:
         """
     def to_xp(self, copy=False):
         """
-
         Provide NumPy or CuPy views into a StructOfArrays, depending on amr.Config.have_gpu .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
@@ -19731,7 +19589,7 @@ class ParticleTile_2_1_3_1_pinned:
     def resize(
         self,
         count: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
+        strategy: GrowthStrategy = amrex.space1d.GrowthStrategy.Poisson,
     ) -> None: ...
     def set_num_neighbors(
         self, arg0: typing.SupportsInt | typing.SupportsIndex
@@ -19837,7 +19695,7 @@ class ParticleTile_2_1_3_1_default:
     def resize(
         self,
         count: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
+        strategy: GrowthStrategy = amrex.space1d.GrowthStrategy.Poisson,
     ) -> None: ...
     def set_num_neighbors(
         self, arg0: typing.SupportsInt | typing.SupportsIndex
@@ -19943,7 +19801,7 @@ class ParticleTile_2_1_3_1_arena:
     def resize(
         self,
         count: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
+        strategy: GrowthStrategy = amrex.space1d.GrowthStrategy.Poisson,
     ) -> None: ...
     def set_num_neighbors(
         self, arg0: typing.SupportsInt | typing.SupportsIndex
@@ -20049,7 +19907,7 @@ class ParticleTile_2_1_3_1_polymorphic:
     def resize(
         self,
         count: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
+        strategy: GrowthStrategy = amrex.space1d.GrowthStrategy.Poisson,
     ) -> None: ...
     def set_num_neighbors(
         self, arg0: typing.SupportsInt | typing.SupportsIndex
@@ -20522,7 +20380,6 @@ class ParticleContainer_2_1_3_1_pinned:
     def sort_particles_by_cell(self) -> None: ...
     def to_df(self, local=True, comm=None, root_rank=0):
         """
-
         Copy all particles into a pandas.DataFrame
 
         Parameters
@@ -20994,7 +20851,6 @@ class ParticleContainer_2_1_3_1_default:
     def sort_particles_by_cell(self) -> None: ...
     def to_df(self, local=True, comm=None, root_rank=0):
         """
-
         Copy all particles into a pandas.DataFrame
 
         Parameters
@@ -21466,7 +21322,6 @@ class ParticleContainer_2_1_3_1_arena:
     def sort_particles_by_cell(self) -> None: ...
     def to_df(self, local=True, comm=None, root_rank=0):
         """
-
         Copy all particles into a pandas.DataFrame
 
         Parameters
@@ -21938,7 +21793,6 @@ class ParticleContainer_2_1_3_1_polymorphic:
     def sort_particles_by_cell(self) -> None: ...
     def to_df(self, local=True, comm=None, root_rank=0):
         """
-
         Copy all particles into a pandas.DataFrame
 
         Parameters
@@ -22126,7 +21980,6 @@ class ArrayOfStructs_16_4_pinned:
     def size(self) -> int: ...
     def to_cupy(self, copy=False):
         """
-
         Provide CuPy views into a ArrayOfStructs.
 
         Parameters
@@ -22151,7 +22004,6 @@ class ArrayOfStructs_16_4_pinned:
     def to_host(self) -> ArrayOfStructs_16_4_pinned: ...
     def to_numpy(self, copy=False):
         """
-
         Provide NumPy views into a ArrayOfStructs.
 
         Parameters
@@ -22170,7 +22022,6 @@ class ArrayOfStructs_16_4_pinned:
         """
     def to_xp(self, copy=False):
         """
-
         Provide NumPy or CuPy views into a ArrayOfStructs, depending on amr.Config.have_gpu .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
@@ -22226,7 +22077,6 @@ class ArrayOfStructs_16_4_default:
     def size(self) -> int: ...
     def to_cupy(self, copy=False):
         """
-
         Provide CuPy views into a ArrayOfStructs.
 
         Parameters
@@ -22251,7 +22101,6 @@ class ArrayOfStructs_16_4_default:
     def to_host(self) -> ArrayOfStructs_16_4_pinned: ...
     def to_numpy(self, copy=False):
         """
-
         Provide NumPy views into a ArrayOfStructs.
 
         Parameters
@@ -22270,7 +22119,6 @@ class ArrayOfStructs_16_4_default:
         """
     def to_xp(self, copy=False):
         """
-
         Provide NumPy or CuPy views into a ArrayOfStructs, depending on amr.Config.have_gpu .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
@@ -22326,7 +22174,6 @@ class ArrayOfStructs_16_4_arena:
     def size(self) -> int: ...
     def to_cupy(self, copy=False):
         """
-
         Provide CuPy views into a ArrayOfStructs.
 
         Parameters
@@ -22351,7 +22198,6 @@ class ArrayOfStructs_16_4_arena:
     def to_host(self) -> ArrayOfStructs_16_4_pinned: ...
     def to_numpy(self, copy=False):
         """
-
         Provide NumPy views into a ArrayOfStructs.
 
         Parameters
@@ -22370,7 +22216,6 @@ class ArrayOfStructs_16_4_arena:
         """
     def to_xp(self, copy=False):
         """
-
         Provide NumPy or CuPy views into a ArrayOfStructs, depending on amr.Config.have_gpu .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
@@ -22426,7 +22271,6 @@ class ArrayOfStructs_16_4_polymorphic:
     def size(self) -> int: ...
     def to_cupy(self, copy=False):
         """
-
         Provide CuPy views into a ArrayOfStructs.
 
         Parameters
@@ -22451,7 +22295,6 @@ class ArrayOfStructs_16_4_polymorphic:
     def to_host(self) -> ArrayOfStructs_16_4_pinned: ...
     def to_numpy(self, copy=False):
         """
-
         Provide NumPy views into a ArrayOfStructs.
 
         Parameters
@@ -22470,7 +22313,6 @@ class ArrayOfStructs_16_4_polymorphic:
         """
     def to_xp(self, copy=False):
         """
-
         Provide NumPy or CuPy views into a ArrayOfStructs, depending on amr.Config.have_gpu .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
@@ -22550,14 +22392,13 @@ class StructOfArrays_0_0_pinned:
     def resize(
         self,
         new_size: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
+        strategy: GrowthStrategy = amrex.space1d.GrowthStrategy.Poisson,
     ) -> None: ...
     def set_num_neighbors(
         self, arg0: typing.SupportsInt | typing.SupportsIndex
     ) -> None: ...
     def to_cupy(self, copy=False):
         """
-
         Provide CuPy views into a StructOfArrays.
 
         Parameters
@@ -22584,7 +22425,6 @@ class StructOfArrays_0_0_pinned:
         """
     def to_numpy(self, copy=False):
         """
-
         Provide NumPy views into a StructOfArrays.
 
         Parameters
@@ -22606,7 +22446,6 @@ class StructOfArrays_0_0_pinned:
         """
     def to_xp(self, copy=False):
         """
-
         Provide NumPy or CuPy views into a StructOfArrays, depending on amr.Config.have_gpu .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
@@ -22719,14 +22558,13 @@ class StructOfArrays_0_0_default:
     def resize(
         self,
         new_size: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
+        strategy: GrowthStrategy = amrex.space1d.GrowthStrategy.Poisson,
     ) -> None: ...
     def set_num_neighbors(
         self, arg0: typing.SupportsInt | typing.SupportsIndex
     ) -> None: ...
     def to_cupy(self, copy=False):
         """
-
         Provide CuPy views into a StructOfArrays.
 
         Parameters
@@ -22753,7 +22591,6 @@ class StructOfArrays_0_0_default:
         """
     def to_numpy(self, copy=False):
         """
-
         Provide NumPy views into a StructOfArrays.
 
         Parameters
@@ -22775,7 +22612,6 @@ class StructOfArrays_0_0_default:
         """
     def to_xp(self, copy=False):
         """
-
         Provide NumPy or CuPy views into a StructOfArrays, depending on amr.Config.have_gpu .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
@@ -22890,14 +22726,13 @@ class StructOfArrays_0_0_arena:
     def resize(
         self,
         new_size: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
+        strategy: GrowthStrategy = amrex.space1d.GrowthStrategy.Poisson,
     ) -> None: ...
     def set_num_neighbors(
         self, arg0: typing.SupportsInt | typing.SupportsIndex
     ) -> None: ...
     def to_cupy(self, copy=False):
         """
-
         Provide CuPy views into a StructOfArrays.
 
         Parameters
@@ -22924,7 +22759,6 @@ class StructOfArrays_0_0_arena:
         """
     def to_numpy(self, copy=False):
         """
-
         Provide NumPy views into a StructOfArrays.
 
         Parameters
@@ -22946,7 +22780,6 @@ class StructOfArrays_0_0_arena:
         """
     def to_xp(self, copy=False):
         """
-
         Provide NumPy or CuPy views into a StructOfArrays, depending on amr.Config.have_gpu .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
@@ -23061,14 +22894,13 @@ class StructOfArrays_0_0_polymorphic:
     def resize(
         self,
         new_size: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
+        strategy: GrowthStrategy = amrex.space1d.GrowthStrategy.Poisson,
     ) -> None: ...
     def set_num_neighbors(
         self, arg0: typing.SupportsInt | typing.SupportsIndex
     ) -> None: ...
     def to_cupy(self, copy=False):
         """
-
         Provide CuPy views into a StructOfArrays.
 
         Parameters
@@ -23095,7 +22927,6 @@ class StructOfArrays_0_0_polymorphic:
         """
     def to_numpy(self, copy=False):
         """
-
         Provide NumPy views into a StructOfArrays.
 
         Parameters
@@ -23117,7 +22948,6 @@ class StructOfArrays_0_0_polymorphic:
         """
     def to_xp(self, copy=False):
         """
-
         Provide NumPy or CuPy views into a StructOfArrays, depending on amr.Config.have_gpu .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
@@ -23276,7 +23106,7 @@ class ParticleTile_16_4_0_0_pinned:
     def resize(
         self,
         count: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
+        strategy: GrowthStrategy = amrex.space1d.GrowthStrategy.Poisson,
     ) -> None: ...
     def set_num_neighbors(
         self, arg0: typing.SupportsInt | typing.SupportsIndex
@@ -23382,7 +23212,7 @@ class ParticleTile_16_4_0_0_default:
     def resize(
         self,
         count: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
+        strategy: GrowthStrategy = amrex.space1d.GrowthStrategy.Poisson,
     ) -> None: ...
     def set_num_neighbors(
         self, arg0: typing.SupportsInt | typing.SupportsIndex
@@ -23488,7 +23318,7 @@ class ParticleTile_16_4_0_0_arena:
     def resize(
         self,
         count: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
+        strategy: GrowthStrategy = amrex.space1d.GrowthStrategy.Poisson,
     ) -> None: ...
     def set_num_neighbors(
         self, arg0: typing.SupportsInt | typing.SupportsIndex
@@ -23594,7 +23424,7 @@ class ParticleTile_16_4_0_0_polymorphic:
     def resize(
         self,
         count: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
+        strategy: GrowthStrategy = amrex.space1d.GrowthStrategy.Poisson,
     ) -> None: ...
     def set_num_neighbors(
         self, arg0: typing.SupportsInt | typing.SupportsIndex
@@ -24067,7 +23897,6 @@ class ParticleContainer_16_4_0_0_pinned:
     def sort_particles_by_cell(self) -> None: ...
     def to_df(self, local=True, comm=None, root_rank=0):
         """
-
         Copy all particles into a pandas.DataFrame
 
         Parameters
@@ -24539,7 +24368,6 @@ class ParticleContainer_16_4_0_0_default:
     def sort_particles_by_cell(self) -> None: ...
     def to_df(self, local=True, comm=None, root_rank=0):
         """
-
         Copy all particles into a pandas.DataFrame
 
         Parameters
@@ -25011,7 +24839,6 @@ class ParticleContainer_16_4_0_0_arena:
     def sort_particles_by_cell(self) -> None: ...
     def to_df(self, local=True, comm=None, root_rank=0):
         """
-
         Copy all particles into a pandas.DataFrame
 
         Parameters
@@ -25483,7 +25310,6 @@ class ParticleContainer_16_4_0_0_polymorphic:
     def sort_particles_by_cell(self) -> None: ...
     def to_df(self, local=True, comm=None, root_rank=0):
         """
-
         Copy all particles into a pandas.DataFrame
 
         Parameters
@@ -25699,14 +25525,13 @@ class StructOfArrays_11_0_idcpu_polymorphic:
     def resize(
         self,
         new_size: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
+        strategy: GrowthStrategy = amrex.space1d.GrowthStrategy.Poisson,
     ) -> None: ...
     def set_num_neighbors(
         self, arg0: typing.SupportsInt | typing.SupportsIndex
     ) -> None: ...
     def to_cupy(self, copy=False):
         """
-
         Provide CuPy views into a StructOfArrays.
 
         Parameters
@@ -25733,7 +25558,6 @@ class StructOfArrays_11_0_idcpu_polymorphic:
         """
     def to_numpy(self, copy=False):
         """
-
         Provide NumPy views into a StructOfArrays.
 
         Parameters
@@ -25755,7 +25579,6 @@ class StructOfArrays_11_0_idcpu_polymorphic:
         """
     def to_xp(self, copy=False):
         """
-
         Provide NumPy or CuPy views into a StructOfArrays, depending on amr.Config.have_gpu .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
@@ -25907,7 +25730,7 @@ class ParticleTile_pureSoA_11_0_polymorphic:
     def resize(
         self,
         count: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
+        strategy: GrowthStrategy = amrex.space1d.GrowthStrategy.Poisson,
     ) -> None: ...
     def set_num_neighbors(
         self, arg0: typing.SupportsInt | typing.SupportsIndex
@@ -26345,7 +26168,6 @@ class ParticleContainer_pureSoA_11_0_polymorphic:
     def sort_particles_by_cell(self) -> None: ...
     def to_df(self, local=True, comm=None, root_rank=0):
         """
-
         Copy all particles into a pandas.DataFrame
 
         Parameters
@@ -26561,14 +26383,13 @@ class StructOfArrays_5_0_idcpu_polymorphic:
     def resize(
         self,
         new_size: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
+        strategy: GrowthStrategy = amrex.space1d.GrowthStrategy.Poisson,
     ) -> None: ...
     def set_num_neighbors(
         self, arg0: typing.SupportsInt | typing.SupportsIndex
     ) -> None: ...
     def to_cupy(self, copy=False):
         """
-
         Provide CuPy views into a StructOfArrays.
 
         Parameters
@@ -26595,7 +26416,6 @@ class StructOfArrays_5_0_idcpu_polymorphic:
         """
     def to_numpy(self, copy=False):
         """
-
         Provide NumPy views into a StructOfArrays.
 
         Parameters
@@ -26617,7 +26437,6 @@ class StructOfArrays_5_0_idcpu_polymorphic:
         """
     def to_xp(self, copy=False):
         """
-
         Provide NumPy or CuPy views into a StructOfArrays, depending on amr.Config.have_gpu .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
@@ -26769,7 +26588,7 @@ class ParticleTile_pureSoA_5_0_polymorphic:
     def resize(
         self,
         count: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
+        strategy: GrowthStrategy = amrex.space1d.GrowthStrategy.Poisson,
     ) -> None: ...
     def set_num_neighbors(
         self, arg0: typing.SupportsInt | typing.SupportsIndex
@@ -27207,7 +27026,6 @@ class ParticleContainer_pureSoA_5_0_polymorphic:
     def sort_particles_by_cell(self) -> None: ...
     def to_df(self, local=True, comm=None, root_rank=0):
         """
-
         Copy all particles into a pandas.DataFrame
 
         Parameters
@@ -27785,9 +27603,9 @@ def write_single_level_plotfile(
     Writes single level plotfile
     """
 
-Exact: GrowthStrategy  # value = <GrowthStrategy.Exact: 1>
-Geometric: GrowthStrategy  # value = <GrowthStrategy.Geometric: 2>
-Poisson: GrowthStrategy  # value = <GrowthStrategy.Poisson: 0>
+Exact: GrowthStrategy
+Geometric: GrowthStrategy
+Poisson: GrowthStrategy
 __author__: str = "Axel Huebl, Ryan T. Sandberg, Shreyas Ananthan, David P. Grote, Revathi Jambunathan, Edoardo Zoni, Remi Lehe, Andrew Myers, Weiqun Zhang"
 __license__: str = "BSD-3-Clause-LBNL"
 __version__: str = "26.04"
