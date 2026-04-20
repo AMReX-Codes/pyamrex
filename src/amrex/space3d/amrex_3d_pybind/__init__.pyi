@@ -46,8 +46,6 @@ import typing
 import numpy
 import numpy.typing
 
-import amrex.space3d
-
 from . import ParallelDescriptor
 
 __all__: list[str] = [
@@ -13848,20 +13846,20 @@ class PODVector_real_pinned:
     def reserve(
         self,
         capacity: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = amrex.space3d.GrowthStrategy.Poisson,
+        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
     ) -> None: ...
     @typing.overload
     def resize(
         self,
         new_size: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = amrex.space3d.GrowthStrategy.Poisson,
+        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
     ) -> None: ...
     @typing.overload
     def resize(
         self,
         new_size: typing.SupportsInt | typing.SupportsIndex,
         value: typing.SupportsFloat | typing.SupportsIndex,
-        strategy: GrowthStrategy = amrex.space3d.GrowthStrategy.Poisson,
+        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
     ) -> None: ...
     def shrink_to_fit(self) -> None: ...
     def size(self) -> int: ...
@@ -13961,20 +13959,20 @@ class PODVector_real_arena:
     def reserve(
         self,
         capacity: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = amrex.space3d.GrowthStrategy.Poisson,
+        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
     ) -> None: ...
     @typing.overload
     def resize(
         self,
         new_size: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = amrex.space3d.GrowthStrategy.Poisson,
+        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
     ) -> None: ...
     @typing.overload
     def resize(
         self,
         new_size: typing.SupportsInt | typing.SupportsIndex,
         value: typing.SupportsFloat | typing.SupportsIndex,
-        strategy: GrowthStrategy = amrex.space3d.GrowthStrategy.Poisson,
+        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
     ) -> None: ...
     def shrink_to_fit(self) -> None: ...
     def size(self) -> int: ...
@@ -14074,20 +14072,20 @@ class PODVector_real_std:
     def reserve(
         self,
         capacity: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = amrex.space3d.GrowthStrategy.Poisson,
+        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
     ) -> None: ...
     @typing.overload
     def resize(
         self,
         new_size: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = amrex.space3d.GrowthStrategy.Poisson,
+        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
     ) -> None: ...
     @typing.overload
     def resize(
         self,
         new_size: typing.SupportsInt | typing.SupportsIndex,
         value: typing.SupportsFloat | typing.SupportsIndex,
-        strategy: GrowthStrategy = amrex.space3d.GrowthStrategy.Poisson,
+        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
     ) -> None: ...
     def shrink_to_fit(self) -> None: ...
     def size(self) -> int: ...
@@ -14187,20 +14185,20 @@ class PODVector_real_polymorphic:
     def reserve(
         self,
         capacity: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = amrex.space3d.GrowthStrategy.Poisson,
+        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
     ) -> None: ...
     @typing.overload
     def resize(
         self,
         new_size: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = amrex.space3d.GrowthStrategy.Poisson,
+        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
     ) -> None: ...
     @typing.overload
     def resize(
         self,
         new_size: typing.SupportsInt | typing.SupportsIndex,
         value: typing.SupportsFloat | typing.SupportsIndex,
-        strategy: GrowthStrategy = amrex.space3d.GrowthStrategy.Poisson,
+        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
     ) -> None: ...
     def shrink_to_fit(self) -> None: ...
     def size(self) -> int: ...
@@ -14300,20 +14298,20 @@ class PODVector_int_pinned:
     def reserve(
         self,
         capacity: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = amrex.space3d.GrowthStrategy.Poisson,
+        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
     ) -> None: ...
     @typing.overload
     def resize(
         self,
         new_size: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = amrex.space3d.GrowthStrategy.Poisson,
+        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
     ) -> None: ...
     @typing.overload
     def resize(
         self,
         new_size: typing.SupportsInt | typing.SupportsIndex,
         value: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = amrex.space3d.GrowthStrategy.Poisson,
+        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
     ) -> None: ...
     def shrink_to_fit(self) -> None: ...
     def size(self) -> int: ...
@@ -14413,20 +14411,20 @@ class PODVector_int_arena:
     def reserve(
         self,
         capacity: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = amrex.space3d.GrowthStrategy.Poisson,
+        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
     ) -> None: ...
     @typing.overload
     def resize(
         self,
         new_size: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = amrex.space3d.GrowthStrategy.Poisson,
+        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
     ) -> None: ...
     @typing.overload
     def resize(
         self,
         new_size: typing.SupportsInt | typing.SupportsIndex,
         value: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = amrex.space3d.GrowthStrategy.Poisson,
+        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
     ) -> None: ...
     def shrink_to_fit(self) -> None: ...
     def size(self) -> int: ...
@@ -14526,20 +14524,20 @@ class PODVector_int_std:
     def reserve(
         self,
         capacity: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = amrex.space3d.GrowthStrategy.Poisson,
+        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
     ) -> None: ...
     @typing.overload
     def resize(
         self,
         new_size: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = amrex.space3d.GrowthStrategy.Poisson,
+        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
     ) -> None: ...
     @typing.overload
     def resize(
         self,
         new_size: typing.SupportsInt | typing.SupportsIndex,
         value: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = amrex.space3d.GrowthStrategy.Poisson,
+        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
     ) -> None: ...
     def shrink_to_fit(self) -> None: ...
     def size(self) -> int: ...
@@ -14639,20 +14637,20 @@ class PODVector_int_polymorphic:
     def reserve(
         self,
         capacity: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = amrex.space3d.GrowthStrategy.Poisson,
+        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
     ) -> None: ...
     @typing.overload
     def resize(
         self,
         new_size: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = amrex.space3d.GrowthStrategy.Poisson,
+        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
     ) -> None: ...
     @typing.overload
     def resize(
         self,
         new_size: typing.SupportsInt | typing.SupportsIndex,
         value: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = amrex.space3d.GrowthStrategy.Poisson,
+        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
     ) -> None: ...
     def shrink_to_fit(self) -> None: ...
     def size(self) -> int: ...
@@ -14752,20 +14750,20 @@ class PODVector_uint64_pinned:
     def reserve(
         self,
         capacity: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = amrex.space3d.GrowthStrategy.Poisson,
+        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
     ) -> None: ...
     @typing.overload
     def resize(
         self,
         new_size: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = amrex.space3d.GrowthStrategy.Poisson,
+        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
     ) -> None: ...
     @typing.overload
     def resize(
         self,
         new_size: typing.SupportsInt | typing.SupportsIndex,
         value: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = amrex.space3d.GrowthStrategy.Poisson,
+        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
     ) -> None: ...
     def shrink_to_fit(self) -> None: ...
     def size(self) -> int: ...
@@ -14865,20 +14863,20 @@ class PODVector_uint64_arena:
     def reserve(
         self,
         capacity: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = amrex.space3d.GrowthStrategy.Poisson,
+        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
     ) -> None: ...
     @typing.overload
     def resize(
         self,
         new_size: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = amrex.space3d.GrowthStrategy.Poisson,
+        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
     ) -> None: ...
     @typing.overload
     def resize(
         self,
         new_size: typing.SupportsInt | typing.SupportsIndex,
         value: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = amrex.space3d.GrowthStrategy.Poisson,
+        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
     ) -> None: ...
     def shrink_to_fit(self) -> None: ...
     def size(self) -> int: ...
@@ -14978,20 +14976,20 @@ class PODVector_uint64_std:
     def reserve(
         self,
         capacity: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = amrex.space3d.GrowthStrategy.Poisson,
+        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
     ) -> None: ...
     @typing.overload
     def resize(
         self,
         new_size: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = amrex.space3d.GrowthStrategy.Poisson,
+        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
     ) -> None: ...
     @typing.overload
     def resize(
         self,
         new_size: typing.SupportsInt | typing.SupportsIndex,
         value: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = amrex.space3d.GrowthStrategy.Poisson,
+        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
     ) -> None: ...
     def shrink_to_fit(self) -> None: ...
     def size(self) -> int: ...
@@ -15091,20 +15089,20 @@ class PODVector_uint64_polymorphic:
     def reserve(
         self,
         capacity: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = amrex.space3d.GrowthStrategy.Poisson,
+        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
     ) -> None: ...
     @typing.overload
     def resize(
         self,
         new_size: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = amrex.space3d.GrowthStrategy.Poisson,
+        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
     ) -> None: ...
     @typing.overload
     def resize(
         self,
         new_size: typing.SupportsInt | typing.SupportsIndex,
         value: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = amrex.space3d.GrowthStrategy.Poisson,
+        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
     ) -> None: ...
     def shrink_to_fit(self) -> None: ...
     def size(self) -> int: ...
@@ -15340,7 +15338,7 @@ class StructOfArrays_3_0_idcpu_pinned:
     def resize(
         self,
         new_size: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = amrex.space3d.GrowthStrategy.Poisson,
+        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
     ) -> None: ...
     def set_num_neighbors(
         self, arg0: typing.SupportsInt | typing.SupportsIndex
@@ -15510,7 +15508,7 @@ class StructOfArrays_3_0_idcpu_default:
     def resize(
         self,
         new_size: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = amrex.space3d.GrowthStrategy.Poisson,
+        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
     ) -> None: ...
     def set_num_neighbors(
         self, arg0: typing.SupportsInt | typing.SupportsIndex
@@ -15682,7 +15680,7 @@ class StructOfArrays_3_0_idcpu_arena:
     def resize(
         self,
         new_size: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = amrex.space3d.GrowthStrategy.Poisson,
+        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
     ) -> None: ...
     def set_num_neighbors(
         self, arg0: typing.SupportsInt | typing.SupportsIndex
@@ -15854,7 +15852,7 @@ class StructOfArrays_3_0_idcpu_polymorphic:
     def resize(
         self,
         new_size: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = amrex.space3d.GrowthStrategy.Poisson,
+        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
     ) -> None: ...
     def set_num_neighbors(
         self, arg0: typing.SupportsInt | typing.SupportsIndex
@@ -16059,7 +16057,7 @@ class ParticleTile_pureSoA_3_0_pinned:
     def resize(
         self,
         count: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = amrex.space3d.GrowthStrategy.Poisson,
+        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
     ) -> None: ...
     def set_num_neighbors(
         self, arg0: typing.SupportsInt | typing.SupportsIndex
@@ -16158,7 +16156,7 @@ class ParticleTile_pureSoA_3_0_default:
     def resize(
         self,
         count: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = amrex.space3d.GrowthStrategy.Poisson,
+        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
     ) -> None: ...
     def set_num_neighbors(
         self, arg0: typing.SupportsInt | typing.SupportsIndex
@@ -16257,7 +16255,7 @@ class ParticleTile_pureSoA_3_0_arena:
     def resize(
         self,
         count: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = amrex.space3d.GrowthStrategy.Poisson,
+        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
     ) -> None: ...
     def set_num_neighbors(
         self, arg0: typing.SupportsInt | typing.SupportsIndex
@@ -16356,7 +16354,7 @@ class ParticleTile_pureSoA_3_0_polymorphic:
     def resize(
         self,
         count: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = amrex.space3d.GrowthStrategy.Poisson,
+        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
     ) -> None: ...
     def set_num_neighbors(
         self, arg0: typing.SupportsInt | typing.SupportsIndex
@@ -18889,7 +18887,7 @@ class StructOfArrays_3_1_pinned:
     def resize(
         self,
         new_size: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = amrex.space3d.GrowthStrategy.Poisson,
+        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
     ) -> None: ...
     def set_num_neighbors(
         self, arg0: typing.SupportsInt | typing.SupportsIndex
@@ -19055,7 +19053,7 @@ class StructOfArrays_3_1_default:
     def resize(
         self,
         new_size: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = amrex.space3d.GrowthStrategy.Poisson,
+        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
     ) -> None: ...
     def set_num_neighbors(
         self, arg0: typing.SupportsInt | typing.SupportsIndex
@@ -19223,7 +19221,7 @@ class StructOfArrays_3_1_arena:
     def resize(
         self,
         new_size: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = amrex.space3d.GrowthStrategy.Poisson,
+        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
     ) -> None: ...
     def set_num_neighbors(
         self, arg0: typing.SupportsInt | typing.SupportsIndex
@@ -19391,7 +19389,7 @@ class StructOfArrays_3_1_polymorphic:
     def resize(
         self,
         new_size: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = amrex.space3d.GrowthStrategy.Poisson,
+        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
     ) -> None: ...
     def set_num_neighbors(
         self, arg0: typing.SupportsInt | typing.SupportsIndex
@@ -19603,7 +19601,7 @@ class ParticleTile_2_1_3_1_pinned:
     def resize(
         self,
         count: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = amrex.space3d.GrowthStrategy.Poisson,
+        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
     ) -> None: ...
     def set_num_neighbors(
         self, arg0: typing.SupportsInt | typing.SupportsIndex
@@ -19709,7 +19707,7 @@ class ParticleTile_2_1_3_1_default:
     def resize(
         self,
         count: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = amrex.space3d.GrowthStrategy.Poisson,
+        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
     ) -> None: ...
     def set_num_neighbors(
         self, arg0: typing.SupportsInt | typing.SupportsIndex
@@ -19815,7 +19813,7 @@ class ParticleTile_2_1_3_1_arena:
     def resize(
         self,
         count: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = amrex.space3d.GrowthStrategy.Poisson,
+        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
     ) -> None: ...
     def set_num_neighbors(
         self, arg0: typing.SupportsInt | typing.SupportsIndex
@@ -19921,7 +19919,7 @@ class ParticleTile_2_1_3_1_polymorphic:
     def resize(
         self,
         count: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = amrex.space3d.GrowthStrategy.Poisson,
+        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
     ) -> None: ...
     def set_num_neighbors(
         self, arg0: typing.SupportsInt | typing.SupportsIndex
@@ -22427,7 +22425,7 @@ class StructOfArrays_0_0_pinned:
     def resize(
         self,
         new_size: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = amrex.space3d.GrowthStrategy.Poisson,
+        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
     ) -> None: ...
     def set_num_neighbors(
         self, arg0: typing.SupportsInt | typing.SupportsIndex
@@ -22593,7 +22591,7 @@ class StructOfArrays_0_0_default:
     def resize(
         self,
         new_size: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = amrex.space3d.GrowthStrategy.Poisson,
+        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
     ) -> None: ...
     def set_num_neighbors(
         self, arg0: typing.SupportsInt | typing.SupportsIndex
@@ -22761,7 +22759,7 @@ class StructOfArrays_0_0_arena:
     def resize(
         self,
         new_size: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = amrex.space3d.GrowthStrategy.Poisson,
+        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
     ) -> None: ...
     def set_num_neighbors(
         self, arg0: typing.SupportsInt | typing.SupportsIndex
@@ -22929,7 +22927,7 @@ class StructOfArrays_0_0_polymorphic:
     def resize(
         self,
         new_size: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = amrex.space3d.GrowthStrategy.Poisson,
+        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
     ) -> None: ...
     def set_num_neighbors(
         self, arg0: typing.SupportsInt | typing.SupportsIndex
@@ -23141,7 +23139,7 @@ class ParticleTile_16_4_0_0_pinned:
     def resize(
         self,
         count: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = amrex.space3d.GrowthStrategy.Poisson,
+        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
     ) -> None: ...
     def set_num_neighbors(
         self, arg0: typing.SupportsInt | typing.SupportsIndex
@@ -23247,7 +23245,7 @@ class ParticleTile_16_4_0_0_default:
     def resize(
         self,
         count: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = amrex.space3d.GrowthStrategy.Poisson,
+        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
     ) -> None: ...
     def set_num_neighbors(
         self, arg0: typing.SupportsInt | typing.SupportsIndex
@@ -23353,7 +23351,7 @@ class ParticleTile_16_4_0_0_arena:
     def resize(
         self,
         count: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = amrex.space3d.GrowthStrategy.Poisson,
+        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
     ) -> None: ...
     def set_num_neighbors(
         self, arg0: typing.SupportsInt | typing.SupportsIndex
@@ -23459,7 +23457,7 @@ class ParticleTile_16_4_0_0_polymorphic:
     def resize(
         self,
         count: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = amrex.space3d.GrowthStrategy.Poisson,
+        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
     ) -> None: ...
     def set_num_neighbors(
         self, arg0: typing.SupportsInt | typing.SupportsIndex
@@ -25581,7 +25579,7 @@ class StructOfArrays_11_0_idcpu_polymorphic:
     def resize(
         self,
         new_size: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = amrex.space3d.GrowthStrategy.Poisson,
+        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
     ) -> None: ...
     def set_num_neighbors(
         self, arg0: typing.SupportsInt | typing.SupportsIndex
@@ -25786,7 +25784,7 @@ class ParticleTile_pureSoA_11_0_polymorphic:
     def resize(
         self,
         count: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = amrex.space3d.GrowthStrategy.Poisson,
+        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
     ) -> None: ...
     def set_num_neighbors(
         self, arg0: typing.SupportsInt | typing.SupportsIndex
@@ -26460,7 +26458,7 @@ class StructOfArrays_7_0_idcpu_polymorphic:
     def resize(
         self,
         new_size: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = amrex.space3d.GrowthStrategy.Poisson,
+        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
     ) -> None: ...
     def set_num_neighbors(
         self, arg0: typing.SupportsInt | typing.SupportsIndex
@@ -26665,7 +26663,7 @@ class ParticleTile_pureSoA_7_0_polymorphic:
     def resize(
         self,
         count: typing.SupportsInt | typing.SupportsIndex,
-        strategy: GrowthStrategy = amrex.space3d.GrowthStrategy.Poisson,
+        strategy: GrowthStrategy = "GrowthStrategy.Poisson",
     ) -> None: ...
     def set_num_neighbors(
         self, arg0: typing.SupportsInt | typing.SupportsIndex
