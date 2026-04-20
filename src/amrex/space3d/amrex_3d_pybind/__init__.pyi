@@ -39,7 +39,6 @@ amrex
 
 from __future__ import annotations
 
-import builtins
 import collections.abc
 import enum
 import typing
@@ -879,36 +878,9 @@ class IndexType:
     class CellIndex(enum.IntEnum):
         CELL: typing.ClassVar[IndexType.CellIndex]
         NODE: typing.ClassVar[IndexType.CellIndex]
-        __pybind11_native_enum__: typing.ClassVar[typing.Any]
-        _member_map_: typing.ClassVar[dict]
-        _member_names_: typing.ClassVar[list] = ["CELL", "NODE"]
-        _unhashable_values_: typing.ClassVar[list] = list()
-        _use_args_: typing.ClassVar[bool] = True
-        _value2member_map_: typing.ClassVar[dict]
-        _member_type_ = builtins.int
-        @staticmethod
-        def _generate_next_value_(name, start, count, last_values):
-            """
-            Generate the next value when not given.
-
-            name: the name of the member
-            start: the initial start value or None
-            count: the number of existing members
-            last_values: the list of values assigned
-
-            """
-        @staticmethod
-        def _new_member_(type, *args, **kwargs):
-            """
-            Create and return a new object.  See help(type) for accurate signature.
-            """
         @classmethod
         def __new__(cls, value): ...
         def __format__(self, format_spec): ...
-        def _value_repr_(self):
-            """
-            Return repr(self).
-            """
 
     CELL: typing.ClassVar[IndexType.CellIndex]
     NODE: typing.ClassVar[IndexType.CellIndex]
@@ -10234,43 +10206,11 @@ class CoordSys:
     class CoordType(enum.IntEnum):
         RZ: typing.ClassVar[CoordSys.CoordType]
         SPHERICAL: typing.ClassVar[CoordSys.CoordType]
-        __pybind11_native_enum__: typing.ClassVar[typing.Any]
-        _member_map_: typing.ClassVar[dict]
-        _member_names_: typing.ClassVar[list] = [
-            "undef",
-            "cartesian",
-            "RZ",
-            "SPHERICAL",
-        ]
-        _unhashable_values_: typing.ClassVar[list] = list()
-        _use_args_: typing.ClassVar[bool] = True
-        _value2member_map_: typing.ClassVar[dict]
         cartesian: typing.ClassVar[CoordSys.CoordType]
         undef: typing.ClassVar[CoordSys.CoordType]
-        _member_type_ = builtins.int
-        @staticmethod
-        def _generate_next_value_(name, start, count, last_values):
-            """
-            Generate the next value when not given.
-
-            name: the name of the member
-            start: the initial start value or None
-            count: the number of existing members
-            last_values: the list of values assigned
-
-            """
-        @staticmethod
-        def _new_member_(type, *args, **kwargs):
-            """
-            Create and return a new object.  See help(type) for accurate signature.
-            """
         @classmethod
         def __new__(cls, value): ...
         def __format__(self, format_spec): ...
-        def _value_repr_(self):
-            """
-            Return repr(self).
-            """
 
     RZ: typing.ClassVar[CoordSys.CoordType]
     SPHERICAL: typing.ClassVar[CoordSys.CoordType]
@@ -13875,30 +13815,6 @@ class GrowthStrategy(enum.Enum):
     Exact: typing.ClassVar[GrowthStrategy]
     Geometric: typing.ClassVar[GrowthStrategy]
     Poisson: typing.ClassVar[GrowthStrategy]
-    __pybind11_native_enum__: typing.ClassVar[typing.Any]
-    _member_map_: typing.ClassVar[dict]
-    _member_names_: typing.ClassVar[list] = ["Poisson", "Exact", "Geometric"]
-    _unhashable_values_: typing.ClassVar[list] = list()
-    _use_args_: typing.ClassVar[bool] = False
-    _value2member_map_: typing.ClassVar[dict]
-    _value_repr_ = None
-    _member_type_ = builtins.object
-    @staticmethod
-    def _generate_next_value_(name, start, count, last_values):
-        """
-        Generate the next value when not given.
-
-        name: the name of the member
-        start: the initial start value or None
-        count: the number of existing members
-        last_values: the list of values assigned
-
-        """
-    @staticmethod
-    def _new_member_(type, *args, **kwargs):
-        """
-        Create and return a new object.  See help(type) for accurate signature.
-        """
     @classmethod
     def __new__(cls, value): ...
 
@@ -27416,33 +27332,9 @@ class EBFArrayBoxFactory(FabFactory_FArrayBox):
         """
 
 class EBSupport(enum.Enum):
-    __pybind11_native_enum__: typing.ClassVar[typing.Any]
-    _member_map_: typing.ClassVar[dict]
-    _member_names_: typing.ClassVar[list] = ["basic", "volume", "full"]
-    _unhashable_values_: typing.ClassVar[list] = list()
-    _use_args_: typing.ClassVar[bool] = False
-    _value2member_map_: typing.ClassVar[dict]
-    _value_repr_ = None
     basic: typing.ClassVar[EBSupport]
     full: typing.ClassVar[EBSupport]
     volume: typing.ClassVar[EBSupport]
-    _member_type_ = builtins.object
-    @staticmethod
-    def _generate_next_value_(name, start, count, last_values):
-        """
-        Generate the next value when not given.
-
-        name: the name of the member
-        start: the initial start value or None
-        count: the number of existing members
-        last_values: the list of values assigned
-
-        """
-    @staticmethod
-    def _new_member_(type, *args, **kwargs):
-        """
-        Create and return a new object.  See help(type) for accurate signature.
-        """
     @classmethod
     def __new__(cls, value): ...
 
