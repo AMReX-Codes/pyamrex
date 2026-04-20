@@ -7,7 +7,7 @@
 breathe
 docutils>=0.17.1
 numpy  # in public APIs
-pybind11-stubgen @ git+https://github.com/pybind/pybind11-stubgen.git@ae80391555b520593721af9b00a1fe7e564aca9f  # type hints in pyi files
+pybind11-stubgen @ git+https://github.com/ax3l/pybind11-stubgen.git@fix-enum-py-protected-members  # type hints in pyi files
 pygments
 recommonmark
 # Attention: we need to track the resolution of
