@@ -13,14 +13,6 @@ set -eu -o pipefail
 # we are in the source directory, .github/
 this_dir=$(cd $(dirname $0) && pwd)
 
-pybind11-stubgen --sort-by=definition --exit-code --enum-class-locations="GrowthStrategy:amrex.space1d" -o ${this_dir}/../src/ amrex.space1d
-pybind11-stubgen --sort-by=definition --exit-code --enum-class-locations="GrowthStrategy:amrex.space2d" -o ${this_dir}/../src/ amrex.space2d
-pybind11-stubgen --sort-by=definition --exit-code --enum-class-locations="GrowthStrategy:amrex.space3d" -o ${this_dir}/../src/ amrex.space3d
-
-sed -i 's/amrex.space1d.GrowthStrategy/GrowthStrategy/g' src/amrex/space1d/amrex_1d_pybind/__init__.pyi
-sed -i 's/amrex.space2d.GrowthStrategy/GrowthStrategy/g' src/amrex/space2d/amrex_2d_pybind/__init__.pyi
-sed -i 's/amrex.space3d.GrowthStrategy/GrowthStrategy/g' src/amrex/space3d/amrex_3d_pybind/__init__.pyi
-
-sed -i 's/= GrowthStrategy.Poisson/= "GrowthStrategy.Poisson"/g' src/amrex/space1d/amrex_1d_pybind/__init__.pyi
-sed -i 's/= GrowthStrategy.Poisson/= "GrowthStrategy.Poisson"/g' src/amrex/space2d/amrex_2d_pybind/__init__.pyi
-sed -i 's/= GrowthStrategy.Poisson/= "GrowthStrategy.Poisson"/g' src/amrex/space3d/amrex_3d_pybind/__init__.pyi
+pybind11-stubgen --exit-code --enum-class-locations="GrowthStrategy:amrex.space1d" -o ${this_dir}/../src/ amrex.space1d
+pybind11-stubgen --exit-code --enum-class-locations="GrowthStrategy:amrex.space2d" -o ${this_dir}/../src/ amrex.space2d
+pybind11-stubgen --exit-code --enum-class-locations="GrowthStrategy:amrex.space3d" -o ${this_dir}/../src/ amrex.space3d
