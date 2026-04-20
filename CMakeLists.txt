@@ -317,6 +317,7 @@ add_custom_target(${pyAMReX_CUSTOM_TARGET_PREFIX}pip_wheel
         ${pyAMReX_BINARY_DIR}
     DEPENDS
         ${pyAMReX_INSTALL_TARGET_NAMES}
+        pyAMReX_python_sources
 )
 
 # this will also upgrade/downgrade dependencies, e.g., when the version of numpy changes
@@ -354,12 +355,16 @@ add_custom_target(${pyAMReX_CUSTOM_TARGET_PREFIX}pip_install_nodeps
         ${pyAMReX_CUSTOM_TARGET_PREFIX}pip_wheel
 )
 
-# copy Python wrapper library to build directory
-add_custom_command(TARGET pyAMReX_${AMReX_SPACEDIM_LAST}d POST_BUILD
+# populate the build-tree Python package for ctest and direct build-tree imports
+add_custom_target(pyAMReX_python_sources ALL
+    COMMAND ${CMAKE_COMMAND} -E make_directory
+        $<TARGET_FILE_DIR:pyAMReX_${AMReX_SPACEDIM_LAST}d>/..
     COMMAND ${CMAKE_COMMAND} -E copy_directory
         ${pyAMReX_SOURCE_DIR}/src/amrex
         $<TARGET_FILE_DIR:pyAMReX_${AMReX_SPACEDIM_LAST}d>/..
+    VERBATIM
 )
+add_dependencies(pyAMReX_python_sources pyAMReX_${AMReX_SPACEDIM_LAST}d)
 
 
 # Tests #######################################################################
