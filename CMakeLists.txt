@@ -40,9 +40,9 @@ endif()
 
 # C++ Standard in Superbuilds #################################################
 #
-# This is the easiest way to push up a C++17 requirement for AMReX, PICSAR and
+# This is the easiest way to push up a C++20 requirement for AMReX, PICSAR and
 # openPMD-api until they increase their requirement.
-set_cxx17_superbuild()
+set_cxx20_superbuild()
 
 
 # CCache Support ##############################################################
@@ -204,17 +204,17 @@ foreach(D IN LISTS AMReX_SPACEDIM)
         pybind11_strip(pyAMReX_${D}d)
     endif()
 
-    # C++ properties: at least a C++17 capable compiler is needed
+    # C++ properties: at least a C++20 capable compiler is needed
     # AMReX helper function: propagate CUDA specific target & source properties
     if(AMReX_GPU_BACKEND STREQUAL CUDA)
         setup_target_for_cuda_compilation(pyAMReX_${D}d)
-        target_compile_features(pyAMReX_${D}d PUBLIC cuda_std_17)
+        target_compile_features(pyAMReX_${D}d PUBLIC cuda_std_20)
         set_target_properties(pyAMReX_${D}d PROPERTIES
             CUDA_EXTENSIONS OFF
             CUDA_STANDARD_REQUIRED ON
         )
     else()
-        target_compile_features(pyAMReX_${D}d PUBLIC cxx_std_17)
+        target_compile_features(pyAMReX_${D}d PUBLIC cxx_std_20)
         set_target_properties(pyAMReX_${D}d PROPERTIES
             CXX_EXTENSIONS OFF
             CXX_STANDARD_REQUIRED ON
