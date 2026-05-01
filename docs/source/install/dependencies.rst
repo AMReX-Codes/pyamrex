@@ -22,7 +22,7 @@ Optional dependencies include:
 
   - `OpenMP 3.1+ <https://www.openmp.org>`__: for threaded CPU execution or
   - `CUDA Toolkit 12.2+ <https://developer.nvidia.com/cuda-downloads>`__: for Nvidia GPU support (see `matching host-compilers <https://gist.github.com/ax3l/9489132>`_) or
-  - `ROCm 5.5+ <https://gpuopen.com/learn/amd-lab-notes/amd-lab-notes-rocm-installation-readme/>`__: for AMD GPU support
+  - `ROCm 6.0+ <https://gpuopen.com/learn/amd-lab-notes/amd-lab-notes-rocm-installation-readme/>`__: for AMD GPU support
 - `CCache <https://ccache.dev>`__: to speed up rebuilds (For CUDA support, needs version 3.7.9+ and 4.2+ is recommended)
 - `Ninja <https://ninja-build.org>`__: for faster parallel compiles
 - further `optional dependencies of AMReX <https://github.com/AMReX-Codes/amrex/>`__
