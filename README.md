@@ -53,11 +53,11 @@ If you just want to use CMake to build the project, jump into sections *1. Intro
 
 pyAMReX depends on the following popular third party software.
 
-- a mature [C++17](https://en.wikipedia.org/wiki/C%2B%2B17) compiler, e.g., GCC 8, Clang 7, NVCC 11.0, MSVC 19.15 or newer
+- a mature [C++20](https://en.wikipedia.org/wiki/C%2B%2B20) compiler, e.g., GCC 12+, Clang 14, NVCC 12.4, MSVC 19.39 or newer
 - [CMake 3.24.0+](https://cmake.org)
 - [AMReX *development*](https://amrex-codes.github.io): we automatically download and compile a copy of AMReX
 - [pybind11](https://github.com/pybind/pybind11/) 3.0.0+: we automatically download and compile a copy of pybind11 ([new BSD](https://github.com/pybind/pybind11/blob/master/LICENSE))
-  - [Python](https://python.org) 3.9+
+  - [Python](https://python.org) 3.11+
   - [Numpy](https://numpy.org) 1.15+
 
 Optional dependencies include:
@@ -68,7 +68,7 @@ Optional dependencies include:
 - [pytest](https://docs.pytest.org/en/stable/) 6.2+: for running unit tests
 
 Optional CUDA-capable dependencies for tests include:
-- [cupy](https://github.com/cupy/cupy#installation) 11.2+
+- [cupy](https://github.com/cupy/cupy#installation) 12.2+
 - [numba](https://numba.readthedocs.io/en/stable/user/installing.html) 0.56+
 - [torch](https://pytorch.org/get-started/locally/) 1.12+
 
