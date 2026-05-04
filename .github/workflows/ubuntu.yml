@@ -9,11 +9,11 @@ concurrency:
 jobs:
   # Build and install libamrex as AMReX CMake project
   gcc10:
-    name: GNU@10.5 Release
+    name: GNU@11 Release
     runs-on: ubuntu-24.04
     env:
-      CC: gcc-10
-      CXX: g++-10
+      CC: gcc-11
+      CXX: g++-11
       CXXFLAGS: "-Werror -Wshadow -Woverloaded-virtual -Wunreachable-code -fno-operator-names -Wno-array-bounds"
     steps:
     - uses: actions/checkout@v6
@@ -23,7 +23,7 @@ jobs:
         python-version: '3.11'
     - name: Dependencies
       run: |
-        .github/workflows/dependencies/dependencies_gcc10.sh
+        .github/workflows/dependencies/dependencies_gcc.sh 11
         .github/workflows/dependencies/dependencies_ccache.sh
     - name: Set Up Cache
       uses: actions/cache@v4
@@ -57,14 +57,14 @@ jobs:
         mpiexec -np 1 python3 -m pytest tests/
 
   gcc14:
-    name: GNU@14.5 Debug
+    name: GNU@14 Debug
     runs-on: ubuntu-24.04
     env: {CXXFLAGS: "-Werror -Wno-error=deprecated-declarations -Wshadow -Woverloaded-virtual -Wunreachable-code -fno-operator-names"}
     steps:
     - uses: actions/checkout@v6
     - name: Dependencies
       run: |
-        .github/workflows/dependencies/dependencies_gcc14.sh
+        .github/workflows/dependencies/dependencies_gcc.sh 14
         .github/workflows/dependencies/dependencies_ccache.sh
     - name: Set Up Cache
       uses: actions/cache@v4
@@ -250,7 +250,7 @@ jobs:
           python3 -m pytest tests/
 
   nvcc11:
-    name: CUDA@12.2 GNU@10.5
+    name: CUDA@12.2 GNU@11
     runs-on: ubuntu-24.04
     env: {CXXFLAGS: "-fno-operator-names"}
     steps:
@@ -287,9 +287,9 @@ jobs:
         export LD_LIBRARY_PATH=/usr/local/nvidia/lib:/usr/local/nvidia/lib64:/usr/local/cuda/lib64:${LD_LIBRARY_PATH}
         which nvcc || echo "nvcc not in PATH!"
 
-        export CC=$(which gcc-10)
-        export CXX=$(which g++-10)
-        export CUDAHOSTCXX=$(which g++-10)
+        export CC=$(which gcc-11)
+        export CXX=$(which g++-11)
+        export CUDAHOSTCXX=$(which g++-11)
 
         python3 -m pip install -U pip
         python3 -m pip install -U build packaging setuptools[core] wheel
