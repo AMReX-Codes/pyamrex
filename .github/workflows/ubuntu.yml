@@ -249,7 +249,7 @@ jobs:
         run: |
           python3 -m pytest tests/
 
-  nvcc11:
+  nvcc:
     name: CUDA@12.2 GNU@11
     runs-on: ubuntu-24.04
     env: {CXXFLAGS: "-fno-operator-names"}
@@ -267,7 +267,7 @@ jobs:
     - uses: actions/checkout@v6
     - name: Dependencies
       run: |
-        .github/workflows/dependencies/dependencies_nvcc12.sh
+        .github/workflows/dependencies/dependencies_nvcc.sh 12.2
         .github/workflows/dependencies/dependencies_ccache.sh
     - name: Set Up Cache
       uses: actions/cache@v4
