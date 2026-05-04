@@ -43,7 +43,7 @@ jobs:
 
     - name: Dependencies
       run: |
-        .github/workflows/dependencies/dependencies_gcc10.sh
+        .github/workflows/dependencies/dependencies_gcc.sh 11
         .github/workflows/dependencies/dependencies_ccache.sh
 
     - name: Set Up Cache
