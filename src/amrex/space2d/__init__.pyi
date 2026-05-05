@@ -39,8 +39,7 @@ amrex
 
 from __future__ import annotations
 
-import os as os
-
+from amrex._dll import add_windows_dll_directories
 from amrex.extensions.Array4 import register_Array4_extension
 from amrex.extensions.ArrayOfStructs import register_AoS_extension
 from amrex.extensions.MultiFab import register_MultiFab_extension
@@ -657,6 +656,7 @@ __all__: list[str] = [
     "Vector_string",
     "VisMF",
     "XDim3",
+    "add_windows_dll_directories",
     "almost_equal",
     "amrex_2d_pybind",
     "basic",
@@ -682,7 +682,6 @@ __all__: list[str] = [
     "make_valid",
     "max",
     "min",
-    "os",
     "pack_cpus",
     "pack_ids",
     "refine",
