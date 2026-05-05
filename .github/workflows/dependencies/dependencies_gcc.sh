@@ -7,10 +7,13 @@
 
 set -eu -o pipefail
 
+# Parse GCC version from the command line
+gcc_version=${1:?Usage: $0 <gcc_version>}
+
 sudo apt-get update
 
 sudo apt-get install -y --no-install-recommends\
     build-essential \
-    g++-14          \
-    libopenmpi-dev  \
+    g++-${gcc_version} \
+    libopenmpi-dev \
     openmpi-bin
