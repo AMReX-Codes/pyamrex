@@ -652,7 +652,13 @@ def register_MultiFab_extension(amr):
     amr.FabArrayBase.__iter__ = lambda fab: amr.MFIter(fab)
 
     # register member functions for the MultiFab type
-    amr.MultiFab.__iter__ = lambda mfab: amr.MFIter(mfab)
+    def _mfab_iter(mfab):
+        mfi = amr.MFIter(mfab)
+        mfi._mfab_ref = mfab  # keep MultiFab alive for duration of iteration (WSL2 fix, see issue #569)
+        return mfi
+
+    amr.MultiFab.__iter__ = _mfab_iter
+    # amr.MultiFab.__iter__ = lambda mfab: amr.MFIter(mfab)
 
     amr.MultiFab.to_numpy = mf_to_numpy
     amr.MultiFab.to_cupy = mf_to_cupy
