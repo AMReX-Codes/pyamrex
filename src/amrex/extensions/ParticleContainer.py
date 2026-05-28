@@ -60,7 +60,9 @@ def iterator(self, *args, level=None):
         # for lvl in range(self.finest_level + 1):
         #     yield self.Iterator(self, level=lvl)
     elif isinstance(level, int) and level >= 0:
-        return self.Iterator(self, level=level)
+        par_iter = self.Iterator(self, level=level)
+        par_iter._pc_ref = self  # keep ParticleContainer alive for duration of iteration (WSL2 fix, see issue #569)
+        return par_iter
     else:
         raise ValueError(
             f"level must be an integer in [0:{self.finest_level + 1}) or 'all', but got: {level}"
