@@ -377,20 +377,21 @@ void make_ParticleContainer_and_Iterators (py::module &m, std::string allocstr)
 
         .def("clear_particles", &ParticleContainerType::clearParticles)
         // template <class PCType,
-        //           std::enable_if_t<IsParticleContainer<PCType>::value, int> foo = 0>
+        // requires (IsParticleContainer<PCType>::value)
         // void copyParticles (const PCType& other, bool local=false);
         // template <class PCType,
-        //           std::enable_if_t<IsParticleContainer<PCType>::value, int> foo = 0>
+        // requires (IsParticleContainer<PCType>::value)
         // void addParticles (const PCType& other, bool local=false);
-        .def("add_particles", py::overload_cast<ParticleContainerType const &, bool>(&ParticleContainerType::template addParticles<ParticleContainerType, true>),
+        .def("add_particles",
+            [](ParticleContainerType& pc, ParticleContainerType const& other, bool local) {
+                pc.template addParticles<ParticleContainerType>(other, local);
+            },
             py::arg("other"), py::arg("local")=false)
         // template <class F, class PCType,
-        //           std::enable_if_t<IsParticleContainer<PCType>::value, int> foo = 0,
-        //           std::enable_if_t<! std::is_integral<F>::value, int> bar = 0>
+        // requires ((IsParticleContainer<PCType>::value) && (!std::is_integral_v<F>))
         // void copyParticles (const PCType& other, F&&f, bool local=false);
         // template <class F, class PCType,
-        //           std::enable_if_t<IsParticleContainer<PCType>::value, int> foo = 0,
-        //           std::enable_if_t<! std::is_integral<F>::value, int> bar = 0>
+        // requires ((IsParticleContainer<PCType>::value) && (!std::is_integral_v<F>))
         // void addParticles (const PCType& other, F&& f, bool local=false);
         // void WriteParticleRealData (void* data, size_t size, std::ostream& os) const;
         // // void ReadParticleRealData (void* data, size_t size, std::istream& is);
@@ -422,23 +423,44 @@ void make_ParticleContainer_and_Iterators (py::module &m, std::string allocstr)
              },
              py::arg("dir"), py::arg("name")
         )
-        // template <class F, typename std::enable_if<!std::is_same<F, Vector<std::string>&>::value>::type* = nullptr>
-        // void WritePlotFile (const std::string& dir, const std::string& name, F&& f) const;
+        // void WritePlotFile (const std::string& dir, const std::string& name) const;
+        // template <class F>
+        // void WritePlotFile (const std::string& dir, const std::string& name, F const& f) const;
         // void WritePlotFile (const std::string& dir, const std::string& name,
         //                 const Vector<std::string>& real_comp_names,
         //                 const Vector<std::string>&  int_comp_names) const;
+        // template <class F>
+        // void WritePlotFile (const std::string& dir, const std::string& name,
+        //                 const Vector<std::string>& real_comp_names,
+        //                 const Vector<std::string>&  int_comp_names, F const& f) const;
         // void WritePlotFile (const std::string& dir, const std::string& name,
         //                     const Vector<std::string>& real_comp_names) const;
+        // template <class F>
+        // void WritePlotFile (const std::string& dir, const std::string& name,
+        //                     const Vector<std::string>& real_comp_names, F const& f) const;
         // void WritePlotFile (const std::string& dir,
         //                     const std::string& name,
         //                     const Vector<int>& write_real_comp,
         //                     const Vector<int>& write_int_comp) const;
+        // template <class F>
+        // void WritePlotFile (const std::string& dir,
+        //                     const std::string& name,
+        //                     const Vector<int>& write_real_comp,
+        //                     const Vector<int>& write_int_comp, F const& f) const;
         // void WritePlotFile (const std::string& dir,
         //                     const std::string& name,
         //                     const Vector<int>& write_real_comp,
         //                     const Vector<int>& write_int_comp,
         //                     const Vector<std::string>& real_comp_names,
         //                     const Vector<std::string>&  int_comp_names) const;
+        // template <class F>
+        // void WritePlotFile (const std::string& dir,
+        //                     const std::string& name,
+        //                     const Vector<int>& write_real_comp,
+        //                     const Vector<int>& write_int_comp,
+        //                     const Vector<std::string>& real_comp_names,
+        //                     const Vector<std::string>&  int_comp_names,
+        //                     F const& f) const;
         // void WritePlotFilePre ();
 
         // void WritePlotFilePost ();
