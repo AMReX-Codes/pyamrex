@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import sys
-
 import numpy as np
 import pytest
 
@@ -72,27 +70,13 @@ def test_array4():
     assert v_carr2np[0, 1, 1, 1] == 44
 
 
-def test_array4_views_keep_sources_alive():
+def test_array4_views_keep_sources_alive(assert_keeps_python_alive):
     x = np.ones((2, 3, 4))
 
-    before = sys.getrefcount(x)
-    arr = amr.Array4_double(x)
-    assert sys.getrefcount(x) > before
-
-    before = sys.getrefcount(arr)
-    arr_copy = amr.Array4_double(arr)
-    assert sys.getrefcount(arr) > before
-    del arr_copy
-
-    before = sys.getrefcount(arr)
-    arr_comp = amr.Array4_double(arr, 0)
-    assert sys.getrefcount(arr) > before
-    del arr_comp
-
-    before = sys.getrefcount(arr)
-    arr_comps = amr.Array4_double(arr, 0, 1)
-    assert sys.getrefcount(arr) > before
-    del arr_comps
+    arr = assert_keeps_python_alive(x, lambda: amr.Array4_double(x))
+    assert_keeps_python_alive(arr, lambda: amr.Array4_double(arr))
+    assert_keeps_python_alive(arr, lambda: amr.Array4_double(arr, 0))
+    assert_keeps_python_alive(arr, lambda: amr.Array4_double(arr, 0, 1))
 
 
 @pytest.mark.skipif(

@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import sys
-
 import numpy as np
 import pytest
 
@@ -66,7 +64,7 @@ def test_ptile_pushback_ptiledata():
     )
 
 
-def test_particle_tile_data_keeps_tile_alive():
+def test_particle_tile_data_keeps_tile_alive(assert_keeps_python_alive):
     pt = (
         amr.ParticleTile_2_1_3_1_managed()
         if amr.Config.have_gpu
@@ -74,10 +72,7 @@ def test_particle_tile_data_keeps_tile_alive():
     )
     pt.push_back(amr.Particle_2_1())
 
-    before = sys.getrefcount(pt)
-    td = pt.get_particle_tile_data()
-    assert sys.getrefcount(pt) > before
-    del td
+    assert_keeps_python_alive(pt, lambda: pt.get_particle_tile_data())
 
 
 @pytest.mark.skipif(amr.Config.spacedim != 3, reason="Requires AMREX_SPACEDIM = 3")
