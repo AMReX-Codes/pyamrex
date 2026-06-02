@@ -30,10 +30,10 @@ void init_FArrayBox(py::module &m) {
         //.def(py::init< FArrayBox const &, MakeType, int, int >())
         .def(py::init< Box const &, int, Real const* >())
         .def(py::init< Box const &, int, Real* >())
-        .def(py::init< Array4<Real> const& >())
-        .def(py::init< Array4<Real> const&, IndexType >())
-        .def(py::init< Array4<Real const> const& >())
-        .def(py::init< Array4<Real const> const&, IndexType >())
+        .def(py::init< Array4<Real> const& >(), py::keep_alive<1, 2>())
+        .def(py::init< Array4<Real> const&, IndexType >(), py::keep_alive<1, 2>())
+        .def(py::init< Array4<Real const> const& >(), py::keep_alive<1, 2>())
+        .def(py::init< Array4<Real const> const&, IndexType >(), py::keep_alive<1, 2>())
 
         /*
         .def("read_from",
