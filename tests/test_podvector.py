@@ -48,12 +48,13 @@ def test_array_interface():
 def test_from_numpy():
     import numpy as np
 
-    # basic roundtrip
+    # basic roundtrip (cast to the vector's element type so the test is
+    # precision-agnostic, e.g. single-precision builds)
     arr = np.array([1.0, 2.5, 3.7, 4.0], dtype=np.float64)
     podv = amr.DeviceVector_real.from_numpy(arr)
     assert podv.size() == 4
     result = podv.to_numpy(copy=True)
-    np.testing.assert_array_equal(result, arr)
+    np.testing.assert_array_equal(result, arr.astype(result.dtype))
 
     # from_numpy creates a copy, not a view
     arr[0] = 999.0
@@ -70,6 +71,38 @@ def test_from_numpy():
     assert podv_list[1] == 20.0
 
 
+def test_from_numpy_normalizes_input():
+    import numpy as np
+
+    # non-contiguous (strided) input is made contiguous on the host
+    base = np.array([1.0, 9.0, 2.0, 9.0, 3.0, 9.0], dtype=np.float64)
+    strided = base[::2]
+    assert not strided.flags["C_CONTIGUOUS"]
+    podv = amr.DeviceVector_real.from_numpy(strided)
+    assert podv.size() == 3
+    result = podv.to_numpy(copy=True)
+    np.testing.assert_array_equal(result, np.array([1.0, 2.0, 3.0], result.dtype))
+
+    # mismatched dtype is cast to the vector's element type
+    ints = np.array([4, 5, 6], dtype=np.int32)
+    podv2 = amr.DeviceVector_real.from_numpy(ints)
+    result2 = podv2.to_numpy(copy=True)
+    np.testing.assert_array_equal(result2, np.array([4.0, 5.0, 6.0], result2.dtype))
+
+
+@pytest.mark.skipif(not amr.Config.have_gpu, reason="requires AMReX GPU support")
+def test_from_numpy_device_only():
+    # device-only allocator: the host-to-device copy must work without CuPy
+    import numpy as np
+
+    arr = np.array([1.0, 2.5, 3.7, 4.0], dtype=np.float64)
+    podv = amr.NonManagedDeviceVector_real.from_numpy(arr)
+    assert podv.size() == 4
+    # read back through an AMReX device-to-host copy (no CuPy either)
+    result = podv.to_host().to_numpy(copy=True)
+    np.testing.assert_array_equal(result, arr.astype(result.dtype))
+
+
 def test_from_xp():
     import numpy as np
 
@@ -77,17 +110,7 @@ def test_from_xp():
     podv = amr.DeviceVector_real.from_xp(arr)
     assert podv.size() == 3
     result = podv.to_numpy(copy=True)
-    np.testing.assert_array_equal(result, arr)
-
-
-def test_from_xp_default():
-    import numpy as np
-
-    arr = np.array([5.0, 6.0, 7.0])
-    podv = amr.DeviceVector_real.from_xp(arr)
-    assert podv.size() == 3
-    result = podv.to_numpy(copy=True)
-    np.testing.assert_array_equal(result, arr)
+    np.testing.assert_array_equal(result, arr.astype(result.dtype))
 
 
 @pytest.mark.skipif(not amr.Config.have_gpu, reason="requires AMReX GPU support")
