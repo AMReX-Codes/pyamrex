@@ -162,8 +162,8 @@ namespace
 }
 
 template <class T, class Allocator = std::allocator<T> >
-void make_PODVector(py::module &m, std::string typestr, std::string allocstr)
-{
+py::class_<PODVector<T, Allocator> >
+make_PODVector(py::module &m, std::string typestr, std::string allocstr) {
     using namespace amrex;
 
     using PODVector_type = PODVector<T, Allocator>;
@@ -176,7 +176,7 @@ void make_PODVector(py::module &m, std::string typestr, std::string allocstr)
         .append(allocstr)
         .append("' allocation.");
 
-    py::class_<PODVector_type>(m, podv_name.c_str(), podv_doc.c_str())
+    auto cl = py::class_<PODVector_type>(m, podv_name.c_str(), podv_doc.c_str())
         .def("__repr__",
              [typestr](PODVector_type const & pv) {
                  std::stringstream s, rs;
@@ -224,15 +224,6 @@ void make_PODVector(py::module &m, std::string typestr, std::string allocstr)
             py::arg("strategy") = GrowthStrategy::Poisson
         )
         .def("shrink_to_fit", &PODVector_type::shrink_to_fit)
-        .def("to_host", [](PODVector_type const & pv) {
-            PODVector<T, amrex::PinnedArenaAllocator<T>> h_data(pv.size());
-            amrex::Gpu::copyAsync(amrex::Gpu::deviceToHost,
-               pv.begin(), pv.end(),
-               h_data.begin()
-            );
-            Gpu::streamSynchronize();
-            return h_data;
-        }, py::return_value_policy::move)
 
         // front
         // back
@@ -290,21 +281,102 @@ PODVector
     A new PODVector with a copy of the data.
 )")
     ;
+
+    return cl;
+}
+
+/** Bind the host/device copy helpers ``to_host`` and ``to_device`` on a
+ * single PODVector class.
+ *
+ * Both return a different PODVector allocator type than ``cl`` (``to_host`` a
+ * pinned vector, ``to_device`` a ``Gpu::DeviceVector`` = ``arena`` on GPU,
+ * ``std`` on CPU). Binding them only after every allocator class exists lets
+ * pybind11 stubgen resolve those return types to registered Python types.
+ */
+template <class T, class Allocator>
+void bind_host_device(py::class_<PODVector<T, Allocator> > & cl)
+{
+    using namespace amrex;
+
+    cl.def("to_host",
+        [](PODVector<T, Allocator> const & src) {
+            PODVector<T, amrex::PinnedArenaAllocator<T>> h_data(src.size());
+            amrex::Gpu::copyAsync(amrex::Gpu::deviceToHost,
+               src.begin(), src.end(),
+               h_data.begin()
+            );
+            Gpu::streamSynchronize();
+            return h_data;
+        },
+        py::return_value_policy::move,
+        "Copy this vector into a new pinned (host) PODVector. Mirrors to_device().")
+
+      .def("to_device",
+        [](PODVector<T, Allocator> const & src) -> amrex::Gpu::DeviceVector<T> {
+            amrex::Gpu::DeviceVector<T> dst(src.size());
+            if (src.empty()) {
+                return dst;
+            }
+#ifdef AMREX_USE_GPU
+            bool const src_host = is_host_accessible(src);
+            bool const dst_host = is_host_accessible(dst);
+            if (src_host && !dst_host) {
+                Gpu::copyAsync(Gpu::hostToDevice, src.begin(), src.end(), dst.begin());
+                Gpu::streamSynchronize();
+                return dst;
+            } else if (!src_host && dst_host) {
+                Gpu::copyAsync(Gpu::deviceToHost, src.begin(), src.end(), dst.begin());
+                Gpu::streamSynchronize();
+                return dst;
+            } else if (!src_host && !dst_host) {
+                Gpu::copyAsync(Gpu::deviceToDevice, src.begin(), src.end(), dst.begin());
+                Gpu::streamSynchronize();
+                return dst;
+            }
+#endif
+            std::copy(src.begin(), src.end(), dst.begin());
+            return dst;
+        },
+        py::return_value_policy::move,
+        "Copy this vector into a new amrex Gpu::DeviceVector (the arena "
+        "allocator on GPU, std on CPU), transferring across memory spaces "
+        "as needed. Mirrors to_host().");
+}
+
+/** Bind ``to_host``/``to_device`` on each of the given PODVector classes. */
+template <class... PODVectorClass>
+void add_host_device(PODVectorClass &... cls)
+{
+    (bind_host_device(cls), ...);
 }
 
 template <class T>
 void make_PODVector(py::module &m, std::string typestr)
 {
     // see Src/Base/AMReX_GpuContainers.H
-    make_PODVector<T, amrex::PinnedArenaAllocator<T>> (m, typestr, "pinned");
-    make_PODVector<T, amrex::ArenaAllocator<T>> (m, typestr, "arena");
-    make_PODVector<T, std::allocator<T>> (m, typestr, "std");
+    auto pv_pinned = make_PODVector<T, amrex::PinnedArenaAllocator<T>> (m, typestr, "pinned");
+    auto pv_arena = make_PODVector<T, amrex::ArenaAllocator<T>> (m, typestr, "arena");
+    auto pv_std = make_PODVector<T, std::allocator<T>> (m, typestr, "std");
 #ifdef AMREX_USE_GPU
-    make_PODVector<T, amrex::DeviceArenaAllocator<T>> (m, typestr, "device");
-    make_PODVector<T, amrex::ManagedArenaAllocator<T>> (m, typestr, "managed");
-    make_PODVector<T, amrex::AsyncArenaAllocator<T>> (m, typestr, "async");
+    auto pv_device = make_PODVector<T, amrex::DeviceArenaAllocator<T>> (m, typestr, "device");
+    auto pv_managed = make_PODVector<T, amrex::ManagedArenaAllocator<T>> (m, typestr, "managed");
+    auto pv_async = make_PODVector<T, amrex::AsyncArenaAllocator<T>> (m, typestr, "async");
 #endif
-    make_PODVector<T, amrex::PolymorphicArenaAllocator<T>> (m, typestr, "polymorphic");
+    auto pv_polymorphic = make_PODVector<T, amrex::PolymorphicArenaAllocator<T>> (m, typestr, "polymorphic");
+
+    // bind to_host/to_device now that every PODVector allocator class is
+    // registered, so their PODVector return types resolve to known Python types
+    add_host_device(
+        pv_pinned,
+        pv_arena,
+        pv_std,
+#ifdef AMREX_USE_GPU
+        pv_device,
+        pv_managed,
+        pv_async,
+#endif
+        pv_polymorphic
+    );
 
     // Implement AMReX_GpuContainers.H
     // Alias matching Gpu::DeviceVector<T> etc. — resolves per platform:

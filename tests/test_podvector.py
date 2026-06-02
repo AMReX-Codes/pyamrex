@@ -90,6 +90,50 @@ def test_from_numpy_normalizes_input():
     np.testing.assert_array_equal(result2, np.array([4.0, 5.0, 6.0], result2.dtype))
 
 
+def test_to_device_empty():
+    podv = amr.PODVector_int_std()
+    device = podv.to_device()
+    assert isinstance(device, amr.DeviceVector_int)
+    assert device.size() == 0
+    assert device.empty()
+
+
+def test_to_device_from_host_vector():
+    import numpy as np
+
+    values = np.array([1, -2, 5, 8], dtype=np.int32)
+    podv = amr.PODVector_int_std.from_numpy(values)
+    device = podv.to_device()
+
+    assert isinstance(device, amr.DeviceVector_int)
+    assert device.size() == values.size
+    result = device.to_numpy(copy=True)
+    np.testing.assert_array_equal(result, values.astype(result.dtype))
+
+    podv[0] = 99
+    np.testing.assert_array_equal(
+        device.to_numpy(copy=True), values.astype(result.dtype)
+    )
+
+
+def test_to_device_from_device_vector():
+    import numpy as np
+
+    values = np.array([1.0, 2.5, -3.0], dtype=np.float64)
+    podv = amr.DeviceVector_real.from_numpy(values)
+    device = podv.to_device()
+
+    assert isinstance(device, amr.DeviceVector_real)
+    assert device.size() == values.size
+    result = device.to_numpy(copy=True)
+    np.testing.assert_array_equal(result, values.astype(result.dtype))
+
+    podv[1] = 7.0
+    np.testing.assert_array_equal(
+        device.to_numpy(copy=True), values.astype(result.dtype)
+    )
+
+
 @pytest.mark.skipif(not amr.Config.have_gpu, reason="requires AMReX GPU support")
 def test_from_numpy_device_only():
     # device-only allocator: the host-to-device copy must work without CuPy
