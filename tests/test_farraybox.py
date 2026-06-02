@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
 
+import sys
+
+import numpy as np
+
 import amrex.space3d as amr
 
 
@@ -16,3 +20,18 @@ def test_farraybox_io():
     # iob = io.BytesIO()
     # assert iob.getvalue() == b"..."
     # fab.read_from(iob)
+
+
+def test_farraybox_array4_constructor_keeps_array4_alive():
+    x = np.ones((2, 3, 4))
+    arr = amr.Array4_double(x)
+
+    before = sys.getrefcount(arr)
+    fab = amr.FArrayBox(arr)
+    assert sys.getrefcount(arr) > before
+    del fab
+
+    before = sys.getrefcount(arr)
+    fab = amr.FArrayBox(arr, amr.IndexType.cell_type())
+    assert sys.getrefcount(arr) > before
+    del fab
