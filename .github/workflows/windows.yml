@@ -126,13 +126,22 @@ jobs:
         export CCACHE_MAXSIZE=600M
         ccache -z
 
-        export CMAKE_BUILD_PARALLEL_LEVEL=4
+        # Build on native ext4, not the 9p-mounted Windows workspace, where
+        # AMReX's many small header/object I/Os are far too slow.
+        cp -a "$(wslpath '${{ github.workspace }}')" ~/pyamrex
+        cd ~/pyamrex
 
-        uv venv ~/pyamrex-venv --python python3
-        source ~/pyamrex-venv/bin/activate
-        uv pip install -U build packaging "setuptools[core]" wheel
-        uv pip install -U cmake pytest pandas
-        uv pip install -v .
+        # --seed provides pip in the venv for the CMake pip_install target
+        uv venv --seed .venv
+        source .venv/bin/activate
+        uv pip install -U cmake pandas pytest
+
+        # -j 2 bounds peak memory under WSL2's default ~50% RAM cap
+        export CMAKE_BUILD_PARALLEL_LEVEL=2
+        cmake -S . -B build               \
+              -DCMAKE_VERBOSE_MAKEFILE=ON \
+              -DAMReX_SPACEDIM="1;2;3"
+        cmake --build build --target pip_install -j 2
 
         python3 -c "import amrex.space1d as amr; print(amr.__version__)"
         python3 -c "import amrex.space2d as amr; print(amr.__version__)"
@@ -148,5 +157,6 @@ jobs:
         cp -a "$CCACHE_DIR/." "$WS_CCACHE/"
     - name: Unit tests
       run: |
-        source ~/pyamrex-venv/bin/activate
+        cd ~/pyamrex
+        source .venv/bin/activate
         python3 -m pytest tests/
