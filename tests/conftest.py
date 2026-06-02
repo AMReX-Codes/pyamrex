@@ -2,6 +2,8 @@
 
 import itertools
 import os
+import platform
+import sys
 
 import pytest
 
@@ -22,6 +24,21 @@ if amr.Config.have_mpi:
 
 # base path for input files
 basepath = os.getcwd()
+
+
+@pytest.fixture(scope="function")
+def assert_keeps_python_alive():
+    """Assert that a pybind11 object keeps its Python owner alive."""
+    if platform.python_implementation() != "CPython":
+        pytest.skip("sys.getrefcount-based lifetime checks are CPython-specific")
+
+    def check(owner, make_view):
+        before = sys.getrefcount(owner)
+        view = make_view()
+        assert sys.getrefcount(owner) > before
+        return view
+
+    return check
 
 
 @pytest.fixture(autouse=True, scope="function")

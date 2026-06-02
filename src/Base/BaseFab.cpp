@@ -38,10 +38,10 @@ namespace
             .def(py::init< const Box&, int, T* >())
             .def(py::init< const Box&, int, T const* >())
 
-            .def(py::init< Array4<T> const& >())
-            .def(py::init< Array4<T> const&, IndexType >())
-            .def(py::init< Array4<T const> const& >())
-            .def(py::init< Array4<T const> const&, IndexType >())
+            .def(py::init< Array4<T> const& >(), py::keep_alive<1, 2>())
+            .def(py::init< Array4<T> const&, IndexType >(), py::keep_alive<1, 2>())
+            .def(py::init< Array4<T const> const& >(), py::keep_alive<1, 2>())
+            .def(py::init< Array4<T const> const&, IndexType >(), py::keep_alive<1, 2>())
 
             //.def_static("initialize", &BaseFab<T>::Initialize )
             //.def_static("finalize", &BaseFab<T>::Finalize )

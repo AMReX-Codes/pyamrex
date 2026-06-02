@@ -150,6 +150,16 @@ def test_n_particles(particle_container, Npart):
     )
 
 
+def test_particle_iterators_keep_container_alive(
+    particle_container, assert_keeps_python_alive
+):
+    pc = particle_container
+
+    assert_keeps_python_alive(pc, lambda: pc.iterator(level=0))
+    assert_keeps_python_alive(pc, lambda: pc.Iterator(pc, level=0))
+    assert_keeps_python_alive(pc, lambda: pc.ConstIterator(pc, level=0))
+
+
 def test_pc_init():
     # This test only runs on CPU or requires managed memory,
     # see https://github.com/cupy/cupy/issues/2031

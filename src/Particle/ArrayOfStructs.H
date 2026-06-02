@@ -140,7 +140,8 @@ void make_ArrayOfStructs(py::module &m, std::string allocstr)
         })
         .def("test_sizes", [](){ })
         .def("__setitem__", [](AOSType &aos, int const v,  const ParticleType& p){ aos[v] = p; })
-        .def("__getitem__", [](AOSType &aos, int const v){ return aos[v]; }, py::return_value_policy::reference)
+        .def("__getitem__", [](AOSType &aos, int const v) -> ParticleType& { return aos[v]; },
+             py::return_value_policy::reference_internal)
 
         .def("to_host", [](AOSType const & aos) {
             ArrayOfStructs<T_ParticleType, amrex::PinnedArenaAllocator> h_data;

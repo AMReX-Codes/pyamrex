@@ -252,6 +252,12 @@ def test_imfab_mfiter(imfab):
     assert iter(imfab).length == cnt
 
 
+def test_imfab_mfiter_keeps_imfab_alive(imfab, assert_keeps_python_alive):
+    assert_keeps_python_alive(imfab, lambda: iter(imfab))
+    assert_keeps_python_alive(imfab, lambda: amr.MFIter(imfab))
+    assert_keeps_python_alive(imfab, lambda: amr.MFIter(imfab, amr.MFItInfo()))
+
+
 @pytest.mark.skipif(
     amr.Config.gpu_backend != "CUDA", reason="Requires AMReX_GPU_BACKEND=CUDA"
 )

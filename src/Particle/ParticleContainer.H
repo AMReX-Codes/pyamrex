@@ -132,7 +132,10 @@ void make_Iterators (
 
     py_it
         .def(py::init<container&, int>(),
-             py::arg("particle_container"), py::arg("level"))
+            // while the created iterator (argument 1: this) exists,
+            // keep the ParticleContainer (argument 2) alive
+            py::keep_alive<1, 2>(),
+            py::arg("particle_container"), py::arg("level"))
         //.def(py::init<container&, int, MFItInfo&>(),
         //     py::arg("particle_container"), py::arg("level"), py::arg("info"))
         .def_property_readonly_static("is_soa_particle", [](const py::object&){ return ParticleType::is_soa_particle;})
