@@ -140,6 +140,7 @@ jobs:
         export CMAKE_BUILD_PARALLEL_LEVEL=2
         cmake -S . -B build               \
               -DCMAKE_VERBOSE_MAKEFILE=ON \
+              -DAMReX_MPI=OFF             \
               -DAMReX_SPACEDIM="1;2;3"
         cmake --build build --target pip_install -j 2
 
