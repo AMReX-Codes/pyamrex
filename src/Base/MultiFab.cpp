@@ -36,17 +36,25 @@ void init_MultiFab(py::module &m, py::class_< amrex::MFIter > & py_MFIter)
             // keep the FabArrayBase (argument 2) alive
              py::keep_alive<1, 2>()
         )
-        .def(py::init< FabArrayBase const &, MFItInfo const & >())
+        .def(py::init< FabArrayBase const &, MFItInfo const & >(),
+            py::keep_alive<1, 2>()
+        )
 
         .def(py::init< MultiFab const & >(),
             // while the created iterator (argument 1: this) exists,
             // keep the MultiFab (argument 2) alive
             py::keep_alive<1, 2>()
         )
-        .def(py::init< MultiFab const &, MFItInfo const & >())
+        .def(py::init< MultiFab const &, MFItInfo const & >(),
+            py::keep_alive<1, 2>()
+        )
 
-        .def(py::init< iMultiFab const & >())
-        .def(py::init< iMultiFab const &, MFItInfo const & >())
+        .def(py::init< iMultiFab const & >(),
+            py::keep_alive<1, 2>()
+        )
+        .def(py::init< iMultiFab const &, MFItInfo const & >(),
+            py::keep_alive<1, 2>()
+        )
 
         // helpers for iteration __next__
         .def("_incr", &MFIter::operator++)
