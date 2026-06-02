@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import importlib
+import sys
 
 import numpy as np
 import pytest
@@ -148,6 +149,25 @@ def test_n_particles(particle_container, Npart):
         == np.sum(pc.number_of_particles_in_grid(0))
         == Npart
     )
+
+
+def test_particle_iterators_keep_container_alive(particle_container):
+    pc = particle_container
+
+    before = sys.getrefcount(pc)
+    pti = pc.iterator(level=0)
+    assert sys.getrefcount(pc) > before
+    del pti
+
+    before = sys.getrefcount(pc)
+    pti = pc.Iterator(pc, level=0)
+    assert sys.getrefcount(pc) > before
+    del pti
+
+    before = sys.getrefcount(pc)
+    pti = pc.ConstIterator(pc, level=0)
+    assert sys.getrefcount(pc) > before
+    del pti
 
 
 def test_pc_init():

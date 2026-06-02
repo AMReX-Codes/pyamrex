@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import math
+import sys
 
 import numpy as np
 import pytest
@@ -250,6 +251,23 @@ def test_imfab_mfiter(imfab):
         cnt += 1
 
     assert iter(imfab).length == cnt
+
+
+def test_imfab_mfiter_keeps_imfab_alive(imfab):
+    before = sys.getrefcount(imfab)
+    mfi = iter(imfab)
+    assert sys.getrefcount(imfab) > before
+    del mfi
+
+    before = sys.getrefcount(imfab)
+    mfi = amr.MFIter(imfab)
+    assert sys.getrefcount(imfab) > before
+    del mfi
+
+    before = sys.getrefcount(imfab)
+    mfi = amr.MFIter(imfab, amr.MFItInfo())
+    assert sys.getrefcount(imfab) > before
+    del mfi
 
 
 @pytest.mark.skipif(
