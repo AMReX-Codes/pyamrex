@@ -126,40 +126,6 @@ def _is_host_accessible(cls):
     return arenas[suffix]().is_host_accessible
 
 
-def podvector_from_numpy(cls, arr):
-    """
-    Create a new PODVector from a NumPy array (or array-like).
-
-    Always copies the data into a newly allocated PODVector. The input is
-    cast to the vector's element type and made contiguous as needed. The
-    copy into device-only memory uses an AMReX host-to-device copy and does
-    not require CuPy.
-
-    Parameters
-    ----------
-    cls : type
-        The PODVector type to construct.
-    arr : array_like
-        Input data, convertible to a NumPy array.
-
-    Returns
-    -------
-    PODVector
-        A new PODVector with a copy of the data.
-
-    """
-    import numpy as np
-
-    arr_np = np.asarray(arr)
-    n = len(arr_np)
-    if n == 0:
-        return cls()
-
-    pv = cls(n)
-    pv.copy_from_host(arr_np)
-    return pv
-
-
 def podvector_from_cupy(cls, arr):
     """
     Create a new PODVector from a CuPy array (or array-like).
@@ -246,6 +212,6 @@ def register_PODVector_extension(amr):
         POD_type.to_xp = podvector_to_xp
 
         # class methods: array -> PODVector
-        POD_type.from_numpy = classmethod(podvector_from_numpy)
+        # (from_numpy is provided in C++ as a static method)
         POD_type.from_cupy = classmethod(podvector_from_cupy)
         POD_type.from_xp = classmethod(podvector_from_xp)

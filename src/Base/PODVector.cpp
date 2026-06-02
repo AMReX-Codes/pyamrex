@@ -117,33 +117,30 @@ namespace
         podvector[index] = value;
     }
 
-    /** Bulk-copy a host (NumPy) array into an existing PODVector.
+    /** Create a new PODVector with a copy of a host (NumPy) array.
      *
-     * The source array is normalized on the host by pybind11
-     * (``c_style | forcecast``): a non-contiguous or differently-typed
-     * input is staged into a contiguous, ``T``-typed temporary before the
-     * copy.  The destination is filled with a single contiguous transfer:
-     * a host copy for host-accessible allocators, or
+     * Always copies: a ``PODVector`` owns its memory through its allocator,
+     * so a zero-copy view is not possible.  The source array is normalized on
+     * the host by pybind11 (``c_style | forcecast``): a non-contiguous or
+     * differently-typed input is staged into a contiguous, ``T``-typed
+     * temporary before the copy.  The destination is filled with a single
+     * contiguous transfer: a host copy for host-accessible allocators, or
      * ``Gpu::copyAsync(hostToDevice, ...)`` for device memory.  This keeps
      * the host-to-device path free of any CuPy dependency.
      */
     template <class T, class Allocator>
-    void
-    copy_from_host(
-        PODVector<T, Allocator> & podvector,
-        py::array_t<T, py::array::c_style | py::array::forcecast> const & arr
-    )
+    PODVector<T, Allocator>
+    from_numpy(py::array_t<T, py::array::c_style | py::array::forcecast> const & arr)
     {
         auto const buf = arr.request();
         if (buf.ndim != 1) {
-            throw py::value_error("copy_from_host: expected a 1-D array");
+            throw py::value_error("from_numpy: expected a 1-D array");
         }
-        if (static_cast<std::size_t>(buf.shape[0]) != podvector.size()) {
-            throw py::value_error(
-                "copy_from_host: array size does not match PODVector size");
-        }
-        if (podvector.empty()) {
-            return;
+        auto const n = static_cast<std::size_t>(buf.shape[0]);
+
+        PODVector<T, Allocator> podvector(n);
+        if (n == 0) {
+            return podvector;
         }
 
         auto const * src = static_cast<T const *>(buf.ptr);
@@ -152,14 +149,15 @@ namespace
             Gpu::copyAsync(
                 Gpu::hostToDevice,
                 src,
-                src + podvector.size(),
+                src + n,
                 podvector.begin()
             );
             Gpu::streamSynchronize();
-            return;
+            return podvector;
         }
 #endif
-        std::copy(src, src + podvector.size(), podvector.begin());
+        std::copy(src, src + n, podvector.begin());
+        return podvector;
     }
 }
 
@@ -271,13 +269,26 @@ void make_PODVector(py::module &m, std::string typestr, std::string allocstr)
         .def("__setitem__", &set_item<T, Allocator>)
         .def("__getitem__", &get_item<T, Allocator>)
 
-        // bulk copy from a host (NumPy) array into this vector
-        .def("copy_from_host", &copy_from_host<T, Allocator>,
+        // create a new vector with a copy of a host (NumPy) array
+        .def_static("from_numpy", &from_numpy<T, Allocator>,
              py::arg("arr"),
-             "Copy a 1-D host (NumPy) array into this vector.\n\n"
-             "The input is cast to the vector's element type and made "
-             "contiguous as needed. Device memory is filled via an AMReX "
-             "host-to-device copy.")
+             py::return_value_policy::move,
+             R"(Create a new PODVector from a NumPy array (or array-like).
+
+Always copies the data into a newly allocated PODVector. The input is cast to
+the vector's element type and made contiguous as needed. The copy into
+device-only memory uses an AMReX host-to-device copy and does not require CuPy.
+
+Parameters
+----------
+arr : array_like
+    Input data, convertible to a NumPy array.
+
+Returns
+-------
+PODVector
+    A new PODVector with a copy of the data.
+)")
     ;
 }
 
