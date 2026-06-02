@@ -130,8 +130,10 @@ def podvector_from_numpy(cls, arr):
     """
     Create a new PODVector from a NumPy array (or array-like).
 
-    Always copies the data into a newly allocated PODVector.
-    For device-only allocators, the input is staged through CuPy.
+    Always copies the data into a newly allocated PODVector. The input is
+    cast to the vector's element type and made contiguous as needed. The
+    copy into device-only memory uses an AMReX host-to-device copy and does
+    not require CuPy.
 
     Parameters
     ----------
@@ -154,12 +156,7 @@ def podvector_from_numpy(cls, arr):
         return cls()
 
     pv = cls(n)
-    if _is_host_accessible(cls):
-        np.array(pv, copy=False)[:] = arr_np
-    else:
-        import cupy as cp
-
-        cp.asarray(pv)[:] = cp.asarray(arr_np)
+    pv.copy_from_host(arr_np)
     return pv
 
 
