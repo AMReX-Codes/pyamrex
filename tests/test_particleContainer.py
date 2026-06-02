@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import importlib
-import sys
 
 import numpy as np
 import pytest
@@ -151,23 +150,14 @@ def test_n_particles(particle_container, Npart):
     )
 
 
-def test_particle_iterators_keep_container_alive(particle_container):
+def test_particle_iterators_keep_container_alive(
+    particle_container, assert_keeps_python_alive
+):
     pc = particle_container
 
-    before = sys.getrefcount(pc)
-    pti = pc.iterator(level=0)
-    assert sys.getrefcount(pc) > before
-    del pti
-
-    before = sys.getrefcount(pc)
-    pti = pc.Iterator(pc, level=0)
-    assert sys.getrefcount(pc) > before
-    del pti
-
-    before = sys.getrefcount(pc)
-    pti = pc.ConstIterator(pc, level=0)
-    assert sys.getrefcount(pc) > before
-    del pti
+    assert_keeps_python_alive(pc, lambda: pc.iterator(level=0))
+    assert_keeps_python_alive(pc, lambda: pc.Iterator(pc, level=0))
+    assert_keeps_python_alive(pc, lambda: pc.ConstIterator(pc, level=0))
 
 
 def test_pc_init():

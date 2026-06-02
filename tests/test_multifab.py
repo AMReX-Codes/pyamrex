@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import math
-import sys
 
 import numpy as np
 import pytest
@@ -276,21 +275,10 @@ def test_mfab_mfiter(mfab):
     assert iter(mfab).length == cnt
 
 
-def test_mfab_mfiter_keeps_mfab_alive(mfab):
-    before = sys.getrefcount(mfab)
-    mfi = iter(mfab)
-    assert sys.getrefcount(mfab) > before
-    del mfi
-
-    before = sys.getrefcount(mfab)
-    mfi = amr.MFIter(mfab)
-    assert sys.getrefcount(mfab) > before
-    del mfi
-
-    before = sys.getrefcount(mfab)
-    mfi = amr.MFIter(mfab, amr.MFItInfo())
-    assert sys.getrefcount(mfab) > before
-    del mfi
+def test_mfab_mfiter_keeps_mfab_alive(mfab, assert_keeps_python_alive):
+    assert_keeps_python_alive(mfab, lambda: iter(mfab))
+    assert_keeps_python_alive(mfab, lambda: amr.MFIter(mfab))
+    assert_keeps_python_alive(mfab, lambda: amr.MFIter(mfab, amr.MFItInfo()))
 
 
 @pytest.mark.skipif(
