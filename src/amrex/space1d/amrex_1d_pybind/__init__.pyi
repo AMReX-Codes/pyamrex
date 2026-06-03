@@ -28170,6 +28170,24 @@ def copy_mfab(
     nghost: IntVect1D,
 ) -> None: ...
 @typing.overload
+def dtoh_memcpy(dest: FabArray_IArrayBox, src: FabArray_IArrayBox) -> None:
+    """
+    Copy from a device to host FabArray.
+    """
+
+@typing.overload
+def dtoh_memcpy(
+    dest: FabArray_IArrayBox,
+    src: FabArray_IArrayBox,
+    scomp: typing.SupportsInt | typing.SupportsIndex,
+    dcomp: typing.SupportsInt | typing.SupportsIndex,
+    ncomp: typing.SupportsInt | typing.SupportsIndex,
+) -> None:
+    """
+    Copy from a device to host FabArray for a specific (number of) component(s).
+    """
+
+@typing.overload
 def dtoh_memcpy(dest: FabArray_FArrayBox, src: FabArray_FArrayBox) -> None:
     """
     Copy from a device to host FabArray.
@@ -28192,6 +28210,24 @@ def end(arg0: Box) -> Dim3: ...
 def finalize() -> None: ...
 @typing.overload
 def finalize(arg0: AMReX) -> None: ...
+@typing.overload
+def htod_memcpy(dest: FabArray_IArrayBox, src: FabArray_IArrayBox) -> None:
+    """
+    Copy from a host to device FabArray.
+    """
+
+@typing.overload
+def htod_memcpy(
+    dest: FabArray_IArrayBox,
+    src: FabArray_IArrayBox,
+    scomp: typing.SupportsInt | typing.SupportsIndex,
+    dcomp: typing.SupportsInt | typing.SupportsIndex,
+    ncomp: typing.SupportsInt | typing.SupportsIndex,
+) -> None:
+    """
+    Copy from a host to device FabArray for a specific (number of) component(s).
+    """
+
 @typing.overload
 def htod_memcpy(dest: FabArray_FArrayBox, src: FabArray_FArrayBox) -> None:
     """
