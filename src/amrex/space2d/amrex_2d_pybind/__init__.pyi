@@ -13818,6 +13818,75 @@ class PODVector_real_pinned:
     """
     A plain-old-data (POD) vector of 'real' elements with 'pinned' allocation.
     """
+    @staticmethod
+    def from_numpy(
+        arr: typing.Annotated[numpy.typing.ArrayLike, numpy.float64],
+    ) -> PODVector_real_pinned:
+        """
+        Create a new PODVector from a NumPy array (or array-like).
+
+        Always copies the data into a newly allocated PODVector. The input is cast to
+        the vector's element type and made contiguous as needed. The copy into
+        device-only memory uses an AMReX host-to-device copy and does not require CuPy.
+
+        Parameters
+        ----------
+        arr : array_like
+            Input data, convertible to a NumPy array.
+
+        Returns
+        -------
+        PODVector
+            A new PODVector with a copy of the data.
+        """
+    @classmethod
+    def from_cupy(cls, arr):
+        """
+        Create a new PODVector from a CuPy array (or array-like).
+
+        Always copies the data into a newly allocated PODVector.
+        Works for every allocator type: for host-only allocators the
+        data is staged to the host through NumPy automatically.
+
+        Parameters
+        ----------
+        cls : type
+            The PODVector type to construct.
+        arr : array_like
+            Input data, convertible to a CuPy array.
+
+        Returns
+        -------
+        PODVector
+            A new PODVector with a copy of the data.
+
+        """
+    @classmethod
+    def from_xp(cls, arr):
+        """
+        Create a new PODVector from a NumPy or CuPy array,
+        depending on amr.Config.have_gpu .
+
+        Always copies the data into a newly allocated PODVector.
+        Unlike :meth:`to_xp`, a zero-copy view is not possible here because
+        PODVector always owns its memory through its allocator.
+
+        This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
+        https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
+
+        Parameters
+        ----------
+        cls : type
+            The PODVector type to construct.
+        arr : array_like
+            Input data (NumPy or CuPy array).
+
+        Returns
+        -------
+        PODVector
+            A new PODVector with a copy of the data.
+
+        """
     def __getitem__(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> float: ...
     @typing.overload
     def __init__(self) -> None: ...
@@ -13883,7 +13952,14 @@ class PODVector_real_pinned:
             Raises an exception if cupy is not installed
 
         """
-    def to_host(self) -> PODVector_real_pinned: ...
+    def to_device(self) -> PODVector_real_std:
+        """
+        Copy this vector into a new amrex Gpu::DeviceVector (the arena allocator on GPU, std on CPU), transferring across memory spaces as needed. Mirrors to_host().
+        """
+    def to_host(self) -> PODVector_real_pinned:
+        """
+        Copy this vector into a new pinned (host) PODVector. Mirrors to_device().
+        """
     def to_numpy(self, copy=False):
         """
         Provide a NumPy view into a PODVector (e.g., RealVector, IntVector).
@@ -13931,6 +14007,75 @@ class PODVector_real_arena:
     """
     A plain-old-data (POD) vector of 'real' elements with 'arena' allocation.
     """
+    @staticmethod
+    def from_numpy(
+        arr: typing.Annotated[numpy.typing.ArrayLike, numpy.float64],
+    ) -> PODVector_real_arena:
+        """
+        Create a new PODVector from a NumPy array (or array-like).
+
+        Always copies the data into a newly allocated PODVector. The input is cast to
+        the vector's element type and made contiguous as needed. The copy into
+        device-only memory uses an AMReX host-to-device copy and does not require CuPy.
+
+        Parameters
+        ----------
+        arr : array_like
+            Input data, convertible to a NumPy array.
+
+        Returns
+        -------
+        PODVector
+            A new PODVector with a copy of the data.
+        """
+    @classmethod
+    def from_cupy(cls, arr):
+        """
+        Create a new PODVector from a CuPy array (or array-like).
+
+        Always copies the data into a newly allocated PODVector.
+        Works for every allocator type: for host-only allocators the
+        data is staged to the host through NumPy automatically.
+
+        Parameters
+        ----------
+        cls : type
+            The PODVector type to construct.
+        arr : array_like
+            Input data, convertible to a CuPy array.
+
+        Returns
+        -------
+        PODVector
+            A new PODVector with a copy of the data.
+
+        """
+    @classmethod
+    def from_xp(cls, arr):
+        """
+        Create a new PODVector from a NumPy or CuPy array,
+        depending on amr.Config.have_gpu .
+
+        Always copies the data into a newly allocated PODVector.
+        Unlike :meth:`to_xp`, a zero-copy view is not possible here because
+        PODVector always owns its memory through its allocator.
+
+        This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
+        https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
+
+        Parameters
+        ----------
+        cls : type
+            The PODVector type to construct.
+        arr : array_like
+            Input data (NumPy or CuPy array).
+
+        Returns
+        -------
+        PODVector
+            A new PODVector with a copy of the data.
+
+        """
     def __getitem__(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> float: ...
     @typing.overload
     def __init__(self) -> None: ...
@@ -13996,7 +14141,14 @@ class PODVector_real_arena:
             Raises an exception if cupy is not installed
 
         """
-    def to_host(self) -> PODVector_real_pinned: ...
+    def to_device(self) -> PODVector_real_std:
+        """
+        Copy this vector into a new amrex Gpu::DeviceVector (the arena allocator on GPU, std on CPU), transferring across memory spaces as needed. Mirrors to_host().
+        """
+    def to_host(self) -> PODVector_real_pinned:
+        """
+        Copy this vector into a new pinned (host) PODVector. Mirrors to_device().
+        """
     def to_numpy(self, copy=False):
         """
         Provide a NumPy view into a PODVector (e.g., RealVector, IntVector).
@@ -14044,6 +14196,75 @@ class PODVector_real_std:
     """
     A plain-old-data (POD) vector of 'real' elements with 'std' allocation.
     """
+    @staticmethod
+    def from_numpy(
+        arr: typing.Annotated[numpy.typing.ArrayLike, numpy.float64],
+    ) -> PODVector_real_std:
+        """
+        Create a new PODVector from a NumPy array (or array-like).
+
+        Always copies the data into a newly allocated PODVector. The input is cast to
+        the vector's element type and made contiguous as needed. The copy into
+        device-only memory uses an AMReX host-to-device copy and does not require CuPy.
+
+        Parameters
+        ----------
+        arr : array_like
+            Input data, convertible to a NumPy array.
+
+        Returns
+        -------
+        PODVector
+            A new PODVector with a copy of the data.
+        """
+    @classmethod
+    def from_cupy(cls, arr):
+        """
+        Create a new PODVector from a CuPy array (or array-like).
+
+        Always copies the data into a newly allocated PODVector.
+        Works for every allocator type: for host-only allocators the
+        data is staged to the host through NumPy automatically.
+
+        Parameters
+        ----------
+        cls : type
+            The PODVector type to construct.
+        arr : array_like
+            Input data, convertible to a CuPy array.
+
+        Returns
+        -------
+        PODVector
+            A new PODVector with a copy of the data.
+
+        """
+    @classmethod
+    def from_xp(cls, arr):
+        """
+        Create a new PODVector from a NumPy or CuPy array,
+        depending on amr.Config.have_gpu .
+
+        Always copies the data into a newly allocated PODVector.
+        Unlike :meth:`to_xp`, a zero-copy view is not possible here because
+        PODVector always owns its memory through its allocator.
+
+        This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
+        https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
+
+        Parameters
+        ----------
+        cls : type
+            The PODVector type to construct.
+        arr : array_like
+            Input data (NumPy or CuPy array).
+
+        Returns
+        -------
+        PODVector
+            A new PODVector with a copy of the data.
+
+        """
     def __getitem__(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> float: ...
     @typing.overload
     def __init__(self) -> None: ...
@@ -14109,7 +14330,14 @@ class PODVector_real_std:
             Raises an exception if cupy is not installed
 
         """
-    def to_host(self) -> PODVector_real_pinned: ...
+    def to_device(self) -> PODVector_real_std:
+        """
+        Copy this vector into a new amrex Gpu::DeviceVector (the arena allocator on GPU, std on CPU), transferring across memory spaces as needed. Mirrors to_host().
+        """
+    def to_host(self) -> PODVector_real_pinned:
+        """
+        Copy this vector into a new pinned (host) PODVector. Mirrors to_device().
+        """
     def to_numpy(self, copy=False):
         """
         Provide a NumPy view into a PODVector (e.g., RealVector, IntVector).
@@ -14157,6 +14385,75 @@ class PODVector_real_polymorphic:
     """
     A plain-old-data (POD) vector of 'real' elements with 'polymorphic' allocation.
     """
+    @staticmethod
+    def from_numpy(
+        arr: typing.Annotated[numpy.typing.ArrayLike, numpy.float64],
+    ) -> PODVector_real_polymorphic:
+        """
+        Create a new PODVector from a NumPy array (or array-like).
+
+        Always copies the data into a newly allocated PODVector. The input is cast to
+        the vector's element type and made contiguous as needed. The copy into
+        device-only memory uses an AMReX host-to-device copy and does not require CuPy.
+
+        Parameters
+        ----------
+        arr : array_like
+            Input data, convertible to a NumPy array.
+
+        Returns
+        -------
+        PODVector
+            A new PODVector with a copy of the data.
+        """
+    @classmethod
+    def from_cupy(cls, arr):
+        """
+        Create a new PODVector from a CuPy array (or array-like).
+
+        Always copies the data into a newly allocated PODVector.
+        Works for every allocator type: for host-only allocators the
+        data is staged to the host through NumPy automatically.
+
+        Parameters
+        ----------
+        cls : type
+            The PODVector type to construct.
+        arr : array_like
+            Input data, convertible to a CuPy array.
+
+        Returns
+        -------
+        PODVector
+            A new PODVector with a copy of the data.
+
+        """
+    @classmethod
+    def from_xp(cls, arr):
+        """
+        Create a new PODVector from a NumPy or CuPy array,
+        depending on amr.Config.have_gpu .
+
+        Always copies the data into a newly allocated PODVector.
+        Unlike :meth:`to_xp`, a zero-copy view is not possible here because
+        PODVector always owns its memory through its allocator.
+
+        This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
+        https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
+
+        Parameters
+        ----------
+        cls : type
+            The PODVector type to construct.
+        arr : array_like
+            Input data (NumPy or CuPy array).
+
+        Returns
+        -------
+        PODVector
+            A new PODVector with a copy of the data.
+
+        """
     def __getitem__(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> float: ...
     @typing.overload
     def __init__(self) -> None: ...
@@ -14222,7 +14519,14 @@ class PODVector_real_polymorphic:
             Raises an exception if cupy is not installed
 
         """
-    def to_host(self) -> PODVector_real_pinned: ...
+    def to_device(self) -> PODVector_real_std:
+        """
+        Copy this vector into a new amrex Gpu::DeviceVector (the arena allocator on GPU, std on CPU), transferring across memory spaces as needed. Mirrors to_host().
+        """
+    def to_host(self) -> PODVector_real_pinned:
+        """
+        Copy this vector into a new pinned (host) PODVector. Mirrors to_device().
+        """
     def to_numpy(self, copy=False):
         """
         Provide a NumPy view into a PODVector (e.g., RealVector, IntVector).
@@ -14270,6 +14574,75 @@ class PODVector_int_pinned:
     """
     A plain-old-data (POD) vector of 'int' elements with 'pinned' allocation.
     """
+    @staticmethod
+    def from_numpy(
+        arr: typing.Annotated[numpy.typing.ArrayLike, numpy.int32],
+    ) -> PODVector_int_pinned:
+        """
+        Create a new PODVector from a NumPy array (or array-like).
+
+        Always copies the data into a newly allocated PODVector. The input is cast to
+        the vector's element type and made contiguous as needed. The copy into
+        device-only memory uses an AMReX host-to-device copy and does not require CuPy.
+
+        Parameters
+        ----------
+        arr : array_like
+            Input data, convertible to a NumPy array.
+
+        Returns
+        -------
+        PODVector
+            A new PODVector with a copy of the data.
+        """
+    @classmethod
+    def from_cupy(cls, arr):
+        """
+        Create a new PODVector from a CuPy array (or array-like).
+
+        Always copies the data into a newly allocated PODVector.
+        Works for every allocator type: for host-only allocators the
+        data is staged to the host through NumPy automatically.
+
+        Parameters
+        ----------
+        cls : type
+            The PODVector type to construct.
+        arr : array_like
+            Input data, convertible to a CuPy array.
+
+        Returns
+        -------
+        PODVector
+            A new PODVector with a copy of the data.
+
+        """
+    @classmethod
+    def from_xp(cls, arr):
+        """
+        Create a new PODVector from a NumPy or CuPy array,
+        depending on amr.Config.have_gpu .
+
+        Always copies the data into a newly allocated PODVector.
+        Unlike :meth:`to_xp`, a zero-copy view is not possible here because
+        PODVector always owns its memory through its allocator.
+
+        This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
+        https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
+
+        Parameters
+        ----------
+        cls : type
+            The PODVector type to construct.
+        arr : array_like
+            Input data (NumPy or CuPy array).
+
+        Returns
+        -------
+        PODVector
+            A new PODVector with a copy of the data.
+
+        """
     def __getitem__(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> int: ...
     @typing.overload
     def __init__(self) -> None: ...
@@ -14335,7 +14708,14 @@ class PODVector_int_pinned:
             Raises an exception if cupy is not installed
 
         """
-    def to_host(self) -> PODVector_int_pinned: ...
+    def to_device(self) -> PODVector_int_std:
+        """
+        Copy this vector into a new amrex Gpu::DeviceVector (the arena allocator on GPU, std on CPU), transferring across memory spaces as needed. Mirrors to_host().
+        """
+    def to_host(self) -> PODVector_int_pinned:
+        """
+        Copy this vector into a new pinned (host) PODVector. Mirrors to_device().
+        """
     def to_numpy(self, copy=False):
         """
         Provide a NumPy view into a PODVector (e.g., RealVector, IntVector).
@@ -14383,6 +14763,75 @@ class PODVector_int_arena:
     """
     A plain-old-data (POD) vector of 'int' elements with 'arena' allocation.
     """
+    @staticmethod
+    def from_numpy(
+        arr: typing.Annotated[numpy.typing.ArrayLike, numpy.int32],
+    ) -> PODVector_int_arena:
+        """
+        Create a new PODVector from a NumPy array (or array-like).
+
+        Always copies the data into a newly allocated PODVector. The input is cast to
+        the vector's element type and made contiguous as needed. The copy into
+        device-only memory uses an AMReX host-to-device copy and does not require CuPy.
+
+        Parameters
+        ----------
+        arr : array_like
+            Input data, convertible to a NumPy array.
+
+        Returns
+        -------
+        PODVector
+            A new PODVector with a copy of the data.
+        """
+    @classmethod
+    def from_cupy(cls, arr):
+        """
+        Create a new PODVector from a CuPy array (or array-like).
+
+        Always copies the data into a newly allocated PODVector.
+        Works for every allocator type: for host-only allocators the
+        data is staged to the host through NumPy automatically.
+
+        Parameters
+        ----------
+        cls : type
+            The PODVector type to construct.
+        arr : array_like
+            Input data, convertible to a CuPy array.
+
+        Returns
+        -------
+        PODVector
+            A new PODVector with a copy of the data.
+
+        """
+    @classmethod
+    def from_xp(cls, arr):
+        """
+        Create a new PODVector from a NumPy or CuPy array,
+        depending on amr.Config.have_gpu .
+
+        Always copies the data into a newly allocated PODVector.
+        Unlike :meth:`to_xp`, a zero-copy view is not possible here because
+        PODVector always owns its memory through its allocator.
+
+        This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
+        https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
+
+        Parameters
+        ----------
+        cls : type
+            The PODVector type to construct.
+        arr : array_like
+            Input data (NumPy or CuPy array).
+
+        Returns
+        -------
+        PODVector
+            A new PODVector with a copy of the data.
+
+        """
     def __getitem__(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> int: ...
     @typing.overload
     def __init__(self) -> None: ...
@@ -14448,7 +14897,14 @@ class PODVector_int_arena:
             Raises an exception if cupy is not installed
 
         """
-    def to_host(self) -> PODVector_int_pinned: ...
+    def to_device(self) -> PODVector_int_std:
+        """
+        Copy this vector into a new amrex Gpu::DeviceVector (the arena allocator on GPU, std on CPU), transferring across memory spaces as needed. Mirrors to_host().
+        """
+    def to_host(self) -> PODVector_int_pinned:
+        """
+        Copy this vector into a new pinned (host) PODVector. Mirrors to_device().
+        """
     def to_numpy(self, copy=False):
         """
         Provide a NumPy view into a PODVector (e.g., RealVector, IntVector).
@@ -14496,6 +14952,75 @@ class PODVector_int_std:
     """
     A plain-old-data (POD) vector of 'int' elements with 'std' allocation.
     """
+    @staticmethod
+    def from_numpy(
+        arr: typing.Annotated[numpy.typing.ArrayLike, numpy.int32],
+    ) -> PODVector_int_std:
+        """
+        Create a new PODVector from a NumPy array (or array-like).
+
+        Always copies the data into a newly allocated PODVector. The input is cast to
+        the vector's element type and made contiguous as needed. The copy into
+        device-only memory uses an AMReX host-to-device copy and does not require CuPy.
+
+        Parameters
+        ----------
+        arr : array_like
+            Input data, convertible to a NumPy array.
+
+        Returns
+        -------
+        PODVector
+            A new PODVector with a copy of the data.
+        """
+    @classmethod
+    def from_cupy(cls, arr):
+        """
+        Create a new PODVector from a CuPy array (or array-like).
+
+        Always copies the data into a newly allocated PODVector.
+        Works for every allocator type: for host-only allocators the
+        data is staged to the host through NumPy automatically.
+
+        Parameters
+        ----------
+        cls : type
+            The PODVector type to construct.
+        arr : array_like
+            Input data, convertible to a CuPy array.
+
+        Returns
+        -------
+        PODVector
+            A new PODVector with a copy of the data.
+
+        """
+    @classmethod
+    def from_xp(cls, arr):
+        """
+        Create a new PODVector from a NumPy or CuPy array,
+        depending on amr.Config.have_gpu .
+
+        Always copies the data into a newly allocated PODVector.
+        Unlike :meth:`to_xp`, a zero-copy view is not possible here because
+        PODVector always owns its memory through its allocator.
+
+        This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
+        https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
+
+        Parameters
+        ----------
+        cls : type
+            The PODVector type to construct.
+        arr : array_like
+            Input data (NumPy or CuPy array).
+
+        Returns
+        -------
+        PODVector
+            A new PODVector with a copy of the data.
+
+        """
     def __getitem__(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> int: ...
     @typing.overload
     def __init__(self) -> None: ...
@@ -14561,7 +15086,14 @@ class PODVector_int_std:
             Raises an exception if cupy is not installed
 
         """
-    def to_host(self) -> PODVector_int_pinned: ...
+    def to_device(self) -> PODVector_int_std:
+        """
+        Copy this vector into a new amrex Gpu::DeviceVector (the arena allocator on GPU, std on CPU), transferring across memory spaces as needed. Mirrors to_host().
+        """
+    def to_host(self) -> PODVector_int_pinned:
+        """
+        Copy this vector into a new pinned (host) PODVector. Mirrors to_device().
+        """
     def to_numpy(self, copy=False):
         """
         Provide a NumPy view into a PODVector (e.g., RealVector, IntVector).
@@ -14609,6 +15141,75 @@ class PODVector_int_polymorphic:
     """
     A plain-old-data (POD) vector of 'int' elements with 'polymorphic' allocation.
     """
+    @staticmethod
+    def from_numpy(
+        arr: typing.Annotated[numpy.typing.ArrayLike, numpy.int32],
+    ) -> PODVector_int_polymorphic:
+        """
+        Create a new PODVector from a NumPy array (or array-like).
+
+        Always copies the data into a newly allocated PODVector. The input is cast to
+        the vector's element type and made contiguous as needed. The copy into
+        device-only memory uses an AMReX host-to-device copy and does not require CuPy.
+
+        Parameters
+        ----------
+        arr : array_like
+            Input data, convertible to a NumPy array.
+
+        Returns
+        -------
+        PODVector
+            A new PODVector with a copy of the data.
+        """
+    @classmethod
+    def from_cupy(cls, arr):
+        """
+        Create a new PODVector from a CuPy array (or array-like).
+
+        Always copies the data into a newly allocated PODVector.
+        Works for every allocator type: for host-only allocators the
+        data is staged to the host through NumPy automatically.
+
+        Parameters
+        ----------
+        cls : type
+            The PODVector type to construct.
+        arr : array_like
+            Input data, convertible to a CuPy array.
+
+        Returns
+        -------
+        PODVector
+            A new PODVector with a copy of the data.
+
+        """
+    @classmethod
+    def from_xp(cls, arr):
+        """
+        Create a new PODVector from a NumPy or CuPy array,
+        depending on amr.Config.have_gpu .
+
+        Always copies the data into a newly allocated PODVector.
+        Unlike :meth:`to_xp`, a zero-copy view is not possible here because
+        PODVector always owns its memory through its allocator.
+
+        This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
+        https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
+
+        Parameters
+        ----------
+        cls : type
+            The PODVector type to construct.
+        arr : array_like
+            Input data (NumPy or CuPy array).
+
+        Returns
+        -------
+        PODVector
+            A new PODVector with a copy of the data.
+
+        """
     def __getitem__(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> int: ...
     @typing.overload
     def __init__(self) -> None: ...
@@ -14674,7 +15275,14 @@ class PODVector_int_polymorphic:
             Raises an exception if cupy is not installed
 
         """
-    def to_host(self) -> PODVector_int_pinned: ...
+    def to_device(self) -> PODVector_int_std:
+        """
+        Copy this vector into a new amrex Gpu::DeviceVector (the arena allocator on GPU, std on CPU), transferring across memory spaces as needed. Mirrors to_host().
+        """
+    def to_host(self) -> PODVector_int_pinned:
+        """
+        Copy this vector into a new pinned (host) PODVector. Mirrors to_device().
+        """
     def to_numpy(self, copy=False):
         """
         Provide a NumPy view into a PODVector (e.g., RealVector, IntVector).
@@ -14722,6 +15330,75 @@ class PODVector_uint64_pinned:
     """
     A plain-old-data (POD) vector of 'uint64' elements with 'pinned' allocation.
     """
+    @staticmethod
+    def from_numpy(
+        arr: typing.Annotated[numpy.typing.ArrayLike, numpy.uint64],
+    ) -> PODVector_uint64_pinned:
+        """
+        Create a new PODVector from a NumPy array (or array-like).
+
+        Always copies the data into a newly allocated PODVector. The input is cast to
+        the vector's element type and made contiguous as needed. The copy into
+        device-only memory uses an AMReX host-to-device copy and does not require CuPy.
+
+        Parameters
+        ----------
+        arr : array_like
+            Input data, convertible to a NumPy array.
+
+        Returns
+        -------
+        PODVector
+            A new PODVector with a copy of the data.
+        """
+    @classmethod
+    def from_cupy(cls, arr):
+        """
+        Create a new PODVector from a CuPy array (or array-like).
+
+        Always copies the data into a newly allocated PODVector.
+        Works for every allocator type: for host-only allocators the
+        data is staged to the host through NumPy automatically.
+
+        Parameters
+        ----------
+        cls : type
+            The PODVector type to construct.
+        arr : array_like
+            Input data, convertible to a CuPy array.
+
+        Returns
+        -------
+        PODVector
+            A new PODVector with a copy of the data.
+
+        """
+    @classmethod
+    def from_xp(cls, arr):
+        """
+        Create a new PODVector from a NumPy or CuPy array,
+        depending on amr.Config.have_gpu .
+
+        Always copies the data into a newly allocated PODVector.
+        Unlike :meth:`to_xp`, a zero-copy view is not possible here because
+        PODVector always owns its memory through its allocator.
+
+        This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
+        https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
+
+        Parameters
+        ----------
+        cls : type
+            The PODVector type to construct.
+        arr : array_like
+            Input data (NumPy or CuPy array).
+
+        Returns
+        -------
+        PODVector
+            A new PODVector with a copy of the data.
+
+        """
     def __getitem__(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> int: ...
     @typing.overload
     def __init__(self) -> None: ...
@@ -14787,7 +15464,14 @@ class PODVector_uint64_pinned:
             Raises an exception if cupy is not installed
 
         """
-    def to_host(self) -> PODVector_uint64_pinned: ...
+    def to_device(self) -> PODVector_uint64_std:
+        """
+        Copy this vector into a new amrex Gpu::DeviceVector (the arena allocator on GPU, std on CPU), transferring across memory spaces as needed. Mirrors to_host().
+        """
+    def to_host(self) -> PODVector_uint64_pinned:
+        """
+        Copy this vector into a new pinned (host) PODVector. Mirrors to_device().
+        """
     def to_numpy(self, copy=False):
         """
         Provide a NumPy view into a PODVector (e.g., RealVector, IntVector).
@@ -14835,6 +15519,75 @@ class PODVector_uint64_arena:
     """
     A plain-old-data (POD) vector of 'uint64' elements with 'arena' allocation.
     """
+    @staticmethod
+    def from_numpy(
+        arr: typing.Annotated[numpy.typing.ArrayLike, numpy.uint64],
+    ) -> PODVector_uint64_arena:
+        """
+        Create a new PODVector from a NumPy array (or array-like).
+
+        Always copies the data into a newly allocated PODVector. The input is cast to
+        the vector's element type and made contiguous as needed. The copy into
+        device-only memory uses an AMReX host-to-device copy and does not require CuPy.
+
+        Parameters
+        ----------
+        arr : array_like
+            Input data, convertible to a NumPy array.
+
+        Returns
+        -------
+        PODVector
+            A new PODVector with a copy of the data.
+        """
+    @classmethod
+    def from_cupy(cls, arr):
+        """
+        Create a new PODVector from a CuPy array (or array-like).
+
+        Always copies the data into a newly allocated PODVector.
+        Works for every allocator type: for host-only allocators the
+        data is staged to the host through NumPy automatically.
+
+        Parameters
+        ----------
+        cls : type
+            The PODVector type to construct.
+        arr : array_like
+            Input data, convertible to a CuPy array.
+
+        Returns
+        -------
+        PODVector
+            A new PODVector with a copy of the data.
+
+        """
+    @classmethod
+    def from_xp(cls, arr):
+        """
+        Create a new PODVector from a NumPy or CuPy array,
+        depending on amr.Config.have_gpu .
+
+        Always copies the data into a newly allocated PODVector.
+        Unlike :meth:`to_xp`, a zero-copy view is not possible here because
+        PODVector always owns its memory through its allocator.
+
+        This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
+        https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
+
+        Parameters
+        ----------
+        cls : type
+            The PODVector type to construct.
+        arr : array_like
+            Input data (NumPy or CuPy array).
+
+        Returns
+        -------
+        PODVector
+            A new PODVector with a copy of the data.
+
+        """
     def __getitem__(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> int: ...
     @typing.overload
     def __init__(self) -> None: ...
@@ -14900,7 +15653,14 @@ class PODVector_uint64_arena:
             Raises an exception if cupy is not installed
 
         """
-    def to_host(self) -> PODVector_uint64_pinned: ...
+    def to_device(self) -> PODVector_uint64_std:
+        """
+        Copy this vector into a new amrex Gpu::DeviceVector (the arena allocator on GPU, std on CPU), transferring across memory spaces as needed. Mirrors to_host().
+        """
+    def to_host(self) -> PODVector_uint64_pinned:
+        """
+        Copy this vector into a new pinned (host) PODVector. Mirrors to_device().
+        """
     def to_numpy(self, copy=False):
         """
         Provide a NumPy view into a PODVector (e.g., RealVector, IntVector).
@@ -14948,6 +15708,75 @@ class PODVector_uint64_std:
     """
     A plain-old-data (POD) vector of 'uint64' elements with 'std' allocation.
     """
+    @staticmethod
+    def from_numpy(
+        arr: typing.Annotated[numpy.typing.ArrayLike, numpy.uint64],
+    ) -> PODVector_uint64_std:
+        """
+        Create a new PODVector from a NumPy array (or array-like).
+
+        Always copies the data into a newly allocated PODVector. The input is cast to
+        the vector's element type and made contiguous as needed. The copy into
+        device-only memory uses an AMReX host-to-device copy and does not require CuPy.
+
+        Parameters
+        ----------
+        arr : array_like
+            Input data, convertible to a NumPy array.
+
+        Returns
+        -------
+        PODVector
+            A new PODVector with a copy of the data.
+        """
+    @classmethod
+    def from_cupy(cls, arr):
+        """
+        Create a new PODVector from a CuPy array (or array-like).
+
+        Always copies the data into a newly allocated PODVector.
+        Works for every allocator type: for host-only allocators the
+        data is staged to the host through NumPy automatically.
+
+        Parameters
+        ----------
+        cls : type
+            The PODVector type to construct.
+        arr : array_like
+            Input data, convertible to a CuPy array.
+
+        Returns
+        -------
+        PODVector
+            A new PODVector with a copy of the data.
+
+        """
+    @classmethod
+    def from_xp(cls, arr):
+        """
+        Create a new PODVector from a NumPy or CuPy array,
+        depending on amr.Config.have_gpu .
+
+        Always copies the data into a newly allocated PODVector.
+        Unlike :meth:`to_xp`, a zero-copy view is not possible here because
+        PODVector always owns its memory through its allocator.
+
+        This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
+        https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
+
+        Parameters
+        ----------
+        cls : type
+            The PODVector type to construct.
+        arr : array_like
+            Input data (NumPy or CuPy array).
+
+        Returns
+        -------
+        PODVector
+            A new PODVector with a copy of the data.
+
+        """
     def __getitem__(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> int: ...
     @typing.overload
     def __init__(self) -> None: ...
@@ -15013,7 +15842,14 @@ class PODVector_uint64_std:
             Raises an exception if cupy is not installed
 
         """
-    def to_host(self) -> PODVector_uint64_pinned: ...
+    def to_device(self) -> PODVector_uint64_std:
+        """
+        Copy this vector into a new amrex Gpu::DeviceVector (the arena allocator on GPU, std on CPU), transferring across memory spaces as needed. Mirrors to_host().
+        """
+    def to_host(self) -> PODVector_uint64_pinned:
+        """
+        Copy this vector into a new pinned (host) PODVector. Mirrors to_device().
+        """
     def to_numpy(self, copy=False):
         """
         Provide a NumPy view into a PODVector (e.g., RealVector, IntVector).
@@ -15061,6 +15897,75 @@ class PODVector_uint64_polymorphic:
     """
     A plain-old-data (POD) vector of 'uint64' elements with 'polymorphic' allocation.
     """
+    @staticmethod
+    def from_numpy(
+        arr: typing.Annotated[numpy.typing.ArrayLike, numpy.uint64],
+    ) -> PODVector_uint64_polymorphic:
+        """
+        Create a new PODVector from a NumPy array (or array-like).
+
+        Always copies the data into a newly allocated PODVector. The input is cast to
+        the vector's element type and made contiguous as needed. The copy into
+        device-only memory uses an AMReX host-to-device copy and does not require CuPy.
+
+        Parameters
+        ----------
+        arr : array_like
+            Input data, convertible to a NumPy array.
+
+        Returns
+        -------
+        PODVector
+            A new PODVector with a copy of the data.
+        """
+    @classmethod
+    def from_cupy(cls, arr):
+        """
+        Create a new PODVector from a CuPy array (or array-like).
+
+        Always copies the data into a newly allocated PODVector.
+        Works for every allocator type: for host-only allocators the
+        data is staged to the host through NumPy automatically.
+
+        Parameters
+        ----------
+        cls : type
+            The PODVector type to construct.
+        arr : array_like
+            Input data, convertible to a CuPy array.
+
+        Returns
+        -------
+        PODVector
+            A new PODVector with a copy of the data.
+
+        """
+    @classmethod
+    def from_xp(cls, arr):
+        """
+        Create a new PODVector from a NumPy or CuPy array,
+        depending on amr.Config.have_gpu .
+
+        Always copies the data into a newly allocated PODVector.
+        Unlike :meth:`to_xp`, a zero-copy view is not possible here because
+        PODVector always owns its memory through its allocator.
+
+        This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
+        https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
+
+        Parameters
+        ----------
+        cls : type
+            The PODVector type to construct.
+        arr : array_like
+            Input data (NumPy or CuPy array).
+
+        Returns
+        -------
+        PODVector
+            A new PODVector with a copy of the data.
+
+        """
     def __getitem__(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> int: ...
     @typing.overload
     def __init__(self) -> None: ...
@@ -15126,7 +16031,14 @@ class PODVector_uint64_polymorphic:
             Raises an exception if cupy is not installed
 
         """
-    def to_host(self) -> PODVector_uint64_pinned: ...
+    def to_device(self) -> PODVector_uint64_std:
+        """
+        Copy this vector into a new amrex Gpu::DeviceVector (the arena allocator on GPU, std on CPU), transferring across memory spaces as needed. Mirrors to_host().
+        """
+    def to_host(self) -> PODVector_uint64_pinned:
+        """
+        Copy this vector into a new pinned (host) PODVector. Mirrors to_device().
+        """
     def to_numpy(self, copy=False):
         """
         Provide a NumPy view into a PODVector (e.g., RealVector, IntVector).
