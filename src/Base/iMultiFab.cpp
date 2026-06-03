@@ -7,6 +7,7 @@
 #include "MultiFab.H"
 
 #include <AMReX_FabArray.H>
+#include <AMReX_FabArrayUtility.H>
 #include <AMReX_IArrayBox.H>
 #include <AMReX_iMultiFab.H>
 
@@ -20,4 +21,27 @@ void init_iMultiFab(py::module &m)
 
     m.def("copy_mfab", py::overload_cast< iMultiFab &, iMultiFab const &, int, int, int, int >(&iMultiFab::Copy), py::arg("dst"), py::arg("src"), py::arg("srccomp"), py::arg("dstcomp"), py::arg("numcomp"), py::arg("nghost"))
      .def("copy_mfab", py::overload_cast< iMultiFab &, iMultiFab const &, int, int, int, IntVect const & >(&iMultiFab::Copy), py::arg("dst"), py::arg("src"), py::arg("srccomp"), py::arg("dstcomp"), py::arg("numcomp"), py::arg("nghost"));
+
+    // host-device copies for integer FabArrays (iMultiFab)
+    m.def("htod_memcpy",
+          py::overload_cast< FabArray<IArrayBox> &, FabArray<IArrayBox> const & >(&htod_memcpy<IArrayBox>),
+          py::arg("dest"), py::arg("src"),
+          "Copy from a host to device FabArray."
+    );
+    m.def("htod_memcpy",
+          py::overload_cast< FabArray<IArrayBox> &, FabArray<IArrayBox> const &, int, int, int >(&htod_memcpy<IArrayBox>),
+          py::arg("dest"), py::arg("src"), py::arg("scomp"), py::arg("dcomp"), py::arg("ncomp"),
+          "Copy from a host to device FabArray for a specific (number of) component(s)."
+    );
+
+    m.def("dtoh_memcpy",
+          py::overload_cast< FabArray<IArrayBox> &, FabArray<IArrayBox> const & >(&dtoh_memcpy<IArrayBox>),
+          py::arg("dest"), py::arg("src"),
+          "Copy from a device to host FabArray."
+    );
+    m.def("dtoh_memcpy",
+          py::overload_cast< FabArray<IArrayBox> &, FabArray<IArrayBox> const &, int, int, int >(&dtoh_memcpy<IArrayBox>),
+          py::arg("dest"), py::arg("src"), py::arg("scomp"), py::arg("dcomp"), py::arg("ncomp"),
+          "Copy from a device to host FabArray for a specific (number of) component(s)."
+    );
 }
