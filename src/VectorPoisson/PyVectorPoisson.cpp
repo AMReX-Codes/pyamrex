@@ -280,18 +280,7 @@ void init_VectorPoisson3D(py::module& m)
         .def("getResidual",
              py::overload_cast<int>(&VectorPoissonSolverNodal::getResidual, py::const_),
              py::arg("component"),
-             "Get final residual for a given component (0=r, 1=theta, 2=z).")
-        .def("setEBCoils", &VectorPoissonSolverNodal::setEBCoils,
-             py::arg("component"), py::arg("coils"),
-             R"(Set EB Dirichlet values for coil regions.
-
-             Parameters
-             ----------
-             component : int
-                 Vector component (0=r, 1=theta, 2=z).
-             coils : list of CoilSpec
-                 List of coil specifications with geometry and prescribed psi values.
-             )");
+             "Get final residual for a given component (0=r, 1=theta, 2=z).");
 
     // ================================================================
     // CoilSpec — nested under VectorPoissonSolverNodal
@@ -304,4 +293,16 @@ void init_VectorPoisson3D(py::module& m)
         .def_readwrite("r2c",  &VectorPoissonSolverNodal::CoilSpec::r2c)
         .def_readwrite("drc",  &VectorPoissonSolverNodal::CoilSpec::drc)
         .def_readwrite("psi",  &VectorPoissonSolverNodal::CoilSpec::psi);
+
+    solver_cls.def("setEBCoils", &VectorPoissonSolverNodal::setEBCoils,
+             py::arg("component"), py::arg("coils"),
+             R"(Set EB Dirichlet values for coil regions.
+
+             Parameters
+             ----------
+             component : int
+                 Vector component (0=r, 1=theta, 2=z).
+             coils : list of CoilSpec
+                 List of coil specifications with geometry and prescribed psi values.
+             )");
 }
