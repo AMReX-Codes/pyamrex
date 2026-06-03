@@ -1,5 +1,4 @@
-#ifndef VECTOR_POISSON_SOLVER_NODAL_H
-#define VECTOR_POISSON_SOLVER_NODAL_H
+#pragma once
 
 #include <AMReX.H>
 #include <AMReX_Array.H>
@@ -184,5 +183,3 @@ private:
 };
 
 } // namespace VectorPoisson3D
-
-#endif

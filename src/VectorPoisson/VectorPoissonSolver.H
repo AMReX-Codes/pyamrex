@@ -1,5 +1,4 @@
-#ifndef VECTOR_POISSON_SOLVER_3D_H
-#define VECTOR_POISSON_SOLVER_3D_H
+#pragma once
 
 #include <AMReX.H>
 #include <AMReX_MultiFab.H>
@@ -97,5 +96,3 @@ private:
 };
 
 } // namespace VectorPoisson3D
-
-#endif
