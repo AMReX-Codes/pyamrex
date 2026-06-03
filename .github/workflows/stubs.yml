@@ -43,7 +43,7 @@ jobs:
 
     - name: Dependencies
       run: |
-        .github/workflows/dependencies/dependencies_gcc10.sh
+        .github/workflows/dependencies/dependencies_gcc.sh 11
         .github/workflows/dependencies/dependencies_ccache.sh
 
     - name: Set Up Cache
@@ -63,7 +63,7 @@ jobs:
 
         python3 -m pip install -U pip setuptools[core] wheel
         python3 -m pip install -U mpi4py pytest pre-commit
-        python3 -m pip install -U "pybind11-stubgen @ git+https://github.com/ax3l/pybind11-stubgen.git@fix-class-sorting"
+        python3 -m pip install -U "pybind11-stubgen @ git+https://github.com/ax3l/pybind11-stubgen.git@fix-enum-py-protected-members"
         cmake -S . -B build -DAMReX_SPACEDIM="1;2;3" -DAMReX_EB=ON -DpyAMReX_IPO=OFF
         cmake --build build -j 4 --target pip_install
 

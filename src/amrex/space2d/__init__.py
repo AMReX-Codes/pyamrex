@@ -1,22 +1,10 @@
 # -*- coding: utf-8 -*-
 
-import os
+from .._dll import add_windows_dll_directories
 
-# Python 3.8+ on Windows: DLL search paths for dependent
-# shared libraries
-# Refs.:
-# - https://github.com/python/cpython/issues/80266
-# - https://docs.python.org/3.8/library/os.html#os.add_dll_directory
-if os.name == "nt":
-    # add anything in the current directory
-    pwd = __file__.rsplit(os.sep, 1)[0] + os.sep
-    os.add_dll_directory(pwd)
-    # add anything in PATH
-    paths = os.environ.get("PATH", "")
-    for p in paths.split(";"):
-        p_abs = os.path.abspath(os.path.expanduser(os.path.expandvars(p)))
-        if os.path.exists(p_abs):
-            os.add_dll_directory(p_abs)
+# Register dependent DLL locations for the C++ AMReX library and potential
+# shared library dependencies before importing pybind.
+add_windows_dll_directories(__file__)
 
 # import core bindings to C++
 from . import amrex_2d_pybind

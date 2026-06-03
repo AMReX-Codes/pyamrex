@@ -82,11 +82,21 @@ namespace
 }
 
 // forward declarations
-void init_ParticleContainer_soa(py::module& m);
+#ifdef PYAMREX_CODES_SoA
+void init_ParticleContainer_SoA(py::module& m);
+#endif
+#ifdef PYAMREX_CODES_tests
 void init_ParticleContainer_tests(py::module& m);
+#endif
+#ifdef PYAMREX_CODES_FHDeX
 void init_ParticleContainer_FHDeX(py::module& m);
+#endif
+#ifdef PYAMREX_CODES_ImpactX
 void init_ParticleContainer_ImpactX(py::module& m);
+#endif
+#ifdef PYAMREX_CODES_WarpX
 void init_ParticleContainer_WarpX(py::module& m);
+#endif
 
 void init_ParticleContainer(py::module& m) {
     using namespace amrex;
@@ -96,17 +106,27 @@ void init_ParticleContainer(py::module& m) {
 
     // most common case: ND particle + runtime attributes
     //   pure SoA
-    init_ParticleContainer_soa(m);
+#ifdef PYAMREX_CODES_SoA
+    init_ParticleContainer_SoA(m);
+#endif
     //   legacy AoS + SoA
     //make_ParticleContainer_and_Iterators<Particle<0, 0>, 0, 0>(m);
 
     // used in tests
+#ifdef PYAMREX_CODES_tests
     init_ParticleContainer_tests(m);
+#endif
 
     // application codes
+#ifdef PYAMREX_CODES_FHDeX
     init_ParticleContainer_FHDeX(m);
+#endif
+#ifdef PYAMREX_CODES_ImpactX
     init_ParticleContainer_ImpactX(m);
+#endif
+#ifdef PYAMREX_CODES_WarpX
     init_ParticleContainer_WarpX(m);
+#endif
 
     // for particle idcpu arrays
     m.def("pack_ids", &pack_ids);

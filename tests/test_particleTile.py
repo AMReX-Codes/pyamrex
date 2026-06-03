@@ -64,6 +64,17 @@ def test_ptile_pushback_ptiledata():
     )
 
 
+def test_particle_tile_data_keeps_tile_alive(assert_keeps_python_alive):
+    pt = (
+        amr.ParticleTile_2_1_3_1_managed()
+        if amr.Config.have_gpu
+        else amr.ParticleTile_2_1_3_1_default()
+    )
+    pt.push_back(amr.Particle_2_1())
+
+    assert_keeps_python_alive(pt, lambda: pt.get_particle_tile_data())
+
+
 @pytest.mark.skipif(amr.Config.spacedim != 3, reason="Requires AMREX_SPACEDIM = 3")
 def test_ptile_access():
     pt = (

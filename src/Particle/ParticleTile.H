@@ -145,7 +145,8 @@ void make_ParticleTile(py::module &m, std::string allocstr)
         .def("shrink_to_fit", &ParticleTileType::shrink_to_fit)
         .def("capacity", &ParticleTileType::capacity)
         .def("swap",&ParticleTileType::swap)
-        .def("get_particle_tile_data", &ParticleTileType::getParticleTileData)
+        .def("get_particle_tile_data", &ParticleTileType::getParticleTileData,
+             py::keep_alive<0, 1>())
         .def("__setitem__", [](ParticleTileType & pt, int const v, SuperParticleType const value){ pt.getParticleTileData().setSuperParticle( value, v); })
         .def("__getitem__", [](ParticleTileType & pt, int const v){ return pt.getParticleTileData().getSuperParticle(v); })
     ;

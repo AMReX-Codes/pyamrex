@@ -70,6 +70,15 @@ def test_array4():
     assert v_carr2np[0, 1, 1, 1] == 44
 
 
+def test_array4_views_keep_sources_alive(assert_keeps_python_alive):
+    x = np.ones((2, 3, 4))
+
+    arr = assert_keeps_python_alive(x, lambda: amr.Array4_double(x))
+    assert_keeps_python_alive(arr, lambda: amr.Array4_double(arr))
+    assert_keeps_python_alive(arr, lambda: amr.Array4_double(arr, 0))
+    assert_keeps_python_alive(arr, lambda: amr.Array4_double(arr, 0, 1))
+
+
 @pytest.mark.skipif(
     amr.Config.gpu_backend != "CUDA", reason="Requires AMReX_GPU_BACKEND=CUDA"
 )

@@ -73,3 +73,94 @@ jobs:
         $env:PATH += ';C:/Program Files (x86)/pyAMReX/bin/'
         rm -r -fo build
         python3 -m pytest tests
+
+  wsl:
+    name: WSL Ubuntu GCC w/o MPI
+    runs-on: windows-latest
+    # Run every ``run`` step inside the WSL distribution as its default shell.
+    # ``wsl-bash`` runs as root with ``-euo pipefail`` and starts in the Windows
+    # working directory (the checked-out repo) auto-mounted under ``/mnt``.
+    defaults:
+      run:
+        shell: wsl-bash {0}
+    steps:
+    - uses: actions/checkout@v6
+    - name: Set Up WSL
+      uses: Vampire/setup-wsl@v7
+      with:
+        distribution: Ubuntu-24.04
+    - name: Set Up Cache
+      # actions/cache runs on the Windows host, so the saved/restored path must
+      # live on the Windows-side workspace. The build below copies it into a
+      # native ext4 directory inside WSL (fast) for the actual ccache I/O and
+      # writes it back here at the end, avoiding slow 9p-mounted ccache access.
+      uses: actions/cache@v4
+      with:
+        path: ${{ github.workspace }}/.ccache
+        key: ccache-${{ github.workflow }}-${{ github.job }}-git-${{ github.sha }}
+        restore-keys: |
+             ccache-${{ github.workflow }}-${{ github.job }}-git-
+    - name: Dependencies
+      run: |
+        export DEBIAN_FRONTEND=noninteractive
+        apt-get update -qq
+        apt-get install -y --no-install-recommends \
+            build-essential ca-certificates ccache curl git \
+            python3 python3-dev
+        # uv manages the virtual environment and dependencies; it is installed
+        # into ~/.local/bin (added to PATH in the build & test steps below).
+        curl -LsSf https://astral.sh/uv/install.sh | sh
+    - name: Build & Install
+      run: |
+        export PATH="$HOME/.local/bin:$PATH"
+
+        # Keep ccache on native ext4 (fast); the host-side cache lives on the
+        # 9p-mounted Windows workspace and is only synced in/out once.
+        export CCACHE_DIR="$HOME/.cache/ccache"
+        WS_CCACHE="$(wslpath '${{ github.workspace }}')/.ccache"
+        mkdir -p "$CCACHE_DIR"
+        [ -d "$WS_CCACHE" ] && cp -a "$WS_CCACHE/." "$CCACHE_DIR/"
+
+        export CCACHE_COMPRESS=1
+        export CCACHE_COMPRESSLEVEL=10
+        export CCACHE_MAXSIZE=600M
+        ccache -z
+
+        # Build on native ext4, not the 9p-mounted Windows workspace, where
+        # AMReX's many small header/object I/Os are far too slow.
+        cp -a "$(wslpath '${{ github.workspace }}')" ~/pyamrex
+        cd ~/pyamrex
+
+        # --seed provides pip in the venv for the CMake pip_install target
+        uv venv --seed .venv
+        source .venv/bin/activate
+        uv pip install -U build packaging "setuptools[core]" wheel
+        uv pip install -U cmake
+        uv pip install -U pytest pandas
+        uv pip install -U -r requirements.txt
+
+        # -O1 for faster compiles
+        # -j 2 to bound peak memory under WSL2's default ~50% RAM cap
+        export CXXFLAGS="-O1"
+        export CMAKE_BUILD_PARALLEL_LEVEL=2
+        cmake -S . -B build               \
+              -DCMAKE_VERBOSE_MAKEFILE=ON \
+              -DAMReX_MPI=OFF             \
+              -DAMReX_SPACEDIM="3"
+        cmake --build build --target pip_install -j 2
+
+        python3 -c "import amrex.space3d as amr; print(amr.__version__)"
+
+        ccache -s
+        du -hs "$CCACHE_DIR"
+
+        # Write the fast ext4 cache back to the host-side path so that the
+        # actions/cache post-step persists it for the next run.
+        rm -rf "$WS_CCACHE"
+        mkdir -p "$WS_CCACHE"
+        cp -a "$CCACHE_DIR/." "$WS_CCACHE/"
+    - name: Unit tests
+      run: |
+        cd ~/pyamrex
+        source .venv/bin/activate
+        python3 -m pytest tests/

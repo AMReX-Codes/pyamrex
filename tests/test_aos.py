@@ -52,6 +52,17 @@ def test_aos_push_pop():
     assert aos.numTotalParticles() == 6
 
 
+def test_aos_getitem_keeps_aos_alive(assert_keeps_python_alive):
+    aos = (
+        amr.ArrayOfStructs_2_1_managed()
+        if amr.Config.have_gpu
+        else amr.ArrayOfStructs_2_1_default()
+    )
+    aos.push_back(amr.Particle_2_1())
+
+    assert_keeps_python_alive(aos, lambda: aos[0])
+
+
 def test_array_interface():
     aos = (
         amr.ArrayOfStructs_2_1_managed()

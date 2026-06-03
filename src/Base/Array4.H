@@ -139,9 +139,9 @@ namespace pyAMReX
             .def_property_readonly("num_comp", &Array4<T>::nComp)
 
             .def(py::init< >())
-            .def(py::init< Array4<T> const & >())
-            .def(py::init< Array4<T> const &, int >())
-            .def(py::init< Array4<T> const &, int, int >())
+            .def(py::init< Array4<T> const & >(), py::keep_alive<1, 2>())
+            .def(py::init< Array4<T> const &, int >(), py::keep_alive<1, 2>())
+            .def(py::init< Array4<T> const &, int, int >(), py::keep_alive<1, 2>())
             //.def(py::init< T*, Dim3 const &, Dim3 const &, int >())
 
             /* init from a numpy or other buffer protocol array: non-owning view
@@ -189,7 +189,7 @@ namespace pyAMReX
                 // todo: we could check and store here if the array buffer we got is read-only
 
                 return a4;
-            }))
+            }), py::keep_alive<1, 2>())
 
             /* init from __cuda_array_interface__: non-owning view
              * TODO

@@ -40,9 +40,9 @@ endif()
 
 # C++ Standard in Superbuilds #################################################
 #
-# This is the easiest way to push up a C++17 requirement for AMReX, PICSAR and
+# This is the easiest way to push up a C++20 requirement for AMReX, PICSAR and
 # openPMD-api until they increase their requirement.
-set_cxx17_superbuild()
+set_cxx20_superbuild()
 
 
 # CCache Support ##############################################################
@@ -72,6 +72,16 @@ pyamrex_set_default_install_dirs()
 
 # Options and Variants ########################################################
 #
+set(pyAMReX_CODES_VALUES SoA tests FHDeX ImpactX WarpX)
+set(pyAMReX_CODES "SoA;tests;FHDeX;ImpactX;WarpX" CACHE STRING "Fine-tune the pre-compiled particle containers for downstream codes <SoA;tests;FHDeX;ImpactX;WarpX>")
+list(REMOVE_DUPLICATES pyAMReX_CODES)
+foreach(PC IN LISTS pyAMReX_CODES)
+    if(NOT PC IN_LIST pyAMReX_CODES_VALUES)
+        message(FATAL_ERROR "pyAMReX_CODES=${PC} is not allowed."
+                " Must be one of ${pyAMReX_CODES_VALUES}")
+    endif()
+endforeach()
+
 set(_pyAMReX_IPO_DEFAULT ON)
 if(DEFINED CMAKE_INTERPROCEDURAL_OPTIMIZATION)
     set(_pyAMReX_IPO_DEFAULT ${CMAKE_INTERPROCEDURAL_OPTIMIZATION})
@@ -194,17 +204,17 @@ foreach(D IN LISTS AMReX_SPACEDIM)
         pybind11_strip(pyAMReX_${D}d)
     endif()
 
-    # C++ properties: at least a C++17 capable compiler is needed
+    # C++ properties: at least a C++20 capable compiler is needed
     # AMReX helper function: propagate CUDA specific target & source properties
     if(AMReX_GPU_BACKEND STREQUAL CUDA)
         setup_target_for_cuda_compilation(pyAMReX_${D}d)
-        target_compile_features(pyAMReX_${D}d PUBLIC cuda_std_17)
+        target_compile_features(pyAMReX_${D}d PUBLIC cuda_std_20)
         set_target_properties(pyAMReX_${D}d PROPERTIES
             CUDA_EXTENSIONS OFF
             CUDA_STANDARD_REQUIRED ON
         )
     else()
-        target_compile_features(pyAMReX_${D}d PUBLIC cxx_std_17)
+        target_compile_features(pyAMReX_${D}d PUBLIC cxx_std_20)
         set_target_properties(pyAMReX_${D}d PROPERTIES
             CXX_EXTENSIONS OFF
             CXX_STANDARD_REQUIRED ON
@@ -215,7 +225,17 @@ endforeach()
 
 # Defines #####################################################################
 #
-# none needed - please use AMReX_Config.H
+# Please primarily use AMReX_Config.H
+
+# temporary: this is primarily to save compile-time
+#   mainly used in src/Particle for compile-time PC variants of downstream
+#   codes, see https://github.com/AMReX-Codes/pyamrex/issues/460 for future
+#   evolution
+foreach(D IN LISTS AMReX_SPACEDIM)
+    foreach(PC IN LISTS pyAMReX_CODES)
+        target_compile_definitions(pyAMReX_${D}d PRIVATE PYAMREX_CODES_${PC}=1)
+    endforeach()
+endforeach()
 
 
 # Generate Configuration and .pc Files ########################################
@@ -297,6 +317,7 @@ add_custom_target(${pyAMReX_CUSTOM_TARGET_PREFIX}pip_wheel
         ${pyAMReX_BINARY_DIR}
     DEPENDS
         ${pyAMReX_INSTALL_TARGET_NAMES}
+        pyAMReX_python_sources
 )
 
 # this will also upgrade/downgrade dependencies, e.g., when the version of numpy changes
@@ -334,12 +355,16 @@ add_custom_target(${pyAMReX_CUSTOM_TARGET_PREFIX}pip_install_nodeps
         ${pyAMReX_CUSTOM_TARGET_PREFIX}pip_wheel
 )
 
-# copy Python wrapper library to build directory
-add_custom_command(TARGET pyAMReX_${AMReX_SPACEDIM_LAST}d POST_BUILD
+# populate the build-tree Python package for ctest and direct build-tree imports
+add_custom_target(pyAMReX_python_sources ALL
+    COMMAND ${CMAKE_COMMAND} -E make_directory
+        $<TARGET_FILE_DIR:pyAMReX_${AMReX_SPACEDIM_LAST}d>/..
     COMMAND ${CMAKE_COMMAND} -E copy_directory
         ${pyAMReX_SOURCE_DIR}/src/amrex
         $<TARGET_FILE_DIR:pyAMReX_${AMReX_SPACEDIM_LAST}d>/..
+    VERBATIM
 )
+add_dependencies(pyAMReX_python_sources pyAMReX_${AMReX_SPACEDIM_LAST}d)
 
 
 # Tests #######################################################################

@@ -41,7 +41,7 @@ function(find_pybind11)
             mark_as_advanced(FETCHCONTENT_UPDATES_DISCONNECTED_FETCHEDpybind11)
         endif()
     elseif(NOT pyAMReX_pybind11_internal)
-        find_package(pybind11 ${pybind11_version} CONFIG REQUIRED)
+        find_package(pybind11 ${pybind11_version_min} CONFIG REQUIRED)
         message(STATUS "pybind11: Found version '${pybind11_VERSION}'")
     endif()
 endfunction()
@@ -59,11 +59,11 @@ set(pyAMReX_pybind11_repo "https://github.com/pybind/pybind11.git"
 
 # Parse AMReX version and commit information
 file(READ "${pyAMReX_SOURCE_DIR}/dependencies.json" dependencies_data)
-string(JSON pybind11_version GET "${dependencies_data}" version_pybind11)
+string(JSON pybind11_version_min GET "${dependencies_data}" version_pybind11_min)
 string(JSON pybind11_commit GET "${dependencies_data}" commit_pybind11)
 
 # Strip "v" prefix from version for find_package
-string(REGEX REPLACE "^v" "" pybind11_version "${pybind11_version}")
+string(REGEX REPLACE "^v" "" pybind11_version_min "${pybind11_version_min}")
 
 set(pyAMReX_pybind11_branch ${pybind11_commit}
     CACHE STRING
