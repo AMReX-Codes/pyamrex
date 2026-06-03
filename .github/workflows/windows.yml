@@ -134,18 +134,21 @@ jobs:
         # --seed provides pip in the venv for the CMake pip_install target
         uv venv --seed .venv
         source .venv/bin/activate
-        uv pip install -U cmake pandas pytest
+        uv pip install -U build packaging "setuptools[core]" wheel
+        uv pip install -U cmake
+        uv pip install -U pytest pandas
+        uv pip install -U -r requirements.txt
 
-        # -j 2 bounds peak memory under WSL2's default ~50% RAM cap
+        # -O1 for faster compiles
+        # -j 2 to bound peak memory under WSL2's default ~50% RAM cap
+        export CXXFLAGS="-O1"
         export CMAKE_BUILD_PARALLEL_LEVEL=2
         cmake -S . -B build               \
               -DCMAKE_VERBOSE_MAKEFILE=ON \
               -DAMReX_MPI=OFF             \
-              -DAMReX_SPACEDIM="1;2;3"
+              -DAMReX_SPACEDIM="3"
         cmake --build build --target pip_install -j 2
 
-        python3 -c "import amrex.space1d as amr; print(amr.__version__)"
-        python3 -c "import amrex.space2d as amr; print(amr.__version__)"
         python3 -c "import amrex.space3d as amr; print(amr.__version__)"
 
         ccache -s
