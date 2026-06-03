@@ -47,7 +47,7 @@ VectorPoissonSolverNodal::VectorPoissonSolverNodal (
 #endif
 }
 
-void VectorPoissonSolverNodal::setEBCoils(int component, 
+void VectorPoissonSolverNodal::setEBCoils(int component,
                                            const std::vector<CoilSpec>& coils)
 {
     AMREX_ALWAYS_ASSERT(component >= 0 && component < 3);

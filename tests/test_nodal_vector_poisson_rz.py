@@ -13,7 +13,9 @@ Source: J_theta = -L[A] / μ₀
 
 Expected: second-order convergence.
 """
+
 import argparse
+
 import numpy as np
 
 try:
@@ -35,16 +37,18 @@ def fill_nodal_multifab(mf, geom, fill_func):
         bx = mfi.validbox()
         lo, hi = bx.small_end, bx.big_end
         nr, nz = hi[0] - lo[0] + 1, hi[1] - lo[1] + 1
-        ii, jj = xp.meshgrid(xp.arange(nr, dtype=xp.float64) + lo[0],
-                              xp.arange(nz, dtype=xp.float64) + lo[1],
-                              indexing="ij")
+        ii, jj = xp.meshgrid(
+            xp.arange(nr, dtype=xp.float64) + lo[0],
+            xp.arange(nz, dtype=xp.float64) + lo[1],
+            indexing="ij",
+        )
         vals = fill_func(problo[0] + ii * dx[0], problo[1] + jj * dx[1])
         marr = xp.asarray(mf.array(mfi))
         ng0, ng1 = mf.n_grow_vect[0], mf.n_grow_vect[1]
         if marr.shape[0] == nr + 2 * ng0:
-            marr[ng0:ng0+nr, ng1:ng1+nz, 0, 0] = vals
+            marr[ng0 : ng0 + nr, ng1 : ng1 + nz, 0, 0] = vals
         else:
-            marr[0, 0, ng1:ng1+nz, ng0:ng0+nr] = vals.T
+            marr[0, 0, ng1 : ng1 + nz, ng0 : ng0 + nr] = vals.T
 
 
 def extract_nodal_data(mf, geom):
@@ -62,12 +66,12 @@ def extract_nodal_data(mf, geom):
         ng0, ng1 = mf.n_grow_vect[0], mf.n_grow_vect[1]
         marr = xp.asarray(mf.array(mfi))
         if marr.shape[0] == lnr + 2 * ng0:
-            block = marr[ng0:ng0+lnr, ng1:ng1+lnz, 0, 0]
+            block = marr[ng0 : ng0 + lnr, ng1 : ng1 + lnz, 0, 0]
         else:
-            block = marr[0, 0, ng1:ng1+lnz, ng0:ng0+lnr].T
-        if hasattr(block, 'get'):
+            block = marr[0, 0, ng1 : ng1 + lnz, ng0 : ng0 + lnr].T
+        if hasattr(block, "get"):
             block = block.get()
-        data[lo[0]:hi[0]+1, lo[1]:hi[1]+1] = block
+        data[lo[0] : hi[0] + 1, lo[1] : hi[1] + 1] = block
     r = problo[0] + np.arange(nr_nodes) * dx[0]
     z = problo[1] + np.arange(nz_nodes) * dx[1]
     return r, z, data
@@ -85,11 +89,11 @@ def compute_error(numerical, exact, geom):
         num_arr = xp.asarray(numerical.array(mfi))
         ex_arr = xp.asarray(exact.array(mfi))
         if num_arr.shape[0] == nr + 2 * ng0:
-            n = num_arr[ng0:ng0+nr, ng1:ng1+nz, 0, 0]
-            e = ex_arr[ng0:ng0+nr, ng1:ng1+nz, 0, 0]
+            n = num_arr[ng0 : ng0 + nr, ng1 : ng1 + nz, 0, 0]
+            e = ex_arr[ng0 : ng0 + nr, ng1 : ng1 + nz, 0, 0]
         else:
-            n = num_arr[0, 0, ng1:ng1+nz, ng0:ng0+nr].T
-            e = ex_arr[0, 0, ng1:ng1+nz, ng0:ng0+nr].T
+            n = num_arr[0, 0, ng1 : ng1 + nz, ng0 : ng0 + nr].T
+            e = ex_arr[0, 0, ng1 : ng1 + nz, ng0 : ng0 + nr].T
         diff = xp.abs(n - e)
         linf = max(linf, float(xp.max(diff)))
         l2sum += float(xp.sum(diff**2))
@@ -97,6 +101,7 @@ def compute_error(numerical, exact, geom):
 
 
 # ---------- Manufactured solution ----------
+
 
 def atheta_exact(r, z):
     """A_theta = r sin(pi r) sin(pi z)."""
@@ -109,11 +114,12 @@ def jtheta_source(r, z):
     L[A] = [3 pi cos(pi r) - 2 pi^2 r sin(pi r)] sin(pi z)
     J = -L[A] / mu0
     """
-    lap = (3*PI*xp.cos(PI*r) - 2*PI**2*r*xp.sin(PI*r)) * xp.sin(PI*z)
+    lap = (3 * PI * xp.cos(PI * r) - 2 * PI**2 * r * xp.sin(PI * r)) * xp.sin(PI * z)
     return -lap / MU0
 
 
 # ---------- Solver wrapper ----------
+
 
 def run_test(ncell, verbose=0):
     """Solve for A_theta at a given resolution. Return (geom, A, L_inf, L2)."""
@@ -147,6 +153,7 @@ def run_test(ncell, verbose=0):
 
 # ---------- Plotting ----------
 
+
 def plot_solution(A, A_exact_mf, geom, filename="solution_rz_atheta.png"):
     """Plot numerical A_theta, exact, and error."""
     import matplotlib.pyplot as plt
@@ -163,8 +170,7 @@ def plot_solution(A, A_exact_mf, geom, filename="solution_rz_atheta.png"):
 
     for ax, data, title in zip(axes, datasets, titles):
         vmax = np.max(np.abs(data)) or 1.0
-        cf = ax.contourf(R, Z, data, levels=30, cmap="RdBu_r",
-                         vmin=-vmax, vmax=vmax)
+        cf = ax.contourf(R, Z, data, levels=30, cmap="RdBu_r", vmin=-vmax, vmax=vmax)
         ax.set_xlabel("r")
         ax.set_ylabel("z")
         ax.set_title(title)
@@ -229,9 +235,15 @@ def plot_convergence(resolutions, errors, filename="convergence_rz_atheta.png"):
 
     # Reference second-order slope
     h_ref = np.array([h[0], h[-1]])
-    scale = linfs[0] / h_ref[0]**2
-    ax.loglog(h_ref, scale * h_ref**2, "k--", lw=1.5, alpha=0.5,
-              label=r"$\mathcal{O}(h^2)$ reference")
+    scale = linfs[0] / h_ref[0] ** 2
+    ax.loglog(
+        h_ref,
+        scale * h_ref**2,
+        "k--",
+        lw=1.5,
+        alpha=0.5,
+        label=r"$\mathcal{O}(h^2)$ reference",
+    )
 
     ax.set_xlabel("h = 1/N")
     ax.set_ylabel("Error")
@@ -246,11 +258,16 @@ def plot_convergence(resolutions, errors, filename="convergence_rz_atheta.png"):
 
 # ---------- Main ----------
 
+
 def main():
-    parser = argparse.ArgumentParser(description=__doc__,
-                                     formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("--plot", action="store_true",
-                        help="Generate solution, line-cut, and convergence plots")
+    parser = argparse.ArgumentParser(
+        description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
+    )
+    parser.add_argument(
+        "--plot",
+        action="store_true",
+        help="Generate solution, line-cut, and convergence plots",
+    )
     args = parser.parse_args()
 
     print("=== RZ A_theta convergence test ===")
@@ -269,15 +286,17 @@ def main():
         last_geom, last_A, last_exact = geom, A, A_exact
 
     print()
-    print(f"{'N':>6s}  {'L_inf':>12s}  {'L2':>12s}  {'L_inf order':>12s}  {'L2 order':>10s}")
+    print(
+        f"{'N':>6s}  {'L_inf':>12s}  {'L2':>12s}  {'L_inf order':>12s}  {'L2 order':>10s}"
+    )
     print("-" * 60)
     for i, (n, (linf, l2)) in enumerate(zip(resolutions, errors)):
         if i == 0:
             print(f"{n:6d}  {linf:12.6e}  {l2:12.6e}  {'---':>12s}  {'---':>10s}")
         else:
-            r = n / resolutions[i-1]
-            oi = np.log(errors[i-1][0] / linf) / np.log(r)
-            o2 = np.log(errors[i-1][1] / l2) / np.log(r)
+            r = n / resolutions[i - 1]
+            oi = np.log(errors[i - 1][0] / linf) / np.log(r)
+            o2 = np.log(errors[i - 1][1] / l2) / np.log(r)
             print(f"{n:6d}  {linf:12.6e}  {l2:12.6e}  {oi:12.4f}  {o2:10.4f}")
 
     # Check convergence order

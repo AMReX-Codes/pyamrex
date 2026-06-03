@@ -47,7 +47,7 @@ struct NodalBoundaryHandler
                 } else {
                     hibc[adim][0] = amrex::LinOpBCType::Dirichlet;   // r=rmax for A_theta, A_z
                 }
-                
+
 
                 lobc[adim][1] = amrex::LinOpBCType::Neumann;
                 hibc[adim][1] = amrex::LinOpBCType::Neumann;

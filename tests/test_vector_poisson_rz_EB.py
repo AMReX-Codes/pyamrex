@@ -59,8 +59,10 @@ EXPECTED RESULTS
   - A_theta = 0 on all boundaries and inside the sphere
   - A_theta > 0 in the fluid region
 """
-import numpy as np
+
 import argparse
+
+import numpy as np
 
 try:
     import cupy as xp
@@ -72,6 +74,7 @@ except ImportError:
 
     def to_numpy(a):
         return np.asarray(a)
+
 
 import amrex.space2d as amr
 
@@ -99,10 +102,10 @@ def extract_nodal_data(mf, geom):
         ng0, ng1 = mf.n_grow_vect[0], mf.n_grow_vect[1]
         marr = xp.asarray(mf.array(mfi))
         if marr.shape[0] == nr + 2 * ng0:
-            data = marr[ng0: ng0 + nr, ng1: ng1 + nz, 0, 0]
+            data = marr[ng0 : ng0 + nr, ng1 : ng1 + nz, 0, 0]
         else:
-            data = marr[0, 0, ng1: ng1 + nz, ng0: ng0 + nr].T
-        full_arr[lo[0]:lo[0] + nr, lo[1]:lo[1] + nz] = data
+            data = marr[0, 0, ng1 : ng1 + nz, ng0 : ng0 + nr].T
+        full_arr[lo[0] : lo[0] + nr, lo[1] : lo[1] + nz] = data
 
     r_arr = problo[0] + xp.arange(nr_full, dtype=xp.float64) * dx[0]
     z_arr = problo[1] + xp.arange(nz_full, dtype=xp.float64) * dx[1]
@@ -147,8 +150,7 @@ def run_solve(ncell):
     ba.max_size(max(ncell, 32))
     dm = amr.DistributionMapping(ba)
 
-    amr.EB2_Build(geom, required_coarsening_level=0,
-                  max_coarsening_level=0, ngrow=4)
+    amr.EB2_Build(geom, required_coarsening_level=0, max_coarsening_level=0, ngrow=4)
 
     eb_factory = amr.makeEBFabFactory(
         geom, ba, dm, amr.Vector_int([1, 1, 1]), amr.EBSupport.full
@@ -169,15 +171,20 @@ def run_solve(ncell):
 
     bc = amr.NodalBoundaryHandler(periodic_axial=False, axial_dirichlet=True)
     solver = amr.VectorPoissonSolverNodal(
-        geom, ba, dm, bc,
+        geom,
+        ba,
+        dm,
+        bc,
         is_rz=True,
         eb_enabled=True,
         eb_factory=eb_factory,
     )
     solver.solve(A, J, 1e-12, 0.0, 200, 2)
 
-    print(f"  Converged in {solver.getNumIters(1)} iterations, "
-          f"residual = {solver.getResidual(1):.2e}")
+    print(
+        f"  Converged in {solver.getNumIters(1)} iterations, "
+        f"residual = {solver.getResidual(1):.2e}"
+    )
 
     A_data, r_arr, z_arr = extract_nodal_data(A[1], geom)
     return A_data, r_arr, z_arr, dr, dz
@@ -187,6 +194,7 @@ def plot_solution(solutions, resolutions, plot_file="EB_convergence.png"):
     """Plot A_theta at each resolution."""
     try:
         import matplotlib
+
         matplotlib.use("Agg")
         import matplotlib.pyplot as plt
         from matplotlib.patches import Circle
@@ -212,8 +220,17 @@ def plot_solution(solutions, resolutions, plot_file="EB_convergence.png"):
 
         pcm = ax.pcolormesh(r_np, z_np, A_plot.T, shading="auto", cmap="viridis")
         fig.colorbar(pcm, ax=ax, label=r"$A_\theta$", shrink=0.8)
-        ax.add_patch(Circle((0.5, 0.5), 0.25, fill=False, edgecolor="red",
-                            linewidth=1.5, linestyle="--", label="EB boundary"))
+        ax.add_patch(
+            Circle(
+                (0.5, 0.5),
+                0.25,
+                fill=False,
+                edgecolor="red",
+                linewidth=1.5,
+                linestyle="--",
+                label="EB boundary",
+            )
+        )
         ax.set_xlabel("r")
         ax.set_ylabel("z")
         ax.set_title(f"$A_\\theta$ ({resolutions[idx]}x{resolutions[idx]})")
@@ -226,11 +243,13 @@ def plot_solution(solutions, resolutions, plot_file="EB_convergence.png"):
     plt.close()
 
 
-def plot_convergence_diff(solutions, resolutions, errors,
-                          plot_file="EB_convergence_diff.png"):
+def plot_convergence_diff(
+    solutions, resolutions, errors, plot_file="EB_convergence_diff.png"
+):
     """Plot the difference between successive resolutions."""
     try:
         import matplotlib
+
         matplotlib.use("Agg")
         import matplotlib.pyplot as plt
         from matplotlib.patches import Circle
@@ -261,15 +280,31 @@ def plot_convergence_diff(solutions, resolutions, errors,
         diff_plot = np.where(dist < -0.5 * max(dr_f, dz_f), np.nan, diff)
 
         vmax = np.nanmax(np.abs(diff_plot))
-        pcm = ax.pcolormesh(r_np, z_np, diff_plot.T, shading="auto",
-                            cmap="RdBu_r", vmin=-vmax, vmax=vmax)
+        pcm = ax.pcolormesh(
+            r_np,
+            z_np,
+            diff_plot.T,
+            shading="auto",
+            cmap="RdBu_r",
+            vmin=-vmax,
+            vmax=vmax,
+        )
         fig.colorbar(pcm, ax=ax, label=r"$\Delta A_\theta$", shrink=0.8)
-        ax.add_patch(Circle((0.5, 0.5), 0.25, fill=False, edgecolor="black",
-                            linewidth=1.5, linestyle="--"))
+        ax.add_patch(
+            Circle(
+                (0.5, 0.5),
+                0.25,
+                fill=False,
+                edgecolor="black",
+                linewidth=1.5,
+                linestyle="--",
+            )
+        )
         ax.set_xlabel("r")
         ax.set_ylabel("z")
-        ax.set_title(f"Diff {resolutions[idx]}→{resolutions[idx+1]}\n"
-                     f"L2={errors[idx]:.2e}")
+        ax.set_title(
+            f"Diff {resolutions[idx]}→{resolutions[idx + 1]}\nL2={errors[idx]:.2e}"
+        )
         ax.set_aspect("equal")
 
     plt.tight_layout()
@@ -282,8 +317,9 @@ def main():
     parser = argparse.ArgumentParser(
         description="EB convergence test for VectorPoissonSolverNodal in RZ"
     )
-    parser.add_argument("--plot", action="store_true",
-                        help="Generate solution and convergence plots")
+    parser.add_argument(
+        "--plot", action="store_true", help="Generate solution and convergence plots"
+    )
     args = parser.parse_args()
 
     resolutions = [32, 64, 128, 256]
@@ -313,12 +349,16 @@ def main():
         l2_diff = float(xp.sqrt(xp.sum(diff) / max(n_pts, 1)))
 
         errors.append(l2_diff)
-        print(f"  {resolutions[i]:4d} vs {resolutions[i+1]:4d}: "
-              f"L2 diff = {l2_diff:.6e}  ({n_pts} nodes)")
+        print(
+            f"  {resolutions[i]:4d} vs {resolutions[i + 1]:4d}: "
+            f"L2 diff = {l2_diff:.6e}  ({n_pts} nodes)"
+        )
 
     print()
     for i in range(len(errors)):
-        line = f"  {resolutions[i]:4d}->{resolutions[i+1]:4d}: L2 diff = {errors[i]:.6e}"
+        line = (
+            f"  {resolutions[i]:4d}->{resolutions[i + 1]:4d}: L2 diff = {errors[i]:.6e}"
+        )
         if i > 0:
             ratio = errors[i - 1] / errors[i]
             order = np.log2(ratio)

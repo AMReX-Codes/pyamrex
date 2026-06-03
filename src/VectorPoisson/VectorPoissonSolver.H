@@ -32,7 +32,7 @@ struct BoundaryHandler {
             } else {
                 hibc[adim][0] = amrex::LinOpBCType::Dirichlet;   // r=rmax for A_theta, A_z
             }
-            
+
             // Default is pure Neumann in axial direction
             lobc[adim][1] = amrex::LinOpBCType::Neumann;   // z=zmin for A_z
             hibc[adim][1] = amrex::LinOpBCType::Neumann;   // z=zmax for A_z
@@ -49,7 +49,7 @@ struct BoundaryHandler {
 
 /**
  * @brief Vector Poisson solver for RZ geometry using MLABecLaplacian
- * 
+ *
  * Solves: (1/r²)A_θ - ∇²_cyl A_θ = μ₀J_θ in cylindrical coordinates
  * where ∇²_cyl = (1/r)∂/∂r(r∂/∂r) + ∂²/∂z²
  */
@@ -59,7 +59,7 @@ public:
                        const amrex::BoxArray& grids,
                        const amrex::DistributionMapping& dmap,
                        const BoundaryHandler& bc_handler);
-    
+
     /**
      * @brief Solve the vector Poisson equation
      * @param A Solution: vector potential [A_r, A_theta, A_z]
@@ -69,7 +69,7 @@ public:
      * @param absolute_tol Absolute tolerance for solver
      * @param max_iter Maximum number of iterations
      * @param verbose Verbosity level
-     * 
+     *
      * @note When using mask:
      *       - Set mask = 1 where you want to solve for the value
      *       - Set mask = 0 where you want to fix the value
@@ -82,7 +82,7 @@ public:
               amrex::Real absolute_tol = 0.0,
               int max_iter = 100,
               int verbose = 2);
-    
+
     int getNumIters(int component) const { return m_num_iters[component]; }
     amrex::Real getResidual(int component) const { return m_final_residual[component]; }
 
@@ -91,7 +91,7 @@ private:
     amrex::BoxArray m_grids;
     amrex::DistributionMapping m_dmap;
     BoundaryHandler m_bc_handler;
-    
+
     amrex::Array<int, 3> m_num_iters;
     amrex::Array<amrex::Real, 3> m_final_residual;
 };
