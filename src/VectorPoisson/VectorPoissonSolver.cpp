@@ -95,7 +95,7 @@ void VectorPoissonSolver::solve(
 
             ParallelFor(bx, [=] AMREX_GPU_DEVICE (int i, int j, int k) {
                 Real r = prob_lo[0] + (i + 0.5) * dx[0];
-                if (r > 1e-10 and adim !=2) {
+                if (r > 1e-10 && adim != 2) {
                     a(i,j,k) = 1.0 / (r * r);
                 } else {
                     a(i,j,k) = 0.0;
