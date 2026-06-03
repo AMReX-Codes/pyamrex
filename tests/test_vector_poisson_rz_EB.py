@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-"""
+r"""
 Self-convergence test: VectorPoissonSolverNodal with EB in 2D RZ.
 =================================================================
 
@@ -63,6 +63,7 @@ EXPECTED RESULTS
 import argparse
 
 import numpy as np
+import pytest
 
 try:
     import cupy as xp
@@ -76,7 +77,9 @@ except ImportError:
         return np.asarray(a)
 
 
-import amrex.space2d as amr
+# RZ is a 2D concept; this test requires the 2D module. It is skipped when the
+# 2D module cannot be loaded (e.g. the test suite already registered the 3D one).
+amr = pytest.importorskip("amrex.space2d", exc_type=ImportError)
 
 
 def sphere_distance(r, z, cr=0.5, cz=0.5, radius=0.25):
@@ -169,7 +172,14 @@ def run_solve(ncell):
         J[d].set_val(0.0)
     J[1].set_val(1.0)
 
-    bc = amr.NodalBoundaryHandler(periodic_axial=False, axial_dirichlet=True)
+    bc = amr.NodalBoundaryHandler(False)
+    lobc = bc.lobc
+    hibc = bc.hibc
+    for adim in range(3):
+        lobc[adim][1] = amr.LinOpBCType.Dirichlet
+        hibc[adim][1] = amr.LinOpBCType.Dirichlet
+    bc.lobc = lobc
+    bc.hibc = hibc
     solver = amr.VectorPoissonSolverNodal(
         geom,
         ba,
@@ -311,6 +321,37 @@ def plot_convergence_diff(
     plt.savefig(plot_file, dpi=150, bbox_inches="tight")
     print(f"  Convergence diff plots saved to {plot_file}")
     plt.close()
+
+
+@pytest.mark.skipif(not amr.Config.have_eb, reason="Requires -DAMReX_EB=ON")
+def test_vector_poisson_rz_EB():
+    """Nodal RZ solve with an embedded boundary self-converges above first order."""
+    # Spherical embedded boundary (matches the standalone __main__ setup).
+    pp = amr.ParmParse("eb2")
+    pp.add("geom_type", "sphere")
+    pp.addarr("sphere_center", [0.5, 0.5])
+    pp.add("sphere_radius", 0.25)
+    pp.add("sphere_has_fluid_inside", 0)
+
+    resolutions = [32, 64, 128]
+    solutions = [run_solve(ncell) for ncell in resolutions]
+
+    errors = []
+    for i in range(len(resolutions) - 1):
+        A_c, r_c, z_c, dr_c, dz_c = solutions[i]
+        A_f, r_f, z_f, dr_f, dz_f = solutions[i + 1]
+
+        A_c_interp = interpolate_to_fine(A_c, r_c, z_c, r_f, z_f)
+
+        rr, zz = xp.meshgrid(r_f, z_f, indexing="ij")
+        fluid_mask = sphere_distance(rr, zz) > 3.0 * max(dr_c, dz_c)
+
+        diff = xp.where(fluid_mask, (A_f - A_c_interp) ** 2, 0.0)
+        n_pts = int(xp.sum(fluid_mask))
+        errors.append(float(xp.sqrt(xp.sum(diff) / max(n_pts, 1))))
+
+    order = np.log2(errors[-2] / errors[-1])
+    assert order > 1.5, f"EB self-convergence order {order:.2f} <= 1.5"
 
 
 def main():

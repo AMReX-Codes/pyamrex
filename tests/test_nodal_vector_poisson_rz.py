@@ -17,13 +17,16 @@ Expected: second-order convergence.
 import argparse
 
 import numpy as np
+import pytest
 
 try:
     import cupy as xp
 except ImportError:
     import numpy as xp
 
-import amrex.space2d as amr
+# RZ is a 2D concept; this test requires the 2D module. It is skipped when the
+# 2D module cannot be loaded (e.g. the test suite already registered the 3D one).
+amr = pytest.importorskip("amrex.space2d", exc_type=ImportError)
 
 PI = np.pi
 MU0 = 1.25663706212e-6
@@ -139,7 +142,14 @@ def run_test(ncell, verbose=0):
 
     fill_nodal_multifab(J[1], geom, jtheta_source)
 
-    bc = amr.NodalBoundaryHandler(periodic_axial=False, axial_dirichlet=True)
+    bc = amr.NodalBoundaryHandler(False)
+    lobc = bc.lobc
+    hibc = bc.hibc
+    for adim in range(3):
+        lobc[adim][1] = amr.LinOpBCType.Dirichlet
+        hibc[adim][1] = amr.LinOpBCType.Dirichlet
+    bc.lobc = lobc
+    bc.hibc = hibc
     solver = amr.VectorPoissonSolverNodal(geom, ba, dm, bc, is_rz=True)
     solver.solve(A, J, 1e-10, 0.0, 200, verbose)
 
@@ -257,6 +267,17 @@ def plot_convergence(resolutions, errors, filename="convergence_rz_atheta.png"):
 
 
 # ---------- Main ----------
+
+
+def test_nodal_vector_poisson_rz():
+    """A_theta in RZ converges at second order for the manufactured solution."""
+    resolutions = [16, 32, 64]
+    errors = [run_test(n)[3:5] for n in resolutions]
+
+    order_linf = np.log(errors[-2][0] / errors[-1][0]) / np.log(2)
+    order_l2 = np.log(errors[-2][1] / errors[-1][1]) / np.log(2)
+    assert order_linf > 1.8, f"L_inf convergence order {order_linf:.2f} <= 1.8"
+    assert order_l2 > 1.8, f"L2 convergence order {order_l2:.2f} <= 1.8"
 
 
 def main():
