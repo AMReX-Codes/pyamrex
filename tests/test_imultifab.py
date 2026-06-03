@@ -424,7 +424,7 @@ def test_imfab_ops_cuda_cuml(imfab_device):
 def test_imfab_dtoh_copy(imfab_device):
     class MfabPinnedContextManager:
         def __enter__(self):
-            self.imfab = amr.MultiFab(
+            self.imfab = amr.iMultiFab(
                 imfab_device.box_array(),
                 imfab_device.dm(),
                 imfab_device.n_comp,
