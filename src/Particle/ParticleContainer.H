@@ -382,10 +382,7 @@ void make_ParticleContainer_and_Iterators (py::module &m, std::string allocstr)
         // template <class PCType,
         // requires (IsParticleContainer<PCType>::value)
         // void addParticles (const PCType& other, bool local=false);
-        .def("add_particles",
-            [](ParticleContainerType& pc, ParticleContainerType const& other, bool local) {
-                pc.template addParticles<ParticleContainerType>(other, local);
-            },
+        .def("add_particles", py::overload_cast<ParticleContainerType const &, bool>(&ParticleContainerType::template addParticles<ParticleContainerType>),
             py::arg("other"), py::arg("local")=false)
         // template <class F, class PCType,
         // requires ((IsParticleContainer<PCType>::value) && (!std::is_integral_v<F>))

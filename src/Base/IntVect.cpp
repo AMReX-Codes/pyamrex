@@ -68,7 +68,7 @@ namespace
 
         if constexpr (dim >= 1 && dim <=3) {
             py_iv.def("dim3",
-               [](const iv_type& iv) { return iv.dim3(); });
+               py::overload_cast<>(&iv_type::dim3, py::const_));
         }
 
         py_iv
