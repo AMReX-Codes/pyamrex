@@ -192,6 +192,89 @@ def podvector_from_xp(cls, arr):
         return cls.from_cupy(arr)
 
 
+def _podvector_copy_to(cls, src):
+    """Copy a PODVector ``src`` of any allocator into a new ``cls`` PODVector.
+
+    Stays free of any CuPy dependency by reusing the AMReX copy primitives:
+    the ``to_device``/``to_host`` fast paths for the two common targets, and a
+    host-staged ``from_numpy`` for the remaining allocators.
+
+    Converting between two *distinct device-only* allocators stages through the
+    host (device -> host -> device) rather than a direct device-to-device copy.
+    """
+    import inspect
+
+    amr = inspect.getmodule(cls)
+    suffix = cls.__name__.rsplit("_", 1)[-1]
+
+    # to_host() returns the pinned (HostVector) allocator
+    if suffix == "pinned":
+        return src.to_host()
+
+    # to_device() returns the Gpu::DeviceVector alias: arena on GPU, std on CPU
+    device_suffix = "arena" if amr.Config.have_gpu else "std"
+    if suffix == device_suffix:
+        return src.to_device()
+
+    # general target (device, managed, async, polymorphic, CPU arena, ...):
+    # ensure a host-accessible source, then host -> target via from_numpy
+    host = src if _is_host_accessible(type(src)) else src.to_host()
+    return cls.from_numpy(host)
+
+
+def podvector_from_array(cls, arr):
+    """
+    Create a PODVector from arbitrary array input, mirroring ``numpy.asarray``.
+
+    Accepts ``None``, a NumPy or CuPy array (or array-like such as a list or
+    tuple), or any pyAMReX ``PODVector``. The element type and target allocator
+    are those of ``cls`` (e.g. ``DeviceVector_real``, ``PODVector_int_std``).
+
+    Dispatch:
+
+    - ``None`` returns a new **empty** PODVector (size 0).
+    - An input that is already an instance of ``cls`` is returned **unchanged**
+      (no copy), like ``numpy.asarray`` on a matching array.
+    - Any other ``PODVector`` is copied into ``cls`` across memory spaces as
+      needed, without requiring CuPy.
+    - A CuPy (or other ``__cuda_array_interface__``) array goes through
+      :meth:`from_cupy`.
+    - A NumPy array or array-like goes through :meth:`from_numpy`, which casts
+      to the element type and requires 1-D input.
+
+    Parameters
+    ----------
+    cls : type
+        The PODVector type to construct.
+    arr : None or array_like or PODVector
+        Input data.
+
+    Returns
+    -------
+    PODVector
+        The input itself when it already is a ``cls`` instance, otherwise a new
+        ``cls`` PODVector with a copy of the data.
+    """
+    # None -> empty vector
+    if arr is None:
+        return cls()
+
+    # already the exact target type: no-copy passthrough (numpy.asarray-like)
+    if isinstance(arr, cls):
+        return arr
+
+    # any other PODVector allocator: CuPy-free cross-allocator copy
+    if type(arr).__name__.startswith("PODVector_"):
+        return _podvector_copy_to(cls, arr)
+
+    # CuPy (and other device) arrays expose the CUDA array interface
+    if hasattr(arr, "__cuda_array_interface__"):
+        return cls.from_cupy(arr)
+
+    # NumPy arrays and array-likes (lists, tuples, ...)
+    return cls.from_numpy(arr)
+
+
 def register_PODVector_extension(amr):
     """PODVector helper methods"""
     import inspect
@@ -215,3 +298,4 @@ def register_PODVector_extension(amr):
         # (from_numpy is provided in C++ as a static method)
         POD_type.from_cupy = classmethod(podvector_from_cupy)
         POD_type.from_xp = classmethod(podvector_from_xp)
+        POD_type.from_array = classmethod(podvector_from_array)
