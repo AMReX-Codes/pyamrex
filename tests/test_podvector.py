@@ -333,3 +333,98 @@ def test_host_from_cp():
 
     arr[0] = 999.0
     assert podv[0] != 999.0
+
+
+def test_from_array_none():
+    # None -> a new empty vector (mirrors a sensible asarray of nothing)
+    podv = amr.DeviceVector_real.from_array(None)
+    assert isinstance(podv, amr.DeviceVector_real)
+    assert podv.size() == 0
+    assert podv.empty()
+
+
+def test_from_array_numpy_and_list():
+    import numpy as np
+
+    # NumPy array
+    arr = np.array([1.0, 2.5, 3.7, 4.0], dtype=np.float64)
+    podv = amr.DeviceVector_real.from_array(arr)
+    assert podv.size() == 4
+    result = podv.to_numpy(copy=True)
+    np.testing.assert_array_equal(result, arr.astype(result.dtype))
+
+    # from_array creates a copy, not a view
+    arr[0] = 999.0
+    assert podv[0] != 999.0
+
+    # array-likes: list and tuple
+    podv_list = amr.DeviceVector_real.from_array([10.0, 20.0])
+    assert podv_list.size() == 2
+    assert podv_list[1] == 20.0
+    podv_tuple = amr.DeviceVector_real.from_array((10.0, 20.0, 30.0))
+    assert podv_tuple.size() == 3
+    assert podv_tuple[2] == 30.0
+
+
+def test_from_array_dtype_cast():
+    # mismatched dtype is cast to the vector's element type
+    import numpy as np
+
+    ints = np.array([4, 5, 6], dtype=np.int32)
+    podv = amr.DeviceVector_real.from_array(ints)
+    result = podv.to_numpy(copy=True)
+    np.testing.assert_array_equal(result, np.array([4.0, 5.0, 6.0], result.dtype))
+
+
+def test_from_array_same_type_is_noop():
+    import numpy as np
+
+    src = amr.DeviceVector_real.from_numpy(np.array([1.0, 2.0, 3.0]))
+    # already the target type: returned unchanged, no copy (asarray-like)
+    assert amr.DeviceVector_real.from_array(src) is src
+
+
+def test_from_array_other_podvector():
+    import numpy as np
+
+    # pinned and arena are distinct classes on both CPU and GPU builds, so this
+    # always exercises the cross-allocator copy (not the no-copy passthrough)
+    values = np.array([1, -2, 5, 8], dtype=np.int32)
+    src = amr.PODVector_int_pinned.from_numpy(values)
+    dst = amr.PODVector_int_arena.from_array(src)
+
+    assert isinstance(dst, amr.PODVector_int_arena)
+    assert dst.size() == values.size
+    result = dst.to_numpy(copy=True)
+    np.testing.assert_array_equal(result, values.astype(result.dtype))
+
+    # the copy is independent of the source
+    src[0] = 99
+    np.testing.assert_array_equal(dst.to_numpy(copy=True), values.astype(result.dtype))
+
+
+@pytest.mark.skipif(not amr.Config.have_gpu, reason="requires AMReX GPU support")
+def test_from_array_cupy():
+    cp = pytest.importorskip("cupy")
+
+    # CuPy input is routed through from_cupy
+    arr = cp.array([1.0, 2.5, 3.7, 4.0], dtype=cp.float64)
+    podv = amr.DeviceVector_real.from_array(arr)
+    assert podv.size() == 4
+    cp.testing.assert_array_equal(podv.to_cupy(), arr)
+
+    arr[0] = 999.0
+    assert podv[0] != 999.0
+
+
+@pytest.mark.skipif(not amr.Config.have_gpu, reason="requires AMReX GPU support")
+def test_from_array_device_only_source():
+    # a device-only source converts correctly (CuPy-free, staged as needed)
+    import numpy as np
+
+    values = np.array([1.0, 2.5, 3.7, 4.0], dtype=np.float64)
+    src = amr.NonManagedDeviceVector_real.from_numpy(values)
+    device = amr.DeviceVector_real.from_array(src)
+    assert isinstance(device, amr.DeviceVector_real)
+    result = device.to_host().to_numpy(copy=True)
+    np.testing.assert_array_equal(result, values.astype(result.dtype))
