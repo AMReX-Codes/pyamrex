@@ -42,6 +42,11 @@ void init_MFInfo(py::module &);
 #ifdef AMREX_USE_MPI
 void init_MPMD(py::module &);
 #endif
+void init_MLABecLaplacian(py::module &);
+void init_MLLinOp(py::module &);
+void init_MLMG(py::module &);
+void init_MLNodeLaplacian(py::module &);
+void init_MLPoisson(py::module &);
 void init_MultiFab(py::module &, py::class_< amrex::MFIter >&);
 void init_MultiFabUtil(py::module &);
 void init_ParallelDescriptor(py::module &);
@@ -145,6 +150,13 @@ PYBIND11_MODULE(amrex_3d_pybind, m) {
     init_Interpolater(m);
     init_FillPatchUtil(m);  // after PhysBCFunct, Interpolater and BCRec
     init_FluxRegister(m);   // after MultiFab and Geometry
+
+    // note: order from base to derived classes
+    init_MLLinOp(m);
+    init_MLPoisson(m);
+    init_MLABecLaplacian(m);
+    init_MLNodeLaplacian(m);
+    init_MLMG(m);
     init_ParallelDescriptor(m);
     init_PODVector(m);
 
