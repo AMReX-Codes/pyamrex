@@ -30,6 +30,7 @@ foreach(D IN LISTS AMReX_SPACEDIM)
         SmallMatrix.cpp
         MFInfo.cpp
         MultiFab.cpp
+        MultiFabUtil.cpp
         ParallelDescriptor.cpp
         ParGDB.cpp
         ParmParse.cpp
