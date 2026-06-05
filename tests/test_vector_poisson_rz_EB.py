@@ -167,7 +167,12 @@ def run_solve(ncell):
         J[d].set_val(0.0)
     J[1].set_val(1.0)
 
-    bc = amr.NodalBoundaryHandler(periodic_axial=False, axial_dirichlet=True)
+    D = amr.LinOpBCType.Dirichlet
+    N = amr.LinOpBCType.Neumann
+    lobc = [[N, D], [N, D], [N, D]]
+    hibc = [[D, D], [D, D], [D, D]]
+    bc = amr.NodalBoundaryHandler(lobc=lobc, hibc=hibc)
+
     solver = amr.VectorPoissonSolverNodal(
         geom, ba, dm, bc,
         is_rz=True,

@@ -133,7 +133,12 @@ def run_test(ncell, verbose=0):
 
     fill_nodal_multifab(J[1], geom, jtheta_source)
 
-    bc = amr.NodalBoundaryHandler(periodic_axial=False, axial_dirichlet=True)
+    D = amr.LinOpBCType.Dirichlet
+    N = amr.LinOpBCType.Neumann
+    lobc = [[N, D], [N, D], [N, D]]
+    hibc = [[D, D], [D, D], [D, D]]
+    bc = amr.NodalBoundaryHandler(lobc=lobc, hibc=hibc)
+
     solver = amr.VectorPoissonSolverNodal(geom, ba, dm, bc, is_rz=True)
     solver.solve(A, J, 1e-10, 0.0, 200, verbose)
 

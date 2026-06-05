@@ -1,5 +1,5 @@
-#ifndef VECTOR_POISSON_SOLVER_NODAL_H
-#define VECTOR_POISSON_SOLVER_NODAL_H
+#ifndef PYAMREX_VECTOR_POISSON_SOLVER_NODAL_H
+#define PYAMREX_VECTOR_POISSON_SOLVER_NODAL_H
 
 #include <AMReX.H>
 #include <AMReX_Array.H>
@@ -82,7 +82,7 @@ public:
         amrex::Real inv_dr;
         amrex::Real inv_dz;
 
-        AMREX_GPU_DEVICE
+        AMREX_GPU_HOST_DEVICE
         amrex::Real operator() (AMREX_D_DECL(amrex::Real r, amrex::Real z, amrex::Real /*unused*/)) const
         {
     #if (AMREX_SPACEDIM >= 2)
