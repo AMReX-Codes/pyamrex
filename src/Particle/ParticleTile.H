@@ -48,8 +48,8 @@ void make_ParticleTileData(py::module &m)
             .def_property_readonly("m_num_runtime_real", [](ParticleTileDataType const & ptd){ return ptd.m_num_runtime_real; })
             .def_property_readonly("m_num_runtime_int", [](ParticleTileDataType const & ptd){ return ptd.m_num_runtime_int; })
 
-            .def("get_super_particle", &ParticleTileDataType::template getSuperParticle<ParticleType>)
-            .def("set_super_particle", &ParticleTileDataType::template setSuperParticle<ParticleType>)
+            .def("get_super_particle", [](ParticleTileDataType &pdt, int const v) -> SuperParticleType { return pdt.getSuperParticle(v); })
+            .def("set_super_particle", [](ParticleTileDataType &pdt, SuperParticleType const& sp, int const v) { pdt.setSuperParticle(sp, v); })
             // setter & getter
             .def("__setitem__", [](ParticleTileDataType &pdt, int const v,
                                    SuperParticleType const value) { pdt.setSuperParticle(value, v); })
