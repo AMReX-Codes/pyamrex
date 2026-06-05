@@ -81,13 +81,117 @@ void init_ParmParse(py::module &m)
             "parses input values", py::arg("name"), py::arg("ival")=0
         )
 
-        .def("query_int",
+        .def("get_string",
             [](ParmParse &pp, std::string name, int ival) {
-                int ref;
+                std::string ref;
+                pp.get(name, ref, ival);
+                return ref;
+            },
+            "parses input values", py::arg("name"), py::arg("ival")=0
+        )
+
+        .def("query_bool",
+            [](ParmParse &pp, std::string name, int ival) {
+                bool ref = false;
                 bool exist = pp.query(name, ref, ival);
                 return std::make_tuple(exist,ref);
             },
             "queries input values", py::arg("name"), py::arg("ival")=0
+        )
+
+        .def("query_int",
+            [](ParmParse &pp, std::string name, int ival) {
+                int ref = 0;
+                bool exist = pp.query(name, ref, ival);
+                return std::make_tuple(exist,ref);
+            },
+            "queries input values", py::arg("name"), py::arg("ival")=0
+        )
+
+        .def("query_real",
+            [](ParmParse &pp, std::string name, int ival) {
+                amrex::Real ref = 0.;
+                bool exist = pp.query(name, ref, ival);
+                return std::make_tuple(exist,ref);
+            },
+            "queries input values", py::arg("name"), py::arg("ival")=0
+        )
+
+        .def("query_string",
+            [](ParmParse &pp, std::string name, int ival) {
+                std::string ref;
+                bool exist = pp.query(name, ref, ival);
+                return std::make_tuple(exist,ref);
+            },
+            "queries input values", py::arg("name"), py::arg("ival")=0
+        )
+
+        .def("get_int_arr",
+            [](ParmParse &pp, std::string name, int start_ix, int num_val) {
+                std::vector<int> ref;
+                if (num_val == -1) { num_val = pp.countval(name.c_str()); }
+                pp.getarr(name, ref, start_ix, num_val);
+                return ref;
+            },
+            "parses an array of input values",
+            py::arg("name"), py::arg("start_ix")=0, py::arg("num_val")=-1
+        )
+
+        .def("get_real_arr",
+            [](ParmParse &pp, std::string name, int start_ix, int num_val) {
+                std::vector<amrex::Real> ref;
+                if (num_val == -1) { num_val = pp.countval(name.c_str()); }
+                pp.getarr(name, ref, start_ix, num_val);
+                return ref;
+            },
+            "parses an array of input values",
+            py::arg("name"), py::arg("start_ix")=0, py::arg("num_val")=-1
+        )
+
+        .def("get_string_arr",
+            [](ParmParse &pp, std::string name, int start_ix, int num_val) {
+                std::vector<std::string> ref;
+                if (num_val == -1) { num_val = pp.countval(name.c_str()); }
+                pp.getarr(name, ref, start_ix, num_val);
+                return ref;
+            },
+            "parses an array of input values",
+            py::arg("name"), py::arg("start_ix")=0, py::arg("num_val")=-1
+        )
+
+        .def("query_int_arr",
+            [](ParmParse &pp, std::string name) {
+                std::vector<int> ref;
+                bool exist = pp.queryarr(name, ref);
+                return std::make_tuple(exist,ref);
+            },
+            "queries an array of input values", py::arg("name")
+        )
+
+        .def("query_real_arr",
+            [](ParmParse &pp, std::string name) {
+                std::vector<amrex::Real> ref;
+                bool exist = pp.queryarr(name, ref);
+                return std::make_tuple(exist,ref);
+            },
+            "queries an array of input values", py::arg("name")
+        )
+
+        .def("query_string_arr",
+            [](ParmParse &pp, std::string name) {
+                std::vector<std::string> ref;
+                bool exist = pp.queryarr(name, ref);
+                return std::make_tuple(exist,ref);
+            },
+            "queries an array of input values", py::arg("name")
+        )
+
+        .def("countval",
+            [](ParmParse &pp, std::string name) {
+                return pp.countval(name.c_str());
+            },
+            "Returns the number of values associated with a parameter",
+            py::arg("name")
         )
 
         .def(
@@ -109,6 +213,11 @@ void init_ParmParse(py::module &m)
             "to_dict",
             [](ParmParse &pp) {
                 py::dict d;
+
+                // note: the table names below are fully qualified; use an
+                // unprefixed ParmParse for the value lookups, independent
+                // of the prefix of pp
+                ParmParse pp_root;
 
                 auto g_table = pp.table();
 
@@ -154,7 +263,7 @@ void init_ParmParse(py::module &m)
                                 [&](auto&& arg) {
                                     using T = std::remove_pointer_t<std::decay_t<decltype(arg)>>;
                                     T v;
-                                    pp.get(name, v);
+                                    pp_root.get(name, v);
                                     add_nested(v, name);
                                 },
                                 entry.m_typehint
@@ -165,7 +274,7 @@ void init_ParmParse(py::module &m)
                                     using T = std::remove_pointer_t<std::decay_t<decltype(arg)>>;
                                     if constexpr (!std::is_same_v<T, bool>) {
                                         std::vector<T> valarr;
-                                        pp.getarr(name, valarr);
+                                        pp_root.getarr(name, valarr);
                                         add_nested(valarr, name);
                                     }
                                 },

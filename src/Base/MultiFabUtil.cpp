@@ -5,6 +5,7 @@
  */
 #include "pyAMReX.H"
 
+#include <AMReX_Array.H>
 #include <AMReX_Geometry.H>
 #include <AMReX_IntVect.H>
 #include <AMReX_MultiFab.H>
@@ -124,6 +125,25 @@ void init_MultiFabUtil (py::module& m)
           py::arg("ratio"), py::arg("ngcrse") = 0,
           "Average fine face-based MultiFabs (one per direction) onto "
           "crse face-based MultiFabs.");
+    m.def("average_down_faces",
+          [](std::vector<MultiFab*> const & fine,
+             std::vector<MultiFab*> const & crse,
+             IntVect const & ratio, Geometry const & crse_geom)
+          {
+              check_num_dirs("fine", fine.size());
+              check_num_dirs("crse", crse.size());
+              Array<MultiFab const*, AMREX_SPACEDIM> c_fine;
+              Array<MultiFab*, AMREX_SPACEDIM> v_crse;
+              for (int d = 0; d < AMREX_SPACEDIM; ++d) {
+                  c_fine[d] = fine[d];
+                  v_crse[d] = crse[d];
+              }
+              average_down_faces(c_fine, v_crse, ratio, crse_geom);
+          },
+          py::arg("fine"), py::arg("crse"),
+          py::arg("ratio"), py::arg("crse_geom"),
+          "Average fine face-based MultiFabs (one per direction) onto "
+          "crse face-based MultiFabs, taking periodicity into account.");
     m.def("average_down_faces",
           [](FabArray<FArrayBox> const & fine, FabArray<FArrayBox> & crse,
              IntVect const & ratio, int ngcrse)
