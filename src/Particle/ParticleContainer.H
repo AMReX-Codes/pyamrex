@@ -430,6 +430,17 @@ void make_ParticleContainer_and_Iterators (py::module &m, std::string allocstr)
              },
              py::arg("dir"), py::arg("name")
         )
+        .def("write_plotfile",
+             [](ParticleContainerType const & pc, std::string const & dir, std::string const & name,
+                Vector<std::string> const & real_comp_names, Vector<std::string> const & int_comp_names){
+                return pc.WritePlotFile(dir, name, real_comp_names, int_comp_names);
+             },
+             py::arg("dir"), py::arg("name"),
+             py::arg("real_comp_names"), py::arg("int_comp_names"),
+             "Write a particle plotfile, naming the real and integer components.\n"
+             "For pure SoA containers, real_comp_names excludes the AMREX_SPACEDIM "
+             "position components."
+        )
         // void WritePlotFile (const std::string& dir, const std::string& name) const;
         // template <class F>
         // void WritePlotFile (const std::string& dir, const std::string& name, F const& f) const;

@@ -2,6 +2,7 @@ foreach(D IN LISTS AMReX_SPACEDIM)
     target_sources(pyAMReX_${D}d
       PRIVATE
         ParticleContainer.cpp
+        ParticleHeader.cpp
     )
 
     # this is primarily to save compile-time

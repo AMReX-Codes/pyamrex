@@ -44,6 +44,7 @@ void init_ParallelDescriptor(py::module &);
 void init_ParGDB(py::module &);
 void init_ParmParse(py::module &);
 void init_ParticleContainer(py::module &);
+void init_ParticleHeader(py::module &);
 void init_Periodicity(py::module &);
 void init_PhysBCFunct(py::module &);
 void init_PlotFileUtil(py::module &);
@@ -158,10 +159,12 @@ PYBIND11_MODULE(amrex_3d_pybind, m) {
     // containers (they reference it in member signatures), while its member
     // functions are added after ParGDB (get_par_gdb returns an AmrParGDB)
     init_TagBox(m);
+
     init_AmrMesh(m);
     init_AmrCore_class(m);      // after AmrMesh (its pybind base)
     init_ParGDB(m);             // after the AmrCore class declaration
     init_ParticleContainer(m);  // after ParGDB (constructible from it)
+    init_ParticleHeader(m);
     init_AmrCore(m);            // after ParGDB (AmrParGDB in signatures)
 
 #ifdef AMREX_USE_MPI
