@@ -18,6 +18,13 @@ void init_Utility(py::module& m)
           py::arg("root"), py::arg("num"), py::arg("mindigits")=5
     );
 
+    m.def("second",
+          [](){ return amrex::second(); },
+          "Returns the current time as the number of seconds elapsed "
+          "since some arbitrary point in the past (e.g., for wallclock "
+          "timers)."
+    );
+
     m.def("util_create_directory",
           [](std::string const & path, bool verbose) {
               return amrex::UtilCreateDirectory(path, 0755, verbose);
