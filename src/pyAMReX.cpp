@@ -33,7 +33,10 @@ void init_Dim3(py::module&);
 void init_DistributionMapping(py::module&);
 void init_FabArray(py::module &);
 void init_FArrayBox(py::module&);
+void init_FillPatchUtil(py::module&);
+void init_FluxRegister(py::module&);
 void init_Geometry(py::module&);
+void init_Interpolater(py::module&);
 void init_iMultiFab(py::module&);
 void init_IndexType(py::module &);
 void init_IntVect(py::module &);
@@ -155,9 +158,12 @@ PYBIND11_MODULE(amrex_3d_pybind, m) {
     init_MFInfo(m);
     init_iMultiFab(m);
     init_MultiFab(m, py_MFIter);
-    init_MultiFabUtil(m); // after MultiFab, iMultiFab and Geometry
-    init_BCUtil(m);       // after MultiFab, Geometry and BCRec
-    init_PhysBCFunct(m);  // after MultiFab, Geometry and BCRec
+    init_MultiFabUtil(m);   // after MultiFab, iMultiFab and Geometry
+    init_BCUtil(m);         // after MultiFab, Geometry and BCRec
+    init_PhysBCFunct(m);    // after MultiFab, Geometry and BCRec
+    init_Interpolater(m);
+    init_FillPatchUtil(m);  // after PhysBCFunct, Interpolater and BCRec
+    init_FluxRegister(m);   // after MultiFab and Geometry
     init_ParallelDescriptor(m);
     init_PODVector(m);
 

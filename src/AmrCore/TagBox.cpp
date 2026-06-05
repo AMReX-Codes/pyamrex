@@ -5,12 +5,14 @@
  */
 #include "pyAMReX.H"
 
+#include <AMReX_Array4.H>
 #include <AMReX_Box.H>
 #include <AMReX_BoxArray.H>
 #include <AMReX_DistributionMapping.H>
 #include <AMReX_FabArrayBase.H>
 #include <AMReX_Geometry.H>
 #include <AMReX_IntVect.H>
+#include <AMReX_MFIter.H>
 #include <AMReX_TagBox.H>
 
 #include <sstream>
@@ -95,6 +97,23 @@ non-owning views and should not be stored after the override returns.
              [](TagBoxArray const& tags) { return tags.DistributionMap(); },
              py::return_value_policy::reference_internal,
              "DistributionMapping defining ownership of this tag array.")
+
+        .def("array",
+             [](TagBoxArray& tags, MFIter const& mfi) {
+                 return tags.array(mfi);
+             },
+             py::arg("mfi"),
+             // do not copy via brace init list
+             py::return_value_policy::move,
+             "Return the Array4 (of char) of the tags in the box of mfi.")
+        .def("const_array",
+             [](TagBoxArray const& tags, MFIter const& mfi) {
+                 return tags.const_array(mfi);
+             },
+             py::arg("mfi"),
+             // do not copy via brace init list
+             py::return_value_policy::move,
+             "Return the read-only Array4 (of char) of the tags in the box of mfi.")
 
         .def("set_val",
              [](TagBoxArray& tags, TagBox::TagVal val) {
