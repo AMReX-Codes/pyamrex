@@ -20,6 +20,8 @@ void init_AmrMesh(py::module &);
 void init_Arena(py::module&);
 void init_Array4(py::module&);
 void init_BaseFab(py::module&);
+void init_BCRec(py::module&);
+void init_BCUtil(py::module&);
 void init_Box(py::module &);
 void init_RealBox(py::module &);
 void init_BoxArray(py::module &);
@@ -42,6 +44,7 @@ void init_ParGDB(py::module &);
 void init_ParmParse(py::module &);
 void init_ParticleContainer(py::module &);
 void init_Periodicity(py::module &);
+void init_PhysBCFunct(py::module &);
 void init_PlotFileUtil(py::module &);
 void init_PODVector(py::module &);
 void init_RealVect(py::module &);
@@ -122,12 +125,15 @@ PYBIND11_MODULE(amrex_3d_pybind, m) {
     init_Geometry(m);
     init_DistributionMapping(m);
     init_BaseFab(m);
+    init_BCRec(m);  // after Box and Vector
     init_FArrayBox(m);
     py::class_< amrex::MFIter > py_MFIter(m, "MFIter", py::dynamic_attr());
     init_FabArray(m);
     init_MFInfo(m);
     init_iMultiFab(m);
     init_MultiFab(m, py_MFIter);
+    init_BCUtil(m);       // after MultiFab, Geometry and BCRec
+    init_PhysBCFunct(m);  // after MultiFab, Geometry and BCRec
     init_ParallelDescriptor(m);
     init_PODVector(m);
 
