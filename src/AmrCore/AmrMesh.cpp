@@ -71,6 +71,10 @@ void init_AmrMesh(py::module &m)
         .def_property_readonly("verbose", &AmrMesh::Verbose)
         .def_property_readonly("max_level", &AmrMesh::maxLevel)
         .def_property_readonly("finest_level", &AmrMesh::finestLevel)
+        .def("set_finest_level", &AmrMesh::SetFinestLevel,
+             py::arg("new_finest_level"),
+             "Update the recorded finest level index (without "
+             "reallocating), e.g., when restarting from a checkpoint.")
         .def("ref_ratio", py::overload_cast< >(&AmrMesh::refRatio, py::const_))
         .def("ref_ratio", py::overload_cast< int >(&AmrMesh::refRatio, py::const_))
 
