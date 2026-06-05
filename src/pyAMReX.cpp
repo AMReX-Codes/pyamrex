@@ -15,6 +15,7 @@
 // forward declarations of exposed classes
 void init_Algorithm(py::module&);
 void init_AMReX(py::module&);
+void init_AmrCore(py::module &);
 void init_AmrMesh(py::module &);
 void init_Arena(py::module&);
 void init_Array4(py::module&);
@@ -37,6 +38,7 @@ void init_MPMD(py::module &);
 #endif
 void init_MultiFab(py::module &, py::class_< amrex::MFIter >&);
 void init_ParallelDescriptor(py::module &);
+void init_ParGDB(py::module &);
 void init_ParmParse(py::module &);
 void init_ParticleContainer(py::module &);
 void init_Periodicity(py::module &);
@@ -131,6 +133,8 @@ PYBIND11_MODULE(amrex_3d_pybind, m) {
 
     init_ParticleContainer(m);
     init_AmrMesh(m);
+    init_AmrCore(m);   // after AmrMesh (its pybind base)
+    init_ParGDB(m);    // after AmrCore (AmrParGDB references it)
 
 #ifdef AMREX_USE_MPI
     init_MPMD(m);
