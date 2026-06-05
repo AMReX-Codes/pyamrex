@@ -42,6 +42,7 @@ void init_MFInfo(py::module &);
 void init_MPMD(py::module &);
 #endif
 void init_MultiFab(py::module &, py::class_< amrex::MFIter >&);
+void init_MultiFabUtil(py::module &);
 void init_ParallelDescriptor(py::module &);
 void init_ParGDB(py::module &);
 void init_ParmParse(py::module &);
@@ -154,6 +155,7 @@ PYBIND11_MODULE(amrex_3d_pybind, m) {
     init_MFInfo(m);
     init_iMultiFab(m);
     init_MultiFab(m, py_MFIter);
+    init_MultiFabUtil(m); // after MultiFab, iMultiFab and Geometry
     init_BCUtil(m);       // after MultiFab, Geometry and BCRec
     init_PhysBCFunct(m);  // after MultiFab, Geometry and BCRec
     init_ParallelDescriptor(m);
