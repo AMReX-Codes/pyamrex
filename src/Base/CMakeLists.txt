@@ -31,6 +31,7 @@ foreach(D IN LISTS AMReX_SPACEDIM)
         MFInfo.cpp
         MultiFab.cpp
         ParallelDescriptor.cpp
+        ParGDB.cpp
         ParmParse.cpp
         Periodicity.cpp
         PlotFileUtil.cpp
