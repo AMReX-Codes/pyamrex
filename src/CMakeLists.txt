@@ -1,7 +1,7 @@
 #add_subdirectory(Amr)
 add_subdirectory(AmrCore)
 add_subdirectory(Base)
-#add_subdirectory(Boundary)
+add_subdirectory(Boundary)
 add_subdirectory(EB)
 #add_subdirectory(Extern)
 #add_subdirectory(LinearSolvers)
