@@ -15,10 +15,14 @@
 // forward declarations of exposed classes
 void init_Algorithm(py::module&);
 void init_AMReX(py::module&);
+void init_AmrCore(py::module &);
+void init_AmrCore_class(py::module &);
 void init_AmrMesh(py::module &);
 void init_Arena(py::module&);
 void init_Array4(py::module&);
 void init_BaseFab(py::module&);
+void init_BCRec(py::module&);
+void init_BCUtil(py::module&);
 void init_Box(py::module &);
 void init_RealBox(py::module &);
 void init_BoxArray(py::module &);
@@ -27,7 +31,10 @@ void init_Dim3(py::module&);
 void init_DistributionMapping(py::module&);
 void init_FabArray(py::module &);
 void init_FArrayBox(py::module&);
+void init_FillPatchUtil(py::module&);
+void init_FluxRegister(py::module&);
 void init_Geometry(py::module&);
+void init_Interpolater(py::module&);
 void init_iMultiFab(py::module&);
 void init_IndexType(py::module &);
 void init_IntVect(py::module &);
@@ -35,15 +42,24 @@ void init_MFInfo(py::module &);
 #ifdef AMREX_USE_MPI
 void init_MPMD(py::module &);
 #endif
+void init_MLABecLaplacian(py::module &);
+void init_MLLinOp(py::module &);
+void init_MLMG(py::module &);
+void init_MLNodeLaplacian(py::module &);
+void init_MLPoisson(py::module &);
 void init_MultiFab(py::module &, py::class_< amrex::MFIter >&);
+void init_MultiFabUtil(py::module &);
 void init_ParallelDescriptor(py::module &);
+void init_ParGDB(py::module &);
 void init_ParmParse(py::module &);
 void init_ParticleContainer(py::module &);
 void init_Periodicity(py::module &);
+void init_PhysBCFunct(py::module &);
 void init_PlotFileUtil(py::module &);
 void init_PODVector(py::module &);
 void init_RealVect(py::module &);
 void init_SmallMatrix(py::module &);
+void init_TagBox(py::module &);
 void init_Utility(py::module &);
 void init_Vector(py::module &);
 void init_Version(py::module &);
@@ -120,17 +136,38 @@ PYBIND11_MODULE(amrex_3d_pybind, m) {
     init_Geometry(m);
     init_DistributionMapping(m);
     init_BaseFab(m);
+    init_BCRec(m);  // after Box and Vector
     init_FArrayBox(m);
     py::class_< amrex::MFIter > py_MFIter(m, "MFIter", py::dynamic_attr());
     init_FabArray(m);
     init_MFInfo(m);
     init_iMultiFab(m);
     init_MultiFab(m, py_MFIter);
+    init_MultiFabUtil(m);   // after MultiFab, iMultiFab and Geometry
+    init_BCUtil(m);         // after MultiFab, Geometry and BCRec
+    init_PhysBCFunct(m);    // after MultiFab, Geometry and BCRec
+    init_TagBox(m);         // after FabArrayBase and MFIter
+    init_Interpolater(m);
+    init_FillPatchUtil(m);  // after PhysBCFunct, Interpolater and BCRec
+    init_FluxRegister(m);   // after MultiFab and Geometry
+
+    // note: order from base to derived classes
+    init_MLLinOp(m);
+    init_MLPoisson(m);
+    init_MLABecLaplacian(m);
+    init_MLNodeLaplacian(m);
+    init_MLMG(m);
     init_ParallelDescriptor(m);
     init_PODVector(m);
 
-    init_ParticleContainer(m);
+    // note: the AmrCore class is declared before ParGDB and the particle
+    // containers (they reference it in member signatures), while its member
+    // functions are added after ParGDB (get_par_gdb returns an AmrParGDB)
     init_AmrMesh(m);
+    init_AmrCore_class(m);      // after AmrMesh (its pybind base)
+    init_ParGDB(m);             // after the AmrCore class declaration
+    init_ParticleContainer(m);  // after ParGDB (constructible from it)
+    init_AmrCore(m);            // after ParGDB (AmrParGDB in signatures)
 
 #ifdef AMREX_USE_MPI
     init_MPMD(m);

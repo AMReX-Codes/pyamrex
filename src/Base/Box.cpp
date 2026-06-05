@@ -239,6 +239,28 @@ void init_Box(py::module &m) {
              "Grow in the direction of the given face."
         )
         */
+        .def("refine",
+             py::overload_cast< int >(&Box::refine),
+             py::arg("ref_ratio"),
+             "Refine the Box by the given refinement ratio:\n"
+             "lo <- lo*ratio, hi <- (hi+1)*ratio - 1 for cell-centered\n"
+             "directions; lo <- lo*ratio, hi <- hi*ratio for nodal ones."
+        )
+        .def("refine",
+             py::overload_cast< IntVect const & >(&Box::refine),
+             py::arg("ref_ratio"),
+             "Refine the Box by the given refinement ratio (per direction)."
+        )
+        .def("coarsen",
+             py::overload_cast< int >(&Box::coarsen),
+             py::arg("ref_ratio"),
+             "Coarsen the Box by the given refinement ratio."
+        )
+        .def("coarsen",
+             py::overload_cast< IntVect const & >(&Box::coarsen),
+             py::arg("ref_ratio"),
+             "Coarsen the Box by the given refinement ratio (per direction)."
+        )
         .def("grow_low",
              py::overload_cast< int, int >(&Box::growLo),
              py::arg("idir"), py::arg("n_cell")=1,
