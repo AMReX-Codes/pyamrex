@@ -16,6 +16,7 @@
 void init_Algorithm(py::module&);
 void init_AMReX(py::module&);
 void init_AmrCore(py::module &);
+void init_AmrCore_class(py::module &);
 void init_AmrMesh(py::module &);
 void init_Arena(py::module&);
 void init_Array4(py::module&);
@@ -131,10 +132,14 @@ PYBIND11_MODULE(amrex_3d_pybind, m) {
     init_ParallelDescriptor(m);
     init_PODVector(m);
 
-    init_ParticleContainer(m);
+    // note: the AmrCore class is declared before ParGDB and the particle
+    // containers (they reference it in member signatures), while its member
+    // functions are added after ParGDB (get_par_gdb returns an AmrParGDB)
     init_AmrMesh(m);
-    init_AmrCore(m);   // after AmrMesh (its pybind base)
-    init_ParGDB(m);    // after AmrCore (AmrParGDB references it)
+    init_AmrCore_class(m);      // after AmrMesh (its pybind base)
+    init_ParGDB(m);             // after the AmrCore class declaration
+    init_ParticleContainer(m);  // after ParGDB (constructible from it)
+    init_AmrCore(m);            // after ParGDB (AmrParGDB in signatures)
 
 #ifdef AMREX_USE_MPI
     init_MPMD(m);

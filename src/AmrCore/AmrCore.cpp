@@ -20,6 +20,7 @@
 #   include <AMReX_AmrParGDB.H>
 #endif
 
+#include <memory>
 #include <sstream>
 
 
@@ -90,14 +91,33 @@ namespace
                 void, amrex::AmrCore, "clear_level", ClearLevel, lev);
         }
     };
+
+    /** Class handle between declaration and method definition.
+     *
+     * The AmrCore type is declared first (init_AmrCore_class) so that types
+     * referencing it in member function signatures (AmrParGDB, the particle
+     * containers) render proper Python type names in their docstrings and
+     * type stubs. The member functions are added later (init_AmrCore), once
+     * the types AmrCore members reference (AmrParGDB) are registered, too.
+     */
+    std::unique_ptr< py::class_< amrex::AmrCore, amrex::AmrMesh, PyAmrCore > >
+        py_AmrCore;
 }
 
 
-void init_AmrCore (py::module& m)
+void init_AmrCore_class (py::module& m)
 {
     using namespace amrex;
 
-    py::class_< AmrCore, AmrMesh, PyAmrCore >(m, "AmrCore")
+    py_AmrCore = std::make_unique<
+        py::class_< AmrCore, AmrMesh, PyAmrCore > >(m, "AmrCore");
+}
+
+void init_AmrCore (py::module& /* m */)
+{
+    using namespace amrex;
+
+    (*py_AmrCore)
         .def("__repr__",
             [](AmrCore const & amr_core) {
                 std::stringstream s;
@@ -131,4 +151,7 @@ void init_AmrCore (py::module& m)
              py::return_value_policy::reference_internal)
 #endif
     ;
+
+    // release the class handle held since init_AmrCore_class
+    py_AmrCore.reset();
 }
