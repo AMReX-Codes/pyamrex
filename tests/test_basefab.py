@@ -20,9 +20,10 @@ def test_basefab_to_host():
     np.testing.assert_allclose(x1, x2)
 
 
-def test_basefab_array4_constructor_keeps_array4_alive(assert_keeps_python_alive):
-    x = np.ones((2, 3, 4))
-    arr = amr.Array4_double(x)
+def test_basefab_array4_constructor_keeps_array4_alive(
+    assert_keeps_python_alive, make_real_array4
+):
+    arr = make_real_array4((2, 3, 4))
 
     assert_keeps_python_alive(arr, lambda: amr.BaseFab_Real(arr))
     assert_keeps_python_alive(

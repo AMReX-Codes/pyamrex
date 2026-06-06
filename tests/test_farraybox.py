@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import numpy as np
-
 import amrex.space3d as amr
 
 
@@ -20,9 +18,10 @@ def test_farraybox_io():
     # fab.read_from(iob)
 
 
-def test_farraybox_array4_constructor_keeps_array4_alive(assert_keeps_python_alive):
-    x = np.ones((2, 3, 4))
-    arr = amr.Array4_double(x)
+def test_farraybox_array4_constructor_keeps_array4_alive(
+    assert_keeps_python_alive, make_real_array4
+):
+    arr = make_real_array4((2, 3, 4))
 
     assert_keeps_python_alive(arr, lambda: amr.FArrayBox(arr))
     assert_keeps_python_alive(

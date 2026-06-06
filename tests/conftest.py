@@ -5,6 +5,7 @@ import os
 import platform
 import sys
 
+import numpy as np
 import pytest
 
 try:
@@ -24,6 +25,19 @@ if amr.Config.have_mpi:
 
 # base path for input files
 basepath = os.getcwd()
+
+
+@pytest.fixture(scope="function")
+def make_real_array4():
+    """Create an Array4 of ones matching the compiled amrex::Real precision."""
+
+    def make(shape):
+        if amr.Config.precision == "SINGLE":
+            return amr.Array4_float(np.ones(shape, dtype=np.float32))
+        else:
+            return amr.Array4_double(np.ones(shape, dtype=np.float64))
+
+    return make
 
 
 @pytest.fixture(scope="function")
