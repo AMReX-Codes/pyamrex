@@ -81,9 +81,27 @@ void init_ParmParse(py::module &m)
             "parses input values", py::arg("name"), py::arg("ival")=0
         )
 
+        .def("get_str",
+            [](ParmParse &pp, std::string name, int ival) {
+                std::string ref;
+                pp.get(name, ref, ival);
+                return ref;
+            },
+            "parses input values", py::arg("name"), py::arg("ival")=0
+        )
+
         .def("query_int",
             [](ParmParse &pp, std::string name, int ival) {
                 int ref;
+                bool exist = pp.query(name, ref, ival);
+                return std::make_tuple(exist,ref);
+            },
+            "queries input values", py::arg("name"), py::arg("ival")=0
+        )
+
+        .def("query_str",
+            [](ParmParse &pp, std::string name, int ival) {
+                std::string ref;
                 bool exist = pp.query(name, ref, ival);
                 return std::make_tuple(exist,ref);
             },

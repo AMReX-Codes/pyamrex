@@ -30,6 +30,15 @@ def test_parmparse():
     assert np.isclose(dt, 1.0e-5)
     assert ncell == 100
 
+    # string getters
+    question = pp_param.get_str("question")
+    assert question == "What is the answer to life, the universe, and everything?"
+    exist, question = pp_param.query_str("question")
+    assert exist
+    assert question == "What is the answer to life, the universe, and everything?"
+    exist, _ = pp_param.query_str("does_not_exist")
+    assert not exist
+
     # printing
     pp.pretty_print_table()
 
