@@ -207,8 +207,8 @@ jobs:
       LDFLAGS: "-fuse-ld=lld"
       CXX: "clang++"
       CC: "clang"
-      AMReX_PRECISION: "SINGLE"
-      AMReX_PARTICLES_PRECISION: "SINGLE"
+      AMREX_PRECISION: "SINGLE"
+      AMREX_PARTICLES_PRECISION: "SINGLE"
     steps:
       - uses: actions/checkout@v6
       - name: Dependencies
