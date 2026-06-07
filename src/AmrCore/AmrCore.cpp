@@ -52,7 +52,8 @@ namespace
         {
             PYBIND11_OVERRIDE_PURE_NAME(
                 void, amrex::AmrCore, "error_est", ErrorEst,
-                lev, tags, time, ngrow);
+                lev, py::cast(&tags, py::return_value_policy::reference),
+                time, ngrow);
         }
 
         void MakeNewLevelFromScratch (
@@ -119,6 +120,11 @@ Subclasses must implement ``make_new_level_from_scratch``,
 ``make_new_level_from_coarse``, ``remake_level``, ``clear_level`` and
 ``error_est``.  AMReX calls these Python overrides while creating or
 regridding levels.
+
+``error_est(lev, tags, time, ngrow)`` receives a mutable ``TagBoxArray``
+for the level being tagged.  Mark cells with
+``tags.set_val(TagBox.SET, ...)`` and keep the tag array only for the
+duration of the callback.
 )pbdoc");
 }
 

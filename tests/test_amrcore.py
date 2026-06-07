@@ -7,9 +7,10 @@ import amrex.space3d as amr
 
 
 def _make_core(record=None, max_level=0):
-    """An AmrCore subclass that records calls to its overridden virtuals.
+    """Return an AmrCore subclass that records virtual-callback calls.
 
-    Built as a single-level (``max_level = 0``), non-periodic, Cartesian core.
+    The core uses a non-periodic Cartesian domain and the requested
+    ``max_level``.
     """
     if record is None:
         record = {}

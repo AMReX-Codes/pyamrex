@@ -205,8 +205,9 @@ AmrCore
 Python subclasses implement the AMR callbacks with pyAMReX snake-case names:
 ``make_new_level_from_scratch``, ``make_new_level_from_coarse``,
 ``remake_level``, ``clear_level`` and ``error_est``.  The ``error_est``
-callback receives a ``TagBoxArray`` and marks cells for refinement with
-``tags.set_val(amr.TagBox.SET, ...)``.
+callback receives a mutable ``TagBoxArray`` for the level being tagged.  The
+tag array is a callback-scoped, non-owning view; mark cells for refinement with
+``tags.set_val(amr.TagBox.SET, ...)`` and do not store it for later use.
 
 A particle container can be connected to an ``AmrCore`` hierarchy through the
 particle metadata broker returned by ``core.get_par_gdb()``.

@@ -57,8 +57,9 @@ Use ``TagBox.SET`` to request refinement, ``TagBox.CLEAR`` to remove a tag and
         R"pbdoc(
 Distributed array of ``TagBox`` objects used during AMR error estimation.
 
-Python ``AmrCore.error_est`` overrides receive a ``TagBoxArray`` and mark cells
-with ``set_val(TagBox.SET, ...)``.
+Python ``AmrCore.error_est`` overrides receive a mutable ``TagBoxArray`` and
+mark cells with ``set_val(TagBox.SET, ...)``.  Callback arguments are
+non-owning views and should not be stored after the override returns.
 )pbdoc")
         .def("__repr__",
             [](TagBoxArray const& tags) {
