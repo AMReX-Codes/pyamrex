@@ -195,7 +195,8 @@ void make_ParticleContainer_and_Iterators (py::module &m, std::string allocstr)
         .def(py::init<const Geometry&, const DistributionMapping&, const BoxArray&>())
         // construct from a ParGDBBase broker, e.g. AmrCore::GetParGDB();
         // keep the ParGDB (and its owner) alive while the container lives
-        .def(py::init<ParGDBBase*>(), py::arg("gdb"), py::keep_alive<1, 2>())
+        .def(py::init<ParGDBBase*>(), py::arg("gdb"), py::keep_alive<1, 2>(),
+             "Construct from a particle metadata broker such as AmrCore.get_par_gdb().")
         .def(py::init<const Vector<Geometry>&,
                       const Vector<DistributionMapping>&,
                       const Vector<BoxArray>&,
@@ -208,7 +209,8 @@ void make_ParticleContainer_and_Iterators (py::module &m, std::string allocstr)
     py_pc
         .def("define",
             py::overload_cast<ParGDBBase*>(&ParticleContainerType::Define),
-            py::arg("gdb"), py::keep_alive<1, 2>())
+            py::arg("gdb"), py::keep_alive<1, 2>(),
+            "Define this container from a particle metadata broker.")
 
         .def("make_alike", &ParticleContainerType::template make_alike<Allocator>)
 
@@ -479,7 +481,13 @@ void make_ParticleContainer_and_Iterators (py::module &m, std::string allocstr)
                 return pc.DefineAndReturnParticleTile(lev, grid, tile);
             },
             py::return_value_policy::reference_internal,
-            py::arg("lev"), py::arg("grid"), py::arg("tile"))
+            py::arg("lev"), py::arg("grid"), py::arg("tile"),
+            R"pbdoc(
+Define, if necessary, and return the particle tile at ``(lev, grid, tile)``.
+
+This is useful when particles are inserted in place into a known AMR tile.
+The returned tile is owned by the particle container.
+)pbdoc")
         // .def("ParticlesAt", py::overload_cast<int,int,int>(&ParticleContainerType::ParticlesAt),
         //     py::return_value_policy::reference_internal)
         // .def("ParticlesAt", py::overload_cast<int,int,int>(&ParticleContainerType::ParticlesAt,py::const_))

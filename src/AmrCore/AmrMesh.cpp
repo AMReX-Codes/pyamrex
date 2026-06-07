@@ -76,8 +76,10 @@ void init_AmrMesh(py::module &m)
 
         .def("geom",
              py::overload_cast< int >(&AmrMesh::Geom, py::const_),
-             py::return_value_policy::reference_internal, py::arg("lev"))
+             py::return_value_policy::reference_internal, py::arg("lev"),
+             "Return the Geometry stored for AMR level lev.")
         .def("set_geometry", &AmrMesh::SetGeometry,
-             py::arg("lev"), py::arg("geom_in"))
+             py::arg("lev"), py::arg("geom_in"),
+             "Replace the Geometry stored for AMR level lev.")
     ;
 }
