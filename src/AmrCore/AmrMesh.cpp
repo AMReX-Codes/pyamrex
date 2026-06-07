@@ -73,5 +73,13 @@ void init_AmrMesh(py::module &m)
         .def_property_readonly("finest_level", &AmrMesh::finestLevel)
         .def("ref_ratio", py::overload_cast< >(&AmrMesh::refRatio, py::const_))
         .def("ref_ratio", py::overload_cast< int >(&AmrMesh::refRatio, py::const_))
+
+        .def("geom",
+             py::overload_cast< int >(&AmrMesh::Geom, py::const_),
+             py::return_value_policy::reference_internal, py::arg("lev"),
+             "Return the Geometry stored for AMR level lev.")
+        .def("set_geometry", &AmrMesh::SetGeometry,
+             py::arg("lev"), py::arg("geom_in"),
+             "Replace the Geometry stored for AMR level lev.")
     ;
 }

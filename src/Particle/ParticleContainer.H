@@ -15,6 +15,7 @@
 #include <AMReX_BoxArray.H>
 #include <AMReX_GpuAllocators.H>
 #include <AMReX_IntVect.H>
+#include <AMReX_ParGDB.H>
 #include <AMReX_ParIter.H>
 #include <AMReX_Particle.H>
 #include <AMReX_Particles.H>
@@ -192,6 +193,10 @@ void make_ParticleContainer_and_Iterators (py::module &m, std::string allocstr)
     auto py_pc = py::class_<ParticleContainerType>(m, particle_container_type.c_str())
         .def(py::init())
         .def(py::init<const Geometry&, const DistributionMapping&, const BoxArray&>())
+        // construct from a ParGDBBase broker, e.g. AmrCore::GetParGDB();
+        // keep the ParGDB (and its owner) alive while the container lives
+        .def(py::init<ParGDBBase*>(), py::arg("gdb"), py::keep_alive<1, 2>(),
+             "Construct from a particle metadata broker such as AmrCore.get_par_gdb().")
         .def(py::init<const Vector<Geometry>&,
                       const Vector<DistributionMapping>&,
                       const Vector<BoxArray>&,
@@ -202,6 +207,11 @@ void make_ParticleContainer_and_Iterators (py::module &m, std::string allocstr)
                       const Vector<IntVect>&>())
     ;
     py_pc
+        .def("define",
+            py::overload_cast<ParGDBBase*>(&ParticleContainerType::Define),
+            py::arg("gdb"), py::keep_alive<1, 2>(),
+            "Define this container from a particle metadata broker.")
+
         .def("make_alike", &ParticleContainerType::template make_alike<Allocator>)
 
         .def_property("arena",
@@ -463,6 +473,21 @@ void make_ParticleContainer_and_Iterators (py::module &m, std::string allocstr)
         // void WritePlotFilePost ();
         //.def("get_particles", py::overload_cast<>(&ParticleContainerType::GetParticles), py::return_value_policy::reference_internal)
         .def("get_particles", py::overload_cast<int>(&ParticleContainerType::GetParticles), py::return_value_policy::reference_internal, py::arg("level"))
+        // define (if needed) and return the particle tile at (level, grid, tile);
+        // used to add particles in-place into a known tile, e.g. ImpactX AddNParticles
+        .def("define_and_return_particle_tile",
+            [](ParticleContainerType& pc, int lev, int grid, int tile)
+                -> ParticleTileType& {
+                return pc.DefineAndReturnParticleTile(lev, grid, tile);
+            },
+            py::return_value_policy::reference_internal,
+            py::arg("lev"), py::arg("grid"), py::arg("tile"),
+            R"pbdoc(
+Define, if necessary, and return the particle tile at ``(lev, grid, tile)``.
+
+This is useful when particles are inserted in place into a known AMR tile.
+The returned tile is owned by the particle container.
+)pbdoc")
         // .def("ParticlesAt", py::overload_cast<int,int,int>(&ParticleContainerType::ParticlesAt),
         //     py::return_value_policy::reference_internal)
         // .def("ParticlesAt", py::overload_cast<int,int,int>(&ParticleContainerType::ParticlesAt,py::const_))

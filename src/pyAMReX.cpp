@@ -15,6 +15,8 @@
 // forward declarations of exposed classes
 void init_Algorithm(py::module&);
 void init_AMReX(py::module&);
+void init_AmrCore(py::module &);
+void init_AmrCore_class(py::module &);
 void init_AmrMesh(py::module &);
 void init_Arena(py::module&);
 void init_Array4(py::module&);
@@ -37,6 +39,7 @@ void init_MPMD(py::module &);
 #endif
 void init_MultiFab(py::module &, py::class_< amrex::MFIter >&);
 void init_ParallelDescriptor(py::module &);
+void init_ParGDB(py::module &);
 void init_ParmParse(py::module &);
 void init_ParticleContainer(py::module &);
 void init_Periodicity(py::module &);
@@ -44,6 +47,7 @@ void init_PlotFileUtil(py::module &);
 void init_PODVector(py::module &);
 void init_RealVect(py::module &);
 void init_SmallMatrix(py::module &);
+void init_TagBox(py::module &);
 void init_Utility(py::module &);
 void init_Vector(py::module &);
 void init_Version(py::module &);
@@ -68,8 +72,10 @@ PYBIND11_MODULE(amrex_3d_pybind, m) {
 
             .. autosummary::
                :toctree: _generate
+               AmrCore
                AmrInfo
                AmrMesh
+               AmrParGDB
                Arena
                ArrayOfStructs
                Box
@@ -85,6 +91,7 @@ PYBIND11_MODULE(amrex_3d_pybind, m) {
                MFItInfo
                MultiFab
                ParallelDescriptor
+               ParGDBBase
                Particle
                ParmParse
                ParticleTile
@@ -94,6 +101,8 @@ PYBIND11_MODULE(amrex_3d_pybind, m) {
                PODVector
                SmallMatrix
                StructOfArrays
+               TagBox
+               TagBoxArray
                Utility
                Vector
                VisMF
@@ -129,8 +138,15 @@ PYBIND11_MODULE(amrex_3d_pybind, m) {
     init_ParallelDescriptor(m);
     init_PODVector(m);
 
-    init_ParticleContainer(m);
+    // note: the AmrCore class is declared before ParGDB and the particle
+    // containers (they reference it in member signatures), while its member
+    // functions are added after ParGDB (get_par_gdb returns an AmrParGDB)
+    init_TagBox(m);
     init_AmrMesh(m);
+    init_AmrCore_class(m);      // after AmrMesh (its pybind base)
+    init_ParGDB(m);             // after the AmrCore class declaration
+    init_ParticleContainer(m);  // after ParGDB (constructible from it)
+    init_AmrCore(m);            // after ParGDB (AmrParGDB in signatures)
 
 #ifdef AMREX_USE_MPI
     init_MPMD(m);

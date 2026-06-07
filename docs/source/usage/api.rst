@@ -202,11 +202,63 @@ Utility
 AmrCore
 -------
 
+Python subclasses implement the AMR callbacks with pyAMReX snake-case names:
+``make_new_level_from_scratch``, ``make_new_level_from_coarse``,
+``remake_level``, ``clear_level`` and ``error_est``.  The ``error_est``
+callback receives a mutable ``TagBoxArray`` for the level being tagged.  The
+tag array is a callback-scoped, non-owning view; mark cells for refinement with
+``tags.set_val(amr.TagBox.SET, ...)`` and do not store it for later use.
+
+A particle container can be connected to an ``AmrCore`` hierarchy through the
+particle metadata broker returned by ``core.get_par_gdb()``.
+
+.. code-block:: python
+
+   class MyCore(amr.AmrCore):
+       def make_new_level_from_scratch(self, lev, time, ba, dm):
+           pass
+
+       def make_new_level_from_coarse(self, lev, time, ba, dm):
+           pass
+
+       def remake_level(self, lev, time, ba, dm):
+           pass
+
+       def clear_level(self, lev):
+           pass
+
+       def error_est(self, lev, tags, time, ngrow):
+           tags.set_val(amr.TagBox.SET)
+
+   core = MyCore(rb, 1, n_cell, 0, ref_ratios, is_periodic)
+   core.init_from_scratch(0.0)
+   particles = amr.ParticleContainer_2_1_3_1_default(core.get_par_gdb())
+
 .. autoclass:: amrex.space3d.AmrInfo
    :members:
    :undoc-members:
 
 .. autoclass:: amrex.space3d.AmrMesh
+   :members:
+   :undoc-members:
+
+.. autoclass:: amrex.space3d.AmrCore
+   :members:
+   :undoc-members:
+
+.. autoclass:: amrex.space3d.TagBox
+   :members:
+   :undoc-members:
+
+.. autoclass:: amrex.space3d.TagBoxArray
+   :members:
+   :undoc-members:
+
+.. autoclass:: amrex.space3d.ParGDBBase
+   :members:
+   :undoc-members:
+
+.. autoclass:: amrex.space3d.AmrParGDB
    :members:
    :undoc-members:
 
