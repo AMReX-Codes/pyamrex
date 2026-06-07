@@ -135,6 +135,83 @@ Vectors
    :members:
    :undoc-members:
 
+Boundary Conditions
+"""""""""""""""""""
+
+Boundary records describe the mathematical boundary types used for each
+MultiFab component and coordinate direction. A common cell-centered fill
+sequence is to fill interior or periodic ghost cells first and then fill
+physical-domain ghost cells:
+
+.. code-block:: python
+
+   sd = amr.Config.spacedim
+   bc = amr.Vector_BCRec([
+       amr.BCRec(
+           lo=[amr.BCType.foextrap] * sd,
+           hi=[amr.BCType.foextrap] * sd,
+       )
+   ])
+
+   mf.fill_boundary()
+   amr.fill_domain_boundary(mf, geom, bc)
+
+``fill_domain_boundary`` handles extrapolation and reflection boundary
+types. For external Dirichlet values, ``BCType.ext_dir`` or
+``BCType.ext_dir_cc``, fill the relevant ghost cells from application
+code. ``PhysBCFunctUser`` provides a Python callback hook with the same
+component-range convention as AMReX FillPatch routines:
+
+.. code-block:: python
+
+   def fill_ext_dir(mf, dcomp, ncomp, nghost, time, bccomp):
+       # Fill external Dirichlet ghost cells for mf components
+       # [dcomp, dcomp + ncomp).
+       pass
+
+   physbc = amr.PhysBCFunctUser(fill_ext_dir)
+   physbc(mf, 0, 1, mf.n_grow_vect, 0.0, 0)
+
+In physical boundary functors, ``dcomp`` is the first destination
+component in the ``MultiFab`` and ``bccomp`` is the first matching entry
+in the ``Vector_BCRec``.
+
+.. autoclass:: amrex.space3d.BCType
+   :members:
+   :undoc-members:
+
+.. autoclass:: amrex.space3d.PhysBCType
+   :members:
+   :undoc-members:
+
+.. autoclass:: amrex.space3d.BCRec
+   :members:
+   :undoc-members:
+
+.. autoclass:: amrex.space3d.Vector_BCRec
+   :members:
+   :undoc-members:
+
+.. autofunction:: amrex.space3d.setBC
+
+.. autofunction:: amrex.space3d.fill_domain_boundary
+
+.. autoclass:: amrex.space3d.PhysBCFunctNoOp
+   :members:
+   :undoc-members:
+
+.. autoclass:: amrex.space3d.CpuBndryFuncFab
+   :members:
+   :undoc-members:
+
+.. autoclass:: amrex.space3d.PhysBCFunct_CpuBndryFuncFab
+   :members:
+   :undoc-members:
+
+.. autoclass:: amrex.space3d.PhysBCFunctUser
+   :members:
+   :undoc-members:
+
 Data Containers
 """""""""""""""
 
