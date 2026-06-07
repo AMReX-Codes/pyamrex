@@ -5,8 +5,10 @@ amrex
 
 .. autosummary::
    :toctree: _generate
+   AmrCore
    AmrInfo
    AmrMesh
+   AmrParGDB
    Arena
    ArrayOfStructs
    Box
@@ -22,6 +24,7 @@ amrex
    MFItInfo
    MultiFab
    ParallelDescriptor
+   ParGDBBase
    Particle
    ParmParse
    ParticleTile
@@ -31,6 +34,8 @@ amrex
    PODVector
    SmallMatrix
    StructOfArrays
+   TagBox
+   TagBoxArray
    Utility
    Vector
    VisMF
@@ -49,9 +54,11 @@ from amrex.extensions.SmallMatrix import register_SmallMatrix_extension
 from amrex.extensions.StructOfArrays import register_SoA_extension
 from amrex.space2d.amrex_2d_pybind import (
     AlmostEqual,
+    AmrCore,
     AMReX,
     AmrInfo,
     AmrMesh,
+    AmrParGDB,
     Arena,
     Array4_cdouble,
     Array4_cdouble_const,
@@ -154,6 +161,7 @@ from amrex.space2d.amrex_2d_pybind import (
     ParConstIterBase_pureSoA_6_0_polymorphic,
     ParConstIterBase_pureSoA_7_0_polymorphic,
     ParConstIterBase_pureSoA_11_0_polymorphic,
+    ParGDBBase,
     ParIter_2_1_3_1_arena,
     ParIter_2_1_3_1_default,
     ParIter_2_1_3_1_pinned,
@@ -286,6 +294,8 @@ from amrex.space2d.amrex_2d_pybind import (
     StructOfArrays_6_0_idcpu_polymorphic,
     StructOfArrays_7_0_idcpu_polymorphic,
     StructOfArrays_11_0_idcpu_polymorphic,
+    TagBox,
+    TagBoxArray,
     The_Arena,
     The_Async_Arena,
     The_Cpu_Arena,
@@ -374,8 +384,10 @@ from . import amrex_2d_pybind
 __all__: list[str] = [
     "AMReX",
     "AlmostEqual",
+    "AmrCore",
     "AmrInfo",
     "AmrMesh",
+    "AmrParGDB",
     "Arena",
     "Array4_cdouble",
     "Array4_cdouble_const",
@@ -513,6 +525,7 @@ __all__: list[str] = [
     "ParConstIter_pureSoA_2_0_polymorphic",
     "ParConstIter_pureSoA_6_0_polymorphic",
     "ParConstIter_pureSoA_7_0_polymorphic",
+    "ParGDBBase",
     "ParIterBase_16_4_0_0_arena",
     "ParIterBase_16_4_0_0_default",
     "ParIterBase_16_4_0_0_pinned",
@@ -639,6 +652,8 @@ __all__: list[str] = [
     "StructOfArrays_3_1_polymorphic",
     "StructOfArrays_6_0_idcpu_polymorphic",
     "StructOfArrays_7_0_idcpu_polymorphic",
+    "TagBox",
+    "TagBoxArray",
     "The_Arena",
     "The_Async_Arena",
     "The_Cpu_Arena",

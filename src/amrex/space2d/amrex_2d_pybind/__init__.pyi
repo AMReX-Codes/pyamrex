@@ -5,8 +5,10 @@ amrex
 
 .. autosummary::
    :toctree: _generate
+   AmrCore
    AmrInfo
    AmrMesh
+   AmrParGDB
    Arena
    ArrayOfStructs
    Box
@@ -22,6 +24,7 @@ amrex
    MFItInfo
    MultiFab
    ParallelDescriptor
+   ParGDBBase
    Particle
    ParmParse
    ParticleTile
@@ -31,6 +34,8 @@ amrex
    PODVector
    SmallMatrix
    StructOfArrays
+   TagBox
+   TagBoxArray
    Utility
    Vector
    VisMF
@@ -51,8 +56,10 @@ from . import ParallelDescriptor
 __all__: list[str] = [
     "AMReX",
     "AlmostEqual",
+    "AmrCore",
     "AmrInfo",
     "AmrMesh",
+    "AmrParGDB",
     "Arena",
     "Array4_cdouble",
     "Array4_cdouble_const",
@@ -190,6 +197,7 @@ __all__: list[str] = [
     "ParConstIter_pureSoA_2_0_polymorphic",
     "ParConstIter_pureSoA_6_0_polymorphic",
     "ParConstIter_pureSoA_7_0_polymorphic",
+    "ParGDBBase",
     "ParIterBase_16_4_0_0_arena",
     "ParIterBase_16_4_0_0_default",
     "ParIterBase_16_4_0_0_pinned",
@@ -315,6 +323,8 @@ __all__: list[str] = [
     "StructOfArrays_3_1_polymorphic",
     "StructOfArrays_6_0_idcpu_polymorphic",
     "StructOfArrays_7_0_idcpu_polymorphic",
+    "TagBox",
+    "TagBoxArray",
     "The_Arena",
     "The_Async_Arena",
     "The_Cpu_Arena",
@@ -16094,6 +16104,397 @@ class PODVector_uint64_polymorphic:
     @property
     def __cuda_array_interface__(self) -> dict: ...
 
+class TagBox:
+    """
+    Cell-tag storage used by ``AmrCore.error_est``.
+
+    Use ``TagBox.SET`` to request refinement, ``TagBox.CLEAR`` to remove a tag and
+    ``TagBox.BUF`` for AMReX-generated buffered tags.
+    """
+    class TagVal(enum.IntEnum):
+        BUF: typing.ClassVar[TagBox.TagVal]
+        CLEAR: typing.ClassVar[TagBox.TagVal]
+        SET: typing.ClassVar[TagBox.TagVal]
+        @classmethod
+        def __new__(cls, value): ...
+        def __format__(self, format_spec): ...
+
+    BUF: typing.ClassVar[TagBox.TagVal]
+    CLEAR: typing.ClassVar[TagBox.TagVal]
+    SET: typing.ClassVar[TagBox.TagVal]
+    def __repr__(self) -> str: ...
+
+class TagBoxArray(FabArrayBase):
+    """
+    Distributed array of ``TagBox`` objects used during AMR error estimation.
+
+    Python ``AmrCore.error_est`` overrides receive a mutable ``TagBoxArray`` and
+    mark cells with ``set_val(TagBox.SET, ...)``.  Callback arguments are
+    non-owning views and should not be stored after the override returns.
+    """
+    @typing.overload
+    def __init__(
+        self,
+        ba: BoxArray,
+        dm: DistributionMapping,
+        ngrow: typing.SupportsInt | typing.SupportsIndex = 0,
+    ) -> None:
+        """
+        Construct tag storage on ba/dm with an isotropic grow width.
+        """
+    @typing.overload
+    def __init__(self, ba: BoxArray, dm: DistributionMapping, ngrow: IntVect2D) -> None:
+        """
+        Construct tag storage on ba/dm with per-direction grow widths.
+        """
+    def __len__(self) -> int: ...
+    def __repr__(self) -> str: ...
+    def buffer(self, nbuf: IntVect2D) -> None:
+        """
+        Grow every SET tag by nbuf cells using AMReX tag-buffer rules.
+        """
+    def clear(self) -> None:
+        """
+        Release all tag data and metadata.
+        """
+    def coarsen(self, ratio: IntVect2D) -> None:
+        """
+        Coarsen tags in place by ratio.
+        """
+    def has_tags(self, box: Box) -> bool:
+        """
+        Return True if box contains any SET or BUF tags.
+        """
+    def map_periodic_remove_duplicates(self, geom: Geometry) -> None:
+        """
+        Map tags through periodic boundaries described by geom and remove duplicates.
+        """
+    def ok(self) -> bool:
+        """
+        Return True if the tag array is internally consistent.
+        """
+    @typing.overload
+    def set_val(self, val: TagBox.TagVal) -> None:
+        """
+        Set all valid and grow cells in the tag array to val.
+        """
+    @typing.overload
+    def set_val(
+        self, val: TagBox.TagVal, nghost: typing.SupportsInt | typing.SupportsIndex
+    ) -> None:
+        """
+        Set all valid cells plus nghost grow cells to val.
+        """
+    @typing.overload
+    def set_val(self, val: TagBox.TagVal, nghost: IntVect2D) -> None:
+        """
+        Set all valid cells plus per-direction grow cells to val.
+        """
+    @typing.overload
+    def set_val(
+        self,
+        val: TagBox.TagVal,
+        region: Box,
+        nghost: typing.SupportsInt | typing.SupportsIndex = 0,
+    ) -> None:
+        """
+        Set cells intersecting region, optionally grown by nghost, to val.
+        """
+    @typing.overload
+    def set_val(self, val: TagBox.TagVal, region: Box, nghost: IntVect2D) -> None:
+        """
+        Set cells intersecting region with per-direction grow widths to val.
+        """
+    @typing.overload
+    def set_val(self, ba: BoxArray, val: TagBox.TagVal) -> None:
+        """
+        Set cells covered by ba to val.
+        """
+    @property
+    def box_array(self) -> BoxArray:
+        """
+        BoxArray defining the valid regions for this tag array.
+        """
+    @property
+    def dist_map(self) -> DistributionMapping:
+        """
+        DistributionMapping defining ownership of this tag array.
+        """
+    @property
+    def local_size(self) -> int:
+        """
+        Number of tag boxes owned by this MPI rank.
+        """
+    @property
+    def n_grow_vect(self) -> IntVect2D:
+        """
+        Grow width of the tag storage in each coordinate direction.
+        """
+    @property
+    def size(self) -> int:
+        """
+        Number of boxes in the global tag layout.
+        """
+
+class AmrInfo:
+    check_input: bool
+    iterate_on_new_grids: bool
+    refine_grid_layout: bool
+    refine_grid_layout_dims: IntVect2D
+    use_fixed_coarse_grids: bool
+    use_new_chop: bool
+    def __init__(self) -> None: ...
+    def __repr__(self) -> str: ...
+    def blocking_factor(
+        self, arg0: typing.SupportsInt | typing.SupportsIndex
+    ) -> IntVect2D: ...
+    def max_grid_size(
+        self, arg0: typing.SupportsInt | typing.SupportsIndex
+    ) -> IntVect2D: ...
+    def n_error_buf(
+        self, arg0: typing.SupportsInt | typing.SupportsIndex
+    ) -> IntVect2D: ...
+    def ref_ratio(
+        self, arg0: typing.SupportsInt | typing.SupportsIndex
+    ) -> IntVect2D: ...
+    @property
+    def grid_eff(self) -> float: ...
+    @grid_eff.setter
+    def grid_eff(self, arg0: typing.SupportsFloat | typing.SupportsIndex) -> None: ...
+    @property
+    def max_level(self) -> int: ...
+    @max_level.setter
+    def max_level(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> None: ...
+    @property
+    def n_proper(self) -> int: ...
+    @n_proper.setter
+    def n_proper(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> None: ...
+    @property
+    def use_fixed_upto_level(self) -> int: ...
+    @use_fixed_upto_level.setter
+    def use_fixed_upto_level(
+        self, arg0: typing.SupportsInt | typing.SupportsIndex
+    ) -> None: ...
+    @property
+    def verbose(self) -> int: ...
+    @verbose.setter
+    def verbose(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> None: ...
+
+class AmrMesh:
+    @typing.overload
+    def __init__(self) -> None: ...
+    @typing.overload
+    def __init__(
+        self,
+        rb: RealBox,
+        max_level_in: typing.SupportsInt | typing.SupportsIndex,
+        n_cell_in: Vector_int,
+        coord: typing.SupportsInt | typing.SupportsIndex,
+        ref_ratios: Vector_IntVect,
+        is_per: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt | typing.SupportsIndex],
+            "FixedSize(2)",
+        ],
+    ) -> None: ...
+    def __repr__(self) -> str: ...
+    def geom(self, lev: typing.SupportsInt | typing.SupportsIndex) -> Geometry:
+        """
+        Return the Geometry stored for AMR level lev.
+        """
+    @typing.overload
+    def ref_ratio(self) -> Vector_IntVect: ...
+    @typing.overload
+    def ref_ratio(
+        self, arg0: typing.SupportsInt | typing.SupportsIndex
+    ) -> IntVect2D: ...
+    def set_geometry(
+        self, lev: typing.SupportsInt | typing.SupportsIndex, geom_in: Geometry
+    ) -> None:
+        """
+        Replace the Geometry stored for AMR level lev.
+        """
+    @property
+    def finest_level(self) -> int: ...
+    @property
+    def max_level(self) -> int: ...
+    @property
+    def verbose(self) -> int: ...
+
+class AmrCore(AmrMesh):
+    """
+    Base class for Python AMR applications that manage an AMReX mesh hierarchy.
+
+    Subclasses must implement ``make_new_level_from_scratch``,
+    ``make_new_level_from_coarse``, ``remake_level``, ``clear_level`` and
+    ``error_est``.  AMReX calls these Python overrides while creating or
+    regridding levels.
+
+    ``error_est(lev, tags, time, ngrow)`` receives a mutable ``TagBoxArray``
+    for the level being tagged.  Mark cells with
+    ``tags.set_val(TagBox.SET, ...)`` and keep the tag array only for the
+    duration of the callback.
+    """
+    @typing.overload
+    def __init__(self) -> None:
+        """
+        Construct an empty AMR core.
+
+        The mesh metadata is read from AMReX runtime parameters when available.
+        """
+    @typing.overload
+    def __init__(
+        self,
+        rb: RealBox,
+        max_level_in: typing.SupportsInt | typing.SupportsIndex,
+        n_cell_in: Vector_int,
+        coord: typing.SupportsInt | typing.SupportsIndex,
+        ref_ratios: Vector_IntVect,
+        is_per: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt | typing.SupportsIndex],
+            "FixedSize(2)",
+        ],
+    ) -> None:
+        """
+        Construct an AMR core from an explicit level-0 problem domain.
+
+        Parameters
+        ----------
+        rb : RealBox
+            Physical problem domain for level 0.
+        max_level_in : int
+            Maximum AMR level to create.  Use 0 for a single-level hierarchy.
+        n_cell_in : Vector_int
+            Number of level-0 cells in each coordinate direction.
+        coord : int
+            AMReX coordinate-system identifier.
+        ref_ratios : Vector_IntVect
+            Refinement ratio for each coarse level.  Its length is normally
+            ``max_level_in``.
+        is_per : Sequence[int]
+            Periodicity flags for each coordinate direction.
+        """
+    @typing.overload
+    def __init__(self, level_0_geom: Geometry, amr_info: AmrInfo) -> None:
+        """
+        Construct an AMR core from a level-0 geometry and an ``AmrInfo`` object.
+        """
+    def __repr__(self) -> str: ...
+    def get_par_gdb(self) -> AmrParGDB:
+        """
+        Return the particle geometry/database broker owned by this AMR core.
+
+        The returned ``AmrParGDB`` can be passed to particle-container constructors or
+        ``define`` methods.  It is a non-owning view; the ``AmrCore`` is kept alive by
+        the binding while the broker is used from Python.
+        """
+    def init_from_scratch(
+        self, time: typing.SupportsFloat | typing.SupportsIndex
+    ) -> None:
+        """
+        Create the AMR hierarchy from scratch at simulation time ``time``.
+
+        This calls the Python overrides that allocate level data and, when
+        ``max_level`` is greater than 0, calls ``error_est`` to create refined grids.
+        """
+    def regrid(
+        self,
+        lbase: typing.SupportsInt | typing.SupportsIndex,
+        time: typing.SupportsFloat | typing.SupportsIndex,
+        initial: bool = False,
+    ) -> None:
+        """
+        Rebuild levels finer than ``lbase`` at simulation time ``time``.
+
+        ``error_est`` is called to tag cells, followed by the level remake/create/clear
+        callbacks as needed.
+        """
+
+class ParGDBBase:
+    """
+    Abstract broker for particle geometry, box arrays and distribution maps.
+
+    Particle containers use a ``ParGDBBase`` to query mesh metadata for each AMR
+    level.  Python users usually obtain a concrete ``AmrParGDB`` from
+    ``AmrCore.get_par_gdb()``.
+    """
+    def box_array(self, level: typing.SupportsInt | typing.SupportsIndex) -> BoxArray:
+        """
+        Return mesh BoxArray for AMR level.
+        """
+    def dist_map(
+        self, level: typing.SupportsInt | typing.SupportsIndex
+    ) -> DistributionMapping:
+        """
+        Return mesh DistributionMapping for AMR level.
+        """
+    def finest_level(self) -> int:
+        """
+        Return the finest currently defined AMR level.
+        """
+    def geom(self, level: typing.SupportsInt | typing.SupportsIndex) -> Geometry:
+        """
+        Return mesh Geometry for AMR level.
+        """
+    def level_defined(self, level: typing.SupportsInt | typing.SupportsIndex) -> bool:
+        """
+        Return True if AMR level has valid mesh metadata.
+        """
+    def max_level(self) -> int:
+        """
+        Return the maximum AMR level supported by this broker.
+        """
+    def particle_box_array(
+        self, level: typing.SupportsInt | typing.SupportsIndex
+    ) -> BoxArray:
+        """
+        Return particle BoxArray for AMR level.
+        """
+    def particle_dist_map(
+        self, level: typing.SupportsInt | typing.SupportsIndex
+    ) -> DistributionMapping:
+        """
+        Return particle DistributionMapping for AMR level.
+        """
+    def particle_geom(
+        self, level: typing.SupportsInt | typing.SupportsIndex
+    ) -> Geometry:
+        """
+        Return particle Geometry for AMR level.
+        """
+    def ref_ratio(self, level: typing.SupportsInt | typing.SupportsIndex) -> IntVect2D:
+        """
+        Return the refinement ratio from level to level + 1.
+        """
+    def set_particle_box_array(
+        self, level: typing.SupportsInt | typing.SupportsIndex, new_ba: BoxArray
+    ) -> None:
+        """
+        Replace the particle BoxArray for AMR level.
+        """
+    def set_particle_dist_map(
+        self,
+        level: typing.SupportsInt | typing.SupportsIndex,
+        new_dm: DistributionMapping,
+    ) -> None:
+        """
+        Replace the particle DistributionMapping for AMR level.
+        """
+    def set_particle_geometry(
+        self, level: typing.SupportsInt | typing.SupportsIndex, new_geom: Geometry
+    ) -> None:
+        """
+        Replace the particle Geometry for AMR level.
+        """
+
+class AmrParGDB(ParGDBBase):
+    """
+    Concrete particle metadata broker backed by an AmrCore.
+    """
+    def __init__(self, amr_core: AmrCore) -> None:
+        """
+        Construct a particle metadata broker backed by amr_core.
+        """
+
 class Particle_2_0:
     NInt: typing.ClassVar[int] = 0
     NReal: typing.ClassVar[int] = 2
@@ -17533,6 +17934,11 @@ class ParticleContainer_pureSoA_2_0_pinned:
         self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray
     ) -> None: ...
     @typing.overload
+    def __init__(self, gdb: ParGDBBase) -> None:
+        """
+        Construct from a particle metadata broker such as AmrCore.get_par_gdb().
+        """
+    @typing.overload
     def __init__(
         self,
         arg0: Vector_Geometry,
@@ -17608,6 +18014,22 @@ class ParticleContainer_pureSoA_2_0_pinned:
             >>> pc.iterator(level="all")
             >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
 
+        """
+    def define(self, gdb: ParGDBBase) -> None:
+        """
+        Define this container from a particle metadata broker.
+        """
+    def define_and_return_particle_tile(
+        self,
+        lev: typing.SupportsInt | typing.SupportsIndex,
+        grid: typing.SupportsInt | typing.SupportsIndex,
+        tile: typing.SupportsInt | typing.SupportsIndex,
+    ) -> ParticleTile_pureSoA_2_0_pinned:
+        """
+        Define, if necessary, and return the particle tile at ``(lev, grid, tile)``.
+
+        This is useful when particles are inserted in place into a known AMR tile.
+        The returned tile is owned by the particle container.
         """
     def get_int_comp_index(self, arg0: str) -> int:
         """
@@ -17989,6 +18411,11 @@ class ParticleContainer_pureSoA_2_0_default:
         self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray
     ) -> None: ...
     @typing.overload
+    def __init__(self, gdb: ParGDBBase) -> None:
+        """
+        Construct from a particle metadata broker such as AmrCore.get_par_gdb().
+        """
+    @typing.overload
     def __init__(
         self,
         arg0: Vector_Geometry,
@@ -18064,6 +18491,22 @@ class ParticleContainer_pureSoA_2_0_default:
             >>> pc.iterator(level="all")
             >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
 
+        """
+    def define(self, gdb: ParGDBBase) -> None:
+        """
+        Define this container from a particle metadata broker.
+        """
+    def define_and_return_particle_tile(
+        self,
+        lev: typing.SupportsInt | typing.SupportsIndex,
+        grid: typing.SupportsInt | typing.SupportsIndex,
+        tile: typing.SupportsInt | typing.SupportsIndex,
+    ) -> ParticleTile_pureSoA_2_0_default:
+        """
+        Define, if necessary, and return the particle tile at ``(lev, grid, tile)``.
+
+        This is useful when particles are inserted in place into a known AMR tile.
+        The returned tile is owned by the particle container.
         """
     def get_int_comp_index(self, arg0: str) -> int:
         """
@@ -18445,6 +18888,11 @@ class ParticleContainer_pureSoA_2_0_arena:
         self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray
     ) -> None: ...
     @typing.overload
+    def __init__(self, gdb: ParGDBBase) -> None:
+        """
+        Construct from a particle metadata broker such as AmrCore.get_par_gdb().
+        """
+    @typing.overload
     def __init__(
         self,
         arg0: Vector_Geometry,
@@ -18520,6 +18968,22 @@ class ParticleContainer_pureSoA_2_0_arena:
             >>> pc.iterator(level="all")
             >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
 
+        """
+    def define(self, gdb: ParGDBBase) -> None:
+        """
+        Define this container from a particle metadata broker.
+        """
+    def define_and_return_particle_tile(
+        self,
+        lev: typing.SupportsInt | typing.SupportsIndex,
+        grid: typing.SupportsInt | typing.SupportsIndex,
+        tile: typing.SupportsInt | typing.SupportsIndex,
+    ) -> ParticleTile_pureSoA_2_0_arena:
+        """
+        Define, if necessary, and return the particle tile at ``(lev, grid, tile)``.
+
+        This is useful when particles are inserted in place into a known AMR tile.
+        The returned tile is owned by the particle container.
         """
     def get_int_comp_index(self, arg0: str) -> int:
         """
@@ -18901,6 +19365,11 @@ class ParticleContainer_pureSoA_2_0_polymorphic:
         self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray
     ) -> None: ...
     @typing.overload
+    def __init__(self, gdb: ParGDBBase) -> None:
+        """
+        Construct from a particle metadata broker such as AmrCore.get_par_gdb().
+        """
+    @typing.overload
     def __init__(
         self,
         arg0: Vector_Geometry,
@@ -18976,6 +19445,22 @@ class ParticleContainer_pureSoA_2_0_polymorphic:
             >>> pc.iterator(level="all")
             >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
 
+        """
+    def define(self, gdb: ParGDBBase) -> None:
+        """
+        Define this container from a particle metadata broker.
+        """
+    def define_and_return_particle_tile(
+        self,
+        lev: typing.SupportsInt | typing.SupportsIndex,
+        grid: typing.SupportsInt | typing.SupportsIndex,
+        tile: typing.SupportsInt | typing.SupportsIndex,
+    ) -> ParticleTile_pureSoA_2_0_polymorphic:
+        """
+        Define, if necessary, and return the particle tile at ``(lev, grid, tile)``.
+
+        This is useful when particles are inserted in place into a known AMR tile.
+        The returned tile is owned by the particle container.
         """
     def get_int_comp_index(self, arg0: str) -> int:
         """
@@ -21106,6 +21591,11 @@ class ParticleContainer_2_1_3_1_pinned:
         self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray
     ) -> None: ...
     @typing.overload
+    def __init__(self, gdb: ParGDBBase) -> None:
+        """
+        Construct from a particle metadata broker such as AmrCore.get_par_gdb().
+        """
+    @typing.overload
     def __init__(
         self,
         arg0: Vector_Geometry,
@@ -21181,6 +21671,22 @@ class ParticleContainer_2_1_3_1_pinned:
             >>> pc.iterator(level="all")
             >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
 
+        """
+    def define(self, gdb: ParGDBBase) -> None:
+        """
+        Define this container from a particle metadata broker.
+        """
+    def define_and_return_particle_tile(
+        self,
+        lev: typing.SupportsInt | typing.SupportsIndex,
+        grid: typing.SupportsInt | typing.SupportsIndex,
+        tile: typing.SupportsInt | typing.SupportsIndex,
+    ) -> ParticleTile_2_1_3_1_pinned:
+        """
+        Define, if necessary, and return the particle tile at ``(lev, grid, tile)``.
+
+        This is useful when particles are inserted in place into a known AMR tile.
+        The returned tile is owned by the particle container.
         """
     def get_int_comp_index(self, arg0: str) -> int:
         """
@@ -21577,6 +22083,11 @@ class ParticleContainer_2_1_3_1_default:
         self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray
     ) -> None: ...
     @typing.overload
+    def __init__(self, gdb: ParGDBBase) -> None:
+        """
+        Construct from a particle metadata broker such as AmrCore.get_par_gdb().
+        """
+    @typing.overload
     def __init__(
         self,
         arg0: Vector_Geometry,
@@ -21652,6 +22163,22 @@ class ParticleContainer_2_1_3_1_default:
             >>> pc.iterator(level="all")
             >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
 
+        """
+    def define(self, gdb: ParGDBBase) -> None:
+        """
+        Define this container from a particle metadata broker.
+        """
+    def define_and_return_particle_tile(
+        self,
+        lev: typing.SupportsInt | typing.SupportsIndex,
+        grid: typing.SupportsInt | typing.SupportsIndex,
+        tile: typing.SupportsInt | typing.SupportsIndex,
+    ) -> ParticleTile_2_1_3_1_default:
+        """
+        Define, if necessary, and return the particle tile at ``(lev, grid, tile)``.
+
+        This is useful when particles are inserted in place into a known AMR tile.
+        The returned tile is owned by the particle container.
         """
     def get_int_comp_index(self, arg0: str) -> int:
         """
@@ -22048,6 +22575,11 @@ class ParticleContainer_2_1_3_1_arena:
         self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray
     ) -> None: ...
     @typing.overload
+    def __init__(self, gdb: ParGDBBase) -> None:
+        """
+        Construct from a particle metadata broker such as AmrCore.get_par_gdb().
+        """
+    @typing.overload
     def __init__(
         self,
         arg0: Vector_Geometry,
@@ -22123,6 +22655,22 @@ class ParticleContainer_2_1_3_1_arena:
             >>> pc.iterator(level="all")
             >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
 
+        """
+    def define(self, gdb: ParGDBBase) -> None:
+        """
+        Define this container from a particle metadata broker.
+        """
+    def define_and_return_particle_tile(
+        self,
+        lev: typing.SupportsInt | typing.SupportsIndex,
+        grid: typing.SupportsInt | typing.SupportsIndex,
+        tile: typing.SupportsInt | typing.SupportsIndex,
+    ) -> ParticleTile_2_1_3_1_arena:
+        """
+        Define, if necessary, and return the particle tile at ``(lev, grid, tile)``.
+
+        This is useful when particles are inserted in place into a known AMR tile.
+        The returned tile is owned by the particle container.
         """
     def get_int_comp_index(self, arg0: str) -> int:
         """
@@ -22519,6 +23067,11 @@ class ParticleContainer_2_1_3_1_polymorphic:
         self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray
     ) -> None: ...
     @typing.overload
+    def __init__(self, gdb: ParGDBBase) -> None:
+        """
+        Construct from a particle metadata broker such as AmrCore.get_par_gdb().
+        """
+    @typing.overload
     def __init__(
         self,
         arg0: Vector_Geometry,
@@ -22594,6 +23147,22 @@ class ParticleContainer_2_1_3_1_polymorphic:
             >>> pc.iterator(level="all")
             >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
 
+        """
+    def define(self, gdb: ParGDBBase) -> None:
+        """
+        Define this container from a particle metadata broker.
+        """
+    def define_and_return_particle_tile(
+        self,
+        lev: typing.SupportsInt | typing.SupportsIndex,
+        grid: typing.SupportsInt | typing.SupportsIndex,
+        tile: typing.SupportsInt | typing.SupportsIndex,
+    ) -> ParticleTile_2_1_3_1_polymorphic:
+        """
+        Define, if necessary, and return the particle tile at ``(lev, grid, tile)``.
+
+        This is useful when particles are inserted in place into a known AMR tile.
+        The returned tile is owned by the particle container.
         """
     def get_int_comp_index(self, arg0: str) -> int:
         """
@@ -24637,6 +25206,11 @@ class ParticleContainer_16_4_0_0_pinned:
         self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray
     ) -> None: ...
     @typing.overload
+    def __init__(self, gdb: ParGDBBase) -> None:
+        """
+        Construct from a particle metadata broker such as AmrCore.get_par_gdb().
+        """
+    @typing.overload
     def __init__(
         self,
         arg0: Vector_Geometry,
@@ -24712,6 +25286,22 @@ class ParticleContainer_16_4_0_0_pinned:
             >>> pc.iterator(level="all")
             >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
 
+        """
+    def define(self, gdb: ParGDBBase) -> None:
+        """
+        Define this container from a particle metadata broker.
+        """
+    def define_and_return_particle_tile(
+        self,
+        lev: typing.SupportsInt | typing.SupportsIndex,
+        grid: typing.SupportsInt | typing.SupportsIndex,
+        tile: typing.SupportsInt | typing.SupportsIndex,
+    ) -> ParticleTile_16_4_0_0_pinned:
+        """
+        Define, if necessary, and return the particle tile at ``(lev, grid, tile)``.
+
+        This is useful when particles are inserted in place into a known AMR tile.
+        The returned tile is owned by the particle container.
         """
     def get_int_comp_index(self, arg0: str) -> int:
         """
@@ -25108,6 +25698,11 @@ class ParticleContainer_16_4_0_0_default:
         self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray
     ) -> None: ...
     @typing.overload
+    def __init__(self, gdb: ParGDBBase) -> None:
+        """
+        Construct from a particle metadata broker such as AmrCore.get_par_gdb().
+        """
+    @typing.overload
     def __init__(
         self,
         arg0: Vector_Geometry,
@@ -25183,6 +25778,22 @@ class ParticleContainer_16_4_0_0_default:
             >>> pc.iterator(level="all")
             >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
 
+        """
+    def define(self, gdb: ParGDBBase) -> None:
+        """
+        Define this container from a particle metadata broker.
+        """
+    def define_and_return_particle_tile(
+        self,
+        lev: typing.SupportsInt | typing.SupportsIndex,
+        grid: typing.SupportsInt | typing.SupportsIndex,
+        tile: typing.SupportsInt | typing.SupportsIndex,
+    ) -> ParticleTile_16_4_0_0_default:
+        """
+        Define, if necessary, and return the particle tile at ``(lev, grid, tile)``.
+
+        This is useful when particles are inserted in place into a known AMR tile.
+        The returned tile is owned by the particle container.
         """
     def get_int_comp_index(self, arg0: str) -> int:
         """
@@ -25579,6 +26190,11 @@ class ParticleContainer_16_4_0_0_arena:
         self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray
     ) -> None: ...
     @typing.overload
+    def __init__(self, gdb: ParGDBBase) -> None:
+        """
+        Construct from a particle metadata broker such as AmrCore.get_par_gdb().
+        """
+    @typing.overload
     def __init__(
         self,
         arg0: Vector_Geometry,
@@ -25654,6 +26270,22 @@ class ParticleContainer_16_4_0_0_arena:
             >>> pc.iterator(level="all")
             >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
 
+        """
+    def define(self, gdb: ParGDBBase) -> None:
+        """
+        Define this container from a particle metadata broker.
+        """
+    def define_and_return_particle_tile(
+        self,
+        lev: typing.SupportsInt | typing.SupportsIndex,
+        grid: typing.SupportsInt | typing.SupportsIndex,
+        tile: typing.SupportsInt | typing.SupportsIndex,
+    ) -> ParticleTile_16_4_0_0_arena:
+        """
+        Define, if necessary, and return the particle tile at ``(lev, grid, tile)``.
+
+        This is useful when particles are inserted in place into a known AMR tile.
+        The returned tile is owned by the particle container.
         """
     def get_int_comp_index(self, arg0: str) -> int:
         """
@@ -26050,6 +26682,11 @@ class ParticleContainer_16_4_0_0_polymorphic:
         self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray
     ) -> None: ...
     @typing.overload
+    def __init__(self, gdb: ParGDBBase) -> None:
+        """
+        Construct from a particle metadata broker such as AmrCore.get_par_gdb().
+        """
+    @typing.overload
     def __init__(
         self,
         arg0: Vector_Geometry,
@@ -26125,6 +26762,22 @@ class ParticleContainer_16_4_0_0_polymorphic:
             >>> pc.iterator(level="all")
             >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
 
+        """
+    def define(self, gdb: ParGDBBase) -> None:
+        """
+        Define this container from a particle metadata broker.
+        """
+    def define_and_return_particle_tile(
+        self,
+        lev: typing.SupportsInt | typing.SupportsIndex,
+        grid: typing.SupportsInt | typing.SupportsIndex,
+        tile: typing.SupportsInt | typing.SupportsIndex,
+    ) -> ParticleTile_16_4_0_0_polymorphic:
+        """
+        Define, if necessary, and return the particle tile at ``(lev, grid, tile)``.
+
+        This is useful when particles are inserted in place into a known AMR tile.
+        The returned tile is owned by the particle container.
         """
     def get_int_comp_index(self, arg0: str) -> int:
         """
@@ -26935,6 +27588,11 @@ class ParticleContainer_pureSoA_11_0_polymorphic:
         self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray
     ) -> None: ...
     @typing.overload
+    def __init__(self, gdb: ParGDBBase) -> None:
+        """
+        Construct from a particle metadata broker such as AmrCore.get_par_gdb().
+        """
+    @typing.overload
     def __init__(
         self,
         arg0: Vector_Geometry,
@@ -27010,6 +27668,22 @@ class ParticleContainer_pureSoA_11_0_polymorphic:
             >>> pc.iterator(level="all")
             >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
 
+        """
+    def define(self, gdb: ParGDBBase) -> None:
+        """
+        Define this container from a particle metadata broker.
+        """
+    def define_and_return_particle_tile(
+        self,
+        lev: typing.SupportsInt | typing.SupportsIndex,
+        grid: typing.SupportsInt | typing.SupportsIndex,
+        tile: typing.SupportsInt | typing.SupportsIndex,
+    ) -> ParticleTile_pureSoA_11_0_polymorphic:
+        """
+        Define, if necessary, and return the particle tile at ``(lev, grid, tile)``.
+
+        This is useful when particles are inserted in place into a known AMR tile.
+        The returned tile is owned by the particle container.
         """
     def get_int_comp_index(self, arg0: str) -> int:
         """
@@ -27807,6 +28481,11 @@ class ParticleContainer_pureSoA_6_0_polymorphic:
         self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray
     ) -> None: ...
     @typing.overload
+    def __init__(self, gdb: ParGDBBase) -> None:
+        """
+        Construct from a particle metadata broker such as AmrCore.get_par_gdb().
+        """
+    @typing.overload
     def __init__(
         self,
         arg0: Vector_Geometry,
@@ -27882,6 +28561,22 @@ class ParticleContainer_pureSoA_6_0_polymorphic:
             >>> pc.iterator(level="all")
             >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
 
+        """
+    def define(self, gdb: ParGDBBase) -> None:
+        """
+        Define this container from a particle metadata broker.
+        """
+    def define_and_return_particle_tile(
+        self,
+        lev: typing.SupportsInt | typing.SupportsIndex,
+        grid: typing.SupportsInt | typing.SupportsIndex,
+        tile: typing.SupportsInt | typing.SupportsIndex,
+    ) -> ParticleTile_pureSoA_6_0_polymorphic:
+        """
+        Define, if necessary, and return the particle tile at ``(lev, grid, tile)``.
+
+        This is useful when particles are inserted in place into a known AMR tile.
+        The returned tile is owned by the particle container.
         """
     def get_int_comp_index(self, arg0: str) -> int:
         """
@@ -28679,6 +29374,11 @@ class ParticleContainer_pureSoA_7_0_polymorphic:
         self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray
     ) -> None: ...
     @typing.overload
+    def __init__(self, gdb: ParGDBBase) -> None:
+        """
+        Construct from a particle metadata broker such as AmrCore.get_par_gdb().
+        """
+    @typing.overload
     def __init__(
         self,
         arg0: Vector_Geometry,
@@ -28754,6 +29454,22 @@ class ParticleContainer_pureSoA_7_0_polymorphic:
             >>> pc.iterator(level="all")
             >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
 
+        """
+    def define(self, gdb: ParGDBBase) -> None:
+        """
+        Define this container from a particle metadata broker.
+        """
+    def define_and_return_particle_tile(
+        self,
+        lev: typing.SupportsInt | typing.SupportsIndex,
+        grid: typing.SupportsInt | typing.SupportsIndex,
+        tile: typing.SupportsInt | typing.SupportsIndex,
+    ) -> ParticleTile_pureSoA_7_0_polymorphic:
+        """
+        Define, if necessary, and return the particle tile at ``(lev, grid, tile)``.
+
+        This is useful when particles are inserted in place into a known AMR tile.
+        The returned tile is owned by the particle container.
         """
     def get_int_comp_index(self, arg0: str) -> int:
         """
@@ -28922,80 +29638,6 @@ class ParticleContainer_pureSoA_7_0_polymorphic:
         """
         Return the number of valid particles on all MPI ranks
         """
-
-class AmrInfo:
-    check_input: bool
-    iterate_on_new_grids: bool
-    refine_grid_layout: bool
-    refine_grid_layout_dims: IntVect2D
-    use_fixed_coarse_grids: bool
-    use_new_chop: bool
-    def __init__(self) -> None: ...
-    def __repr__(self) -> str: ...
-    def blocking_factor(
-        self, arg0: typing.SupportsInt | typing.SupportsIndex
-    ) -> IntVect2D: ...
-    def max_grid_size(
-        self, arg0: typing.SupportsInt | typing.SupportsIndex
-    ) -> IntVect2D: ...
-    def n_error_buf(
-        self, arg0: typing.SupportsInt | typing.SupportsIndex
-    ) -> IntVect2D: ...
-    def ref_ratio(
-        self, arg0: typing.SupportsInt | typing.SupportsIndex
-    ) -> IntVect2D: ...
-    @property
-    def grid_eff(self) -> float: ...
-    @grid_eff.setter
-    def grid_eff(self, arg0: typing.SupportsFloat | typing.SupportsIndex) -> None: ...
-    @property
-    def max_level(self) -> int: ...
-    @max_level.setter
-    def max_level(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> None: ...
-    @property
-    def n_proper(self) -> int: ...
-    @n_proper.setter
-    def n_proper(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> None: ...
-    @property
-    def use_fixed_upto_level(self) -> int: ...
-    @use_fixed_upto_level.setter
-    def use_fixed_upto_level(
-        self, arg0: typing.SupportsInt | typing.SupportsIndex
-    ) -> None: ...
-    @property
-    def verbose(self) -> int: ...
-    @verbose.setter
-    def verbose(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> None: ...
-
-class AmrMesh:
-    @typing.overload
-    def __init__(self) -> None: ...
-    @typing.overload
-    def __init__(
-        self,
-        rb: RealBox,
-        max_level_in: typing.SupportsInt | typing.SupportsIndex,
-        n_cell_in: Vector_int,
-        coord: typing.SupportsInt | typing.SupportsIndex,
-        ref_ratios: Vector_IntVect,
-        is_per: typing.Annotated[
-            collections.abc.Sequence[typing.SupportsInt | typing.SupportsIndex],
-            "FixedSize(2)",
-        ],
-    ) -> None: ...
-    def __repr__(self) -> str: ...
-    @typing.overload
-    def ref_ratio(self) -> Vector_IntVect: ...
-    @typing.overload
-    def ref_ratio(
-        self, arg0: typing.SupportsInt | typing.SupportsIndex
-    ) -> IntVect2D: ...
-    @property
-    def finest_level(self) -> int: ...
-    @property
-    def max_level(self) -> int: ...
-    @property
-    def verbose(self) -> int: ...
 
 class MPMD_Copier:
     @typing.overload
