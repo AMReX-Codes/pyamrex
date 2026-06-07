@@ -14,6 +14,9 @@ amrex
    Box
    RealBox
    BoxArray
+   BCRec
+   BCType
+   CpuBndryFuncFab
    Dim3
    FArrayBox
    iMultiFab
@@ -30,6 +33,10 @@ amrex
    ParticleTile
    ParticleContainer
    Periodicity
+   PhysBCFunctNoOp
+   PhysBCFunct_CpuBndryFuncFab
+   PhysBCFunctUser
+   PhysBCType
    PlotFileUtil
    PODVector
    SmallMatrix
@@ -38,6 +45,9 @@ amrex
    TagBoxArray
    Utility
    Vector
+   Vector_BCRec
+   fill_domain_boundary
+   setBC
    VisMF
 
 """
@@ -98,11 +108,14 @@ __all__: list[str] = [
     "AsyncVector_int",
     "AsyncVector_real",
     "AsyncVector_uint64",
+    "BCRec",
+    "BCType",
     "BaseFab_Real",
     "Box",
     "BoxArray",
     "Config",
     "CoordSys",
+    "CpuBndryFuncFab",
     "DeviceVector_int",
     "DeviceVector_real",
     "DeviceVector_uint64",
@@ -271,6 +284,10 @@ __all__: list[str] = [
     "Particle_5_2",
     "Particle_7_0",
     "Periodicity",
+    "PhysBCFunctNoOp",
+    "PhysBCFunctUser",
+    "PhysBCFunct_CpuBndryFuncFab",
+    "PhysBCType",
     "PinnedVector_int",
     "PinnedVector_real",
     "PinnedVector_uint64",
@@ -321,6 +338,7 @@ __all__: list[str] = [
     "The_Device_Arena",
     "The_Managed_Arena",
     "The_Pinned_Arena",
+    "Vector_BCRec",
     "Vector_Box",
     "Vector_BoxArray",
     "Vector_DistributionMapping",
@@ -340,6 +358,7 @@ __all__: list[str] = [
     "copy_mfab",
     "dtoh_memcpy",
     "end",
+    "fill_domain_boundary",
     "finalize",
     "full",
     "htod_memcpy",
@@ -358,6 +377,7 @@ __all__: list[str] = [
     "pack_cpus",
     "pack_ids",
     "refine",
+    "setBC",
     "size",
     "ubound",
     "unpack_cpus",
@@ -10935,6 +10955,269 @@ class BaseFab_Real:
     @property
     def __cuda_array_interface__(self) -> dict: ...
 
+class BCType(enum.IntEnum):
+    """
+    Mathematical boundary condition types stored in BCRec.
+
+    Common values are BCType.int_dir for interior cells, BCType.foextrap
+    for first-order extrapolation, BCType.reflect_even and
+    BCType.reflect_odd for reflective boundaries, and BCType.ext_dir or
+    BCType.ext_dir_cc for external Dirichlet values supplied by the
+    application.
+    """
+
+    bogus: typing.ClassVar[BCType]
+    direction_dependent: typing.ClassVar[BCType]
+    ext_dir: typing.ClassVar[BCType]
+    ext_dir_cc: typing.ClassVar[BCType]
+    foextrap: typing.ClassVar[BCType]
+    hoextrap: typing.ClassVar[BCType]
+    hoextrapcc: typing.ClassVar[BCType]
+    int_dir: typing.ClassVar[BCType]
+    reflect_even: typing.ClassVar[BCType]
+    reflect_odd: typing.ClassVar[BCType]
+    user_1: typing.ClassVar[BCType]
+    user_2: typing.ClassVar[BCType]
+    user_3: typing.ClassVar[BCType]
+    @classmethod
+    def __new__(cls, value): ...
+    def __format__(self, format_spec): ...
+
+class PhysBCType(enum.IntEnum):
+    """
+    Physical boundary condition categories.
+
+    Application code maps these physical categories to mathematical
+    BCType values for each field component and coordinate direction.
+    """
+
+    inflow: typing.ClassVar[PhysBCType]
+    inflowoutflow: typing.ClassVar[PhysBCType]
+    interior: typing.ClassVar[PhysBCType]
+    noslipwall: typing.ClassVar[PhysBCType]
+    outflow: typing.ClassVar[PhysBCType]
+    slipwall: typing.ClassVar[PhysBCType]
+    symmetry: typing.ClassVar[PhysBCType]
+    @classmethod
+    def __new__(cls, value): ...
+    def __format__(self, format_spec): ...
+
+class BCRec:
+    """
+    Boundary condition record for one field component.
+
+    A BCRec stores one mathematical boundary type on the low and high side
+    of each coordinate direction. Pass lists of length Config.spacedim for
+    lo and hi, usually using BCType enum values.
+    """
+
+    __hash__: typing.ClassVar[None] = None
+    def __eq__(self, arg0: BCRec) -> bool: ...
+    @typing.overload
+    def __init__(self) -> None:
+        """
+        Create a BCRec initialized to BCType.bogus on every face.
+
+        Set all low and high entries before using this record in a fill
+        operation.
+        """
+    @typing.overload
+    def __init__(
+        self,
+        lo: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt | typing.SupportsIndex],
+            "FixedSize(3)",
+        ],
+        hi: typing.Annotated[
+            collections.abc.Sequence[typing.SupportsInt | typing.SupportsIndex],
+            "FixedSize(3)",
+        ],
+    ) -> None:
+        """
+        Create a BCRec from low-side and high-side boundary types.
+
+        Args:
+            lo: Sequence of Config.spacedim BCType or integer values for the
+                low side of each coordinate direction.
+            hi: Sequence of Config.spacedim BCType or integer values for the
+                high side of each coordinate direction.
+        """
+    @typing.overload
+    def __init__(self, bx: Box, domain: Box, bc_domain: BCRec) -> None:
+        """
+        Create the BCRec for a sub-box from a domain BCRec.
+
+        For each face, the returned record inherits bc_domain when bx touches
+        the physical domain boundary and uses BCType.int_dir otherwise.
+
+        Args:
+            bx: Box to classify.
+            domain: Physical domain box.
+            bc_domain: Boundary record for the full domain.
+        """
+    def __ne__(self, arg0: BCRec) -> bool: ...
+    def __repr__(self) -> str: ...
+    def data(self) -> list[int]:
+        """
+        Return all boundary types as low-side entries followed by high-side entries.
+        """
+    @typing.overload
+    def hi(self) -> list[int]:
+        """
+        Return high-side boundary types as a list.
+        """
+    @typing.overload
+    def hi(self, dir: typing.SupportsInt | typing.SupportsIndex) -> int:
+        """
+        Return the high-side boundary type in one direction.
+        """
+    @typing.overload
+    def lo(self) -> list[int]:
+        """
+        Return low-side boundary types as a list.
+        """
+    @typing.overload
+    def lo(self, dir: typing.SupportsInt | typing.SupportsIndex) -> int:
+        """
+        Return the low-side boundary type in one direction.
+        """
+    def set_hi(
+        self,
+        dir: typing.SupportsInt | typing.SupportsIndex,
+        bc_type: typing.SupportsInt | typing.SupportsIndex,
+    ) -> None:
+        """
+        Set the high-side boundary type in one direction.
+
+        Args:
+            dir: Coordinate direction, from 0 to Config.spacedim - 1.
+            bc_type: BCType or integer boundary value.
+        """
+    def set_lo(
+        self,
+        dir: typing.SupportsInt | typing.SupportsIndex,
+        bc_type: typing.SupportsInt | typing.SupportsIndex,
+    ) -> None:
+        """
+        Set the low-side boundary type in one direction.
+
+        Args:
+            dir: Coordinate direction, from 0 to Config.spacedim - 1.
+            bc_type: BCType or integer boundary value.
+        """
+    def vect(self) -> list[int]:
+        """
+        Return all boundary types as low-side entries followed by high-side entries.
+        """
+
+class Vector_BCRec:
+    __hash__: typing.ClassVar[None] = None
+    def __bool__(self) -> bool:
+        """
+        Check whether the list is nonempty
+        """
+    def __contains__(self, x: BCRec) -> bool:
+        """
+        Return true the container contains ``x``
+        """
+    @typing.overload
+    def __delitem__(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> None:
+        """
+        Delete the list elements at index ``i``
+        """
+    @typing.overload
+    def __delitem__(self, arg0: slice) -> None:
+        """
+        Delete list elements using a slice object
+        """
+    def __eq__(self, arg0: Vector_BCRec) -> bool: ...
+    @typing.overload
+    def __getitem__(self, s: slice) -> Vector_BCRec:
+        """
+        Retrieve list elements using a slice object
+        """
+    @typing.overload
+    def __getitem__(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> BCRec: ...
+    @typing.overload
+    def __getitem__(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> BCRec: ...
+    @typing.overload
+    def __init__(self) -> None: ...
+    @typing.overload
+    def __init__(self, arg0: Vector_BCRec) -> None:
+        """
+        Copy constructor
+        """
+    @typing.overload
+    def __init__(self, arg0: collections.abc.Iterable) -> None: ...
+    @typing.overload
+    def __init__(self) -> None: ...
+    @typing.overload
+    def __init__(self, arg0: Vector_BCRec) -> None: ...
+    def __iter__(self) -> collections.abc.Iterator[BCRec]: ...
+    def __len__(self) -> int: ...
+    def __ne__(self, arg0: Vector_BCRec) -> bool: ...
+    @typing.overload
+    def __repr__(self) -> str:
+        """
+        Return the canonical string representation of this list.
+        """
+    @typing.overload
+    def __repr__(self) -> str: ...
+    @typing.overload
+    def __setitem__(
+        self, arg0: typing.SupportsInt | typing.SupportsIndex, arg1: BCRec
+    ) -> None: ...
+    @typing.overload
+    def __setitem__(self, arg0: slice, arg1: Vector_BCRec) -> None:
+        """
+        Assign list elements using a slice object
+        """
+    @typing.overload
+    def __setitem__(
+        self, arg0: typing.SupportsInt | typing.SupportsIndex, arg1: BCRec
+    ) -> None: ...
+    def append(self, x: BCRec) -> None:
+        """
+        Add an item to the end of the list
+        """
+    def clear(self) -> None:
+        """
+        Clear the contents
+        """
+    def count(self, x: BCRec) -> int:
+        """
+        Return the number of times ``x`` appears in the list
+        """
+    @typing.overload
+    def extend(self, L: Vector_BCRec) -> None:
+        """
+        Extend the list by appending all the items in the given list
+        """
+    @typing.overload
+    def extend(self, L: collections.abc.Iterable) -> None:
+        """
+        Extend the list by appending all the items in the given list
+        """
+    def insert(self, i: typing.SupportsInt | typing.SupportsIndex, x: BCRec) -> None:
+        """
+        Insert an item at a given position.
+        """
+    @typing.overload
+    def pop(self) -> BCRec:
+        """
+        Remove and return the last item
+        """
+    @typing.overload
+    def pop(self, i: typing.SupportsInt | typing.SupportsIndex) -> BCRec:
+        """
+        Remove and return the item at index ``i``
+        """
+    def remove(self, x: BCRec) -> None:
+        """
+        Remove the first item from the list whose value is x. It is an error if there is no such item.
+        """
+    def size(self) -> int: ...
+
 class FArrayBox(BaseFab_Real):
     @typing.overload
     def __init__(self) -> None: ...
@@ -13829,6 +14112,182 @@ class MultiFab(FabArray_FArrayBox):
             self : amrex.MultiFab
                 A MultiFab class in pyAMReX
 
+        """
+
+class PhysBCFunctNoOp:
+    """
+    Physical boundary condition functor that does nothing.
+
+    Use this with FillPatch-style calls when physical-domain ghost cells do
+    not need additional work, for example in fully periodic domains or when
+    the caller has already filled them.
+    """
+    def __call__(
+        self,
+        mf: MultiFab,
+        dcomp: typing.SupportsInt | typing.SupportsIndex,
+        ncomp: typing.SupportsInt | typing.SupportsIndex,
+        nghost: IntVect3D,
+        time: typing.SupportsFloat | typing.SupportsIndex,
+        bccomp: typing.SupportsInt | typing.SupportsIndex,
+    ) -> None:
+        """
+        Apply the no-op boundary fill.
+
+        The arguments match the PhysBCFunct call interface and are accepted for
+        interchangeability with other physical boundary functors.
+
+        Args:
+            mf: MultiFab passed by reference.
+            dcomp: First destination component.
+            ncomp: Number of destination components.
+            nghost: Number of ghost cells to consider in each direction.
+            time: Simulation time associated with the fill.
+            bccomp: First boundary-condition component.
+        """
+    def __init__(self) -> None:
+        """
+        Create a no-op physical boundary functor.
+        """
+
+class CpuBndryFuncFab:
+    """
+    Host boundary-fill helper for PhysBCFunct_CpuBndryFuncFab.
+
+    The default-constructed helper fills extrapolation and reflection
+    boundaries handled by AMReX, including BCType.foextrap,
+    BCType.hoextrap, BCType.hoextrapcc, BCType.reflect_even, and
+    BCType.reflect_odd. It leaves BCType.ext_dir and BCType.ext_dir_cc
+    unchanged; fill external Dirichlet values separately, for example with
+    PhysBCFunctUser.
+    """
+    def __init__(self) -> None:
+        """
+        Create the default host boundary-fill helper.
+        """
+
+class PhysBCFunct_CpuBndryFuncFab:
+    """
+    Physical boundary condition functor using CpuBndryFuncFab.
+
+    This wraps amrex::PhysBCFunct<CpuBndryFuncFab>. It applies the
+    boundary types stored in a Vector_BCRec over the physical-domain ghost
+    cells selected by a Geometry.
+    """
+    def __call__(
+        self,
+        mf: MultiFab,
+        dcomp: typing.SupportsInt | typing.SupportsIndex,
+        ncomp: typing.SupportsInt | typing.SupportsIndex,
+        nghost: IntVect3D,
+        time: typing.SupportsFloat | typing.SupportsIndex,
+        bccomp: typing.SupportsInt | typing.SupportsIndex,
+    ) -> None:
+        """
+        Fill physical-domain ghost cells for a component range.
+
+        Args:
+            mf: MultiFab to modify in place.
+            dcomp: First destination component in mf.
+            ncomp: Number of components to fill.
+            nghost: Number of ghost cells to consider in each direction.
+            time: Simulation time associated with the fill.
+            bccomp: First component in the stored Vector_BCRec that corresponds
+                to dcomp.
+        """
+    @typing.overload
+    def __init__(self) -> None:
+        """
+        Create an undefined physical boundary functor.
+
+        Call define() before invoking this object.
+        """
+    @typing.overload
+    def __init__(
+        self, geom: Geometry, bc: Vector_BCRec, bndry_func: CpuBndryFuncFab
+    ) -> None:
+        """
+        Create a physical boundary functor.
+
+        Args:
+            geom: Geometry defining the physical domain and periodic directions.
+            bc: Vector_BCRec with one record per component.
+            bndry_func: Boundary-fill helper, usually CpuBndryFuncFab().
+        """
+    def define(
+        self, geom: Geometry, bc: Vector_BCRec, bndry_func: CpuBndryFuncFab
+    ) -> None:
+        """
+        Reset the geometry, component BC records, and boundary helper.
+
+        Args:
+            geom: Geometry defining the physical domain and periodic directions.
+            bc: Vector_BCRec with one record per component.
+            bndry_func: Boundary-fill helper, usually CpuBndryFuncFab().
+        """
+
+class PhysBCFunctUser:
+    """
+    Physical boundary condition functor implemented in Python.
+
+    The callback receives (mf, dcomp, ncomp, nghost, time, bccomp). It
+    should fill the ghost cells of mf that lie outside the physical domain
+    for the requested component range. This is the intended hook for
+    application-supplied external Dirichlet values such as BCType.ext_dir
+    and BCType.ext_dir_cc.
+
+    The callback runs on the host after pending AMReX GPU stream work is
+    synchronized. When called from C++, pybind11 acquires the Python GIL
+    before invoking the callback.
+    """
+    def __call__(
+        self,
+        mf: MultiFab,
+        dcomp: typing.SupportsInt | typing.SupportsIndex,
+        ncomp: typing.SupportsInt | typing.SupportsIndex,
+        nghost: IntVect3D,
+        time: typing.SupportsFloat | typing.SupportsIndex,
+        bccomp: typing.SupportsInt | typing.SupportsIndex,
+    ) -> None:
+        """
+        Invoke the Python physical-boundary callback.
+
+        Args:
+            mf: MultiFab to modify in place.
+            dcomp: First destination component in mf.
+            ncomp: Number of components the callback should fill.
+            nghost: Number of ghost cells to consider in each direction.
+            time: Simulation time associated with the fill.
+            bccomp: First boundary-condition component corresponding to dcomp.
+        """
+    @typing.overload
+    def __init__(self) -> None:
+        """
+        Create a user boundary functor with no callback.
+
+        Calling an empty PhysBCFunctUser is a no-op.
+        """
+    @typing.overload
+    def __init__(
+        self,
+        callback: collections.abc.Callable[
+            [
+                MultiFab,
+                typing.SupportsInt | typing.SupportsIndex,
+                typing.SupportsInt | typing.SupportsIndex,
+                IntVect3D,
+                typing.SupportsFloat | typing.SupportsIndex,
+                typing.SupportsInt | typing.SupportsIndex,
+            ],
+            None,
+        ],
+    ) -> None:
+        """
+        Create a user boundary functor from a Python callback.
+
+        Args:
+            callback: Callable with signature
+                callback(mf, dcomp, ncomp, nghost, time, bccomp).
         """
 
 class GrowthStrategy(enum.Enum):
@@ -29026,6 +29485,27 @@ def dtoh_memcpy(
     """
 
 def end(arg0: Box) -> Dim3: ...
+def fill_domain_boundary(phi: MultiFab, geom: Geometry, bc: Vector_BCRec) -> None:
+    """
+    Fill cell-centered physical-domain ghost cells.
+
+    This fills non-periodic ghost cells outside the physical domain for
+    BCType.foextrap, BCType.hoextrap, BCType.hoextrapcc,
+    BCType.reflect_even, and BCType.reflect_odd. It intentionally leaves
+    BCType.ext_dir and BCType.ext_dir_cc unchanged; fill those values from
+    application code, for example with PhysBCFunctUser.
+
+    Args:
+        phi: MultiFab to modify in place. All components are processed.
+        geom: Geometry defining the physical domain and periodic directions.
+        bc: Vector_BCRec with one record per component in phi.
+
+    Notes:
+        This function fills physical-domain ghost cells only. For multi-box
+        MultiFabs, call phi.fill_boundary() separately when interior or
+        periodic ghost cells also need to be valid.
+    """
+
 @typing.overload
 def finalize() -> None: ...
 @typing.overload
@@ -29215,6 +29695,46 @@ def refine(arg0: Dim3, arg1: IntVect1D) -> Dim3: ...
 def refine(arg0: Dim3, arg1: IntVect2D) -> Dim3: ...
 @typing.overload
 def refine(arg0: Dim3, arg1: IntVect3D) -> Dim3: ...
+@typing.overload
+def setBC(bx: Box, domain: Box, bc_domain: BCRec) -> BCRec:
+    """
+    Return the BCRec for a box from a domain BCRec.
+
+    For each face, the returned record inherits bc_domain when bx touches
+    the physical domain boundary and uses BCType.int_dir otherwise.
+
+    Args:
+        bx: Box to classify.
+        domain: Physical domain box.
+        bc_domain: Boundary record for the full domain.
+    """
+
+@typing.overload
+def setBC(
+    bx: Box,
+    domain: Box,
+    src_comp: typing.SupportsInt | typing.SupportsIndex,
+    dest_comp: typing.SupportsInt | typing.SupportsIndex,
+    ncomp: typing.SupportsInt | typing.SupportsIndex,
+    bc_domain: Vector_BCRec,
+) -> Vector_BCRec:
+    """
+    Return component boundary records for a box.
+
+    The returned Vector_BCRec has size dest_comp + ncomp. Components in
+    the interval [dest_comp, dest_comp + ncomp) are populated from
+    bc_domain[src_comp:src_comp + ncomp]. Earlier destination entries are
+    left at their default BCType.bogus values.
+
+    Args:
+        bx: Box to classify.
+        domain: Physical domain box.
+        src_comp: First component to read from bc_domain.
+        dest_comp: First component to write in the returned Vector_BCRec.
+        ncomp: Number of component records to populate.
+        bc_domain: Domain boundary records for source components.
+    """
+
 def size() -> int:
     """
     The amr stack size, the number of amr instances pushed.

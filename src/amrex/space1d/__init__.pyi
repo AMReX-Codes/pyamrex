@@ -14,6 +14,9 @@ amrex
    Box
    RealBox
    BoxArray
+   BCRec
+   BCType
+   CpuBndryFuncFab
    Dim3
    FArrayBox
    iMultiFab
@@ -30,6 +33,10 @@ amrex
    ParticleTile
    ParticleContainer
    Periodicity
+   PhysBCFunctNoOp
+   PhysBCFunct_CpuBndryFuncFab
+   PhysBCFunctUser
+   PhysBCType
    PlotFileUtil
    PODVector
    SmallMatrix
@@ -38,6 +45,9 @@ amrex
    TagBoxArray
    Utility
    Vector
+   Vector_BCRec
+   fill_domain_boundary
+   setBC
    VisMF
 
 """
@@ -95,10 +105,13 @@ from amrex.space1d.amrex_1d_pybind import (
     ArrayOfStructs_16_4_pinned,
     ArrayOfStructs_16_4_polymorphic,
     BaseFab_Real,
+    BCRec,
+    BCType,
     Box,
     BoxArray,
     Config,
     CoordSys,
+    CpuBndryFuncFab,
     Dim3,
     Direction,
     DistributionMapping,
@@ -231,6 +244,10 @@ from amrex.space1d.amrex_1d_pybind import (
     ParticleTileData_pureSoA_5_0,
     ParticleTileData_pureSoA_11_0,
     Periodicity,
+    PhysBCFunct_CpuBndryFuncFab,
+    PhysBCFunctNoOp,
+    PhysBCFunctUser,
+    PhysBCType,
     PlotFileData,
     PODVector_int_arena,
     PODVector_int_pinned,
@@ -289,6 +306,7 @@ from amrex.space1d.amrex_1d_pybind import (
     The_Device_Arena,
     The_Managed_Arena,
     The_Pinned_Arena,
+    Vector_BCRec,
     Vector_Box,
     Vector_BoxArray,
     Vector_DistributionMapping,
@@ -307,6 +325,7 @@ from amrex.space1d.amrex_1d_pybind import (
     copy_mfab,
     dtoh_memcpy,
     end,
+    fill_domain_boundary,
     finalize,
     htod_memcpy,
     iMultiFab,
@@ -323,6 +342,7 @@ from amrex.space1d.amrex_1d_pybind import (
     pack_cpus,
     pack_ids,
     refine,
+    setBC,
     size,
     ubound,
     unpack_cpus,
@@ -412,11 +432,14 @@ __all__: list[str] = [
     "AsyncVector_int",
     "AsyncVector_real",
     "AsyncVector_uint64",
+    "BCRec",
+    "BCType",
     "BaseFab_Real",
     "Box",
     "BoxArray",
     "Config",
     "CoordSys",
+    "CpuBndryFuncFab",
     "DeviceVector_int",
     "DeviceVector_real",
     "DeviceVector_uint64",
@@ -582,6 +605,10 @@ __all__: list[str] = [
     "Particle_5_0",
     "Particle_5_2",
     "Periodicity",
+    "PhysBCFunctNoOp",
+    "PhysBCFunctUser",
+    "PhysBCFunct_CpuBndryFuncFab",
+    "PhysBCType",
     "PinnedVector_int",
     "PinnedVector_real",
     "PinnedVector_uint64",
@@ -633,6 +660,7 @@ __all__: list[str] = [
     "The_Device_Arena",
     "The_Managed_Arena",
     "The_Pinned_Arena",
+    "Vector_BCRec",
     "Vector_Box",
     "Vector_BoxArray",
     "Vector_DistributionMapping",
@@ -654,6 +682,7 @@ __all__: list[str] = [
     "d_decl",
     "dtoh_memcpy",
     "end",
+    "fill_domain_boundary",
     "finalize",
     "htod_memcpy",
     "iMultiFab",
@@ -677,6 +706,7 @@ __all__: list[str] = [
     "register_ParticleContainer_extension",
     "register_SmallMatrix_extension",
     "register_SoA_extension",
+    "setBC",
     "size",
     "ubound",
     "unpack_cpus",
