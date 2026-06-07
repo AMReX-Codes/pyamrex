@@ -6,7 +6,7 @@ import pytest
 import amrex.space3d as amr
 
 
-def _make_core(record=None):
+def _make_core(record=None, max_level=0):
     """An AmrCore subclass that records calls to its overridden virtuals.
 
     Built as a single-level (``max_level = 0``), non-periodic, Cartesian core.
@@ -28,12 +28,15 @@ def _make_core(record=None):
             record.setdefault("clear", []).append(lev)
 
         def error_est(self, lev, tags, time, ngrow):
-            record.setdefault("error_est", []).append(lev)
+            record.setdefault("error_est", []).append(
+                (lev, isinstance(tags, amr.TagBoxArray), tags.size)
+            )
+            tags.set_val(amr.TagBox.SET)
 
     rb = amr.RealBox(0.0, 0.0, 0.0, 1.0, 1.0, 1.0)
     n_cell = amr.Vector_int([16, 16, 16])
-    ref_ratios = amr.Vector_IntVect([])  # max_level=0 -> no refinement ratios
-    core = RecordingCore(rb, 0, n_cell, 0, ref_ratios, [0, 0, 0])
+    ref_ratios = amr.Vector_IntVect([amr.IntVect(2) for _ in range(max_level)])
+    core = RecordingCore(rb, max_level, n_cell, 0, ref_ratios, [0, 0, 0])
     return core, record
 
 
@@ -42,6 +45,8 @@ def _make_core(record=None):
 # ---------------------------------------------------------------------------
 def test_amrcore_classes_are_bound():
     assert hasattr(amr, "AmrCore")
+    assert hasattr(amr, "TagBox")
+    assert hasattr(amr, "TagBoxArray")
     assert hasattr(amr, "ParGDBBase")
     assert hasattr(amr, "AmrParGDB")
     # AmrCore derives from AmrMesh in C++ and in the bindings
@@ -74,6 +79,19 @@ def test_amrcore_trampoline_clear_level():
     core.init_from_scratch(0.0)
     core.clear_level(0)
     assert record.get("clear") == [0]
+
+
+def test_amrcore_trampoline_error_est_tags_refined_level():
+    core, record = _make_core(max_level=1)
+    core.init_from_scratch(0.0)
+
+    assert record.get("error_est")
+    lev, got_tag_box_array, n_boxes = record["error_est"][0]
+    assert lev == 0
+    assert got_tag_box_array
+    assert n_boxes >= 1
+    assert [call[0] for call in record["scratch"]] == [0, 1]
+    assert core.finest_level == 1
 
 
 def test_amrcore_missing_pure_virtual_raises():

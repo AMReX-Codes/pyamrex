@@ -47,6 +47,7 @@ void init_PlotFileUtil(py::module &);
 void init_PODVector(py::module &);
 void init_RealVect(py::module &);
 void init_SmallMatrix(py::module &);
+void init_TagBox(py::module &);
 void init_Utility(py::module &);
 void init_Vector(py::module &);
 void init_Version(py::module &);
@@ -71,8 +72,10 @@ PYBIND11_MODULE(amrex_3d_pybind, m) {
 
             .. autosummary::
                :toctree: _generate
+               AmrCore
                AmrInfo
                AmrMesh
+               AmrParGDB
                Arena
                ArrayOfStructs
                Box
@@ -88,6 +91,7 @@ PYBIND11_MODULE(amrex_3d_pybind, m) {
                MFItInfo
                MultiFab
                ParallelDescriptor
+               ParGDBBase
                Particle
                ParmParse
                ParticleTile
@@ -97,6 +101,8 @@ PYBIND11_MODULE(amrex_3d_pybind, m) {
                PODVector
                SmallMatrix
                StructOfArrays
+               TagBox
+               TagBoxArray
                Utility
                Vector
                VisMF
@@ -135,6 +141,7 @@ PYBIND11_MODULE(amrex_3d_pybind, m) {
     // note: the AmrCore class is declared before ParGDB and the particle
     // containers (they reference it in member signatures), while its member
     // functions are added after ParGDB (get_par_gdb returns an AmrParGDB)
+    init_TagBox(m);
     init_AmrMesh(m);
     init_AmrCore_class(m);      // after AmrMesh (its pybind base)
     init_ParGDB(m);             // after the AmrCore class declaration

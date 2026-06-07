@@ -3,5 +3,6 @@ foreach(D IN LISTS AMReX_SPACEDIM)
       PRIVATE
         AmrCore.cpp
         AmrMesh.cpp
+        TagBox.cpp
     )
 endforeach()
