@@ -119,6 +119,29 @@ def test_set_bc_vector(std_box):
         assert bcr[n].hi() == [amr.BCType.int_dir] * sd
 
 
+def test_set_bc_vector_with_offsets(std_box):
+    sd = amr.Config.spacedim
+    bc_domain = amr.Vector_BCRec(
+        [
+            amr.BCRec(lo=[amr.BCType.foextrap] * sd, hi=[amr.BCType.ext_dir] * sd),
+            amr.BCRec(lo=[amr.BCType.hoextrap] * sd, hi=[amr.BCType.reflect_even] * sd),
+            amr.BCRec(
+                lo=[amr.BCType.reflect_odd] * sd, hi=[amr.BCType.ext_dir_cc] * sd
+            ),
+        ]
+    )
+    lo_box = amr.Box(std_box.small_end, amr.IntVect(7))
+    bcr = amr.setBC(lo_box, std_box, 1, 1, 2, bc_domain)
+
+    assert bcr.size() == 3
+    assert bcr[0].lo() == [amr.BCType.bogus] * sd
+    assert bcr[0].hi() == [amr.BCType.bogus] * sd
+    assert bcr[1].lo() == [amr.BCType.hoextrap] * sd
+    assert bcr[1].hi() == [amr.BCType.int_dir] * sd
+    assert bcr[2].lo() == [amr.BCType.reflect_odd] * sd
+    assert bcr[2].hi() == [amr.BCType.int_dir] * sd
+
+
 def test_vector_bcrec():
     sd = amr.Config.spacedim
     bcr = amr.BCRec(lo=[amr.BCType.int_dir] * sd, hi=[amr.BCType.foextrap] * sd)

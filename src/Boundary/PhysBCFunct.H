@@ -5,6 +5,7 @@
  */
 #pragma once
 
+#include <AMReX_Gpu.H>
 #include <AMReX_IntVect.H>
 #include <AMReX_MultiFab.H>
 #include <AMReX_REAL.H>
@@ -22,9 +23,11 @@ namespace pyAMReX
      * functions. The user-provided callable receives
      * (mf, dcomp, ncomp, nghost, time, bccomp) and is expected to fill
      * the ghost cells of mf that lie outside the physical domain,
-     * e.g., for external Dirichlet (BCType.ext_dir) boundaries.
+     * e.g., for external Dirichlet (BCType.ext_dir or
+     * BCType.ext_dir_cc) boundaries.
      *
-     * Note: the callback runs on the host. When called from C++, the
+     * Note: the callback runs on the host. Pending AMReX GPU stream
+     * work is synchronized before invoking it. When called from C++, the
      * pybind11 functional caster acquires the GIL automatically.
      */
     struct PhysBCFunctUser
@@ -41,7 +44,12 @@ namespace pyAMReX
                          amrex::IntVect const& nghost, amrex::Real time,
                          int bccomp)
         {
-            if (m_f) { m_f(mf, dcomp, ncomp, nghost, time, bccomp); }
+            if (m_f) {
+                // AMReX FillPatch work can be asynchronous; Python callbacks
+                // run on the host and may read or mutate host-visible data.
+                amrex::Gpu::streamSynchronize();
+                m_f(mf, dcomp, ncomp, nghost, time, bccomp);
+            }
         }
 
         UserFillFunc m_f;

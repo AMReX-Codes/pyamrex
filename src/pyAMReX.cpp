@@ -84,6 +84,9 @@ PYBIND11_MODULE(amrex_3d_pybind, m) {
                Box
                RealBox
                BoxArray
+               BCRec
+               BCType
+               CpuBndryFuncFab
                Dim3
                FArrayBox
                iMultiFab
@@ -100,6 +103,10 @@ PYBIND11_MODULE(amrex_3d_pybind, m) {
                ParticleTile
                ParticleContainer
                Periodicity
+               PhysBCFunctNoOp
+               PhysBCFunct_CpuBndryFuncFab
+               PhysBCFunctUser
+               PhysBCType
                PlotFileUtil
                PODVector
                SmallMatrix
@@ -108,6 +115,9 @@ PYBIND11_MODULE(amrex_3d_pybind, m) {
                TagBoxArray
                Utility
                Vector
+               Vector_BCRec
+               fill_domain_boundary
+               setBC
                VisMF
     )pbdoc";
 

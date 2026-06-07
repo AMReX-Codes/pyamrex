@@ -93,7 +93,6 @@ def test_fill_domain_boundary_linear(std_box):
 
 def test_physbcfunct_noop(std_box):
     """PhysBCFunctNoOp leaves ghost cells untouched"""
-    geom = make_geometry(std_box)  # noqa: F841
     ba = amr.BoxArray(std_box)
     dm = amr.DistributionMapping(ba)
     mf = amr.MultiFab(ba, dm, 1, 1)
@@ -137,12 +136,42 @@ def test_physbcfunct_cpu(std_box):
         assert np.all(arr == inner)
 
 
-def test_physbcfunct_user(std_box):
-    """PhysBCFunctUser calls back into Python with reference semantics"""
-    geom = make_geometry(std_box)  # noqa: F841
+def test_physbcfunct_cpu_with_offsets(std_box):
+    sd = amr.Config.spacedim
+    geom = make_geometry(std_box)
     ba = amr.BoxArray(std_box)
     dm = amr.DistributionMapping(ba)
-    mf = amr.MultiFab(ba, dm, 1, 1)
+    mf = amr.MultiFab(ba, dm, 2, 1)
+
+    sentinel = -42.0
+    inner = 7.0
+    mf.set_val(sentinel)
+    for mfi in mf:
+        arr = mf.array(mfi).to_xp(copy=False, order="F")
+        vs = valid_slices(arr.shape, mf.n_grow_vect)
+        arr[vs[:-1] + (slice(1, 2),)] = inner
+
+    bc = amr.Vector_BCRec(
+        [
+            amr.BCRec(lo=[amr.BCType.ext_dir] * sd, hi=[amr.BCType.ext_dir] * sd),
+            amr.BCRec(lo=[amr.BCType.foextrap] * sd, hi=[amr.BCType.foextrap] * sd),
+        ]
+    )
+    bndry_func = amr.CpuBndryFuncFab()
+    physbc = amr.PhysBCFunct_CpuBndryFuncFab(geom, bc, bndry_func)
+    physbc(mf, 1, 1, mf.n_grow_vect, 0.0, 1)
+
+    for mfi in mf:
+        arr = mf.array(mfi).to_xp(copy=False, order="F")
+        assert np.all(arr[..., 0] == sentinel)
+        assert np.all(arr[..., 1] == inner)
+
+
+def test_physbcfunct_user(std_box):
+    """PhysBCFunctUser calls back into Python with reference semantics"""
+    ba = amr.BoxArray(std_box)
+    dm = amr.DistributionMapping(ba)
+    mf = amr.MultiFab(ba, dm, 2, 1)
     mf.set_val(0.0)
 
     called = {}
@@ -150,13 +179,16 @@ def test_physbcfunct_user(std_box):
     def fill(mf_arg, dcomp, ncomp, nghost, time, bccomp):
         called["args"] = (dcomp, ncomp, nghost, time, bccomp)
         # mutate through the callback argument: reference semantics
-        mf_arg.set_val(99.0)
+        mf_arg.set_val(99.0, dcomp, ncomp)
 
     physbc = amr.PhysBCFunctUser(fill)
-    physbc(mf, 0, 1, mf.n_grow_vect, 1.5, 0)
+    physbc(mf, 1, 1, mf.n_grow_vect, 1.5, 2)
 
-    assert called["args"][0] == 0
+    assert called["args"][0] == 1
     assert called["args"][1] == 1
     assert called["args"][3] == 1.5
-    assert np.isclose(mf.max(0), 99.0)
-    assert np.isclose(mf.min(0), 99.0)
+    assert called["args"][4] == 2
+    assert np.isclose(mf.max(0), 0.0)
+    assert np.isclose(mf.min(0), 0.0)
+    assert np.isclose(mf.max(1), 99.0)
+    assert np.isclose(mf.min(1), 99.0)
