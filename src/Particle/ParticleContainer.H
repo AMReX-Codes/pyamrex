@@ -26,16 +26,23 @@
 
 #include <string>
 #include <sstream>
+#include <type_traits>
 
 
 template <typename T_ParticleType, int T_NArrayReal=0, int T_NArrayInt=0>
 std::string particle_type_suffix ()
 {
     std::string suffix;
-    if constexpr (T_ParticleType::is_soa_particle)
+    if constexpr (T_ParticleType::is_soa_particle) {
         suffix = "pureSoA_" +
                  std::to_string(T_NArrayReal) + "_" +
                  std::to_string(T_NArrayInt);
+        // distinguish the SoA storage real precision; the default (ParticleReal,
+        // usually double) stays unsuffixed for backward compatibility, a
+        // single-precision storage type gets a "_sp" tag so both can coexist.
+        if constexpr (std::is_same_v<typename T_ParticleType::RealType, float>)
+            suffix += "_sp";
+    }
     else
         suffix = std::to_string(T_ParticleType::NReal) + "_" +
                  std::to_string(T_ParticleType::NInt) + "_" +
@@ -333,12 +340,9 @@ void make_ParticleContainer_and_Iterators (py::module &m, std::string allocstr)
         //                  const ParticleInitData& mass,
         //                  bool serialize = false, RealBox bx = RealBox());
 
-        .def("increment", &ParticleContainerType::Increment) // TODO pure SoA
         //.def("IncrementWithTotal", &ParticleContainerType::IncrementWithTotal, py::arg("mf"), py::arg("level"), py::arg("local")=false) // TODO pure SoA
         .def("redistribute", &ParticleContainerType::Redistribute, py::arg("lev_min")=0, py::arg("lev_max")=-1,
                                             py::arg("nGrow")=0, py::arg("local")=0, py::arg("remove_negative")=true)
-        .def("sort_particles_by_cell", &ParticleContainerType::SortParticlesByCell)
-        .def("sort_particles_by_bin", &ParticleContainerType::SortParticlesByBin)
         .def("OK", &ParticleContainerType::OK, py::arg("lev_min") = 0, py::arg("lev_max") = -1, py::arg("nGrow")=0)
         .def("print_capacity", &ParticleContainerType::PrintCapacity)
         .def("shrink_t_fit", &ParticleContainerType::ShrinkToFit)
@@ -382,9 +386,6 @@ void make_ParticleContainer_and_Iterators (py::module &m, std::string allocstr)
         //     py::arg("level"), py::arg("ngrow"), py::arg("ghosts")) // TODO pure SoA
         //.def("add_particles_at_level", py::overload_cast<AoS&, int, int>(&ParticleContainerType::AddParticlesAtLevel),
         //    py::arg("particles"), py::arg("level"), py::arg("ngrow")=0)
-        .def("add_particles_at_level", py::overload_cast<ParticleTileType&, int, int>(&ParticleContainerType::AddParticlesAtLevel),
-            py::arg("particles"), py::arg("level"), py::arg("ngrow")=0)
-
         .def("clear_particles", &ParticleContainerType::clearParticles)
         // template <class PCType,
         // requires (IsParticleContainer<PCType>::value)
@@ -392,8 +393,6 @@ void make_ParticleContainer_and_Iterators (py::module &m, std::string allocstr)
         // template <class PCType,
         // requires (IsParticleContainer<PCType>::value)
         // void addParticles (const PCType& other, bool local=false);
-        .def("add_particles", py::overload_cast<ParticleContainerType const &, bool>(&ParticleContainerType::template addParticles<ParticleContainerType>),
-            py::arg("other"), py::arg("local")=false)
         // template <class F, class PCType,
         // requires ((IsParticleContainer<PCType>::value) && (!std::is_integral_v<F>))
         // void copyParticles (const PCType& other, F&&f, bool local=false);
@@ -408,28 +407,9 @@ void make_ParticleContainer_and_Iterators (py::module &m, std::string allocstr)
         // void CheckpointPre ();
         // void CheckpointPost ();
 
-        // void Restart (const std::string& dir, const std::string& file);
-        .def("restart",
-            py::overload_cast<std::string const &, std::string const &>(&ParticleContainerType::Restart),
-            py::arg("dir"),
-            py::arg("file")
-        )
-
-        // void Restart (const std::string& dir, const std::string& file, bool is_checkpoint);
-        .def("restart_checkpoint",
-            py::overload_cast<std::string const &, std::string const &, bool>(&ParticleContainerType::Restart),
-            py::arg("dir"),
-            py::arg("file"),
-            py::arg("is_checkpoint")
-        )
-
-        .def("write_plotfile",
-             //py::overload_cast<std::string const &, std::string const &>(&ParticleContainerType::WritePlotFile, py::const_),
-             [](ParticleContainerType const & pc, std::string const & dir, std::string const & name){
-                return pc.WritePlotFile(dir, name);
-             },
-             py::arg("dir"), py::arg("name")
-        )
+        // Restart / WritePlotFile are bound below, only for the native-precision
+        // SoA container (the underlying AMReX binary particle I/O is not yet
+        // generic over the SoA storage real type).
         // void WritePlotFile (const std::string& dir, const std::string& name) const;
         // template <class F>
         // void WritePlotFile (const std::string& dir, const std::string& name, F const& f) const;
@@ -539,9 +519,40 @@ The returned tile is owned by the particle container.
         // }
     ;
 
-    py_pc
-        .def("init_random", py::overload_cast<Long, ULong, const ParticleInitData&, bool, RealBox>(&ParticleContainerType::InitRandom))
-    ;
+    // The following methods rely on AMReX particle code (mesh deposition,
+    // binary checkpoint/plotfile I/O, particle sorting and random init) that is
+    // not yet generic over the SoA storage real type. Bind them only for the
+    // build's native particle precision (and for any AoS container); a
+    // non-native single-precision SoA container omits them.
+    constexpr bool bind_native_particle_io = []{
+        if constexpr (ParticleType::is_soa_particle)
+            return std::is_same_v<typename ParticleType::RealType, amrex::ParticleReal>;
+        else
+            return true;
+    }();
+    if constexpr (bind_native_particle_io) {
+        py_pc
+            .def("increment", &ParticleContainerType::Increment) // TODO pure SoA
+            .def("sort_particles_by_cell", &ParticleContainerType::SortParticlesByCell)
+            .def("sort_particles_by_bin", &ParticleContainerType::SortParticlesByBin)
+            .def("add_particles_at_level", py::overload_cast<ParticleTileType&, int, int>(&ParticleContainerType::AddParticlesAtLevel),
+                py::arg("particles"), py::arg("level"), py::arg("ngrow")=0)
+            .def("add_particles", py::overload_cast<ParticleContainerType const &, bool>(&ParticleContainerType::template addParticles<ParticleContainerType>),
+                py::arg("other"), py::arg("local")=false)
+            .def("restart",
+                py::overload_cast<std::string const &, std::string const &>(&ParticleContainerType::Restart),
+                py::arg("dir"), py::arg("file"))
+            .def("restart_checkpoint",
+                py::overload_cast<std::string const &, std::string const &, bool>(&ParticleContainerType::Restart),
+                py::arg("dir"), py::arg("file"), py::arg("is_checkpoint"))
+            .def("write_plotfile",
+                [](ParticleContainerType const & pc, std::string const & dir, std::string const & name){
+                    return pc.WritePlotFile(dir, name);
+                },
+                py::arg("dir"), py::arg("name"))
+            .def("init_random", py::overload_cast<Long, ULong, const ParticleInitData&, bool, RealBox>(&ParticleContainerType::InitRandom))
+        ;
+    }
 
     // TODO for pure SoA
     // depends on https://github.com/AMReX-Codes/amrex/pull/3280
@@ -569,9 +580,24 @@ The returned tile is owned by the particle container.
 template <typename T_ParticleType, int T_NArrayReal=0, int T_NArrayInt=0, bool only_polymorphic=false>
 void make_ParticleContainer_and_Iterators (py::module &m)
 {
+    // Several helper Python types (the AoS Particle, the StructOfArrays, the
+    // ParticleTile and the ParticleInitData) are either precision-independent or
+    // not yet generic over the SoA storage real type. Register them once, for
+    // the build's native particle precision (and for any AoS container); an
+    // additionally-compiled, non-native single-precision SoA container reuses the
+    // container and iterator bindings only.
+    constexpr bool bind_native_helpers = []{
+        if constexpr (T_ParticleType::is_soa_particle)
+            return std::is_same_v<typename T_ParticleType::RealType, amrex::ParticleReal>;
+        else
+            return true;
+    }();
+
     if constexpr (T_ParticleType::is_soa_particle) {
-        make_Particle<T_NArrayReal, T_NArrayInt>(m);
-        make_StructOfArrays<T_NArrayReal, T_NArrayInt, true, only_polymorphic> (m);
+        if constexpr (bind_native_helpers) {
+            make_Particle<T_NArrayReal, T_NArrayInt>(m);
+            make_StructOfArrays<T_NArrayReal, T_NArrayInt, true, only_polymorphic> (m);
+        }
     } else {
 
         make_Particle<  // particle
@@ -589,9 +615,11 @@ void make_ParticleContainer_and_Iterators (py::module &m)
         make_StructOfArrays<T_NArrayReal, T_NArrayInt, false, only_polymorphic> (m);
     }
 
-    make_ParticleTile<T_ParticleType, T_NArrayReal, T_NArrayInt, only_polymorphic> (m);
+    if constexpr (bind_native_helpers) {
+        make_ParticleTile<T_ParticleType, T_NArrayReal, T_NArrayInt, only_polymorphic> (m);
 
-    make_ParticleInitData<T_ParticleType, T_NArrayReal, T_NArrayInt>(m);
+        make_ParticleInitData<T_ParticleType, T_NArrayReal, T_NArrayInt>(m);
+    }
 
     if constexpr (!only_polymorphic) {
         // first, because used as copy target in methods in containers with other allocators
