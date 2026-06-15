@@ -5,6 +5,7 @@
  */
 #include "pyAMReX.H"
 
+#include <AMReX_BaseFab.H>
 #include <AMReX_BoxArray.H>
 #include <AMReX_DistributionMapping.H>
 #include <AMReX_FabArray.H>
@@ -302,4 +303,10 @@ init_FabArray(py::module &m)
 
     make_FabArray_T<IArrayBox>(m, "IArrayBox");
     make_FabArray_T<FArrayBox>(m, "FArrayBox");
+
+    // single-precision field array (amrex::fMultiFab == FabArray<BaseFab<float>>).
+    // This registers the base so that codes storing single-precision mesh fields
+    // (e.g. ImpactX with single-precision beams) can return them to Python.
+    // Note: FabArray<BaseFab<double>> is amrex::MultiFab, registered separately.
+    make_FabArray_T<BaseFab<float>>(m, "BaseFab_float");
 }
