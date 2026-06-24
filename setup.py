@@ -12,6 +12,7 @@ import re
 import shutil
 import subprocess
 import sys
+import sysconfig
 
 from setuptools import Extension, setup
 from setuptools.command.build import build
@@ -84,14 +85,26 @@ class CMakeBuild(build_ext):
         dims = r_dim.group(1).upper()
 
         pyv = sys.version_info
+        # cross-compiling (e.g. Pyodide)? host & target Python differ
+        emscripten = sysconfig.get_platform().startswith("emscripten")
         cmake_args = [
             # Python: use the calling interpreter in CMake
             # https://cmake.org/cmake/help/latest/module/FindPython.html#hints
             # https://cmake.org/cmake/help/latest/command/find_package.html#config-mode-version-selection
+            # Cross builds (e.g. Pyodide/Emscripten) keep these host hints to
+            # resolve the interpreter/library for Development.Module, but
+            # override the target headers (below) and relax the exact-version
+            # match.
             f"-DPython_ROOT_DIR={sys.prefix}",
             f"-DPython_FIND_VERSION={pyv.major}.{pyv.minor}.{pyv.micro}",
-            "-DPython_FIND_VERSION_EXACT=TRUE",
+            "-DPython_FIND_VERSION_EXACT=" + ("FALSE" if emscripten else "TRUE"),
             "-DPython_FIND_STRATEGY=LOCATION",
+        ]
+        if emscripten:
+            cmake_args += [
+                "-DPython_INCLUDE_DIR=" + sysconfig.get_config_var("INCLUDEPY")
+            ]
+        cmake_args += [
             "-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=" + os.path.join(extdir, "amrex"),
             "-DCMAKE_VERBOSE_MAKEFILE=ON",
             "-DCMAKE_PYTHON_OUTPUT_DIRECTORY=" + extdir,
