@@ -18578,7 +18578,7 @@ class ParticleContainer_pureSoA_3_0_pinned:
         lev_min: typing.SupportsInt | typing.SupportsIndex = 0,
         lev_max: typing.SupportsInt | typing.SupportsIndex = -1,
         nGrow: typing.SupportsInt | typing.SupportsIndex = 0,
-        local: typing.SupportsInt | typing.SupportsIndex = 0,
+        local: IntVect3D = IntVect3D(0),
         remove_negative: bool = True,
     ) -> None: ...
     def remove_particles_at_level(
@@ -19055,7 +19055,7 @@ class ParticleContainer_pureSoA_3_0_default:
         lev_min: typing.SupportsInt | typing.SupportsIndex = 0,
         lev_max: typing.SupportsInt | typing.SupportsIndex = -1,
         nGrow: typing.SupportsInt | typing.SupportsIndex = 0,
-        local: typing.SupportsInt | typing.SupportsIndex = 0,
+        local: IntVect3D = IntVect3D(0),
         remove_negative: bool = True,
     ) -> None: ...
     def remove_particles_at_level(
@@ -19532,7 +19532,7 @@ class ParticleContainer_pureSoA_3_0_arena:
         lev_min: typing.SupportsInt | typing.SupportsIndex = 0,
         lev_max: typing.SupportsInt | typing.SupportsIndex = -1,
         nGrow: typing.SupportsInt | typing.SupportsIndex = 0,
-        local: typing.SupportsInt | typing.SupportsIndex = 0,
+        local: IntVect3D = IntVect3D(0),
         remove_negative: bool = True,
     ) -> None: ...
     def remove_particles_at_level(
@@ -20009,7 +20009,7 @@ class ParticleContainer_pureSoA_3_0_polymorphic:
         lev_min: typing.SupportsInt | typing.SupportsIndex = 0,
         lev_max: typing.SupportsInt | typing.SupportsIndex = -1,
         nGrow: typing.SupportsInt | typing.SupportsIndex = 0,
-        local: typing.SupportsInt | typing.SupportsIndex = 0,
+        local: IntVect3D = IntVect3D(0),
         remove_negative: bool = True,
     ) -> None: ...
     def remove_particles_at_level(
@@ -22262,7 +22262,7 @@ class ParticleContainer_2_1_3_1_pinned:
         lev_min: typing.SupportsInt | typing.SupportsIndex = 0,
         lev_max: typing.SupportsInt | typing.SupportsIndex = -1,
         nGrow: typing.SupportsInt | typing.SupportsIndex = 0,
-        local: typing.SupportsInt | typing.SupportsIndex = 0,
+        local: IntVect3D = IntVect3D(0),
         remove_negative: bool = True,
     ) -> None: ...
     def remove_particles_at_level(
@@ -22754,7 +22754,7 @@ class ParticleContainer_2_1_3_1_default:
         lev_min: typing.SupportsInt | typing.SupportsIndex = 0,
         lev_max: typing.SupportsInt | typing.SupportsIndex = -1,
         nGrow: typing.SupportsInt | typing.SupportsIndex = 0,
-        local: typing.SupportsInt | typing.SupportsIndex = 0,
+        local: IntVect3D = IntVect3D(0),
         remove_negative: bool = True,
     ) -> None: ...
     def remove_particles_at_level(
@@ -23246,7 +23246,7 @@ class ParticleContainer_2_1_3_1_arena:
         lev_min: typing.SupportsInt | typing.SupportsIndex = 0,
         lev_max: typing.SupportsInt | typing.SupportsIndex = -1,
         nGrow: typing.SupportsInt | typing.SupportsIndex = 0,
-        local: typing.SupportsInt | typing.SupportsIndex = 0,
+        local: IntVect3D = IntVect3D(0),
         remove_negative: bool = True,
     ) -> None: ...
     def remove_particles_at_level(
@@ -23738,7 +23738,7 @@ class ParticleContainer_2_1_3_1_polymorphic:
         lev_min: typing.SupportsInt | typing.SupportsIndex = 0,
         lev_max: typing.SupportsInt | typing.SupportsIndex = -1,
         nGrow: typing.SupportsInt | typing.SupportsIndex = 0,
-        local: typing.SupportsInt | typing.SupportsIndex = 0,
+        local: IntVect3D = IntVect3D(0),
         remove_negative: bool = True,
     ) -> None: ...
     def remove_particles_at_level(
@@ -25884,7 +25884,7 @@ class ParticleContainer_16_4_0_0_pinned:
         lev_min: typing.SupportsInt | typing.SupportsIndex = 0,
         lev_max: typing.SupportsInt | typing.SupportsIndex = -1,
         nGrow: typing.SupportsInt | typing.SupportsIndex = 0,
-        local: typing.SupportsInt | typing.SupportsIndex = 0,
+        local: IntVect3D = IntVect3D(0),
         remove_negative: bool = True,
     ) -> None: ...
     def remove_particles_at_level(
@@ -26376,7 +26376,7 @@ class ParticleContainer_16_4_0_0_default:
         lev_min: typing.SupportsInt | typing.SupportsIndex = 0,
         lev_max: typing.SupportsInt | typing.SupportsIndex = -1,
         nGrow: typing.SupportsInt | typing.SupportsIndex = 0,
-        local: typing.SupportsInt | typing.SupportsIndex = 0,
+        local: IntVect3D = IntVect3D(0),
         remove_negative: bool = True,
     ) -> None: ...
     def remove_particles_at_level(
@@ -26868,7 +26868,7 @@ class ParticleContainer_16_4_0_0_arena:
         lev_min: typing.SupportsInt | typing.SupportsIndex = 0,
         lev_max: typing.SupportsInt | typing.SupportsIndex = -1,
         nGrow: typing.SupportsInt | typing.SupportsIndex = 0,
-        local: typing.SupportsInt | typing.SupportsIndex = 0,
+        local: IntVect3D = IntVect3D(0),
         remove_negative: bool = True,
     ) -> None: ...
     def remove_particles_at_level(
@@ -27360,7 +27360,7 @@ class ParticleContainer_16_4_0_0_polymorphic:
         lev_min: typing.SupportsInt | typing.SupportsIndex = 0,
         lev_max: typing.SupportsInt | typing.SupportsIndex = -1,
         nGrow: typing.SupportsInt | typing.SupportsIndex = 0,
-        local: typing.SupportsInt | typing.SupportsIndex = 0,
+        local: IntVect3D = IntVect3D(0),
         remove_negative: bool = True,
     ) -> None: ...
     def remove_particles_at_level(
@@ -28260,7 +28260,7 @@ class ParticleContainer_pureSoA_11_0_polymorphic:
         lev_min: typing.SupportsInt | typing.SupportsIndex = 0,
         lev_max: typing.SupportsInt | typing.SupportsIndex = -1,
         nGrow: typing.SupportsInt | typing.SupportsIndex = 0,
-        local: typing.SupportsInt | typing.SupportsIndex = 0,
+        local: IntVect3D = IntVect3D(0),
         remove_negative: bool = True,
     ) -> None: ...
     def remove_particles_at_level(
@@ -29160,7 +29160,7 @@ class ParticleContainer_pureSoA_7_0_polymorphic:
         lev_min: typing.SupportsInt | typing.SupportsIndex = 0,
         lev_max: typing.SupportsInt | typing.SupportsIndex = -1,
         nGrow: typing.SupportsInt | typing.SupportsIndex = 0,
-        local: typing.SupportsInt | typing.SupportsIndex = 0,
+        local: IntVect3D = IntVect3D(0),
         remove_negative: bool = True,
     ) -> None: ...
     def remove_particles_at_level(
