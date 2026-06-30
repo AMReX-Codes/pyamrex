@@ -335,8 +335,14 @@ void make_ParticleContainer_and_Iterators (py::module &m, std::string allocstr)
 
         .def("increment", &ParticleContainerType::Increment) // TODO pure SoA
         //.def("IncrementWithTotal", &ParticleContainerType::IncrementWithTotal, py::arg("mf"), py::arg("level"), py::arg("local")=false) // TODO pure SoA
-        .def("redistribute", &ParticleContainerType::Redistribute, py::arg("lev_min")=0, py::arg("lev_max")=-1,
-                                            py::arg("nGrow")=0, py::arg("local")=amrex::IntVect(0), py::arg("remove_negative")=true)
+        .def("redistribute",
+            static_cast<void (ParticleContainerType::*)(int, int, int, int, bool)>(&ParticleContainerType::Redistribute),
+            py::arg("lev_min")=0, py::arg("lev_max")=-1,
+            py::arg("nGrow")=0, py::arg("local")=0, py::arg("remove_negative")=true)
+        .def("redistribute",
+            static_cast<void (ParticleContainerType::*)(int, int, int, amrex::IntVect, bool)>(&ParticleContainerType::Redistribute),
+            py::arg("lev_min")=0, py::arg("lev_max")=-1,
+            py::arg("nGrow")=0, py::arg("local")=amrex::IntVect(0), py::arg("remove_negative")=true)
         .def("sort_particles_by_cell", &ParticleContainerType::SortParticlesByCell)
         .def("sort_particles_by_bin", &ParticleContainerType::SortParticlesByBin)
         .def("OK", &ParticleContainerType::OK, py::arg("lev_min") = 0, py::arg("lev_max") = -1, py::arg("nGrow")=0)
