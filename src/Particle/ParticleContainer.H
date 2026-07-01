@@ -340,9 +340,9 @@ void make_ParticleContainer_and_Iterators (py::module &m, std::string allocstr)
             py::arg("lev_min")=0, py::arg("lev_max")=-1,
             py::arg("nGrow")=0, py::arg("local")=0, py::arg("remove_negative")=true)
         .def("redistribute",
-            static_cast<void (ParticleContainerType::*)(int, int, int, bool, amrex::IntVect, bool)>(&ParticleContainerType::Redistribute),
+            static_cast<void (ParticleContainerType::*)(int, int, amrex::IntVect, bool, amrex::IntVect, bool)>(&ParticleContainerType::Redistribute),
             py::arg("lev_min")=0, py::arg("lev_max")=-1,
-            py::arg("nGrow")=0, py::arg("local")=false,
+            py::arg("nGrow")=amrex::IntVect(0), py::arg("local")=false,
             py::arg("max_cells_moved")=amrex::IntVect(0), py::arg("remove_negative")=true)
         .def("sort_particles_by_cell", &ParticleContainerType::SortParticlesByCell)
         .def("sort_particles_by_bin", &ParticleContainerType::SortParticlesByBin)
