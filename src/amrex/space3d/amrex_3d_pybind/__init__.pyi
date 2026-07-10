@@ -18573,12 +18573,23 @@ class ParticleContainer_pureSoA_3_0_pinned:
         only_local: bool = False,
     ) -> Vector_Long: ...
     def print_capacity(self) -> typing.Annotated[list[int], "FixedSize(3)"]: ...
+    @typing.overload
     def redistribute(
         self,
         lev_min: typing.SupportsInt | typing.SupportsIndex = 0,
         lev_max: typing.SupportsInt | typing.SupportsIndex = -1,
         nGrow: typing.SupportsInt | typing.SupportsIndex = 0,
         local: typing.SupportsInt | typing.SupportsIndex = 0,
+        remove_negative: bool = True,
+    ) -> None: ...
+    @typing.overload
+    def redistribute(
+        self,
+        lev_min: typing.SupportsInt | typing.SupportsIndex = 0,
+        lev_max: typing.SupportsInt | typing.SupportsIndex = -1,
+        nGrow: IntVect3D = IntVect3D(0),
+        local: bool = False,
+        max_cells_moved: IntVect3D = IntVect3D(0),
         remove_negative: bool = True,
     ) -> None: ...
     def remove_particles_at_level(
@@ -19050,12 +19061,23 @@ class ParticleContainer_pureSoA_3_0_default:
         only_local: bool = False,
     ) -> Vector_Long: ...
     def print_capacity(self) -> typing.Annotated[list[int], "FixedSize(3)"]: ...
+    @typing.overload
     def redistribute(
         self,
         lev_min: typing.SupportsInt | typing.SupportsIndex = 0,
         lev_max: typing.SupportsInt | typing.SupportsIndex = -1,
         nGrow: typing.SupportsInt | typing.SupportsIndex = 0,
         local: typing.SupportsInt | typing.SupportsIndex = 0,
+        remove_negative: bool = True,
+    ) -> None: ...
+    @typing.overload
+    def redistribute(
+        self,
+        lev_min: typing.SupportsInt | typing.SupportsIndex = 0,
+        lev_max: typing.SupportsInt | typing.SupportsIndex = -1,
+        nGrow: IntVect3D = IntVect3D(0),
+        local: bool = False,
+        max_cells_moved: IntVect3D = IntVect3D(0),
         remove_negative: bool = True,
     ) -> None: ...
     def remove_particles_at_level(
@@ -19527,12 +19549,23 @@ class ParticleContainer_pureSoA_3_0_arena:
         only_local: bool = False,
     ) -> Vector_Long: ...
     def print_capacity(self) -> typing.Annotated[list[int], "FixedSize(3)"]: ...
+    @typing.overload
     def redistribute(
         self,
         lev_min: typing.SupportsInt | typing.SupportsIndex = 0,
         lev_max: typing.SupportsInt | typing.SupportsIndex = -1,
         nGrow: typing.SupportsInt | typing.SupportsIndex = 0,
         local: typing.SupportsInt | typing.SupportsIndex = 0,
+        remove_negative: bool = True,
+    ) -> None: ...
+    @typing.overload
+    def redistribute(
+        self,
+        lev_min: typing.SupportsInt | typing.SupportsIndex = 0,
+        lev_max: typing.SupportsInt | typing.SupportsIndex = -1,
+        nGrow: IntVect3D = IntVect3D(0),
+        local: bool = False,
+        max_cells_moved: IntVect3D = IntVect3D(0),
         remove_negative: bool = True,
     ) -> None: ...
     def remove_particles_at_level(
@@ -20004,12 +20037,23 @@ class ParticleContainer_pureSoA_3_0_polymorphic:
         only_local: bool = False,
     ) -> Vector_Long: ...
     def print_capacity(self) -> typing.Annotated[list[int], "FixedSize(3)"]: ...
+    @typing.overload
     def redistribute(
         self,
         lev_min: typing.SupportsInt | typing.SupportsIndex = 0,
         lev_max: typing.SupportsInt | typing.SupportsIndex = -1,
         nGrow: typing.SupportsInt | typing.SupportsIndex = 0,
         local: typing.SupportsInt | typing.SupportsIndex = 0,
+        remove_negative: bool = True,
+    ) -> None: ...
+    @typing.overload
+    def redistribute(
+        self,
+        lev_min: typing.SupportsInt | typing.SupportsIndex = 0,
+        lev_max: typing.SupportsInt | typing.SupportsIndex = -1,
+        nGrow: IntVect3D = IntVect3D(0),
+        local: bool = False,
+        max_cells_moved: IntVect3D = IntVect3D(0),
         remove_negative: bool = True,
     ) -> None: ...
     def remove_particles_at_level(
@@ -22257,12 +22301,23 @@ class ParticleContainer_2_1_3_1_pinned:
         only_local: bool = False,
     ) -> Vector_Long: ...
     def print_capacity(self) -> typing.Annotated[list[int], "FixedSize(3)"]: ...
+    @typing.overload
     def redistribute(
         self,
         lev_min: typing.SupportsInt | typing.SupportsIndex = 0,
         lev_max: typing.SupportsInt | typing.SupportsIndex = -1,
         nGrow: typing.SupportsInt | typing.SupportsIndex = 0,
         local: typing.SupportsInt | typing.SupportsIndex = 0,
+        remove_negative: bool = True,
+    ) -> None: ...
+    @typing.overload
+    def redistribute(
+        self,
+        lev_min: typing.SupportsInt | typing.SupportsIndex = 0,
+        lev_max: typing.SupportsInt | typing.SupportsIndex = -1,
+        nGrow: IntVect3D = IntVect3D(0),
+        local: bool = False,
+        max_cells_moved: IntVect3D = IntVect3D(0),
         remove_negative: bool = True,
     ) -> None: ...
     def remove_particles_at_level(
@@ -22749,12 +22804,23 @@ class ParticleContainer_2_1_3_1_default:
         only_local: bool = False,
     ) -> Vector_Long: ...
     def print_capacity(self) -> typing.Annotated[list[int], "FixedSize(3)"]: ...
+    @typing.overload
     def redistribute(
         self,
         lev_min: typing.SupportsInt | typing.SupportsIndex = 0,
         lev_max: typing.SupportsInt | typing.SupportsIndex = -1,
         nGrow: typing.SupportsInt | typing.SupportsIndex = 0,
         local: typing.SupportsInt | typing.SupportsIndex = 0,
+        remove_negative: bool = True,
+    ) -> None: ...
+    @typing.overload
+    def redistribute(
+        self,
+        lev_min: typing.SupportsInt | typing.SupportsIndex = 0,
+        lev_max: typing.SupportsInt | typing.SupportsIndex = -1,
+        nGrow: IntVect3D = IntVect3D(0),
+        local: bool = False,
+        max_cells_moved: IntVect3D = IntVect3D(0),
         remove_negative: bool = True,
     ) -> None: ...
     def remove_particles_at_level(
@@ -23241,12 +23307,23 @@ class ParticleContainer_2_1_3_1_arena:
         only_local: bool = False,
     ) -> Vector_Long: ...
     def print_capacity(self) -> typing.Annotated[list[int], "FixedSize(3)"]: ...
+    @typing.overload
     def redistribute(
         self,
         lev_min: typing.SupportsInt | typing.SupportsIndex = 0,
         lev_max: typing.SupportsInt | typing.SupportsIndex = -1,
         nGrow: typing.SupportsInt | typing.SupportsIndex = 0,
         local: typing.SupportsInt | typing.SupportsIndex = 0,
+        remove_negative: bool = True,
+    ) -> None: ...
+    @typing.overload
+    def redistribute(
+        self,
+        lev_min: typing.SupportsInt | typing.SupportsIndex = 0,
+        lev_max: typing.SupportsInt | typing.SupportsIndex = -1,
+        nGrow: IntVect3D = IntVect3D(0),
+        local: bool = False,
+        max_cells_moved: IntVect3D = IntVect3D(0),
         remove_negative: bool = True,
     ) -> None: ...
     def remove_particles_at_level(
@@ -23733,12 +23810,23 @@ class ParticleContainer_2_1_3_1_polymorphic:
         only_local: bool = False,
     ) -> Vector_Long: ...
     def print_capacity(self) -> typing.Annotated[list[int], "FixedSize(3)"]: ...
+    @typing.overload
     def redistribute(
         self,
         lev_min: typing.SupportsInt | typing.SupportsIndex = 0,
         lev_max: typing.SupportsInt | typing.SupportsIndex = -1,
         nGrow: typing.SupportsInt | typing.SupportsIndex = 0,
         local: typing.SupportsInt | typing.SupportsIndex = 0,
+        remove_negative: bool = True,
+    ) -> None: ...
+    @typing.overload
+    def redistribute(
+        self,
+        lev_min: typing.SupportsInt | typing.SupportsIndex = 0,
+        lev_max: typing.SupportsInt | typing.SupportsIndex = -1,
+        nGrow: IntVect3D = IntVect3D(0),
+        local: bool = False,
+        max_cells_moved: IntVect3D = IntVect3D(0),
         remove_negative: bool = True,
     ) -> None: ...
     def remove_particles_at_level(
@@ -25879,12 +25967,23 @@ class ParticleContainer_16_4_0_0_pinned:
         only_local: bool = False,
     ) -> Vector_Long: ...
     def print_capacity(self) -> typing.Annotated[list[int], "FixedSize(3)"]: ...
+    @typing.overload
     def redistribute(
         self,
         lev_min: typing.SupportsInt | typing.SupportsIndex = 0,
         lev_max: typing.SupportsInt | typing.SupportsIndex = -1,
         nGrow: typing.SupportsInt | typing.SupportsIndex = 0,
         local: typing.SupportsInt | typing.SupportsIndex = 0,
+        remove_negative: bool = True,
+    ) -> None: ...
+    @typing.overload
+    def redistribute(
+        self,
+        lev_min: typing.SupportsInt | typing.SupportsIndex = 0,
+        lev_max: typing.SupportsInt | typing.SupportsIndex = -1,
+        nGrow: IntVect3D = IntVect3D(0),
+        local: bool = False,
+        max_cells_moved: IntVect3D = IntVect3D(0),
         remove_negative: bool = True,
     ) -> None: ...
     def remove_particles_at_level(
@@ -26371,12 +26470,23 @@ class ParticleContainer_16_4_0_0_default:
         only_local: bool = False,
     ) -> Vector_Long: ...
     def print_capacity(self) -> typing.Annotated[list[int], "FixedSize(3)"]: ...
+    @typing.overload
     def redistribute(
         self,
         lev_min: typing.SupportsInt | typing.SupportsIndex = 0,
         lev_max: typing.SupportsInt | typing.SupportsIndex = -1,
         nGrow: typing.SupportsInt | typing.SupportsIndex = 0,
         local: typing.SupportsInt | typing.SupportsIndex = 0,
+        remove_negative: bool = True,
+    ) -> None: ...
+    @typing.overload
+    def redistribute(
+        self,
+        lev_min: typing.SupportsInt | typing.SupportsIndex = 0,
+        lev_max: typing.SupportsInt | typing.SupportsIndex = -1,
+        nGrow: IntVect3D = IntVect3D(0),
+        local: bool = False,
+        max_cells_moved: IntVect3D = IntVect3D(0),
         remove_negative: bool = True,
     ) -> None: ...
     def remove_particles_at_level(
@@ -26863,12 +26973,23 @@ class ParticleContainer_16_4_0_0_arena:
         only_local: bool = False,
     ) -> Vector_Long: ...
     def print_capacity(self) -> typing.Annotated[list[int], "FixedSize(3)"]: ...
+    @typing.overload
     def redistribute(
         self,
         lev_min: typing.SupportsInt | typing.SupportsIndex = 0,
         lev_max: typing.SupportsInt | typing.SupportsIndex = -1,
         nGrow: typing.SupportsInt | typing.SupportsIndex = 0,
         local: typing.SupportsInt | typing.SupportsIndex = 0,
+        remove_negative: bool = True,
+    ) -> None: ...
+    @typing.overload
+    def redistribute(
+        self,
+        lev_min: typing.SupportsInt | typing.SupportsIndex = 0,
+        lev_max: typing.SupportsInt | typing.SupportsIndex = -1,
+        nGrow: IntVect3D = IntVect3D(0),
+        local: bool = False,
+        max_cells_moved: IntVect3D = IntVect3D(0),
         remove_negative: bool = True,
     ) -> None: ...
     def remove_particles_at_level(
@@ -27355,12 +27476,23 @@ class ParticleContainer_16_4_0_0_polymorphic:
         only_local: bool = False,
     ) -> Vector_Long: ...
     def print_capacity(self) -> typing.Annotated[list[int], "FixedSize(3)"]: ...
+    @typing.overload
     def redistribute(
         self,
         lev_min: typing.SupportsInt | typing.SupportsIndex = 0,
         lev_max: typing.SupportsInt | typing.SupportsIndex = -1,
         nGrow: typing.SupportsInt | typing.SupportsIndex = 0,
         local: typing.SupportsInt | typing.SupportsIndex = 0,
+        remove_negative: bool = True,
+    ) -> None: ...
+    @typing.overload
+    def redistribute(
+        self,
+        lev_min: typing.SupportsInt | typing.SupportsIndex = 0,
+        lev_max: typing.SupportsInt | typing.SupportsIndex = -1,
+        nGrow: IntVect3D = IntVect3D(0),
+        local: bool = False,
+        max_cells_moved: IntVect3D = IntVect3D(0),
         remove_negative: bool = True,
     ) -> None: ...
     def remove_particles_at_level(
@@ -28255,12 +28387,23 @@ class ParticleContainer_pureSoA_11_0_polymorphic:
         only_local: bool = False,
     ) -> Vector_Long: ...
     def print_capacity(self) -> typing.Annotated[list[int], "FixedSize(3)"]: ...
+    @typing.overload
     def redistribute(
         self,
         lev_min: typing.SupportsInt | typing.SupportsIndex = 0,
         lev_max: typing.SupportsInt | typing.SupportsIndex = -1,
         nGrow: typing.SupportsInt | typing.SupportsIndex = 0,
         local: typing.SupportsInt | typing.SupportsIndex = 0,
+        remove_negative: bool = True,
+    ) -> None: ...
+    @typing.overload
+    def redistribute(
+        self,
+        lev_min: typing.SupportsInt | typing.SupportsIndex = 0,
+        lev_max: typing.SupportsInt | typing.SupportsIndex = -1,
+        nGrow: IntVect3D = IntVect3D(0),
+        local: bool = False,
+        max_cells_moved: IntVect3D = IntVect3D(0),
         remove_negative: bool = True,
     ) -> None: ...
     def remove_particles_at_level(
@@ -29155,12 +29298,23 @@ class ParticleContainer_pureSoA_7_0_polymorphic:
         only_local: bool = False,
     ) -> Vector_Long: ...
     def print_capacity(self) -> typing.Annotated[list[int], "FixedSize(3)"]: ...
+    @typing.overload
     def redistribute(
         self,
         lev_min: typing.SupportsInt | typing.SupportsIndex = 0,
         lev_max: typing.SupportsInt | typing.SupportsIndex = -1,
         nGrow: typing.SupportsInt | typing.SupportsIndex = 0,
         local: typing.SupportsInt | typing.SupportsIndex = 0,
+        remove_negative: bool = True,
+    ) -> None: ...
+    @typing.overload
+    def redistribute(
+        self,
+        lev_min: typing.SupportsInt | typing.SupportsIndex = 0,
+        lev_max: typing.SupportsInt | typing.SupportsIndex = -1,
+        nGrow: IntVect3D = IntVect3D(0),
+        local: bool = False,
+        max_cells_moved: IntVect3D = IntVect3D(0),
         remove_negative: bool = True,
     ) -> None: ...
     def remove_particles_at_level(

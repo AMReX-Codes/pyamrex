@@ -190,6 +190,13 @@ void make_ParticleContainer_and_Iterators (py::module &m, std::string allocstr)
 
     std::string const suffix = particle_type_suffix<T_ParticleType, T_NArrayReal, T_NArrayInt>();
     auto const particle_container_type = std::string("ParticleContainer_") + suffix + "_" + allocstr;
+#if AMREX_SPACEDIM == 1
+    constexpr char const* intvect_zero_default = "IntVect1D(0)";
+#elif AMREX_SPACEDIM == 2
+    constexpr char const* intvect_zero_default = "IntVect2D(0)";
+#else
+    constexpr char const* intvect_zero_default = "IntVect3D(0)";
+#endif
     auto py_pc = py::class_<ParticleContainerType>(m, particle_container_type.c_str())
         .def(py::init())
         .def(py::init<const Geometry&, const DistributionMapping&, const BoxArray&>())
@@ -335,8 +342,15 @@ void make_ParticleContainer_and_Iterators (py::module &m, std::string allocstr)
 
         .def("increment", &ParticleContainerType::Increment) // TODO pure SoA
         //.def("IncrementWithTotal", &ParticleContainerType::IncrementWithTotal, py::arg("mf"), py::arg("level"), py::arg("local")=false) // TODO pure SoA
-        .def("redistribute", &ParticleContainerType::Redistribute, py::arg("lev_min")=0, py::arg("lev_max")=-1,
-                                            py::arg("nGrow")=0, py::arg("local")=0, py::arg("remove_negative")=true)
+        .def("redistribute",
+            static_cast<void (ParticleContainerType::*)(int, int, int, int, bool)>(&ParticleContainerType::Redistribute),
+            py::arg("lev_min")=0, py::arg("lev_max")=-1,
+            py::arg("nGrow")=0, py::arg("local")=0, py::arg("remove_negative")=true)
+        .def("redistribute",
+            static_cast<void (ParticleContainerType::*)(int, int, amrex::IntVect, bool, amrex::IntVect, bool)>(&ParticleContainerType::Redistribute),
+            py::arg("lev_min")=0, py::arg("lev_max")=-1,
+            py::arg_v("nGrow", amrex::IntVect(0), intvect_zero_default), py::arg("local")=false,
+            py::arg_v("max_cells_moved", amrex::IntVect(0), intvect_zero_default), py::arg("remove_negative")=true)
         .def("sort_particles_by_cell", &ParticleContainerType::SortParticlesByCell)
         .def("sort_particles_by_bin", &ParticleContainerType::SortParticlesByBin)
         .def("OK", &ParticleContainerType::OK, py::arg("lev_min") = 0, py::arg("lev_max") = -1, py::arg("nGrow")=0)
