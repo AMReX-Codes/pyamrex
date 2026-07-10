@@ -397,7 +397,7 @@ class AMReX:
     def top() -> AMReX: ...
 
 class Config:
-    amrex_version: typing.ClassVar[str] = "26.07"
+    amrex_version: typing.ClassVar[str] = "26.07-29-g8addf4d92318"
     gpu_backend = None
     have_eb: typing.ClassVar[bool] = True
     have_gpu: typing.ClassVar[bool] = False
@@ -18587,9 +18587,9 @@ class ParticleContainer_pureSoA_3_0_pinned:
         self,
         lev_min: typing.SupportsInt | typing.SupportsIndex = 0,
         lev_max: typing.SupportsInt | typing.SupportsIndex = -1,
-        nGrow: IntVect3D = IntVect3D(0),
+        nGrow: IntVect3D = ...,
         local: bool = False,
-        max_cells_moved: IntVect3D = IntVect3D(0),
+        max_cells_moved: IntVect3D = ...,
         remove_negative: bool = True,
     ) -> None: ...
     def remove_particles_at_level(
@@ -19075,9 +19075,9 @@ class ParticleContainer_pureSoA_3_0_default:
         self,
         lev_min: typing.SupportsInt | typing.SupportsIndex = 0,
         lev_max: typing.SupportsInt | typing.SupportsIndex = -1,
-        nGrow: IntVect3D = IntVect3D(0),
+        nGrow: IntVect3D = ...,
         local: bool = False,
-        max_cells_moved: IntVect3D = IntVect3D(0),
+        max_cells_moved: IntVect3D = ...,
         remove_negative: bool = True,
     ) -> None: ...
     def remove_particles_at_level(
@@ -19563,9 +19563,9 @@ class ParticleContainer_pureSoA_3_0_arena:
         self,
         lev_min: typing.SupportsInt | typing.SupportsIndex = 0,
         lev_max: typing.SupportsInt | typing.SupportsIndex = -1,
-        nGrow: IntVect3D = IntVect3D(0),
+        nGrow: IntVect3D = ...,
         local: bool = False,
-        max_cells_moved: IntVect3D = IntVect3D(0),
+        max_cells_moved: IntVect3D = ...,
         remove_negative: bool = True,
     ) -> None: ...
     def remove_particles_at_level(
@@ -20051,9 +20051,9 @@ class ParticleContainer_pureSoA_3_0_polymorphic:
         self,
         lev_min: typing.SupportsInt | typing.SupportsIndex = 0,
         lev_max: typing.SupportsInt | typing.SupportsIndex = -1,
-        nGrow: IntVect3D = IntVect3D(0),
+        nGrow: IntVect3D = ...,
         local: bool = False,
-        max_cells_moved: IntVect3D = IntVect3D(0),
+        max_cells_moved: IntVect3D = ...,
         remove_negative: bool = True,
     ) -> None: ...
     def remove_particles_at_level(
@@ -22315,9 +22315,9 @@ class ParticleContainer_2_1_3_1_pinned:
         self,
         lev_min: typing.SupportsInt | typing.SupportsIndex = 0,
         lev_max: typing.SupportsInt | typing.SupportsIndex = -1,
-        nGrow: IntVect3D = IntVect3D(0),
+        nGrow: IntVect3D = ...,
         local: bool = False,
-        max_cells_moved: IntVect3D = IntVect3D(0),
+        max_cells_moved: IntVect3D = ...,
         remove_negative: bool = True,
     ) -> None: ...
     def remove_particles_at_level(
@@ -22818,9 +22818,9 @@ class ParticleContainer_2_1_3_1_default:
         self,
         lev_min: typing.SupportsInt | typing.SupportsIndex = 0,
         lev_max: typing.SupportsInt | typing.SupportsIndex = -1,
-        nGrow: IntVect3D = IntVect3D(0),
+        nGrow: IntVect3D = ...,
         local: bool = False,
-        max_cells_moved: IntVect3D = IntVect3D(0),
+        max_cells_moved: IntVect3D = ...,
         remove_negative: bool = True,
     ) -> None: ...
     def remove_particles_at_level(
@@ -23321,9 +23321,9 @@ class ParticleContainer_2_1_3_1_arena:
         self,
         lev_min: typing.SupportsInt | typing.SupportsIndex = 0,
         lev_max: typing.SupportsInt | typing.SupportsIndex = -1,
-        nGrow: IntVect3D = IntVect3D(0),
+        nGrow: IntVect3D = ...,
         local: bool = False,
-        max_cells_moved: IntVect3D = IntVect3D(0),
+        max_cells_moved: IntVect3D = ...,
         remove_negative: bool = True,
     ) -> None: ...
     def remove_particles_at_level(
@@ -23824,9 +23824,9 @@ class ParticleContainer_2_1_3_1_polymorphic:
         self,
         lev_min: typing.SupportsInt | typing.SupportsIndex = 0,
         lev_max: typing.SupportsInt | typing.SupportsIndex = -1,
-        nGrow: IntVect3D = IntVect3D(0),
+        nGrow: IntVect3D = ...,
         local: bool = False,
-        max_cells_moved: IntVect3D = IntVect3D(0),
+        max_cells_moved: IntVect3D = ...,
         remove_negative: bool = True,
     ) -> None: ...
     def remove_particles_at_level(
@@ -25981,9 +25981,9 @@ class ParticleContainer_16_4_0_0_pinned:
         self,
         lev_min: typing.SupportsInt | typing.SupportsIndex = 0,
         lev_max: typing.SupportsInt | typing.SupportsIndex = -1,
-        nGrow: IntVect3D = IntVect3D(0),
+        nGrow: IntVect3D = ...,
         local: bool = False,
-        max_cells_moved: IntVect3D = IntVect3D(0),
+        max_cells_moved: IntVect3D = ...,
         remove_negative: bool = True,
     ) -> None: ...
     def remove_particles_at_level(
@@ -26484,9 +26484,9 @@ class ParticleContainer_16_4_0_0_default:
         self,
         lev_min: typing.SupportsInt | typing.SupportsIndex = 0,
         lev_max: typing.SupportsInt | typing.SupportsIndex = -1,
-        nGrow: IntVect3D = IntVect3D(0),
+        nGrow: IntVect3D = ...,
         local: bool = False,
-        max_cells_moved: IntVect3D = IntVect3D(0),
+        max_cells_moved: IntVect3D = ...,
         remove_negative: bool = True,
     ) -> None: ...
     def remove_particles_at_level(
@@ -26987,9 +26987,9 @@ class ParticleContainer_16_4_0_0_arena:
         self,
         lev_min: typing.SupportsInt | typing.SupportsIndex = 0,
         lev_max: typing.SupportsInt | typing.SupportsIndex = -1,
-        nGrow: IntVect3D = IntVect3D(0),
+        nGrow: IntVect3D = ...,
         local: bool = False,
-        max_cells_moved: IntVect3D = IntVect3D(0),
+        max_cells_moved: IntVect3D = ...,
         remove_negative: bool = True,
     ) -> None: ...
     def remove_particles_at_level(
@@ -27490,9 +27490,9 @@ class ParticleContainer_16_4_0_0_polymorphic:
         self,
         lev_min: typing.SupportsInt | typing.SupportsIndex = 0,
         lev_max: typing.SupportsInt | typing.SupportsIndex = -1,
-        nGrow: IntVect3D = IntVect3D(0),
+        nGrow: IntVect3D = ...,
         local: bool = False,
-        max_cells_moved: IntVect3D = IntVect3D(0),
+        max_cells_moved: IntVect3D = ...,
         remove_negative: bool = True,
     ) -> None: ...
     def remove_particles_at_level(
@@ -28401,9 +28401,9 @@ class ParticleContainer_pureSoA_11_0_polymorphic:
         self,
         lev_min: typing.SupportsInt | typing.SupportsIndex = 0,
         lev_max: typing.SupportsInt | typing.SupportsIndex = -1,
-        nGrow: IntVect3D = IntVect3D(0),
+        nGrow: IntVect3D = ...,
         local: bool = False,
-        max_cells_moved: IntVect3D = IntVect3D(0),
+        max_cells_moved: IntVect3D = ...,
         remove_negative: bool = True,
     ) -> None: ...
     def remove_particles_at_level(
@@ -29312,9 +29312,9 @@ class ParticleContainer_pureSoA_7_0_polymorphic:
         self,
         lev_min: typing.SupportsInt | typing.SupportsIndex = 0,
         lev_max: typing.SupportsInt | typing.SupportsIndex = -1,
-        nGrow: IntVect3D = IntVect3D(0),
+        nGrow: IntVect3D = ...,
         local: bool = False,
-        max_cells_moved: IntVect3D = IntVect3D(0),
+        max_cells_moved: IntVect3D = ...,
         remove_negative: bool = True,
     ) -> None: ...
     def remove_particles_at_level(
@@ -29975,7 +29975,7 @@ Geometric: GrowthStrategy
 Poisson: GrowthStrategy
 __author__: str = "Axel Huebl, Ryan T. Sandberg, Shreyas Ananthan, David P. Grote, Revathi Jambunathan, Edoardo Zoni, Remi Lehe, Andrew Myers, Weiqun Zhang"
 __license__: str = "BSD-3-Clause-LBNL"
-__version__: str = "26.07"
+__version__: str = "26.07-29-g8addf4d92318"
 basic: EBSupport
 full: EBSupport
 volume: EBSupport
