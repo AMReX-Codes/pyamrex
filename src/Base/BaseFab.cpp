@@ -17,9 +17,9 @@ namespace
     using namespace amrex;
 
     template< typename T >
-    void init_bf(py::module &m, std::string typestr) {
+    void init_bf(nb::module_ &m, std::string typestr) {
         auto const bf_name = std::string("BaseFab_").append(typestr);
-        py::class_< BaseFab<T> >(m, bf_name.c_str())
+        nb::class_< BaseFab<T> >(m, bf_name.c_str())
             .def("__repr__",
                  [bf_name](BaseFab<Real> const & bf) {
                      std::string r = "<amrex.";
@@ -29,19 +29,19 @@ namespace
                  }
             )
 
-            .def(py::init< >())
-            .def(py::init< Arena* >())
-            .def(py::init< Box const &, int, Arena* >())
-            //.def(py::init< >( Box const &, int, bool, bool, Arena* ))
-            //.def(py::init< const BaseFab<T>&, MakeType, int, int >())
+            .def(nb::init< >())
+            .def(nb::init< Arena* >())
+            .def(nb::init< Box const &, int, Arena* >())
+            //.def(nb::init< >( Box const &, int, bool, bool, Arena* ))
+            //.def(nb::init< const BaseFab<T>&, MakeType, int, int >())
             // non-owning
-            .def(py::init< const Box&, int, T* >())
-            .def(py::init< const Box&, int, T const* >())
+            .def(nb::init< const Box&, int, T* >())
+            .def(nb::init< const Box&, int, T const* >())
 
-            .def(py::init< Array4<T> const& >(), py::keep_alive<1, 2>())
-            .def(py::init< Array4<T> const&, IndexType >(), py::keep_alive<1, 2>())
-            .def(py::init< Array4<T const> const& >(), py::keep_alive<1, 2>())
-            .def(py::init< Array4<T const> const&, IndexType >(), py::keep_alive<1, 2>())
+            .def(nb::init< Array4<T> const& >(), nb::keep_alive<1, 2>())
+            .def(nb::init< Array4<T> const&, IndexType >(), nb::keep_alive<1, 2>())
+            .def(nb::init< Array4<T const> const& >(), nb::keep_alive<1, 2>())
+            .def(nb::init< Array4<T const> const&, IndexType >(), nb::keep_alive<1, 2>())
 
             //.def_static("initialize", &BaseFab<T>::Initialize )
             //.def_static("finalize", &BaseFab<T>::Finalize )
@@ -50,8 +50,8 @@ namespace
             .def("clear", &BaseFab<T>::clear )
             //.def("release", &BaseFab<T>::release )
 
-            .def("n_bytes", py::overload_cast< >(&BaseFab<T>::nBytes, py::const_))
-            .def("n_bytes", py::overload_cast< Box const &, int >(&BaseFab<T>::nBytes, py::const_))
+            .def("n_bytes", nb::overload_cast< >(&BaseFab<T>::nBytes, nb::const_))
+            .def("n_bytes", nb::overload_cast< Box const &, int >(&BaseFab<T>::nBytes, nb::const_))
             .def("n_bytes_owned", &BaseFab<T>::nBytesOwned )
             .def("n_comp", &BaseFab<T>::nComp )
             .def("num_pts", &BaseFab<T>::numPts )
@@ -72,12 +72,12 @@ namespace
             .def("array", [](BaseFab<T> & bf)
                 { return bf.array(); },
                 // as long as the return value (argument 0) exists, keep the fa (argument 1) alive
-                py::keep_alive<0, 1>()
+                nb::keep_alive<0, 1>()
             )
             .def("const_array", [](BaseFab<T> const & bf)
                 { return bf.const_array(); },
                 // as long as the return value (argument 0) exists, keep the fa (argument 1) alive
-                 py::keep_alive<0, 1>()
+                 nb::keep_alive<0, 1>()
             )
 
             .def("to_host", [](BaseFab<T> const & bf) {
@@ -88,11 +88,11 @@ namespace
                     ha.dataPtr());
                 Gpu::streamSynchronize();
                 return hbf;
-            }, py::return_value_policy::move)
+            }, nb::rv_policy::move)
 
             // CPU: __array_interface__ v3
             // https://numpy.org/doc/stable/reference/arrays.interface.html
-            .def_property_readonly("__array_interface__", [](BaseFab<T> const & bf) {
+            .def_prop_ro("__array_interface__", [](BaseFab<T> const & bf) {
                 return pyAMReX::array_interface(bf.array());
             })
 
@@ -106,7 +106,7 @@ namespace
 
             // Nvidia GPUs: __cuda_array_interface__ v3
             // https://numba.readthedocs.io/en/latest/cuda/cuda_array_interface.html
-            .def_property_readonly("__cuda_array_interface__", [](BaseFab<T> & bf) {
+            .def_prop_ro("__cuda_array_interface__", [](BaseFab<T> & bf) {
                 auto d = pyAMReX::array_interface(bf.array());
 
                 // data:
@@ -120,7 +120,7 @@ namespace
                 //   2: The per-thread default stream.
                 //   Any other integer: a cudaStream_t represented as a Python integer.
                 //   When None, no synchronization is required.
-                d["stream"] = py::none();
+                d["stream"] = nb::none();
 
                 d["version"] = 3;
                 return d;
@@ -185,7 +185,7 @@ namespace
     }
 }
 
-void init_BaseFab(py::module &m) {
+void init_BaseFab(nb::module_ &m) {
     using namespace amrex;
 
     init_bf<Real>(m, "Real");

@@ -200,7 +200,7 @@ function(pyamrex_set_compile_warnings tgt)
         # or on Debian 9 with Clang 6.0
         #   export LD_PRELOAD=/usr/lib/llvm-6.0/lib/clang/6.0.0/lib/linux/libclang_rt.asan-x86_64.so:
         #                     /usr/lib/llvm-6.0/lib/clang/6.0.0/lib/linux/libclang_rt.ubsan_minimal-x86_64.so
-        # at runtime when used with symbol-hidden code (e.g. pybind11 module)
+        # at runtime when used with symbol-hidden code (e.g. nanobind module)
         target_compile_options(${tgt} PRIVATE -Wall -Wextra -Wpedantic -Wshadow -Woverloaded-virtual -Wextra-semi -Wunreachable-code)
     elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "AppleClang")
         target_compile_options(${tgt} PRIVATE -Wall -Wextra -Wpedantic -Wshadow -Woverloaded-virtual -Wextra-semi -Wunreachable-code)

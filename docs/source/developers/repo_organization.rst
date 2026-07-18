@@ -6,7 +6,7 @@ pyAMReX Structure
 Repo Organization
 -----------------
 
-The pyAMReX source code is located in ``src/`` and contains pybind11 C++ code, exposing C++ objects and functions to Python.
+The pyAMReX source code is located in ``src/`` and contains nanobind C++ code, exposing C++ objects and functions to Python.
 All sub-directories have a pretty straightforward name, mirroring the `AMReX Src/ structure <https://github.com/AMReX-Codes/amrex/tree/development/Src>`__.
 
 Additionally, the ``src/amrex/`` directory contains Python import modules and extensions written in pyre Python.

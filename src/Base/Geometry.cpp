@@ -13,21 +13,21 @@
 #include <stdexcept>
 
 
-void init_Geometry(py::module& m)
+void init_Geometry(nb::module_& m)
 {
     using namespace amrex;
 
-    py::class_<GeometryData>(m, "GeometryData")
+    nb::class_<GeometryData>(m, "GeometryData")
         .def("__repr__",
             [](const GeometryData&) {
                 return "<amrex.GeometryData>";
             }
         )
-        .def(py::init<>())
-        .def_readonly("prob_domain", &GeometryData::prob_domain, "The problem domain (real).")
-        .def_readonly("domain", &GeometryData::domain, "The index domain.")
-        .def_readonly("coord", &GeometryData::coord, "The Coordinates type.")
-        .def_property_readonly("dx",
+        .def(nb::init<>())
+        .def_ro("prob_domain", &GeometryData::prob_domain, "The problem domain (real).")
+        .def_ro("domain", &GeometryData::domain, "The index domain.")
+        .def_ro("coord", &GeometryData::coord, "The Coordinates type.")
+        .def_prop_ro("dx",
             [](const GeometryData& gd){
                 std::array<Real,AMREX_SPACEDIM> dx {AMREX_D_DECL(
                     gd.dx[0], gd.dx[1], gd.dx[2]
@@ -36,7 +36,7 @@ void init_Geometry(py::module& m)
             },
             "The cellsize for each coordinate direction."
         )
-        .def_property_readonly("is_periodic",
+        .def_prop_ro("is_periodic",
             [](const GeometryData& gd){
                 std::array<int,AMREX_SPACEDIM> per {AMREX_D_DECL(
                     gd.is_periodic[0], gd.is_periodic[1], gd.is_periodic[2]
@@ -89,12 +89,12 @@ void init_Geometry(py::module& m)
         .def("Coord", &GeometryData::Coord,"return integer coordinate type")
     ;
 
-    py::class_<Geometry, CoordSys>(m, "Geometry")
+    nb::class_<Geometry, CoordSys>(m, "Geometry")
         .def("__repr__",
-             [](py::object& obj) {
-                 py::str py_name = obj.attr("__class__").attr("__name__");
-                 const std::string name = py_name;
-                 const auto gm = obj.cast<Geometry>();
+             [](nb::object& obj) {
+                 nb::str py_name = obj.attr("__class__").attr("__name__");
+                 const std::string name = nb::cast<std::string>(py_name);
+                 const auto gm = nb::cast<Geometry>(obj);
                  std::stringstream s;
                  s << gm;
                  return "<amrex." + name + " " + s.str() + ">";
@@ -106,45 +106,45 @@ void init_Geometry(py::module& m)
                  s << gm;
                  return s.str();
              })
-        .def(py::init<>())
-        .def(py::init<
+        .def(nb::init<>())
+        .def(nb::init<
             const Box&,
             const RealBox&,
             int,
             Array<int, AMREX_SPACEDIM> const&
           >(),
-          py::arg("dom"), py::arg("rb"), py::arg("coord"), py::arg("is_per"))
+          nb::arg("dom"), nb::arg("rb"), nb::arg("coord"), nb::arg("is_per"))
 
         .def("data", &Geometry::data, "Returns non-static copy of geometry's stored data")
         // .def("setup")
 
         .def("ResetDefaultProbDomain",
-            py::overload_cast<const RealBox&>
+            nb::overload_cast<const RealBox&>
             (&Geometry::ResetDefaultProbDomain),
             "Reset default problem domain of Geometry class with a `RealBox`")
         .def("ResetDefaultPeriodicity",
-            py::overload_cast<const Array<int,AMREX_SPACEDIM>& >
+            nb::overload_cast<const Array<int,AMREX_SPACEDIM>& >
             (&Geometry::ResetDefaultPeriodicity),
             "Reset default periodicity of Geometry class with an Array of `int`")
         .def("ResetDefaultCoord",
-            py::overload_cast< int >
+            nb::overload_cast< int >
             (&Geometry::ResetDefaultCoord),
             "Reset default coord of Geometry class with an Array of `int`")
 
-        .def("define", py::overload_cast<const Box&, const RealBox&,
+        .def("define", nb::overload_cast<const Box&, const RealBox&,
                                         int, Array<int,AMREX_SPACEDIM> const&>
                                         (&Geometry::define),
-            py::arg("dom"), py::arg("rb"), py::arg("coord"), py::arg("is_per"),
+            nb::arg("dom"), nb::arg("rb"), nb::arg("coord"), nb::arg("is_per"),
             "Set geometry"
         )
 
-        .def_property("prob_domain",
-            py::overload_cast<>(&Geometry::ProbDomain, py::const_),
-            py::overload_cast<RealBox const &>(&Geometry::ProbDomain),
+        .def_prop_rw("prob_domain",
+            nb::overload_cast<>(&Geometry::ProbDomain, nb::const_),
+            nb::overload_cast<RealBox const &>(&Geometry::ProbDomain),
             "The problem domain (real)."
         )
-        .def("ProbLo", py::overload_cast<int>(&Geometry::ProbLo, py::const_),
-            py::arg("dir"),
+        .def("ProbLo", nb::overload_cast<int>(&Geometry::ProbLo, nb::const_),
+            nb::arg("dir"),
             "Get the lo end of the problem domain in specified direction")
         .def("ProbLo",
             [](const Geometry& gm) {
@@ -153,8 +153,8 @@ void init_Geometry(py::module& m)
             },
             "Get the list of lo ends of the problem domain"
         )
-        .def("ProbHi", py::overload_cast<int>(&Geometry::ProbHi, py::const_),
-             py::arg("dir"),
+        .def("ProbHi", nb::overload_cast<int>(&Geometry::ProbHi, nb::const_),
+             nb::arg("dir"),
             "Get the hi end of the problem domain in specified direction")
         .def("ProbHi",
             [](const Geometry& gm) {
@@ -166,68 +166,68 @@ void init_Geometry(py::module& m)
         .def("ProbSize", &Geometry::ProbSize, "the overall size of the domain")
         .def("ProbLength", &Geometry::ProbLength, "length of problem domain in specified dimension")
 
-        .def_property("domain",
-              py::overload_cast<>(&Geometry::Domain, py::const_),
-              py::overload_cast<Box const &>(&Geometry::Domain),
+        .def_prop_rw("domain",
+              nb::overload_cast<>(&Geometry::Domain, nb::const_),
+              nb::overload_cast<Box const &>(&Geometry::Domain),
               "The rectangular domain (index space)."
         )
 
         // GetVolume
-        // .def("GetVolume", py::overload_cast<MultiFab&>(&Geometry::GetVolume, py::const_))
-        // .def("GetVolume", py::overload_cast<)
+        // .def("GetVolume", nb::overload_cast<MultiFab&>(&Geometry::GetVolume, nb::const_))
+        // .def("GetVolume", nb::overload_cast<)
         // ---- needs FArrayBox, BoxArray ! --------
         // GetDLogA
         // GetFaceArea
 
-        .def("isPeriodic", py::overload_cast<int>(&Geometry::isPeriodic, py::const_),
+        .def("isPeriodic", nb::overload_cast<int>(&Geometry::isPeriodic, nb::const_),
             "Is the domain periodic in the specified direction?")
-        .def("isAnyPeriodic", py::overload_cast<>(&Geometry::isAnyPeriodic, py::const_),
+        .def("isAnyPeriodic", nb::overload_cast<>(&Geometry::isAnyPeriodic, nb::const_),
             "Is domain periodic in any direction?")
-        .def("isAllPeriodic", py::overload_cast<>(&Geometry::isAllPeriodic, py::const_),
+        .def("isAllPeriodic", nb::overload_cast<>(&Geometry::isAllPeriodic, nb::const_),
             "Is domain periodic in all directions?")
-        .def("isPeriodic", py::overload_cast<>(&Geometry::isPeriodic, py::const_),
+        .def("isPeriodic", nb::overload_cast<>(&Geometry::isPeriodic, nb::const_),
             "Return list indicating whether domain is periodic in each direction")
         .def("period",
             [](const Geometry& gm, const int dir) {
                 if(gm.isPeriodic(dir)){ return gm.period(dir); }
                 else { throw std::runtime_error("Geometry is not periodic in this direction."); }
             },
-            py::arg("dir"),
+            nb::arg("dir"),
             "Return the period in the specified direction")
         .def("periodicity",
-            py::overload_cast<>(&Geometry::periodicity, py::const_)
+            nb::overload_cast<>(&Geometry::periodicity, nb::const_)
         )
         .def("periodicity",
-            py::overload_cast<const Box&>(&Geometry::periodicity, py::const_),
-            py::arg("b"),
+            nb::overload_cast<const Box&>(&Geometry::periodicity, nb::const_),
+            nb::arg("b"),
             "Return Periodicity object with lengths determined by input Box"
         )
 
         // .def("periodicShift", &Geometry::periodicShift)
-        .def("growNonPeriodicDomain", py::overload_cast<IntVect const&>(&Geometry::growNonPeriodicDomain, py::const_),
-            py::arg("ngrow"))
-        .def("growNonPeriodicDomain", py::overload_cast<int>(&Geometry::growNonPeriodicDomain, py::const_),
-             py::arg("ngrow"))
-        .def("growPeriodicDomain", py::overload_cast<IntVect const&>(&Geometry::growPeriodicDomain, py::const_),
-             py::arg("ngrow"))
-        .def("growPeriodicDomain", py::overload_cast<int>(&Geometry::growPeriodicDomain, py::const_),
-             py::arg("ngrow"))
+        .def("growNonPeriodicDomain", nb::overload_cast<IntVect const&>(&Geometry::growNonPeriodicDomain, nb::const_),
+            nb::arg("ngrow"))
+        .def("growNonPeriodicDomain", nb::overload_cast<int>(&Geometry::growNonPeriodicDomain, nb::const_),
+             nb::arg("ngrow"))
+        .def("growPeriodicDomain", nb::overload_cast<IntVect const&>(&Geometry::growPeriodicDomain, nb::const_),
+             nb::arg("ngrow"))
+        .def("growPeriodicDomain", nb::overload_cast<int>(&Geometry::growPeriodicDomain, nb::const_),
+             nb::arg("ngrow"))
 
         .def("setPeriodicity",
             &Geometry::setPeriodicity,
-            py::arg("period"),
+            nb::arg("period"),
             "Set periodicity flags and return the old flags.\n"
             "Note that, unlike Periodicity class, the flags are just boolean."
         )
-        .def("coarsen", &Geometry::coarsen, py::arg("rr"))
-        .def("refine", &Geometry::refine, py::arg("rr"))
-        .def("outsideRoundOffDomain", py::overload_cast<AMREX_D_DECL(ParticleReal, ParticleReal, ParticleReal)>
-            (&Geometry::outsideRoundoffDomain, py::const_),
-            AMREX_D_DECL(py::arg("x"), py::arg("y"), py::arg("z")),
+        .def("coarsen", &Geometry::coarsen, nb::arg("rr"))
+        .def("refine", &Geometry::refine, nb::arg("rr"))
+        .def("outsideRoundOffDomain", nb::overload_cast<AMREX_D_DECL(ParticleReal, ParticleReal, ParticleReal)>
+            (&Geometry::outsideRoundoffDomain, nb::const_),
+            AMREX_D_DECL(nb::arg("x"), nb::arg("y"), nb::arg("z")),
             "Returns true if a point is outside the roundoff domain. All particles with positions inside the roundoff domain are sure to be mapped to cells inside the Domain() box. Note that the same need not be true for all points inside ProbDomain()")
-        .def("insideRoundOffDomain", py::overload_cast<AMREX_D_DECL(ParticleReal, ParticleReal, ParticleReal)>
-            (&Geometry::insideRoundoffDomain, py::const_),
-            AMREX_D_DECL(py::arg("x"), py::arg("y"), py::arg("z")),
+        .def("insideRoundOffDomain", nb::overload_cast<AMREX_D_DECL(ParticleReal, ParticleReal, ParticleReal)>
+            (&Geometry::insideRoundoffDomain, nb::const_),
+            AMREX_D_DECL(nb::arg("x"), nb::arg("y"), nb::arg("z")),
             "Returns true if a point is inside the roundoff domain. All particles with positions inside the roundoff domain are sure to be mapped to cells inside the Domain() box. Note that the same need not be true for all points inside ProbDomain()")
 
         // .def("computeRoundoffDomain")

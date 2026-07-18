@@ -8,7 +8,7 @@
 #include "Array4.H"
 
 
-void init_Array4_float_const(py::module &m)
+void init_Array4_float_const(nb::module_ &m)
 {
     using namespace pyAMReX;
 

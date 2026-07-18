@@ -21,15 +21,15 @@ namespace
      * https://numpy.org/doc/stable/reference/arrays.interface.html
      */
     template <class T, class Allocator = std::allocator<T> >
-    py::dict
+    nb::dict
     array_interface(PODVector<T, Allocator> const & podvector)
     {
-        auto d = py::dict();
+        auto d = nb::dict();
         bool const read_only = false;
-        d["data"] = py::make_tuple(std::intptr_t(podvector.dataPtr()), read_only);
-        d["shape"] = py::make_tuple(podvector.size());
-        d["strides"] = py::none();
-        d["typestr"] = py::format_descriptor<T>::format();
+        d["data"] = nb::make_tuple(std::intptr_t(podvector.dataPtr()), read_only);
+        d["shape"] = nb::make_tuple(podvector.size());
+        d["strides"] = nb::none();
+        d["typestr"] = pyAMReX::buffer_format<T>();
         d["version"] = 3;
         return d;
     }
@@ -71,7 +71,7 @@ namespace
             index += size;
         }
         if (index < 0 || index >= size) {
-            throw py::index_error("PODVector index out of range");
+            throw nb::index_error("PODVector index out of range");
         }
         return static_cast<std::size_t>(index);
     }
@@ -121,7 +121,7 @@ namespace
      *
      * Always copies: a ``PODVector`` owns its memory through its allocator,
      * so a zero-copy view is not possible.  The source array is normalized on
-     * the host by pybind11 (``c_style | forcecast``): a non-contiguous or
+     * the host by nanobind (``c_contig``): a non-contiguous or
      * differently-typed input is staged into a contiguous, ``T``-typed
      * temporary before the copy.  The destination is filled with a single
      * contiguous transfer: a host copy for host-accessible allocators, or
@@ -130,20 +130,25 @@ namespace
      */
     template <class T, class Allocator>
     PODVector<T, Allocator>
-    from_numpy(py::array_t<T, py::array::c_style | py::array::forcecast> const & arr)
+    from_numpy(nb::object const& input)
     {
-        auto const buf = arr.request();
-        if (buf.ndim != 1) {
-            throw py::value_error("from_numpy: expected a 1-D array");
-        }
-        auto const n = static_cast<std::size_t>(buf.shape[0]);
+        auto np = nb::module_::import_("numpy");
+        auto const dtype = pyAMReX::buffer_format<T>();
+        auto normalized = np.attr("asarray")(
+            input,
+            nb::arg("dtype") = nb::str(dtype.c_str()),
+            nb::arg("order") = "C");
+        auto arr = nb::cast<
+            nb::ndarray<nb::numpy, T, nb::ndim<1>, nb::c_contig>
+        >(normalized);
+        auto const n = static_cast<std::size_t>(arr.shape(0));
 
         PODVector<T, Allocator> podvector(n);
         if (n == 0) {
             return podvector;
         }
 
-        auto const * src = static_cast<T const *>(buf.ptr);
+        auto const * src = arr.data();
 #ifdef AMREX_USE_GPU
         if (!is_host_accessible(podvector)) {
             Gpu::copyAsync(
@@ -162,8 +167,8 @@ namespace
 }
 
 template <class T, class Allocator = std::allocator<T> >
-py::class_<PODVector<T, Allocator> >
-make_PODVector(py::module &m, std::string typestr, std::string allocstr) {
+nb::class_<PODVector<T, Allocator> >
+make_PODVector(nb::module_ &m, std::string typestr, std::string allocstr) {
     using namespace amrex;
 
     using PODVector_type = PODVector<T, Allocator>;
@@ -176,7 +181,7 @@ make_PODVector(py::module &m, std::string typestr, std::string allocstr) {
         .append(allocstr)
         .append("' allocation.");
 
-    auto cl = py::class_<PODVector_type>(m, podv_name.c_str(), podv_doc.c_str())
+    auto cl = nb::class_<PODVector_type>(m, podv_name.c_str(), podv_doc.c_str())
         .def("__repr__",
              [typestr](PODVector_type const & pv) {
                  std::stringstream s, rs;
@@ -193,13 +198,15 @@ make_PODVector(py::module &m, std::string typestr, std::string allocstr) {
                  return rs.str();
              }
         )
-        .def(py::init<>())
-        .def(py::init<std::size_t>(), py::arg("size"))
-        .def(py::init<PODVector_type&>(), py::arg("other"))
+        .def(nb::init<>())
+        .def("__init__", [](PODVector_type *self, std::size_t size) {
+            new (self) PODVector_type(size);
+        }, nb::arg("size"))
+        .def(nb::init<PODVector_type&>(), nb::arg("other"))
         .def("assign", [](PODVector_type & pv, T const & value){
             pv.assign(pv.size(), value);
-        }, py::arg("value"), "assign the same value to every element")
-        .def("push_back", py::overload_cast<const T&>(&PODVector_type::push_back))
+        }, nb::arg("value"), "assign the same value to every element")
+        .def("push_back", nb::overload_cast<const T&>(&PODVector_type::push_back))
         .def("pop_back", &PODVector_type::pop_back)
         .def("clear", &PODVector_type::clear)
         .def("size", &PODVector_type::size)
@@ -208,20 +215,20 @@ make_PODVector(py::module &m, std::string typestr, std::string allocstr) {
         .def("capacity", &PODVector_type::capacity)
         .def("empty", &PODVector_type::empty)
         .def("resize",
-            py::overload_cast<std::size_t, GrowthStrategy>(&PODVector_type::resize),
-            py::arg("new_size"),
-            py::arg("strategy") = GrowthStrategy::Poisson
+            nb::overload_cast<std::size_t, GrowthStrategy>(&PODVector_type::resize),
+            nb::arg("new_size"),
+            nb::arg("strategy") = GrowthStrategy::Poisson
         )
         .def("resize",
-            py::overload_cast<std::size_t, const T&, GrowthStrategy>(&PODVector_type::resize),
-            py::arg("new_size"),
-            py::arg("value"),
-            py::arg("strategy") = GrowthStrategy::Poisson
+            nb::overload_cast<std::size_t, const T&, GrowthStrategy>(&PODVector_type::resize),
+            nb::arg("new_size"),
+            nb::arg("value"),
+            nb::arg("strategy") = GrowthStrategy::Poisson
         )
         .def("reserve",
             &PODVector_type::reserve,
-            py::arg("capacity"),
-            py::arg("strategy") = GrowthStrategy::Poisson
+            nb::arg("capacity"),
+            nb::arg("strategy") = GrowthStrategy::Poisson
         )
         .def("shrink_to_fit", &PODVector_type::shrink_to_fit)
 
@@ -232,10 +239,10 @@ make_PODVector(py::module &m, std::string typestr, std::string allocstr) {
         //
         // swap
 
-        .def_property_readonly("__array_interface__", [](PODVector_type const & podvector) {
+        .def_prop_ro("__array_interface__", [](PODVector_type const & podvector) {
             return array_interface(podvector);
         })
-        .def_property_readonly("__cuda_array_interface__", [](PODVector_type const & podvector) {
+        .def_prop_ro("__cuda_array_interface__", [](PODVector_type const & podvector) {
             // Nvidia GPUs: __cuda_array_interface__ v3
             // https://numba.readthedocs.io/en/latest/cuda/cuda_array_interface.html
             auto d = array_interface(podvector);
@@ -251,7 +258,7 @@ make_PODVector(py::module &m, std::string typestr, std::string allocstr) {
             //   2: The per-thread default stream.
             //   Any other integer: a cudaStream_t represented as a Python integer.
             //   When None, no synchronization is required.
-            d["stream"] = py::none();
+            d["stream"] = nb::none();
 
             d["version"] = 3;
             return d;
@@ -262,8 +269,8 @@ make_PODVector(py::module &m, std::string typestr, std::string allocstr) {
 
         // create a new vector with a copy of a host (NumPy) array
         .def_static("from_numpy", &from_numpy<T, Allocator>,
-             py::arg("arr"),
-             py::return_value_policy::move,
+             nb::arg("arr"),
+             nb::rv_policy::move,
              R"(Create a new PODVector from a NumPy array (or array-like).
 
 Always copies the data into a newly allocated PODVector. The input is cast to
@@ -291,10 +298,10 @@ PODVector
  * Both return a different PODVector allocator type than ``cl`` (``to_host`` a
  * pinned vector, ``to_device`` a ``Gpu::DeviceVector`` = ``arena`` on GPU,
  * ``std`` on CPU). Binding them only after every allocator class exists lets
- * pybind11 stubgen resolve those return types to registered Python types.
+ * nanobind's stub generator resolves those return types to registered Python types.
  */
 template <class T, class Allocator>
-void bind_host_device(py::class_<PODVector<T, Allocator> > & cl)
+void bind_host_device(nb::class_<PODVector<T, Allocator> > & cl)
 {
     using namespace amrex;
 
@@ -308,7 +315,7 @@ void bind_host_device(py::class_<PODVector<T, Allocator> > & cl)
             Gpu::streamSynchronize();
             return h_data;
         },
-        py::return_value_policy::move,
+        nb::rv_policy::move,
         "Copy this vector into a new pinned (host) PODVector. Mirrors to_device().")
 
       .def("to_device",
@@ -337,7 +344,7 @@ void bind_host_device(py::class_<PODVector<T, Allocator> > & cl)
             std::copy(src.begin(), src.end(), dst.begin());
             return dst;
         },
-        py::return_value_policy::move,
+        nb::rv_policy::move,
         "Copy this vector into a new amrex Gpu::DeviceVector (the arena "
         "allocator on GPU, std on CPU), transferring across memory spaces "
         "as needed. Mirrors to_host().");
@@ -351,7 +358,7 @@ void add_host_device(PODVectorClass &... cls)
 }
 
 template <class T>
-void make_PODVector(py::module &m, std::string typestr)
+void make_PODVector(nb::module_ &m, std::string typestr)
 {
     // see Src/Base/AMReX_GpuContainers.H
     auto pv_pinned = make_PODVector<T, amrex::PinnedArenaAllocator<T>> (m, typestr, "pinned");
@@ -391,7 +398,7 @@ void make_PODVector(py::module &m, std::string typestr)
     m.attr(cstr("AsyncVector", typestr).c_str()) = m.attr(str_PODVector(typestr, "async").c_str());
     m.attr(cstr("HostVector", typestr).c_str()) = m.attr(str_PODVector(typestr, "pinned").c_str());
 #else
-    py::object const std_pod = m.attr(str_PODVector(typestr, "std").c_str());
+    nb::object const std_pod = m.attr(str_PODVector(typestr, "std").c_str());
     m.attr(cstr("DeviceVector", typestr).c_str()) = std_pod;
     m.attr(cstr("NonManagedDeviceVector", typestr).c_str()) = std_pod;
     m.attr(cstr("ManagedVector", typestr).c_str()) = std_pod;
@@ -410,14 +417,13 @@ void make_PODVector(py::module &m, std::string typestr)
 #endif
 }
 
-void init_PODVector(py::module& m)
+void init_PODVector(nb::module_& m)
 {
-    py::native_enum<GrowthStrategy>(m, "GrowthStrategy", "enum.Enum")
+    nb::enum_<GrowthStrategy>(m, "GrowthStrategy")
         .value("Poisson", GrowthStrategy::Poisson)
         .value("Exact", GrowthStrategy::Exact)
         .value("Geometric", GrowthStrategy::Geometric)
         .export_values()
-        .finalize()
     ;
 
     make_PODVector<ParticleReal> (m, "real");

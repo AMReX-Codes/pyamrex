@@ -23,25 +23,25 @@ namespace
      */
     template <typename T_ParticleType,
               template<class> class Allocator=DefaultAllocator>
-    py::dict
+    nb::dict
     array_interface(ArrayOfStructs<T_ParticleType, Allocator> const & aos)
     {
         using ParticleType = T_ParticleType;
         using RealType     = typename ParticleType::RealType;
 
-        auto d = py::dict();
+        auto d = nb::dict();
         bool const read_only = false;
-        d["data"] = py::make_tuple(std::intptr_t(aos.dataPtr()), read_only);
-        d["shape"] = py::make_tuple(aos.size());
-        d["strides"] = py::make_tuple(sizeof(ParticleType));
+        d["data"] = nb::make_tuple(std::intptr_t(aos.dataPtr()), read_only);
+        d["shape"] = nb::make_tuple(aos.size());
+        d["strides"] = nb::make_tuple(sizeof(ParticleType));
         d["typestr"] = "|V" + std::to_string(sizeof(ParticleType));
-        py::list descr;
-        descr.append(py::make_tuple("x", py::format_descriptor<RealType>::format()));
+        nb::list descr;
+        descr.append(nb::make_tuple("x", pyAMReX::buffer_format<RealType>()));
 #if (AMREX_SPACEDIM >= 2)
-        descr.append(py::make_tuple("y", py::format_descriptor<RealType>::format()));
+        descr.append(nb::make_tuple("y", pyAMReX::buffer_format<RealType>()));
 #endif
 #if (AMREX_SPACEDIM >= 3)
-        descr.append(py::make_tuple("z", py::format_descriptor<RealType>::format()));
+        descr.append(nb::make_tuple("z", pyAMReX::buffer_format<RealType>()));
 #endif
 
         /* Note AMReX_Particle.H:
@@ -58,22 +58,22 @@ namespace
          */
         if constexpr (ParticleType::NReal > 0) {
             for(int ii=0; ii < ParticleType::NReal; ii++) {
-                descr.append(py::make_tuple("rdata_"+std::to_string(ii),py::format_descriptor<RealType>::format()));
+                descr.append(nb::make_tuple("rdata_"+std::to_string(ii),pyAMReX::buffer_format<RealType>()));
             }
         }
 #ifdef AMREX_SINGLE_PRECISION_PARTICLES
         if constexpr ((AMREX_SPACEDIM + ParticleType::NReal) % 2 != 0) {  // alignas
-            descr.append(py::make_tuple("", "|V4"));  // empty space due to alignment
+            descr.append(nb::make_tuple("", "|V4"));  // empty space due to alignment
         }
 #endif
-        descr.append(py::make_tuple("idcpu", py::format_descriptor<uint64_t>::format()) );
+        descr.append(nb::make_tuple("idcpu", pyAMReX::buffer_format<uint64_t>()) );
         if constexpr (ParticleType::NInt > 0) {
             for(int ii=0; ii < ParticleType::NInt; ++ii) {
-                descr.append(py::make_tuple("idata_"+std::to_string(ii),py::format_descriptor<int>::format()));
+                descr.append(nb::make_tuple("idata_"+std::to_string(ii),pyAMReX::buffer_format<int>()));
             }
         }/*
         if constexpr (ParticleType::NInt % 2 != 0) {  // alignas
-            descr.append(py::make_tuple("", "|V4"));  // empty space due to alignment
+            descr.append(nb::make_tuple("", "|V4"));  // empty space due to alignment
         }*/
 
         d["descr"] = descr;
@@ -84,7 +84,7 @@ namespace
 
 template <typename T_ParticleType,
           template<class> class Allocator=DefaultAllocator>
-void make_ArrayOfStructs(py::module &m, std::string allocstr)
+void make_ArrayOfStructs(nb::module_ &m, std::string allocstr)
 {
     using namespace amrex;
 
@@ -95,8 +95,8 @@ void make_ArrayOfStructs(py::module &m, std::string allocstr)
                           .append(std::to_string(ParticleType::NReal)).append("_")
                           .append(std::to_string(ParticleType::NInt)).append("_")
                           .append(allocstr);
-    py::class_<AOSType>(m, aos_name.c_str())
-        .def(py::init())
+    nb::class_<AOSType>(m, aos_name.c_str())
+        .def(nb::init())
         // TODO:
         //operator()
         // .def("__call__", [](AOSType const & pv){ return pv();})
@@ -107,17 +107,17 @@ void make_ArrayOfStructs(py::module &m, std::string allocstr)
         .def("numTotalParticles", &AOSType::numTotalParticles)
         .def("setNumNeighbors", &AOSType::setNumNeighbors)
         .def("getNumNeighbors", &AOSType::getNumNeighbors)
-        .def("empty", py::overload_cast<>(&AOSType::empty))
-        .def("empty", py::overload_cast<>(&AOSType::empty, py::const_))
+        .def("empty", nb::overload_cast<>(&AOSType::empty))
+        .def("empty", nb::overload_cast<>(&AOSType::empty, nb::const_))
         .def("push_back", &AOSType::push_back)
         .def("pop_back", &AOSType::pop_back)
-        .def("back", py::overload_cast<>(&AOSType::back),"get back member.  Problem!!!!! this is perfo")
+        .def("back", nb::overload_cast<>(&AOSType::back),"get back member.  Problem!!!!! this is perfo")
 
         // setter & getter
-        .def_property_readonly("__array_interface__", [](AOSType const & aos) {
+        .def_prop_ro("__array_interface__", [](AOSType const & aos) {
             return array_interface(aos);
         })
-        .def_property_readonly("__cuda_array_interface__", [](AOSType const & aos) {
+        .def_prop_ro("__cuda_array_interface__", [](AOSType const & aos) {
             // Nvidia GPUs: __cuda_array_interface__ v3
             // https://numba.readthedocs.io/en/latest/cuda/cuda_array_interface.html
             auto d = array_interface(aos);
@@ -133,7 +133,7 @@ void make_ArrayOfStructs(py::module &m, std::string allocstr)
             //   2: The per-thread default stream.
             //   Any other integer: a cudaStream_t represented as a Python integer.
             //   When None, no synchronization is required.
-            d["stream"] = py::none();
+            d["stream"] = nb::none();
 
             d["version"] = 3;
             return d;
@@ -141,12 +141,12 @@ void make_ArrayOfStructs(py::module &m, std::string allocstr)
         .def("test_sizes", [](){ })
         .def("__setitem__", [](AOSType &aos, int const v,  const ParticleType& p){ aos[v] = p; })
         .def("__getitem__", [](AOSType &aos, int const v) -> ParticleType& { return aos[v]; },
-             py::return_value_policy::reference_internal)
+             nb::rv_policy::reference_internal)
 
         .def("to_host", [](AOSType const & aos) {
             ArrayOfStructs<T_ParticleType, amrex::PinnedArenaAllocator> h_data;
             h_data.resize(aos.size());
-            //py::array_t<T_ParticleType> h_data(aos.size());
+            //nb::array_t<T_ParticleType> h_data(aos.size());
             amrex::Gpu::copy(amrex::Gpu::deviceToHost,
                aos.begin(), aos.end(),
                h_data.begin()
@@ -158,7 +158,7 @@ void make_ArrayOfStructs(py::module &m, std::string allocstr)
 }
 
 template <int NReal, int NInt, bool only_polymorphic=false>
-void make_ArrayOfStructs(py::module &m)
+void make_ArrayOfStructs(nb::module_ &m)
 {
     using namespace amrex;
 
@@ -173,7 +173,8 @@ void make_ArrayOfStructs(py::module &m)
         //   !AMREX_USE_GPU: DefaultAllocator = std::allocator
         //    AMREX_USE_GPU: DefaultAllocator = amrex::ArenaAllocator
 
-        //   work-around for https://github.com/pybind/pybind11/pull/4581
+        // Register each concrete allocator type only once: DefaultAllocator is
+        // an alias of std::allocator on CPU and ArenaAllocator on GPU.
         //make_ArrayOfStructs<ParticleType, std::allocator> (m, "std");
         //make_ArrayOfStructs<ParticleType, amrex::ArenaAllocator> (m, "arena");
 #ifdef AMREX_USE_GPU
@@ -183,7 +184,6 @@ void make_ArrayOfStructs(py::module &m)
         make_ArrayOfStructs<ParticleType, amrex::DefaultAllocator> (m, "default");  // std::allocator
         make_ArrayOfStructs<ParticleType, amrex::ArenaAllocator> (m, "arena");
 #endif
-        //   end work-around
 #ifdef AMREX_USE_GPU
         make_ArrayOfStructs<ParticleType, amrex::DeviceArenaAllocator> (m, "device");
         make_ArrayOfStructs<ParticleType, amrex::ManagedArenaAllocator> (m, "managed");

@@ -56,43 +56,43 @@ namespace
         amrex::Order ORDER = amrex::Order::F,
         int StartIndex = 0
     >
-    py::dict
+    nb::dict
     array_interface (amrex::SmallMatrix<T, NRows, NCols, ORDER, StartIndex> const & m)
     {
         using namespace amrex;
 
-        auto d = py::dict();
+        auto d = nb::dict();
         // provide C index order for shape and strides
-        auto shape = m.ordering == Order::F ? py::make_tuple(
-            py::ssize_t(NRows),
-            py::ssize_t(NCols)  // fastest varying index
-        ) : py::make_tuple(
-            py::ssize_t(NCols),
-            py::ssize_t(NRows)  // fastest varying index
+        auto shape = m.ordering == Order::F ? nb::make_tuple(
+            nb::ssize_t(NRows),
+            nb::ssize_t(NCols)  // fastest varying index
+        ) : nb::make_tuple(
+            nb::ssize_t(NCols),
+            nb::ssize_t(NRows)  // fastest varying index
         );
         // buffer protocol strides are in bytes
-        auto const strides = m.ordering == Order::F ? py::make_tuple(
-            py::ssize_t(sizeof(T) * NCols),
-            py::ssize_t(sizeof(T))  // fastest varying index
-        ) : py::make_tuple(
-            py::ssize_t(sizeof(T) * NRows),
-            py::ssize_t(sizeof(T))  // fastest varying index
+        auto const strides = m.ordering == Order::F ? nb::make_tuple(
+            nb::ssize_t(sizeof(T) * NCols),
+            nb::ssize_t(sizeof(T))  // fastest varying index
+        ) : nb::make_tuple(
+            nb::ssize_t(sizeof(T) * NRows),
+            nb::ssize_t(sizeof(T))  // fastest varying index
         );
         bool const read_only = false;  // note: we could decide on is_not_const,
                                        // but many libs, e.g. PyTorch, do not
                                        // support read-only and will raise
                                        // warnings, casting to read-write
-        d["data"] = py::make_tuple(std::intptr_t(&m.template get<0>()), read_only);
+        d["data"] = nb::make_tuple(std::intptr_t(&m.template get<0>()), read_only);
         // note: if we want to keep the same global indexing with non-zero
         //       box small_end as in AMReX, then we can explore playing with
         //       this offset as well
         //d["offset"] = 0;         // default
-        //d["mask"] = py::none();  // default
+        //d["mask"] = nb::none();  // default
 
         d["shape"] = shape;
         // we could also set this after checking the strides are C-style contiguous:
         //if (is_contiguous<T>(shape, strides))
-        //    d["strides"] = py::none();  // C-style contiguous
+        //    d["strides"] = nb::none();  // C-style contiguous
         //else
         d["strides"] = strides;
 
@@ -101,14 +101,14 @@ namespace
         //d["descr"] = ...;
         // we currently only need this
         using T_no_cv = std::remove_cv_t<T>;
-        d["typestr"] = py::format_descriptor<T_no_cv>::format();
+        d["typestr"] = pyAMReX::buffer_format<T_no_cv>();
 
         d["version"] = 3;
         return d;
     }
 
     template<class SM>
-    void add_matrix_methods (py::class_<SM> & py_sm)
+    void add_matrix_methods (nb::class_<SM> & py_sm)
     {
         using T = typename SM::value_type;
         using T_no_cv = std::remove_cv_t<T>;
@@ -121,14 +121,14 @@ namespace
             .def("prod", &SM::product)  // NumPy name
             .def("set_val", &SM::setVal)
             .def("sum", &SM::sum)
-            .def_property_readonly("T", &SM::transpose)   // NumPy name
+            .def_prop_ro("T", &SM::transpose)   // NumPy name
 
             // operators
-            .def(py::self + py::self)
-            .def(py::self - py::self)
-            .def(py::self * amrex::Real())
-            .def(amrex::Real() * py::self)
-            .def(-py::self)
+            .def(nb::self + nb::self)
+            .def(nb::self - nb::self)
+            .def(nb::self * amrex::Real())
+            .def(amrex::Real() * nb::self)
+            .def(-nb::self)
 
             // getter
             .def("__getitem__", [](SM & sm, std::array<int, 2> const & key){
@@ -172,7 +172,7 @@ namespace
     }
 
     template<class T_SV>
-    void add_get_set_Vector (py::class_<T_SV> &py_v)
+    void add_get_set_Vector (nb::class_<T_SV> &py_v)
     {
         using self = T_SV;
         using T = typename T_SV::value_type;
@@ -193,34 +193,30 @@ namespace
     }
 
     template<class SM>
-    py::class_<SM>
-    make_SmallMatrix_or_Vector (py::module &m, std::string typestr)
+    nb::class_<SM>
+    make_SmallMatrix_or_Vector (nb::module_ &m, std::string typestr)
     {
         using namespace amrex;
 
-        // If this type was already registered (e.g., a shared vector type
-        // between different matrix sizes), return the existing binding.
-        if (auto *tinfo = py::detail::get_type_info(typeid(SM))) {
-            return py::reinterpret_borrow<py::class_<SM>>(
-                py::handle(reinterpret_cast<PyObject*>(tinfo->type))
-            );
-        }
+        // A vector specialization can be shared by several matrix bindings.
+        // Use nanobind's documented public type registry to reuse it.
+        if (nb::handle registered = nb::type<SM>(); registered.is_valid())
+            return nb::borrow<nb::class_<SM>>(registered);
 
         using T = typename SM::value_type;
-        using T_no_cv = std::remove_cv_t<T>;
         static constexpr int row_size = SM::row_size;
         static constexpr int column_size = SM::column_size;
         static constexpr Order ordering = SM::ordering;
         static constexpr int starting_index = SM::starting_index;
 
-        // dispatch simpler via: py::format_descriptor<T>::format() naming
+        // dispatch simpler via: pyAMReX::buffer_format<T>() naming
         // but note the _const suffix that might be needed
         auto const sm_name = std::string("SmallMatrix_")
             .append(std::to_string(row_size)).append("x").append(std::to_string(column_size))
             .append("_").append(ordering == Order::F ? "F" : "C")
             .append("_SI").append(std::to_string(starting_index))
             .append("_").append(typestr);
-        py::class_< SM > py_sm(m, sm_name.c_str());
+        nb::class_< SM > py_sm(m, sm_name.c_str());
         py_sm
             .def("__repr__",
                 [](SM const & sm) {
@@ -242,48 +238,46 @@ namespace
                  }
             )
 
-            .def_property_readonly("size", [](SM const &){ return SM::row_size * SM::column_size; })
-            .def_property_readonly("row_size", [](SM const &){ return SM::row_size; })
-            .def_property_readonly("column_size", [](SM const &){ return SM::column_size; })
-            .def_property_readonly("order", [](SM const &){ return SM::ordering == Order::F ? "F" : "C"; })  // NumPy name
-            .def_property_readonly("starting_index", [](SM const &){ return SM::starting_index; })
+            .def_prop_ro("size", [](SM const &){ return SM::row_size * SM::column_size; })
+            .def_prop_ro("row_size", [](SM const &){ return SM::row_size; })
+            .def_prop_ro("column_size", [](SM const &){ return SM::column_size; })
+            .def_prop_ro("order", [](SM const &){ return SM::ordering == Order::F ? "F" : "C"; })  // NumPy name
+            .def_prop_ro("starting_index", [](SM const &){ return SM::starting_index; })
 
             .def_static("zero", [](){ return SM::Zero(); })
 
-            .def(py::init([](){ return SM{}; }))  // zero-init
-            .def(py::init<SM const &>())          // copy-init
+            .def("__init__", [](SM * self) { new (self) SM{}; })  // zero-init
+            .def(nb::init<SM const &>())          // copy-init
 
             /* init from a numpy or other buffer protocol array: copy
              */
-            .def(py::init([](py::array_t<T> & arr)
+            .def("__init__", [](SM * self, nb::object const& input)
             {
-                py::buffer_info buf = arr.request();
-
+                auto const dtype = pyAMReX::buffer_format<T>();
+                auto normalized = nb::module_::import_("numpy").attr("asarray")(
+                    input,
+                    nb::arg("dtype") = nb::str(dtype.c_str()),
+                    nb::arg("order") = "C");
+                auto arr = nb::cast<nb::ndarray<nb::numpy, T>>(normalized);
                 constexpr bool is_vector = SM::column_size == 1 || SM::row_size == 1;
                 constexpr int sm_dim = is_vector ? 1 : 2;
-                if (buf.ndim != sm_dim)
+                if (arr.ndim() != sm_dim)
                     throw std::runtime_error("The SmallMatrix to create is " + std::to_string(sm_dim) +
-                                             "D, but the passed array is " + std::to_string(buf.ndim) + "D.");
-                if (buf.size != SM::column_size * SM::row_size)
+                                             "D, but the passed array is " + std::to_string(arr.ndim()) + "D.");
+                if (arr.size() != SM::column_size * SM::row_size)
                     throw std::runtime_error("Array size mismatch: Expected " + std::to_string(SM::column_size * SM::row_size) +
-                                             " elements, but passed " + std::to_string(buf.size) + " elements.");
-
-                if (buf.format != py::format_descriptor<T_no_cv>::format())
-                    throw std::runtime_error("Incompatible format: expected '" +
-                        py::format_descriptor<T_no_cv>::format() +
-                        "' and received '" + buf.format + "'!");
+                                             " elements, but passed " + std::to_string(arr.size()) + " elements.");
 
                 // TODO: check that strides are either exact or None in buf (e.g., F or C contiguous)
                 // TODO: transpose if SM order is not C?
 
-                auto sm = std::make_unique< SM >();
-                auto * src = static_cast<T*>(buf.ptr);
-                std::copy(src, src + buf.size, &sm->template get<0>());
+                new (self) SM{};
+                auto * src = arr.data();
+                std::copy(src, src + arr.size(), &self->template get<0>());
 
                 // todo: we could check and store here if the array buffer we got is read-only
 
-                return sm;
-            }))
+            })
 
             /* init from __cuda_array_interface__: device-to-host copy
              * TODO
@@ -292,7 +286,7 @@ namespace
 
             // CPU: __array_interface__ v3
             // https://numpy.org/doc/stable/reference/arrays.interface.html
-            .def_property_readonly("__array_interface__", [](SM const & sm) {
+            .def_prop_ro("__array_interface__", [](SM const & sm) {
                 return array_interface(sm);
             })
 
@@ -306,7 +300,7 @@ namespace
 
             // Nvidia GPUs: __cuda_array_interface__ v3
             // https://numba.readthedocs.io/en/latest/cuda/cuda_array_interface.html
-            .def_property_readonly("__cuda_array_interface__", [](SM const & sm)
+            .def_prop_ro("__cuda_array_interface__", [](SM const & sm)
             {
                 auto d = array_interface(sm);
 
@@ -321,7 +315,7 @@ namespace
                 //   2: The per-thread default stream.
                 //   Any other integer: a cudaStream_t represented as a Python integer.
                 //   When None, no synchronization is required.
-                d["stream"] = py::none();
+                d["stream"] = nb::none();
 
                 d["version"] = 3;
                 return d;
@@ -356,7 +350,7 @@ namespace pyAMReX
         amrex::Order ORDER = amrex::Order::F,
         int StartIndex = 0
     >
-    void make_SmallMatrix (py::module &m, std::string typestr)
+    void make_SmallMatrix (nb::module_ &m, std::string typestr)
     {
         using namespace amrex;
 
@@ -369,13 +363,13 @@ namespace pyAMReX
         using ColVec = SmallMatrix<T, NCols, 1, Order::F, StartIndex>;
         using RowVec = SmallMatrix<T, 1, NRows, Order::F, StartIndex>;
 
-        py::class_<SM> py_sm = make_SmallMatrix_or_Vector<SM>(m, typestr);
-        py::class_<ColVec> py_svc = make_SmallMatrix_or_Vector<ColVec>(m, typestr);
-        py::class_<RowVec> py_svr = make_SmallMatrix_or_Vector<RowVec>(m, typestr);
+        nb::class_<SM> py_sm = make_SmallMatrix_or_Vector<SM>(m, typestr);
+        nb::class_<ColVec> py_svc = make_SmallMatrix_or_Vector<ColVec>(m, typestr);
+        nb::class_<RowVec> py_svr = make_SmallMatrix_or_Vector<RowVec>(m, typestr);
 
         // methods, getter, setter
         if constexpr (NRows != NCols) {
-            py::class_<SM_T> py_sm_T = make_SmallMatrix_or_Vector<SM_T>(m, typestr);
+            nb::class_<SM_T> py_sm_T = make_SmallMatrix_or_Vector<SM_T>(m, typestr);
             add_matrix_methods(py_sm_T);
         }
         add_matrix_methods(py_sm);
@@ -383,7 +377,7 @@ namespace pyAMReX
         // operators for matrix-matrix (square matrices only)
         if constexpr (NRows == NCols) {
             py_sm
-                .def(py::self * py::self)
+                .def(nb::self * nb::self)
             ;
         }
         // For non-square matrices, the output vectors have different
@@ -394,8 +388,8 @@ namespace pyAMReX
             using OutColVec = SmallMatrix<T, NRows, 1, Order::F, StartIndex>;
             using OutRowVec = SmallMatrix<T, 1, NCols, Order::F, StartIndex>;
 
-            py::class_<OutColVec> py_svoc = make_SmallMatrix_or_Vector<OutColVec>(m, typestr);
-            py::class_<OutRowVec> py_svor = make_SmallMatrix_or_Vector<OutRowVec>(m, typestr);
+            nb::class_<OutColVec> py_svoc = make_SmallMatrix_or_Vector<OutColVec>(m, typestr);
+            nb::class_<OutRowVec> py_svor = make_SmallMatrix_or_Vector<OutRowVec>(m, typestr);
 
             // methods, getter, setter
             add_matrix_methods(py_svoc);
@@ -409,8 +403,8 @@ namespace pyAMReX
 
         // operators for matrix-vector & vector-matrix
         py_sm
-            .def(py::self * ColVec())
-            .def(RowVec() * py::self)
+            .def(nb::self * ColVec())
+            .def(RowVec() * nb::self)
         ;
     }
 }

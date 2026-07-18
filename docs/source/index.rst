@@ -80,6 +80,7 @@ Development
    developers/testing
    developers/documentation
    developers/repo_organization
+   developers/nanobind_extensions
    developers/implementation
    developers/doxygen
    developers/debugging

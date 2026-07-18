@@ -13,10 +13,9 @@ def next(self):
     In Python, iterators always are called with __next__, even for the
     first access. This means we need to handle the first iterator element
     explicitly, otherwise we will jump directly to the 2nd element. We do
-    this the same way as pybind11 does this, via a little state:
+    this via a small first-element state flag:
       https://github.com/AMReX-Codes/pyamrex/pull/50
       https://github.com/AMReX-Codes/pyamrex/pull/262
-      https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
 
     Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
 

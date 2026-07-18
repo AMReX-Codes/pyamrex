@@ -58,42 +58,42 @@ namespace pyAMReX
      * https://numpy.org/doc/stable/reference/arrays.interface.html
      */
     template<typename T>
-    py::dict
+    nb::dict
     array_interface (Array4<T> const & a4)
     {
-        auto d = py::dict();
+        auto d = nb::dict();
         // F->C index conversion here
         // p[(i-begin[0])+(j-begin[1])*jstride+(k-begin[2])*kstride+n*nstride];
         // Here [jkn]stride is obtained with get_stride<[123]>(). (0 is the unit stride i-direction.)
         // Buffer dimensions: zero-size shall not skip dimension
-        auto shape = py::make_tuple(
-            py::ssize_t(a4.end[3] <= a4.begin[3] ? 1 : a4.end[3]-a4.begin[3]),
-            py::ssize_t(a4.end[2] <= a4.begin[2] ? 1 : a4.end[2]-a4.begin[2]),
-            py::ssize_t(a4.end[1] <= a4.begin[1] ? 1 : a4.end[1]-a4.begin[1]),
-            py::ssize_t(a4.end[0] <= a4.begin[0] ? 1 : a4.end[0]-a4.begin[0]) // fastest varying index
+        auto shape = nb::make_tuple(
+            nb::ssize_t(a4.end[3] <= a4.begin[3] ? 1 : a4.end[3]-a4.begin[3]),
+            nb::ssize_t(a4.end[2] <= a4.begin[2] ? 1 : a4.end[2]-a4.begin[2]),
+            nb::ssize_t(a4.end[1] <= a4.begin[1] ? 1 : a4.end[1]-a4.begin[1]),
+            nb::ssize_t(a4.end[0] <= a4.begin[0] ? 1 : a4.end[0]-a4.begin[0]) // fastest varying index
         );
         // buffer protocol strides are in bytes, AMReX strides are elements
-        auto const strides = py::make_tuple(
-            py::ssize_t(sizeof(T) * a4.template get_stride<3>()),
-            py::ssize_t(sizeof(T) * a4.template get_stride<2>()),
-            py::ssize_t(sizeof(T) * a4.template get_stride<1>()),
-            py::ssize_t(sizeof(T))  // fastest varying index
+        auto const strides = nb::make_tuple(
+            nb::ssize_t(sizeof(T) * a4.template get_stride<3>()),
+            nb::ssize_t(sizeof(T) * a4.template get_stride<2>()),
+            nb::ssize_t(sizeof(T) * a4.template get_stride<1>()),
+            nb::ssize_t(sizeof(T))  // fastest varying index
         );
         bool const read_only = false;  // note: we could decide on is_not_const,
                                        // but many libs, e.g. PyTorch, do not
                                        // support read-only and will raise
                                        // warnings, casting to read-write
-        d["data"] = py::make_tuple(std::intptr_t(a4.dataPtr()), read_only);
+        d["data"] = nb::make_tuple(std::intptr_t(a4.dataPtr()), read_only);
         // note: if we want to keep the same global indexing with non-zero
         //       box small_end as in AMReX, then we can explore playing with
         //       this offset as well
         //d["offset"] = 0;         // default
-        //d["mask"] = py::none();  // default
+        //d["mask"] = nb::none();  // default
 
         d["shape"] = shape;
         // we could also set this after checking the strides are C-style contiguous:
         //if (is_contiguous<T>(shape, strides))
-        //    d["strides"] = py::none();  // C-style contiguous
+        //    d["strides"] = nb::none();  // C-style contiguous
         //else
         d["strides"] = strides;
 
@@ -102,23 +102,23 @@ namespace pyAMReX
         //d["descr"] = ...;
         // we currently only need this
         using T_no_cv = std::remove_cv_t<T>;
-        d["typestr"] = py::format_descriptor<T_no_cv>::format();
+        d["typestr"] = pyAMReX::buffer_format<T_no_cv>();
 
         d["version"] = 3;
         return d;
     }
 
     template< typename T >
-    void make_Array4(py::module &m, std::string typestr)
+    void make_Array4(nb::module_ &m, std::string typestr)
     {
         using namespace amrex;
 
         using T_no_cv = std::remove_cv_t<T>;
 
-        // dispatch simpler via: py::format_descriptor<T>::format() naming
+        // dispatch simpler via: pyAMReX::buffer_format<T>() naming
         // but note the _const suffix that might be needed
         auto const array_name = std::string("Array4_").append(typestr);
-        py::class_< Array4<T> > py_array4(m, array_name.c_str());
+        nb::class_< Array4<T> > py_array4(m, array_name.c_str());
         py_array4
             .def("__repr__",
                  [typestr](Array4<T> const & a4) {
@@ -131,49 +131,41 @@ namespace pyAMReX
     #if defined(AMREX_DEBUG) || defined(AMREX_BOUND_CHECK)
             .def("index_assert", [](Array4<T> const& a4, int i, int j, int k, int n) noexcept {
                 return a4.index_assert(IntVectND<4>{i,j,k,n});
-            }, py::arg("i"), py::arg("j"), py::arg("k"), py::arg("n"))
+            }, nb::arg("i"), nb::arg("j"), nb::arg("k"), nb::arg("n"))
     #endif
 
-            .def_property_readonly("size", &Array4<T>::size)
-            .def_property_readonly("nComp", &Array4<T>::nComp)
-            .def_property_readonly("num_comp", &Array4<T>::nComp)
+            .def_prop_ro("size", &Array4<T>::size)
+            .def_prop_ro("nComp", &Array4<T>::nComp)
+            .def_prop_ro("num_comp", &Array4<T>::nComp)
 
-            .def(py::init< >())
-            .def(py::init< Array4<T> const & >(), py::keep_alive<1, 2>())
-            .def(py::init< Array4<T> const &, int >(), py::keep_alive<1, 2>())
-            .def(py::init< Array4<T> const &, int, int >(), py::keep_alive<1, 2>())
-            //.def(py::init< T*, Dim3 const &, Dim3 const &, int >())
+            .def(nb::init< >())
+            .def(nb::init< Array4<T> const & >(), nb::keep_alive<1, 2>())
+            .def(nb::init< Array4<T> const &, int >(), nb::keep_alive<1, 2>())
+            .def(nb::init< Array4<T> const &, int, int >(), nb::keep_alive<1, 2>())
+            //.def(nb::init< T*, Dim3 const &, Dim3 const &, int >())
 
             /* init from a numpy or other buffer protocol array: non-owning view
              */
-            .def(py::init([](py::array_t<T> & arr) {
-                py::buffer_info buf = arr.request();
-
-                AMREX_ALWAYS_ASSERT_WITH_MESSAGE(buf.ndim == 3,
-                    "We can only create amrex::Array4 views into 3D Python arrays at the moment.");
+            .def("__init__", [](Array4<T> *a4,
+                                nb::ndarray<nb::numpy, T, nb::ndim<3>> arr) {
                 // TODO:
                 //   In 2D, Array4 still needs to be accessed with (i,j,k) or (i,j,k,n), with k = 0.
                 //   Likewise in 1D.
                 //   We could also add support for 4D numpy arrays, treating the slowest
                 //   varying index as component "n".
 
-                if (buf.format != py::format_descriptor<T_no_cv>::format())
-                    throw std::runtime_error("Incompatible format: expected '" +
-                        py::format_descriptor<T_no_cv>::format() +
-                        "' and received '" + buf.format + "'!");
-
-                auto a4 = std::make_unique< Array4<T> >();
-                a4.get()->p = static_cast<T*>(buf.ptr);
-                a4.get()->begin = IntVectND<4>{0, 0, 0, 0};
+                new (a4) Array4<T>();
+                a4->p = arr.data();
+                a4->begin = IntVectND<4>{0, 0, 0, 0};
                 // C->F index conversion here
                 // p[(i-begin[0])+(j-begin[1])*jstride+(k-begin[2])*kstride+n*nstride];
-                a4.get()->end[0] = (int)buf.shape.at(2); // fastest varying index
-                a4.get()->end[1] = (int)buf.shape.at(1);
-                a4.get()->end[2] = (int)buf.shape.at(0);
-                a4.get()->end[3] = 1;
+                a4->end[0] = (int)arr.shape(2); // fastest varying index
+                a4->end[1] = (int)arr.shape(1);
+                a4->end[2] = (int)arr.shape(0);
+                a4->end[3] = 1;
                 // buffer protocol strides are in bytes, AMReX strides are
                 // elements.  In AMReX, 0 is the unit stride direction,
-                // which we do not need to set. For py::buffer_info, 2 is
+                // which we do not need to set. For nb::ndarray, 2 is
                 // the unit stride direction. If AMReX has a set function,
                 // we would do
                 //  a4.set_stride<0>(buf.strides.at(2)); // not needed
@@ -181,15 +173,14 @@ namespace pyAMReX
                 //  a4.set_stride<2>(buf.strides.at(0));
                 // Unfortunately, amrex::Array4 does not have a public function for setting
                 // strides, and stride<n> is stored at stride.a[n-1].
-                a4.get()->stride.a[0] = (int)buf.strides.at(1) / sizeof(T);
-                a4.get()->stride.a[1] = (int)buf.strides.at(0) / sizeof(T);
+                a4->stride.a[0] = (int)arr.stride(1);
+                a4->stride.a[1] = (int)arr.stride(0);
                 // 3D == no component: stride here should not matter
-                a4.get()->stride.a[2] = a4.get()->template get_stride<2>() * (int)buf.shape.at(0);
+                a4->stride.a[2] = a4->template get_stride<2>() * (int)arr.shape(0);
 
                 // todo: we could check and store here if the array buffer we got is read-only
 
-                return a4;
-            }), py::keep_alive<1, 2>())
+            }, nb::keep_alive<1, 2>())
 
             /* init from __cuda_array_interface__: non-owning view
              * TODO
@@ -198,7 +189,7 @@ namespace pyAMReX
 
             // CPU: __array_interface__ v3
             // https://numpy.org/doc/stable/reference/arrays.interface.html
-            .def_property_readonly("__array_interface__", [](Array4<T> const & a4) {
+            .def_prop_ro("__array_interface__", [](Array4<T> const & a4) {
                 return pyAMReX::array_interface(a4);
             })
 
@@ -212,7 +203,7 @@ namespace pyAMReX
 
             // Nvidia GPUs: __cuda_array_interface__ v3
             // https://numba.readthedocs.io/en/latest/cuda/cuda_array_interface.html
-            .def_property_readonly("__cuda_array_interface__", [](Array4<T> const & a4) {
+            .def_prop_ro("__cuda_array_interface__", [](Array4<T> const & a4) {
                 auto d = pyAMReX::array_interface(a4);
 
                 // data:
@@ -226,7 +217,7 @@ namespace pyAMReX
                 //   2: The per-thread default stream.
                 //   Any other integer: a cudaStream_t represented as a Python integer.
                 //   When None, no synchronization is required.
-                d["stream"] = py::none();
+                d["stream"] = nb::none();
 
                 d["version"] = 3;
                 return d;
@@ -242,32 +233,36 @@ namespace pyAMReX
             // https://docs.cupy.dev/en/stable/user_guide/interoperability.html#dlpack-data-exchange-protocol
 
             .def("to_host", [](Array4<T> const & a4) {
-                // py::tuple to std::vector
+                // nb::tuple to std::vector
                 auto const a4i = pyAMReX::array_interface(a4);
-                auto const shape = py::cast<std::vector<py::ssize_t>>(a4i["shape"]);
-                auto const strides_bytes = py::cast<std::vector<py::ssize_t>>(a4i["strides"]);
+                auto const shape = nb::cast<std::vector<nb::ssize_t>>(a4i["shape"]);
+                auto const strides_bytes = nb::cast<std::vector<nb::ssize_t>>(a4i["strides"]);
 
                 // allocate host memory copy
-                auto h_data = py::array_t<T_no_cv>(shape, strides_bytes);
+                auto numpy = nb::module_::import_("numpy");
+                auto h_owner = numpy.attr("empty")(
+                    shape, numpy.attr("dtype")(pyAMReX::buffer_format<T_no_cv>())
+                );
+                auto h_data = nb::cast<nb::ndarray<nb::numpy, T_no_cv>>(h_owner);
 
                 // sync copy: host data is unpinned
                 Gpu::copy(Gpu::deviceToHost,
                     a4.dataPtr(), a4.dataPtr() + a4.size(),
-                    h_data.mutable_data()
+                    h_data.data()
                 );
-                return h_data;
-            }, py::return_value_policy::move)
+                return h_owner;
+            }, nb::rv_policy::move)
 
             //.def("__contains__", &Array4<T>::contains)  // syntax: "other in b"
             .def("contains", [](Array4<T> const& a4, int i, int j, int k) noexcept {
                 return a4.contains(i,j,k);
-            }, py::arg("i"), py::arg("j"), py::arg("k"))
+            }, nb::arg("i"), nb::arg("j"), nb::arg("k"))
             .def("contains", [](Array4<T> const& a4, IntVect const& iv) noexcept {
                 return a4.contains(iv);
-            }, py::arg("iv"))
+            }, nb::arg("iv"))
             .def("contains", [](Array4<T> const& a4, Dim3 const& cell) noexcept {
                 return a4.contains(cell);
-            }, py::arg("cell"))
+            }, nb::arg("cell"))
 
             // getter
             .def("__getitem__", [](Array4<T> & a4, IntVect const & v){ return a4(v); })

@@ -8,7 +8,7 @@ Update pyAMReX' Core Dependencies
 
 pyAMReX has a direct dependency on AMReX, which we periodically update.
 
-It further depends on pybind11 and a Python interpreter.
+It further depends on nanobind and a Python interpreter.
 
 
 Create a new pyAMReX release

@@ -25,11 +25,11 @@ namespace
 }
 
 
-void init_TagBox (py::module& m)
+void init_TagBox (nb::module_& m)
 {
     using namespace amrex;
 
-    py::class_< TagBox > py_TagBox(
+    nb::class_< TagBox > py_TagBox(
         m, "TagBox",
         R"pbdoc(
 Cell-tag storage used by ``AmrCore.error_est``.
@@ -38,12 +38,11 @@ Use ``TagBox.SET`` to request refinement, ``TagBox.CLEAR`` to remove a tag and
 ``TagBox.BUF`` for AMReX-generated buffered tags.
 )pbdoc");
 
-    py::native_enum< TagBox::TagVal >(py_TagBox, "TagVal", "enum.IntEnum")
+    nb::enum_< TagBox::TagVal >(py_TagBox, "TagVal", nb::is_arithmetic())
         .value("CLEAR", TagBox::TagVal::CLEAR)
         .value("BUF", TagBox::TagVal::BUF)
         .value("SET", TagBox::TagVal::SET)
         .export_values()
-        .finalize()
     ;
 
     py_TagBox.def("__repr__",
@@ -52,7 +51,7 @@ Use ``TagBox.SET`` to request refinement, ``TagBox.CLEAR`` to remove a tag and
         }
     );
 
-    py::class_< TagBoxArray, FabArrayBase >(
+    nb::class_< TagBoxArray, FabArrayBase >(
         m, "TagBoxArray",
         R"pbdoc(
 Distributed array of ``TagBox`` objects used during AMR error estimation.
@@ -69,11 +68,11 @@ non-owning views and should not be stored after the override returns.
             }
         )
 
-        .def(py::init< BoxArray const&, DistributionMapping const&, int >(),
-             py::arg("ba"), py::arg("dm"), py::arg("ngrow") = 0,
+        .def(nb::init< BoxArray const&, DistributionMapping const&, int >(),
+             nb::arg("ba"), nb::arg("dm"), nb::arg("ngrow") = 0,
              "Construct tag storage on ba/dm with an isotropic grow width.")
-        .def(py::init< BoxArray const&, DistributionMapping const&, IntVect const& >(),
-             py::arg("ba"), py::arg("dm"), py::arg("ngrow"),
+        .def(nb::init< BoxArray const&, DistributionMapping const&, IntVect const& >(),
+             nb::arg("ba"), nb::arg("dm"), nb::arg("ngrow"),
              "Construct tag storage on ba/dm with per-direction grow widths.")
 
         .def("clear", &TagBoxArray::clear,
@@ -81,66 +80,66 @@ non-owning views and should not be stored after the override returns.
         .def("ok", &TagBoxArray::ok,
              "Return True if the tag array is internally consistent.")
         .def("__len__", &TagBoxArray::size)
-        .def_property_readonly("size", &TagBoxArray::size,
+        .def_prop_ro("size", &TagBoxArray::size,
              "Number of boxes in the global tag layout.")
-        .def_property_readonly("local_size", &TagBoxArray::local_size,
+        .def_prop_ro("local_size", &TagBoxArray::local_size,
              "Number of tag boxes owned by this MPI rank.")
-        .def_property_readonly("n_grow_vect", &TagBoxArray::nGrowVect,
+        .def_prop_ro("n_grow_vect", &TagBoxArray::nGrowVect,
              "Grow width of the tag storage in each coordinate direction.")
-        .def_property_readonly("box_array",
+        .def_prop_ro("box_array",
              [](TagBoxArray const& tags) { return tags.boxArray(); },
-             py::return_value_policy::reference_internal,
+             nb::rv_policy::reference_internal,
              "BoxArray defining the valid regions for this tag array.")
-        .def_property_readonly("dist_map",
+        .def_prop_ro("dist_map",
              [](TagBoxArray const& tags) { return tags.DistributionMap(); },
-             py::return_value_policy::reference_internal,
+             nb::rv_policy::reference_internal,
              "DistributionMapping defining ownership of this tag array.")
 
         .def("set_val",
              [](TagBoxArray& tags, TagBox::TagVal val) {
                  tags.setVal(tag_value(val));
              },
-             py::arg("val"),
+             nb::arg("val"),
              "Set all valid and grow cells in the tag array to val.")
         .def("set_val",
              [](TagBoxArray& tags, TagBox::TagVal val, int nghost) {
                  tags.setVal(tag_value(val), nghost);
              },
-             py::arg("val"), py::arg("nghost"),
+             nb::arg("val"), nb::arg("nghost"),
              "Set all valid cells plus nghost grow cells to val.")
         .def("set_val",
              [](TagBoxArray& tags, TagBox::TagVal val, IntVect const& nghost) {
                  tags.setVal(tag_value(val), nghost);
              },
-             py::arg("val"), py::arg("nghost"),
+             nb::arg("val"), nb::arg("nghost"),
              "Set all valid cells plus per-direction grow cells to val.")
         .def("set_val",
              [](TagBoxArray& tags, TagBox::TagVal val, Box const& region, int nghost) {
                  tags.setVal(tag_value(val), region, nghost);
              },
-             py::arg("val"), py::arg("region"), py::arg("nghost") = 0,
+             nb::arg("val"), nb::arg("region"), nb::arg("nghost") = 0,
              "Set cells intersecting region, optionally grown by nghost, to val.")
         .def("set_val",
              [](TagBoxArray& tags, TagBox::TagVal val, Box const& region, IntVect const& nghost) {
                  tags.setVal(tag_value(val), region, nghost);
              },
-             py::arg("val"), py::arg("region"), py::arg("nghost"),
+             nb::arg("val"), nb::arg("region"), nb::arg("nghost"),
              "Set cells intersecting region with per-direction grow widths to val.")
         .def("set_val",
              [](TagBoxArray& tags, BoxArray const& ba, TagBox::TagVal val) {
                  tags.setVal(ba, val);
              },
-             py::arg("ba"), py::arg("val"),
+             nb::arg("ba"), nb::arg("val"),
              "Set cells covered by ba to val.")
 
-        .def("buffer", &TagBoxArray::buffer, py::arg("nbuf"),
+        .def("buffer", &TagBoxArray::buffer, nb::arg("nbuf"),
              "Grow every SET tag by nbuf cells using AMReX tag-buffer rules.")
         .def("map_periodic_remove_duplicates",
-             &TagBoxArray::mapPeriodicRemoveDuplicates, py::arg("geom"),
+             &TagBoxArray::mapPeriodicRemoveDuplicates, nb::arg("geom"),
              "Map tags through periodic boundaries described by geom and remove duplicates.")
-        .def("coarsen", &TagBoxArray::coarsen, py::arg("ratio"),
+        .def("coarsen", &TagBoxArray::coarsen, nb::arg("ratio"),
              "Coarsen tags in place by ratio.")
-        .def("has_tags", &TagBoxArray::hasTags, py::arg("box"),
+        .def("has_tags", &TagBoxArray::hasTags, nb::arg("box"),
              "Return True if box contains any SET or BUF tags.")
     ;
 }

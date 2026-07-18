@@ -12,13 +12,13 @@
 #include <AMReX_Vector.H>
 
 
-void init_BCUtil(py::module& m)
+void init_BCUtil(nb::module_& m)
 {
     using namespace amrex;
 
     m.def("fill_domain_boundary",
           &FillDomainBoundary,
-          py::arg("phi"), py::arg("geom"), py::arg("bc"),
+          nb::arg("phi"), nb::arg("geom"), nb::arg("bc"),
           R"pbdoc(Fill cell-centered physical-domain ghost cells.
 
 This fills non-periodic ghost cells outside the physical domain for

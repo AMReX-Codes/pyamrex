@@ -28,7 +28,7 @@ namespace pyAMReX
      *
      * Note: the callback runs on the host. Pending AMReX GPU stream
      * work is synchronized before invoking it. When called from C++, the
-     * pybind11 functional caster acquires the GIL automatically.
+     * binding wrapper acquires the GIL before invoking the callback.
      */
     struct PhysBCFunctUser
     {

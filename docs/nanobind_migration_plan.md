@@ -2,8 +2,15 @@
 
 ## Status
 
-Proposed implementation plan. This document describes the migration only; it
-does not change the current binding implementation.
+Implemented on the nanobind migration branch. The disposition record is
+`docs/nanobind_migration_inventory.md`; downstream ABI guidance is in
+`docs/source/developers/nanobind_extensions.rst`.
+
+The implementation pins nanobind 2.12.0, converts the complete native binding
+tree, preserves the historical private extension basenames, generates native
+stubs with `nanobind_add_stub`, and retains the default domain for downstream
+type sharing. Platform and accelerator configurations remain enforced by the
+existing CI matrix.
 
 ## Goals
 

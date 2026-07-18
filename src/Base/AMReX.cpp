@@ -12,83 +12,83 @@ namespace amrex {
    struct Config {};
 }
 
-void init_AMReX(py::module& m)
+void init_AMReX(nb::module_& m)
 {
     using namespace amrex;
 
-    py::class_<AMReX>(m, "AMReX")
+    nb::class_<AMReX>(m, "AMReX")
         .def_static("empty", &AMReX::empty)
         .def_static("size", &AMReX::size)
         .def_static("erase", &AMReX::erase)
         .def_static("top", &AMReX::top,
-                    py::return_value_policy::reference)
+                    nb::rv_policy::reference)
     ;
 
-    py::class_<Config>(m, "Config")
-        .def_property_readonly_static(
+    nb::class_<Config>(m, "Config")
+        .def_prop_ro_static(
             "amrex_version",
-            [](py::object) { return Version(); },
+            [](nb::object) { return Version(); },
             "AMReX library version")
-        .def_property_readonly_static(
+        .def_prop_ro_static(
             "spacedim",
-            [](py::object) { return AMREX_SPACEDIM; })
-        .def_property_static(
+            [](nb::object) { return AMREX_SPACEDIM; })
+        .def_prop_rw_static(
             "verbose",
-            [](py::object) { return Verbose(); },
-            [](py::object, const int v) { SetVerbose(v); })
-        .def_property_readonly_static(
+            [](nb::object) { return Verbose(); },
+            [](nb::object, const int v) { SetVerbose(v); })
+        .def_prop_ro_static(
             "have_eb",
-            [](py::object){
+            [](nb::object){
 #ifdef AMREX_USE_EB
                 return true;
 #else
                 return false;
 #endif
             })
-        .def_property_readonly_static(
+        .def_prop_ro_static(
             "have_mpi",
-            [](py::object){
+            [](nb::object){
 #ifdef AMREX_USE_MPI
                 return true;
 #else
                 return false;
 #endif
             })
-        .def_property_readonly_static(
+        .def_prop_ro_static(
             "have_gpu",
-            [](py::object){
+            [](nb::object){
 #ifdef AMREX_USE_GPU
                 return true;
 #else
                 return false;
 #endif
         })
-        .def_property_readonly_static(
+        .def_prop_ro_static(
             "have_omp",
-            [](py::object){
+            [](nb::object){
 #ifdef AMREX_USE_OMP
                 return true;
 #else
                 return false;
 #endif
         })
-        .def_property_readonly_static(
+        .def_prop_ro_static(
             "have_simd",
-            [](py::object const &){
+            [](nb::object const &){
 #ifdef AMREX_USE_SIMD
                 return true;
 #else
                 return false;
 #endif
         })
-        .def_property_readonly_static(
+        .def_prop_ro_static(
             "simd_size",
-            [](py::object const &){
+            [](nb::object const &){
                 return amrex::simd::native_simd_size_real;
         })
-        .def_property_readonly_static(
+        .def_prop_ro_static(
             "gpu_backend",
-            [](py::object){
+            [](nb::object){
 #ifdef AMREX_USE_CUDA
                 return "CUDA";
 #elif defined(AMREX_USE_HIP)
@@ -96,21 +96,21 @@ void init_AMReX(py::module& m)
 #elif defined(AMREX_USE_DPCPP)
                 return "SYCL";
 #else
-                return py::none();
+                return nb::none();
 #endif
             })
-        .def_property_readonly_static(
+        .def_prop_ro_static(
             "precision",
-            [](py::object){
+            [](nb::object){
 #ifdef AMREX_USE_FLOAT
                 return "SINGLE";
 #else
                 return "DOUBLE";
 #endif
         })
-        .def_property_readonly_static(
+        .def_prop_ro_static(
             "precision_particles",
-            [](py::object){
+            [](nb::object){
 #ifdef AMREX_SINGLE_PRECISION_PARTICLES
                 return "SINGLE";
 #else
@@ -120,13 +120,13 @@ void init_AMReX(py::module& m)
         ;
 
     m.def("initialize",
-          [](const py::list args) {
+          [](const nb::list args) {
               Vector<std::string> cargs{"amrex"};
               Vector<char*> argv;
 
               // Populate the "command line"
               for (const auto& v: args)
-                  cargs.push_back(v.cast<std::string>());
+                  cargs.push_back(nb::cast<std::string>(v));
               for (auto& v: cargs)
                   argv.push_back(&v[0]);
               int argc = argv.size();
@@ -140,7 +140,7 @@ void init_AMReX(py::module& m)
               const bool build_parm_parse = (cargs.size() > 1);
               // TODO: handle version with MPI
               return Initialize(argc, tmp, build_parm_parse);
-          }, py::return_value_policy::reference,
+          }, nb::rv_policy::reference,
           "Initialize AMReX library");
 
     m.def("initialized", &Initialized,
@@ -156,7 +156,7 @@ void init_AMReX(py::module& m)
         // This is a convenience helper/bandage for making work with Python
         // garbage collectors in various implementations more easy.
         // https://github.com/AMReX-Codes/pyamrex/issues/81
-        auto m_gc = py::module::import("gc");
+        auto m_gc = nb::module_::import_("gc");
         auto collect = m_gc.attr("collect");
         collect();
     };

@@ -9,21 +9,20 @@
 #include <AMReX_MultiFab.H>
 
 
-void init_EBFabFactory (py::module& m)
+void init_EBFabFactory (nb::module_& m)
 {
     using namespace amrex;
 
-    py::class_<EBFArrayBoxFactory, FabFactory<FArrayBox>>(m, "EBFArrayBoxFactory")
+    nb::class_<EBFArrayBoxFactory, FabFactory<FArrayBox>>(m, "EBFArrayBoxFactory")
         .def("getVolFrac", &EBFArrayBoxFactory::getVolFrac,
-            py::return_value_policy::reference_internal,
+            nb::rv_policy::reference_internal,
             "Return volume faction MultiFab");
 
-    py::native_enum<EBSupport>(m, "EBSupport", "enum.Enum")
+    nb::enum_<EBSupport>(m, "EBSupport")
         .value("basic", EBSupport::basic)
         .value("volume", EBSupport::volume)
         .value("full", EBSupport::full)
         .export_values()
-        .finalize()
     ;
 
     m.def(
@@ -33,8 +32,8 @@ void init_EBFabFactory (py::module& m)
         {
             return makeEBFabFactory(geom, ba, dm, ngrow, support);
         },
-        py::arg("geom"), py::arg("ba"), py::arg("dm"), py::arg("ngrow"),
-        py::arg("support"),
+        nb::arg("geom"), nb::arg("ba"), nb::arg("dm"), nb::arg("ngrow"),
+        nb::arg("support"),
         "Make EBFArrayBoxFactory for given Geometry, BoxArray and DistributionMapping"
     );
 }

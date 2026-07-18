@@ -63,8 +63,7 @@ jobs:
 
         python3 -m pip install -U pip setuptools[core] wheel
         python3 -m pip install -U mpi4py pytest pre-commit
-        python3 -m pip install -U "pybind11-stubgen @ git+https://github.com/ax3l/pybind11-stubgen.git@fix-enum-py-protected-members"
-        cmake -S . -B build -DAMReX_SPACEDIM="1;2;3" -DAMReX_EB=ON -DpyAMReX_IPO=OFF
+        cmake -S . -B build -DAMReX_SPACEDIM="1;2;3" -DAMReX_EB=ON -DpyAMReX_IPO=OFF -DpyAMReX_BUILD_STUBS=ON
         cmake --build build -j 4 --target pip_install
 
         ccache -s
@@ -87,6 +86,10 @@ jobs:
     - name: Unit tests
       run: |
         mpiexec -np 1 python3 -m pytest tests/
+
+    - name: Check for stale stubs
+      if: github.event_name != 'push' || github.repository != 'AMReX-Codes/pyamrex' || github.ref != 'refs/heads/development'
+      run: git diff --exit-code -- src/amrex/space1d src/amrex/space2d src/amrex/space3d
 
     - uses: stefanzweifel/git-auto-commit-action@v5
       name: Commit Updated Stub Files

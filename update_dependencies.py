@@ -26,13 +26,13 @@ def update(args):
         repo_dict["amrex"]["tags"] = (
             "https://api.github.com/repos/AMReX-Codes/amrex/tags"
         )
-    if args.all or args.pybind11:
-        repo_dict["pybind11"] = {}
-        repo_dict["pybind11"]["commit"] = (
-            "https://api.github.com/repos/pybind/pybind11/commits/master"
+    if args.all or args.nanobind:
+        repo_dict["nanobind"] = {}
+        repo_dict["nanobind"]["commit"] = (
+            "https://api.github.com/repos/wjakob/nanobind/commits/master"
         )
-        repo_dict["pybind11"]["tags"] = (
-            "https://api.github.com/repos/pybind/pybind11/tags"
+        repo_dict["nanobind"]["tags"] = (
+            "https://api.github.com/repos/wjakob/nanobind/tags"
         )
     if args.all or args.pyamrex:
         repo_dict["pyamrex"] = {}
@@ -46,7 +46,7 @@ def update(args):
     # list of repositories labels for logging convenience
     repo_labels = {
         "amrex": "AMReX",
-        "pybind11": "pybind11",
+        "nanobind": "nanobind",
         "pyamrex": "pyAMReX",
     }
 
@@ -100,11 +100,11 @@ def update(args):
         if repo_name != "pyamrex":
             # use version tag instead of commit sha:
             # - for a release update
-            # - for pybind11 (always)
+            # - for nanobind (always)
             # - if the commit has not changed since the last version tag
             use_version_tag = (
                 args.release
-                or (repo_name == "pybind11")
+                or (repo_name == "nanobind")
                 or (repo_commit_sha == tags_list_filtered[0]["commit"]["sha"])
             )
             new_commit_sha = repo_version_tag if use_version_tag else repo_commit_sha
@@ -117,7 +117,7 @@ def update(args):
                 dependencies_data[f"commit_{repo_name}"] = new_commit_sha
 
         # update version
-        if repo_name == "pybind11":
+        if repo_name == "nanobind":
             print("Skipping version update... (minimum version set manually)")
         else:
             print(f"- old version: {dependencies_data[version_key]}")
@@ -145,12 +145,12 @@ if __name__ == "__main__":
         dest="amrex",
     )
 
-    # add arguments: pybind11 option
+    # add arguments: nanobind option
     parser.add_argument(
-        "--pybind11",
-        help="Update pybind11 only",
+        "--nanobind",
+        help="Update nanobind only",
         action="store_true",
-        dest="pybind11",
+        dest="nanobind",
     )
 
     # add arguments: pyAMReX option
@@ -173,7 +173,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     # set args.all automatically
-    args.all = False if (args.amrex or args.pybind11 or args.pyamrex) else True
+    args.all = False if (args.amrex or args.nanobind or args.pyamrex) else True
 
     # update
     update(args)

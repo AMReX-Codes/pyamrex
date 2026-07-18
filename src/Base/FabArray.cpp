@@ -19,79 +19,79 @@
 namespace
 {
     template<typename T>
-    void make_FabArray_T(py::module &m, std::string const &name)
+    void make_FabArray_T(nb::module_ &m, std::string const &name)
     {
         using namespace amrex;
 
         using FAT = FabArray<T>;
         using value_type = typename FAT::value_type;
         std::string const full_name = "FabArray_" + name;
-        py::class_<FAT, FabArrayBase > py_FAT(m, full_name.c_str());
+        nb::class_<FAT, FabArrayBase > py_FAT(m, full_name.c_str());
         py_FAT
             // define
             .def("clear", &FAT::clear)
             .def("ok", &FAT::ok)
 
-            .def_property_readonly("arena", &FAT::arena,
+            .def_prop_ro("arena", &FAT::arena,
                                    "Provides access to the Arena this FabArray was build with.")
-            .def_property_readonly("has_EB_fab_factory", &FAT::hasEBFabFactory)
-            .def_property_readonly("factory", &FAT::Factory)
+            .def_prop_ro("has_EB_fab_factory", &FAT::hasEBFabFactory)
+            .def_prop_ro("factory", &FAT::Factory)
 
-            //.def("array", py::overload_cast< const MFIter& >(&FAT::array))
+            //.def("array", nb::overload_cast< const MFIter& >(&FAT::array))
             //.def("const_array", &FAT::const_array)
             .def("array", [](FAT & fa, MFIter const & mfi)
                  { return fa.array(mfi); },
                     // as long as the return value (argument 0) exists, keep the fa (argument 1) alive
-                 py::keep_alive<0, 1>()
+                 nb::keep_alive<0, 1>()
             )
             .def("const_array", [](FAT & fa, MFIter const & mfi)
                  { return fa.const_array(mfi); },
                     // as long as the return value (argument 0) exists, keep the fa (argument 1) alive
-                 py::keep_alive<0, 1>()
+                 nb::keep_alive<0, 1>()
             )
 
             /* setters */
             .def("set_val",
-                 py::overload_cast< value_type >(&FAT::template setVal<T>),
-                 py::arg("val"),
+                 nb::overload_cast< value_type >(&FAT::template setVal<T>),
+                 nb::arg("val"),
                  "Set all components in the entire region of each FAB to val."
             )
             .def("set_val",
-                 py::overload_cast< value_type, int, int, int >(&FAT::template setVal<T>),
-                 py::arg("val"), py::arg("comp"), py::arg("num_comp"), py::arg("nghost")=0,
+                 nb::overload_cast< value_type, int, int, int >(&FAT::template setVal<T>),
+                 nb::arg("val"), nb::arg("comp"), nb::arg("num_comp"), nb::arg("nghost")=0,
                  "Set the value of num_comp components in the valid region of\n"
                  "each FAB in the FabArray, starting at component comp to val.\n"
                  "Also set the value of nghost boundary cells."
             )
             .def("set_val",
-                 py::overload_cast< value_type, int, int, IntVect const & >(&FAT::template setVal<T>),
-                 py::arg("val"), py::arg("comp"), py::arg("num_comp"), py::arg("nghost"),
+                 nb::overload_cast< value_type, int, int, IntVect const & >(&FAT::template setVal<T>),
+                 nb::arg("val"), nb::arg("comp"), nb::arg("num_comp"), nb::arg("nghost"),
                  "Set the value of num_comp components in the valid region of\n"
                  "each FAB in the FabArray, starting at component comp to val.\n"
                  "Also set the value of nghost boundary cells."
             )
             .def("set_val",
-                 py::overload_cast< value_type, Box const &, int, int, int >(&FAT::template setVal<T>),
-                 py::arg("val"), py::arg("region"), py::arg("comp"), py::arg("num_comp"), py::arg("nghost")=0,
+                 nb::overload_cast< value_type, Box const &, int, int, int >(&FAT::template setVal<T>),
+                 nb::arg("val"), nb::arg("region"), nb::arg("comp"), nb::arg("num_comp"), nb::arg("nghost")=0,
                  "Set the value of num_comp components in the valid region of\n"
                  "each FAB in the FabArray, starting at component comp, as well\n"
                  "as nghost boundary cells, to val, provided they also intersect\n"
                  "with the Box region."
             )
             .def("set_val",
-                 py::overload_cast< value_type, Box const &, int, int, IntVect const & >(&FAT::template setVal<T>),
-                 py::arg("val"), py::arg("region"), py::arg("comp"), py::arg("num_comp"), py::arg("nghost"),
+                 nb::overload_cast< value_type, Box const &, int, int, IntVect const & >(&FAT::template setVal<T>),
+                 nb::arg("val"), nb::arg("region"), nb::arg("comp"), nb::arg("num_comp"), nb::arg("nghost"),
                  "Set the value of num_comp components in the valid region of\n"
                  "each FAB in the FabArray, starting at component comp, as well\n"
                  "as nghost boundary cells, to val, provided they also intersect\n"
                  "with the Box region."
             )
 
-            .def("abs", py::overload_cast< int, int, int >(&FAT::template abs<T>),
-                 py::arg("comp"), py::arg("ncomp"), py::arg("nghost")=0
+            .def("abs", nb::overload_cast< int, int, int >(&FAT::template abs<T>),
+                 nb::arg("comp"), nb::arg("ncomp"), nb::arg("nghost")=0
             )
-            .def("abs", py::overload_cast< int, int, IntVect const & >(&FAT::template abs<T>),
-                 py::arg("comp"), py::arg("ncomp"), py::arg("nghost")
+            .def("abs", nb::overload_cast< int, int, IntVect const & >(&FAT::template abs<T>),
+                 nb::arg("comp"), nb::arg("ncomp"), nb::arg("nghost")
             )
 
             .def("saxpy",
@@ -99,7 +99,7 @@ namespace
                  {
                      FAT::Saxpy(dst, a, x, x_comp, comp, ncomp, nghost);
                  },
-                 py::arg("a"), py::arg("x"), py::arg("x_comp"), py::arg("comp"), py::arg("ncomp"), py::arg("nghost"),
+                 nb::arg("a"), nb::arg("x"), nb::arg("x_comp"), nb::arg("comp"), nb::arg("ncomp"), nb::arg("nghost"),
                  "self += a * x\n\n"
                  "Parameters\n"
                  "----------\n"
@@ -115,7 +115,7 @@ namespace
                  {
                      FAT::Xpay(self, a, x, x_comp, comp, ncomp, nghost);
                  },
-                 py::arg("a"), py::arg("x"), py::arg("xcomp"), py::arg("comp"), py::arg("ncomp"), py::arg("nghost"),
+                 nb::arg("a"), nb::arg("x"), nb::arg("xcomp"), nb::arg("comp"), nb::arg("ncomp"), nb::arg("nghost"),
                  "self = x + a * self\n\n"
                  "Parameters\n"
                  "----------\n"
@@ -135,9 +135,9 @@ namespace
                  {
                      FAT::LinComb(dst, a, x, x_comp, b, y, y_comp, comp, ncomp, nghost);
                  },
-                 py::arg("a"), py::arg("x"), py::arg("xcomp"),
-                 py::arg("b"), py::arg("y"), py::arg("ycomp"),
-                 py::arg("comp"), py::arg("numcomp"), py::arg("nghost"),
+                 nb::arg("a"), nb::arg("x"), nb::arg("xcomp"),
+                 nb::arg("b"), nb::arg("y"), nb::arg("ycomp"),
+                 nb::arg("comp"), nb::arg("numcomp"), nb::arg("nghost"),
                  "self = a * x + b * y\n\n"
                  "Parameters\n"
                  "----------\n"
@@ -160,27 +160,27 @@ namespace
             )
 
             .def("sum",
-                 py::overload_cast< int, IntVect const&, bool >(&FAT::template sum<T>, py::const_),
-                 py::arg("comp"), py::arg("nghost"), py::arg("local"),
-                 "Returns the sum of component \"comp\""
+                 nb::overload_cast< int, IntVect const&, bool >(&FAT::template sum<T>, nb::const_),
+                 nb::arg("comp"), nb::arg("nghost"), nb::arg("local"),
+                 "Returns the sum of component 'comp'"
             )
             .def("sum_boundary",
-                 py::overload_cast< Periodicity const &, bool >(&FAT::SumBoundary),
-                 py::arg("period"), py::arg("deterministic") = false,
+                 nb::overload_cast< Periodicity const &, bool >(&FAT::SumBoundary),
+                 nb::arg("period"), nb::arg("deterministic") = false,
                  "Sum values in overlapped cells.  The destination is limited to valid cells."
             )
-            .def("sum_boundary", py::overload_cast< int, int, Periodicity const &, bool >(&FAT::SumBoundary),
-                 py::arg("scomp"), py::arg("ncomp"), py::arg("period"), py::arg("deterministic") = false,
+            .def("sum_boundary", nb::overload_cast< int, int, Periodicity const &, bool >(&FAT::SumBoundary),
+                 nb::arg("scomp"), nb::arg("ncomp"), nb::arg("period"), nb::arg("deterministic") = false,
                  "Sum values in overlapped cells.  The destination is limited to valid cells."
             )
-            .def("sum_boundary", py::overload_cast< int, int, IntVect const&, Periodicity const &, bool >(&FAT::SumBoundary),
-                 py::arg("scomp"), py::arg("ncomp"), py::arg("nghost"), py::arg("period"),
-                 py::arg("deterministic") = false,
+            .def("sum_boundary", nb::overload_cast< int, int, IntVect const&, Periodicity const &, bool >(&FAT::SumBoundary),
+                 nb::arg("scomp"), nb::arg("ncomp"), nb::arg("nghost"), nb::arg("period"),
+                 nb::arg("deterministic") = false,
                  "Sum values in overlapped cells.  The destination is limited to valid cells."
             )
-            .def("sum_boundary", py::overload_cast< int, int, IntVect const&, IntVect const&, Periodicity const &, bool >(&FAT::SumBoundary),
-                 py::arg("scomp"), py::arg("ncomp"), py::arg("nghost"), py::arg("dst_nghost"), py::arg("period"),
-                 py::arg("deterministic") = false,
+            .def("sum_boundary", nb::overload_cast< int, int, IntVect const&, IntVect const&, Periodicity const &, bool >(&FAT::SumBoundary),
+                 nb::arg("scomp"), nb::arg("ncomp"), nb::arg("nghost"), nb::arg("dst_nghost"), nb::arg("period"),
+                 nb::arg("deterministic") = false,
                  "Sum values in overlapped cells.  The destination is limited to valid cells."
             )
         ;
@@ -202,13 +202,13 @@ namespace
 
         py_FAT
             .def("override_sync",
-                 py::overload_cast< Periodicity const & >(&FAT::OverrideSync),
-                 py::arg("period"),
+                 nb::overload_cast< Periodicity const & >(&FAT::OverrideSync),
+                 nb::arg("period"),
                  doc_fabarray_osync
             )
             .def("override_sync",
-                 py::overload_cast< int, int, Periodicity const & >(&FAT::OverrideSync),
-                 py::arg("scomp"), py::arg("ncomp"), py::arg("period"),
+                 nb::overload_cast< int, int, Periodicity const & >(&FAT::OverrideSync),
+                 nb::arg("scomp"), nb::arg("ncomp"), nb::arg("period"),
                  doc_fabarray_osync
             )
         ;
@@ -227,45 +227,45 @@ namespace
 
         py_FAT
             .def("fill_boundary",
-                 py::overload_cast< bool >(&FAT::template FillBoundary<value_type>),
-                 py::arg("cross")=false,
+                 nb::overload_cast< bool >(&FAT::template FillBoundary<value_type>),
+                 nb::arg("cross")=false,
                  doc_fabarray_fillb
             )
             .def("fill_boundary",
-                 py::overload_cast< Periodicity const &, bool >(&FAT::template FillBoundary<value_type>),
-                 py::arg("period"),
-                 py::arg("cross")=false,
+                 nb::overload_cast< Periodicity const &, bool >(&FAT::template FillBoundary<value_type>),
+                 nb::arg("period"),
+                 nb::arg("cross")=false,
                  doc_fabarray_fillb
             )
             .def("fill_boundary",
-                 py::overload_cast< IntVect const &, Periodicity const &, bool >(&FAT::template FillBoundary<value_type>),
-                 py::arg("nghost"),
-                 py::arg("period"),
-                 py::arg("cross")=false,
+                 nb::overload_cast< IntVect const &, Periodicity const &, bool >(&FAT::template FillBoundary<value_type>),
+                 nb::arg("nghost"),
+                 nb::arg("period"),
+                 nb::arg("cross")=false,
                  doc_fabarray_fillb
             )
             .def("fill_boundary",
-                 py::overload_cast< int, int, bool >(&FAT::template FillBoundary<value_type>),
-                 py::arg("scomp"),
-                 py::arg("ncomp"),
-                 py::arg("cross")=false,
+                 nb::overload_cast< int, int, bool >(&FAT::template FillBoundary<value_type>),
+                 nb::arg("scomp"),
+                 nb::arg("ncomp"),
+                 nb::arg("cross")=false,
                  doc_fabarray_fillb
             )
             .def("fill_boundary",
-                 py::overload_cast< int, int, Periodicity const &, bool >(&FAT::template FillBoundary<value_type>),
-                 py::arg("scomp"),
-                 py::arg("ncomp"),
-                 py::arg("period"),
-                 py::arg("cross")=false,
+                 nb::overload_cast< int, int, Periodicity const &, bool >(&FAT::template FillBoundary<value_type>),
+                 nb::arg("scomp"),
+                 nb::arg("ncomp"),
+                 nb::arg("period"),
+                 nb::arg("cross")=false,
                  doc_fabarray_fillb
             )
             .def("fill_boundary",
-                 py::overload_cast< int, int, IntVect const &, Periodicity const &, bool >(&FAT::template FillBoundary<value_type>),
-                 py::arg("scomp"),
-                 py::arg("ncomp"),
-                 py::arg("nghost"),
-                 py::arg("period"),
-                 py::arg("cross")=false,
+                 nb::overload_cast< int, int, IntVect const &, Periodicity const &, bool >(&FAT::template FillBoundary<value_type>),
+                 nb::arg("scomp"),
+                 nb::arg("ncomp"),
+                 nb::arg("nghost"),
+                 nb::arg("period"),
+                 nb::arg("cross")=false,
                  doc_fabarray_fillb
             )
         ;
@@ -273,32 +273,32 @@ namespace
 }
 
 void
-init_FabArray(py::module &m)
+init_FabArray(nb::module_ &m)
 {
     using namespace amrex;
 
-    py::class_< FabArrayBase >(m, "FabArrayBase")
-        .def_property_readonly("is_all_cell_centered", &FabArrayBase::is_cell_centered)
-        .def_property_readonly("is_all_nodal",
-             py::overload_cast< >(&FabArrayBase::is_nodal, py::const_))
+    nb::class_< FabArrayBase >(m, "FabArrayBase")
+        .def_prop_ro("is_all_cell_centered", &FabArrayBase::is_cell_centered)
+        .def_prop_ro("is_all_nodal",
+             nb::overload_cast< >(&FabArrayBase::is_nodal, nb::const_))
         .def("is_nodal",
-             py::overload_cast< int >(&FabArrayBase::is_nodal, py::const_))
+             nb::overload_cast< int >(&FabArrayBase::is_nodal, nb::const_))
 
-        .def_property_readonly("nComp", &FabArrayBase::nComp,
+        .def_prop_ro("nComp", &FabArrayBase::nComp,
             "Return number of variables (aka components) associated with each point.")
-        .def_property_readonly("num_comp", &FabArrayBase::nComp,
+        .def_prop_ro("num_comp", &FabArrayBase::nComp,
             "Return number of variables (aka components) associated with each point.")
-        .def_property_readonly("size", &FabArrayBase::size,
+        .def_prop_ro("size", &FabArrayBase::size,
             "Return the number of FABs in the FabArray.")
         .def("__len__", &FabArrayBase::size,
             "Return the number of FABs in the FabArray.")
 
-        .def_property_readonly("n_grow_vect", &FabArrayBase::nGrowVect,
+        .def_prop_ro("n_grow_vect", &FabArrayBase::nGrowVect,
             "Return the grow factor (per direction) that defines the region of definition.")
     ;
 
-    py::class_< FabFactory<IArrayBox> >(m, "FabFactory_IArrayBox");
-    py::class_< FabFactory<FArrayBox> >(m, "FabFactory_FArrayBox");
+    nb::class_< FabFactory<IArrayBox> >(m, "FabFactory_IArrayBox");
+    nb::class_< FabFactory<FArrayBox> >(m, "FabFactory_FArrayBox");
 
     make_FabArray_T<IArrayBox>(m, "IArrayBox");
     make_FabArray_T<FArrayBox>(m, "FArrayBox");

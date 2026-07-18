@@ -5,11 +5,11 @@
 #include <sstream>
 
 
-void init_Dim3(py::module& m)
+void init_Dim3(nb::module_& m)
 {
     using namespace amrex;
 
-    py::class_<Dim3>(m, "Dim3")
+    nb::class_<Dim3>(m, "Dim3")
         .def("__repr__",
              [](const Dim3& d) {
                  std::stringstream s;
@@ -24,16 +24,16 @@ void init_Dim3(py::module& m)
                  return s.str();
              }
         )
-        .def(py::init<int, int, int>())
-        .def_readwrite("x", &Dim3::x)
-        .def_readwrite("y", &Dim3::y)
-        .def_readwrite("z", &Dim3::z)
+        .def(nb::init<int, int, int>())
+        .def_rw("x", &Dim3::x)
+        .def_rw("y", &Dim3::y)
+        .def_rw("z", &Dim3::z)
         ;
 
-    py::class_<XDim3>(m, "XDim3")
-        .def(py::init<Real, Real, Real>())
-        .def_readwrite("x", &XDim3::x)
-        .def_readwrite("y", &XDim3::y)
-        .def_readwrite("z", &XDim3::z)
+    nb::class_<XDim3>(m, "XDim3")
+        .def(nb::init<Real, Real, Real>())
+        .def_rw("x", &XDim3::x)
+        .def_rw("y", &XDim3::y)
+        .def_rw("z", &XDim3::z)
         ;
 }

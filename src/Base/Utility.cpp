@@ -10,11 +10,11 @@
 #include <string>
 
 
-void init_Utility(py::module& m)
+void init_Utility(nb::module_& m)
 {
     m.def("concatenate",
           &amrex::Concatenate,
           "Builds plotfile name",
-          py::arg("root"), py::arg("num"), py::arg("mindigits")=5
+          nb::arg("root"), nb::arg("num"), nb::arg("mindigits")=5
     );
 }

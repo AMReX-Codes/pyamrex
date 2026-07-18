@@ -19,15 +19,15 @@
 #include <optional>
 
 
-void init_RealBox(py::module &m) {
+void init_RealBox(nb::module_ &m) {
     using namespace amrex;
 
-    py::class_< RealBox >(m, "RealBox")
+    nb::class_< RealBox >(m, "RealBox")
         .def("__repr__",
-             [](py::object& obj) {
-                 py::str py_name = obj.attr("__class__").attr("__name__");
-                 const std::string name = py_name;
-                 const auto rb = obj.cast<RealBox>();
+             [](nb::object& obj) {
+                 nb::str py_name = obj.attr("__class__").attr("__name__");
+                 const std::string name = nb::cast<std::string>(py_name);
+                 const auto rb = nb::cast<RealBox>(obj);
                  std::stringstream s;
                  s << rb;
                  return "<amrex." + name + " " + s.str() + ">";
@@ -41,24 +41,25 @@ void init_RealBox(py::module &m) {
              })
 
 
-        .def(py::init())
-        .def(py::init<AMREX_D_DECL(Real, Real, Real),
+        .def(nb::init())
+        .def(nb::init<AMREX_D_DECL(Real, Real, Real),
                       AMREX_D_DECL(Real, Real, Real)>(),
-             AMREX_D_DECL(py::arg("x_lo"), py::arg("y_lo"), py::arg("z_lo")),
-             AMREX_D_DECL(py::arg("x_hi"), py::arg("y_hi"), py::arg("z_hi"))
+             AMREX_D_DECL(nb::arg("x_lo"), nb::arg("y_lo"), nb::arg("z_lo")),
+             AMREX_D_DECL(nb::arg("x_hi"), nb::arg("y_hi"), nb::arg("z_hi"))
         )
-        .def(py::init<const std::array<Real, AMREX_SPACEDIM>&,
+        .def(nb::init<const std::array<Real, AMREX_SPACEDIM>&,
                       const std::array<Real, AMREX_SPACEDIM>& >(),
-             py::arg("a_lo"), py::arg("a_hi")
+             nb::arg("a_lo"), nb::arg("a_hi")
         )
-        .def(py::init(
-            [](const Box bx, Array<Real, AMREX_SPACEDIM> dx, Array<Real, AMREX_SPACEDIM> base) {
-                return RealBox(bx, dx.data(), base.data());
-            }),
-            py::arg("bx"), py::arg("dx"), py::arg("base")
+        .def("__init__",
+            [](RealBox *self, const Box bx, Array<Real, AMREX_SPACEDIM> dx,
+               Array<Real, AMREX_SPACEDIM> base) {
+                new (self) RealBox(bx, dx.data(), base.data());
+            },
+            nb::arg("bx"), nb::arg("dx"), nb::arg("base")
         )
 
-        .def_property_readonly(
+        .def_prop_ro(
             "xlo",
             [](RealBox const & rb){
                 std::array<Real,AMREX_SPACEDIM> xlo {AMREX_D_DECL(
@@ -67,7 +68,7 @@ void init_RealBox(py::module &m) {
                 return xlo;
             }
         )
-        .def_property_readonly(
+        .def_prop_ro(
             "xhi",
             [](RealBox const & rb){
                 std::array<Real,AMREX_SPACEDIM> xhi {AMREX_D_DECL(
@@ -77,7 +78,7 @@ void init_RealBox(py::module &m) {
             }
         )
 
-        .def("lo", py::overload_cast<int>(&RealBox::lo, py::const_), "Get ith component of ``xlo``")
+        .def("lo", nb::overload_cast<int>(&RealBox::lo, nb::const_), "Get ith component of ``xlo``")
         .def("lo",
             [](RealBox const & rb){
                 std::array<Real,AMREX_SPACEDIM> xlo {AMREX_D_DECL(
@@ -87,7 +88,7 @@ void init_RealBox(py::module &m) {
             },
             "Get all components of ``xlo``"
         )
-        .def("hi", py::overload_cast<int>(&RealBox::hi, py::const_), "Get ith component of ``xhi``")
+        .def("hi", nb::overload_cast<int>(&RealBox::hi, nb::const_), "Get ith component of ``xhi``")
         .def("hi",
             [](RealBox const & rb){
                 std::array<Real,AMREX_SPACEDIM> xhi {AMREX_D_DECL(
@@ -103,14 +104,14 @@ void init_RealBox(py::module &m) {
             },
             "Get ith component of ``xlo``"
         )
-        .def("setLo", py::overload_cast<int,Real>(&RealBox::setLo), "Get all components of ``xlo``")
+        .def("setLo", nb::overload_cast<int,Real>(&RealBox::setLo), "Get all components of ``xlo``")
         .def("setHi",
             [](RealBox & rb, const std::vector<Real>& a_hi){
                 rb.setHi(a_hi.data() );
             },
             "Get all components of ``xlo``"
         )
-        .def("setHi", py::overload_cast<int,Real>(&RealBox::setHi), "Get ith component of ``xhi``")
+        .def("setHi", nb::overload_cast<int,Real>(&RealBox::setHi), "Get ith component of ``xhi``")
         .def("length", &RealBox::length)
         .def("ok", &RealBox::ok, "Determine if RealBox satisfies ``xlo[i]<xhi[i]`` for ``i=0,1,...,AMREX_SPACEDIM``.")
         .def("volume", &RealBox::volume)
@@ -119,28 +120,28 @@ void init_RealBox(py::module &m) {
                 return rb.contains(point, eps );
             },
             "Determine if RealBox contains ``pt``, within tolerance ``eps``",
-            py::arg("rb"),py::arg("eps") = 0.0
+            nb::arg("rb"),nb::arg("eps") = 0.0
         )
         .def("contains",
             [](RealBox& rb, const RealVect& pt, Real eps) {
                 return rb.contains(pt, eps );
             },
             "Determine if RealBox contains ``pt``, within tolerance ``eps``",
-            py::arg("rb"),py::arg("eps") = 0.0
+            nb::arg("rb"),nb::arg("eps") = 0.0
         )
         .def("contains",
             [](RealBox& rb, const RealBox& rb2, Real eps) {
                 return rb.contains(rb2, eps );
             },
             "Determine if RealBox contains another RealBox, within tolerance ``eps``",
-            py::arg("rb"),py::arg("eps") = 0.0
+            nb::arg("rb"),nb::arg("eps") = 0.0
         )
         .def("contains",
             [](RealBox& rb, const std::vector<Real>& pt, Real eps) {
                 return rb.contains(pt.data(), eps );
             },
             "Determine if RealBox contains ``pt``, within tolerance ``eps``",
-            py::arg("rb"),py::arg("eps") = 0.0
+            nb::arg("rb"),nb::arg("eps") = 0.0
         )
         .def("intersects", &RealBox::intersects, "determine if box intersects with a box")
     ;
@@ -149,5 +150,5 @@ void init_RealBox(py::module &m) {
                 return AlmostEqual(rb1,rb2,eps);
             },
             "Determine if two boxes are equal to within a tolerance",
-            py::arg("rb1"), py::arg("rb2"), py::arg("eps") = 0.0);
+            nb::arg("rb1"), nb::arg("rb2"), nb::arg("eps") = 0.0);
 }

@@ -17,12 +17,12 @@
 #include <vector>
 
 
-void init_BCRec(py::module& m)
+void init_BCRec(nb::module_& m)
 {
     using namespace amrex;
 
     // Expose AMReX boundary enums with the same names used in C++ docs.
-    py::native_enum<BCType::mathematicalBndryTypes>(m, "BCType", "enum.IntEnum",
+    nb::enum_<BCType::mathematicalBndryTypes>(m, "BCType", nb::is_arithmetic(),
             R"pbdoc(Mathematical boundary condition types stored in BCRec.
 
 Common values are BCType.int_dir for interior cells, BCType.foextrap
@@ -44,10 +44,9 @@ application.
         .value("user_1", BCType::user_1)
         .value("user_2", BCType::user_2)
         .value("user_3", BCType::user_3)
-        .finalize()
     ;
 
-    py::native_enum<PhysBCType::physicalBndryTypes>(m, "PhysBCType", "enum.IntEnum",
+    nb::enum_<PhysBCType::physicalBndryTypes>(m, "PhysBCType", nb::is_arithmetic(),
             R"pbdoc(Physical boundary condition categories.
 
 Application code maps these physical categories to mathematical
@@ -60,11 +59,10 @@ BCType values for each field component and coordinate direction.
         .value("slipwall", PhysBCType::slipwall)
         .value("noslipwall", PhysBCType::noslipwall)
         .value("inflowoutflow", PhysBCType::inflowoutflow)
-        .finalize()
     ;
 
     // BCRec stores low/high mathematical boundary types for one component.
-    py::class_<BCRec>(m, "BCRec",
+    nb::class_<BCRec>(m, "BCRec",
             R"pbdoc(Boundary condition record for one field component.
 
 A BCRec stores one mathematical boundary type on the low and high side
@@ -92,17 +90,18 @@ lo and hi, usually using BCType enum values.
         )
 
         // Constructors document AMReX's component and direction conventions.
-        .def(py::init<>(),
+        .def(nb::init<>(),
              R"pbdoc(Create a BCRec initialized to BCType.bogus on every face.
 
 Set all low and high entries before using this record in a fill
 operation.
 )pbdoc")
-        .def(py::init([](std::array<int, AMREX_SPACEDIM> const & lo,
-                         std::array<int, AMREX_SPACEDIM> const & hi) {
-                 return BCRec(lo.data(), hi.data());
-             }),
-             py::arg("lo"), py::arg("hi"),
+        .def("__init__", [](BCRec *self,
+                            std::array<int, AMREX_SPACEDIM> const & lo,
+                            std::array<int, AMREX_SPACEDIM> const & hi) {
+                 new (self) BCRec(lo.data(), hi.data());
+             },
+             nb::arg("lo"), nb::arg("hi"),
              R"pbdoc(Create a BCRec from low-side and high-side boundary types.
 
 Args:
@@ -111,8 +110,8 @@ Args:
     hi: Sequence of Config.spacedim BCType or integer values for the
         high side of each coordinate direction.
 )pbdoc")
-        .def(py::init<Box const &, Box const &, BCRec const &>(),
-             py::arg("bx"), py::arg("domain"), py::arg("bc_domain"),
+        .def(nb::init<Box const &, Box const &, BCRec const &>(),
+             nb::arg("bx"), nb::arg("domain"), nb::arg("bc_domain"),
              R"pbdoc(Create the BCRec for a sub-box from a domain BCRec.
 
 For each face, the returned record inherits bc_domain when bx touches
@@ -126,7 +125,7 @@ Args:
 
         // Mutators set one coordinate direction at a time, matching BCRec.
         .def("set_lo", &BCRec::setLo,
-             py::arg("dir"), py::arg("bc_type"),
+             nb::arg("dir"), nb::arg("bc_type"),
              R"pbdoc(Set the low-side boundary type in one direction.
 
 Args:
@@ -134,7 +133,7 @@ Args:
     bc_type: BCType or integer boundary value.
 )pbdoc")
         .def("set_hi", &BCRec::setHi,
-             py::arg("dir"), py::arg("bc_type"),
+             nb::arg("dir"), nb::arg("bc_type"),
              R"pbdoc(Set the high-side boundary type in one direction.
 
 Args:
@@ -148,16 +147,16 @@ Args:
                  return std::vector<int>(bcr.lo(), bcr.lo() + AMREX_SPACEDIM);
              },
              "Return low-side boundary types as a list.")
-        .def("lo", py::overload_cast<int>(&BCRec::lo, py::const_),
-             py::arg("dir"),
+        .def("lo", nb::overload_cast<int>(&BCRec::lo, nb::const_),
+             nb::arg("dir"),
              "Return the low-side boundary type in one direction.")
         .def("hi",
              [](BCRec const & bcr) {
                  return std::vector<int>(bcr.hi(), bcr.hi() + AMREX_SPACEDIM);
              },
              "Return high-side boundary types as a list.")
-        .def("hi", py::overload_cast<int>(&BCRec::hi, py::const_),
-             py::arg("dir"),
+        .def("hi", nb::overload_cast<int>(&BCRec::hi, nb::const_),
+             nb::arg("dir"),
              "Return the high-side boundary type in one direction.")
         .def("vect",
              [](BCRec const & bcr) {
@@ -170,8 +169,8 @@ Args:
              },
              "Return all boundary types as low-side entries followed by high-side entries.")
 
-        .def(py::self == py::self)
-        .def(py::self != py::self)
+        .def(nb::self == nb::self)
+        .def(nb::self != nb::self)
     ;
 
     make_Vector<BCRec>(m, "BCRec");
@@ -183,7 +182,7 @@ Args:
               setBC(bx, domain, bc_dom, bcr);
               return bcr;
           },
-          py::arg("bx"), py::arg("domain"), py::arg("bc_domain"),
+          nb::arg("bx"), nb::arg("domain"), nb::arg("bc_domain"),
           R"pbdoc(Return the BCRec for a box from a domain BCRec.
 
 For each face, the returned record inherits bc_domain when bx touches
@@ -202,9 +201,9 @@ Args:
               setBC(bx, domain, src_comp, dest_comp, ncomp, bc_dom, bcr);
               return bcr;
           },
-          py::arg("bx"), py::arg("domain"),
-          py::arg("src_comp"), py::arg("dest_comp"), py::arg("ncomp"),
-          py::arg("bc_domain"),
+          nb::arg("bx"), nb::arg("domain"),
+          nb::arg("src_comp"), nb::arg("dest_comp"), nb::arg("ncomp"),
+          nb::arg("bc_domain"),
           R"pbdoc(Return component boundary records for a box.
 
 The returned Vector_BCRec has size dest_comp + ncomp. Components in

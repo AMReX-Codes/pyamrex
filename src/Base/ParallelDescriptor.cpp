@@ -8,16 +8,16 @@
 #include <AMReX_ParallelDescriptor.H>
 
 
-void init_ParallelDescriptor(py::module &m)
+void init_ParallelDescriptor(nb::module_ &m)
 {
     using namespace amrex;
 
     auto mpd = m.def_submodule("ParallelDescriptor");
 
-    mpd.def("NProcs", py::overload_cast<>(&ParallelDescriptor::NProcs))
-       .def("MyProc", py::overload_cast<>(&ParallelDescriptor::MyProc))
-       .def("IOProcessor", py::overload_cast<>(&ParallelDescriptor::IOProcessor))
-       .def("IOProcessorNumber", py::overload_cast<>(&ParallelDescriptor::IOProcessorNumber))
+    mpd.def("NProcs", nb::overload_cast<>(&ParallelDescriptor::NProcs))
+       .def("MyProc", nb::overload_cast<>(&ParallelDescriptor::MyProc))
+       .def("IOProcessor", nb::overload_cast<>(&ParallelDescriptor::IOProcessor))
+       .def("IOProcessorNumber", nb::overload_cast<>(&ParallelDescriptor::IOProcessorNumber))
    ;
     // ...
 }

@@ -8,9 +8,9 @@
 #include <AMReX_EB2.H>
 
 
-void init_EBFabFactory (py::module& m);
+void init_EBFabFactory (nb::module_& m);
 
-void init_EB (py::module& m)
+void init_EB (nb::module_& m)
 {
     using namespace amrex;
 
@@ -23,10 +23,10 @@ void init_EB (py::module& m)
             EB2::Build(geom, required_coarsening_level, max_coarsening_level, ngrow,
                        build_coarse_level_by_coarsening, extend_domain_face, num_coarsen_opt);
         },
-        py::arg("geom"), py::arg("required_coarsening_level"), py::arg("max_coarsening_level"),
-        py::arg("ngrow") = 4, py::arg("build_coarse_level_by_coarsening") = true,
-        py::arg("extend_domain_face") = EB2::ExtendDomainFace(),
-        py::arg("num_coarsen_opt") = EB2::NumCoarsenOpt(),
+        nb::arg("geom"), nb::arg("required_coarsening_level"), nb::arg("max_coarsening_level"),
+        nb::arg("ngrow") = 4, nb::arg("build_coarse_level_by_coarsening") = true,
+        nb::arg("extend_domain_face") = EB2::ExtendDomainFace(),
+        nb::arg("num_coarsen_opt") = EB2::NumCoarsenOpt(),
         "EB generation"
     );
 

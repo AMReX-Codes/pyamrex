@@ -9,7 +9,7 @@
 #include <AMReX_Version.H>
 
 
-void init_Version (py::module& m)
+void init_Version (nb::module_& m)
 {
     // API runtime version
     //   note PEP-440 syntax: x.y.zaN but x.y.z.devN

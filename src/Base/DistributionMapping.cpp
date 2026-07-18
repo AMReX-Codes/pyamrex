@@ -14,10 +14,10 @@
 #include <sstream>
 
 
-void init_DistributionMapping(py::module &m) {
+void init_DistributionMapping(nb::module_ &m) {
     using namespace amrex;
 
-    py::class_< DistributionMapping >(m, "DistributionMapping")
+    nb::class_< DistributionMapping >(m, "DistributionMapping")
         .def("__repr__",
             [](DistributionMapping const & dm) {
                 std::stringstream s;
@@ -26,40 +26,40 @@ void init_DistributionMapping(py::module &m) {
             }
         )
 
-        .def(py::init< >())
-        .def(py::init< DistributionMapping const & >())
-        //.def(py::init< DistributionMapping && >())
-        //.def(py::init< DistributionMapping const &, DistributionMapping const & >())
-        .def(py::init< Vector< int > const & >())
-        //.def(py::init< Vector< int > && >())
-        .def(py::init< BoxArray const & >(),
-            py::arg("boxes")
+        .def(nb::init< >())
+        .def(nb::init< DistributionMapping const & >())
+        //.def(nb::init< DistributionMapping && >())
+        //.def(nb::init< DistributionMapping const &, DistributionMapping const & >())
+        .def(nb::init< Vector< int > const & >())
+        //.def(nb::init< Vector< int > && >())
+        .def(nb::init< BoxArray const & >(),
+            nb::arg("boxes")
         )
-        .def(py::init< BoxArray const &, int >(),
-            py::arg("boxes"), py::arg("nprocs")
+        .def(nb::init< BoxArray const &, int >(),
+            nb::arg("boxes"), nb::arg("nprocs")
         )
 
         .def("define",
             [](DistributionMapping & dm, BoxArray const & boxes) {
                 dm.define(boxes);
             },
-            py::arg("boxes")
+            nb::arg("boxes")
         )
         .def("define",
-            py::overload_cast< BoxArray const &, int >(&DistributionMapping::define),
-            py::arg("boxes"), py::arg("nprocs")
+            nb::overload_cast< BoxArray const &, int >(&DistributionMapping::define),
+            nb::arg("boxes"), nb::arg("nprocs")
         )
         .def("define",
-            py::overload_cast< Vector< int > const & >(&DistributionMapping::define))
+            nb::overload_cast< Vector< int > const & >(&DistributionMapping::define))
         //.def("define",
-        //    py::overload_cast< Vector< int > && >(&DistributionMapping::define))
+        //    nb::overload_cast< Vector< int > && >(&DistributionMapping::define))
         //! Length of the underlying processor map.
-        .def_property_readonly("size", &DistributionMapping::size)
-        .def_property_readonly("capacity", &DistributionMapping::capacity)
-        .def_property_readonly("empty", &DistributionMapping::empty)
+        .def_prop_ro("size", &DistributionMapping::size)
+        .def_prop_ro("capacity", &DistributionMapping::capacity)
+        .def_prop_ro("empty", &DistributionMapping::empty)
 
         //! Number of references to this DistributionMapping
-        .def_property_readonly("link_count", &DistributionMapping::linkCount)
+        .def_prop_ro("link_count", &DistributionMapping::linkCount)
 
         /**
          * \brief Returns a constant reference to the mapping of boxes in the

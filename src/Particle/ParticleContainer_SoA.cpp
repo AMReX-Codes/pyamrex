@@ -8,7 +8,7 @@
 #include <AMReX_Particle.H>
 
 
-void init_ParticleContainer_SoA(py::module& m) {
+void init_ParticleContainer_SoA(nb::module_& m) {
     using namespace amrex;
 
     // most common case: ND particle + runtime attributes

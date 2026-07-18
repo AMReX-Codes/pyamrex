@@ -8,19 +8,18 @@
 #include <AMReX_CoordSys.H>
 
 
-void init_CoordSys(py::module& m)
+void init_CoordSys(nb::module_& m)
 {
     using namespace amrex;
 
-    py::class_<CoordSys> coord_sys(m, "CoordSys");
+    nb::class_<CoordSys> coord_sys(m, "CoordSys");
 
-    py::native_enum<CoordSys::CoordType>(coord_sys, "CoordType", "enum.IntEnum")
+    nb::enum_<CoordSys::CoordType>(coord_sys, "CoordType", nb::is_arithmetic())
         .value("undef", CoordSys::CoordType::undef)
         .value("cartesian", CoordSys::CoordType::cartesian)
         .value("RZ", CoordSys::CoordType::RZ)
         .value("SPHERICAL", CoordSys::CoordType::SPHERICAL)
         .export_values()
-        .finalize()
     ;
 
     coord_sys.def("__repr__",
@@ -28,8 +27,8 @@ void init_CoordSys(py::module& m)
                  return "<amrex.CoordSys>";
              }
         )
-        .def(py::init<>())
-        .def(py::init<const CoordSys&>())
+        .def(nb::init<>())
+        .def(nb::init<const CoordSys&>())
 
         .def("ok", &CoordSys::Ok)
         .def("Coord", &CoordSys::Coord)

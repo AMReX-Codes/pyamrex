@@ -42,7 +42,7 @@ def make_real_array4():
 
 @pytest.fixture(scope="function")
 def assert_keeps_python_alive():
-    """Assert that a pybind11 object keeps its Python owner alive."""
+    """Assert that a bound object keeps its Python owner alive."""
     if platform.python_implementation() != "CPython":
         pytest.skip("sys.getrefcount-based lifetime checks are CPython-specific")
 

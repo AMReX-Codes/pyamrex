@@ -119,6 +119,36 @@ def test_amrcore_missing_pure_virtual_raises():
         core.init_from_scratch(0.0)
 
 
+def test_amrcore_python_override_exception_propagates():
+    class FailingCore(amr.AmrCore):
+        def make_new_level_from_scratch(self, *_args):
+            pass
+
+        def make_new_level_from_coarse(self, *_args):
+            pass
+
+        def remake_level(self, *_args):
+            pass
+
+        def clear_level(self, _lev):
+            pass
+
+        def error_est(self, *_args):
+            raise ValueError("error_est failed")
+
+    rb = amr.RealBox(0.0, 0.0, 0.0, 1.0, 1.0, 1.0)
+    core = FailingCore(
+        rb,
+        1,
+        amr.Vector_int([16, 16, 16]),
+        0,
+        amr.Vector_IntVect([amr.IntVect(2)]),
+        [0, 0, 0],
+    )
+    with pytest.raises(ValueError, match="error_est failed"):
+        core.init_from_scratch(0.0)
+
+
 # ---------------------------------------------------------------------------
 # AmrMesh geom / set_geometry accessors (added alongside AmrCore)
 # ---------------------------------------------------------------------------

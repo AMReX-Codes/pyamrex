@@ -10,14 +10,14 @@
 #include <type_traits>
 
 
-void init_Algorithm (py::module& m)
+void init_Algorithm (nb::module_& m)
 {
     using namespace amrex;
 
     m.def(
         "almost_equal",
         &almostEqual<Real>,
-        py::arg("x"), py::arg("y"), py::arg("ulp")=2
+        nb::arg("x"), nb::arg("y"), nb::arg("ulp")=2
     );
 
     if constexpr (!std::is_same_v<Real, ParticleReal>)
@@ -25,7 +25,7 @@ void init_Algorithm (py::module& m)
         m.def(
             "almost_equal",
             &almostEqual<ParticleReal>,
-            py::arg("x"), py::arg("y"), py::arg("ulp")=2
+            nb::arg("x"), nb::arg("y"), nb::arg("ulp")=2
         );
     }
 }
