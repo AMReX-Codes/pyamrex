@@ -74,16 +74,6 @@ void init_MPMD(nb::module_ &m) {
 
               const bool build_parm_parse = (cargs.size() > 1);
 
-              //! TODO perform mpi4py import test and check min-version
-              //!       careful: double MPI_Init risk? only import mpi4py.MPI?
-              //!       required C-API init? probably just checks:
-              //! refs:
-              //! -
-              //! https://bitbucket.org/mpi4py/mpi4py/src/3.0.0/demo/wrap-c/helloworld.c
-              //! - installed: include/mpi4py/mpi4py.MPI_api.h
-              //auto m_mpi4py = nb::module_::import_("mpi4py");
-              //amrex::ignore_unused(m_mpi4py);
-
               if (app_comm_py.ptr() == Py_None)
                   throw std::runtime_error(
                       "MPMD: MPI communicator cannot be None.");
@@ -102,17 +92,12 @@ void init_MPMD(nb::module_ &m) {
                   throw std::runtime_error(
                       "MPMD: comm is not an mpi4py communicator: " +
                       comm_str);
-              // only checks same layout, e.g. an `int` in `PyObject` could
-              // pass this
-              if (!nb::isinstance<nb::class_<pyAMReX_PyMPIIntracommObject> >(
-                      nb::type::of(app_comm_py)))
-                  // TODO add mpi4py version from above import check to error
-                  // message
+              nb::object const mpi4py_intracomm =
+                  nb::module_::import_("mpi4py.MPI").attr("Intracomm");
+              if (!nb::isinstance(app_comm_py, mpi4py_intracomm))
                   throw std::runtime_error(
-                      "MPMD: comm has unexpected type layout in " +
-                      comm_str +
-                      " (Mismatched MPI at compile vs. runtime? "
-                      "Breaking mpi4py release?)");
+                      "MPMD: comm is not an mpi4py.MPI.Intracomm: " +
+                      comm_str);
 
               // todo other possible implementations:
               // - pyMPI (inactive since 2008?): import mpi; mpi.WORLD
