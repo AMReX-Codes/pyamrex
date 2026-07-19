@@ -190,13 +190,6 @@ void make_ParticleContainer_and_Iterators (nb::module_ &m, std::string allocstr)
 
     std::string const suffix = particle_type_suffix<T_ParticleType, T_NArrayReal, T_NArrayInt>();
     auto const particle_container_type = std::string("ParticleContainer_") + suffix + "_" + allocstr;
-#if AMREX_SPACEDIM == 1
-    constexpr char const* intvect_zero_default = "IntVect1D(0)";
-#elif AMREX_SPACEDIM == 2
-    constexpr char const* intvect_zero_default = "IntVect2D(0)";
-#else
-    constexpr char const* intvect_zero_default = "IntVect3D(0)";
-#endif
     auto py_pc = nb::class_<ParticleContainerType>(m, particle_container_type.c_str())
         .def(nb::init())
         .def(nb::init<const Geometry&, const DistributionMapping&, const BoxArray&>())

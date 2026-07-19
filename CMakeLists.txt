@@ -139,7 +139,8 @@ foreach(D IN LISTS AMReX_SPACEDIM)
     # optimization and stripping decisions, so disable nanobind's size and
     # strip transformations. pyAMReX_IPO below remains the single owner of
     # interprocedural optimization.
-    set(_pyAMReX_nanobind_options NB_STATIC NOMINSIZE NOSTRIP)
+    set(_pyAMReX_nanobind_options
+        NB_STATIC NB_SUPPRESS_WARNINGS NOMINSIZE NOSTRIP)
     nanobind_add_module(pyAMReX_${D}d
         ${_pyAMReX_nanobind_options}
         src/pyAMReX.cpp
@@ -155,6 +156,13 @@ foreach(D IN LISTS AMReX_SPACEDIM)
     generate_buildinfo(pyAMReX_${D}d "${pyAMReX_SOURCE_DIR}")
     target_link_libraries(pyAMReX_${D}d PRIVATE buildInfo::pyAMReX_${D}d)
 endforeach()
+
+# CI passes strict warning flags through CXXFLAGS, which also reaches compiled
+# third-party dependencies. Keep nanobind diagnostics visible without treating
+# warnings in its runtime implementation as pyAMReX build failures.
+if(TARGET nanobind-static AND NOT MSVC)
+    target_compile_options(nanobind-static PRIVATE -Wno-error)
+endif()
 
 # add sources
 add_subdirectory(src)
