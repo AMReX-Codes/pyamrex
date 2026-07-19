@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.24)
-project(pyAMReXDownstreamNanobind LANGUAGES CXX)
+project(pyAMReXDownstreamNanobind LANGUAGES C CXX)
 
 find_package(Python 3.8 COMPONENTS Interpreter Development.Module REQUIRED)
 execute_process(
