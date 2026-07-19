@@ -51,8 +51,8 @@ amrex
    VisMF
 """
 
-from collections.abc import Callable, Iterable, Iterator, Sequence
 import enum
+from collections.abc import Callable, Iterable, Iterator, Sequence
 from typing import Annotated, TypeAlias, overload
 
 import numpy
@@ -60,17 +60,13 @@ from numpy.typing import NDArray
 
 from . import ParallelDescriptor as ParallelDescriptor
 
-
 class AMReX:
     @staticmethod
     def empty() -> bool: ...
-
     @staticmethod
     def size() -> int: ...
-
     @staticmethod
     def erase(arg: AMReX, /) -> None: ...
-
     @staticmethod
     def top() -> AMReX: ...
 
@@ -124,98 +120,69 @@ def size() -> int:
 
 @overload
 def finalize() -> None: ...
-
 @overload
 def finalize(arg: AMReX, /) -> None: ...
 
 class Arena:
     @staticmethod
     def initialize(arg: bool, /) -> None: ...
-
     @staticmethod
     def print_usage(arg: bool, /) -> None: ...
-
     @staticmethod
     def print_usage_to_files(filename: str, message: str) -> None: ...
-
     @staticmethod
     def finalize() -> None: ...
-
     @property
     def is_device_accessible(self) -> bool: ...
-
     @property
     def is_host_accessible(self) -> bool: ...
-
     @property
     def is_managed(self) -> bool: ...
-
     @property
     def is_device(self) -> bool: ...
-
     @property
     def is_pinned(self) -> bool: ...
-
     def has_free_device_memory(self, sz: int) -> bool:
         """
         Does the device have enough free memory for allocating this much memory? For CPU builds, this always return true.
         """
 
 def The_Arena() -> Arena: ...
-
 def The_Async_Arena() -> Arena: ...
-
 def The_Device_Arena() -> Arena: ...
-
 def The_Managed_Arena() -> Arena: ...
-
 def The_Pinned_Arena() -> Arena: ...
-
 def The_Cpu_Arena() -> Arena: ...
 
 class Dim3:
     def __init__(self, arg0: int, arg1: int, arg2: int, /) -> None: ...
-
     def __repr__(self) -> str: ...
-
     def __str__(self) -> str: ...
-
     @property
     def x(self) -> int: ...
-
     @x.setter
     def x(self, arg: int, /) -> None: ...
-
     @property
     def y(self) -> int: ...
-
     @y.setter
     def y(self, arg: int, /) -> None: ...
-
     @property
     def z(self) -> int: ...
-
     @z.setter
     def z(self, arg: int, /) -> None: ...
 
 class XDim3:
     def __init__(self, arg0: float, arg1: float, arg2: float, /) -> None: ...
-
     @property
     def x(self) -> float: ...
-
     @x.setter
     def x(self, arg: float, /) -> None: ...
-
     @property
     def y(self) -> float: ...
-
     @y.setter
     def y(self, arg: float, /) -> None: ...
-
     @property
     def z(self) -> float: ...
-
     @z.setter
     def z(self, arg: float, /) -> None: ...
 
@@ -224,406 +191,264 @@ def almost_equal(x: float, y: float, ulp: int = 2) -> bool: ...
 class IntVect1D:
     @overload
     def __init__(self) -> None: ...
-
     @overload
     def __init__(self, arg: int, /) -> None: ...
-
     @overload
     def __init__(self, arg: Sequence[int], /) -> None: ...
-
     def __repr__(self) -> str: ...
-
     def __str(self) -> str: ...
-
     @property
     def sum(self) -> int: ...
-
     @property
     def max(self) -> int: ...
-
     @property
     def min(self) -> int: ...
-
     @staticmethod
     def zero_vector() -> IntVect1D: ...
-
     @staticmethod
     def unit_vector() -> IntVect1D: ...
-
     @staticmethod
     def node_vector() -> IntVect1D: ...
-
     @staticmethod
     def cell_vector() -> IntVect1D: ...
-
     @staticmethod
     def max_vector() -> IntVect1D: ...
-
     @staticmethod
     def min_vector() -> IntVect1D: ...
-
     def dim3(self) -> Dim3: ...
-
     def __getitem__(self, arg: int, /) -> int: ...
-
     def __setitem__(self, arg0: int, arg1: int, /) -> int: ...
-
     def __len__(self) -> int: ...
-
     def __iter__(self) -> Iterator[int]: ...
-
     @overload
     def __eq__(self, arg: int, /) -> bool: ...
-
     @overload
     def __eq__(self, arg: IntVect1D, /) -> bool: ...
-
     @overload
     def __ne__(self, arg: int, /) -> bool: ...
-
     @overload
     def __ne__(self, arg: IntVect1D, /) -> bool: ...
-
     def __lt__(self, arg: IntVect1D, /) -> bool: ...
-
     def __le__(self, arg: IntVect1D, /) -> bool: ...
-
     def __gt__(self, arg: IntVect1D, /) -> bool: ...
-
     def __ge__(self, arg: IntVect1D, /) -> bool: ...
-
     @overload
     def __add__(self, arg: int, /) -> IntVect1D: ...
-
     @overload
     def __add__(self, arg: IntVect1D, /) -> IntVect1D: ...
-
     @overload
     def __sub__(self, arg: int, /) -> IntVect1D: ...
-
     @overload
     def __sub__(self, arg: IntVect1D, /) -> IntVect1D: ...
-
     @overload
     def __mul__(self, arg: int, /) -> IntVect1D: ...
-
     @overload
     def __mul__(self, arg: IntVect1D, /) -> IntVect1D: ...
-
     @overload
     def __truediv__(self, arg: int, /) -> IntVect1D: ...
-
     @overload
     def __truediv__(self, arg: IntVect1D, /) -> IntVect1D: ...
-
     @overload
     def __iadd__(self, arg: int, /) -> IntVect1D: ...
-
     @overload
     def __iadd__(self, arg: IntVect1D, /) -> IntVect1D: ...
-
     @overload
     def __isub__(self, arg: int, /) -> IntVect1D: ...
-
     @overload
     def __isub__(self, arg: IntVect1D, /) -> IntVect1D: ...
-
     @overload
     def __imul__(self, arg: int, /) -> IntVect1D: ...
-
     @overload
     def __imul__(self, arg: IntVect1D, /) -> IntVect1D: ...
-
     @overload
     def __itruediv__(self, arg: int, /) -> IntVect1D: ...
-
     @overload
     def __itruediv__(self, arg: IntVect1D, /) -> IntVect1D: ...
-
     def numpy(self) -> object: ...
 
 @overload
 def coarsen(arg0: IntVect1D, arg1: IntVect1D, /) -> IntVect1D: ...
-
 @overload
 def coarsen(arg0: Dim3, arg1: IntVect1D, /) -> Dim3: ...
-
 @overload
 def coarsen(arg0: IntVect1D, arg1: int, /) -> IntVect1D: ...
-
 @overload
 def coarsen(arg0: IntVect2D, arg1: IntVect2D, /) -> IntVect2D: ...
-
 @overload
 def coarsen(arg0: Dim3, arg1: IntVect2D, /) -> Dim3: ...
-
 @overload
 def coarsen(arg0: IntVect2D, arg1: int, /) -> IntVect2D: ...
-
 @overload
 def coarsen(arg0: IntVect3D, arg1: IntVect3D, /) -> IntVect3D: ...
-
 @overload
 def coarsen(arg0: Dim3, arg1: IntVect3D, /) -> Dim3: ...
-
 @overload
 def coarsen(arg0: IntVect3D, arg1: int, /) -> IntVect3D: ...
-
 @overload
 def refine(arg0: Dim3, arg1: IntVect1D, /) -> Dim3: ...
-
 @overload
 def refine(arg0: Dim3, arg1: IntVect2D, /) -> Dim3: ...
-
 @overload
 def refine(arg0: Dim3, arg1: IntVect3D, /) -> Dim3: ...
 
 class IntVect2D:
     @overload
     def __init__(self, arg0: int, arg1: int, /) -> None: ...
-
     @overload
     def __init__(self) -> None: ...
-
     @overload
     def __init__(self, arg: int, /) -> None: ...
-
     @overload
     def __init__(self, arg: Sequence[int], /) -> None: ...
-
     def __repr__(self) -> str: ...
-
     def __str(self) -> str: ...
-
     @property
     def sum(self) -> int: ...
-
     @property
     def max(self) -> int: ...
-
     @property
     def min(self) -> int: ...
-
     @staticmethod
     def zero_vector() -> IntVect2D: ...
-
     @staticmethod
     def unit_vector() -> IntVect2D: ...
-
     @staticmethod
     def node_vector() -> IntVect2D: ...
-
     @staticmethod
     def cell_vector() -> IntVect2D: ...
-
     @staticmethod
     def max_vector() -> IntVect2D: ...
-
     @staticmethod
     def min_vector() -> IntVect2D: ...
-
     def dim3(self) -> Dim3: ...
-
     def __getitem__(self, arg: int, /) -> int: ...
-
     def __setitem__(self, arg0: int, arg1: int, /) -> int: ...
-
     def __len__(self) -> int: ...
-
     def __iter__(self) -> Iterator[int]: ...
-
     @overload
     def __eq__(self, arg: int, /) -> bool: ...
-
     @overload
     def __eq__(self, arg: IntVect2D, /) -> bool: ...
-
     @overload
     def __ne__(self, arg: int, /) -> bool: ...
-
     @overload
     def __ne__(self, arg: IntVect2D, /) -> bool: ...
-
     def __lt__(self, arg: IntVect2D, /) -> bool: ...
-
     def __le__(self, arg: IntVect2D, /) -> bool: ...
-
     def __gt__(self, arg: IntVect2D, /) -> bool: ...
-
     def __ge__(self, arg: IntVect2D, /) -> bool: ...
-
     @overload
     def __add__(self, arg: int, /) -> IntVect2D: ...
-
     @overload
     def __add__(self, arg: IntVect2D, /) -> IntVect2D: ...
-
     @overload
     def __sub__(self, arg: int, /) -> IntVect2D: ...
-
     @overload
     def __sub__(self, arg: IntVect2D, /) -> IntVect2D: ...
-
     @overload
     def __mul__(self, arg: int, /) -> IntVect2D: ...
-
     @overload
     def __mul__(self, arg: IntVect2D, /) -> IntVect2D: ...
-
     @overload
     def __truediv__(self, arg: int, /) -> IntVect2D: ...
-
     @overload
     def __truediv__(self, arg: IntVect2D, /) -> IntVect2D: ...
-
     @overload
     def __iadd__(self, arg: int, /) -> IntVect2D: ...
-
     @overload
     def __iadd__(self, arg: IntVect2D, /) -> IntVect2D: ...
-
     @overload
     def __isub__(self, arg: int, /) -> IntVect2D: ...
-
     @overload
     def __isub__(self, arg: IntVect2D, /) -> IntVect2D: ...
-
     @overload
     def __imul__(self, arg: int, /) -> IntVect2D: ...
-
     @overload
     def __imul__(self, arg: IntVect2D, /) -> IntVect2D: ...
-
     @overload
     def __itruediv__(self, arg: int, /) -> IntVect2D: ...
-
     @overload
     def __itruediv__(self, arg: IntVect2D, /) -> IntVect2D: ...
-
     def numpy(self) -> object: ...
 
 class IntVect3D:
     @overload
     def __init__(self, arg0: int, arg1: int, arg2: int, /) -> None: ...
-
     @overload
     def __init__(self) -> None: ...
-
     @overload
     def __init__(self, arg: int, /) -> None: ...
-
     @overload
     def __init__(self, arg: Sequence[int], /) -> None: ...
-
     def __repr__(self) -> str: ...
-
     def __str(self) -> str: ...
-
     @property
     def sum(self) -> int: ...
-
     @property
     def max(self) -> int: ...
-
     @property
     def min(self) -> int: ...
-
     @staticmethod
     def zero_vector() -> IntVect3D: ...
-
     @staticmethod
     def unit_vector() -> IntVect3D: ...
-
     @staticmethod
     def node_vector() -> IntVect3D: ...
-
     @staticmethod
     def cell_vector() -> IntVect3D: ...
-
     @staticmethod
     def max_vector() -> IntVect3D: ...
-
     @staticmethod
     def min_vector() -> IntVect3D: ...
-
     def dim3(self) -> Dim3: ...
-
     def __getitem__(self, arg: int, /) -> int: ...
-
     def __setitem__(self, arg0: int, arg1: int, /) -> int: ...
-
     def __len__(self) -> int: ...
-
     def __iter__(self) -> Iterator[int]: ...
-
     @overload
     def __eq__(self, arg: int, /) -> bool: ...
-
     @overload
     def __eq__(self, arg: IntVect3D, /) -> bool: ...
-
     @overload
     def __ne__(self, arg: int, /) -> bool: ...
-
     @overload
     def __ne__(self, arg: IntVect3D, /) -> bool: ...
-
     def __lt__(self, arg: IntVect3D, /) -> bool: ...
-
     def __le__(self, arg: IntVect3D, /) -> bool: ...
-
     def __gt__(self, arg: IntVect3D, /) -> bool: ...
-
     def __ge__(self, arg: IntVect3D, /) -> bool: ...
-
     @overload
     def __add__(self, arg: int, /) -> IntVect3D: ...
-
     @overload
     def __add__(self, arg: IntVect3D, /) -> IntVect3D: ...
-
     @overload
     def __sub__(self, arg: int, /) -> IntVect3D: ...
-
     @overload
     def __sub__(self, arg: IntVect3D, /) -> IntVect3D: ...
-
     @overload
     def __mul__(self, arg: int, /) -> IntVect3D: ...
-
     @overload
     def __mul__(self, arg: IntVect3D, /) -> IntVect3D: ...
-
     @overload
     def __truediv__(self, arg: int, /) -> IntVect3D: ...
-
     @overload
     def __truediv__(self, arg: IntVect3D, /) -> IntVect3D: ...
-
     @overload
     def __iadd__(self, arg: int, /) -> IntVect3D: ...
-
     @overload
     def __iadd__(self, arg: IntVect3D, /) -> IntVect3D: ...
-
     @overload
     def __isub__(self, arg: int, /) -> IntVect3D: ...
-
     @overload
     def __isub__(self, arg: IntVect3D, /) -> IntVect3D: ...
-
     @overload
     def __imul__(self, arg: int, /) -> IntVect3D: ...
-
     @overload
     def __imul__(self, arg: IntVect3D, /) -> IntVect3D: ...
-
     @overload
     def __itruediv__(self, arg: int, /) -> IntVect3D: ...
-
     @overload
     def __itruediv__(self, arg: IntVect3D, /) -> IntVect3D: ...
-
     def numpy(self) -> object: ...
 
 IntVect: TypeAlias = IntVect1D
@@ -643,32 +468,23 @@ class Vector_IntVect:
 
     @overload
     def __init__(self) -> None: ...
-
     @overload
     def __init__(self, arg: Vector_IntVect) -> None: ...
-
     def __len__(self) -> int: ...
-
     def __bool__(self) -> bool:
         """Check whether the vector is nonempty"""
 
     @overload
     def __repr__(self) -> str: ...
-
     @overload
     def __repr__(self) -> str: ...
-
     def __iter__(self) -> Iterator[IntVect1D]: ...
-
     @overload
     def __getitem__(self, arg: int, /) -> IntVect1D: ...
-
     @overload
     def __getitem__(self, arg: slice, /) -> Vector_IntVect: ...
-
     @overload
     def __getitem__(self, arg: int, /) -> IntVect1D: ...
-
     def clear(self) -> None:
         """Remove all items from list."""
 
@@ -686,29 +502,20 @@ class Vector_IntVect:
 
     @overload
     def __setitem__(self, arg0: int, arg1: IntVect1D, /) -> None: ...
-
     @overload
     def __setitem__(self, arg0: slice, arg1: Vector_IntVect, /) -> None: ...
-
     @overload
     def __setitem__(self, arg0: int, arg1: IntVect1D, /) -> None: ...
-
     @overload
     def __delitem__(self, arg: int, /) -> None: ...
-
     @overload
     def __delitem__(self, arg: slice, /) -> None: ...
-
     def __eq__(self, arg: object, /) -> bool: ...
-
     def __ne__(self, arg: object, /) -> bool: ...
-
     @overload
     def __contains__(self, arg: IntVect1D, /) -> bool: ...
-
     @overload
     def __contains__(self, arg: object, /) -> bool: ...
-
     def count(self, arg: IntVect1D, /) -> int:
         """Return number of occurrences of `arg`."""
 
@@ -720,7 +527,6 @@ class Vector_IntVect:
 class IndexType:
     @overload
     def __init__(self) -> None: ...
-
     @overload
     def __init__(self, arg: IndexType) -> None: ...
 
@@ -734,151 +540,94 @@ class IndexType:
     NODE: IndexType.CellIndex = CellIndex.NODE
 
     def __repr__(self) -> str: ...
-
     def __str(self) -> str: ...
-
     def __getitem__(self, arg: int, /) -> int: ...
-
     def __len__(self) -> int: ...
-
     def __eq__(self, arg: IndexType, /) -> bool: ...
-
     def __ne__(self, arg: IndexType, /) -> bool: ...
-
     def __lt__(self, arg: IndexType, /) -> bool: ...
-
     def set(self, arg: int, /) -> None: ...
-
     def unset(self, arg: int, /) -> None: ...
-
     def test(self, arg: int, /) -> bool: ...
-
     def setall(self) -> None: ...
-
     def clear(self) -> None: ...
-
     def any(self) -> bool: ...
-
     def ok(self) -> bool: ...
-
     def flip(self, arg: int, /) -> None: ...
-
     @overload
     def cell_centered(self) -> bool: ...
-
     @overload
     def cell_centered(self, arg: int, /) -> bool: ...
-
     @overload
     def node_centered(self) -> bool: ...
-
     @overload
     def node_centered(self, arg: int, /) -> bool: ...
-
     def set_type(self, arg0: int, arg1: IndexType.CellIndex, /) -> None: ...
-
     @overload
     def ix_type(self) -> IntVect1D: ...
-
     @overload
     def ix_type(self, arg: int, /) -> IndexType.CellIndex: ...
-
     def to_IntVect(self) -> IntVect1D: ...
-
     @staticmethod
     def cell_type() -> IndexType: ...
-
     @staticmethod
     def node_type() -> IndexType: ...
 
 class RealVect:
     @overload
     def __init__(self) -> None: ...
-
     @overload
     def __init__(self, arg: IntVect1D, /) -> None: ...
-
     @overload
     def __init__(self, arg: Sequence[float], /) -> None: ...
-
     @overload
     def __init__(self, arg: float, /) -> None: ...
-
     def __repr__(self) -> str: ...
-
     def __str(self) -> str: ...
-
     def __getitem__(self, arg: int, /) -> float: ...
-
     def __setitem__(self, arg0: int, arg1: float, /) -> float: ...
-
     def __eq__(self, arg: RealVect, /) -> bool: ...
-
     def __ne__(self, arg: RealVect, /) -> bool: ...
-
     def __lt__(self, arg: RealVect, /) -> bool: ...
-
     def __le__(self, arg: RealVect, /) -> bool: ...
-
     def __gt__(self, arg: RealVect, /) -> bool: ...
-
     def __ge__(self, arg: RealVect, /) -> bool: ...
-
     @overload
     def __iadd__(self, arg: float, /) -> RealVect: ...
-
     @overload
     def __iadd__(self, arg: RealVect, /) -> RealVect: ...
-
     @overload
     def __add__(self, arg: float, /) -> RealVect: ...
-
     @overload
     def __add__(self, arg: RealVect, /) -> RealVect: ...
-
     def __radd__(self, arg: float, /) -> RealVect: ...
-
     @overload
     def __isub__(self, arg: float, /) -> RealVect: ...
-
     @overload
     def __isub__(self, arg: RealVect, /) -> RealVect: ...
-
     def __rsub__(self, arg: float, /) -> RealVect: ...
-
     @overload
     def __sub__(self, arg: RealVect, /) -> RealVect: ...
-
     @overload
     def __sub__(self, arg: float, /) -> RealVect: ...
-
     @overload
     def __imul__(self, arg: float, /) -> RealVect: ...
-
     @overload
     def __imul__(self, arg: RealVect, /) -> RealVect: ...
-
     def __rmul__(self, arg: float, /) -> RealVect: ...
-
     @overload
     def __mul__(self, arg: RealVect, /) -> RealVect: ...
-
     @overload
     def __mul__(self, arg: float, /) -> RealVect: ...
-
     def dotProduct(self, arg: RealVect, /) -> float:
         """Return dot product of this vector with another"""
 
     def __itruediv__(self, arg: float, /) -> RealVect: ...
-
     @overload
     def __truediv__(self, arg: float, /) -> RealVect: ...
-
     @overload
     def __truediv__(self, arg: RealVect, /) -> RealVect: ...
-
     def __rtruediv__(self, arg: float, /) -> RealVect: ...
-
     def scale(self, arg: float, /) -> RealVect:
         """Multiplify each component of this vector by a scalar"""
 
@@ -908,9 +657,7 @@ class RealVect:
         """
 
     def __pos__(self) -> RealVect: ...
-
     def __neg__(self) -> RealVect: ...
-
     @property
     def sum(self) -> float:
         """Sum of the components of this vector"""
@@ -935,15 +682,12 @@ class RealVect:
 
     @staticmethod
     def zero_vector() -> RealVect: ...
-
     @staticmethod
     def unit_vector() -> RealVect: ...
-
     def BASISREALV(self) -> RealVect:
         """return basis vector in given coordinate direction"""
 
 def min(arg0: RealVect, arg1: RealVect, /) -> RealVect: ...
-
 def max(arg0: RealVect, arg1: RealVect, /) -> RealVect: ...
 
 class Direction(enum.IntEnum):
@@ -952,57 +696,41 @@ class Direction(enum.IntEnum):
 class Box:
     @overload
     def __init__(self, small: IntVect1D, big: IntVect1D) -> None: ...
-
     @overload
     def __init__(self, small: IntVect1D, big: IntVect1D, typ: IntVect1D) -> None: ...
-
     @overload
     def __init__(self, small: IntVect1D, big: IntVect1D, t: IndexType) -> None: ...
-
     @overload
     def __init__(self, small: Sequence[int], big: Sequence[int]) -> None: ...
-
     @overload
-    def __init__(self, small: Sequence[int], big: Sequence[int], t: IndexType) -> None: ...
-
+    def __init__(
+        self, small: Sequence[int], big: Sequence[int], t: IndexType
+    ) -> None: ...
     def __repr__(self) -> str: ...
-
     @property
     def lo_vect(self) -> IntVect1D: ...
-
     @lo_vect.setter
     def lo_vect(self, arg: IntVect1D, /) -> None: ...
-
     @property
     def hi_vect(self) -> IntVect1D: ...
-
     @hi_vect.setter
     def hi_vect(self, arg: IntVect1D, /) -> None: ...
-
     @property
     def small_end(self) -> IntVect1D: ...
-
     @small_end.setter
     def small_end(self, arg: IntVect1D, /) -> None: ...
-
     @property
     def big_end(self) -> IntVect1D: ...
-
     @big_end.setter
     def big_end(self, arg: IntVect1D, /) -> None: ...
-
     @property
     def type(self) -> IntVect1D: ...
-
     @type.setter
     def type(self, arg: IndexType, /) -> Box: ...
-
     @property
     def ix_type(self) -> IndexType: ...
-
     @property
     def size(self) -> IntVect1D: ...
-
     @overload
     def length(self) -> IntVect1D:
         """Return IntVect of lengths of the Box"""
@@ -1016,29 +744,22 @@ class Box:
 
     @property
     def is_empty(self) -> bool: ...
-
     @property
     def ok(self) -> bool: ...
-
     @property
     def cell_centered(self) -> bool:
         """Returns true if Box is cell-centered in all indexing directions."""
 
     @property
     def num_pts(self) -> int: ...
-
     @property
     def d_num_pts(self) -> float: ...
-
     @property
     def volume(self) -> int: ...
-
     @property
     def the_unit_box(self) -> Box: ...
-
     @property
     def is_square(self) -> bool: ...
-
     def contains(self, p: IntVect1D) -> bool:
         """Returns true if argument is contained within Box."""
 
@@ -1061,7 +782,6 @@ class Box:
         """Returns true if Boxes have same type."""
 
     def normalize(self) -> None: ...
-
     @overload
     def shift(self, dir: int, nzones: int) -> Box:
         """Shift this Box nzones indexing positions in coordinate direction dir."""
@@ -1071,13 +791,9 @@ class Box:
         """Equivalent to b.shift(0,iv[0]).shift(1,iv[1]) ..."""
 
     def __add__(self, arg: IntVect1D, /) -> Box: ...
-
     def __sub__(self, arg: IntVect1D, /) -> Box: ...
-
     def __iadd__(self, arg: IntVect1D, /) -> Box: ...
-
     def __isub__(self, arg: IntVect1D, /) -> Box: ...
-
     @overload
     def convert(self, typ: IndexType) -> Box:
         """
@@ -1090,7 +806,6 @@ class Box:
 
     @overload
     def convert(self, typ: IntVect1D) -> Box: ...
-
     @overload
     def grow(self, n_cell: int) -> Box:
         """
@@ -1111,7 +826,6 @@ class Box:
 
     @overload
     def grow(self, d: Direction, n_cell: int) -> Box: ...
-
     @overload
     def grow_low(self, idir: int, n_cell: int = 1) -> Box:
         """
@@ -1121,7 +835,6 @@ class Box:
 
     @overload
     def grow_low(self, d: Direction, n_cell: int = 1) -> Box: ...
-
     @overload
     def grow_high(self, idir: int, n_cell: int = 1) -> Box:
         """
@@ -1132,7 +845,6 @@ class Box:
 
     @overload
     def grow_high(self, d: Direction, n_cell: int = 1) -> Box: ...
-
     @overload
     def surrounding_nodes(self) -> Box:
         """Convert to NODE type in all directions."""
@@ -1161,290 +873,195 @@ class Box:
         """Flatten the box in one direction."""
 
     def __iter__(self) -> Iterator[IntVect1D]: ...
-
     def lbound(self, arg: Box, /) -> Dim3: ...
-
     def ubound(self, arg: Box, /) -> Dim3: ...
-
     def begin(self, box: Box) -> Dim3: ...
-
     def end(self, box: Box) -> Dim3: ...
 
 @overload
 def lbound(arg: Box, /) -> Dim3: ...
-
 @overload
 def lbound(arg: Array4_float, /) -> Dim3: ...
-
 @overload
 def lbound(arg: Array4_double, /) -> Dim3: ...
-
 @overload
 def lbound(arg: Array4_longdouble, /) -> Dim3: ...
-
 @overload
 def lbound(arg: Array4_float_const, /) -> Dim3: ...
-
 @overload
 def lbound(arg: Array4_double_const, /) -> Dim3: ...
-
 @overload
 def lbound(arg: Array4_longdouble_const, /) -> Dim3: ...
-
 @overload
 def lbound(arg: Array4_cfloat, /) -> Dim3: ...
-
 @overload
 def lbound(arg: Array4_cdouble, /) -> Dim3: ...
-
 @overload
 def lbound(arg: Array4_cfloat_const, /) -> Dim3: ...
-
 @overload
 def lbound(arg: Array4_cdouble_const, /) -> Dim3: ...
-
 @overload
 def lbound(arg: Array4_short, /) -> Dim3: ...
-
 @overload
 def lbound(arg: Array4_int, /) -> Dim3: ...
-
 @overload
 def lbound(arg: Array4_long, /) -> Dim3: ...
-
 @overload
 def lbound(arg: Array4_longlong, /) -> Dim3: ...
-
 @overload
 def lbound(arg: Array4_short_const, /) -> Dim3: ...
-
 @overload
 def lbound(arg: Array4_int_const, /) -> Dim3: ...
-
 @overload
 def lbound(arg: Array4_long_const, /) -> Dim3: ...
-
 @overload
 def lbound(arg: Array4_longlong_const, /) -> Dim3: ...
-
 @overload
 def lbound(arg: Array4_ushort, /) -> Dim3: ...
-
 @overload
 def lbound(arg: Array4_uint, /) -> Dim3: ...
-
 @overload
 def lbound(arg: Array4_ulong, /) -> Dim3: ...
-
 @overload
 def lbound(arg: Array4_ulonglong, /) -> Dim3: ...
-
 @overload
 def lbound(arg: Array4_ushort_const, /) -> Dim3: ...
-
 @overload
 def lbound(arg: Array4_uint_const, /) -> Dim3: ...
-
 @overload
 def lbound(arg: Array4_ulong_const, /) -> Dim3: ...
-
 @overload
 def lbound(arg: Array4_ulonglong_const, /) -> Dim3: ...
-
 @overload
 def ubound(arg: Box, /) -> Dim3: ...
-
 @overload
 def ubound(arg: Array4_float, /) -> Dim3: ...
-
 @overload
 def ubound(arg: Array4_double, /) -> Dim3: ...
-
 @overload
 def ubound(arg: Array4_longdouble, /) -> Dim3: ...
-
 @overload
 def ubound(arg: Array4_float_const, /) -> Dim3: ...
-
 @overload
 def ubound(arg: Array4_double_const, /) -> Dim3: ...
-
 @overload
 def ubound(arg: Array4_longdouble_const, /) -> Dim3: ...
-
 @overload
 def ubound(arg: Array4_cfloat, /) -> Dim3: ...
-
 @overload
 def ubound(arg: Array4_cdouble, /) -> Dim3: ...
-
 @overload
 def ubound(arg: Array4_cfloat_const, /) -> Dim3: ...
-
 @overload
 def ubound(arg: Array4_cdouble_const, /) -> Dim3: ...
-
 @overload
 def ubound(arg: Array4_short, /) -> Dim3: ...
-
 @overload
 def ubound(arg: Array4_int, /) -> Dim3: ...
-
 @overload
 def ubound(arg: Array4_long, /) -> Dim3: ...
-
 @overload
 def ubound(arg: Array4_longlong, /) -> Dim3: ...
-
 @overload
 def ubound(arg: Array4_short_const, /) -> Dim3: ...
-
 @overload
 def ubound(arg: Array4_int_const, /) -> Dim3: ...
-
 @overload
 def ubound(arg: Array4_long_const, /) -> Dim3: ...
-
 @overload
 def ubound(arg: Array4_longlong_const, /) -> Dim3: ...
-
 @overload
 def ubound(arg: Array4_ushort, /) -> Dim3: ...
-
 @overload
 def ubound(arg: Array4_uint, /) -> Dim3: ...
-
 @overload
 def ubound(arg: Array4_ulong, /) -> Dim3: ...
-
 @overload
 def ubound(arg: Array4_ulonglong, /) -> Dim3: ...
-
 @overload
 def ubound(arg: Array4_ushort_const, /) -> Dim3: ...
-
 @overload
 def ubound(arg: Array4_uint_const, /) -> Dim3: ...
-
 @overload
 def ubound(arg: Array4_ulong_const, /) -> Dim3: ...
-
 @overload
 def ubound(arg: Array4_ulonglong_const, /) -> Dim3: ...
-
 def begin(arg: Box, /) -> Dim3: ...
-
 def end(arg: Box, /) -> Dim3: ...
-
 @overload
 def length(arg: Box, /) -> Dim3: ...
-
 @overload
 def length(arg: Array4_float, /) -> Dim3: ...
-
 @overload
 def length(arg: Array4_double, /) -> Dim3: ...
-
 @overload
 def length(arg: Array4_longdouble, /) -> Dim3: ...
-
 @overload
 def length(arg: Array4_float_const, /) -> Dim3: ...
-
 @overload
 def length(arg: Array4_double_const, /) -> Dim3: ...
-
 @overload
 def length(arg: Array4_longdouble_const, /) -> Dim3: ...
-
 @overload
 def length(arg: Array4_cfloat, /) -> Dim3: ...
-
 @overload
 def length(arg: Array4_cdouble, /) -> Dim3: ...
-
 @overload
 def length(arg: Array4_cfloat_const, /) -> Dim3: ...
-
 @overload
 def length(arg: Array4_cdouble_const, /) -> Dim3: ...
-
 @overload
 def length(arg: Array4_short, /) -> Dim3: ...
-
 @overload
 def length(arg: Array4_int, /) -> Dim3: ...
-
 @overload
 def length(arg: Array4_long, /) -> Dim3: ...
-
 @overload
 def length(arg: Array4_longlong, /) -> Dim3: ...
-
 @overload
 def length(arg: Array4_short_const, /) -> Dim3: ...
-
 @overload
 def length(arg: Array4_int_const, /) -> Dim3: ...
-
 @overload
 def length(arg: Array4_long_const, /) -> Dim3: ...
-
 @overload
 def length(arg: Array4_longlong_const, /) -> Dim3: ...
-
 @overload
 def length(arg: Array4_ushort, /) -> Dim3: ...
-
 @overload
 def length(arg: Array4_uint, /) -> Dim3: ...
-
 @overload
 def length(arg: Array4_ulong, /) -> Dim3: ...
-
 @overload
 def length(arg: Array4_ulonglong, /) -> Dim3: ...
-
 @overload
 def length(arg: Array4_ushort_const, /) -> Dim3: ...
-
 @overload
 def length(arg: Array4_uint_const, /) -> Dim3: ...
-
 @overload
 def length(arg: Array4_ulong_const, /) -> Dim3: ...
-
 @overload
 def length(arg: Array4_ulonglong_const, /) -> Dim3: ...
 
 class Periodicity:
     @overload
     def __init__(self) -> None: ...
-
     @overload
     def __init__(self, arg: IntVect1D, /) -> None: ...
-
     def __repr__(self) -> str: ...
-
     @property
     def is_any_periodic(self) -> bool: ...
-
     @property
     def is_all_periodic(self) -> bool: ...
-
     @property
     def domain(self) -> Box:
         """Cell-centered domain Box "infinitely" long in non-periodic directions."""
 
     @property
     def shift_IntVect(self, arg: IntVect1D, /) -> list[IntVect1D]: ...
-
     def is_periodic(self, dir: int) -> bool: ...
-
     def __getitem__(self, dir: int) -> bool: ...
-
     def __eq__(self, arg: Periodicity, /) -> bool: ...
-
     @staticmethod
     def non_periodic() -> Periodicity:
         """Return the Periodicity object that is not periodic in any direction"""
@@ -1452,3255 +1069,2403 @@ class Periodicity:
 class Array4_float:
     @overload
     def __init__(self) -> None: ...
-
     @overload
     def __init__(self, arg: Array4_float) -> None: ...
-
     @overload
     def __init__(self, arg0: Array4_float, arg1: int, /) -> None: ...
-
     @overload
     def __init__(self, arg0: Array4_float, arg1: int, arg2: int, /) -> None: ...
-
     @overload
-    def __init__(self, arg: Annotated[NDArray[numpy.float32], dict(shape=(None, None, None))], /) -> None: ...
-
+    def __init__(
+        self, arg: Annotated[NDArray[numpy.float32], dict(shape=(None, None, None))], /
+    ) -> None: ...
     def __repr__(self) -> str: ...
-
     def index_assert(self, i: int, j: int, k: int, n: int) -> None: ...
-
     @property
     def size(self) -> int: ...
-
     @property
     def nComp(self) -> int: ...
-
     @property
     def num_comp(self) -> int: ...
-
     @property
     def __array_interface__(self) -> dict: ...
-
     @property
     def __cuda_array_interface__(self) -> dict: ...
-
     def to_host(self) -> object: ...
-
     @overload
     def contains(self, i: int, j: int, k: int) -> bool: ...
-
     @overload
     def contains(self, iv: IntVect1D) -> bool: ...
-
     @overload
     def contains(self, cell: Dim3) -> bool: ...
-
     @overload
     def __getitem__(self, arg: IntVect1D, /) -> float: ...
-
     @overload
     def __getitem__(self, arg: Sequence[int], /) -> float: ...
-
     @overload
     def __getitem__(self, arg: Sequence[int], /) -> float: ...
-
     @overload
     def __setitem__(self, arg0: IntVect1D, arg1: float, /) -> None: ...
-
     @overload
     def __setitem__(self, arg0: Sequence[int], arg1: float, /) -> None: ...
-
     @overload
     def __setitem__(self, arg0: Sequence[int], arg1: float, /) -> None: ...
 
 class Array4_double:
     @overload
     def __init__(self) -> None: ...
-
     @overload
     def __init__(self, arg: Array4_double) -> None: ...
-
     @overload
     def __init__(self, arg0: Array4_double, arg1: int, /) -> None: ...
-
     @overload
     def __init__(self, arg0: Array4_double, arg1: int, arg2: int, /) -> None: ...
-
     @overload
-    def __init__(self, arg: Annotated[NDArray[numpy.float64], dict(shape=(None, None, None))], /) -> None: ...
-
+    def __init__(
+        self, arg: Annotated[NDArray[numpy.float64], dict(shape=(None, None, None))], /
+    ) -> None: ...
     def __repr__(self) -> str: ...
-
     def index_assert(self, i: int, j: int, k: int, n: int) -> None: ...
-
     @property
     def size(self) -> int: ...
-
     @property
     def nComp(self) -> int: ...
-
     @property
     def num_comp(self) -> int: ...
-
     @property
     def __array_interface__(self) -> dict: ...
-
     @property
     def __cuda_array_interface__(self) -> dict: ...
-
     def to_host(self) -> object: ...
-
     @overload
     def contains(self, i: int, j: int, k: int) -> bool: ...
-
     @overload
     def contains(self, iv: IntVect1D) -> bool: ...
-
     @overload
     def contains(self, cell: Dim3) -> bool: ...
-
     @overload
     def __getitem__(self, arg: IntVect1D, /) -> float: ...
-
     @overload
     def __getitem__(self, arg: Sequence[int], /) -> float: ...
-
     @overload
     def __getitem__(self, arg: Sequence[int], /) -> float: ...
-
     @overload
     def __setitem__(self, arg0: IntVect1D, arg1: float, /) -> None: ...
-
     @overload
     def __setitem__(self, arg0: Sequence[int], arg1: float, /) -> None: ...
-
     @overload
     def __setitem__(self, arg0: Sequence[int], arg1: float, /) -> None: ...
 
 class Array4_longdouble:
     @overload
     def __init__(self) -> None: ...
-
     @overload
     def __init__(self, arg: Array4_longdouble) -> None: ...
-
     @overload
     def __init__(self, arg0: Array4_longdouble, arg1: int, /) -> None: ...
-
     @overload
     def __init__(self, arg0: Array4_longdouble, arg1: int, arg2: int, /) -> None: ...
-
     @overload
-    def __init__(self, arg: Annotated[NDArray[numpy.float64], dict(shape=(None, None, None))], /) -> None: ...
-
+    def __init__(
+        self, arg: Annotated[NDArray[numpy.float64], dict(shape=(None, None, None))], /
+    ) -> None: ...
     def __repr__(self) -> str: ...
-
     def index_assert(self, i: int, j: int, k: int, n: int) -> None: ...
-
     @property
     def size(self) -> int: ...
-
     @property
     def nComp(self) -> int: ...
-
     @property
     def num_comp(self) -> int: ...
-
     @property
     def __array_interface__(self) -> dict: ...
-
     @property
     def __cuda_array_interface__(self) -> dict: ...
-
     def to_host(self) -> object: ...
-
     @overload
     def contains(self, i: int, j: int, k: int) -> bool: ...
-
     @overload
     def contains(self, iv: IntVect1D) -> bool: ...
-
     @overload
     def contains(self, cell: Dim3) -> bool: ...
-
     @overload
     def __getitem__(self, arg: IntVect1D, /) -> float: ...
-
     @overload
     def __getitem__(self, arg: Sequence[int], /) -> float: ...
-
     @overload
     def __getitem__(self, arg: Sequence[int], /) -> float: ...
-
     @overload
     def __setitem__(self, arg0: IntVect1D, arg1: float, /) -> None: ...
-
     @overload
     def __setitem__(self, arg0: Sequence[int], arg1: float, /) -> None: ...
-
     @overload
     def __setitem__(self, arg0: Sequence[int], arg1: float, /) -> None: ...
 
 class Array4_float_const:
     @overload
     def __init__(self) -> None: ...
-
     @overload
     def __init__(self, arg: Array4_float_const) -> None: ...
-
     @overload
     def __init__(self, arg0: Array4_float_const, arg1: int, /) -> None: ...
-
     @overload
     def __init__(self, arg0: Array4_float_const, arg1: int, arg2: int, /) -> None: ...
-
     @overload
-    def __init__(self, arg: Annotated[NDArray[numpy.float32], dict(shape=(None, None, None), writable=False)], /) -> None: ...
-
+    def __init__(
+        self,
+        arg: Annotated[
+            NDArray[numpy.float32], dict(shape=(None, None, None), writable=False)
+        ],
+        /,
+    ) -> None: ...
     def __repr__(self) -> str: ...
-
     def index_assert(self, i: int, j: int, k: int, n: int) -> None: ...
-
     @property
     def size(self) -> int: ...
-
     @property
     def nComp(self) -> int: ...
-
     @property
     def num_comp(self) -> int: ...
-
     @property
     def __array_interface__(self) -> dict: ...
-
     @property
     def __cuda_array_interface__(self) -> dict: ...
-
     def to_host(self) -> object: ...
-
     @overload
     def contains(self, i: int, j: int, k: int) -> bool: ...
-
     @overload
     def contains(self, iv: IntVect1D) -> bool: ...
-
     @overload
     def contains(self, cell: Dim3) -> bool: ...
-
     @overload
     def __getitem__(self, arg: IntVect1D, /) -> float: ...
-
     @overload
     def __getitem__(self, arg: Sequence[int], /) -> float: ...
-
     @overload
     def __getitem__(self, arg: Sequence[int], /) -> float: ...
 
 class Array4_double_const:
     @overload
     def __init__(self) -> None: ...
-
     @overload
     def __init__(self, arg: Array4_double_const) -> None: ...
-
     @overload
     def __init__(self, arg0: Array4_double_const, arg1: int, /) -> None: ...
-
     @overload
     def __init__(self, arg0: Array4_double_const, arg1: int, arg2: int, /) -> None: ...
-
     @overload
-    def __init__(self, arg: Annotated[NDArray[numpy.float64], dict(shape=(None, None, None), writable=False)], /) -> None: ...
-
+    def __init__(
+        self,
+        arg: Annotated[
+            NDArray[numpy.float64], dict(shape=(None, None, None), writable=False)
+        ],
+        /,
+    ) -> None: ...
     def __repr__(self) -> str: ...
-
     def index_assert(self, i: int, j: int, k: int, n: int) -> None: ...
-
     @property
     def size(self) -> int: ...
-
     @property
     def nComp(self) -> int: ...
-
     @property
     def num_comp(self) -> int: ...
-
     @property
     def __array_interface__(self) -> dict: ...
-
     @property
     def __cuda_array_interface__(self) -> dict: ...
-
     def to_host(self) -> object: ...
-
     @overload
     def contains(self, i: int, j: int, k: int) -> bool: ...
-
     @overload
     def contains(self, iv: IntVect1D) -> bool: ...
-
     @overload
     def contains(self, cell: Dim3) -> bool: ...
-
     @overload
     def __getitem__(self, arg: IntVect1D, /) -> float: ...
-
     @overload
     def __getitem__(self, arg: Sequence[int], /) -> float: ...
-
     @overload
     def __getitem__(self, arg: Sequence[int], /) -> float: ...
 
 class Array4_longdouble_const:
     @overload
     def __init__(self) -> None: ...
-
     @overload
     def __init__(self, arg: Array4_longdouble_const) -> None: ...
-
     @overload
     def __init__(self, arg0: Array4_longdouble_const, arg1: int, /) -> None: ...
-
     @overload
-    def __init__(self, arg0: Array4_longdouble_const, arg1: int, arg2: int, /) -> None: ...
-
+    def __init__(
+        self, arg0: Array4_longdouble_const, arg1: int, arg2: int, /
+    ) -> None: ...
     @overload
-    def __init__(self, arg: Annotated[NDArray[numpy.float64], dict(shape=(None, None, None), writable=False)], /) -> None: ...
-
+    def __init__(
+        self,
+        arg: Annotated[
+            NDArray[numpy.float64], dict(shape=(None, None, None), writable=False)
+        ],
+        /,
+    ) -> None: ...
     def __repr__(self) -> str: ...
-
     def index_assert(self, i: int, j: int, k: int, n: int) -> None: ...
-
     @property
     def size(self) -> int: ...
-
     @property
     def nComp(self) -> int: ...
-
     @property
     def num_comp(self) -> int: ...
-
     @property
     def __array_interface__(self) -> dict: ...
-
     @property
     def __cuda_array_interface__(self) -> dict: ...
-
     def to_host(self) -> object: ...
-
     @overload
     def contains(self, i: int, j: int, k: int) -> bool: ...
-
     @overload
     def contains(self, iv: IntVect1D) -> bool: ...
-
     @overload
     def contains(self, cell: Dim3) -> bool: ...
-
     @overload
     def __getitem__(self, arg: IntVect1D, /) -> float: ...
-
     @overload
     def __getitem__(self, arg: Sequence[int], /) -> float: ...
-
     @overload
     def __getitem__(self, arg: Sequence[int], /) -> float: ...
 
 class Array4_cfloat:
     @overload
     def __init__(self) -> None: ...
-
     @overload
     def __init__(self, arg: Array4_cfloat) -> None: ...
-
     @overload
     def __init__(self, arg0: Array4_cfloat, arg1: int, /) -> None: ...
-
     @overload
     def __init__(self, arg0: Array4_cfloat, arg1: int, arg2: int, /) -> None: ...
-
     @overload
-    def __init__(self, arg: Annotated[NDArray[numpy.complex64], dict(shape=(None, None, None))], /) -> None: ...
-
+    def __init__(
+        self,
+        arg: Annotated[NDArray[numpy.complex64], dict(shape=(None, None, None))],
+        /,
+    ) -> None: ...
     def __repr__(self) -> str: ...
-
     def index_assert(self, i: int, j: int, k: int, n: int) -> None: ...
-
     @property
     def size(self) -> int: ...
-
     @property
     def nComp(self) -> int: ...
-
     @property
     def num_comp(self) -> int: ...
-
     @property
     def __array_interface__(self) -> dict: ...
-
     @property
     def __cuda_array_interface__(self) -> dict: ...
-
     def to_host(self) -> object: ...
-
     @overload
     def contains(self, i: int, j: int, k: int) -> bool: ...
-
     @overload
     def contains(self, iv: IntVect1D) -> bool: ...
-
     @overload
     def contains(self, cell: Dim3) -> bool: ...
-
     @overload
     def __getitem__(self, arg: IntVect1D, /) -> complex: ...
-
     @overload
     def __getitem__(self, arg: Sequence[int], /) -> complex: ...
-
     @overload
     def __getitem__(self, arg: Sequence[int], /) -> complex: ...
-
     @overload
     def __setitem__(self, arg0: IntVect1D, arg1: complex, /) -> None: ...
-
     @overload
     def __setitem__(self, arg0: Sequence[int], arg1: complex, /) -> None: ...
-
     @overload
     def __setitem__(self, arg0: Sequence[int], arg1: complex, /) -> None: ...
 
 class Array4_cdouble:
     @overload
     def __init__(self) -> None: ...
-
     @overload
     def __init__(self, arg: Array4_cdouble) -> None: ...
-
     @overload
     def __init__(self, arg0: Array4_cdouble, arg1: int, /) -> None: ...
-
     @overload
     def __init__(self, arg0: Array4_cdouble, arg1: int, arg2: int, /) -> None: ...
-
     @overload
-    def __init__(self, arg: Annotated[NDArray[numpy.complex128], dict(shape=(None, None, None))], /) -> None: ...
-
+    def __init__(
+        self,
+        arg: Annotated[NDArray[numpy.complex128], dict(shape=(None, None, None))],
+        /,
+    ) -> None: ...
     def __repr__(self) -> str: ...
-
     def index_assert(self, i: int, j: int, k: int, n: int) -> None: ...
-
     @property
     def size(self) -> int: ...
-
     @property
     def nComp(self) -> int: ...
-
     @property
     def num_comp(self) -> int: ...
-
     @property
     def __array_interface__(self) -> dict: ...
-
     @property
     def __cuda_array_interface__(self) -> dict: ...
-
     def to_host(self) -> object: ...
-
     @overload
     def contains(self, i: int, j: int, k: int) -> bool: ...
-
     @overload
     def contains(self, iv: IntVect1D) -> bool: ...
-
     @overload
     def contains(self, cell: Dim3) -> bool: ...
-
     @overload
     def __getitem__(self, arg: IntVect1D, /) -> complex: ...
-
     @overload
     def __getitem__(self, arg: Sequence[int], /) -> complex: ...
-
     @overload
     def __getitem__(self, arg: Sequence[int], /) -> complex: ...
-
     @overload
     def __setitem__(self, arg0: IntVect1D, arg1: complex, /) -> None: ...
-
     @overload
     def __setitem__(self, arg0: Sequence[int], arg1: complex, /) -> None: ...
-
     @overload
     def __setitem__(self, arg0: Sequence[int], arg1: complex, /) -> None: ...
 
 class Array4_cfloat_const:
     @overload
     def __init__(self) -> None: ...
-
     @overload
     def __init__(self, arg: Array4_cfloat_const) -> None: ...
-
     @overload
     def __init__(self, arg0: Array4_cfloat_const, arg1: int, /) -> None: ...
-
     @overload
     def __init__(self, arg0: Array4_cfloat_const, arg1: int, arg2: int, /) -> None: ...
-
     @overload
-    def __init__(self, arg: Annotated[NDArray[numpy.complex64], dict(shape=(None, None, None), writable=False)], /) -> None: ...
-
+    def __init__(
+        self,
+        arg: Annotated[
+            NDArray[numpy.complex64], dict(shape=(None, None, None), writable=False)
+        ],
+        /,
+    ) -> None: ...
     def __repr__(self) -> str: ...
-
     def index_assert(self, i: int, j: int, k: int, n: int) -> None: ...
-
     @property
     def size(self) -> int: ...
-
     @property
     def nComp(self) -> int: ...
-
     @property
     def num_comp(self) -> int: ...
-
     @property
     def __array_interface__(self) -> dict: ...
-
     @property
     def __cuda_array_interface__(self) -> dict: ...
-
     def to_host(self) -> object: ...
-
     @overload
     def contains(self, i: int, j: int, k: int) -> bool: ...
-
     @overload
     def contains(self, iv: IntVect1D) -> bool: ...
-
     @overload
     def contains(self, cell: Dim3) -> bool: ...
-
     @overload
     def __getitem__(self, arg: IntVect1D, /) -> complex: ...
-
     @overload
     def __getitem__(self, arg: Sequence[int], /) -> complex: ...
-
     @overload
     def __getitem__(self, arg: Sequence[int], /) -> complex: ...
 
 class Array4_cdouble_const:
     @overload
     def __init__(self) -> None: ...
-
     @overload
     def __init__(self, arg: Array4_cdouble_const) -> None: ...
-
     @overload
     def __init__(self, arg0: Array4_cdouble_const, arg1: int, /) -> None: ...
-
     @overload
     def __init__(self, arg0: Array4_cdouble_const, arg1: int, arg2: int, /) -> None: ...
-
     @overload
-    def __init__(self, arg: Annotated[NDArray[numpy.complex128], dict(shape=(None, None, None), writable=False)], /) -> None: ...
-
+    def __init__(
+        self,
+        arg: Annotated[
+            NDArray[numpy.complex128], dict(shape=(None, None, None), writable=False)
+        ],
+        /,
+    ) -> None: ...
     def __repr__(self) -> str: ...
-
     def index_assert(self, i: int, j: int, k: int, n: int) -> None: ...
-
     @property
     def size(self) -> int: ...
-
     @property
     def nComp(self) -> int: ...
-
     @property
     def num_comp(self) -> int: ...
-
     @property
     def __array_interface__(self) -> dict: ...
-
     @property
     def __cuda_array_interface__(self) -> dict: ...
-
     def to_host(self) -> object: ...
-
     @overload
     def contains(self, i: int, j: int, k: int) -> bool: ...
-
     @overload
     def contains(self, iv: IntVect1D) -> bool: ...
-
     @overload
     def contains(self, cell: Dim3) -> bool: ...
-
     @overload
     def __getitem__(self, arg: IntVect1D, /) -> complex: ...
-
     @overload
     def __getitem__(self, arg: Sequence[int], /) -> complex: ...
-
     @overload
     def __getitem__(self, arg: Sequence[int], /) -> complex: ...
 
 class Array4_short:
     @overload
     def __init__(self) -> None: ...
-
     @overload
     def __init__(self, arg: Array4_short) -> None: ...
-
     @overload
     def __init__(self, arg0: Array4_short, arg1: int, /) -> None: ...
-
     @overload
     def __init__(self, arg0: Array4_short, arg1: int, arg2: int, /) -> None: ...
-
     @overload
-    def __init__(self, arg: Annotated[NDArray[numpy.int16], dict(shape=(None, None, None))], /) -> None: ...
-
+    def __init__(
+        self, arg: Annotated[NDArray[numpy.int16], dict(shape=(None, None, None))], /
+    ) -> None: ...
     def __repr__(self) -> str: ...
-
     def index_assert(self, i: int, j: int, k: int, n: int) -> None: ...
-
     @property
     def size(self) -> int: ...
-
     @property
     def nComp(self) -> int: ...
-
     @property
     def num_comp(self) -> int: ...
-
     @property
     def __array_interface__(self) -> dict: ...
-
     @property
     def __cuda_array_interface__(self) -> dict: ...
-
     def to_host(self) -> object: ...
-
     @overload
     def contains(self, i: int, j: int, k: int) -> bool: ...
-
     @overload
     def contains(self, iv: IntVect1D) -> bool: ...
-
     @overload
     def contains(self, cell: Dim3) -> bool: ...
-
     @overload
     def __getitem__(self, arg: IntVect1D, /) -> int: ...
-
     @overload
     def __getitem__(self, arg: Sequence[int], /) -> int: ...
-
     @overload
     def __getitem__(self, arg: Sequence[int], /) -> int: ...
-
     @overload
     def __setitem__(self, arg0: IntVect1D, arg1: int, /) -> None: ...
-
     @overload
     def __setitem__(self, arg0: Sequence[int], arg1: int, /) -> None: ...
-
     @overload
     def __setitem__(self, arg0: Sequence[int], arg1: int, /) -> None: ...
 
 class Array4_int:
     @overload
     def __init__(self) -> None: ...
-
     @overload
     def __init__(self, arg: Array4_int) -> None: ...
-
     @overload
     def __init__(self, arg0: Array4_int, arg1: int, /) -> None: ...
-
     @overload
     def __init__(self, arg0: Array4_int, arg1: int, arg2: int, /) -> None: ...
-
     @overload
-    def __init__(self, arg: Annotated[NDArray[numpy.int32], dict(shape=(None, None, None))], /) -> None: ...
-
+    def __init__(
+        self, arg: Annotated[NDArray[numpy.int32], dict(shape=(None, None, None))], /
+    ) -> None: ...
     def __repr__(self) -> str: ...
-
     def index_assert(self, i: int, j: int, k: int, n: int) -> None: ...
-
     @property
     def size(self) -> int: ...
-
     @property
     def nComp(self) -> int: ...
-
     @property
     def num_comp(self) -> int: ...
-
     @property
     def __array_interface__(self) -> dict: ...
-
     @property
     def __cuda_array_interface__(self) -> dict: ...
-
     def to_host(self) -> object: ...
-
     @overload
     def contains(self, i: int, j: int, k: int) -> bool: ...
-
     @overload
     def contains(self, iv: IntVect1D) -> bool: ...
-
     @overload
     def contains(self, cell: Dim3) -> bool: ...
-
     @overload
     def __getitem__(self, arg: IntVect1D, /) -> int: ...
-
     @overload
     def __getitem__(self, arg: Sequence[int], /) -> int: ...
-
     @overload
     def __getitem__(self, arg: Sequence[int], /) -> int: ...
-
     @overload
     def __setitem__(self, arg0: IntVect1D, arg1: int, /) -> None: ...
-
     @overload
     def __setitem__(self, arg0: Sequence[int], arg1: int, /) -> None: ...
-
     @overload
     def __setitem__(self, arg0: Sequence[int], arg1: int, /) -> None: ...
 
 class Array4_long:
     @overload
     def __init__(self) -> None: ...
-
     @overload
     def __init__(self, arg: Array4_long) -> None: ...
-
     @overload
     def __init__(self, arg0: Array4_long, arg1: int, /) -> None: ...
-
     @overload
     def __init__(self, arg0: Array4_long, arg1: int, arg2: int, /) -> None: ...
-
     @overload
-    def __init__(self, arg: Annotated[NDArray[numpy.int64], dict(shape=(None, None, None))], /) -> None: ...
-
+    def __init__(
+        self, arg: Annotated[NDArray[numpy.int64], dict(shape=(None, None, None))], /
+    ) -> None: ...
     def __repr__(self) -> str: ...
-
     def index_assert(self, i: int, j: int, k: int, n: int) -> None: ...
-
     @property
     def size(self) -> int: ...
-
     @property
     def nComp(self) -> int: ...
-
     @property
     def num_comp(self) -> int: ...
-
     @property
     def __array_interface__(self) -> dict: ...
-
     @property
     def __cuda_array_interface__(self) -> dict: ...
-
     def to_host(self) -> object: ...
-
     @overload
     def contains(self, i: int, j: int, k: int) -> bool: ...
-
     @overload
     def contains(self, iv: IntVect1D) -> bool: ...
-
     @overload
     def contains(self, cell: Dim3) -> bool: ...
-
     @overload
     def __getitem__(self, arg: IntVect1D, /) -> int: ...
-
     @overload
     def __getitem__(self, arg: Sequence[int], /) -> int: ...
-
     @overload
     def __getitem__(self, arg: Sequence[int], /) -> int: ...
-
     @overload
     def __setitem__(self, arg0: IntVect1D, arg1: int, /) -> None: ...
-
     @overload
     def __setitem__(self, arg0: Sequence[int], arg1: int, /) -> None: ...
-
     @overload
     def __setitem__(self, arg0: Sequence[int], arg1: int, /) -> None: ...
 
 class Array4_longlong:
     @overload
     def __init__(self) -> None: ...
-
     @overload
     def __init__(self, arg: Array4_longlong) -> None: ...
-
     @overload
     def __init__(self, arg0: Array4_longlong, arg1: int, /) -> None: ...
-
     @overload
     def __init__(self, arg0: Array4_longlong, arg1: int, arg2: int, /) -> None: ...
-
     @overload
-    def __init__(self, arg: Annotated[NDArray[numpy.int64], dict(shape=(None, None, None))], /) -> None: ...
-
+    def __init__(
+        self, arg: Annotated[NDArray[numpy.int64], dict(shape=(None, None, None))], /
+    ) -> None: ...
     def __repr__(self) -> str: ...
-
     def index_assert(self, i: int, j: int, k: int, n: int) -> None: ...
-
     @property
     def size(self) -> int: ...
-
     @property
     def nComp(self) -> int: ...
-
     @property
     def num_comp(self) -> int: ...
-
     @property
     def __array_interface__(self) -> dict: ...
-
     @property
     def __cuda_array_interface__(self) -> dict: ...
-
     def to_host(self) -> object: ...
-
     @overload
     def contains(self, i: int, j: int, k: int) -> bool: ...
-
     @overload
     def contains(self, iv: IntVect1D) -> bool: ...
-
     @overload
     def contains(self, cell: Dim3) -> bool: ...
-
     @overload
     def __getitem__(self, arg: IntVect1D, /) -> int: ...
-
     @overload
     def __getitem__(self, arg: Sequence[int], /) -> int: ...
-
     @overload
     def __getitem__(self, arg: Sequence[int], /) -> int: ...
-
     @overload
     def __setitem__(self, arg0: IntVect1D, arg1: int, /) -> None: ...
-
     @overload
     def __setitem__(self, arg0: Sequence[int], arg1: int, /) -> None: ...
-
     @overload
     def __setitem__(self, arg0: Sequence[int], arg1: int, /) -> None: ...
 
 class Array4_short_const:
     @overload
     def __init__(self) -> None: ...
-
     @overload
     def __init__(self, arg: Array4_short_const) -> None: ...
-
     @overload
     def __init__(self, arg0: Array4_short_const, arg1: int, /) -> None: ...
-
     @overload
     def __init__(self, arg0: Array4_short_const, arg1: int, arg2: int, /) -> None: ...
-
     @overload
-    def __init__(self, arg: Annotated[NDArray[numpy.int16], dict(shape=(None, None, None), writable=False)], /) -> None: ...
-
+    def __init__(
+        self,
+        arg: Annotated[
+            NDArray[numpy.int16], dict(shape=(None, None, None), writable=False)
+        ],
+        /,
+    ) -> None: ...
     def __repr__(self) -> str: ...
-
     def index_assert(self, i: int, j: int, k: int, n: int) -> None: ...
-
     @property
     def size(self) -> int: ...
-
     @property
     def nComp(self) -> int: ...
-
     @property
     def num_comp(self) -> int: ...
-
     @property
     def __array_interface__(self) -> dict: ...
-
     @property
     def __cuda_array_interface__(self) -> dict: ...
-
     def to_host(self) -> object: ...
-
     @overload
     def contains(self, i: int, j: int, k: int) -> bool: ...
-
     @overload
     def contains(self, iv: IntVect1D) -> bool: ...
-
     @overload
     def contains(self, cell: Dim3) -> bool: ...
-
     @overload
     def __getitem__(self, arg: IntVect1D, /) -> int: ...
-
     @overload
     def __getitem__(self, arg: Sequence[int], /) -> int: ...
-
     @overload
     def __getitem__(self, arg: Sequence[int], /) -> int: ...
 
 class Array4_int_const:
     @overload
     def __init__(self) -> None: ...
-
     @overload
     def __init__(self, arg: Array4_int_const) -> None: ...
-
     @overload
     def __init__(self, arg0: Array4_int_const, arg1: int, /) -> None: ...
-
     @overload
     def __init__(self, arg0: Array4_int_const, arg1: int, arg2: int, /) -> None: ...
-
     @overload
-    def __init__(self, arg: Annotated[NDArray[numpy.int32], dict(shape=(None, None, None), writable=False)], /) -> None: ...
-
+    def __init__(
+        self,
+        arg: Annotated[
+            NDArray[numpy.int32], dict(shape=(None, None, None), writable=False)
+        ],
+        /,
+    ) -> None: ...
     def __repr__(self) -> str: ...
-
     def index_assert(self, i: int, j: int, k: int, n: int) -> None: ...
-
     @property
     def size(self) -> int: ...
-
     @property
     def nComp(self) -> int: ...
-
     @property
     def num_comp(self) -> int: ...
-
     @property
     def __array_interface__(self) -> dict: ...
-
     @property
     def __cuda_array_interface__(self) -> dict: ...
-
     def to_host(self) -> object: ...
-
     @overload
     def contains(self, i: int, j: int, k: int) -> bool: ...
-
     @overload
     def contains(self, iv: IntVect1D) -> bool: ...
-
     @overload
     def contains(self, cell: Dim3) -> bool: ...
-
     @overload
     def __getitem__(self, arg: IntVect1D, /) -> int: ...
-
     @overload
     def __getitem__(self, arg: Sequence[int], /) -> int: ...
-
     @overload
     def __getitem__(self, arg: Sequence[int], /) -> int: ...
 
 class Array4_long_const:
     @overload
     def __init__(self) -> None: ...
-
     @overload
     def __init__(self, arg: Array4_long_const) -> None: ...
-
     @overload
     def __init__(self, arg0: Array4_long_const, arg1: int, /) -> None: ...
-
     @overload
     def __init__(self, arg0: Array4_long_const, arg1: int, arg2: int, /) -> None: ...
-
     @overload
-    def __init__(self, arg: Annotated[NDArray[numpy.int64], dict(shape=(None, None, None), writable=False)], /) -> None: ...
-
+    def __init__(
+        self,
+        arg: Annotated[
+            NDArray[numpy.int64], dict(shape=(None, None, None), writable=False)
+        ],
+        /,
+    ) -> None: ...
     def __repr__(self) -> str: ...
-
     def index_assert(self, i: int, j: int, k: int, n: int) -> None: ...
-
     @property
     def size(self) -> int: ...
-
     @property
     def nComp(self) -> int: ...
-
     @property
     def num_comp(self) -> int: ...
-
     @property
     def __array_interface__(self) -> dict: ...
-
     @property
     def __cuda_array_interface__(self) -> dict: ...
-
     def to_host(self) -> object: ...
-
     @overload
     def contains(self, i: int, j: int, k: int) -> bool: ...
-
     @overload
     def contains(self, iv: IntVect1D) -> bool: ...
-
     @overload
     def contains(self, cell: Dim3) -> bool: ...
-
     @overload
     def __getitem__(self, arg: IntVect1D, /) -> int: ...
-
     @overload
     def __getitem__(self, arg: Sequence[int], /) -> int: ...
-
     @overload
     def __getitem__(self, arg: Sequence[int], /) -> int: ...
 
 class Array4_longlong_const:
     @overload
     def __init__(self) -> None: ...
-
     @overload
     def __init__(self, arg: Array4_longlong_const) -> None: ...
-
     @overload
     def __init__(self, arg0: Array4_longlong_const, arg1: int, /) -> None: ...
-
     @overload
-    def __init__(self, arg0: Array4_longlong_const, arg1: int, arg2: int, /) -> None: ...
-
+    def __init__(
+        self, arg0: Array4_longlong_const, arg1: int, arg2: int, /
+    ) -> None: ...
     @overload
-    def __init__(self, arg: Annotated[NDArray[numpy.int64], dict(shape=(None, None, None), writable=False)], /) -> None: ...
-
+    def __init__(
+        self,
+        arg: Annotated[
+            NDArray[numpy.int64], dict(shape=(None, None, None), writable=False)
+        ],
+        /,
+    ) -> None: ...
     def __repr__(self) -> str: ...
-
     def index_assert(self, i: int, j: int, k: int, n: int) -> None: ...
-
     @property
     def size(self) -> int: ...
-
     @property
     def nComp(self) -> int: ...
-
     @property
     def num_comp(self) -> int: ...
-
     @property
     def __array_interface__(self) -> dict: ...
-
     @property
     def __cuda_array_interface__(self) -> dict: ...
-
     def to_host(self) -> object: ...
-
     @overload
     def contains(self, i: int, j: int, k: int) -> bool: ...
-
     @overload
     def contains(self, iv: IntVect1D) -> bool: ...
-
     @overload
     def contains(self, cell: Dim3) -> bool: ...
-
     @overload
     def __getitem__(self, arg: IntVect1D, /) -> int: ...
-
     @overload
     def __getitem__(self, arg: Sequence[int], /) -> int: ...
-
     @overload
     def __getitem__(self, arg: Sequence[int], /) -> int: ...
 
 class Array4_ushort:
     @overload
     def __init__(self) -> None: ...
-
     @overload
     def __init__(self, arg: Array4_ushort) -> None: ...
-
     @overload
     def __init__(self, arg0: Array4_ushort, arg1: int, /) -> None: ...
-
     @overload
     def __init__(self, arg0: Array4_ushort, arg1: int, arg2: int, /) -> None: ...
-
     @overload
-    def __init__(self, arg: Annotated[NDArray[numpy.uint16], dict(shape=(None, None, None))], /) -> None: ...
-
+    def __init__(
+        self, arg: Annotated[NDArray[numpy.uint16], dict(shape=(None, None, None))], /
+    ) -> None: ...
     def __repr__(self) -> str: ...
-
     def index_assert(self, i: int, j: int, k: int, n: int) -> None: ...
-
     @property
     def size(self) -> int: ...
-
     @property
     def nComp(self) -> int: ...
-
     @property
     def num_comp(self) -> int: ...
-
     @property
     def __array_interface__(self) -> dict: ...
-
     @property
     def __cuda_array_interface__(self) -> dict: ...
-
     def to_host(self) -> object: ...
-
     @overload
     def contains(self, i: int, j: int, k: int) -> bool: ...
-
     @overload
     def contains(self, iv: IntVect1D) -> bool: ...
-
     @overload
     def contains(self, cell: Dim3) -> bool: ...
-
     @overload
     def __getitem__(self, arg: IntVect1D, /) -> int: ...
-
     @overload
     def __getitem__(self, arg: Sequence[int], /) -> int: ...
-
     @overload
     def __getitem__(self, arg: Sequence[int], /) -> int: ...
-
     @overload
     def __setitem__(self, arg0: IntVect1D, arg1: int, /) -> None: ...
-
     @overload
     def __setitem__(self, arg0: Sequence[int], arg1: int, /) -> None: ...
-
     @overload
     def __setitem__(self, arg0: Sequence[int], arg1: int, /) -> None: ...
 
 class Array4_uint:
     @overload
     def __init__(self) -> None: ...
-
     @overload
     def __init__(self, arg: Array4_uint) -> None: ...
-
     @overload
     def __init__(self, arg0: Array4_uint, arg1: int, /) -> None: ...
-
     @overload
     def __init__(self, arg0: Array4_uint, arg1: int, arg2: int, /) -> None: ...
-
     @overload
-    def __init__(self, arg: Annotated[NDArray[numpy.uint32], dict(shape=(None, None, None))], /) -> None: ...
-
+    def __init__(
+        self, arg: Annotated[NDArray[numpy.uint32], dict(shape=(None, None, None))], /
+    ) -> None: ...
     def __repr__(self) -> str: ...
-
     def index_assert(self, i: int, j: int, k: int, n: int) -> None: ...
-
     @property
     def size(self) -> int: ...
-
     @property
     def nComp(self) -> int: ...
-
     @property
     def num_comp(self) -> int: ...
-
     @property
     def __array_interface__(self) -> dict: ...
-
     @property
     def __cuda_array_interface__(self) -> dict: ...
-
     def to_host(self) -> object: ...
-
     @overload
     def contains(self, i: int, j: int, k: int) -> bool: ...
-
     @overload
     def contains(self, iv: IntVect1D) -> bool: ...
-
     @overload
     def contains(self, cell: Dim3) -> bool: ...
-
     @overload
     def __getitem__(self, arg: IntVect1D, /) -> int: ...
-
     @overload
     def __getitem__(self, arg: Sequence[int], /) -> int: ...
-
     @overload
     def __getitem__(self, arg: Sequence[int], /) -> int: ...
-
     @overload
     def __setitem__(self, arg0: IntVect1D, arg1: int, /) -> None: ...
-
     @overload
     def __setitem__(self, arg0: Sequence[int], arg1: int, /) -> None: ...
-
     @overload
     def __setitem__(self, arg0: Sequence[int], arg1: int, /) -> None: ...
 
 class Array4_ulong:
     @overload
     def __init__(self) -> None: ...
-
     @overload
     def __init__(self, arg: Array4_ulong) -> None: ...
-
     @overload
     def __init__(self, arg0: Array4_ulong, arg1: int, /) -> None: ...
-
     @overload
     def __init__(self, arg0: Array4_ulong, arg1: int, arg2: int, /) -> None: ...
-
     @overload
-    def __init__(self, arg: Annotated[NDArray[numpy.uint64], dict(shape=(None, None, None))], /) -> None: ...
-
+    def __init__(
+        self, arg: Annotated[NDArray[numpy.uint64], dict(shape=(None, None, None))], /
+    ) -> None: ...
     def __repr__(self) -> str: ...
-
     def index_assert(self, i: int, j: int, k: int, n: int) -> None: ...
-
     @property
     def size(self) -> int: ...
-
     @property
     def nComp(self) -> int: ...
-
     @property
     def num_comp(self) -> int: ...
-
     @property
     def __array_interface__(self) -> dict: ...
-
     @property
     def __cuda_array_interface__(self) -> dict: ...
-
     def to_host(self) -> object: ...
-
     @overload
     def contains(self, i: int, j: int, k: int) -> bool: ...
-
     @overload
     def contains(self, iv: IntVect1D) -> bool: ...
-
     @overload
     def contains(self, cell: Dim3) -> bool: ...
-
     @overload
     def __getitem__(self, arg: IntVect1D, /) -> int: ...
-
     @overload
     def __getitem__(self, arg: Sequence[int], /) -> int: ...
-
     @overload
     def __getitem__(self, arg: Sequence[int], /) -> int: ...
-
     @overload
     def __setitem__(self, arg0: IntVect1D, arg1: int, /) -> None: ...
-
     @overload
     def __setitem__(self, arg0: Sequence[int], arg1: int, /) -> None: ...
-
     @overload
     def __setitem__(self, arg0: Sequence[int], arg1: int, /) -> None: ...
 
 class Array4_ulonglong:
     @overload
     def __init__(self) -> None: ...
-
     @overload
     def __init__(self, arg: Array4_ulonglong) -> None: ...
-
     @overload
     def __init__(self, arg0: Array4_ulonglong, arg1: int, /) -> None: ...
-
     @overload
     def __init__(self, arg0: Array4_ulonglong, arg1: int, arg2: int, /) -> None: ...
-
     @overload
-    def __init__(self, arg: Annotated[NDArray[numpy.uint64], dict(shape=(None, None, None))], /) -> None: ...
-
+    def __init__(
+        self, arg: Annotated[NDArray[numpy.uint64], dict(shape=(None, None, None))], /
+    ) -> None: ...
     def __repr__(self) -> str: ...
-
     def index_assert(self, i: int, j: int, k: int, n: int) -> None: ...
-
     @property
     def size(self) -> int: ...
-
     @property
     def nComp(self) -> int: ...
-
     @property
     def num_comp(self) -> int: ...
-
     @property
     def __array_interface__(self) -> dict: ...
-
     @property
     def __cuda_array_interface__(self) -> dict: ...
-
     def to_host(self) -> object: ...
-
     @overload
     def contains(self, i: int, j: int, k: int) -> bool: ...
-
     @overload
     def contains(self, iv: IntVect1D) -> bool: ...
-
     @overload
     def contains(self, cell: Dim3) -> bool: ...
-
     @overload
     def __getitem__(self, arg: IntVect1D, /) -> int: ...
-
     @overload
     def __getitem__(self, arg: Sequence[int], /) -> int: ...
-
     @overload
     def __getitem__(self, arg: Sequence[int], /) -> int: ...
-
     @overload
     def __setitem__(self, arg0: IntVect1D, arg1: int, /) -> None: ...
-
     @overload
     def __setitem__(self, arg0: Sequence[int], arg1: int, /) -> None: ...
-
     @overload
     def __setitem__(self, arg0: Sequence[int], arg1: int, /) -> None: ...
 
 class Array4_ushort_const:
     @overload
     def __init__(self) -> None: ...
-
     @overload
     def __init__(self, arg: Array4_ushort_const) -> None: ...
-
     @overload
     def __init__(self, arg0: Array4_ushort_const, arg1: int, /) -> None: ...
-
     @overload
     def __init__(self, arg0: Array4_ushort_const, arg1: int, arg2: int, /) -> None: ...
-
     @overload
-    def __init__(self, arg: Annotated[NDArray[numpy.uint16], dict(shape=(None, None, None), writable=False)], /) -> None: ...
-
+    def __init__(
+        self,
+        arg: Annotated[
+            NDArray[numpy.uint16], dict(shape=(None, None, None), writable=False)
+        ],
+        /,
+    ) -> None: ...
     def __repr__(self) -> str: ...
-
     def index_assert(self, i: int, j: int, k: int, n: int) -> None: ...
-
     @property
     def size(self) -> int: ...
-
     @property
     def nComp(self) -> int: ...
-
     @property
     def num_comp(self) -> int: ...
-
     @property
     def __array_interface__(self) -> dict: ...
-
     @property
     def __cuda_array_interface__(self) -> dict: ...
-
     def to_host(self) -> object: ...
-
     @overload
     def contains(self, i: int, j: int, k: int) -> bool: ...
-
     @overload
     def contains(self, iv: IntVect1D) -> bool: ...
-
     @overload
     def contains(self, cell: Dim3) -> bool: ...
-
     @overload
     def __getitem__(self, arg: IntVect1D, /) -> int: ...
-
     @overload
     def __getitem__(self, arg: Sequence[int], /) -> int: ...
-
     @overload
     def __getitem__(self, arg: Sequence[int], /) -> int: ...
 
 class Array4_uint_const:
     @overload
     def __init__(self) -> None: ...
-
     @overload
     def __init__(self, arg: Array4_uint_const) -> None: ...
-
     @overload
     def __init__(self, arg0: Array4_uint_const, arg1: int, /) -> None: ...
-
     @overload
     def __init__(self, arg0: Array4_uint_const, arg1: int, arg2: int, /) -> None: ...
-
     @overload
-    def __init__(self, arg: Annotated[NDArray[numpy.uint32], dict(shape=(None, None, None), writable=False)], /) -> None: ...
-
+    def __init__(
+        self,
+        arg: Annotated[
+            NDArray[numpy.uint32], dict(shape=(None, None, None), writable=False)
+        ],
+        /,
+    ) -> None: ...
     def __repr__(self) -> str: ...
-
     def index_assert(self, i: int, j: int, k: int, n: int) -> None: ...
-
     @property
     def size(self) -> int: ...
-
     @property
     def nComp(self) -> int: ...
-
     @property
     def num_comp(self) -> int: ...
-
     @property
     def __array_interface__(self) -> dict: ...
-
     @property
     def __cuda_array_interface__(self) -> dict: ...
-
     def to_host(self) -> object: ...
-
     @overload
     def contains(self, i: int, j: int, k: int) -> bool: ...
-
     @overload
     def contains(self, iv: IntVect1D) -> bool: ...
-
     @overload
     def contains(self, cell: Dim3) -> bool: ...
-
     @overload
     def __getitem__(self, arg: IntVect1D, /) -> int: ...
-
     @overload
     def __getitem__(self, arg: Sequence[int], /) -> int: ...
-
     @overload
     def __getitem__(self, arg: Sequence[int], /) -> int: ...
 
 class Array4_ulong_const:
     @overload
     def __init__(self) -> None: ...
-
     @overload
     def __init__(self, arg: Array4_ulong_const) -> None: ...
-
     @overload
     def __init__(self, arg0: Array4_ulong_const, arg1: int, /) -> None: ...
-
     @overload
     def __init__(self, arg0: Array4_ulong_const, arg1: int, arg2: int, /) -> None: ...
-
     @overload
-    def __init__(self, arg: Annotated[NDArray[numpy.uint64], dict(shape=(None, None, None), writable=False)], /) -> None: ...
-
+    def __init__(
+        self,
+        arg: Annotated[
+            NDArray[numpy.uint64], dict(shape=(None, None, None), writable=False)
+        ],
+        /,
+    ) -> None: ...
     def __repr__(self) -> str: ...
-
     def index_assert(self, i: int, j: int, k: int, n: int) -> None: ...
-
     @property
     def size(self) -> int: ...
-
     @property
     def nComp(self) -> int: ...
-
     @property
     def num_comp(self) -> int: ...
-
     @property
     def __array_interface__(self) -> dict: ...
-
     @property
     def __cuda_array_interface__(self) -> dict: ...
-
     def to_host(self) -> object: ...
-
     @overload
     def contains(self, i: int, j: int, k: int) -> bool: ...
-
     @overload
     def contains(self, iv: IntVect1D) -> bool: ...
-
     @overload
     def contains(self, cell: Dim3) -> bool: ...
-
     @overload
     def __getitem__(self, arg: IntVect1D, /) -> int: ...
-
     @overload
     def __getitem__(self, arg: Sequence[int], /) -> int: ...
-
     @overload
     def __getitem__(self, arg: Sequence[int], /) -> int: ...
 
 class Array4_ulonglong_const:
     @overload
     def __init__(self) -> None: ...
-
     @overload
     def __init__(self, arg: Array4_ulonglong_const) -> None: ...
-
     @overload
     def __init__(self, arg0: Array4_ulonglong_const, arg1: int, /) -> None: ...
-
     @overload
-    def __init__(self, arg0: Array4_ulonglong_const, arg1: int, arg2: int, /) -> None: ...
-
+    def __init__(
+        self, arg0: Array4_ulonglong_const, arg1: int, arg2: int, /
+    ) -> None: ...
     @overload
-    def __init__(self, arg: Annotated[NDArray[numpy.uint64], dict(shape=(None, None, None), writable=False)], /) -> None: ...
-
+    def __init__(
+        self,
+        arg: Annotated[
+            NDArray[numpy.uint64], dict(shape=(None, None, None), writable=False)
+        ],
+        /,
+    ) -> None: ...
     def __repr__(self) -> str: ...
-
     def index_assert(self, i: int, j: int, k: int, n: int) -> None: ...
-
     @property
     def size(self) -> int: ...
-
     @property
     def nComp(self) -> int: ...
-
     @property
     def num_comp(self) -> int: ...
-
     @property
     def __array_interface__(self) -> dict: ...
-
     @property
     def __cuda_array_interface__(self) -> dict: ...
-
     def to_host(self) -> object: ...
-
     @overload
     def contains(self, i: int, j: int, k: int) -> bool: ...
-
     @overload
     def contains(self, iv: IntVect1D) -> bool: ...
-
     @overload
     def contains(self, cell: Dim3) -> bool: ...
-
     @overload
     def __getitem__(self, arg: IntVect1D, /) -> int: ...
-
     @overload
     def __getitem__(self, arg: Sequence[int], /) -> int: ...
-
     @overload
     def __getitem__(self, arg: Sequence[int], /) -> int: ...
 
 class SmallMatrix_6x6_F_SI1_float:
     @overload
     def __init__(self) -> None: ...
-
     @overload
     def __init__(self, arg: SmallMatrix_6x6_F_SI1_float) -> None: ...
-
     @overload
     def __init__(self, arg: object, /) -> None: ...
-
     def __repr__(self) -> str: ...
-
     @property
     def size(self) -> int: ...
-
     @property
     def row_size(self) -> int: ...
-
     @property
     def column_size(self) -> int: ...
-
     @property
     def order(self) -> str: ...
-
     @property
     def starting_index(self) -> int: ...
-
     @staticmethod
     def zero() -> SmallMatrix_6x6_F_SI1_float: ...
-
     @property
     def __array_interface__(self) -> dict: ...
-
     @property
     def __cuda_array_interface__(self) -> dict: ...
-
     def dot(self, arg: SmallMatrix_6x6_F_SI1_float, /) -> float: ...
-
     def prod(self) -> float: ...
-
     def set_val(self, arg: float, /) -> SmallMatrix_6x6_F_SI1_float: ...
-
     def sum(self) -> float: ...
-
     @property
     def T(self) -> SmallMatrix_6x6_F_SI1_float: ...
-
-    def __add__(self, arg: SmallMatrix_6x6_F_SI1_float, /) -> SmallMatrix_6x6_F_SI1_float: ...
-
-    def __sub__(self, arg: SmallMatrix_6x6_F_SI1_float, /) -> SmallMatrix_6x6_F_SI1_float: ...
-
+    def __add__(
+        self, arg: SmallMatrix_6x6_F_SI1_float, /
+    ) -> SmallMatrix_6x6_F_SI1_float: ...
+    def __sub__(
+        self, arg: SmallMatrix_6x6_F_SI1_float, /
+    ) -> SmallMatrix_6x6_F_SI1_float: ...
     @overload
     def __mul__(self, arg: float, /) -> SmallMatrix_6x6_F_SI1_float: ...
-
     @overload
-    def __mul__(self, arg: SmallMatrix_6x6_F_SI1_float, /) -> SmallMatrix_6x6_F_SI1_float: ...
-
+    def __mul__(
+        self, arg: SmallMatrix_6x6_F_SI1_float, /
+    ) -> SmallMatrix_6x6_F_SI1_float: ...
     @overload
-    def __mul__(self, arg: SmallMatrix_6x1_F_SI1_float, /) -> SmallMatrix_6x1_F_SI1_float: ...
-
+    def __mul__(
+        self, arg: SmallMatrix_6x1_F_SI1_float, /
+    ) -> SmallMatrix_6x1_F_SI1_float: ...
     @overload
     def __rmul__(self, arg: float, /) -> SmallMatrix_6x6_F_SI1_float: ...
-
     @overload
-    def __rmul__(self, arg: SmallMatrix_1x6_F_SI1_float, /) -> SmallMatrix_1x6_F_SI1_float: ...
-
+    def __rmul__(
+        self, arg: SmallMatrix_1x6_F_SI1_float, /
+    ) -> SmallMatrix_1x6_F_SI1_float: ...
     def __neg__(self) -> SmallMatrix_6x6_F_SI1_float: ...
-
     def __getitem__(self, arg: Sequence[int], /) -> float: ...
-
     def __setitem__(self, arg0: Sequence[int], arg1: float, /) -> None: ...
-
     @staticmethod
     def identity() -> SmallMatrix_6x6_F_SI1_float: ...
-
     def trace(self) -> float: ...
-
     def transpose_in_place(self) -> SmallMatrix_6x6_F_SI1_float: ...
 
 class SmallMatrix_6x1_F_SI1_float:
     @overload
     def __init__(self) -> None: ...
-
     @overload
     def __init__(self, arg: SmallMatrix_6x1_F_SI1_float) -> None: ...
-
     @overload
     def __init__(self, arg: object, /) -> None: ...
-
     def __repr__(self) -> str: ...
-
     @property
     def size(self) -> int: ...
-
     @property
     def row_size(self) -> int: ...
-
     @property
     def column_size(self) -> int: ...
-
     @property
     def order(self) -> str: ...
-
     @property
     def starting_index(self) -> int: ...
-
     @staticmethod
     def zero() -> SmallMatrix_6x1_F_SI1_float: ...
-
     @property
     def __array_interface__(self) -> dict: ...
-
     @property
     def __cuda_array_interface__(self) -> dict: ...
-
     @overload
     def __getitem__(self, arg: int, /) -> float: ...
-
     @overload
     def __getitem__(self, arg: Sequence[int], /) -> float: ...
-
     @overload
     def __getitem__(self, arg: Sequence[int], /) -> float: ...
-
     @overload
     def __setitem__(self, arg0: int, arg1: float, /) -> None: ...
-
     @overload
     def __setitem__(self, arg0: Sequence[int], arg1: float, /) -> None: ...
-
     @overload
     def __setitem__(self, arg0: Sequence[int], arg1: float, /) -> None: ...
-
     @overload
     def dot(self, arg: SmallMatrix_6x1_F_SI1_float, /) -> float: ...
-
     @overload
     def dot(self, arg: SmallMatrix_6x1_F_SI1_float, /) -> float: ...
-
     @overload
     def prod(self) -> float: ...
-
     @overload
     def prod(self) -> float: ...
-
     @overload
     def set_val(self, arg: float, /) -> SmallMatrix_6x1_F_SI1_float: ...
-
     @overload
     def set_val(self, arg: float, /) -> SmallMatrix_6x1_F_SI1_float: ...
-
     @overload
     def sum(self) -> float: ...
-
     @overload
     def sum(self) -> float: ...
-
     @property
     def T(self) -> SmallMatrix_1x6_F_SI1_float: ...
-
     @overload
-    def __add__(self, arg: SmallMatrix_6x1_F_SI1_float, /) -> SmallMatrix_6x1_F_SI1_float: ...
-
+    def __add__(
+        self, arg: SmallMatrix_6x1_F_SI1_float, /
+    ) -> SmallMatrix_6x1_F_SI1_float: ...
     @overload
-    def __add__(self, arg: SmallMatrix_6x1_F_SI1_float, /) -> SmallMatrix_6x1_F_SI1_float: ...
-
+    def __add__(
+        self, arg: SmallMatrix_6x1_F_SI1_float, /
+    ) -> SmallMatrix_6x1_F_SI1_float: ...
     @overload
-    def __sub__(self, arg: SmallMatrix_6x1_F_SI1_float, /) -> SmallMatrix_6x1_F_SI1_float: ...
-
+    def __sub__(
+        self, arg: SmallMatrix_6x1_F_SI1_float, /
+    ) -> SmallMatrix_6x1_F_SI1_float: ...
     @overload
-    def __sub__(self, arg: SmallMatrix_6x1_F_SI1_float, /) -> SmallMatrix_6x1_F_SI1_float: ...
-
+    def __sub__(
+        self, arg: SmallMatrix_6x1_F_SI1_float, /
+    ) -> SmallMatrix_6x1_F_SI1_float: ...
     @overload
     def __mul__(self, arg: float, /) -> SmallMatrix_6x1_F_SI1_float: ...
-
     @overload
     def __mul__(self, arg: float, /) -> SmallMatrix_6x1_F_SI1_float: ...
-
     @overload
     def __rmul__(self, arg: float, /) -> SmallMatrix_6x1_F_SI1_float: ...
-
     @overload
     def __rmul__(self, arg: float, /) -> SmallMatrix_6x1_F_SI1_float: ...
-
     @overload
     def __neg__(self) -> SmallMatrix_6x1_F_SI1_float: ...
-
     @overload
     def __neg__(self) -> SmallMatrix_6x1_F_SI1_float: ...
 
 class SmallMatrix_1x6_F_SI1_float:
     @overload
     def __init__(self) -> None: ...
-
     @overload
     def __init__(self, arg: SmallMatrix_1x6_F_SI1_float) -> None: ...
-
     @overload
     def __init__(self, arg: object, /) -> None: ...
-
     def __repr__(self) -> str: ...
-
     @property
     def size(self) -> int: ...
-
     @property
     def row_size(self) -> int: ...
-
     @property
     def column_size(self) -> int: ...
-
     @property
     def order(self) -> str: ...
-
     @property
     def starting_index(self) -> int: ...
-
     @staticmethod
     def zero() -> SmallMatrix_1x6_F_SI1_float: ...
-
     @property
     def __array_interface__(self) -> dict: ...
-
     @property
     def __cuda_array_interface__(self) -> dict: ...
-
     @overload
     def __getitem__(self, arg: int, /) -> float: ...
-
     @overload
     def __getitem__(self, arg: Sequence[int], /) -> float: ...
-
     @overload
     def __getitem__(self, arg: Sequence[int], /) -> float: ...
-
     @overload
     def __setitem__(self, arg0: int, arg1: float, /) -> None: ...
-
     @overload
     def __setitem__(self, arg0: Sequence[int], arg1: float, /) -> None: ...
-
     @overload
     def __setitem__(self, arg0: Sequence[int], arg1: float, /) -> None: ...
-
     @overload
     def dot(self, arg: SmallMatrix_1x6_F_SI1_float, /) -> float: ...
-
     @overload
     def dot(self, arg: SmallMatrix_1x6_F_SI1_float, /) -> float: ...
-
     @overload
     def prod(self) -> float: ...
-
     @overload
     def prod(self) -> float: ...
-
     @overload
     def set_val(self, arg: float, /) -> SmallMatrix_1x6_F_SI1_float: ...
-
     @overload
     def set_val(self, arg: float, /) -> SmallMatrix_1x6_F_SI1_float: ...
-
     @overload
     def sum(self) -> float: ...
-
     @overload
     def sum(self) -> float: ...
-
     @property
     def T(self) -> SmallMatrix_6x1_F_SI1_float: ...
-
     @overload
-    def __add__(self, arg: SmallMatrix_1x6_F_SI1_float, /) -> SmallMatrix_1x6_F_SI1_float: ...
-
+    def __add__(
+        self, arg: SmallMatrix_1x6_F_SI1_float, /
+    ) -> SmallMatrix_1x6_F_SI1_float: ...
     @overload
-    def __add__(self, arg: SmallMatrix_1x6_F_SI1_float, /) -> SmallMatrix_1x6_F_SI1_float: ...
-
+    def __add__(
+        self, arg: SmallMatrix_1x6_F_SI1_float, /
+    ) -> SmallMatrix_1x6_F_SI1_float: ...
     @overload
-    def __sub__(self, arg: SmallMatrix_1x6_F_SI1_float, /) -> SmallMatrix_1x6_F_SI1_float: ...
-
+    def __sub__(
+        self, arg: SmallMatrix_1x6_F_SI1_float, /
+    ) -> SmallMatrix_1x6_F_SI1_float: ...
     @overload
-    def __sub__(self, arg: SmallMatrix_1x6_F_SI1_float, /) -> SmallMatrix_1x6_F_SI1_float: ...
-
+    def __sub__(
+        self, arg: SmallMatrix_1x6_F_SI1_float, /
+    ) -> SmallMatrix_1x6_F_SI1_float: ...
     @overload
     def __mul__(self, arg: float, /) -> SmallMatrix_1x6_F_SI1_float: ...
-
     @overload
     def __mul__(self, arg: float, /) -> SmallMatrix_1x6_F_SI1_float: ...
-
     @overload
     def __rmul__(self, arg: float, /) -> SmallMatrix_1x6_F_SI1_float: ...
-
     @overload
     def __rmul__(self, arg: float, /) -> SmallMatrix_1x6_F_SI1_float: ...
-
     @overload
     def __neg__(self) -> SmallMatrix_1x6_F_SI1_float: ...
-
     @overload
     def __neg__(self) -> SmallMatrix_1x6_F_SI1_float: ...
 
 class SmallMatrix_6x6_F_SI1_double:
     @overload
     def __init__(self) -> None: ...
-
     @overload
     def __init__(self, arg: SmallMatrix_6x6_F_SI1_double) -> None: ...
-
     @overload
     def __init__(self, arg: object, /) -> None: ...
-
     def __repr__(self) -> str: ...
-
     @property
     def size(self) -> int: ...
-
     @property
     def row_size(self) -> int: ...
-
     @property
     def column_size(self) -> int: ...
-
     @property
     def order(self) -> str: ...
-
     @property
     def starting_index(self) -> int: ...
-
     @staticmethod
     def zero() -> SmallMatrix_6x6_F_SI1_double: ...
-
     @property
     def __array_interface__(self) -> dict: ...
-
     @property
     def __cuda_array_interface__(self) -> dict: ...
-
     def dot(self, arg: SmallMatrix_6x6_F_SI1_double, /) -> float: ...
-
     def prod(self) -> float: ...
-
     def set_val(self, arg: float, /) -> SmallMatrix_6x6_F_SI1_double: ...
-
     def sum(self) -> float: ...
-
     @property
     def T(self) -> SmallMatrix_6x6_F_SI1_double: ...
-
-    def __add__(self, arg: SmallMatrix_6x6_F_SI1_double, /) -> SmallMatrix_6x6_F_SI1_double: ...
-
-    def __sub__(self, arg: SmallMatrix_6x6_F_SI1_double, /) -> SmallMatrix_6x6_F_SI1_double: ...
-
+    def __add__(
+        self, arg: SmallMatrix_6x6_F_SI1_double, /
+    ) -> SmallMatrix_6x6_F_SI1_double: ...
+    def __sub__(
+        self, arg: SmallMatrix_6x6_F_SI1_double, /
+    ) -> SmallMatrix_6x6_F_SI1_double: ...
     @overload
     def __mul__(self, arg: float, /) -> SmallMatrix_6x6_F_SI1_double: ...
-
     @overload
-    def __mul__(self, arg: SmallMatrix_6x6_F_SI1_double, /) -> SmallMatrix_6x6_F_SI1_double: ...
-
+    def __mul__(
+        self, arg: SmallMatrix_6x6_F_SI1_double, /
+    ) -> SmallMatrix_6x6_F_SI1_double: ...
     @overload
-    def __mul__(self, arg: SmallMatrix_6x1_F_SI1_double, /) -> SmallMatrix_6x1_F_SI1_double: ...
-
+    def __mul__(
+        self, arg: SmallMatrix_6x1_F_SI1_double, /
+    ) -> SmallMatrix_6x1_F_SI1_double: ...
     @overload
     def __rmul__(self, arg: float, /) -> SmallMatrix_6x6_F_SI1_double: ...
-
     @overload
-    def __rmul__(self, arg: SmallMatrix_1x6_F_SI1_double, /) -> SmallMatrix_1x6_F_SI1_double: ...
-
+    def __rmul__(
+        self, arg: SmallMatrix_1x6_F_SI1_double, /
+    ) -> SmallMatrix_1x6_F_SI1_double: ...
     def __neg__(self) -> SmallMatrix_6x6_F_SI1_double: ...
-
     def __getitem__(self, arg: Sequence[int], /) -> float: ...
-
     def __setitem__(self, arg0: Sequence[int], arg1: float, /) -> None: ...
-
     @staticmethod
     def identity() -> SmallMatrix_6x6_F_SI1_double: ...
-
     def trace(self) -> float: ...
-
     def transpose_in_place(self) -> SmallMatrix_6x6_F_SI1_double: ...
 
 class SmallMatrix_6x1_F_SI1_double:
     @overload
     def __init__(self) -> None: ...
-
     @overload
     def __init__(self, arg: SmallMatrix_6x1_F_SI1_double) -> None: ...
-
     @overload
     def __init__(self, arg: object, /) -> None: ...
-
     def __repr__(self) -> str: ...
-
     @property
     def size(self) -> int: ...
-
     @property
     def row_size(self) -> int: ...
-
     @property
     def column_size(self) -> int: ...
-
     @property
     def order(self) -> str: ...
-
     @property
     def starting_index(self) -> int: ...
-
     @staticmethod
     def zero() -> SmallMatrix_6x1_F_SI1_double: ...
-
     @property
     def __array_interface__(self) -> dict: ...
-
     @property
     def __cuda_array_interface__(self) -> dict: ...
-
     @overload
     def __getitem__(self, arg: int, /) -> float: ...
-
     @overload
     def __getitem__(self, arg: Sequence[int], /) -> float: ...
-
     @overload
     def __getitem__(self, arg: Sequence[int], /) -> float: ...
-
     @overload
     def __setitem__(self, arg0: int, arg1: float, /) -> None: ...
-
     @overload
     def __setitem__(self, arg0: Sequence[int], arg1: float, /) -> None: ...
-
     @overload
     def __setitem__(self, arg0: Sequence[int], arg1: float, /) -> None: ...
-
     @overload
     def dot(self, arg: SmallMatrix_6x1_F_SI1_double, /) -> float: ...
-
     @overload
     def dot(self, arg: SmallMatrix_6x1_F_SI1_double, /) -> float: ...
-
     @overload
     def prod(self) -> float: ...
-
     @overload
     def prod(self) -> float: ...
-
     @overload
     def set_val(self, arg: float, /) -> SmallMatrix_6x1_F_SI1_double: ...
-
     @overload
     def set_val(self, arg: float, /) -> SmallMatrix_6x1_F_SI1_double: ...
-
     @overload
     def sum(self) -> float: ...
-
     @overload
     def sum(self) -> float: ...
-
     @property
     def T(self) -> SmallMatrix_1x6_F_SI1_double: ...
-
     @overload
-    def __add__(self, arg: SmallMatrix_6x1_F_SI1_double, /) -> SmallMatrix_6x1_F_SI1_double: ...
-
+    def __add__(
+        self, arg: SmallMatrix_6x1_F_SI1_double, /
+    ) -> SmallMatrix_6x1_F_SI1_double: ...
     @overload
-    def __add__(self, arg: SmallMatrix_6x1_F_SI1_double, /) -> SmallMatrix_6x1_F_SI1_double: ...
-
+    def __add__(
+        self, arg: SmallMatrix_6x1_F_SI1_double, /
+    ) -> SmallMatrix_6x1_F_SI1_double: ...
     @overload
-    def __sub__(self, arg: SmallMatrix_6x1_F_SI1_double, /) -> SmallMatrix_6x1_F_SI1_double: ...
-
+    def __sub__(
+        self, arg: SmallMatrix_6x1_F_SI1_double, /
+    ) -> SmallMatrix_6x1_F_SI1_double: ...
     @overload
-    def __sub__(self, arg: SmallMatrix_6x1_F_SI1_double, /) -> SmallMatrix_6x1_F_SI1_double: ...
-
+    def __sub__(
+        self, arg: SmallMatrix_6x1_F_SI1_double, /
+    ) -> SmallMatrix_6x1_F_SI1_double: ...
     @overload
     def __mul__(self, arg: float, /) -> SmallMatrix_6x1_F_SI1_double: ...
-
     @overload
     def __mul__(self, arg: float, /) -> SmallMatrix_6x1_F_SI1_double: ...
-
     @overload
     def __rmul__(self, arg: float, /) -> SmallMatrix_6x1_F_SI1_double: ...
-
     @overload
     def __rmul__(self, arg: float, /) -> SmallMatrix_6x1_F_SI1_double: ...
-
     @overload
     def __neg__(self) -> SmallMatrix_6x1_F_SI1_double: ...
-
     @overload
     def __neg__(self) -> SmallMatrix_6x1_F_SI1_double: ...
 
 class SmallMatrix_1x6_F_SI1_double:
     @overload
     def __init__(self) -> None: ...
-
     @overload
     def __init__(self, arg: SmallMatrix_1x6_F_SI1_double) -> None: ...
-
     @overload
     def __init__(self, arg: object, /) -> None: ...
-
     def __repr__(self) -> str: ...
-
     @property
     def size(self) -> int: ...
-
     @property
     def row_size(self) -> int: ...
-
     @property
     def column_size(self) -> int: ...
-
     @property
     def order(self) -> str: ...
-
     @property
     def starting_index(self) -> int: ...
-
     @staticmethod
     def zero() -> SmallMatrix_1x6_F_SI1_double: ...
-
     @property
     def __array_interface__(self) -> dict: ...
-
     @property
     def __cuda_array_interface__(self) -> dict: ...
-
     @overload
     def __getitem__(self, arg: int, /) -> float: ...
-
     @overload
     def __getitem__(self, arg: Sequence[int], /) -> float: ...
-
     @overload
     def __getitem__(self, arg: Sequence[int], /) -> float: ...
-
     @overload
     def __setitem__(self, arg0: int, arg1: float, /) -> None: ...
-
     @overload
     def __setitem__(self, arg0: Sequence[int], arg1: float, /) -> None: ...
-
     @overload
     def __setitem__(self, arg0: Sequence[int], arg1: float, /) -> None: ...
-
     @overload
     def dot(self, arg: SmallMatrix_1x6_F_SI1_double, /) -> float: ...
-
     @overload
     def dot(self, arg: SmallMatrix_1x6_F_SI1_double, /) -> float: ...
-
     @overload
     def prod(self) -> float: ...
-
     @overload
     def prod(self) -> float: ...
-
     @overload
     def set_val(self, arg: float, /) -> SmallMatrix_1x6_F_SI1_double: ...
-
     @overload
     def set_val(self, arg: float, /) -> SmallMatrix_1x6_F_SI1_double: ...
-
     @overload
     def sum(self) -> float: ...
-
     @overload
     def sum(self) -> float: ...
-
     @property
     def T(self) -> SmallMatrix_6x1_F_SI1_double: ...
-
     @overload
-    def __add__(self, arg: SmallMatrix_1x6_F_SI1_double, /) -> SmallMatrix_1x6_F_SI1_double: ...
-
+    def __add__(
+        self, arg: SmallMatrix_1x6_F_SI1_double, /
+    ) -> SmallMatrix_1x6_F_SI1_double: ...
     @overload
-    def __add__(self, arg: SmallMatrix_1x6_F_SI1_double, /) -> SmallMatrix_1x6_F_SI1_double: ...
-
+    def __add__(
+        self, arg: SmallMatrix_1x6_F_SI1_double, /
+    ) -> SmallMatrix_1x6_F_SI1_double: ...
     @overload
-    def __sub__(self, arg: SmallMatrix_1x6_F_SI1_double, /) -> SmallMatrix_1x6_F_SI1_double: ...
-
+    def __sub__(
+        self, arg: SmallMatrix_1x6_F_SI1_double, /
+    ) -> SmallMatrix_1x6_F_SI1_double: ...
     @overload
-    def __sub__(self, arg: SmallMatrix_1x6_F_SI1_double, /) -> SmallMatrix_1x6_F_SI1_double: ...
-
+    def __sub__(
+        self, arg: SmallMatrix_1x6_F_SI1_double, /
+    ) -> SmallMatrix_1x6_F_SI1_double: ...
     @overload
     def __mul__(self, arg: float, /) -> SmallMatrix_1x6_F_SI1_double: ...
-
     @overload
     def __mul__(self, arg: float, /) -> SmallMatrix_1x6_F_SI1_double: ...
-
     @overload
     def __rmul__(self, arg: float, /) -> SmallMatrix_1x6_F_SI1_double: ...
-
     @overload
     def __rmul__(self, arg: float, /) -> SmallMatrix_1x6_F_SI1_double: ...
-
     @overload
     def __neg__(self) -> SmallMatrix_1x6_F_SI1_double: ...
-
     @overload
     def __neg__(self) -> SmallMatrix_1x6_F_SI1_double: ...
 
 class SmallMatrix_6x6_F_SI1_longdouble:
     @overload
     def __init__(self) -> None: ...
-
     @overload
     def __init__(self, arg: SmallMatrix_6x6_F_SI1_longdouble) -> None: ...
-
     @overload
     def __init__(self, arg: object, /) -> None: ...
-
     def __repr__(self) -> str: ...
-
     @property
     def size(self) -> int: ...
-
     @property
     def row_size(self) -> int: ...
-
     @property
     def column_size(self) -> int: ...
-
     @property
     def order(self) -> str: ...
-
     @property
     def starting_index(self) -> int: ...
-
     @staticmethod
     def zero() -> SmallMatrix_6x6_F_SI1_longdouble: ...
-
     @property
     def __array_interface__(self) -> dict: ...
-
     @property
     def __cuda_array_interface__(self) -> dict: ...
-
     def dot(self, arg: SmallMatrix_6x6_F_SI1_longdouble, /) -> float: ...
-
     def prod(self) -> float: ...
-
     def set_val(self, arg: float, /) -> SmallMatrix_6x6_F_SI1_longdouble: ...
-
     def sum(self) -> float: ...
-
     @property
     def T(self) -> SmallMatrix_6x6_F_SI1_longdouble: ...
-
-    def __add__(self, arg: SmallMatrix_6x6_F_SI1_longdouble, /) -> SmallMatrix_6x6_F_SI1_longdouble: ...
-
-    def __sub__(self, arg: SmallMatrix_6x6_F_SI1_longdouble, /) -> SmallMatrix_6x6_F_SI1_longdouble: ...
-
+    def __add__(
+        self, arg: SmallMatrix_6x6_F_SI1_longdouble, /
+    ) -> SmallMatrix_6x6_F_SI1_longdouble: ...
+    def __sub__(
+        self, arg: SmallMatrix_6x6_F_SI1_longdouble, /
+    ) -> SmallMatrix_6x6_F_SI1_longdouble: ...
     @overload
     def __mul__(self, arg: float, /) -> SmallMatrix_6x6_F_SI1_longdouble: ...
-
     @overload
-    def __mul__(self, arg: SmallMatrix_6x6_F_SI1_longdouble, /) -> SmallMatrix_6x6_F_SI1_longdouble: ...
-
+    def __mul__(
+        self, arg: SmallMatrix_6x6_F_SI1_longdouble, /
+    ) -> SmallMatrix_6x6_F_SI1_longdouble: ...
     @overload
-    def __mul__(self, arg: SmallMatrix_6x1_F_SI1_longdouble, /) -> SmallMatrix_6x1_F_SI1_longdouble: ...
-
+    def __mul__(
+        self, arg: SmallMatrix_6x1_F_SI1_longdouble, /
+    ) -> SmallMatrix_6x1_F_SI1_longdouble: ...
     @overload
     def __rmul__(self, arg: float, /) -> SmallMatrix_6x6_F_SI1_longdouble: ...
-
     @overload
-    def __rmul__(self, arg: SmallMatrix_1x6_F_SI1_longdouble, /) -> SmallMatrix_1x6_F_SI1_longdouble: ...
-
+    def __rmul__(
+        self, arg: SmallMatrix_1x6_F_SI1_longdouble, /
+    ) -> SmallMatrix_1x6_F_SI1_longdouble: ...
     def __neg__(self) -> SmallMatrix_6x6_F_SI1_longdouble: ...
-
     def __getitem__(self, arg: Sequence[int], /) -> float: ...
-
     def __setitem__(self, arg0: Sequence[int], arg1: float, /) -> None: ...
-
     @staticmethod
     def identity() -> SmallMatrix_6x6_F_SI1_longdouble: ...
-
     def trace(self) -> float: ...
-
     def transpose_in_place(self) -> SmallMatrix_6x6_F_SI1_longdouble: ...
 
 class SmallMatrix_6x1_F_SI1_longdouble:
     @overload
     def __init__(self) -> None: ...
-
     @overload
     def __init__(self, arg: SmallMatrix_6x1_F_SI1_longdouble) -> None: ...
-
     @overload
     def __init__(self, arg: object, /) -> None: ...
-
     def __repr__(self) -> str: ...
-
     @property
     def size(self) -> int: ...
-
     @property
     def row_size(self) -> int: ...
-
     @property
     def column_size(self) -> int: ...
-
     @property
     def order(self) -> str: ...
-
     @property
     def starting_index(self) -> int: ...
-
     @staticmethod
     def zero() -> SmallMatrix_6x1_F_SI1_longdouble: ...
-
     @property
     def __array_interface__(self) -> dict: ...
-
     @property
     def __cuda_array_interface__(self) -> dict: ...
-
     @overload
     def __getitem__(self, arg: int, /) -> float: ...
-
     @overload
     def __getitem__(self, arg: Sequence[int], /) -> float: ...
-
     @overload
     def __getitem__(self, arg: Sequence[int], /) -> float: ...
-
     @overload
     def __setitem__(self, arg0: int, arg1: float, /) -> None: ...
-
     @overload
     def __setitem__(self, arg0: Sequence[int], arg1: float, /) -> None: ...
-
     @overload
     def __setitem__(self, arg0: Sequence[int], arg1: float, /) -> None: ...
-
     @overload
     def dot(self, arg: SmallMatrix_6x1_F_SI1_longdouble, /) -> float: ...
-
     @overload
     def dot(self, arg: SmallMatrix_6x1_F_SI1_longdouble, /) -> float: ...
-
     @overload
     def prod(self) -> float: ...
-
     @overload
     def prod(self) -> float: ...
-
     @overload
     def set_val(self, arg: float, /) -> SmallMatrix_6x1_F_SI1_longdouble: ...
-
     @overload
     def set_val(self, arg: float, /) -> SmallMatrix_6x1_F_SI1_longdouble: ...
-
     @overload
     def sum(self) -> float: ...
-
     @overload
     def sum(self) -> float: ...
-
     @property
     def T(self) -> SmallMatrix_1x6_F_SI1_longdouble: ...
-
     @overload
-    def __add__(self, arg: SmallMatrix_6x1_F_SI1_longdouble, /) -> SmallMatrix_6x1_F_SI1_longdouble: ...
-
+    def __add__(
+        self, arg: SmallMatrix_6x1_F_SI1_longdouble, /
+    ) -> SmallMatrix_6x1_F_SI1_longdouble: ...
     @overload
-    def __add__(self, arg: SmallMatrix_6x1_F_SI1_longdouble, /) -> SmallMatrix_6x1_F_SI1_longdouble: ...
-
+    def __add__(
+        self, arg: SmallMatrix_6x1_F_SI1_longdouble, /
+    ) -> SmallMatrix_6x1_F_SI1_longdouble: ...
     @overload
-    def __sub__(self, arg: SmallMatrix_6x1_F_SI1_longdouble, /) -> SmallMatrix_6x1_F_SI1_longdouble: ...
-
+    def __sub__(
+        self, arg: SmallMatrix_6x1_F_SI1_longdouble, /
+    ) -> SmallMatrix_6x1_F_SI1_longdouble: ...
     @overload
-    def __sub__(self, arg: SmallMatrix_6x1_F_SI1_longdouble, /) -> SmallMatrix_6x1_F_SI1_longdouble: ...
-
+    def __sub__(
+        self, arg: SmallMatrix_6x1_F_SI1_longdouble, /
+    ) -> SmallMatrix_6x1_F_SI1_longdouble: ...
     @overload
     def __mul__(self, arg: float, /) -> SmallMatrix_6x1_F_SI1_longdouble: ...
-
     @overload
     def __mul__(self, arg: float, /) -> SmallMatrix_6x1_F_SI1_longdouble: ...
-
     @overload
     def __rmul__(self, arg: float, /) -> SmallMatrix_6x1_F_SI1_longdouble: ...
-
     @overload
     def __rmul__(self, arg: float, /) -> SmallMatrix_6x1_F_SI1_longdouble: ...
-
     @overload
     def __neg__(self) -> SmallMatrix_6x1_F_SI1_longdouble: ...
-
     @overload
     def __neg__(self) -> SmallMatrix_6x1_F_SI1_longdouble: ...
 
 class SmallMatrix_1x6_F_SI1_longdouble:
     @overload
     def __init__(self) -> None: ...
-
     @overload
     def __init__(self, arg: SmallMatrix_1x6_F_SI1_longdouble) -> None: ...
-
     @overload
     def __init__(self, arg: object, /) -> None: ...
-
     def __repr__(self) -> str: ...
-
     @property
     def size(self) -> int: ...
-
     @property
     def row_size(self) -> int: ...
-
     @property
     def column_size(self) -> int: ...
-
     @property
     def order(self) -> str: ...
-
     @property
     def starting_index(self) -> int: ...
-
     @staticmethod
     def zero() -> SmallMatrix_1x6_F_SI1_longdouble: ...
-
     @property
     def __array_interface__(self) -> dict: ...
-
     @property
     def __cuda_array_interface__(self) -> dict: ...
-
     @overload
     def __getitem__(self, arg: int, /) -> float: ...
-
     @overload
     def __getitem__(self, arg: Sequence[int], /) -> float: ...
-
     @overload
     def __getitem__(self, arg: Sequence[int], /) -> float: ...
-
     @overload
     def __setitem__(self, arg0: int, arg1: float, /) -> None: ...
-
     @overload
     def __setitem__(self, arg0: Sequence[int], arg1: float, /) -> None: ...
-
     @overload
     def __setitem__(self, arg0: Sequence[int], arg1: float, /) -> None: ...
-
     @overload
     def dot(self, arg: SmallMatrix_1x6_F_SI1_longdouble, /) -> float: ...
-
     @overload
     def dot(self, arg: SmallMatrix_1x6_F_SI1_longdouble, /) -> float: ...
-
     @overload
     def prod(self) -> float: ...
-
     @overload
     def prod(self) -> float: ...
-
     @overload
     def set_val(self, arg: float, /) -> SmallMatrix_1x6_F_SI1_longdouble: ...
-
     @overload
     def set_val(self, arg: float, /) -> SmallMatrix_1x6_F_SI1_longdouble: ...
-
     @overload
     def sum(self) -> float: ...
-
     @overload
     def sum(self) -> float: ...
-
     @property
     def T(self) -> SmallMatrix_6x1_F_SI1_longdouble: ...
-
     @overload
-    def __add__(self, arg: SmallMatrix_1x6_F_SI1_longdouble, /) -> SmallMatrix_1x6_F_SI1_longdouble: ...
-
+    def __add__(
+        self, arg: SmallMatrix_1x6_F_SI1_longdouble, /
+    ) -> SmallMatrix_1x6_F_SI1_longdouble: ...
     @overload
-    def __add__(self, arg: SmallMatrix_1x6_F_SI1_longdouble, /) -> SmallMatrix_1x6_F_SI1_longdouble: ...
-
+    def __add__(
+        self, arg: SmallMatrix_1x6_F_SI1_longdouble, /
+    ) -> SmallMatrix_1x6_F_SI1_longdouble: ...
     @overload
-    def __sub__(self, arg: SmallMatrix_1x6_F_SI1_longdouble, /) -> SmallMatrix_1x6_F_SI1_longdouble: ...
-
+    def __sub__(
+        self, arg: SmallMatrix_1x6_F_SI1_longdouble, /
+    ) -> SmallMatrix_1x6_F_SI1_longdouble: ...
     @overload
-    def __sub__(self, arg: SmallMatrix_1x6_F_SI1_longdouble, /) -> SmallMatrix_1x6_F_SI1_longdouble: ...
-
+    def __sub__(
+        self, arg: SmallMatrix_1x6_F_SI1_longdouble, /
+    ) -> SmallMatrix_1x6_F_SI1_longdouble: ...
     @overload
     def __mul__(self, arg: float, /) -> SmallMatrix_1x6_F_SI1_longdouble: ...
-
     @overload
     def __mul__(self, arg: float, /) -> SmallMatrix_1x6_F_SI1_longdouble: ...
-
     @overload
     def __rmul__(self, arg: float, /) -> SmallMatrix_1x6_F_SI1_longdouble: ...
-
     @overload
     def __rmul__(self, arg: float, /) -> SmallMatrix_1x6_F_SI1_longdouble: ...
-
     @overload
     def __neg__(self) -> SmallMatrix_1x6_F_SI1_longdouble: ...
-
     @overload
     def __neg__(self) -> SmallMatrix_1x6_F_SI1_longdouble: ...
 
 class SmallMatrix_3x6_F_SI1_float:
     @overload
     def __init__(self) -> None: ...
-
     @overload
     def __init__(self, arg: SmallMatrix_3x6_F_SI1_float) -> None: ...
-
     @overload
     def __init__(self, arg: object, /) -> None: ...
-
     def __repr__(self) -> str: ...
-
     @property
     def size(self) -> int: ...
-
     @property
     def row_size(self) -> int: ...
-
     @property
     def column_size(self) -> int: ...
-
     @property
     def order(self) -> str: ...
-
     @property
     def starting_index(self) -> int: ...
-
     @staticmethod
     def zero() -> SmallMatrix_3x6_F_SI1_float: ...
-
     @property
     def __array_interface__(self) -> dict: ...
-
     @property
     def __cuda_array_interface__(self) -> dict: ...
-
     def dot(self, arg: SmallMatrix_3x6_F_SI1_float, /) -> float: ...
-
     def prod(self) -> float: ...
-
     def set_val(self, arg: float, /) -> SmallMatrix_3x6_F_SI1_float: ...
-
     def sum(self) -> float: ...
-
     @property
     def T(self) -> SmallMatrix_6x3_F_SI1_float: ...
-
-    def __add__(self, arg: SmallMatrix_3x6_F_SI1_float, /) -> SmallMatrix_3x6_F_SI1_float: ...
-
-    def __sub__(self, arg: SmallMatrix_3x6_F_SI1_float, /) -> SmallMatrix_3x6_F_SI1_float: ...
-
+    def __add__(
+        self, arg: SmallMatrix_3x6_F_SI1_float, /
+    ) -> SmallMatrix_3x6_F_SI1_float: ...
+    def __sub__(
+        self, arg: SmallMatrix_3x6_F_SI1_float, /
+    ) -> SmallMatrix_3x6_F_SI1_float: ...
     @overload
     def __mul__(self, arg: float, /) -> SmallMatrix_3x6_F_SI1_float: ...
-
     @overload
-    def __mul__(self, arg: SmallMatrix_6x1_F_SI1_float, /) -> SmallMatrix_3x1_F_SI1_float: ...
-
+    def __mul__(
+        self, arg: SmallMatrix_6x1_F_SI1_float, /
+    ) -> SmallMatrix_3x1_F_SI1_float: ...
     @overload
     def __rmul__(self, arg: float, /) -> SmallMatrix_3x6_F_SI1_float: ...
-
     @overload
-    def __rmul__(self, arg: SmallMatrix_1x3_F_SI1_float, /) -> SmallMatrix_1x6_F_SI1_float: ...
-
+    def __rmul__(
+        self, arg: SmallMatrix_1x3_F_SI1_float, /
+    ) -> SmallMatrix_1x6_F_SI1_float: ...
     def __neg__(self) -> SmallMatrix_3x6_F_SI1_float: ...
-
     def __getitem__(self, arg: Sequence[int], /) -> float: ...
-
     def __setitem__(self, arg0: Sequence[int], arg1: float, /) -> None: ...
 
 class SmallMatrix_1x3_F_SI1_float:
     @overload
     def __init__(self) -> None: ...
-
     @overload
     def __init__(self, arg: SmallMatrix_1x3_F_SI1_float) -> None: ...
-
     @overload
     def __init__(self, arg: object, /) -> None: ...
-
     def __repr__(self) -> str: ...
-
     @property
     def size(self) -> int: ...
-
     @property
     def row_size(self) -> int: ...
-
     @property
     def column_size(self) -> int: ...
-
     @property
     def order(self) -> str: ...
-
     @property
     def starting_index(self) -> int: ...
-
     @staticmethod
     def zero() -> SmallMatrix_1x3_F_SI1_float: ...
-
     @property
     def __array_interface__(self) -> dict: ...
-
     @property
     def __cuda_array_interface__(self) -> dict: ...
-
     @overload
     def __getitem__(self, arg: int, /) -> float: ...
-
     @overload
     def __getitem__(self, arg: Sequence[int], /) -> float: ...
-
     @overload
     def __setitem__(self, arg0: int, arg1: float, /) -> None: ...
-
     @overload
     def __setitem__(self, arg0: Sequence[int], arg1: float, /) -> None: ...
-
     def dot(self, arg: SmallMatrix_1x3_F_SI1_float, /) -> float: ...
-
     def prod(self) -> float: ...
-
     def set_val(self, arg: float, /) -> SmallMatrix_1x3_F_SI1_float: ...
-
     def sum(self) -> float: ...
-
     @property
     def T(self) -> SmallMatrix_3x1_F_SI1_float: ...
-
-    def __add__(self, arg: SmallMatrix_1x3_F_SI1_float, /) -> SmallMatrix_1x3_F_SI1_float: ...
-
-    def __sub__(self, arg: SmallMatrix_1x3_F_SI1_float, /) -> SmallMatrix_1x3_F_SI1_float: ...
-
+    def __add__(
+        self, arg: SmallMatrix_1x3_F_SI1_float, /
+    ) -> SmallMatrix_1x3_F_SI1_float: ...
+    def __sub__(
+        self, arg: SmallMatrix_1x3_F_SI1_float, /
+    ) -> SmallMatrix_1x3_F_SI1_float: ...
     def __mul__(self, arg: float, /) -> SmallMatrix_1x3_F_SI1_float: ...
-
     def __rmul__(self, arg: float, /) -> SmallMatrix_1x3_F_SI1_float: ...
-
     def __neg__(self) -> SmallMatrix_1x3_F_SI1_float: ...
 
 class SmallMatrix_6x3_F_SI1_float:
     @overload
     def __init__(self) -> None: ...
-
     @overload
     def __init__(self, arg: SmallMatrix_6x3_F_SI1_float) -> None: ...
-
     @overload
     def __init__(self, arg: object, /) -> None: ...
-
     def __repr__(self) -> str: ...
-
     @property
     def size(self) -> int: ...
-
     @property
     def row_size(self) -> int: ...
-
     @property
     def column_size(self) -> int: ...
-
     @property
     def order(self) -> str: ...
-
     @property
     def starting_index(self) -> int: ...
-
     @staticmethod
     def zero() -> SmallMatrix_6x3_F_SI1_float: ...
-
     @property
     def __array_interface__(self) -> dict: ...
-
     @property
     def __cuda_array_interface__(self) -> dict: ...
-
     def dot(self, arg: SmallMatrix_6x3_F_SI1_float, /) -> float: ...
-
     def prod(self) -> float: ...
-
     def set_val(self, arg: float, /) -> SmallMatrix_6x3_F_SI1_float: ...
-
     def sum(self) -> float: ...
-
     @property
     def T(self) -> SmallMatrix_3x6_F_SI1_float: ...
-
-    def __add__(self, arg: SmallMatrix_6x3_F_SI1_float, /) -> SmallMatrix_6x3_F_SI1_float: ...
-
-    def __sub__(self, arg: SmallMatrix_6x3_F_SI1_float, /) -> SmallMatrix_6x3_F_SI1_float: ...
-
+    def __add__(
+        self, arg: SmallMatrix_6x3_F_SI1_float, /
+    ) -> SmallMatrix_6x3_F_SI1_float: ...
+    def __sub__(
+        self, arg: SmallMatrix_6x3_F_SI1_float, /
+    ) -> SmallMatrix_6x3_F_SI1_float: ...
     def __mul__(self, arg: float, /) -> SmallMatrix_6x3_F_SI1_float: ...
-
     def __rmul__(self, arg: float, /) -> SmallMatrix_6x3_F_SI1_float: ...
-
     def __neg__(self) -> SmallMatrix_6x3_F_SI1_float: ...
-
     def __getitem__(self, arg: Sequence[int], /) -> float: ...
-
     def __setitem__(self, arg0: Sequence[int], arg1: float, /) -> None: ...
 
 class SmallMatrix_3x1_F_SI1_float:
     @overload
     def __init__(self) -> None: ...
-
     @overload
     def __init__(self, arg: SmallMatrix_3x1_F_SI1_float) -> None: ...
-
     @overload
     def __init__(self, arg: object, /) -> None: ...
-
     def __repr__(self) -> str: ...
-
     @property
     def size(self) -> int: ...
-
     @property
     def row_size(self) -> int: ...
-
     @property
     def column_size(self) -> int: ...
-
     @property
     def order(self) -> str: ...
-
     @property
     def starting_index(self) -> int: ...
-
     @staticmethod
     def zero() -> SmallMatrix_3x1_F_SI1_float: ...
-
     @property
     def __array_interface__(self) -> dict: ...
-
     @property
     def __cuda_array_interface__(self) -> dict: ...
-
     @overload
     def __getitem__(self, arg: int, /) -> float: ...
-
     @overload
     def __getitem__(self, arg: Sequence[int], /) -> float: ...
-
     @overload
     def __setitem__(self, arg0: int, arg1: float, /) -> None: ...
-
     @overload
     def __setitem__(self, arg0: Sequence[int], arg1: float, /) -> None: ...
-
     def dot(self, arg: SmallMatrix_3x1_F_SI1_float, /) -> float: ...
-
     def prod(self) -> float: ...
-
     def set_val(self, arg: float, /) -> SmallMatrix_3x1_F_SI1_float: ...
-
     def sum(self) -> float: ...
-
     @property
     def T(self) -> SmallMatrix_1x3_F_SI1_float: ...
-
-    def __add__(self, arg: SmallMatrix_3x1_F_SI1_float, /) -> SmallMatrix_3x1_F_SI1_float: ...
-
-    def __sub__(self, arg: SmallMatrix_3x1_F_SI1_float, /) -> SmallMatrix_3x1_F_SI1_float: ...
-
+    def __add__(
+        self, arg: SmallMatrix_3x1_F_SI1_float, /
+    ) -> SmallMatrix_3x1_F_SI1_float: ...
+    def __sub__(
+        self, arg: SmallMatrix_3x1_F_SI1_float, /
+    ) -> SmallMatrix_3x1_F_SI1_float: ...
     def __mul__(self, arg: float, /) -> SmallMatrix_3x1_F_SI1_float: ...
-
     def __rmul__(self, arg: float, /) -> SmallMatrix_3x1_F_SI1_float: ...
-
     def __neg__(self) -> SmallMatrix_3x1_F_SI1_float: ...
 
 class SmallMatrix_3x6_F_SI1_double:
     @overload
     def __init__(self) -> None: ...
-
     @overload
     def __init__(self, arg: SmallMatrix_3x6_F_SI1_double) -> None: ...
-
     @overload
     def __init__(self, arg: object, /) -> None: ...
-
     def __repr__(self) -> str: ...
-
     @property
     def size(self) -> int: ...
-
     @property
     def row_size(self) -> int: ...
-
     @property
     def column_size(self) -> int: ...
-
     @property
     def order(self) -> str: ...
-
     @property
     def starting_index(self) -> int: ...
-
     @staticmethod
     def zero() -> SmallMatrix_3x6_F_SI1_double: ...
-
     @property
     def __array_interface__(self) -> dict: ...
-
     @property
     def __cuda_array_interface__(self) -> dict: ...
-
     def dot(self, arg: SmallMatrix_3x6_F_SI1_double, /) -> float: ...
-
     def prod(self) -> float: ...
-
     def set_val(self, arg: float, /) -> SmallMatrix_3x6_F_SI1_double: ...
-
     def sum(self) -> float: ...
-
     @property
     def T(self) -> SmallMatrix_6x3_F_SI1_double: ...
-
-    def __add__(self, arg: SmallMatrix_3x6_F_SI1_double, /) -> SmallMatrix_3x6_F_SI1_double: ...
-
-    def __sub__(self, arg: SmallMatrix_3x6_F_SI1_double, /) -> SmallMatrix_3x6_F_SI1_double: ...
-
+    def __add__(
+        self, arg: SmallMatrix_3x6_F_SI1_double, /
+    ) -> SmallMatrix_3x6_F_SI1_double: ...
+    def __sub__(
+        self, arg: SmallMatrix_3x6_F_SI1_double, /
+    ) -> SmallMatrix_3x6_F_SI1_double: ...
     @overload
     def __mul__(self, arg: float, /) -> SmallMatrix_3x6_F_SI1_double: ...
-
     @overload
-    def __mul__(self, arg: SmallMatrix_6x1_F_SI1_double, /) -> SmallMatrix_3x1_F_SI1_double: ...
-
+    def __mul__(
+        self, arg: SmallMatrix_6x1_F_SI1_double, /
+    ) -> SmallMatrix_3x1_F_SI1_double: ...
     @overload
     def __rmul__(self, arg: float, /) -> SmallMatrix_3x6_F_SI1_double: ...
-
     @overload
-    def __rmul__(self, arg: SmallMatrix_1x3_F_SI1_double, /) -> SmallMatrix_1x6_F_SI1_double: ...
-
+    def __rmul__(
+        self, arg: SmallMatrix_1x3_F_SI1_double, /
+    ) -> SmallMatrix_1x6_F_SI1_double: ...
     def __neg__(self) -> SmallMatrix_3x6_F_SI1_double: ...
-
     def __getitem__(self, arg: Sequence[int], /) -> float: ...
-
     def __setitem__(self, arg0: Sequence[int], arg1: float, /) -> None: ...
 
 class SmallMatrix_1x3_F_SI1_double:
     @overload
     def __init__(self) -> None: ...
-
     @overload
     def __init__(self, arg: SmallMatrix_1x3_F_SI1_double) -> None: ...
-
     @overload
     def __init__(self, arg: object, /) -> None: ...
-
     def __repr__(self) -> str: ...
-
     @property
     def size(self) -> int: ...
-
     @property
     def row_size(self) -> int: ...
-
     @property
     def column_size(self) -> int: ...
-
     @property
     def order(self) -> str: ...
-
     @property
     def starting_index(self) -> int: ...
-
     @staticmethod
     def zero() -> SmallMatrix_1x3_F_SI1_double: ...
-
     @property
     def __array_interface__(self) -> dict: ...
-
     @property
     def __cuda_array_interface__(self) -> dict: ...
-
     @overload
     def __getitem__(self, arg: int, /) -> float: ...
-
     @overload
     def __getitem__(self, arg: Sequence[int], /) -> float: ...
-
     @overload
     def __setitem__(self, arg0: int, arg1: float, /) -> None: ...
-
     @overload
     def __setitem__(self, arg0: Sequence[int], arg1: float, /) -> None: ...
-
     def dot(self, arg: SmallMatrix_1x3_F_SI1_double, /) -> float: ...
-
     def prod(self) -> float: ...
-
     def set_val(self, arg: float, /) -> SmallMatrix_1x3_F_SI1_double: ...
-
     def sum(self) -> float: ...
-
     @property
     def T(self) -> SmallMatrix_3x1_F_SI1_double: ...
-
-    def __add__(self, arg: SmallMatrix_1x3_F_SI1_double, /) -> SmallMatrix_1x3_F_SI1_double: ...
-
-    def __sub__(self, arg: SmallMatrix_1x3_F_SI1_double, /) -> SmallMatrix_1x3_F_SI1_double: ...
-
+    def __add__(
+        self, arg: SmallMatrix_1x3_F_SI1_double, /
+    ) -> SmallMatrix_1x3_F_SI1_double: ...
+    def __sub__(
+        self, arg: SmallMatrix_1x3_F_SI1_double, /
+    ) -> SmallMatrix_1x3_F_SI1_double: ...
     def __mul__(self, arg: float, /) -> SmallMatrix_1x3_F_SI1_double: ...
-
     def __rmul__(self, arg: float, /) -> SmallMatrix_1x3_F_SI1_double: ...
-
     def __neg__(self) -> SmallMatrix_1x3_F_SI1_double: ...
 
 class SmallMatrix_6x3_F_SI1_double:
     @overload
     def __init__(self) -> None: ...
-
     @overload
     def __init__(self, arg: SmallMatrix_6x3_F_SI1_double) -> None: ...
-
     @overload
     def __init__(self, arg: object, /) -> None: ...
-
     def __repr__(self) -> str: ...
-
     @property
     def size(self) -> int: ...
-
     @property
     def row_size(self) -> int: ...
-
     @property
     def column_size(self) -> int: ...
-
     @property
     def order(self) -> str: ...
-
     @property
     def starting_index(self) -> int: ...
-
     @staticmethod
     def zero() -> SmallMatrix_6x3_F_SI1_double: ...
-
     @property
     def __array_interface__(self) -> dict: ...
-
     @property
     def __cuda_array_interface__(self) -> dict: ...
-
     def dot(self, arg: SmallMatrix_6x3_F_SI1_double, /) -> float: ...
-
     def prod(self) -> float: ...
-
     def set_val(self, arg: float, /) -> SmallMatrix_6x3_F_SI1_double: ...
-
     def sum(self) -> float: ...
-
     @property
     def T(self) -> SmallMatrix_3x6_F_SI1_double: ...
-
-    def __add__(self, arg: SmallMatrix_6x3_F_SI1_double, /) -> SmallMatrix_6x3_F_SI1_double: ...
-
-    def __sub__(self, arg: SmallMatrix_6x3_F_SI1_double, /) -> SmallMatrix_6x3_F_SI1_double: ...
-
+    def __add__(
+        self, arg: SmallMatrix_6x3_F_SI1_double, /
+    ) -> SmallMatrix_6x3_F_SI1_double: ...
+    def __sub__(
+        self, arg: SmallMatrix_6x3_F_SI1_double, /
+    ) -> SmallMatrix_6x3_F_SI1_double: ...
     def __mul__(self, arg: float, /) -> SmallMatrix_6x3_F_SI1_double: ...
-
     def __rmul__(self, arg: float, /) -> SmallMatrix_6x3_F_SI1_double: ...
-
     def __neg__(self) -> SmallMatrix_6x3_F_SI1_double: ...
-
     def __getitem__(self, arg: Sequence[int], /) -> float: ...
-
     def __setitem__(self, arg0: Sequence[int], arg1: float, /) -> None: ...
 
 class SmallMatrix_3x1_F_SI1_double:
     @overload
     def __init__(self) -> None: ...
-
     @overload
     def __init__(self, arg: SmallMatrix_3x1_F_SI1_double) -> None: ...
-
     @overload
     def __init__(self, arg: object, /) -> None: ...
-
     def __repr__(self) -> str: ...
-
     @property
     def size(self) -> int: ...
-
     @property
     def row_size(self) -> int: ...
-
     @property
     def column_size(self) -> int: ...
-
     @property
     def order(self) -> str: ...
-
     @property
     def starting_index(self) -> int: ...
-
     @staticmethod
     def zero() -> SmallMatrix_3x1_F_SI1_double: ...
-
     @property
     def __array_interface__(self) -> dict: ...
-
     @property
     def __cuda_array_interface__(self) -> dict: ...
-
     @overload
     def __getitem__(self, arg: int, /) -> float: ...
-
     @overload
     def __getitem__(self, arg: Sequence[int], /) -> float: ...
-
     @overload
     def __setitem__(self, arg0: int, arg1: float, /) -> None: ...
-
     @overload
     def __setitem__(self, arg0: Sequence[int], arg1: float, /) -> None: ...
-
     def dot(self, arg: SmallMatrix_3x1_F_SI1_double, /) -> float: ...
-
     def prod(self) -> float: ...
-
     def set_val(self, arg: float, /) -> SmallMatrix_3x1_F_SI1_double: ...
-
     def sum(self) -> float: ...
-
     @property
     def T(self) -> SmallMatrix_1x3_F_SI1_double: ...
-
-    def __add__(self, arg: SmallMatrix_3x1_F_SI1_double, /) -> SmallMatrix_3x1_F_SI1_double: ...
-
-    def __sub__(self, arg: SmallMatrix_3x1_F_SI1_double, /) -> SmallMatrix_3x1_F_SI1_double: ...
-
+    def __add__(
+        self, arg: SmallMatrix_3x1_F_SI1_double, /
+    ) -> SmallMatrix_3x1_F_SI1_double: ...
+    def __sub__(
+        self, arg: SmallMatrix_3x1_F_SI1_double, /
+    ) -> SmallMatrix_3x1_F_SI1_double: ...
     def __mul__(self, arg: float, /) -> SmallMatrix_3x1_F_SI1_double: ...
-
     def __rmul__(self, arg: float, /) -> SmallMatrix_3x1_F_SI1_double: ...
-
     def __neg__(self) -> SmallMatrix_3x1_F_SI1_double: ...
 
 class SmallMatrix_3x6_F_SI1_longdouble:
     @overload
     def __init__(self) -> None: ...
-
     @overload
     def __init__(self, arg: SmallMatrix_3x6_F_SI1_longdouble) -> None: ...
-
     @overload
     def __init__(self, arg: object, /) -> None: ...
-
     def __repr__(self) -> str: ...
-
     @property
     def size(self) -> int: ...
-
     @property
     def row_size(self) -> int: ...
-
     @property
     def column_size(self) -> int: ...
-
     @property
     def order(self) -> str: ...
-
     @property
     def starting_index(self) -> int: ...
-
     @staticmethod
     def zero() -> SmallMatrix_3x6_F_SI1_longdouble: ...
-
     @property
     def __array_interface__(self) -> dict: ...
-
     @property
     def __cuda_array_interface__(self) -> dict: ...
-
     def dot(self, arg: SmallMatrix_3x6_F_SI1_longdouble, /) -> float: ...
-
     def prod(self) -> float: ...
-
     def set_val(self, arg: float, /) -> SmallMatrix_3x6_F_SI1_longdouble: ...
-
     def sum(self) -> float: ...
-
     @property
     def T(self) -> SmallMatrix_6x3_F_SI1_longdouble: ...
-
-    def __add__(self, arg: SmallMatrix_3x6_F_SI1_longdouble, /) -> SmallMatrix_3x6_F_SI1_longdouble: ...
-
-    def __sub__(self, arg: SmallMatrix_3x6_F_SI1_longdouble, /) -> SmallMatrix_3x6_F_SI1_longdouble: ...
-
+    def __add__(
+        self, arg: SmallMatrix_3x6_F_SI1_longdouble, /
+    ) -> SmallMatrix_3x6_F_SI1_longdouble: ...
+    def __sub__(
+        self, arg: SmallMatrix_3x6_F_SI1_longdouble, /
+    ) -> SmallMatrix_3x6_F_SI1_longdouble: ...
     @overload
     def __mul__(self, arg: float, /) -> SmallMatrix_3x6_F_SI1_longdouble: ...
-
     @overload
-    def __mul__(self, arg: SmallMatrix_6x1_F_SI1_longdouble, /) -> SmallMatrix_3x1_F_SI1_longdouble: ...
-
+    def __mul__(
+        self, arg: SmallMatrix_6x1_F_SI1_longdouble, /
+    ) -> SmallMatrix_3x1_F_SI1_longdouble: ...
     @overload
     def __rmul__(self, arg: float, /) -> SmallMatrix_3x6_F_SI1_longdouble: ...
-
     @overload
-    def __rmul__(self, arg: SmallMatrix_1x3_F_SI1_longdouble, /) -> SmallMatrix_1x6_F_SI1_longdouble: ...
-
+    def __rmul__(
+        self, arg: SmallMatrix_1x3_F_SI1_longdouble, /
+    ) -> SmallMatrix_1x6_F_SI1_longdouble: ...
     def __neg__(self) -> SmallMatrix_3x6_F_SI1_longdouble: ...
-
     def __getitem__(self, arg: Sequence[int], /) -> float: ...
-
     def __setitem__(self, arg0: Sequence[int], arg1: float, /) -> None: ...
 
 class SmallMatrix_1x3_F_SI1_longdouble:
     @overload
     def __init__(self) -> None: ...
-
     @overload
     def __init__(self, arg: SmallMatrix_1x3_F_SI1_longdouble) -> None: ...
-
     @overload
     def __init__(self, arg: object, /) -> None: ...
-
     def __repr__(self) -> str: ...
-
     @property
     def size(self) -> int: ...
-
     @property
     def row_size(self) -> int: ...
-
     @property
     def column_size(self) -> int: ...
-
     @property
     def order(self) -> str: ...
-
     @property
     def starting_index(self) -> int: ...
-
     @staticmethod
     def zero() -> SmallMatrix_1x3_F_SI1_longdouble: ...
-
     @property
     def __array_interface__(self) -> dict: ...
-
     @property
     def __cuda_array_interface__(self) -> dict: ...
-
     @overload
     def __getitem__(self, arg: int, /) -> float: ...
-
     @overload
     def __getitem__(self, arg: Sequence[int], /) -> float: ...
-
     @overload
     def __setitem__(self, arg0: int, arg1: float, /) -> None: ...
-
     @overload
     def __setitem__(self, arg0: Sequence[int], arg1: float, /) -> None: ...
-
     def dot(self, arg: SmallMatrix_1x3_F_SI1_longdouble, /) -> float: ...
-
     def prod(self) -> float: ...
-
     def set_val(self, arg: float, /) -> SmallMatrix_1x3_F_SI1_longdouble: ...
-
     def sum(self) -> float: ...
-
     @property
     def T(self) -> SmallMatrix_3x1_F_SI1_longdouble: ...
-
-    def __add__(self, arg: SmallMatrix_1x3_F_SI1_longdouble, /) -> SmallMatrix_1x3_F_SI1_longdouble: ...
-
-    def __sub__(self, arg: SmallMatrix_1x3_F_SI1_longdouble, /) -> SmallMatrix_1x3_F_SI1_longdouble: ...
-
+    def __add__(
+        self, arg: SmallMatrix_1x3_F_SI1_longdouble, /
+    ) -> SmallMatrix_1x3_F_SI1_longdouble: ...
+    def __sub__(
+        self, arg: SmallMatrix_1x3_F_SI1_longdouble, /
+    ) -> SmallMatrix_1x3_F_SI1_longdouble: ...
     def __mul__(self, arg: float, /) -> SmallMatrix_1x3_F_SI1_longdouble: ...
-
     def __rmul__(self, arg: float, /) -> SmallMatrix_1x3_F_SI1_longdouble: ...
-
     def __neg__(self) -> SmallMatrix_1x3_F_SI1_longdouble: ...
 
 class SmallMatrix_6x3_F_SI1_longdouble:
     @overload
     def __init__(self) -> None: ...
-
     @overload
     def __init__(self, arg: SmallMatrix_6x3_F_SI1_longdouble) -> None: ...
-
     @overload
     def __init__(self, arg: object, /) -> None: ...
-
     def __repr__(self) -> str: ...
-
     @property
     def size(self) -> int: ...
-
     @property
     def row_size(self) -> int: ...
-
     @property
     def column_size(self) -> int: ...
-
     @property
     def order(self) -> str: ...
-
     @property
     def starting_index(self) -> int: ...
-
     @staticmethod
     def zero() -> SmallMatrix_6x3_F_SI1_longdouble: ...
-
     @property
     def __array_interface__(self) -> dict: ...
-
     @property
     def __cuda_array_interface__(self) -> dict: ...
-
     def dot(self, arg: SmallMatrix_6x3_F_SI1_longdouble, /) -> float: ...
-
     def prod(self) -> float: ...
-
     def set_val(self, arg: float, /) -> SmallMatrix_6x3_F_SI1_longdouble: ...
-
     def sum(self) -> float: ...
-
     @property
     def T(self) -> SmallMatrix_3x6_F_SI1_longdouble: ...
-
-    def __add__(self, arg: SmallMatrix_6x3_F_SI1_longdouble, /) -> SmallMatrix_6x3_F_SI1_longdouble: ...
-
-    def __sub__(self, arg: SmallMatrix_6x3_F_SI1_longdouble, /) -> SmallMatrix_6x3_F_SI1_longdouble: ...
-
+    def __add__(
+        self, arg: SmallMatrix_6x3_F_SI1_longdouble, /
+    ) -> SmallMatrix_6x3_F_SI1_longdouble: ...
+    def __sub__(
+        self, arg: SmallMatrix_6x3_F_SI1_longdouble, /
+    ) -> SmallMatrix_6x3_F_SI1_longdouble: ...
     def __mul__(self, arg: float, /) -> SmallMatrix_6x3_F_SI1_longdouble: ...
-
     def __rmul__(self, arg: float, /) -> SmallMatrix_6x3_F_SI1_longdouble: ...
-
     def __neg__(self) -> SmallMatrix_6x3_F_SI1_longdouble: ...
-
     def __getitem__(self, arg: Sequence[int], /) -> float: ...
-
     def __setitem__(self, arg0: Sequence[int], arg1: float, /) -> None: ...
 
 class SmallMatrix_3x1_F_SI1_longdouble:
     @overload
     def __init__(self) -> None: ...
-
     @overload
     def __init__(self, arg: SmallMatrix_3x1_F_SI1_longdouble) -> None: ...
-
     @overload
     def __init__(self, arg: object, /) -> None: ...
-
     def __repr__(self) -> str: ...
-
     @property
     def size(self) -> int: ...
-
     @property
     def row_size(self) -> int: ...
-
     @property
     def column_size(self) -> int: ...
-
     @property
     def order(self) -> str: ...
-
     @property
     def starting_index(self) -> int: ...
-
     @staticmethod
     def zero() -> SmallMatrix_3x1_F_SI1_longdouble: ...
-
     @property
     def __array_interface__(self) -> dict: ...
-
     @property
     def __cuda_array_interface__(self) -> dict: ...
-
     @overload
     def __getitem__(self, arg: int, /) -> float: ...
-
     @overload
     def __getitem__(self, arg: Sequence[int], /) -> float: ...
-
     @overload
     def __setitem__(self, arg0: int, arg1: float, /) -> None: ...
-
     @overload
     def __setitem__(self, arg0: Sequence[int], arg1: float, /) -> None: ...
-
     def dot(self, arg: SmallMatrix_3x1_F_SI1_longdouble, /) -> float: ...
-
     def prod(self) -> float: ...
-
     def set_val(self, arg: float, /) -> SmallMatrix_3x1_F_SI1_longdouble: ...
-
     def sum(self) -> float: ...
-
     @property
     def T(self) -> SmallMatrix_1x3_F_SI1_longdouble: ...
-
-    def __add__(self, arg: SmallMatrix_3x1_F_SI1_longdouble, /) -> SmallMatrix_3x1_F_SI1_longdouble: ...
-
-    def __sub__(self, arg: SmallMatrix_3x1_F_SI1_longdouble, /) -> SmallMatrix_3x1_F_SI1_longdouble: ...
-
+    def __add__(
+        self, arg: SmallMatrix_3x1_F_SI1_longdouble, /
+    ) -> SmallMatrix_3x1_F_SI1_longdouble: ...
+    def __sub__(
+        self, arg: SmallMatrix_3x1_F_SI1_longdouble, /
+    ) -> SmallMatrix_3x1_F_SI1_longdouble: ...
     def __mul__(self, arg: float, /) -> SmallMatrix_3x1_F_SI1_longdouble: ...
-
     def __rmul__(self, arg: float, /) -> SmallMatrix_3x1_F_SI1_longdouble: ...
-
     def __neg__(self) -> SmallMatrix_3x1_F_SI1_longdouble: ...
 
 class Vector_Real:
@@ -4718,32 +3483,23 @@ class Vector_Real:
 
     @overload
     def __init__(self) -> None: ...
-
     @overload
     def __init__(self, arg: Vector_Real) -> None: ...
-
     def __len__(self) -> int: ...
-
     def __bool__(self) -> bool:
         """Check whether the vector is nonempty"""
 
     @overload
     def __repr__(self) -> str: ...
-
     @overload
     def __repr__(self) -> str: ...
-
     def __iter__(self) -> Iterator[float]: ...
-
     @overload
     def __getitem__(self, arg: int, /) -> float: ...
-
     @overload
     def __getitem__(self, arg: slice, /) -> Vector_Real: ...
-
     @overload
     def __getitem__(self, arg: int, /) -> float: ...
-
     def clear(self) -> None:
         """Remove all items from list."""
 
@@ -4761,29 +3517,20 @@ class Vector_Real:
 
     @overload
     def __setitem__(self, arg0: int, arg1: float, /) -> None: ...
-
     @overload
     def __setitem__(self, arg0: slice, arg1: Vector_Real, /) -> None: ...
-
     @overload
     def __setitem__(self, arg0: int, arg1: float, /) -> None: ...
-
     @overload
     def __delitem__(self, arg: int, /) -> None: ...
-
     @overload
     def __delitem__(self, arg: slice, /) -> None: ...
-
     def __eq__(self, arg: object, /) -> bool: ...
-
     def __ne__(self, arg: object, /) -> bool: ...
-
     @overload
     def __contains__(self, arg: float, /) -> bool: ...
-
     @overload
     def __contains__(self, arg: object, /) -> bool: ...
-
     def count(self, arg: float, /) -> int:
         """Return number of occurrences of `arg`."""
 
@@ -4791,10 +3538,8 @@ class Vector_Real:
         """Remove first occurrence of `arg`."""
 
     def size(self) -> int: ...
-
     @property
     def __array_interface__(self) -> dict: ...
-
     @property
     def __cuda_array_interface__(self) -> dict: ...
 
@@ -4813,32 +3558,23 @@ class Vector_int:
 
     @overload
     def __init__(self) -> None: ...
-
     @overload
     def __init__(self, arg: Vector_int) -> None: ...
-
     def __len__(self) -> int: ...
-
     def __bool__(self) -> bool:
         """Check whether the vector is nonempty"""
 
     @overload
     def __repr__(self) -> str: ...
-
     @overload
     def __repr__(self) -> str: ...
-
     def __iter__(self) -> Iterator[int]: ...
-
     @overload
     def __getitem__(self, arg: int, /) -> int: ...
-
     @overload
     def __getitem__(self, arg: slice, /) -> Vector_int: ...
-
     @overload
     def __getitem__(self, arg: int, /) -> int: ...
-
     def clear(self) -> None:
         """Remove all items from list."""
 
@@ -4856,29 +3592,20 @@ class Vector_int:
 
     @overload
     def __setitem__(self, arg0: int, arg1: int, /) -> None: ...
-
     @overload
     def __setitem__(self, arg0: slice, arg1: Vector_int, /) -> None: ...
-
     @overload
     def __setitem__(self, arg0: int, arg1: int, /) -> None: ...
-
     @overload
     def __delitem__(self, arg: int, /) -> None: ...
-
     @overload
     def __delitem__(self, arg: slice, /) -> None: ...
-
     def __eq__(self, arg: object, /) -> bool: ...
-
     def __ne__(self, arg: object, /) -> bool: ...
-
     @overload
     def __contains__(self, arg: int, /) -> bool: ...
-
     @overload
     def __contains__(self, arg: object, /) -> bool: ...
-
     def count(self, arg: int, /) -> int:
         """Return number of occurrences of `arg`."""
 
@@ -4886,10 +3613,8 @@ class Vector_int:
         """Remove first occurrence of `arg`."""
 
     def size(self) -> int: ...
-
     @property
     def __array_interface__(self) -> dict: ...
-
     @property
     def __cuda_array_interface__(self) -> dict: ...
 
@@ -4908,32 +3633,23 @@ class Vector_Long:
 
     @overload
     def __init__(self) -> None: ...
-
     @overload
     def __init__(self, arg: Vector_Long) -> None: ...
-
     def __len__(self) -> int: ...
-
     def __bool__(self) -> bool:
         """Check whether the vector is nonempty"""
 
     @overload
     def __repr__(self) -> str: ...
-
     @overload
     def __repr__(self) -> str: ...
-
     def __iter__(self) -> Iterator[int]: ...
-
     @overload
     def __getitem__(self, arg: int, /) -> int: ...
-
     @overload
     def __getitem__(self, arg: slice, /) -> Vector_Long: ...
-
     @overload
     def __getitem__(self, arg: int, /) -> int: ...
-
     def clear(self) -> None:
         """Remove all items from list."""
 
@@ -4951,29 +3667,20 @@ class Vector_Long:
 
     @overload
     def __setitem__(self, arg0: int, arg1: int, /) -> None: ...
-
     @overload
     def __setitem__(self, arg0: slice, arg1: Vector_Long, /) -> None: ...
-
     @overload
     def __setitem__(self, arg0: int, arg1: int, /) -> None: ...
-
     @overload
     def __delitem__(self, arg: int, /) -> None: ...
-
     @overload
     def __delitem__(self, arg: slice, /) -> None: ...
-
     def __eq__(self, arg: object, /) -> bool: ...
-
     def __ne__(self, arg: object, /) -> bool: ...
-
     @overload
     def __contains__(self, arg: int, /) -> bool: ...
-
     @overload
     def __contains__(self, arg: object, /) -> bool: ...
-
     def count(self, arg: int, /) -> int:
         """Return number of occurrences of `arg`."""
 
@@ -4981,10 +3688,8 @@ class Vector_Long:
         """Remove first occurrence of `arg`."""
 
     def size(self) -> int: ...
-
     @property
     def __array_interface__(self) -> dict: ...
-
     @property
     def __cuda_array_interface__(self) -> dict: ...
 
@@ -5003,32 +3708,23 @@ class Vector_Box:
 
     @overload
     def __init__(self) -> None: ...
-
     @overload
     def __init__(self, arg: Vector_Box) -> None: ...
-
     def __len__(self) -> int: ...
-
     def __bool__(self) -> bool:
         """Check whether the vector is nonempty"""
 
     @overload
     def __repr__(self) -> str: ...
-
     @overload
     def __repr__(self) -> str: ...
-
     def __iter__(self) -> Iterator[Box]: ...
-
     @overload
     def __getitem__(self, arg: int, /) -> Box: ...
-
     @overload
     def __getitem__(self, arg: slice, /) -> Vector_Box: ...
-
     @overload
     def __getitem__(self, arg: int, /) -> Box: ...
-
     def clear(self) -> None:
         """Remove all items from list."""
 
@@ -5046,29 +3742,20 @@ class Vector_Box:
 
     @overload
     def __setitem__(self, arg0: int, arg1: Box, /) -> None: ...
-
     @overload
     def __setitem__(self, arg0: slice, arg1: Vector_Box, /) -> None: ...
-
     @overload
     def __setitem__(self, arg0: int, arg1: Box, /) -> None: ...
-
     @overload
     def __delitem__(self, arg: int, /) -> None: ...
-
     @overload
     def __delitem__(self, arg: slice, /) -> None: ...
-
     def __eq__(self, arg: object, /) -> bool: ...
-
     def __ne__(self, arg: object, /) -> bool: ...
-
     @overload
     def __contains__(self, arg: Box, /) -> bool: ...
-
     @overload
     def __contains__(self, arg: object, /) -> bool: ...
-
     def count(self, arg: Box, /) -> int:
         """Return number of occurrences of `arg`."""
 
@@ -5092,32 +3779,23 @@ class Vector_string:
 
     @overload
     def __init__(self) -> None: ...
-
     @overload
     def __init__(self, arg: Vector_string) -> None: ...
-
     def __len__(self) -> int: ...
-
     def __bool__(self) -> bool:
         """Check whether the vector is nonempty"""
 
     @overload
     def __repr__(self) -> str: ...
-
     @overload
     def __repr__(self) -> str: ...
-
     def __iter__(self) -> Iterator[str]: ...
-
     @overload
     def __getitem__(self, arg: int, /) -> str: ...
-
     @overload
     def __getitem__(self, arg: slice, /) -> Vector_string: ...
-
     @overload
     def __getitem__(self, arg: int, /) -> str: ...
-
     def clear(self) -> None:
         """Remove all items from list."""
 
@@ -5135,29 +3813,20 @@ class Vector_string:
 
     @overload
     def __setitem__(self, arg0: int, arg1: str, /) -> None: ...
-
     @overload
     def __setitem__(self, arg0: slice, arg1: Vector_string, /) -> None: ...
-
     @overload
     def __setitem__(self, arg0: int, arg1: str, /) -> None: ...
-
     @overload
     def __delitem__(self, arg: int, /) -> None: ...
-
     @overload
     def __delitem__(self, arg: slice, /) -> None: ...
-
     def __eq__(self, arg: object, /) -> bool: ...
-
     def __ne__(self, arg: object, /) -> bool: ...
-
     @overload
     def __contains__(self, arg: str, /) -> bool: ...
-
     @overload
     def __contains__(self, arg: object, /) -> bool: ...
-
     def count(self, arg: str, /) -> int:
         """Return number of occurrences of `arg`."""
 
@@ -5169,92 +3838,60 @@ class Vector_string:
 class BoxArray:
     @overload
     def __init__(self) -> None: ...
-
     @overload
     def __init__(self, arg: BoxArray) -> None: ...
-
     @overload
     def __init__(self, arg: Box, /) -> None: ...
-
     @overload
     def __init__(self, arg: Vector_Box, /) -> None: ...
-
     def __repr__(self) -> str: ...
-
     @property
     def size(self) -> int: ...
-
     @property
     def capacity(self) -> int: ...
-
     @property
     def empty(self) -> bool: ...
-
     @property
     def numPts(self) -> int: ...
-
     @property
     def d_numPts(self) -> float: ...
-
     def define(self, arg: Box, /) -> None: ...
-
     def clear(self) -> None: ...
-
     def resize(self, arg: int, /) -> None: ...
-
     def cell_equal(self, arg: BoxArray, /) -> bool: ...
-
     @overload
     def max_size(self, arg: int, /) -> BoxArray: ...
-
     @overload
     def max_size(self, arg: IntVect1D, /) -> BoxArray: ...
-
     @overload
     def refine(self, arg: int, /) -> BoxArray: ...
-
     @overload
     def refine(self, arg: IntVect1D, /) -> BoxArray: ...
-
     @overload
     def coarsen(self, arg: IntVect1D, /) -> BoxArray: ...
-
     @overload
     def coarsen(self, arg: int, /) -> BoxArray: ...
-
     @overload
     def coarsenable(self, arg0: int, arg1: int, /) -> bool: ...
-
     @overload
     def coarsenable(self, arg0: IntVect1D, arg1: int, /) -> bool: ...
-
     @overload
     def coarsenable(self, arg0: IntVect1D, arg1: IntVect1D, /) -> bool: ...
-
     @overload
     def surroundingNodes(self) -> BoxArray: ...
-
     @overload
     def surroundingNodes(self, arg: int, /) -> BoxArray: ...
-
     @overload
     def enclosed_cells(self) -> BoxArray: ...
-
     @overload
     def enclosed_cells(self, arg: int, /) -> BoxArray: ...
-
     @overload
     def convert(self, arg: IndexType, /) -> BoxArray: ...
-
     @overload
     def convert(self, arg: IntVect1D, /) -> BoxArray: ...
-
     def __getitem__(self, arg: int, /) -> Box: ...
-
     def get(self, arg: int, /) -> Box: ...
-
     def minimal_box(self) -> Box: ...
-
     def ix_type(self) -> IndexType: ...
 
 class Vector_BoxArray:
@@ -5272,32 +3909,23 @@ class Vector_BoxArray:
 
     @overload
     def __init__(self) -> None: ...
-
     @overload
     def __init__(self, arg: Vector_BoxArray) -> None: ...
-
     def __len__(self) -> int: ...
-
     def __bool__(self) -> bool:
         """Check whether the vector is nonempty"""
 
     @overload
     def __repr__(self) -> str: ...
-
     @overload
     def __repr__(self) -> str: ...
-
     def __iter__(self) -> Iterator[BoxArray]: ...
-
     @overload
     def __getitem__(self, arg: int, /) -> BoxArray: ...
-
     @overload
     def __getitem__(self, arg: slice, /) -> Vector_BoxArray: ...
-
     @overload
     def __getitem__(self, arg: int, /) -> BoxArray: ...
-
     def clear(self) -> None:
         """Remove all items from list."""
 
@@ -5315,29 +3943,20 @@ class Vector_BoxArray:
 
     @overload
     def __setitem__(self, arg0: int, arg1: BoxArray, /) -> None: ...
-
     @overload
     def __setitem__(self, arg0: slice, arg1: Vector_BoxArray, /) -> None: ...
-
     @overload
     def __setitem__(self, arg0: int, arg1: BoxArray, /) -> None: ...
-
     @overload
     def __delitem__(self, arg: int, /) -> None: ...
-
     @overload
     def __delitem__(self, arg: slice, /) -> None: ...
-
     def __eq__(self, arg: object, /) -> bool: ...
-
     def __ne__(self, arg: object, /) -> bool: ...
-
     @overload
     def __contains__(self, arg: BoxArray, /) -> bool: ...
-
     @overload
     def __contains__(self, arg: object, /) -> bool: ...
-
     def count(self, arg: BoxArray, /) -> int:
         """Return number of occurrences of `arg`."""
 
@@ -5347,66 +3966,45 @@ class Vector_BoxArray:
     def size(self) -> int: ...
 
 class ParmParse:
-    def __init__(self, prefix: str = '') -> None: ...
-
+    def __init__(self, prefix: str = "") -> None: ...
     def __repr__(self) -> str: ...
-
     def remove(self, arg: str, /) -> int: ...
-
     @staticmethod
     def addfile(arg: str, /) -> None: ...
-
     @overload
     def add(self, arg0: str, arg1: bool, /) -> None: ...
-
     @overload
     def add(self, arg0: str, arg1: int, /) -> None: ...
-
     @overload
     def add(self, arg0: str, arg1: int, /) -> None: ...
-
     @overload
     def add(self, arg0: str, arg1: int, /) -> None: ...
-
     @overload
     def add(self, arg0: str, arg1: float, /) -> None: ...
-
     @overload
     def add(self, arg0: str, arg1: float, /) -> None: ...
-
     @overload
     def add(self, arg0: str, arg1: str, /) -> None: ...
-
     @overload
     def add(self, arg0: str, arg1: IntVect1D, /) -> None: ...
-
     @overload
     def add(self, arg0: str, arg1: Box, /) -> None: ...
-
     @overload
     def addarr(self, arg0: str, arg1: Sequence[int], /) -> None: ...
-
     @overload
     def addarr(self, arg0: str, arg1: Sequence[int], /) -> None: ...
-
     @overload
     def addarr(self, arg0: str, arg1: Sequence[int], /) -> None: ...
-
     @overload
     def addarr(self, arg0: str, arg1: Sequence[float], /) -> None: ...
-
     @overload
     def addarr(self, arg0: str, arg1: Sequence[float], /) -> None: ...
-
     @overload
     def addarr(self, arg0: str, arg1: Sequence[str], /) -> None: ...
-
     @overload
     def addarr(self, arg0: str, arg1: Sequence[IntVect1D], /) -> None: ...
-
     @overload
     def addarr(self, arg0: str, arg1: Sequence[Box], /) -> None: ...
-
     def get_bool(self, name: str, ival: int = 0) -> bool:
         """parses input values"""
 
@@ -5448,7 +4046,6 @@ class ParmParse:
 class CoordSys:
     @overload
     def __init__(self) -> None: ...
-
     @overload
     def __init__(self, arg: CoordSys) -> None: ...
 
@@ -5470,44 +4067,29 @@ class CoordSys:
     SPHERICAL: CoordSys.CoordType = CoordType.SPHERICAL
 
     def __repr__(self) -> str: ...
-
     def ok(self) -> bool: ...
-
     def Coord(self) -> CoordSys.CoordType: ...
-
     def SetCoord(self, arg: CoordSys.CoordType, /) -> None: ...
-
     def CoordInt(self) -> int: ...
-
     def IsSPHERICAL(self) -> bool: ...
-
     def IsRZ(self) -> bool: ...
-
     def IsCartesian(self) -> bool: ...
 
 class RealBox:
     @overload
     def __init__(self) -> None: ...
-
     @overload
     def __init__(self, x_lo: float, x_hi: float) -> None: ...
-
     @overload
     def __init__(self, a_lo: Sequence[float], a_hi: Sequence[float]) -> None: ...
-
     @overload
     def __init__(self, bx: Box, dx: Sequence[float], base: Sequence[float]) -> None: ...
-
     def __repr__(self) -> str: ...
-
     def __str(self) -> str: ...
-
     @property
     def xlo(self) -> list[float]: ...
-
     @property
     def xhi(self) -> list[float]: ...
-
     @overload
     def lo(self, arg: int, /) -> float:
         """Get ith component of ``xlo``"""
@@ -5541,14 +4123,12 @@ class RealBox:
         """Get ith component of ``xhi``"""
 
     def length(self, arg: int, /) -> float: ...
-
     def ok(self) -> bool:
         """
         Determine if RealBox satisfies ``xlo[i]<xhi[i]`` for ``i=0,1,...,AMREX_SPACEDIM``.
         """
 
     def volume(self) -> float: ...
-
     @overload
     def contains(self, rb: XDim3, eps: float = 0.0) -> bool:
         """Determine if RealBox contains ``pt``, within tolerance ``eps``"""
@@ -5575,9 +4155,7 @@ def AlmostEqual(rb1: RealBox, rb2: RealBox, eps: float = 0.0) -> bool:
 
 class GeometryData:
     def __init__(self) -> None: ...
-
     def __repr__(self) -> str: ...
-
     @property
     def prob_domain(self) -> RealBox:
         """The problem domain (real)."""
@@ -5639,14 +4217,12 @@ class GeometryData:
 class Geometry(CoordSys):
     @overload
     def __init__(self) -> None: ...
-
     @overload
-    def __init__(self, dom: Box, rb: RealBox, coord: int, is_per: Sequence[int]) -> None: ...
-
+    def __init__(
+        self, dom: Box, rb: RealBox, coord: int, is_per: Sequence[int]
+    ) -> None: ...
     def __repr__(self) -> str: ...
-
     def __str__(self) -> str: ...
-
     def data(self) -> GeometryData:
         """Returns non-static copy of geometry's stored data"""
 
@@ -5668,7 +4244,6 @@ class Geometry(CoordSys):
 
     @prob_domain.setter
     def prob_domain(self, arg: RealBox, /) -> None: ...
-
     @overload
     def ProbLo(self, dir: int) -> float:
         """Get the lo end of the problem domain in specified direction"""
@@ -5697,7 +4272,6 @@ class Geometry(CoordSys):
 
     @domain.setter
     def domain(self, arg: Box, /) -> None: ...
-
     @overload
     def isPeriodic(self, arg: int, /) -> bool:
         """Is the domain periodic in the specified direction?"""
@@ -5717,23 +4291,18 @@ class Geometry(CoordSys):
 
     @overload
     def periodicity(self) -> Periodicity: ...
-
     @overload
     def periodicity(self, b: Box) -> Periodicity:
         """Return Periodicity object with lengths determined by input Box"""
 
     @overload
     def growNonPeriodicDomain(self, ngrow: IntVect1D) -> Box: ...
-
     @overload
     def growNonPeriodicDomain(self, ngrow: int) -> Box: ...
-
     @overload
     def growPeriodicDomain(self, ngrow: IntVect1D) -> Box: ...
-
     @overload
     def growPeriodicDomain(self, ngrow: int) -> Box: ...
-
     def setPeriodicity(self, period: Sequence[int]) -> list[int]:
         """
         Set periodicity flags and return the old flags.
@@ -5741,9 +4310,7 @@ class Geometry(CoordSys):
         """
 
     def coarsen(self, rr: IntVect1D) -> None: ...
-
     def refine(self, rr: IntVect1D) -> None: ...
-
     def outsideRoundOffDomain(self, x: float) -> bool:
         """
         Returns true if a point is outside the roundoff domain. All particles with positions inside the roundoff domain are sure to be mapped to cells inside the Domain() box. Note that the same need not be true for all points inside ProbDomain()
@@ -5769,32 +4336,23 @@ class Vector_Geometry:
 
     @overload
     def __init__(self) -> None: ...
-
     @overload
     def __init__(self, arg: Vector_Geometry) -> None: ...
-
     def __len__(self) -> int: ...
-
     def __bool__(self) -> bool:
         """Check whether the vector is nonempty"""
 
     @overload
     def __repr__(self) -> str: ...
-
     @overload
     def __repr__(self) -> str: ...
-
     def __iter__(self) -> Iterator[Geometry]: ...
-
     @overload
     def __getitem__(self, arg: int, /) -> Geometry: ...
-
     @overload
     def __getitem__(self, arg: slice, /) -> Vector_Geometry: ...
-
     @overload
     def __getitem__(self, arg: int, /) -> Geometry: ...
-
     def clear(self) -> None:
         """Remove all items from list."""
 
@@ -5812,62 +4370,43 @@ class Vector_Geometry:
 
     @overload
     def __setitem__(self, arg0: int, arg1: Geometry, /) -> None: ...
-
     @overload
     def __setitem__(self, arg0: slice, arg1: Vector_Geometry, /) -> None: ...
-
     @overload
     def __setitem__(self, arg0: int, arg1: Geometry, /) -> None: ...
-
     @overload
     def __delitem__(self, arg: int, /) -> None: ...
-
     @overload
     def __delitem__(self, arg: slice, /) -> None: ...
-
     def size(self) -> int: ...
 
 class DistributionMapping:
     @overload
     def __init__(self) -> None: ...
-
     @overload
     def __init__(self, arg: DistributionMapping) -> None: ...
-
     @overload
     def __init__(self, arg: Vector_int, /) -> None: ...
-
     @overload
     def __init__(self, boxes: BoxArray) -> None: ...
-
     @overload
     def __init__(self, boxes: BoxArray, nprocs: int) -> None: ...
-
     def __repr__(self) -> str: ...
-
     @overload
     def define(self, boxes: BoxArray) -> None: ...
-
     @overload
     def define(self, boxes: BoxArray, nprocs: int) -> None: ...
-
     @overload
     def define(self, arg: Vector_int, /) -> None: ...
-
     @property
     def size(self) -> int: ...
-
     @property
     def capacity(self) -> int: ...
-
     @property
     def empty(self) -> bool: ...
-
     @property
     def link_count(self) -> int: ...
-
     def ProcessorMap(self) -> Vector_int: ...
-
     def __getitem__(self, arg: int, /) -> int: ...
 
 class Vector_DistributionMapping:
@@ -5885,32 +4424,23 @@ class Vector_DistributionMapping:
 
     @overload
     def __init__(self) -> None: ...
-
     @overload
     def __init__(self, arg: Vector_DistributionMapping) -> None: ...
-
     def __len__(self) -> int: ...
-
     def __bool__(self) -> bool:
         """Check whether the vector is nonempty"""
 
     @overload
     def __repr__(self) -> str: ...
-
     @overload
     def __repr__(self) -> str: ...
-
     def __iter__(self) -> Iterator[DistributionMapping]: ...
-
     @overload
     def __getitem__(self, arg: int, /) -> DistributionMapping: ...
-
     @overload
     def __getitem__(self, arg: slice, /) -> Vector_DistributionMapping: ...
-
     @overload
     def __getitem__(self, arg: int, /) -> DistributionMapping: ...
-
     def clear(self) -> None:
         """Remove all items from list."""
 
@@ -5928,29 +4458,20 @@ class Vector_DistributionMapping:
 
     @overload
     def __setitem__(self, arg0: int, arg1: DistributionMapping, /) -> None: ...
-
     @overload
     def __setitem__(self, arg0: slice, arg1: Vector_DistributionMapping, /) -> None: ...
-
     @overload
     def __setitem__(self, arg0: int, arg1: DistributionMapping, /) -> None: ...
-
     @overload
     def __delitem__(self, arg: int, /) -> None: ...
-
     @overload
     def __delitem__(self, arg: slice, /) -> None: ...
-
     def __eq__(self, arg: object, /) -> bool: ...
-
     def __ne__(self, arg: object, /) -> bool: ...
-
     @overload
     def __contains__(self, arg: DistributionMapping, /) -> bool: ...
-
     @overload
     def __contains__(self, arg: object, /) -> bool: ...
-
     def count(self, arg: DistributionMapping, /) -> int:
         """Return number of occurrences of `arg`."""
 
@@ -5962,74 +4483,45 @@ class Vector_DistributionMapping:
 class BaseFab_Real:
     @overload
     def __init__(self) -> None: ...
-
     @overload
     def __init__(self, arg: Arena, /) -> None: ...
-
     @overload
     def __init__(self, arg0: Box, arg1: int, arg2: Arena, /) -> None: ...
-
     @overload
     def __init__(self, arg0: Box, arg1: int, arg2: float, /) -> None: ...
-
     @overload
     def __init__(self, arg0: Box, arg1: int, arg2: float, /) -> None: ...
-
     @overload
     def __init__(self, arg: Array4_double, /) -> None: ...
-
     @overload
     def __init__(self, arg0: Array4_double, arg1: IndexType, /) -> None: ...
-
     @overload
     def __init__(self, arg: Array4_double_const, /) -> None: ...
-
     @overload
     def __init__(self, arg0: Array4_double_const, arg1: IndexType, /) -> None: ...
-
     def __repr__(self) -> str: ...
-
     def resize(self, arg0: Box, arg1: int, arg2: Arena, /) -> None: ...
-
     def clear(self) -> None: ...
-
     @overload
     def n_bytes(self) -> int: ...
-
     @overload
     def n_bytes(self, arg0: Box, arg1: int, /) -> int: ...
-
     def n_bytes_owned(self) -> int: ...
-
     def n_comp(self) -> int: ...
-
     def num_pts(self) -> int: ...
-
     def size(self) -> int: ...
-
     def box(self) -> Box: ...
-
     def length(self) -> IntVect1D: ...
-
     def small_end(self) -> IntVect1D: ...
-
     def big_end(self) -> IntVect1D: ...
-
     def lo_vect(self) -> int: ...
-
     def hi_vect(self) -> int: ...
-
     def is_allocated(self) -> bool: ...
-
     def array(self) -> Array4_double: ...
-
     def const_array(self) -> Array4_double_const: ...
-
     def to_host(self) -> BaseFab_Real: ...
-
     @property
     def __array_interface__(self) -> dict: ...
-
     @property
     def __cuda_array_interface__(self) -> dict: ...
 
@@ -6137,7 +4629,6 @@ class BCRec:
         """
 
     def __repr__(self) -> str: ...
-
     def set_lo(self, dir: int, bc_type: int) -> None:
         """
         Set the low-side boundary type in one direction.
@@ -6183,7 +4674,6 @@ class BCRec:
         """
 
     def __eq__(self, arg: BCRec, /) -> bool: ...
-
     def __ne__(self, arg: BCRec, /) -> bool: ...
 
 class Vector_BCRec:
@@ -6201,32 +4691,23 @@ class Vector_BCRec:
 
     @overload
     def __init__(self) -> None: ...
-
     @overload
     def __init__(self, arg: Vector_BCRec) -> None: ...
-
     def __len__(self) -> int: ...
-
     def __bool__(self) -> bool:
         """Check whether the vector is nonempty"""
 
     @overload
     def __repr__(self) -> str: ...
-
     @overload
     def __repr__(self) -> str: ...
-
     def __iter__(self) -> Iterator[BCRec]: ...
-
     @overload
     def __getitem__(self, arg: int, /) -> BCRec: ...
-
     @overload
     def __getitem__(self, arg: slice, /) -> Vector_BCRec: ...
-
     @overload
     def __getitem__(self, arg: int, /) -> BCRec: ...
-
     def clear(self) -> None:
         """Remove all items from list."""
 
@@ -6244,29 +4725,20 @@ class Vector_BCRec:
 
     @overload
     def __setitem__(self, arg0: int, arg1: BCRec, /) -> None: ...
-
     @overload
     def __setitem__(self, arg0: slice, arg1: Vector_BCRec, /) -> None: ...
-
     @overload
     def __setitem__(self, arg0: int, arg1: BCRec, /) -> None: ...
-
     @overload
     def __delitem__(self, arg: int, /) -> None: ...
-
     @overload
     def __delitem__(self, arg: slice, /) -> None: ...
-
     def __eq__(self, arg: object, /) -> bool: ...
-
     def __ne__(self, arg: object, /) -> bool: ...
-
     @overload
     def __contains__(self, arg: BCRec, /) -> bool: ...
-
     @overload
     def __contains__(self, arg: object, /) -> bool: ...
-
     def count(self, arg: BCRec, /) -> int:
         """Return number of occurrences of `arg`."""
 
@@ -6290,7 +4762,14 @@ def setBC(bx: Box, domain: Box, bc_domain: BCRec) -> BCRec:
     """
 
 @overload
-def setBC(bx: Box, domain: Box, src_comp: int, dest_comp: int, ncomp: int, bc_domain: Vector_BCRec) -> Vector_BCRec:
+def setBC(
+    bx: Box,
+    domain: Box,
+    src_comp: int,
+    dest_comp: int,
+    ncomp: int,
+    bc_domain: Vector_BCRec,
+) -> Vector_BCRec:
     """
     Return component boundary records for a box.
 
@@ -6311,100 +4790,70 @@ def setBC(bx: Box, domain: Box, src_comp: int, dest_comp: int, ncomp: int, bc_do
 class FArrayBox(BaseFab_Real):
     @overload
     def __init__(self) -> None: ...
-
     @overload
     def __init__(self, arg: Arena, /) -> None: ...
-
     @overload
     def __init__(self, arg0: Box, arg1: int, arg2: Arena, /) -> None: ...
-
     @overload
-    def __init__(self, arg0: Box, arg1: int, arg2: bool, arg3: bool, arg4: Arena, /) -> None: ...
-
-    @overload
-    def __init__(self, arg0: Box, arg1: int, arg2: float, /) -> None: ...
-
+    def __init__(
+        self, arg0: Box, arg1: int, arg2: bool, arg3: bool, arg4: Arena, /
+    ) -> None: ...
     @overload
     def __init__(self, arg0: Box, arg1: int, arg2: float, /) -> None: ...
-
+    @overload
+    def __init__(self, arg0: Box, arg1: int, arg2: float, /) -> None: ...
     @overload
     def __init__(self, arg: Array4_double, /) -> None: ...
-
     @overload
     def __init__(self, arg0: Array4_double, arg1: IndexType, /) -> None: ...
-
     @overload
     def __init__(self, arg: Array4_double_const, /) -> None: ...
-
     @overload
     def __init__(self, arg0: Array4_double_const, arg1: IndexType, /) -> None: ...
-
     def __repr__(self) -> str: ...
 
 class MFIter:
     @overload
     def __init__(self, arg: FabArrayBase, /) -> None: ...
-
     @overload
     def __init__(self, arg0: FabArrayBase, arg1: MFItInfo, /) -> None: ...
-
     @overload
     def __init__(self, arg: MultiFab, /) -> None: ...
-
     @overload
     def __init__(self, arg0: MultiFab, arg1: MFItInfo, /) -> None: ...
-
     @overload
     def __init__(self, arg: iMultiFab, /) -> None: ...
-
     @overload
     def __init__(self, arg0: iMultiFab, arg1: MFItInfo, /) -> None: ...
-
     def __repr__(self) -> str: ...
-
     def finalize(self) -> None: ...
-
     @overload
     def tilebox(self) -> Box: ...
-
     @overload
     def tilebox(self, arg: IntVect1D, /) -> Box: ...
-
     @overload
     def tilebox(self, arg0: IntVect1D, arg1: IntVect1D, /) -> Box: ...
-
     def validbox(self) -> Box: ...
-
     def fabbox(self) -> Box: ...
-
     def nodaltilebox(self, dir: int = -1) -> Box: ...
-
     def growntilebox(self, ng: IntVect1D = -1000000) -> Box: ...
-
     @overload
     def grownnodaltilebox(self, int: int = -1, ng: int = -1000000) -> Box: ...
-
     @overload
     def grownnodaltilebox(self, int: int, ng: IntVect1D) -> Box: ...
-
     @property
     def is_valid(self) -> bool: ...
-
     @property
     def index(self) -> int: ...
-
     @property
     def length(self) -> int: ...
 
 class FabArrayBase:
     @property
     def is_all_cell_centered(self) -> bool: ...
-
     @property
     def is_all_nodal(self) -> bool: ...
-
     def is_nodal(self, arg: int, /) -> bool: ...
-
     @property
     def nComp(self) -> int:
         """
@@ -6438,23 +4887,17 @@ class FabFactory_FArrayBox:
 
 class FabArray_IArrayBox(FabArrayBase):
     def clear(self) -> None: ...
-
     def ok(self) -> bool: ...
-
     @property
     def arena(self) -> Arena:
         """Provides access to the Arena this FabArray was build with."""
 
     @property
     def has_EB_fab_factory(self) -> bool: ...
-
     @property
     def factory(self) -> FabFactory_IArrayBox: ...
-
     def array(self, arg: MFIter, /) -> Array4_int: ...
-
     def const_array(self, arg: MFIter, /) -> Array4_int_const: ...
-
     @overload
     def set_val(self, val: int) -> None:
         """Set all components in the entire region of each FAB to val."""
@@ -6476,7 +4919,9 @@ class FabArray_IArrayBox(FabArrayBase):
         """
 
     @overload
-    def set_val(self, val: int, region: Box, comp: int, num_comp: int, nghost: int = 0) -> None:
+    def set_val(
+        self, val: int, region: Box, comp: int, num_comp: int, nghost: int = 0
+    ) -> None:
         """
         Set the value of num_comp components in the valid region of
         each FAB in the FabArray, starting at component comp, as well
@@ -6485,7 +4930,9 @@ class FabArray_IArrayBox(FabArrayBase):
         """
 
     @overload
-    def set_val(self, val: int, region: Box, comp: int, num_comp: int, nghost: IntVect1D) -> None:
+    def set_val(
+        self, val: int, region: Box, comp: int, num_comp: int, nghost: IntVect1D
+    ) -> None:
         """
         Set the value of num_comp components in the valid region of
         each FAB in the FabArray, starting at component comp, as well
@@ -6495,11 +4942,17 @@ class FabArray_IArrayBox(FabArrayBase):
 
     @overload
     def abs(self, comp: int, ncomp: int, nghost: int = 0) -> None: ...
-
     @overload
     def abs(self, comp: int, ncomp: int, nghost: IntVect1D) -> None: ...
-
-    def saxpy(self, a: int, x: FabArray_IArrayBox, x_comp: int, comp: int, ncomp: int, nghost: IntVect1D) -> None:
+    def saxpy(
+        self,
+        a: int,
+        x: FabArray_IArrayBox,
+        x_comp: int,
+        comp: int,
+        ncomp: int,
+        nghost: IntVect1D,
+    ) -> None:
         """
         self += a * x
 
@@ -6513,7 +4966,15 @@ class FabArray_IArrayBox(FabArrayBase):
         nghost : number of ghost cells
         """
 
-    def xpay(self, a: int, x: FabArray_IArrayBox, xcomp: int, comp: int, ncomp: int, nghost: IntVect1D) -> None:
+    def xpay(
+        self,
+        a: int,
+        x: FabArray_IArrayBox,
+        xcomp: int,
+        comp: int,
+        ncomp: int,
+        nghost: IntVect1D,
+    ) -> None:
         """
         self = x + a * self
 
@@ -6527,7 +4988,18 @@ class FabArray_IArrayBox(FabArrayBase):
         nghost : number of ghost cells
         """
 
-    def lin_comb(self, a: int, x: FabArray_IArrayBox, xcomp: int, b: int, y: FabArray_IArrayBox, ycomp: int, comp: int, numcomp: int, nghost: IntVect1D) -> None:
+    def lin_comb(
+        self,
+        a: int,
+        x: FabArray_IArrayBox,
+        xcomp: int,
+        b: int,
+        y: FabArray_IArrayBox,
+        ycomp: int,
+        comp: int,
+        numcomp: int,
+        nghost: IntVect1D,
+    ) -> None:
         """
         self = a * x + b * y
 
@@ -6561,14 +5033,28 @@ class FabArray_IArrayBox(FabArrayBase):
         """
 
     @overload
-    def sum_boundary(self, scomp: int, ncomp: int, period: Periodicity, deterministic: bool = False) -> None: ...
-
+    def sum_boundary(
+        self, scomp: int, ncomp: int, period: Periodicity, deterministic: bool = False
+    ) -> None: ...
     @overload
-    def sum_boundary(self, scomp: int, ncomp: int, nghost: IntVect1D, period: Periodicity, deterministic: bool = False) -> None: ...
-
+    def sum_boundary(
+        self,
+        scomp: int,
+        ncomp: int,
+        nghost: IntVect1D,
+        period: Periodicity,
+        deterministic: bool = False,
+    ) -> None: ...
     @overload
-    def sum_boundary(self, scomp: int, ncomp: int, nghost: IntVect1D, dst_nghost: IntVect1D, period: Periodicity, deterministic: bool = False) -> None: ...
-
+    def sum_boundary(
+        self,
+        scomp: int,
+        ncomp: int,
+        nghost: IntVect1D,
+        dst_nghost: IntVect1D,
+        period: Periodicity,
+        deterministic: bool = False,
+    ) -> None: ...
     @overload
     def override_sync(self, period: Periodicity) -> None:
         """
@@ -6590,7 +5076,6 @@ class FabArray_IArrayBox(FabArrayBase):
 
     @overload
     def override_sync(self, scomp: int, ncomp: int, period: Periodicity) -> None: ...
-
     @overload
     def fill_boundary(self, cross: bool = False) -> None:
         """
@@ -6609,38 +5094,39 @@ class FabArray_IArrayBox(FabArrayBase):
 
     @overload
     def fill_boundary(self, period: Periodicity, cross: bool = False) -> None: ...
-
     @overload
-    def fill_boundary(self, nghost: IntVect1D, period: Periodicity, cross: bool = False) -> None: ...
-
+    def fill_boundary(
+        self, nghost: IntVect1D, period: Periodicity, cross: bool = False
+    ) -> None: ...
     @overload
     def fill_boundary(self, scomp: int, ncomp: int, cross: bool = False) -> None: ...
-
     @overload
-    def fill_boundary(self, scomp: int, ncomp: int, period: Periodicity, cross: bool = False) -> None: ...
-
+    def fill_boundary(
+        self, scomp: int, ncomp: int, period: Periodicity, cross: bool = False
+    ) -> None: ...
     @overload
-    def fill_boundary(self, scomp: int, ncomp: int, nghost: IntVect1D, period: Periodicity, cross: bool = False) -> None: ...
+    def fill_boundary(
+        self,
+        scomp: int,
+        ncomp: int,
+        nghost: IntVect1D,
+        period: Periodicity,
+        cross: bool = False,
+    ) -> None: ...
 
 class FabArray_FArrayBox(FabArrayBase):
     def clear(self) -> None: ...
-
     def ok(self) -> bool: ...
-
     @property
     def arena(self) -> Arena:
         """Provides access to the Arena this FabArray was build with."""
 
     @property
     def has_EB_fab_factory(self) -> bool: ...
-
     @property
     def factory(self) -> FabFactory_FArrayBox: ...
-
     def array(self, arg: MFIter, /) -> Array4_double: ...
-
     def const_array(self, arg: MFIter, /) -> Array4_double_const: ...
-
     @overload
     def set_val(self, val: float) -> None:
         """Set all components in the entire region of each FAB to val."""
@@ -6662,7 +5148,9 @@ class FabArray_FArrayBox(FabArrayBase):
         """
 
     @overload
-    def set_val(self, val: float, region: Box, comp: int, num_comp: int, nghost: int = 0) -> None:
+    def set_val(
+        self, val: float, region: Box, comp: int, num_comp: int, nghost: int = 0
+    ) -> None:
         """
         Set the value of num_comp components in the valid region of
         each FAB in the FabArray, starting at component comp, as well
@@ -6671,7 +5159,9 @@ class FabArray_FArrayBox(FabArrayBase):
         """
 
     @overload
-    def set_val(self, val: float, region: Box, comp: int, num_comp: int, nghost: IntVect1D) -> None:
+    def set_val(
+        self, val: float, region: Box, comp: int, num_comp: int, nghost: IntVect1D
+    ) -> None:
         """
         Set the value of num_comp components in the valid region of
         each FAB in the FabArray, starting at component comp, as well
@@ -6681,11 +5171,17 @@ class FabArray_FArrayBox(FabArrayBase):
 
     @overload
     def abs(self, comp: int, ncomp: int, nghost: int = 0) -> None: ...
-
     @overload
     def abs(self, comp: int, ncomp: int, nghost: IntVect1D) -> None: ...
-
-    def saxpy(self, a: float, x: FabArray_FArrayBox, x_comp: int, comp: int, ncomp: int, nghost: IntVect1D) -> None:
+    def saxpy(
+        self,
+        a: float,
+        x: FabArray_FArrayBox,
+        x_comp: int,
+        comp: int,
+        ncomp: int,
+        nghost: IntVect1D,
+    ) -> None:
         """
         self += a * x
 
@@ -6699,7 +5195,15 @@ class FabArray_FArrayBox(FabArrayBase):
         nghost : number of ghost cells
         """
 
-    def xpay(self, a: float, x: FabArray_FArrayBox, xcomp: int, comp: int, ncomp: int, nghost: IntVect1D) -> None:
+    def xpay(
+        self,
+        a: float,
+        x: FabArray_FArrayBox,
+        xcomp: int,
+        comp: int,
+        ncomp: int,
+        nghost: IntVect1D,
+    ) -> None:
         """
         self = x + a * self
 
@@ -6713,7 +5217,18 @@ class FabArray_FArrayBox(FabArrayBase):
         nghost : number of ghost cells
         """
 
-    def lin_comb(self, a: float, x: FabArray_FArrayBox, xcomp: int, b: float, y: FabArray_FArrayBox, ycomp: int, comp: int, numcomp: int, nghost: IntVect1D) -> None:
+    def lin_comb(
+        self,
+        a: float,
+        x: FabArray_FArrayBox,
+        xcomp: int,
+        b: float,
+        y: FabArray_FArrayBox,
+        ycomp: int,
+        comp: int,
+        numcomp: int,
+        nghost: IntVect1D,
+    ) -> None:
         """
         self = a * x + b * y
 
@@ -6747,14 +5262,28 @@ class FabArray_FArrayBox(FabArrayBase):
         """
 
     @overload
-    def sum_boundary(self, scomp: int, ncomp: int, period: Periodicity, deterministic: bool = False) -> None: ...
-
+    def sum_boundary(
+        self, scomp: int, ncomp: int, period: Periodicity, deterministic: bool = False
+    ) -> None: ...
     @overload
-    def sum_boundary(self, scomp: int, ncomp: int, nghost: IntVect1D, period: Periodicity, deterministic: bool = False) -> None: ...
-
+    def sum_boundary(
+        self,
+        scomp: int,
+        ncomp: int,
+        nghost: IntVect1D,
+        period: Periodicity,
+        deterministic: bool = False,
+    ) -> None: ...
     @overload
-    def sum_boundary(self, scomp: int, ncomp: int, nghost: IntVect1D, dst_nghost: IntVect1D, period: Periodicity, deterministic: bool = False) -> None: ...
-
+    def sum_boundary(
+        self,
+        scomp: int,
+        ncomp: int,
+        nghost: IntVect1D,
+        dst_nghost: IntVect1D,
+        period: Periodicity,
+        deterministic: bool = False,
+    ) -> None: ...
     @overload
     def override_sync(self, period: Periodicity) -> None:
         """
@@ -6776,7 +5305,6 @@ class FabArray_FArrayBox(FabArrayBase):
 
     @overload
     def override_sync(self, scomp: int, ncomp: int, period: Periodicity) -> None: ...
-
     @overload
     def fill_boundary(self, cross: bool = False) -> None:
         """
@@ -6795,89 +5323,71 @@ class FabArray_FArrayBox(FabArrayBase):
 
     @overload
     def fill_boundary(self, period: Periodicity, cross: bool = False) -> None: ...
-
     @overload
-    def fill_boundary(self, nghost: IntVect1D, period: Periodicity, cross: bool = False) -> None: ...
-
+    def fill_boundary(
+        self, nghost: IntVect1D, period: Periodicity, cross: bool = False
+    ) -> None: ...
     @overload
     def fill_boundary(self, scomp: int, ncomp: int, cross: bool = False) -> None: ...
-
     @overload
-    def fill_boundary(self, scomp: int, ncomp: int, period: Periodicity, cross: bool = False) -> None: ...
-
+    def fill_boundary(
+        self, scomp: int, ncomp: int, period: Periodicity, cross: bool = False
+    ) -> None: ...
     @overload
-    def fill_boundary(self, scomp: int, ncomp: int, nghost: IntVect1D, period: Periodicity, cross: bool = False) -> None: ...
+    def fill_boundary(
+        self,
+        scomp: int,
+        ncomp: int,
+        nghost: IntVect1D,
+        period: Periodicity,
+        cross: bool = False,
+    ) -> None: ...
 
 class MFInfo:
     def __init__(self) -> None: ...
-
     @property
     def alloc(self) -> bool: ...
-
     @alloc.setter
     def alloc(self, arg: bool, /) -> None: ...
-
     @property
     def arena(self) -> Arena: ...
-
     @arena.setter
     def arena(self, arg: Arena, /) -> None: ...
-
     @property
     def tags(self) -> Vector_string: ...
-
     @tags.setter
     def tags(self, arg: Vector_string, /) -> None: ...
-
     def set_alloc(self, arg: bool, /) -> MFInfo: ...
-
     def set_arena(self, arg: Arena, /) -> MFInfo: ...
-
     def set_tag(self, arg: str, /) -> None: ...
 
 class MFItInfo:
     def __init__(self) -> None: ...
-
     @property
     def do_tiling(self) -> bool: ...
-
     @do_tiling.setter
     def do_tiling(self, arg: bool, /) -> None: ...
-
     @property
     def dynamic(self) -> bool: ...
-
     @dynamic.setter
     def dynamic(self, arg: bool, /) -> None: ...
-
     @property
     def device_sync(self) -> bool: ...
-
     @device_sync.setter
     def device_sync(self, arg: bool, /) -> None: ...
-
     @property
     def num_streams(self) -> int: ...
-
     @num_streams.setter
     def num_streams(self, arg: int, /) -> None: ...
-
     @property
     def tilesize(self) -> IntVect1D: ...
-
     @tilesize.setter
     def tilesize(self, arg: IntVect1D, /) -> None: ...
-
     def enable_tiling(self, ts: IntVect1D) -> MFItInfo: ...
-
     def set_dynamic(self, f: bool) -> MFItInfo: ...
-
     def disable_device_sync(self) -> MFItInfo: ...
-
     def set_device_sync(self, f: bool) -> MFItInfo: ...
-
     def set_num_streams(self, n: int) -> MFItInfo: ...
-
     def use_default_stream(self) -> MFItInfo: ...
 
 class iMultiFab(FabArray_IArrayBox):
@@ -6902,7 +5412,15 @@ class iMultiFab(FabArray_IArrayBox):
         """
 
     @overload
-    def __init__(self, bxs: BoxArray, dm: DistributionMapping, ncomp: int, ngrow: int, info: MFInfo, factory: FabFactory_IArrayBox) -> None:
+    def __init__(
+        self,
+        bxs: BoxArray,
+        dm: DistributionMapping,
+        ncomp: int,
+        ngrow: int,
+        info: MFInfo,
+        factory: FabFactory_IArrayBox,
+    ) -> None:
         r"""
         Constructs an (i)MultiFab.
 
@@ -6928,7 +5446,14 @@ class iMultiFab(FabArray_IArrayBox):
         """
 
     @overload
-    def __init__(self, bxs: BoxArray, dm: DistributionMapping, ncomp: int, ngrow: int, info: MFInfo) -> None:
+    def __init__(
+        self,
+        bxs: BoxArray,
+        dm: DistributionMapping,
+        ncomp: int,
+        ngrow: int,
+        info: MFInfo,
+    ) -> None:
         r"""
         Constructs an (i)MultiFab.
 
@@ -6954,7 +5479,9 @@ class iMultiFab(FabArray_IArrayBox):
         """
 
     @overload
-    def __init__(self, bxs: BoxArray, dm: DistributionMapping, ncomp: int, ngrow: int) -> None:
+    def __init__(
+        self, bxs: BoxArray, dm: DistributionMapping, ncomp: int, ngrow: int
+    ) -> None:
         r"""
         Constructs an (i)MultiFab.
 
@@ -6980,7 +5507,14 @@ class iMultiFab(FabArray_IArrayBox):
         """
 
     @overload
-    def __init__(self, bxs: BoxArray, dm: DistributionMapping, ncomp: int, ngrow: IntVect1D, info: MFInfo) -> None:
+    def __init__(
+        self,
+        bxs: BoxArray,
+        dm: DistributionMapping,
+        ncomp: int,
+        ngrow: IntVect1D,
+        info: MFInfo,
+    ) -> None:
         r"""
         Constructs an (i)MultiFab.
 
@@ -7006,7 +5540,15 @@ class iMultiFab(FabArray_IArrayBox):
         """
 
     @overload
-    def __init__(self, bxs: BoxArray, dm: DistributionMapping, ncomp: int, ngrow: IntVect1D, info: MFInfo, factory: FabFactory_IArrayBox) -> None:
+    def __init__(
+        self,
+        bxs: BoxArray,
+        dm: DistributionMapping,
+        ncomp: int,
+        ngrow: IntVect1D,
+        info: MFInfo,
+        factory: FabFactory_IArrayBox,
+    ) -> None:
         r"""
         Constructs an (i)MultiFab.
 
@@ -7032,7 +5574,9 @@ class iMultiFab(FabArray_IArrayBox):
         """
 
     @overload
-    def __init__(self, bxs: BoxArray, dm: DistributionMapping, ncomp: int, ngrow: IntVect1D) -> None:
+    def __init__(
+        self, bxs: BoxArray, dm: DistributionMapping, ncomp: int, ngrow: IntVect1D
+    ) -> None:
         r"""
         Constructs an (i)MultiFab.
 
@@ -7058,7 +5602,6 @@ class iMultiFab(FabArray_IArrayBox):
         """
 
     def __repr__(self) -> str: ...
-
     @overload
     def min(self, comp: int = 0, nghost: int = 0, local: bool = False) -> int:
         """
@@ -7066,7 +5609,9 @@ class iMultiFab(FabArray_IArrayBox):
         """
 
     @overload
-    def min(self, region: Box, comp: int = 0, nghost: int = 0, local: bool = False) -> int:
+    def min(
+        self, region: Box, comp: int = 0, nghost: int = 0, local: bool = False
+    ) -> int:
         """
         Returns the minimum value of the specified component of the (i)MultiFab over the region.
         """
@@ -7078,15 +5623,15 @@ class iMultiFab(FabArray_IArrayBox):
         """
 
     @overload
-    def max(self, region: Box, comp: int = 0, nghost: int = 0, local: bool = False) -> int:
+    def max(
+        self, region: Box, comp: int = 0, nghost: int = 0, local: bool = False
+    ) -> int:
         """
         Returns the maximum value of the specified component of the (i)MultiFab over the region.
         """
 
     def minIndex(self, arg0: int, arg1: int, /) -> IntVect1D: ...
-
     def maxIndex(self, arg0: int, arg1: int, /) -> IntVect1D: ...
-
     @overload
     def sum(self, comp: int = 0, local: bool = False) -> int:
         """
@@ -7131,7 +5676,9 @@ class iMultiFab(FabArray_IArrayBox):
         """
 
     @overload
-    def plus(self, val: int, region: Box, comp: int, num_comp: int, nghost: int = 0) -> None:
+    def plus(
+        self, val: int, region: Box, comp: int, num_comp: int, nghost: int = 0
+    ) -> None:
         """
         Identical to the previous version of plus(), with the
         restriction that the subregion is further constrained to
@@ -7139,7 +5686,9 @@ class iMultiFab(FabArray_IArrayBox):
         """
 
     @overload
-    def plus(self, mf: iMultiFab, strt_comp: int, num_comp: int, nghost: int = 0) -> None:
+    def plus(
+        self, mf: iMultiFab, strt_comp: int, num_comp: int, nghost: int = 0
+    ) -> None:
         """
         This function adds the values of the cells in mf to the corresponding
         cells of this MultiFab.  mf is required to have the same BoxArray or
@@ -7150,7 +5699,9 @@ class iMultiFab(FabArray_IArrayBox):
         modified.
         """
 
-    def minus(self, mf: iMultiFab, strt_comp: int, num_comp: int, nghost: int = 0) -> None:
+    def minus(
+        self, mf: iMultiFab, strt_comp: int, num_comp: int, nghost: int = 0
+    ) -> None:
         """
         This function subtracts the values of the cells in mf from the
         corresponding cells of this MultiFab.  mf is required to have the
@@ -7161,7 +5712,9 @@ class iMultiFab(FabArray_IArrayBox):
         each FArrayBox will be modified.
         """
 
-    def divi(self, mf: iMultiFab, strt_comp: int, num_comp: int, nghost: int = 0) -> None:
+    def divi(
+        self, mf: iMultiFab, strt_comp: int, num_comp: int, nghost: int = 0
+    ) -> None:
         """
         This function divides the values of the cells in mf from the
         corresponding cells of this MultiFab.  mf is required to have the
@@ -7194,7 +5747,9 @@ class iMultiFab(FabArray_IArrayBox):
         """
 
     @overload
-    def mult(self, val: int, region: Box, comp: int, num_comp: int, nghost: int = 0) -> None:
+    def mult(
+        self, val: int, region: Box, comp: int, num_comp: int, nghost: int = 0
+    ) -> None:
         """
         Identical to the previous version of mult(), with the
         restriction that the subregion is further constrained to the
@@ -7249,53 +5804,69 @@ class iMultiFab(FabArray_IArrayBox):
         """
 
     @overload
-    def add(self, src: iMultiFab, srccomp: int, comp: int, numcomp: int, nghost: int) -> None:
+    def add(
+        self, src: iMultiFab, srccomp: int, comp: int, numcomp: int, nghost: int
+    ) -> None:
         """
         Add src to self including nghost ghost cells.
         The two MultiFabs MUST have the same underlying BoxArray.
         """
 
     @overload
-    def add(self, src: iMultiFab, srccomp: int, comp: int, numcomp: int, nghost: IntVect1D) -> None: ...
-
-    def copymf(self, src: iMultiFab, srccomp: int, dstcomp: int, numcomp: int, nghost: int) -> None:
+    def add(
+        self, src: iMultiFab, srccomp: int, comp: int, numcomp: int, nghost: IntVect1D
+    ) -> None: ...
+    def copymf(
+        self, src: iMultiFab, srccomp: int, dstcomp: int, numcomp: int, nghost: int
+    ) -> None:
         """
         Copy from src to self including nghost ghost cells.
         The two MultiFabs MUST have the same underlying BoxArray. The copy is local
         """
 
     @overload
-    def subtract(self, src: iMultiFab, srccomp: int, comp: int, numcomp: int, nghost: int) -> None:
+    def subtract(
+        self, src: iMultiFab, srccomp: int, comp: int, numcomp: int, nghost: int
+    ) -> None:
         """
         Subtract src from self including nghost ghost cells.
         The two MultiFabs MUST have the same underlying BoxArray.
         """
 
     @overload
-    def subtract(self, src: iMultiFab, srccomp: int, comp: int, numcomp: int, nghost: IntVect1D) -> None: ...
-
+    def subtract(
+        self, src: iMultiFab, srccomp: int, comp: int, numcomp: int, nghost: IntVect1D
+    ) -> None: ...
     @overload
-    def multiply(self, src: iMultiFab, srccomp: int, comp: int, numcomp: int, nghost: int) -> None:
+    def multiply(
+        self, src: iMultiFab, srccomp: int, comp: int, numcomp: int, nghost: int
+    ) -> None:
         """
         Multiply self by src including nghost ghost cells.
         The two MultiFabs MUST have the same underlying BoxArray.
         """
 
     @overload
-    def multiply(self, src: iMultiFab, srccomp: int, comp: int, numcomp: int, nghost: IntVect1D) -> None: ...
-
+    def multiply(
+        self, src: iMultiFab, srccomp: int, comp: int, numcomp: int, nghost: IntVect1D
+    ) -> None: ...
     @overload
-    def divide(self, src: iMultiFab, srccomp: int, comp: int, numcomp: int, nghost: int) -> None:
+    def divide(
+        self, src: iMultiFab, srccomp: int, comp: int, numcomp: int, nghost: int
+    ) -> None:
         """
         Divide self by src including nghost ghost cells.
         The two MultiFabs MUST have the same underlying BoxArray.
         """
 
     @overload
-    def divide(self, src: iMultiFab, srccomp: int, comp: int, numcomp: int, nghost: IntVect1D) -> None: ...
-
+    def divide(
+        self, src: iMultiFab, srccomp: int, comp: int, numcomp: int, nghost: IntVect1D
+    ) -> None: ...
     @overload
-    def swap(self, src: iMultiFab, srccomp: int, comp: int, numcomp: int, nghost: int) -> None:
+    def swap(
+        self, src: iMultiFab, srccomp: int, comp: int, numcomp: int, nghost: int
+    ) -> None:
         """
         Swap from src to self including nghost ghost cells.
         The two MultiFabs MUST have the same underlying BoxArray.
@@ -7303,42 +5874,63 @@ class iMultiFab(FabArray_IArrayBox):
         """
 
     @overload
-    def swap(self, src: iMultiFab, srccomp: int, comp: int, numcomp: int, nghost: IntVect1D) -> None: ...
-
+    def swap(
+        self, src: iMultiFab, srccomp: int, comp: int, numcomp: int, nghost: IntVect1D
+    ) -> None: ...
     def box_array(self) -> BoxArray: ...
-
     def dm(self) -> DistributionMapping: ...
-
     @property
     def n_comp(self) -> int: ...
-
     @property
     def n_grow_vect(self) -> IntVect1D: ...
-
     @staticmethod
     def initialize() -> None: ...
-
     @staticmethod
     def finalize() -> None: ...
 
 @overload
-def copy_mfab(dst: iMultiFab, src: iMultiFab, srccomp: int, dstcomp: int, numcomp: int, nghost: int) -> None: ...
-
+def copy_mfab(
+    dst: iMultiFab,
+    src: iMultiFab,
+    srccomp: int,
+    dstcomp: int,
+    numcomp: int,
+    nghost: int,
+) -> None: ...
 @overload
-def copy_mfab(dst: iMultiFab, src: iMultiFab, srccomp: int, dstcomp: int, numcomp: int, nghost: IntVect1D) -> None: ...
-
+def copy_mfab(
+    dst: iMultiFab,
+    src: iMultiFab,
+    srccomp: int,
+    dstcomp: int,
+    numcomp: int,
+    nghost: IntVect1D,
+) -> None: ...
 @overload
-def copy_mfab(dst: MultiFab, src: MultiFab, srccomp: int, dstcomp: int, numcomp: int, nghost: int) -> None: ...
-
+def copy_mfab(
+    dst: MultiFab, src: MultiFab, srccomp: int, dstcomp: int, numcomp: int, nghost: int
+) -> None: ...
 @overload
-def copy_mfab(dst: MultiFab, src: MultiFab, srccomp: int, dstcomp: int, numcomp: int, nghost: IntVect1D) -> None: ...
-
+def copy_mfab(
+    dst: MultiFab,
+    src: MultiFab,
+    srccomp: int,
+    dstcomp: int,
+    numcomp: int,
+    nghost: IntVect1D,
+) -> None: ...
 @overload
 def htod_memcpy(dest: FabArray_IArrayBox, src: FabArray_IArrayBox) -> None:
     """Copy from a host to device FabArray."""
 
 @overload
-def htod_memcpy(dest: FabArray_IArrayBox, src: FabArray_IArrayBox, scomp: int, dcomp: int, ncomp: int) -> None:
+def htod_memcpy(
+    dest: FabArray_IArrayBox,
+    src: FabArray_IArrayBox,
+    scomp: int,
+    dcomp: int,
+    ncomp: int,
+) -> None:
     """
     Copy from a host to device FabArray for a specific (number of) component(s).
     """
@@ -7348,7 +5940,13 @@ def htod_memcpy(dest: FabArray_FArrayBox, src: FabArray_FArrayBox) -> None:
     """Copy from a host to device FabArray."""
 
 @overload
-def htod_memcpy(dest: FabArray_FArrayBox, src: FabArray_FArrayBox, scomp: int, dcomp: int, ncomp: int) -> None:
+def htod_memcpy(
+    dest: FabArray_FArrayBox,
+    src: FabArray_FArrayBox,
+    scomp: int,
+    dcomp: int,
+    ncomp: int,
+) -> None:
     """
     Copy from a host to device FabArray for a specific (number of) component(s).
     """
@@ -7358,7 +5956,13 @@ def dtoh_memcpy(dest: FabArray_IArrayBox, src: FabArray_IArrayBox) -> None:
     """Copy from a device to host FabArray."""
 
 @overload
-def dtoh_memcpy(dest: FabArray_IArrayBox, src: FabArray_IArrayBox, scomp: int, dcomp: int, ncomp: int) -> None:
+def dtoh_memcpy(
+    dest: FabArray_IArrayBox,
+    src: FabArray_IArrayBox,
+    scomp: int,
+    dcomp: int,
+    ncomp: int,
+) -> None:
     """
     Copy from a device to host FabArray for a specific (number of) component(s).
     """
@@ -7368,7 +5972,13 @@ def dtoh_memcpy(dest: FabArray_FArrayBox, src: FabArray_FArrayBox) -> None:
     """Copy from a device to host FabArray."""
 
 @overload
-def dtoh_memcpy(dest: FabArray_FArrayBox, src: FabArray_FArrayBox, scomp: int, dcomp: int, ncomp: int) -> None:
+def dtoh_memcpy(
+    dest: FabArray_FArrayBox,
+    src: FabArray_FArrayBox,
+    scomp: int,
+    dcomp: int,
+    ncomp: int,
+) -> None:
     """
     Copy from a device to host FabArray for a specific (number of) component(s).
     """
@@ -7395,7 +6005,15 @@ class MultiFab(FabArray_FArrayBox):
         """
 
     @overload
-    def __init__(self, bxs: BoxArray, dm: DistributionMapping, ncomp: int, ngrow: int, info: MFInfo, factory: FabFactory_FArrayBox) -> None:
+    def __init__(
+        self,
+        bxs: BoxArray,
+        dm: DistributionMapping,
+        ncomp: int,
+        ngrow: int,
+        info: MFInfo,
+        factory: FabFactory_FArrayBox,
+    ) -> None:
         r"""
         Constructs an (i)MultiFab.
 
@@ -7421,7 +6039,14 @@ class MultiFab(FabArray_FArrayBox):
         """
 
     @overload
-    def __init__(self, bxs: BoxArray, dm: DistributionMapping, ncomp: int, ngrow: int, info: MFInfo) -> None:
+    def __init__(
+        self,
+        bxs: BoxArray,
+        dm: DistributionMapping,
+        ncomp: int,
+        ngrow: int,
+        info: MFInfo,
+    ) -> None:
         r"""
         Constructs an (i)MultiFab.
 
@@ -7447,7 +6072,9 @@ class MultiFab(FabArray_FArrayBox):
         """
 
     @overload
-    def __init__(self, bxs: BoxArray, dm: DistributionMapping, ncomp: int, ngrow: int) -> None:
+    def __init__(
+        self, bxs: BoxArray, dm: DistributionMapping, ncomp: int, ngrow: int
+    ) -> None:
         r"""
         Constructs an (i)MultiFab.
 
@@ -7473,7 +6100,14 @@ class MultiFab(FabArray_FArrayBox):
         """
 
     @overload
-    def __init__(self, bxs: BoxArray, dm: DistributionMapping, ncomp: int, ngrow: IntVect1D, info: MFInfo) -> None:
+    def __init__(
+        self,
+        bxs: BoxArray,
+        dm: DistributionMapping,
+        ncomp: int,
+        ngrow: IntVect1D,
+        info: MFInfo,
+    ) -> None:
         r"""
         Constructs an (i)MultiFab.
 
@@ -7499,7 +6133,15 @@ class MultiFab(FabArray_FArrayBox):
         """
 
     @overload
-    def __init__(self, bxs: BoxArray, dm: DistributionMapping, ncomp: int, ngrow: IntVect1D, info: MFInfo, factory: FabFactory_FArrayBox) -> None:
+    def __init__(
+        self,
+        bxs: BoxArray,
+        dm: DistributionMapping,
+        ncomp: int,
+        ngrow: IntVect1D,
+        info: MFInfo,
+        factory: FabFactory_FArrayBox,
+    ) -> None:
         r"""
         Constructs an (i)MultiFab.
 
@@ -7525,7 +6167,9 @@ class MultiFab(FabArray_FArrayBox):
         """
 
     @overload
-    def __init__(self, bxs: BoxArray, dm: DistributionMapping, ncomp: int, ngrow: IntVect1D) -> None:
+    def __init__(
+        self, bxs: BoxArray, dm: DistributionMapping, ncomp: int, ngrow: IntVect1D
+    ) -> None:
         r"""
         Constructs an (i)MultiFab.
 
@@ -7551,7 +6195,6 @@ class MultiFab(FabArray_FArrayBox):
         """
 
     def __repr__(self) -> str: ...
-
     @overload
     def min(self, comp: int = 0, nghost: int = 0, local: bool = False) -> float:
         """
@@ -7559,7 +6202,9 @@ class MultiFab(FabArray_FArrayBox):
         """
 
     @overload
-    def min(self, region: Box, comp: int = 0, nghost: int = 0, local: bool = False) -> float:
+    def min(
+        self, region: Box, comp: int = 0, nghost: int = 0, local: bool = False
+    ) -> float:
         """
         Returns the minimum value of the specified component of the (i)MultiFab over the region.
         """
@@ -7571,41 +6216,32 @@ class MultiFab(FabArray_FArrayBox):
         """
 
     @overload
-    def max(self, region: Box, comp: int = 0, nghost: int = 0, local: bool = False) -> float:
+    def max(
+        self, region: Box, comp: int = 0, nghost: int = 0, local: bool = False
+    ) -> float:
         """
         Returns the maximum value of the specified component of the (i)MultiFab over the region.
         """
 
     def minIndex(self, arg0: int, arg1: int, /) -> IntVect1D: ...
-
     def maxIndex(self, arg0: int, arg1: int, /) -> IntVect1D: ...
-
     @overload
     def norm0(self, arg0: int, arg1: int, arg2: bool, arg3: bool, /) -> float: ...
-
     @overload
     def norm0(self, arg0: iMultiFab, arg1: int, arg2: int, arg3: bool, /) -> float: ...
-
     def norminf(self, arg0: int, arg1: int, arg2: bool, arg3: bool, /) -> float: ...
-
     @overload
     def norm1(self, arg0: int, arg1: Periodicity, arg2: bool, /) -> float: ...
-
     @overload
     def norm1(self, arg0: int, arg1: int, arg2: bool, /) -> float: ...
-
     @overload
     def norm1(self, arg0: Vector_int, arg1: int, arg2: bool, /) -> Vector_Real: ...
-
     @overload
     def norm2(self, arg: int, /) -> float: ...
-
     @overload
     def norm2(self, arg0: int, arg1: Periodicity, /) -> float: ...
-
     @overload
     def norm2(self, arg: Vector_int, /) -> Vector_Real: ...
-
     @overload
     def sum(self, comp: int = 0, local: bool = False) -> float:
         """
@@ -7619,7 +6255,9 @@ class MultiFab(FabArray_FArrayBox):
         """
 
     @overload
-    def sum_unique(self, comp: int = 0, local: bool = False, period: Periodicity = ...) -> float:
+    def sum_unique(
+        self, comp: int = 0, local: bool = False, period: Periodicity = ...
+    ) -> float:
         """
         Same as sum with local=false, but for non-cell-centered data, thisskips non-unique points that are owned by multiple boxes.
         """
@@ -7662,7 +6300,9 @@ class MultiFab(FabArray_FArrayBox):
         """
 
     @overload
-    def plus(self, val: float, region: Box, comp: int, num_comp: int, nghost: int = 0) -> None:
+    def plus(
+        self, val: float, region: Box, comp: int, num_comp: int, nghost: int = 0
+    ) -> None:
         """
         Identical to the previous version of plus(), with the
         restriction that the subregion is further constrained to
@@ -7670,7 +6310,9 @@ class MultiFab(FabArray_FArrayBox):
         """
 
     @overload
-    def plus(self, mf: MultiFab, strt_comp: int, num_comp: int, nghost: int = 0) -> None:
+    def plus(
+        self, mf: MultiFab, strt_comp: int, num_comp: int, nghost: int = 0
+    ) -> None:
         """
         This function adds the values of the cells in mf to the corresponding
         cells of this MultiFab.  mf is required to have the same BoxArray or
@@ -7681,7 +6323,9 @@ class MultiFab(FabArray_FArrayBox):
         modified.
         """
 
-    def minus(self, mf: MultiFab, strt_comp: int, num_comp: int, nghost: int = 0) -> None:
+    def minus(
+        self, mf: MultiFab, strt_comp: int, num_comp: int, nghost: int = 0
+    ) -> None:
         """
         This function subtracts the values of the cells in mf from the
         corresponding cells of this MultiFab.  mf is required to have the
@@ -7692,7 +6336,9 @@ class MultiFab(FabArray_FArrayBox):
         each FArrayBox will be modified.
         """
 
-    def divi(self, mf: MultiFab, strt_comp: int, num_comp: int, nghost: int = 0) -> None:
+    def divi(
+        self, mf: MultiFab, strt_comp: int, num_comp: int, nghost: int = 0
+    ) -> None:
         """
         This function divides the values of the cells in mf from the
         corresponding cells of this MultiFab.  mf is required to have the
@@ -7725,7 +6371,9 @@ class MultiFab(FabArray_FArrayBox):
         """
 
     @overload
-    def mult(self, val: float, region: Box, comp: int, num_comp: int, nghost: int = 0) -> None:
+    def mult(
+        self, val: float, region: Box, comp: int, num_comp: int, nghost: int = 0
+    ) -> None:
         """
         Identical to the previous version of mult(), with the
         restriction that the subregion is further constrained to the
@@ -7754,7 +6402,9 @@ class MultiFab(FabArray_FArrayBox):
         """
 
     @overload
-    def invert(self, numerator: float, comp: int, num_comp: int, nghost: int = 0) -> None:
+    def invert(
+        self, numerator: float, comp: int, num_comp: int, nghost: int = 0
+    ) -> None:
         """
         Replaces the value of each cell in the specified subregion of
         the MultiFab with its reciprocal multiplied by the value of
@@ -7775,7 +6425,9 @@ class MultiFab(FabArray_FArrayBox):
         """
 
     @overload
-    def invert(self, numerator: float, region: Box, comp: int, num_comp: int, nghost: int = 0) -> None:
+    def invert(
+        self, numerator: float, region: Box, comp: int, num_comp: int, nghost: int = 0
+    ) -> None:
         """
         Identical to the previous version of invert(), with the
         restriction that the subregion is further constrained to the
@@ -7820,7 +6472,15 @@ class MultiFab(FabArray_FArrayBox):
         """
 
     @overload
-    def dot(self, comp: int, y: MultiFab, y_comp: int, numcomp: int, nghost: int, local: bool = False) -> float:
+    def dot(
+        self,
+        comp: int,
+        y: MultiFab,
+        y_comp: int,
+        numcomp: int,
+        nghost: int,
+        local: bool = False,
+    ) -> float:
         """Returns the dot product of self with another MultiFab."""
 
     @overload
@@ -7828,63 +6488,89 @@ class MultiFab(FabArray_FArrayBox):
         """Returns the dot product with itself."""
 
     @overload
-    def dot(self, mask: iMultiFab, comp: int, y: MultiFab, y_comp: int, numcomp: int, nghost: int, local: bool = False) -> float:
+    def dot(
+        self,
+        mask: iMultiFab,
+        comp: int,
+        y: MultiFab,
+        y_comp: int,
+        numcomp: int,
+        nghost: int,
+        local: bool = False,
+    ) -> float:
         """
         Returns the dot product of self with another MultiFab where the mask is valid.
         """
 
     @overload
-    def add(self, src: MultiFab, srccomp: int, comp: int, numcomp: int, nghost: int) -> None:
+    def add(
+        self, src: MultiFab, srccomp: int, comp: int, numcomp: int, nghost: int
+    ) -> None:
         """
         Add src to self including nghost ghost cells.
         The two MultiFabs MUST have the same underlying BoxArray.
         """
 
     @overload
-    def add(self, src: MultiFab, srccomp: int, comp: int, numcomp: int, nghost: IntVect1D) -> None: ...
-
+    def add(
+        self, src: MultiFab, srccomp: int, comp: int, numcomp: int, nghost: IntVect1D
+    ) -> None: ...
     @overload
-    def copymf(self, src: MultiFab, srccomp: int, dstcomp: int, numcomp: int, nghost: int) -> None:
+    def copymf(
+        self, src: MultiFab, srccomp: int, dstcomp: int, numcomp: int, nghost: int
+    ) -> None:
         """
         Copy from src to self including nghost ghost cells.
         The two MultiFabs MUST have the same underlying BoxArray. The copy is local
         """
 
     @overload
-    def copymf(self, src: MultiFab, srccomp: int, dstcomp: int, numcomp: int, nghost: IntVect1D) -> None: ...
-
+    def copymf(
+        self, src: MultiFab, srccomp: int, dstcomp: int, numcomp: int, nghost: IntVect1D
+    ) -> None: ...
     @overload
-    def subtract(self, src: MultiFab, srccomp: int, comp: int, numcomp: int, nghost: int) -> None:
+    def subtract(
+        self, src: MultiFab, srccomp: int, comp: int, numcomp: int, nghost: int
+    ) -> None:
         """
         Subtract src from self including nghost ghost cells.
         The two MultiFabs MUST have the same underlying BoxArray.
         """
 
     @overload
-    def subtract(self, src: MultiFab, srccomp: int, comp: int, numcomp: int, nghost: IntVect1D) -> None: ...
-
+    def subtract(
+        self, src: MultiFab, srccomp: int, comp: int, numcomp: int, nghost: IntVect1D
+    ) -> None: ...
     @overload
-    def multiply(self, src: MultiFab, srccomp: int, comp: int, numcomp: int, nghost: int) -> None:
+    def multiply(
+        self, src: MultiFab, srccomp: int, comp: int, numcomp: int, nghost: int
+    ) -> None:
         """
         Multiply self by src including nghost ghost cells.
         The two MultiFabs MUST have the same underlying BoxArray.
         """
 
     @overload
-    def multiply(self, src: MultiFab, srccomp: int, comp: int, numcomp: int, nghost: IntVect1D) -> None: ...
-
+    def multiply(
+        self, src: MultiFab, srccomp: int, comp: int, numcomp: int, nghost: IntVect1D
+    ) -> None: ...
     @overload
-    def divide(self, src: MultiFab, srccomp: int, comp: int, numcomp: int, nghost: int) -> None:
+    def divide(
+        self, src: MultiFab, srccomp: int, comp: int, numcomp: int, nghost: int
+    ) -> None:
         """
         Divide self by src including nghost ghost cells.
         The two MultiFabs MUST have the same underlying BoxArray.
         """
 
     @overload
-    def divide(self, src: MultiFab, srccomp: int, comp: int, numcomp: int, nghost: IntVect1D) -> None: ...
-
+    def divide(
+        self, src: MultiFab, srccomp: int, comp: int, numcomp: int, nghost: IntVect1D
+    ) -> None: ...
     @overload
-    def swap(self, src: MultiFab, srccomp: int, comp: int, numcomp: int, nghost: int) -> None:
+    def swap(
+        self, src: MultiFab, srccomp: int, comp: int, numcomp: int, nghost: int
+    ) -> None:
         """
         Swap from src to self including nghost ghost cells.
         The two MultiFabs MUST have the same underlying BoxArray.
@@ -7892,61 +6578,100 @@ class MultiFab(FabArray_FArrayBox):
         """
 
     @overload
-    def swap(self, src: MultiFab, srccomp: int, comp: int, numcomp: int, nghost: IntVect1D) -> None: ...
-
-    def saxpy(self, a: float, src: MultiFab, srccomp: int, comp: int, numcomp: int, nghost: int) -> None:
+    def swap(
+        self, src: MultiFab, srccomp: int, comp: int, numcomp: int, nghost: IntVect1D
+    ) -> None: ...
+    def saxpy(
+        self,
+        a: float,
+        src: MultiFab,
+        srccomp: int,
+        comp: int,
+        numcomp: int,
+        nghost: int,
+    ) -> None:
         """self += a * src"""
 
-    def xpay(self, a: float, src: MultiFab, srccomp: int, comp: int, numcomp: int, nghost: int) -> None:
+    def xpay(
+        self,
+        a: float,
+        src: MultiFab,
+        srccomp: int,
+        comp: int,
+        numcomp: int,
+        nghost: int,
+    ) -> None:
         """self = src + a * self"""
 
-    def lin_comb(self, a: float, x: MultiFab, x_comp: int, b: float, y: MultiFab, y_comp: int, comp: int, numcomp: int, nghost: int) -> None:
+    def lin_comb(
+        self,
+        a: float,
+        x: MultiFab,
+        x_comp: int,
+        b: float,
+        y: MultiFab,
+        y_comp: int,
+        comp: int,
+        numcomp: int,
+        nghost: int,
+    ) -> None:
         """self = a * x + b * y"""
 
     @overload
-    def add_product(self, src1: MultiFab, comp1: int, src2: MultiFab, comp2: int, comp: int, numcomp: int, nghost: int) -> None:
+    def add_product(
+        self,
+        src1: MultiFab,
+        comp1: int,
+        src2: MultiFab,
+        comp2: int,
+        comp: int,
+        numcomp: int,
+        nghost: int,
+    ) -> None:
         """self += src1 * src2"""
 
     @overload
-    def add_product(self, src1: MultiFab, comp1: int, src2: MultiFab, comp2: int, comp: int, numcomp: int, nghost: IntVect1D) -> None: ...
-
+    def add_product(
+        self,
+        src1: MultiFab,
+        comp1: int,
+        src2: MultiFab,
+        comp2: int,
+        comp: int,
+        numcomp: int,
+        nghost: IntVect1D,
+    ) -> None: ...
     @overload
     def contains_nan(self, local: bool = False) -> bool: ...
-
     @overload
-    def contains_nan(self, scomp: int, ncomp: int, ngrow: int = 0, local: bool = False) -> bool: ...
-
+    def contains_nan(
+        self, scomp: int, ncomp: int, ngrow: int = 0, local: bool = False
+    ) -> bool: ...
     @overload
-    def contains_nan(self, scomp: int, ncomp: int, ngrow: IntVect1D, local: bool = False) -> bool: ...
-
+    def contains_nan(
+        self, scomp: int, ncomp: int, ngrow: IntVect1D, local: bool = False
+    ) -> bool: ...
     @overload
     def contains_inf(self, local: bool = False) -> bool: ...
-
     @overload
-    def contains_inf(self, scomp: int, ncomp: int, ngrow: int = 0, local: bool = False) -> bool: ...
-
+    def contains_inf(
+        self, scomp: int, ncomp: int, ngrow: int = 0, local: bool = False
+    ) -> bool: ...
     @overload
-    def contains_inf(self, scomp: int, ncomp: int, ngrow: IntVect1D, local: bool = False) -> bool: ...
-
+    def contains_inf(
+        self, scomp: int, ncomp: int, ngrow: IntVect1D, local: bool = False
+    ) -> bool: ...
     def box_array(self) -> BoxArray: ...
-
     def dm(self) -> DistributionMapping: ...
-
     @property
     def n_comp(self) -> int: ...
-
     @property
     def n_grow_vect(self) -> IntVect1D: ...
-
     def average_sync(self, arg: Periodicity, /) -> None: ...
-
     def weighted_sync(self, arg0: MultiFab, arg1: Periodicity, /) -> None: ...
-
     def override_sync(self, arg0: iMultiFab, arg1: Periodicity, /) -> None: ...
-
     @staticmethod
     def initialize() -> None: ...
-
     @staticmethod
     def finalize() -> None: ...
 
@@ -7983,7 +6708,15 @@ class PhysBCFunctNoOp:
     def __init__(self) -> None:
         """Create a no-op physical boundary functor."""
 
-    def __call__(self, mf: MultiFab, dcomp: int, ncomp: int, nghost: IntVect1D, time: float, bccomp: int) -> None:
+    def __call__(
+        self,
+        mf: MultiFab,
+        dcomp: int,
+        ncomp: int,
+        nghost: IntVect1D,
+        time: float,
+        bccomp: int,
+    ) -> None:
         """
         Apply the no-op boundary fill.
 
@@ -8032,7 +6765,9 @@ class PhysBCFunct_CpuBndryFuncFab:
         """
 
     @overload
-    def __init__(self, geom: Geometry, bc: Vector_BCRec, bndry_func: CpuBndryFuncFab) -> None:
+    def __init__(
+        self, geom: Geometry, bc: Vector_BCRec, bndry_func: CpuBndryFuncFab
+    ) -> None:
         """
         Create a physical boundary functor.
 
@@ -8042,7 +6777,9 @@ class PhysBCFunct_CpuBndryFuncFab:
             bndry_func: Boundary-fill helper, usually CpuBndryFuncFab().
         """
 
-    def define(self, geom: Geometry, bc: Vector_BCRec, bndry_func: CpuBndryFuncFab) -> None:
+    def define(
+        self, geom: Geometry, bc: Vector_BCRec, bndry_func: CpuBndryFuncFab
+    ) -> None:
         """
         Reset the geometry, component BC records, and boundary helper.
 
@@ -8052,7 +6789,15 @@ class PhysBCFunct_CpuBndryFuncFab:
             bndry_func: Boundary-fill helper, usually CpuBndryFuncFab().
         """
 
-    def __call__(self, mf: MultiFab, dcomp: int, ncomp: int, nghost: IntVect1D, time: float, bccomp: int) -> None:
+    def __call__(
+        self,
+        mf: MultiFab,
+        dcomp: int,
+        ncomp: int,
+        nghost: IntVect1D,
+        time: float,
+        bccomp: int,
+    ) -> None:
         """
         Fill physical-domain ghost cells for a component range.
 
@@ -8099,7 +6844,15 @@ class PhysBCFunctUser:
                 callback(mf, dcomp, ncomp, nghost, time, bccomp).
         """
 
-    def __call__(self, mf: MultiFab, dcomp: int, ncomp: int, nghost: IntVect1D, time: float, bccomp: int) -> None:
+    def __call__(
+        self,
+        mf: MultiFab,
+        dcomp: int,
+        ncomp: int,
+        nghost: IntVect1D,
+        time: float,
+        bccomp: int,
+    ) -> None:
         """
         Invoke the Python physical-boundary callback.
 
@@ -8132,52 +6885,42 @@ class PODVector_real_pinned:
 
     @overload
     def __init__(self) -> None: ...
-
     @overload
     def __init__(self, size: int) -> None: ...
-
     @overload
     def __init__(self, other: PODVector_real_pinned) -> None: ...
-
     def __repr__(self) -> str: ...
-
     def assign(self, value: float) -> None:
         """assign the same value to every element"""
 
     def push_back(self, arg: float, /) -> None: ...
-
     def pop_back(self) -> None: ...
-
     def clear(self) -> None: ...
-
     def size(self) -> int: ...
-
     def __len__(self) -> int: ...
-
     def capacity(self) -> int: ...
-
     def empty(self) -> bool: ...
-
     @overload
-    def resize(self, new_size: int, strategy: GrowthStrategy = GrowthStrategy.Poisson) -> None: ...
-
+    def resize(
+        self, new_size: int, strategy: GrowthStrategy = GrowthStrategy.Poisson
+    ) -> None: ...
     @overload
-    def resize(self, new_size: int, value: float, strategy: GrowthStrategy = GrowthStrategy.Poisson) -> None: ...
-
-    def reserve(self, capacity: int, strategy: GrowthStrategy = GrowthStrategy.Poisson) -> None: ...
-
+    def resize(
+        self,
+        new_size: int,
+        value: float,
+        strategy: GrowthStrategy = GrowthStrategy.Poisson,
+    ) -> None: ...
+    def reserve(
+        self, capacity: int, strategy: GrowthStrategy = GrowthStrategy.Poisson
+    ) -> None: ...
     def shrink_to_fit(self) -> None: ...
-
     @property
     def __array_interface__(self) -> dict: ...
-
     @property
     def __cuda_array_interface__(self) -> dict: ...
-
     def __setitem__(self, arg0: int, arg1: float, /) -> None: ...
-
     def __getitem__(self, arg: int, /) -> float: ...
-
     @staticmethod
     def from_numpy(arr: object) -> PODVector_real_pinned:
         """
@@ -8215,52 +6958,42 @@ class PODVector_real_arena:
 
     @overload
     def __init__(self) -> None: ...
-
     @overload
     def __init__(self, size: int) -> None: ...
-
     @overload
     def __init__(self, other: PODVector_real_arena) -> None: ...
-
     def __repr__(self) -> str: ...
-
     def assign(self, value: float) -> None:
         """assign the same value to every element"""
 
     def push_back(self, arg: float, /) -> None: ...
-
     def pop_back(self) -> None: ...
-
     def clear(self) -> None: ...
-
     def size(self) -> int: ...
-
     def __len__(self) -> int: ...
-
     def capacity(self) -> int: ...
-
     def empty(self) -> bool: ...
-
     @overload
-    def resize(self, new_size: int, strategy: GrowthStrategy = GrowthStrategy.Poisson) -> None: ...
-
+    def resize(
+        self, new_size: int, strategy: GrowthStrategy = GrowthStrategy.Poisson
+    ) -> None: ...
     @overload
-    def resize(self, new_size: int, value: float, strategy: GrowthStrategy = GrowthStrategy.Poisson) -> None: ...
-
-    def reserve(self, capacity: int, strategy: GrowthStrategy = GrowthStrategy.Poisson) -> None: ...
-
+    def resize(
+        self,
+        new_size: int,
+        value: float,
+        strategy: GrowthStrategy = GrowthStrategy.Poisson,
+    ) -> None: ...
+    def reserve(
+        self, capacity: int, strategy: GrowthStrategy = GrowthStrategy.Poisson
+    ) -> None: ...
     def shrink_to_fit(self) -> None: ...
-
     @property
     def __array_interface__(self) -> dict: ...
-
     @property
     def __cuda_array_interface__(self) -> dict: ...
-
     def __setitem__(self, arg0: int, arg1: float, /) -> None: ...
-
     def __getitem__(self, arg: int, /) -> float: ...
-
     @staticmethod
     def from_numpy(arr: object) -> PODVector_real_arena:
         """
@@ -8298,52 +7031,42 @@ class PODVector_real_std:
 
     @overload
     def __init__(self) -> None: ...
-
     @overload
     def __init__(self, size: int) -> None: ...
-
     @overload
     def __init__(self, other: PODVector_real_std) -> None: ...
-
     def __repr__(self) -> str: ...
-
     def assign(self, value: float) -> None:
         """assign the same value to every element"""
 
     def push_back(self, arg: float, /) -> None: ...
-
     def pop_back(self) -> None: ...
-
     def clear(self) -> None: ...
-
     def size(self) -> int: ...
-
     def __len__(self) -> int: ...
-
     def capacity(self) -> int: ...
-
     def empty(self) -> bool: ...
-
     @overload
-    def resize(self, new_size: int, strategy: GrowthStrategy = GrowthStrategy.Poisson) -> None: ...
-
+    def resize(
+        self, new_size: int, strategy: GrowthStrategy = GrowthStrategy.Poisson
+    ) -> None: ...
     @overload
-    def resize(self, new_size: int, value: float, strategy: GrowthStrategy = GrowthStrategy.Poisson) -> None: ...
-
-    def reserve(self, capacity: int, strategy: GrowthStrategy = GrowthStrategy.Poisson) -> None: ...
-
+    def resize(
+        self,
+        new_size: int,
+        value: float,
+        strategy: GrowthStrategy = GrowthStrategy.Poisson,
+    ) -> None: ...
+    def reserve(
+        self, capacity: int, strategy: GrowthStrategy = GrowthStrategy.Poisson
+    ) -> None: ...
     def shrink_to_fit(self) -> None: ...
-
     @property
     def __array_interface__(self) -> dict: ...
-
     @property
     def __cuda_array_interface__(self) -> dict: ...
-
     def __setitem__(self, arg0: int, arg1: float, /) -> None: ...
-
     def __getitem__(self, arg: int, /) -> float: ...
-
     @staticmethod
     def from_numpy(arr: object) -> PODVector_real_std:
         """
@@ -8381,52 +7104,42 @@ class PODVector_real_polymorphic:
 
     @overload
     def __init__(self) -> None: ...
-
     @overload
     def __init__(self, size: int) -> None: ...
-
     @overload
     def __init__(self, other: PODVector_real_polymorphic) -> None: ...
-
     def __repr__(self) -> str: ...
-
     def assign(self, value: float) -> None:
         """assign the same value to every element"""
 
     def push_back(self, arg: float, /) -> None: ...
-
     def pop_back(self) -> None: ...
-
     def clear(self) -> None: ...
-
     def size(self) -> int: ...
-
     def __len__(self) -> int: ...
-
     def capacity(self) -> int: ...
-
     def empty(self) -> bool: ...
-
     @overload
-    def resize(self, new_size: int, strategy: GrowthStrategy = GrowthStrategy.Poisson) -> None: ...
-
+    def resize(
+        self, new_size: int, strategy: GrowthStrategy = GrowthStrategy.Poisson
+    ) -> None: ...
     @overload
-    def resize(self, new_size: int, value: float, strategy: GrowthStrategy = GrowthStrategy.Poisson) -> None: ...
-
-    def reserve(self, capacity: int, strategy: GrowthStrategy = GrowthStrategy.Poisson) -> None: ...
-
+    def resize(
+        self,
+        new_size: int,
+        value: float,
+        strategy: GrowthStrategy = GrowthStrategy.Poisson,
+    ) -> None: ...
+    def reserve(
+        self, capacity: int, strategy: GrowthStrategy = GrowthStrategy.Poisson
+    ) -> None: ...
     def shrink_to_fit(self) -> None: ...
-
     @property
     def __array_interface__(self) -> dict: ...
-
     @property
     def __cuda_array_interface__(self) -> dict: ...
-
     def __setitem__(self, arg0: int, arg1: float, /) -> None: ...
-
     def __getitem__(self, arg: int, /) -> float: ...
-
     @staticmethod
     def from_numpy(arr: object) -> PODVector_real_polymorphic:
         """
@@ -8480,52 +7193,42 @@ class PODVector_int_pinned:
 
     @overload
     def __init__(self) -> None: ...
-
     @overload
     def __init__(self, size: int) -> None: ...
-
     @overload
     def __init__(self, other: PODVector_int_pinned) -> None: ...
-
     def __repr__(self) -> str: ...
-
     def assign(self, value: int) -> None:
         """assign the same value to every element"""
 
     def push_back(self, arg: int, /) -> None: ...
-
     def pop_back(self) -> None: ...
-
     def clear(self) -> None: ...
-
     def size(self) -> int: ...
-
     def __len__(self) -> int: ...
-
     def capacity(self) -> int: ...
-
     def empty(self) -> bool: ...
-
     @overload
-    def resize(self, new_size: int, strategy: GrowthStrategy = GrowthStrategy.Poisson) -> None: ...
-
+    def resize(
+        self, new_size: int, strategy: GrowthStrategy = GrowthStrategy.Poisson
+    ) -> None: ...
     @overload
-    def resize(self, new_size: int, value: int, strategy: GrowthStrategy = GrowthStrategy.Poisson) -> None: ...
-
-    def reserve(self, capacity: int, strategy: GrowthStrategy = GrowthStrategy.Poisson) -> None: ...
-
+    def resize(
+        self,
+        new_size: int,
+        value: int,
+        strategy: GrowthStrategy = GrowthStrategy.Poisson,
+    ) -> None: ...
+    def reserve(
+        self, capacity: int, strategy: GrowthStrategy = GrowthStrategy.Poisson
+    ) -> None: ...
     def shrink_to_fit(self) -> None: ...
-
     @property
     def __array_interface__(self) -> dict: ...
-
     @property
     def __cuda_array_interface__(self) -> dict: ...
-
     def __setitem__(self, arg0: int, arg1: int, /) -> None: ...
-
     def __getitem__(self, arg: int, /) -> int: ...
-
     @staticmethod
     def from_numpy(arr: object) -> PODVector_int_pinned:
         """
@@ -8563,52 +7266,42 @@ class PODVector_int_arena:
 
     @overload
     def __init__(self) -> None: ...
-
     @overload
     def __init__(self, size: int) -> None: ...
-
     @overload
     def __init__(self, other: PODVector_int_arena) -> None: ...
-
     def __repr__(self) -> str: ...
-
     def assign(self, value: int) -> None:
         """assign the same value to every element"""
 
     def push_back(self, arg: int, /) -> None: ...
-
     def pop_back(self) -> None: ...
-
     def clear(self) -> None: ...
-
     def size(self) -> int: ...
-
     def __len__(self) -> int: ...
-
     def capacity(self) -> int: ...
-
     def empty(self) -> bool: ...
-
     @overload
-    def resize(self, new_size: int, strategy: GrowthStrategy = GrowthStrategy.Poisson) -> None: ...
-
+    def resize(
+        self, new_size: int, strategy: GrowthStrategy = GrowthStrategy.Poisson
+    ) -> None: ...
     @overload
-    def resize(self, new_size: int, value: int, strategy: GrowthStrategy = GrowthStrategy.Poisson) -> None: ...
-
-    def reserve(self, capacity: int, strategy: GrowthStrategy = GrowthStrategy.Poisson) -> None: ...
-
+    def resize(
+        self,
+        new_size: int,
+        value: int,
+        strategy: GrowthStrategy = GrowthStrategy.Poisson,
+    ) -> None: ...
+    def reserve(
+        self, capacity: int, strategy: GrowthStrategy = GrowthStrategy.Poisson
+    ) -> None: ...
     def shrink_to_fit(self) -> None: ...
-
     @property
     def __array_interface__(self) -> dict: ...
-
     @property
     def __cuda_array_interface__(self) -> dict: ...
-
     def __setitem__(self, arg0: int, arg1: int, /) -> None: ...
-
     def __getitem__(self, arg: int, /) -> int: ...
-
     @staticmethod
     def from_numpy(arr: object) -> PODVector_int_arena:
         """
@@ -8644,52 +7337,42 @@ class PODVector_int_std:
 
     @overload
     def __init__(self) -> None: ...
-
     @overload
     def __init__(self, size: int) -> None: ...
-
     @overload
     def __init__(self, other: PODVector_int_std) -> None: ...
-
     def __repr__(self) -> str: ...
-
     def assign(self, value: int) -> None:
         """assign the same value to every element"""
 
     def push_back(self, arg: int, /) -> None: ...
-
     def pop_back(self) -> None: ...
-
     def clear(self) -> None: ...
-
     def size(self) -> int: ...
-
     def __len__(self) -> int: ...
-
     def capacity(self) -> int: ...
-
     def empty(self) -> bool: ...
-
     @overload
-    def resize(self, new_size: int, strategy: GrowthStrategy = GrowthStrategy.Poisson) -> None: ...
-
+    def resize(
+        self, new_size: int, strategy: GrowthStrategy = GrowthStrategy.Poisson
+    ) -> None: ...
     @overload
-    def resize(self, new_size: int, value: int, strategy: GrowthStrategy = GrowthStrategy.Poisson) -> None: ...
-
-    def reserve(self, capacity: int, strategy: GrowthStrategy = GrowthStrategy.Poisson) -> None: ...
-
+    def resize(
+        self,
+        new_size: int,
+        value: int,
+        strategy: GrowthStrategy = GrowthStrategy.Poisson,
+    ) -> None: ...
+    def reserve(
+        self, capacity: int, strategy: GrowthStrategy = GrowthStrategy.Poisson
+    ) -> None: ...
     def shrink_to_fit(self) -> None: ...
-
     @property
     def __array_interface__(self) -> dict: ...
-
     @property
     def __cuda_array_interface__(self) -> dict: ...
-
     def __setitem__(self, arg0: int, arg1: int, /) -> None: ...
-
     def __getitem__(self, arg: int, /) -> int: ...
-
     @staticmethod
     def from_numpy(arr: object) -> PODVector_int_std:
         """
@@ -8727,52 +7410,42 @@ class PODVector_int_polymorphic:
 
     @overload
     def __init__(self) -> None: ...
-
     @overload
     def __init__(self, size: int) -> None: ...
-
     @overload
     def __init__(self, other: PODVector_int_polymorphic) -> None: ...
-
     def __repr__(self) -> str: ...
-
     def assign(self, value: int) -> None:
         """assign the same value to every element"""
 
     def push_back(self, arg: int, /) -> None: ...
-
     def pop_back(self) -> None: ...
-
     def clear(self) -> None: ...
-
     def size(self) -> int: ...
-
     def __len__(self) -> int: ...
-
     def capacity(self) -> int: ...
-
     def empty(self) -> bool: ...
-
     @overload
-    def resize(self, new_size: int, strategy: GrowthStrategy = GrowthStrategy.Poisson) -> None: ...
-
+    def resize(
+        self, new_size: int, strategy: GrowthStrategy = GrowthStrategy.Poisson
+    ) -> None: ...
     @overload
-    def resize(self, new_size: int, value: int, strategy: GrowthStrategy = GrowthStrategy.Poisson) -> None: ...
-
-    def reserve(self, capacity: int, strategy: GrowthStrategy = GrowthStrategy.Poisson) -> None: ...
-
+    def resize(
+        self,
+        new_size: int,
+        value: int,
+        strategy: GrowthStrategy = GrowthStrategy.Poisson,
+    ) -> None: ...
+    def reserve(
+        self, capacity: int, strategy: GrowthStrategy = GrowthStrategy.Poisson
+    ) -> None: ...
     def shrink_to_fit(self) -> None: ...
-
     @property
     def __array_interface__(self) -> dict: ...
-
     @property
     def __cuda_array_interface__(self) -> dict: ...
-
     def __setitem__(self, arg0: int, arg1: int, /) -> None: ...
-
     def __getitem__(self, arg: int, /) -> int: ...
-
     @staticmethod
     def from_numpy(arr: object) -> PODVector_int_polymorphic:
         """
@@ -8826,52 +7499,42 @@ class PODVector_uint64_pinned:
 
     @overload
     def __init__(self) -> None: ...
-
     @overload
     def __init__(self, size: int) -> None: ...
-
     @overload
     def __init__(self, other: PODVector_uint64_pinned) -> None: ...
-
     def __repr__(self) -> str: ...
-
     def assign(self, value: int) -> None:
         """assign the same value to every element"""
 
     def push_back(self, arg: int, /) -> None: ...
-
     def pop_back(self) -> None: ...
-
     def clear(self) -> None: ...
-
     def size(self) -> int: ...
-
     def __len__(self) -> int: ...
-
     def capacity(self) -> int: ...
-
     def empty(self) -> bool: ...
-
     @overload
-    def resize(self, new_size: int, strategy: GrowthStrategy = GrowthStrategy.Poisson) -> None: ...
-
+    def resize(
+        self, new_size: int, strategy: GrowthStrategy = GrowthStrategy.Poisson
+    ) -> None: ...
     @overload
-    def resize(self, new_size: int, value: int, strategy: GrowthStrategy = GrowthStrategy.Poisson) -> None: ...
-
-    def reserve(self, capacity: int, strategy: GrowthStrategy = GrowthStrategy.Poisson) -> None: ...
-
+    def resize(
+        self,
+        new_size: int,
+        value: int,
+        strategy: GrowthStrategy = GrowthStrategy.Poisson,
+    ) -> None: ...
+    def reserve(
+        self, capacity: int, strategy: GrowthStrategy = GrowthStrategy.Poisson
+    ) -> None: ...
     def shrink_to_fit(self) -> None: ...
-
     @property
     def __array_interface__(self) -> dict: ...
-
     @property
     def __cuda_array_interface__(self) -> dict: ...
-
     def __setitem__(self, arg0: int, arg1: int, /) -> None: ...
-
     def __getitem__(self, arg: int, /) -> int: ...
-
     @staticmethod
     def from_numpy(arr: object) -> PODVector_uint64_pinned:
         """
@@ -8909,52 +7572,42 @@ class PODVector_uint64_arena:
 
     @overload
     def __init__(self) -> None: ...
-
     @overload
     def __init__(self, size: int) -> None: ...
-
     @overload
     def __init__(self, other: PODVector_uint64_arena) -> None: ...
-
     def __repr__(self) -> str: ...
-
     def assign(self, value: int) -> None:
         """assign the same value to every element"""
 
     def push_back(self, arg: int, /) -> None: ...
-
     def pop_back(self) -> None: ...
-
     def clear(self) -> None: ...
-
     def size(self) -> int: ...
-
     def __len__(self) -> int: ...
-
     def capacity(self) -> int: ...
-
     def empty(self) -> bool: ...
-
     @overload
-    def resize(self, new_size: int, strategy: GrowthStrategy = GrowthStrategy.Poisson) -> None: ...
-
+    def resize(
+        self, new_size: int, strategy: GrowthStrategy = GrowthStrategy.Poisson
+    ) -> None: ...
     @overload
-    def resize(self, new_size: int, value: int, strategy: GrowthStrategy = GrowthStrategy.Poisson) -> None: ...
-
-    def reserve(self, capacity: int, strategy: GrowthStrategy = GrowthStrategy.Poisson) -> None: ...
-
+    def resize(
+        self,
+        new_size: int,
+        value: int,
+        strategy: GrowthStrategy = GrowthStrategy.Poisson,
+    ) -> None: ...
+    def reserve(
+        self, capacity: int, strategy: GrowthStrategy = GrowthStrategy.Poisson
+    ) -> None: ...
     def shrink_to_fit(self) -> None: ...
-
     @property
     def __array_interface__(self) -> dict: ...
-
     @property
     def __cuda_array_interface__(self) -> dict: ...
-
     def __setitem__(self, arg0: int, arg1: int, /) -> None: ...
-
     def __getitem__(self, arg: int, /) -> int: ...
-
     @staticmethod
     def from_numpy(arr: object) -> PODVector_uint64_arena:
         """
@@ -8992,52 +7645,42 @@ class PODVector_uint64_std:
 
     @overload
     def __init__(self) -> None: ...
-
     @overload
     def __init__(self, size: int) -> None: ...
-
     @overload
     def __init__(self, other: PODVector_uint64_std) -> None: ...
-
     def __repr__(self) -> str: ...
-
     def assign(self, value: int) -> None:
         """assign the same value to every element"""
 
     def push_back(self, arg: int, /) -> None: ...
-
     def pop_back(self) -> None: ...
-
     def clear(self) -> None: ...
-
     def size(self) -> int: ...
-
     def __len__(self) -> int: ...
-
     def capacity(self) -> int: ...
-
     def empty(self) -> bool: ...
-
     @overload
-    def resize(self, new_size: int, strategy: GrowthStrategy = GrowthStrategy.Poisson) -> None: ...
-
+    def resize(
+        self, new_size: int, strategy: GrowthStrategy = GrowthStrategy.Poisson
+    ) -> None: ...
     @overload
-    def resize(self, new_size: int, value: int, strategy: GrowthStrategy = GrowthStrategy.Poisson) -> None: ...
-
-    def reserve(self, capacity: int, strategy: GrowthStrategy = GrowthStrategy.Poisson) -> None: ...
-
+    def resize(
+        self,
+        new_size: int,
+        value: int,
+        strategy: GrowthStrategy = GrowthStrategy.Poisson,
+    ) -> None: ...
+    def reserve(
+        self, capacity: int, strategy: GrowthStrategy = GrowthStrategy.Poisson
+    ) -> None: ...
     def shrink_to_fit(self) -> None: ...
-
     @property
     def __array_interface__(self) -> dict: ...
-
     @property
     def __cuda_array_interface__(self) -> dict: ...
-
     def __setitem__(self, arg0: int, arg1: int, /) -> None: ...
-
     def __getitem__(self, arg: int, /) -> int: ...
-
     @staticmethod
     def from_numpy(arr: object) -> PODVector_uint64_std:
         """
@@ -9075,52 +7718,42 @@ class PODVector_uint64_polymorphic:
 
     @overload
     def __init__(self) -> None: ...
-
     @overload
     def __init__(self, size: int) -> None: ...
-
     @overload
     def __init__(self, other: PODVector_uint64_polymorphic) -> None: ...
-
     def __repr__(self) -> str: ...
-
     def assign(self, value: int) -> None:
         """assign the same value to every element"""
 
     def push_back(self, arg: int, /) -> None: ...
-
     def pop_back(self) -> None: ...
-
     def clear(self) -> None: ...
-
     def size(self) -> int: ...
-
     def __len__(self) -> int: ...
-
     def capacity(self) -> int: ...
-
     def empty(self) -> bool: ...
-
     @overload
-    def resize(self, new_size: int, strategy: GrowthStrategy = GrowthStrategy.Poisson) -> None: ...
-
+    def resize(
+        self, new_size: int, strategy: GrowthStrategy = GrowthStrategy.Poisson
+    ) -> None: ...
     @overload
-    def resize(self, new_size: int, value: int, strategy: GrowthStrategy = GrowthStrategy.Poisson) -> None: ...
-
-    def reserve(self, capacity: int, strategy: GrowthStrategy = GrowthStrategy.Poisson) -> None: ...
-
+    def resize(
+        self,
+        new_size: int,
+        value: int,
+        strategy: GrowthStrategy = GrowthStrategy.Poisson,
+    ) -> None: ...
+    def reserve(
+        self, capacity: int, strategy: GrowthStrategy = GrowthStrategy.Poisson
+    ) -> None: ...
     def shrink_to_fit(self) -> None: ...
-
     @property
     def __array_interface__(self) -> dict: ...
-
     @property
     def __cuda_array_interface__(self) -> dict: ...
-
     def __setitem__(self, arg0: int, arg1: int, /) -> None: ...
-
     def __getitem__(self, arg: int, /) -> int: ...
-
     @staticmethod
     def from_numpy(arr: object) -> PODVector_uint64_polymorphic:
         """
@@ -9208,7 +7841,6 @@ class TagBoxArray(FabArrayBase):
         """Construct tag storage on ba/dm with per-direction grow widths."""
 
     def __repr__(self) -> str: ...
-
     def clear(self) -> None:
         """Release all tag data and metadata."""
 
@@ -9216,7 +7848,6 @@ class TagBoxArray(FabArrayBase):
         """Return True if the tag array is internally consistent."""
 
     def __len__(self) -> int: ...
-
     @property
     def size(self) -> int:
         """Number of boxes in the global tag layout."""
@@ -9277,107 +7908,80 @@ class TagBoxArray(FabArrayBase):
 
 class AmrInfo:
     def __init__(self) -> None: ...
-
     def __repr__(self) -> str: ...
-
     @property
     def verbose(self) -> int: ...
-
     @verbose.setter
     def verbose(self, arg: int, /) -> None: ...
-
     @property
     def max_level(self) -> int: ...
-
     @max_level.setter
     def max_level(self, arg: int, /) -> None: ...
-
     def ref_ratio(self, arg: int, /) -> IntVect1D: ...
-
     def blocking_factor(self, arg: int, /) -> IntVect1D: ...
-
     def max_grid_size(self, arg: int, /) -> IntVect1D: ...
-
     def n_error_buf(self, arg: int, /) -> IntVect1D: ...
-
     @property
     def grid_eff(self) -> float: ...
-
     @grid_eff.setter
     def grid_eff(self, arg: float, /) -> None: ...
-
     @property
     def n_proper(self) -> int: ...
-
     @n_proper.setter
     def n_proper(self, arg: int, /) -> None: ...
-
     @property
     def use_fixed_upto_level(self) -> int: ...
-
     @use_fixed_upto_level.setter
     def use_fixed_upto_level(self, arg: int, /) -> None: ...
-
     @property
     def use_fixed_coarse_grids(self) -> bool: ...
-
     @use_fixed_coarse_grids.setter
     def use_fixed_coarse_grids(self, arg: bool, /) -> None: ...
-
     @property
     def refine_grid_layout(self) -> bool: ...
-
     @refine_grid_layout.setter
     def refine_grid_layout(self, arg: bool, /) -> None: ...
-
     @property
     def refine_grid_layout_dims(self) -> IntVect1D: ...
-
     @refine_grid_layout_dims.setter
     def refine_grid_layout_dims(self, arg: IntVect1D, /) -> None: ...
-
     @property
     def check_input(self) -> bool: ...
-
     @check_input.setter
     def check_input(self, arg: bool, /) -> None: ...
-
     @property
     def use_new_chop(self) -> bool: ...
-
     @use_new_chop.setter
     def use_new_chop(self, arg: bool, /) -> None: ...
-
     @property
     def iterate_on_new_grids(self) -> bool: ...
-
     @iterate_on_new_grids.setter
     def iterate_on_new_grids(self, arg: bool, /) -> None: ...
 
 class AmrMesh:
     @overload
     def __init__(self) -> None: ...
-
     @overload
-    def __init__(self, rb: RealBox, max_level_in: int, n_cell_in: Vector_int, coord: int, ref_ratios: Vector_IntVect, is_per: Sequence[int]) -> None: ...
-
+    def __init__(
+        self,
+        rb: RealBox,
+        max_level_in: int,
+        n_cell_in: Vector_int,
+        coord: int,
+        ref_ratios: Vector_IntVect,
+        is_per: Sequence[int],
+    ) -> None: ...
     def __repr__(self) -> str: ...
-
     @property
     def verbose(self) -> int: ...
-
     @property
     def max_level(self) -> int: ...
-
     @property
     def finest_level(self) -> int: ...
-
     @overload
     def ref_ratio(self) -> Vector_IntVect: ...
-
     @overload
     def ref_ratio(self, arg: int, /) -> IntVect1D: ...
-
     def geom(self, lev: int) -> Geometry:
         """Return the Geometry stored for AMR level lev."""
 
@@ -9408,7 +8012,15 @@ class AmrCore(AmrMesh):
         """
 
     @overload
-    def __init__(self, rb: RealBox, max_level_in: int, n_cell_in: Vector_int, coord: int, ref_ratios: Vector_IntVect, is_per: Sequence[int]) -> None:
+    def __init__(
+        self,
+        rb: RealBox,
+        max_level_in: int,
+        n_cell_in: Vector_int,
+        coord: int,
+        ref_ratios: Vector_IntVect,
+        is_per: Sequence[int],
+    ) -> None:
         """
         Construct an AMR core from an explicit level-0 problem domain.
 
@@ -9436,7 +8048,6 @@ class AmrCore(AmrMesh):
         """
 
     def __repr__(self) -> str: ...
-
     def init_from_scratch(self, time: float) -> None:
         """
         Create the AMR hierarchy from scratch at simulation time ``time``.
@@ -9519,18 +8130,13 @@ class AmrParGDB(ParGDBBase):
 class Particle_1_0:
     @overload
     def __init__(self, **kwargs) -> None: ...
-
     @overload
     def __init__(self, arg: float, /) -> None: ...
-
     @overload
     def __init__(self, arg0: float, /, *args) -> None: ...
-
     @overload
     def __init__(self, arg0: float, /, **kwargs) -> None: ...
-
     def __repr__(self) -> str: ...
-
     def __str__(self) -> str: ...
 
     NReal: int = ...
@@ -9541,64 +8147,46 @@ class Particle_1_0:
 
     @overload
     def pos(self, arg: int, /) -> float: ...
-
     @overload
     def pos(self) -> RealVect: ...
-
     @overload
     def setPos(self, arg0: int, arg1: float, /) -> None: ...
-
     @overload
     def setPos(self, arg: RealVect, /) -> None: ...
-
     @overload
     def setPos(self, arg: Sequence[float], /) -> None: ...
-
     @overload
     def get_rdata(self, arg: int, /) -> float: ...
-
     @overload
     def get_rdata(self) -> list[float]: ...
-
     @overload
     def set_rdata(self, arg0: int, arg1: float, /) -> None: ...
-
     @overload
     def set_rdata(self, arg: Sequence[float], /) -> None: ...
-
     @overload
     def get_idata(self, arg: int, /) -> object: ...
-
     @overload
     def get_idata(self) -> object: ...
-
     @overload
     def set_idata(self, arg0: int, arg1: int, /) -> None: ...
-
     @overload
     def set_idata(self, arg: Sequence[int], /) -> None: ...
-
     def cpu(self) -> int: ...
-
     def id(self) -> int: ...
-
     @overload
     def NextID(self) -> int: ...
-
     @overload
     def NextID(self, arg: int, /) -> None: ...
-
     @property
     def x(self) -> float: ...
-
     @x.setter
     def x(self, arg: float, /) -> None: ...
 
 class StructOfArrays_1_0_idcpu_pinned:
     def __init__(self) -> None: ...
-
-    def define(self, arg0: int, arg1: int, arg2: Sequence[str], arg3: Sequence[str], /) -> None: ...
-
+    def define(
+        self, arg0: int, arg1: int, arg2: Sequence[str], arg3: Sequence[str], /
+    ) -> None: ...
     @property
     def num_real_comps(self) -> int:
         """Get the number of compile-time + runtime Real components"""
@@ -9660,27 +8248,23 @@ class StructOfArrays_1_0_idcpu_pinned:
 
     @property
     def num_particles(self) -> int: ...
-
     @property
     def num_real_particles(self) -> int: ...
-
     @property
     def num_total_particles(self) -> int: ...
-
     def set_num_neighbors(self, arg: int, /) -> None: ...
-
     def get_num_neighbors(self) -> int: ...
-
-    def resize(self, new_size: int, strategy: GrowthStrategy = GrowthStrategy.Poisson) -> None: ...
-
+    def resize(
+        self, new_size: int, strategy: GrowthStrategy = GrowthStrategy.Poisson
+    ) -> None: ...
     def get_idcpu_data(self) -> PODVector_uint64_pinned:
         """Get access to a particle IdCPU component Array"""
 
 class StructOfArrays_1_0_idcpu_default:
     def __init__(self) -> None: ...
-
-    def define(self, arg0: int, arg1: int, arg2: Sequence[str], arg3: Sequence[str], /) -> None: ...
-
+    def define(
+        self, arg0: int, arg1: int, arg2: Sequence[str], arg3: Sequence[str], /
+    ) -> None: ...
     @property
     def num_real_comps(self) -> int:
         """Get the number of compile-time + runtime Real components"""
@@ -9742,27 +8326,23 @@ class StructOfArrays_1_0_idcpu_default:
 
     @property
     def num_particles(self) -> int: ...
-
     @property
     def num_real_particles(self) -> int: ...
-
     @property
     def num_total_particles(self) -> int: ...
-
     def set_num_neighbors(self, arg: int, /) -> None: ...
-
     def get_num_neighbors(self) -> int: ...
-
-    def resize(self, new_size: int, strategy: GrowthStrategy = GrowthStrategy.Poisson) -> None: ...
-
+    def resize(
+        self, new_size: int, strategy: GrowthStrategy = GrowthStrategy.Poisson
+    ) -> None: ...
     def get_idcpu_data(self) -> PODVector_uint64_std:
         """Get access to a particle IdCPU component Array"""
 
 class StructOfArrays_1_0_idcpu_arena:
     def __init__(self) -> None: ...
-
-    def define(self, arg0: int, arg1: int, arg2: Sequence[str], arg3: Sequence[str], /) -> None: ...
-
+    def define(
+        self, arg0: int, arg1: int, arg2: Sequence[str], arg3: Sequence[str], /
+    ) -> None: ...
     @property
     def num_real_comps(self) -> int:
         """Get the number of compile-time + runtime Real components"""
@@ -9824,27 +8404,23 @@ class StructOfArrays_1_0_idcpu_arena:
 
     @property
     def num_particles(self) -> int: ...
-
     @property
     def num_real_particles(self) -> int: ...
-
     @property
     def num_total_particles(self) -> int: ...
-
     def set_num_neighbors(self, arg: int, /) -> None: ...
-
     def get_num_neighbors(self) -> int: ...
-
-    def resize(self, new_size: int, strategy: GrowthStrategy = GrowthStrategy.Poisson) -> None: ...
-
+    def resize(
+        self, new_size: int, strategy: GrowthStrategy = GrowthStrategy.Poisson
+    ) -> None: ...
     def get_idcpu_data(self) -> PODVector_uint64_arena:
         """Get access to a particle IdCPU component Array"""
 
 class StructOfArrays_1_0_idcpu_polymorphic:
     def __init__(self) -> None: ...
-
-    def define(self, arg0: int, arg1: int, arg2: Sequence[str], arg3: Sequence[str], /) -> None: ...
-
+    def define(
+        self, arg0: int, arg1: int, arg2: Sequence[str], arg3: Sequence[str], /
+    ) -> None: ...
     @property
     def num_real_comps(self) -> int:
         """Get the number of compile-time + runtime Real components"""
@@ -9906,40 +8482,29 @@ class StructOfArrays_1_0_idcpu_polymorphic:
 
     @property
     def num_particles(self) -> int: ...
-
     @property
     def num_real_particles(self) -> int: ...
-
     @property
     def num_total_particles(self) -> int: ...
-
     def set_num_neighbors(self, arg: int, /) -> None: ...
-
     def get_num_neighbors(self) -> int: ...
-
-    def resize(self, new_size: int, strategy: GrowthStrategy = GrowthStrategy.Poisson) -> None: ...
-
+    def resize(
+        self, new_size: int, strategy: GrowthStrategy = GrowthStrategy.Poisson
+    ) -> None: ...
     def get_idcpu_data(self) -> PODVector_uint64_polymorphic:
         """Get access to a particle IdCPU component Array"""
 
 class ParticleTileData_pureSoA_1_0:
     def __init__(self) -> None: ...
-
     @property
     def m_size(self) -> int: ...
-
     @property
     def m_num_runtime_real(self) -> int: ...
-
     @property
     def m_num_runtime_int(self) -> int: ...
-
     def get_super_particle(self, arg: int, /) -> Particle_1_0: ...
-
     def set_super_particle(self, arg0: Particle_1_0, arg1: int, /) -> None: ...
-
     def __setitem__(self, arg0: int, arg1: Particle_1_0, /) -> None: ...
-
     def __getitem__(self, arg: int, /) -> Particle_1_0: ...
 
 class ParticleTile_pureSoA_1_0_pinned:
@@ -9951,77 +8516,61 @@ class ParticleTile_pureSoA_1_0_pinned:
     NAI: int = ...
     """(arg: object, /) -> int"""
 
-    def define(self, arg0: int, arg1: int, arg2: Sequence[str], arg3: Sequence[str], arg4: Arena, /) -> None: ...
-
+    def define(
+        self,
+        arg0: int,
+        arg1: int,
+        arg2: Sequence[str],
+        arg3: Sequence[str],
+        arg4: Arena,
+        /,
+    ) -> None: ...
     def get_struct_of_arrays(self) -> StructOfArrays_1_0_idcpu_pinned: ...
-
     @property
     def empty(self) -> bool: ...
-
     @property
     def size(self) -> int: ...
-
     @property
     def num_particles(self) -> int: ...
-
     @property
     def num_real_particles(self) -> int: ...
-
     @property
     def num_neighbor_particles(self) -> int: ...
-
     @property
     def num_total_particles(self) -> int: ...
-
     def set_num_neighbors(self, arg: int, /) -> None: ...
-
     def get_num_neighbors(self) -> int: ...
-
-    def resize(self, count: int, strategy: GrowthStrategy = GrowthStrategy.Poisson) -> None: ...
-
+    def resize(
+        self, count: int, strategy: GrowthStrategy = GrowthStrategy.Poisson
+    ) -> None: ...
     def push_back(self, arg: Particle_1_0, /) -> None:
         """Add one particle to this tile."""
 
     @overload
     def push_back_real(self, arg0: int, arg1: float, /) -> None: ...
-
     @overload
     def push_back_real(self, arg: Sequence[float], /) -> None: ...
-
     @overload
     def push_back_real(self, arg0: int, arg1: int, arg2: float, /) -> None: ...
-
     @overload
     def push_back_int(self, arg0: int, arg1: int, /) -> None: ...
-
     @overload
     def push_back_int(self, arg: Sequence[int], /) -> None: ...
-
     @overload
     def push_back_int(self, arg0: int, arg1: int, arg2: int, /) -> None: ...
-
     @property
     def num_real_comps(self) -> int: ...
-
     @property
     def num_int_comps(self) -> int: ...
-
     @property
     def num_runtime_real_comps(self) -> int: ...
-
     @property
     def num_runtime_int_comps(self) -> int: ...
-
     def shrink_to_fit(self) -> None: ...
-
     def capacity(self) -> int: ...
-
     def swap(self, arg: ParticleTile_pureSoA_1_0_pinned, /) -> None: ...
-
     def get_particle_tile_data(self) -> ParticleTileData_pureSoA_1_0: ...
-
     def __setitem__(self, arg0: int, arg1: Particle_1_0, /) -> None: ...
-
     def __getitem__(self, arg: int, /) -> Particle_1_0: ...
 
 class ParticleTile_pureSoA_1_0_default:
@@ -10033,77 +8582,61 @@ class ParticleTile_pureSoA_1_0_default:
     NAI: int = ...
     """(arg: object, /) -> int"""
 
-    def define(self, arg0: int, arg1: int, arg2: Sequence[str], arg3: Sequence[str], arg4: Arena, /) -> None: ...
-
+    def define(
+        self,
+        arg0: int,
+        arg1: int,
+        arg2: Sequence[str],
+        arg3: Sequence[str],
+        arg4: Arena,
+        /,
+    ) -> None: ...
     def get_struct_of_arrays(self) -> StructOfArrays_1_0_idcpu_default: ...
-
     @property
     def empty(self) -> bool: ...
-
     @property
     def size(self) -> int: ...
-
     @property
     def num_particles(self) -> int: ...
-
     @property
     def num_real_particles(self) -> int: ...
-
     @property
     def num_neighbor_particles(self) -> int: ...
-
     @property
     def num_total_particles(self) -> int: ...
-
     def set_num_neighbors(self, arg: int, /) -> None: ...
-
     def get_num_neighbors(self) -> int: ...
-
-    def resize(self, count: int, strategy: GrowthStrategy = GrowthStrategy.Poisson) -> None: ...
-
+    def resize(
+        self, count: int, strategy: GrowthStrategy = GrowthStrategy.Poisson
+    ) -> None: ...
     def push_back(self, arg: Particle_1_0, /) -> None:
         """Add one particle to this tile."""
 
     @overload
     def push_back_real(self, arg0: int, arg1: float, /) -> None: ...
-
     @overload
     def push_back_real(self, arg: Sequence[float], /) -> None: ...
-
     @overload
     def push_back_real(self, arg0: int, arg1: int, arg2: float, /) -> None: ...
-
     @overload
     def push_back_int(self, arg0: int, arg1: int, /) -> None: ...
-
     @overload
     def push_back_int(self, arg: Sequence[int], /) -> None: ...
-
     @overload
     def push_back_int(self, arg0: int, arg1: int, arg2: int, /) -> None: ...
-
     @property
     def num_real_comps(self) -> int: ...
-
     @property
     def num_int_comps(self) -> int: ...
-
     @property
     def num_runtime_real_comps(self) -> int: ...
-
     @property
     def num_runtime_int_comps(self) -> int: ...
-
     def shrink_to_fit(self) -> None: ...
-
     def capacity(self) -> int: ...
-
     def swap(self, arg: ParticleTile_pureSoA_1_0_default, /) -> None: ...
-
     def get_particle_tile_data(self) -> ParticleTileData_pureSoA_1_0: ...
-
     def __setitem__(self, arg0: int, arg1: Particle_1_0, /) -> None: ...
-
     def __getitem__(self, arg: int, /) -> Particle_1_0: ...
 
 class ParticleTile_pureSoA_1_0_arena:
@@ -10115,77 +8648,61 @@ class ParticleTile_pureSoA_1_0_arena:
     NAI: int = ...
     """(arg: object, /) -> int"""
 
-    def define(self, arg0: int, arg1: int, arg2: Sequence[str], arg3: Sequence[str], arg4: Arena, /) -> None: ...
-
+    def define(
+        self,
+        arg0: int,
+        arg1: int,
+        arg2: Sequence[str],
+        arg3: Sequence[str],
+        arg4: Arena,
+        /,
+    ) -> None: ...
     def get_struct_of_arrays(self) -> StructOfArrays_1_0_idcpu_arena: ...
-
     @property
     def empty(self) -> bool: ...
-
     @property
     def size(self) -> int: ...
-
     @property
     def num_particles(self) -> int: ...
-
     @property
     def num_real_particles(self) -> int: ...
-
     @property
     def num_neighbor_particles(self) -> int: ...
-
     @property
     def num_total_particles(self) -> int: ...
-
     def set_num_neighbors(self, arg: int, /) -> None: ...
-
     def get_num_neighbors(self) -> int: ...
-
-    def resize(self, count: int, strategy: GrowthStrategy = GrowthStrategy.Poisson) -> None: ...
-
+    def resize(
+        self, count: int, strategy: GrowthStrategy = GrowthStrategy.Poisson
+    ) -> None: ...
     def push_back(self, arg: Particle_1_0, /) -> None:
         """Add one particle to this tile."""
 
     @overload
     def push_back_real(self, arg0: int, arg1: float, /) -> None: ...
-
     @overload
     def push_back_real(self, arg: Sequence[float], /) -> None: ...
-
     @overload
     def push_back_real(self, arg0: int, arg1: int, arg2: float, /) -> None: ...
-
     @overload
     def push_back_int(self, arg0: int, arg1: int, /) -> None: ...
-
     @overload
     def push_back_int(self, arg: Sequence[int], /) -> None: ...
-
     @overload
     def push_back_int(self, arg0: int, arg1: int, arg2: int, /) -> None: ...
-
     @property
     def num_real_comps(self) -> int: ...
-
     @property
     def num_int_comps(self) -> int: ...
-
     @property
     def num_runtime_real_comps(self) -> int: ...
-
     @property
     def num_runtime_int_comps(self) -> int: ...
-
     def shrink_to_fit(self) -> None: ...
-
     def capacity(self) -> int: ...
-
     def swap(self, arg: ParticleTile_pureSoA_1_0_arena, /) -> None: ...
-
     def get_particle_tile_data(self) -> ParticleTileData_pureSoA_1_0: ...
-
     def __setitem__(self, arg0: int, arg1: Particle_1_0, /) -> None: ...
-
     def __getitem__(self, arg: int, /) -> Particle_1_0: ...
 
 class ParticleTile_pureSoA_1_0_polymorphic:
@@ -10197,77 +8714,61 @@ class ParticleTile_pureSoA_1_0_polymorphic:
     NAI: int = ...
     """(arg: object, /) -> int"""
 
-    def define(self, arg0: int, arg1: int, arg2: Sequence[str], arg3: Sequence[str], arg4: Arena, /) -> None: ...
-
+    def define(
+        self,
+        arg0: int,
+        arg1: int,
+        arg2: Sequence[str],
+        arg3: Sequence[str],
+        arg4: Arena,
+        /,
+    ) -> None: ...
     def get_struct_of_arrays(self) -> StructOfArrays_1_0_idcpu_polymorphic: ...
-
     @property
     def empty(self) -> bool: ...
-
     @property
     def size(self) -> int: ...
-
     @property
     def num_particles(self) -> int: ...
-
     @property
     def num_real_particles(self) -> int: ...
-
     @property
     def num_neighbor_particles(self) -> int: ...
-
     @property
     def num_total_particles(self) -> int: ...
-
     def set_num_neighbors(self, arg: int, /) -> None: ...
-
     def get_num_neighbors(self) -> int: ...
-
-    def resize(self, count: int, strategy: GrowthStrategy = GrowthStrategy.Poisson) -> None: ...
-
+    def resize(
+        self, count: int, strategy: GrowthStrategy = GrowthStrategy.Poisson
+    ) -> None: ...
     def push_back(self, arg: Particle_1_0, /) -> None:
         """Add one particle to this tile."""
 
     @overload
     def push_back_real(self, arg0: int, arg1: float, /) -> None: ...
-
     @overload
     def push_back_real(self, arg: Sequence[float], /) -> None: ...
-
     @overload
     def push_back_real(self, arg0: int, arg1: int, arg2: float, /) -> None: ...
-
     @overload
     def push_back_int(self, arg0: int, arg1: int, /) -> None: ...
-
     @overload
     def push_back_int(self, arg: Sequence[int], /) -> None: ...
-
     @overload
     def push_back_int(self, arg0: int, arg1: int, arg2: int, /) -> None: ...
-
     @property
     def num_real_comps(self) -> int: ...
-
     @property
     def num_int_comps(self) -> int: ...
-
     @property
     def num_runtime_real_comps(self) -> int: ...
-
     @property
     def num_runtime_int_comps(self) -> int: ...
-
     def shrink_to_fit(self) -> None: ...
-
     def capacity(self) -> int: ...
-
     def swap(self, arg: ParticleTile_pureSoA_1_0_polymorphic, /) -> None: ...
-
     def get_particle_tile_data(self) -> ParticleTileData_pureSoA_1_0: ...
-
     def __setitem__(self, arg0: int, arg1: Particle_1_0, /) -> None: ...
-
     def __getitem__(self, arg: int, /) -> Particle_1_0: ...
 
 class ParticleInitType_pureSoA_1_0:
@@ -10278,21 +8779,18 @@ class ParticleInitType_pureSoA_1_0:
 
     @property
     def real_array_data(self) -> list[float]: ...
-
     @real_array_data.setter
     def real_array_data(self, arg: Sequence[float], /) -> None: ...
-
     @property
     def int_array_data(self) -> list[int]: ...
-
     @int_array_data.setter
     def int_array_data(self, arg: Sequence[int], /) -> None: ...
 
 class ParIterBase_pureSoA_1_0_pinned(MFIter):
-    def __init__(self, particle_container: ParticleContainer_pureSoA_1_0_pinned, level: int) -> None: ...
-
+    def __init__(
+        self, particle_container: ParticleContainer_pureSoA_1_0_pinned, level: int
+    ) -> None: ...
     def particle_tile(self) -> ParticleTile_pureSoA_1_0_pinned: ...
-
     def soa(self) -> StructOfArrays_1_0_idcpu_pinned: ...
 
     is_soa_particle: bool = ...
@@ -10304,39 +8802,33 @@ class ParIterBase_pureSoA_1_0_pinned(MFIter):
 
     @property
     def num_particles(self) -> int: ...
-
     @property
     def num_real_particles(self) -> int: ...
-
     @property
     def num_neighbor_particles(self) -> int: ...
-
     @property
     def level(self) -> int: ...
-
     @property
     def pair_index(self) -> tuple[int, int]: ...
-
     @property
     def is_valid(self) -> bool: ...
-
     def geom(self, level: int) -> Geometry: ...
-
     def finalize(self) -> None: ...
 
 class ParIter_pureSoA_1_0_pinned(ParIterBase_pureSoA_1_0_pinned):
-    def __init__(self, particle_container: ParticleContainer_pureSoA_1_0_pinned, level: int) -> None: ...
-
+    def __init__(
+        self, particle_container: ParticleContainer_pureSoA_1_0_pinned, level: int
+    ) -> None: ...
     def __repr__(self) -> str: ...
 
     is_soa_particle: bool = ...
     """(arg: object, /) -> bool"""
 
 class ParConstIterBase_pureSoA_1_0_pinned(MFIter):
-    def __init__(self, particle_container: ParticleContainer_pureSoA_1_0_pinned, level: int) -> None: ...
-
+    def __init__(
+        self, particle_container: ParticleContainer_pureSoA_1_0_pinned, level: int
+    ) -> None: ...
     def particle_tile(self) -> ParticleTile_pureSoA_1_0_pinned: ...
-
     def soa(self) -> StructOfArrays_1_0_idcpu_pinned: ...
 
     is_soa_particle: bool = ...
@@ -10348,29 +8840,23 @@ class ParConstIterBase_pureSoA_1_0_pinned(MFIter):
 
     @property
     def num_particles(self) -> int: ...
-
     @property
     def num_real_particles(self) -> int: ...
-
     @property
     def num_neighbor_particles(self) -> int: ...
-
     @property
     def level(self) -> int: ...
-
     @property
     def pair_index(self) -> tuple[int, int]: ...
-
     @property
     def is_valid(self) -> bool: ...
-
     def geom(self, level: int) -> Geometry: ...
-
     def finalize(self) -> None: ...
 
 class ParConstIter_pureSoA_1_0_pinned(ParConstIterBase_pureSoA_1_0_pinned):
-    def __init__(self, particle_container: ParticleContainer_pureSoA_1_0_pinned, level: int) -> None: ...
-
+    def __init__(
+        self, particle_container: ParticleContainer_pureSoA_1_0_pinned, level: int
+    ) -> None: ...
     def __repr__(self) -> str: ...
 
     is_soa_particle: bool = ...
@@ -10379,10 +8865,10 @@ class ParConstIter_pureSoA_1_0_pinned(ParConstIterBase_pureSoA_1_0_pinned):
 class ParticleContainer_pureSoA_1_0_pinned:
     @overload
     def __init__(self) -> None: ...
-
     @overload
-    def __init__(self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray, /) -> None: ...
-
+    def __init__(
+        self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray, /
+    ) -> None: ...
     @overload
     def __init__(self, gdb: ParGDBBase) -> None:
         """
@@ -10390,19 +8876,29 @@ class ParticleContainer_pureSoA_1_0_pinned:
         """
 
     @overload
-    def __init__(self, arg0: Vector_Geometry, arg1: Vector_DistributionMapping, arg2: Vector_BoxArray, arg3: Vector_int, /) -> None: ...
-
+    def __init__(
+        self,
+        arg0: Vector_Geometry,
+        arg1: Vector_DistributionMapping,
+        arg2: Vector_BoxArray,
+        arg3: Vector_int,
+        /,
+    ) -> None: ...
     @overload
-    def __init__(self, arg0: Vector_Geometry, arg1: Vector_DistributionMapping, arg2: Vector_BoxArray, arg3: Vector_IntVect, /) -> None: ...
-
+    def __init__(
+        self,
+        arg0: Vector_Geometry,
+        arg1: Vector_DistributionMapping,
+        arg2: Vector_BoxArray,
+        arg3: Vector_IntVect,
+        /,
+    ) -> None: ...
     def define(self, gdb: ParGDBBase) -> None:
         """Define this container from a particle metadata broker."""
 
     def make_alike(self) -> ParticleContainer_pureSoA_1_0_pinned: ...
-
     @property
     def arena(self) -> Arena: ...
-
     @arena.setter
     def arena(self, arg: Arena, /) -> None: ...
 
@@ -10439,26 +8935,23 @@ class ParticleContainer_pureSoA_1_0_pinned:
 
     @property
     def num_position_components(self) -> int: ...
-
     @property
     def byte_spread(self) -> list[int]: ...
-
-    def set_soa_compile_time_names(self, arg0: Sequence[str], arg1: Sequence[str], /) -> None: ...
-
+    def set_soa_compile_time_names(
+        self, arg0: Sequence[str], arg1: Sequence[str], /
+    ) -> None: ...
     @overload
     def add_real_comp(self, communicate: int = 1) -> None:
         """add a new runtime component with type Real"""
 
     @overload
     def add_real_comp(self, name: str, communicate: int = 1) -> None: ...
-
     @overload
     def add_int_comp(self, communicate: int = 1) -> None:
         """add a new runtime component with type Int"""
 
     @overload
     def add_int_comp(self, name: str, communicate: int = 1) -> None: ...
-
     @property
     def real_soa_names(self) -> list[str]:
         """Get the names for the Real SoA components"""
@@ -10481,50 +8974,70 @@ class ParticleContainer_pureSoA_1_0_pinned:
 
     @property
     def finest_level(self) -> int: ...
-
     @overload
-    def Define(self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray, /) -> None: ...
-
+    def Define(
+        self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray, /
+    ) -> None: ...
     @overload
-    def Define(self, arg0: Vector_Geometry, arg1: Vector_DistributionMapping, arg2: Vector_BoxArray, arg3: Vector_int, /) -> None: ...
-
+    def Define(
+        self,
+        arg0: Vector_Geometry,
+        arg1: Vector_DistributionMapping,
+        arg2: Vector_BoxArray,
+        arg3: Vector_int,
+        /,
+    ) -> None: ...
     @overload
-    def Define(self, arg0: Vector_Geometry, arg1: Vector_DistributionMapping, arg2: Vector_BoxArray, arg3: Vector_IntVect, /) -> None: ...
-
+    def Define(
+        self,
+        arg0: Vector_Geometry,
+        arg1: Vector_DistributionMapping,
+        arg2: Vector_BoxArray,
+        arg3: Vector_IntVect,
+        /,
+    ) -> None: ...
     def num_local_tiles_at_level(self, level: int) -> int: ...
-
     def reserve_data(self) -> None: ...
-
     def resize_data(self) -> None: ...
-
     def increment(self, arg0: MultiFab, arg1: int, /) -> None: ...
-
     @overload
-    def redistribute(self, lev_min: int = 0, lev_max: int = -1, nGrow: int = 0, local: int = 0, remove_negative: bool = True) -> None: ...
-
+    def redistribute(
+        self,
+        lev_min: int = 0,
+        lev_max: int = -1,
+        nGrow: int = 0,
+        local: int = 0,
+        remove_negative: bool = True,
+    ) -> None: ...
     @overload
-    def redistribute(self, lev_min: int = 0, lev_max: int = -1, nGrow: IntVect1D = ..., local: bool = False, max_cells_moved: IntVect1D = ..., remove_negative: bool = True) -> None: ...
-
+    def redistribute(
+        self,
+        lev_min: int = 0,
+        lev_max: int = -1,
+        nGrow: IntVect1D = ...,
+        local: bool = False,
+        max_cells_moved: IntVect1D = ...,
+        remove_negative: bool = True,
+    ) -> None: ...
     def sort_particles_by_cell(self) -> None: ...
-
     def sort_particles_by_bin(self, arg: IntVect1D, /) -> None: ...
-
     def OK(self, lev_min: int = 0, lev_max: int = -1, nGrow: int = 0) -> bool: ...
-
     def print_capacity(self) -> list[int]: ...
-
     def shrink_t_fit(self) -> None: ...
-
-    def number_of_particles_at_level(self, level: int, only_valid: bool = True, only_local: bool = False) -> int: ...
-
-    def number_of_particles_in_grid(self, level: int, only_valid: bool = True, only_local: bool = False) -> Vector_Long: ...
-
+    def number_of_particles_at_level(
+        self, level: int, only_valid: bool = True, only_local: bool = False
+    ) -> int: ...
+    def number_of_particles_in_grid(
+        self, level: int, only_valid: bool = True, only_local: bool = False
+    ) -> Vector_Long: ...
     def number_of_particles(self, only_local: bool = False) -> int:
         """
         Return the number of valid particles on all MPI ranks, unless only_local is specified.
         """
 
-    def total_number_of_particles(self, only_valid: bool = True, only_local: bool = False) -> int:
+    def total_number_of_particles(
+        self, only_valid: bool = True, only_local: bool = False
+    ) -> int:
         """
         Return the number of particles (only valid or including invalid) on all MPI ranks, unless only_local is specified.
         """
@@ -10534,24 +9047,23 @@ class ParticleContainer_pureSoA_1_0_pinned:
         """Return the number of valid particles on all MPI ranks"""
 
     def remove_particles_at_level(self, arg: int, /) -> None: ...
-
     def remove_particles_not_at_finestLevel(self) -> None: ...
-
-    def add_particles_at_level(self, particles: ParticleTile_pureSoA_1_0_pinned, level: int, ngrow: int = 0) -> None: ...
-
+    def add_particles_at_level(
+        self, particles: ParticleTile_pureSoA_1_0_pinned, level: int, ngrow: int = 0
+    ) -> None: ...
     def clear_particles(self) -> None: ...
-
-    def add_particles(self, other: ParticleContainer_pureSoA_1_0_pinned, local: bool = False) -> None: ...
-
+    def add_particles(
+        self, other: ParticleContainer_pureSoA_1_0_pinned, local: bool = False
+    ) -> None: ...
     def restart(self, dir: str, file: str) -> None: ...
-
     def restart_checkpoint(self, dir: str, file: str, is_checkpoint: bool) -> None: ...
-
     def write_plotfile(self, dir: str, name: str) -> None: ...
-
-    def get_particles(self, level: int) -> dict[tuple[int, int], ParticleTile_pureSoA_1_0_pinned]: ...
-
-    def define_and_return_particle_tile(self, lev: int, grid: int, tile: int) -> ParticleTile_pureSoA_1_0_pinned:
+    def get_particles(
+        self, level: int
+    ) -> dict[tuple[int, int], ParticleTile_pureSoA_1_0_pinned]: ...
+    def define_and_return_particle_tile(
+        self, lev: int, grid: int, tile: int
+    ) -> ParticleTile_pureSoA_1_0_pinned:
         """
         Define, if necessary, and return the particle tile at ``(lev, grid, tile)``.
 
@@ -10559,7 +9071,15 @@ class ParticleContainer_pureSoA_1_0_pinned:
         The returned tile is owned by the particle container.
         """
 
-    def init_random(self, arg0: int, arg1: int, arg2: ParticleInitType_pureSoA_1_0, arg3: bool, arg4: RealBox, /) -> None: ...
+    def init_random(
+        self,
+        arg0: int,
+        arg1: int,
+        arg2: ParticleInitType_pureSoA_1_0,
+        arg3: bool,
+        arg4: RealBox,
+        /,
+    ) -> None: ...
 
     Iterator: object = ...
     """amrex iterator for particle boxes"""
@@ -10568,10 +9088,10 @@ class ParticleContainer_pureSoA_1_0_pinned:
     """amrex constant iterator for particle boxes (read-only)"""
 
 class ParIterBase_pureSoA_1_0_default(MFIter):
-    def __init__(self, particle_container: ParticleContainer_pureSoA_1_0_default, level: int) -> None: ...
-
+    def __init__(
+        self, particle_container: ParticleContainer_pureSoA_1_0_default, level: int
+    ) -> None: ...
     def particle_tile(self) -> ParticleTile_pureSoA_1_0_default: ...
-
     def soa(self) -> StructOfArrays_1_0_idcpu_default: ...
 
     is_soa_particle: bool = ...
@@ -10583,39 +9103,33 @@ class ParIterBase_pureSoA_1_0_default(MFIter):
 
     @property
     def num_particles(self) -> int: ...
-
     @property
     def num_real_particles(self) -> int: ...
-
     @property
     def num_neighbor_particles(self) -> int: ...
-
     @property
     def level(self) -> int: ...
-
     @property
     def pair_index(self) -> tuple[int, int]: ...
-
     @property
     def is_valid(self) -> bool: ...
-
     def geom(self, level: int) -> Geometry: ...
-
     def finalize(self) -> None: ...
 
 class ParIter_pureSoA_1_0_default(ParIterBase_pureSoA_1_0_default):
-    def __init__(self, particle_container: ParticleContainer_pureSoA_1_0_default, level: int) -> None: ...
-
+    def __init__(
+        self, particle_container: ParticleContainer_pureSoA_1_0_default, level: int
+    ) -> None: ...
     def __repr__(self) -> str: ...
 
     is_soa_particle: bool = ...
     """(arg: object, /) -> bool"""
 
 class ParConstIterBase_pureSoA_1_0_default(MFIter):
-    def __init__(self, particle_container: ParticleContainer_pureSoA_1_0_default, level: int) -> None: ...
-
+    def __init__(
+        self, particle_container: ParticleContainer_pureSoA_1_0_default, level: int
+    ) -> None: ...
     def particle_tile(self) -> ParticleTile_pureSoA_1_0_default: ...
-
     def soa(self) -> StructOfArrays_1_0_idcpu_default: ...
 
     is_soa_particle: bool = ...
@@ -10627,29 +9141,23 @@ class ParConstIterBase_pureSoA_1_0_default(MFIter):
 
     @property
     def num_particles(self) -> int: ...
-
     @property
     def num_real_particles(self) -> int: ...
-
     @property
     def num_neighbor_particles(self) -> int: ...
-
     @property
     def level(self) -> int: ...
-
     @property
     def pair_index(self) -> tuple[int, int]: ...
-
     @property
     def is_valid(self) -> bool: ...
-
     def geom(self, level: int) -> Geometry: ...
-
     def finalize(self) -> None: ...
 
 class ParConstIter_pureSoA_1_0_default(ParConstIterBase_pureSoA_1_0_default):
-    def __init__(self, particle_container: ParticleContainer_pureSoA_1_0_default, level: int) -> None: ...
-
+    def __init__(
+        self, particle_container: ParticleContainer_pureSoA_1_0_default, level: int
+    ) -> None: ...
     def __repr__(self) -> str: ...
 
     is_soa_particle: bool = ...
@@ -10658,10 +9166,10 @@ class ParConstIter_pureSoA_1_0_default(ParConstIterBase_pureSoA_1_0_default):
 class ParticleContainer_pureSoA_1_0_default:
     @overload
     def __init__(self) -> None: ...
-
     @overload
-    def __init__(self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray, /) -> None: ...
-
+    def __init__(
+        self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray, /
+    ) -> None: ...
     @overload
     def __init__(self, gdb: ParGDBBase) -> None:
         """
@@ -10669,19 +9177,29 @@ class ParticleContainer_pureSoA_1_0_default:
         """
 
     @overload
-    def __init__(self, arg0: Vector_Geometry, arg1: Vector_DistributionMapping, arg2: Vector_BoxArray, arg3: Vector_int, /) -> None: ...
-
+    def __init__(
+        self,
+        arg0: Vector_Geometry,
+        arg1: Vector_DistributionMapping,
+        arg2: Vector_BoxArray,
+        arg3: Vector_int,
+        /,
+    ) -> None: ...
     @overload
-    def __init__(self, arg0: Vector_Geometry, arg1: Vector_DistributionMapping, arg2: Vector_BoxArray, arg3: Vector_IntVect, /) -> None: ...
-
+    def __init__(
+        self,
+        arg0: Vector_Geometry,
+        arg1: Vector_DistributionMapping,
+        arg2: Vector_BoxArray,
+        arg3: Vector_IntVect,
+        /,
+    ) -> None: ...
     def define(self, gdb: ParGDBBase) -> None:
         """Define this container from a particle metadata broker."""
 
     def make_alike(self) -> ParticleContainer_pureSoA_1_0_default: ...
-
     @property
     def arena(self) -> Arena: ...
-
     @arena.setter
     def arena(self, arg: Arena, /) -> None: ...
 
@@ -10718,26 +9236,23 @@ class ParticleContainer_pureSoA_1_0_default:
 
     @property
     def num_position_components(self) -> int: ...
-
     @property
     def byte_spread(self) -> list[int]: ...
-
-    def set_soa_compile_time_names(self, arg0: Sequence[str], arg1: Sequence[str], /) -> None: ...
-
+    def set_soa_compile_time_names(
+        self, arg0: Sequence[str], arg1: Sequence[str], /
+    ) -> None: ...
     @overload
     def add_real_comp(self, communicate: int = 1) -> None:
         """add a new runtime component with type Real"""
 
     @overload
     def add_real_comp(self, name: str, communicate: int = 1) -> None: ...
-
     @overload
     def add_int_comp(self, communicate: int = 1) -> None:
         """add a new runtime component with type Int"""
 
     @overload
     def add_int_comp(self, name: str, communicate: int = 1) -> None: ...
-
     @property
     def real_soa_names(self) -> list[str]:
         """Get the names for the Real SoA components"""
@@ -10760,50 +9275,70 @@ class ParticleContainer_pureSoA_1_0_default:
 
     @property
     def finest_level(self) -> int: ...
-
     @overload
-    def Define(self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray, /) -> None: ...
-
+    def Define(
+        self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray, /
+    ) -> None: ...
     @overload
-    def Define(self, arg0: Vector_Geometry, arg1: Vector_DistributionMapping, arg2: Vector_BoxArray, arg3: Vector_int, /) -> None: ...
-
+    def Define(
+        self,
+        arg0: Vector_Geometry,
+        arg1: Vector_DistributionMapping,
+        arg2: Vector_BoxArray,
+        arg3: Vector_int,
+        /,
+    ) -> None: ...
     @overload
-    def Define(self, arg0: Vector_Geometry, arg1: Vector_DistributionMapping, arg2: Vector_BoxArray, arg3: Vector_IntVect, /) -> None: ...
-
+    def Define(
+        self,
+        arg0: Vector_Geometry,
+        arg1: Vector_DistributionMapping,
+        arg2: Vector_BoxArray,
+        arg3: Vector_IntVect,
+        /,
+    ) -> None: ...
     def num_local_tiles_at_level(self, level: int) -> int: ...
-
     def reserve_data(self) -> None: ...
-
     def resize_data(self) -> None: ...
-
     def increment(self, arg0: MultiFab, arg1: int, /) -> None: ...
-
     @overload
-    def redistribute(self, lev_min: int = 0, lev_max: int = -1, nGrow: int = 0, local: int = 0, remove_negative: bool = True) -> None: ...
-
+    def redistribute(
+        self,
+        lev_min: int = 0,
+        lev_max: int = -1,
+        nGrow: int = 0,
+        local: int = 0,
+        remove_negative: bool = True,
+    ) -> None: ...
     @overload
-    def redistribute(self, lev_min: int = 0, lev_max: int = -1, nGrow: IntVect1D = ..., local: bool = False, max_cells_moved: IntVect1D = ..., remove_negative: bool = True) -> None: ...
-
+    def redistribute(
+        self,
+        lev_min: int = 0,
+        lev_max: int = -1,
+        nGrow: IntVect1D = ...,
+        local: bool = False,
+        max_cells_moved: IntVect1D = ...,
+        remove_negative: bool = True,
+    ) -> None: ...
     def sort_particles_by_cell(self) -> None: ...
-
     def sort_particles_by_bin(self, arg: IntVect1D, /) -> None: ...
-
     def OK(self, lev_min: int = 0, lev_max: int = -1, nGrow: int = 0) -> bool: ...
-
     def print_capacity(self) -> list[int]: ...
-
     def shrink_t_fit(self) -> None: ...
-
-    def number_of_particles_at_level(self, level: int, only_valid: bool = True, only_local: bool = False) -> int: ...
-
-    def number_of_particles_in_grid(self, level: int, only_valid: bool = True, only_local: bool = False) -> Vector_Long: ...
-
+    def number_of_particles_at_level(
+        self, level: int, only_valid: bool = True, only_local: bool = False
+    ) -> int: ...
+    def number_of_particles_in_grid(
+        self, level: int, only_valid: bool = True, only_local: bool = False
+    ) -> Vector_Long: ...
     def number_of_particles(self, only_local: bool = False) -> int:
         """
         Return the number of valid particles on all MPI ranks, unless only_local is specified.
         """
 
-    def total_number_of_particles(self, only_valid: bool = True, only_local: bool = False) -> int:
+    def total_number_of_particles(
+        self, only_valid: bool = True, only_local: bool = False
+    ) -> int:
         """
         Return the number of particles (only valid or including invalid) on all MPI ranks, unless only_local is specified.
         """
@@ -10813,24 +9348,23 @@ class ParticleContainer_pureSoA_1_0_default:
         """Return the number of valid particles on all MPI ranks"""
 
     def remove_particles_at_level(self, arg: int, /) -> None: ...
-
     def remove_particles_not_at_finestLevel(self) -> None: ...
-
-    def add_particles_at_level(self, particles: ParticleTile_pureSoA_1_0_default, level: int, ngrow: int = 0) -> None: ...
-
+    def add_particles_at_level(
+        self, particles: ParticleTile_pureSoA_1_0_default, level: int, ngrow: int = 0
+    ) -> None: ...
     def clear_particles(self) -> None: ...
-
-    def add_particles(self, other: ParticleContainer_pureSoA_1_0_default, local: bool = False) -> None: ...
-
+    def add_particles(
+        self, other: ParticleContainer_pureSoA_1_0_default, local: bool = False
+    ) -> None: ...
     def restart(self, dir: str, file: str) -> None: ...
-
     def restart_checkpoint(self, dir: str, file: str, is_checkpoint: bool) -> None: ...
-
     def write_plotfile(self, dir: str, name: str) -> None: ...
-
-    def get_particles(self, level: int) -> dict[tuple[int, int], ParticleTile_pureSoA_1_0_default]: ...
-
-    def define_and_return_particle_tile(self, lev: int, grid: int, tile: int) -> ParticleTile_pureSoA_1_0_default:
+    def get_particles(
+        self, level: int
+    ) -> dict[tuple[int, int], ParticleTile_pureSoA_1_0_default]: ...
+    def define_and_return_particle_tile(
+        self, lev: int, grid: int, tile: int
+    ) -> ParticleTile_pureSoA_1_0_default:
         """
         Define, if necessary, and return the particle tile at ``(lev, grid, tile)``.
 
@@ -10838,7 +9372,15 @@ class ParticleContainer_pureSoA_1_0_default:
         The returned tile is owned by the particle container.
         """
 
-    def init_random(self, arg0: int, arg1: int, arg2: ParticleInitType_pureSoA_1_0, arg3: bool, arg4: RealBox, /) -> None: ...
+    def init_random(
+        self,
+        arg0: int,
+        arg1: int,
+        arg2: ParticleInitType_pureSoA_1_0,
+        arg3: bool,
+        arg4: RealBox,
+        /,
+    ) -> None: ...
 
     Iterator: object = ...
     """amrex iterator for particle boxes"""
@@ -10847,10 +9389,10 @@ class ParticleContainer_pureSoA_1_0_default:
     """amrex constant iterator for particle boxes (read-only)"""
 
 class ParIterBase_pureSoA_1_0_arena(MFIter):
-    def __init__(self, particle_container: ParticleContainer_pureSoA_1_0_arena, level: int) -> None: ...
-
+    def __init__(
+        self, particle_container: ParticleContainer_pureSoA_1_0_arena, level: int
+    ) -> None: ...
     def particle_tile(self) -> ParticleTile_pureSoA_1_0_arena: ...
-
     def soa(self) -> StructOfArrays_1_0_idcpu_arena: ...
 
     is_soa_particle: bool = ...
@@ -10862,39 +9404,33 @@ class ParIterBase_pureSoA_1_0_arena(MFIter):
 
     @property
     def num_particles(self) -> int: ...
-
     @property
     def num_real_particles(self) -> int: ...
-
     @property
     def num_neighbor_particles(self) -> int: ...
-
     @property
     def level(self) -> int: ...
-
     @property
     def pair_index(self) -> tuple[int, int]: ...
-
     @property
     def is_valid(self) -> bool: ...
-
     def geom(self, level: int) -> Geometry: ...
-
     def finalize(self) -> None: ...
 
 class ParIter_pureSoA_1_0_arena(ParIterBase_pureSoA_1_0_arena):
-    def __init__(self, particle_container: ParticleContainer_pureSoA_1_0_arena, level: int) -> None: ...
-
+    def __init__(
+        self, particle_container: ParticleContainer_pureSoA_1_0_arena, level: int
+    ) -> None: ...
     def __repr__(self) -> str: ...
 
     is_soa_particle: bool = ...
     """(arg: object, /) -> bool"""
 
 class ParConstIterBase_pureSoA_1_0_arena(MFIter):
-    def __init__(self, particle_container: ParticleContainer_pureSoA_1_0_arena, level: int) -> None: ...
-
+    def __init__(
+        self, particle_container: ParticleContainer_pureSoA_1_0_arena, level: int
+    ) -> None: ...
     def particle_tile(self) -> ParticleTile_pureSoA_1_0_arena: ...
-
     def soa(self) -> StructOfArrays_1_0_idcpu_arena: ...
 
     is_soa_particle: bool = ...
@@ -10906,29 +9442,23 @@ class ParConstIterBase_pureSoA_1_0_arena(MFIter):
 
     @property
     def num_particles(self) -> int: ...
-
     @property
     def num_real_particles(self) -> int: ...
-
     @property
     def num_neighbor_particles(self) -> int: ...
-
     @property
     def level(self) -> int: ...
-
     @property
     def pair_index(self) -> tuple[int, int]: ...
-
     @property
     def is_valid(self) -> bool: ...
-
     def geom(self, level: int) -> Geometry: ...
-
     def finalize(self) -> None: ...
 
 class ParConstIter_pureSoA_1_0_arena(ParConstIterBase_pureSoA_1_0_arena):
-    def __init__(self, particle_container: ParticleContainer_pureSoA_1_0_arena, level: int) -> None: ...
-
+    def __init__(
+        self, particle_container: ParticleContainer_pureSoA_1_0_arena, level: int
+    ) -> None: ...
     def __repr__(self) -> str: ...
 
     is_soa_particle: bool = ...
@@ -10937,10 +9467,10 @@ class ParConstIter_pureSoA_1_0_arena(ParConstIterBase_pureSoA_1_0_arena):
 class ParticleContainer_pureSoA_1_0_arena:
     @overload
     def __init__(self) -> None: ...
-
     @overload
-    def __init__(self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray, /) -> None: ...
-
+    def __init__(
+        self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray, /
+    ) -> None: ...
     @overload
     def __init__(self, gdb: ParGDBBase) -> None:
         """
@@ -10948,19 +9478,29 @@ class ParticleContainer_pureSoA_1_0_arena:
         """
 
     @overload
-    def __init__(self, arg0: Vector_Geometry, arg1: Vector_DistributionMapping, arg2: Vector_BoxArray, arg3: Vector_int, /) -> None: ...
-
+    def __init__(
+        self,
+        arg0: Vector_Geometry,
+        arg1: Vector_DistributionMapping,
+        arg2: Vector_BoxArray,
+        arg3: Vector_int,
+        /,
+    ) -> None: ...
     @overload
-    def __init__(self, arg0: Vector_Geometry, arg1: Vector_DistributionMapping, arg2: Vector_BoxArray, arg3: Vector_IntVect, /) -> None: ...
-
+    def __init__(
+        self,
+        arg0: Vector_Geometry,
+        arg1: Vector_DistributionMapping,
+        arg2: Vector_BoxArray,
+        arg3: Vector_IntVect,
+        /,
+    ) -> None: ...
     def define(self, gdb: ParGDBBase) -> None:
         """Define this container from a particle metadata broker."""
 
     def make_alike(self) -> ParticleContainer_pureSoA_1_0_arena: ...
-
     @property
     def arena(self) -> Arena: ...
-
     @arena.setter
     def arena(self, arg: Arena, /) -> None: ...
 
@@ -10997,26 +9537,23 @@ class ParticleContainer_pureSoA_1_0_arena:
 
     @property
     def num_position_components(self) -> int: ...
-
     @property
     def byte_spread(self) -> list[int]: ...
-
-    def set_soa_compile_time_names(self, arg0: Sequence[str], arg1: Sequence[str], /) -> None: ...
-
+    def set_soa_compile_time_names(
+        self, arg0: Sequence[str], arg1: Sequence[str], /
+    ) -> None: ...
     @overload
     def add_real_comp(self, communicate: int = 1) -> None:
         """add a new runtime component with type Real"""
 
     @overload
     def add_real_comp(self, name: str, communicate: int = 1) -> None: ...
-
     @overload
     def add_int_comp(self, communicate: int = 1) -> None:
         """add a new runtime component with type Int"""
 
     @overload
     def add_int_comp(self, name: str, communicate: int = 1) -> None: ...
-
     @property
     def real_soa_names(self) -> list[str]:
         """Get the names for the Real SoA components"""
@@ -11039,50 +9576,70 @@ class ParticleContainer_pureSoA_1_0_arena:
 
     @property
     def finest_level(self) -> int: ...
-
     @overload
-    def Define(self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray, /) -> None: ...
-
+    def Define(
+        self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray, /
+    ) -> None: ...
     @overload
-    def Define(self, arg0: Vector_Geometry, arg1: Vector_DistributionMapping, arg2: Vector_BoxArray, arg3: Vector_int, /) -> None: ...
-
+    def Define(
+        self,
+        arg0: Vector_Geometry,
+        arg1: Vector_DistributionMapping,
+        arg2: Vector_BoxArray,
+        arg3: Vector_int,
+        /,
+    ) -> None: ...
     @overload
-    def Define(self, arg0: Vector_Geometry, arg1: Vector_DistributionMapping, arg2: Vector_BoxArray, arg3: Vector_IntVect, /) -> None: ...
-
+    def Define(
+        self,
+        arg0: Vector_Geometry,
+        arg1: Vector_DistributionMapping,
+        arg2: Vector_BoxArray,
+        arg3: Vector_IntVect,
+        /,
+    ) -> None: ...
     def num_local_tiles_at_level(self, level: int) -> int: ...
-
     def reserve_data(self) -> None: ...
-
     def resize_data(self) -> None: ...
-
     def increment(self, arg0: MultiFab, arg1: int, /) -> None: ...
-
     @overload
-    def redistribute(self, lev_min: int = 0, lev_max: int = -1, nGrow: int = 0, local: int = 0, remove_negative: bool = True) -> None: ...
-
+    def redistribute(
+        self,
+        lev_min: int = 0,
+        lev_max: int = -1,
+        nGrow: int = 0,
+        local: int = 0,
+        remove_negative: bool = True,
+    ) -> None: ...
     @overload
-    def redistribute(self, lev_min: int = 0, lev_max: int = -1, nGrow: IntVect1D = ..., local: bool = False, max_cells_moved: IntVect1D = ..., remove_negative: bool = True) -> None: ...
-
+    def redistribute(
+        self,
+        lev_min: int = 0,
+        lev_max: int = -1,
+        nGrow: IntVect1D = ...,
+        local: bool = False,
+        max_cells_moved: IntVect1D = ...,
+        remove_negative: bool = True,
+    ) -> None: ...
     def sort_particles_by_cell(self) -> None: ...
-
     def sort_particles_by_bin(self, arg: IntVect1D, /) -> None: ...
-
     def OK(self, lev_min: int = 0, lev_max: int = -1, nGrow: int = 0) -> bool: ...
-
     def print_capacity(self) -> list[int]: ...
-
     def shrink_t_fit(self) -> None: ...
-
-    def number_of_particles_at_level(self, level: int, only_valid: bool = True, only_local: bool = False) -> int: ...
-
-    def number_of_particles_in_grid(self, level: int, only_valid: bool = True, only_local: bool = False) -> Vector_Long: ...
-
+    def number_of_particles_at_level(
+        self, level: int, only_valid: bool = True, only_local: bool = False
+    ) -> int: ...
+    def number_of_particles_in_grid(
+        self, level: int, only_valid: bool = True, only_local: bool = False
+    ) -> Vector_Long: ...
     def number_of_particles(self, only_local: bool = False) -> int:
         """
         Return the number of valid particles on all MPI ranks, unless only_local is specified.
         """
 
-    def total_number_of_particles(self, only_valid: bool = True, only_local: bool = False) -> int:
+    def total_number_of_particles(
+        self, only_valid: bool = True, only_local: bool = False
+    ) -> int:
         """
         Return the number of particles (only valid or including invalid) on all MPI ranks, unless only_local is specified.
         """
@@ -11092,24 +9649,23 @@ class ParticleContainer_pureSoA_1_0_arena:
         """Return the number of valid particles on all MPI ranks"""
 
     def remove_particles_at_level(self, arg: int, /) -> None: ...
-
     def remove_particles_not_at_finestLevel(self) -> None: ...
-
-    def add_particles_at_level(self, particles: ParticleTile_pureSoA_1_0_arena, level: int, ngrow: int = 0) -> None: ...
-
+    def add_particles_at_level(
+        self, particles: ParticleTile_pureSoA_1_0_arena, level: int, ngrow: int = 0
+    ) -> None: ...
     def clear_particles(self) -> None: ...
-
-    def add_particles(self, other: ParticleContainer_pureSoA_1_0_arena, local: bool = False) -> None: ...
-
+    def add_particles(
+        self, other: ParticleContainer_pureSoA_1_0_arena, local: bool = False
+    ) -> None: ...
     def restart(self, dir: str, file: str) -> None: ...
-
     def restart_checkpoint(self, dir: str, file: str, is_checkpoint: bool) -> None: ...
-
     def write_plotfile(self, dir: str, name: str) -> None: ...
-
-    def get_particles(self, level: int) -> dict[tuple[int, int], ParticleTile_pureSoA_1_0_arena]: ...
-
-    def define_and_return_particle_tile(self, lev: int, grid: int, tile: int) -> ParticleTile_pureSoA_1_0_arena:
+    def get_particles(
+        self, level: int
+    ) -> dict[tuple[int, int], ParticleTile_pureSoA_1_0_arena]: ...
+    def define_and_return_particle_tile(
+        self, lev: int, grid: int, tile: int
+    ) -> ParticleTile_pureSoA_1_0_arena:
         """
         Define, if necessary, and return the particle tile at ``(lev, grid, tile)``.
 
@@ -11117,7 +9673,15 @@ class ParticleContainer_pureSoA_1_0_arena:
         The returned tile is owned by the particle container.
         """
 
-    def init_random(self, arg0: int, arg1: int, arg2: ParticleInitType_pureSoA_1_0, arg3: bool, arg4: RealBox, /) -> None: ...
+    def init_random(
+        self,
+        arg0: int,
+        arg1: int,
+        arg2: ParticleInitType_pureSoA_1_0,
+        arg3: bool,
+        arg4: RealBox,
+        /,
+    ) -> None: ...
 
     Iterator: object = ...
     """amrex iterator for particle boxes"""
@@ -11126,10 +9690,10 @@ class ParticleContainer_pureSoA_1_0_arena:
     """amrex constant iterator for particle boxes (read-only)"""
 
 class ParIterBase_pureSoA_1_0_polymorphic(MFIter):
-    def __init__(self, particle_container: ParticleContainer_pureSoA_1_0_polymorphic, level: int) -> None: ...
-
+    def __init__(
+        self, particle_container: ParticleContainer_pureSoA_1_0_polymorphic, level: int
+    ) -> None: ...
     def particle_tile(self) -> ParticleTile_pureSoA_1_0_polymorphic: ...
-
     def soa(self) -> StructOfArrays_1_0_idcpu_polymorphic: ...
 
     is_soa_particle: bool = ...
@@ -11141,39 +9705,33 @@ class ParIterBase_pureSoA_1_0_polymorphic(MFIter):
 
     @property
     def num_particles(self) -> int: ...
-
     @property
     def num_real_particles(self) -> int: ...
-
     @property
     def num_neighbor_particles(self) -> int: ...
-
     @property
     def level(self) -> int: ...
-
     @property
     def pair_index(self) -> tuple[int, int]: ...
-
     @property
     def is_valid(self) -> bool: ...
-
     def geom(self, level: int) -> Geometry: ...
-
     def finalize(self) -> None: ...
 
 class ParIter_pureSoA_1_0_polymorphic(ParIterBase_pureSoA_1_0_polymorphic):
-    def __init__(self, particle_container: ParticleContainer_pureSoA_1_0_polymorphic, level: int) -> None: ...
-
+    def __init__(
+        self, particle_container: ParticleContainer_pureSoA_1_0_polymorphic, level: int
+    ) -> None: ...
     def __repr__(self) -> str: ...
 
     is_soa_particle: bool = ...
     """(arg: object, /) -> bool"""
 
 class ParConstIterBase_pureSoA_1_0_polymorphic(MFIter):
-    def __init__(self, particle_container: ParticleContainer_pureSoA_1_0_polymorphic, level: int) -> None: ...
-
+    def __init__(
+        self, particle_container: ParticleContainer_pureSoA_1_0_polymorphic, level: int
+    ) -> None: ...
     def particle_tile(self) -> ParticleTile_pureSoA_1_0_polymorphic: ...
-
     def soa(self) -> StructOfArrays_1_0_idcpu_polymorphic: ...
 
     is_soa_particle: bool = ...
@@ -11185,29 +9743,23 @@ class ParConstIterBase_pureSoA_1_0_polymorphic(MFIter):
 
     @property
     def num_particles(self) -> int: ...
-
     @property
     def num_real_particles(self) -> int: ...
-
     @property
     def num_neighbor_particles(self) -> int: ...
-
     @property
     def level(self) -> int: ...
-
     @property
     def pair_index(self) -> tuple[int, int]: ...
-
     @property
     def is_valid(self) -> bool: ...
-
     def geom(self, level: int) -> Geometry: ...
-
     def finalize(self) -> None: ...
 
 class ParConstIter_pureSoA_1_0_polymorphic(ParConstIterBase_pureSoA_1_0_polymorphic):
-    def __init__(self, particle_container: ParticleContainer_pureSoA_1_0_polymorphic, level: int) -> None: ...
-
+    def __init__(
+        self, particle_container: ParticleContainer_pureSoA_1_0_polymorphic, level: int
+    ) -> None: ...
     def __repr__(self) -> str: ...
 
     is_soa_particle: bool = ...
@@ -11216,10 +9768,10 @@ class ParConstIter_pureSoA_1_0_polymorphic(ParConstIterBase_pureSoA_1_0_polymorp
 class ParticleContainer_pureSoA_1_0_polymorphic:
     @overload
     def __init__(self) -> None: ...
-
     @overload
-    def __init__(self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray, /) -> None: ...
-
+    def __init__(
+        self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray, /
+    ) -> None: ...
     @overload
     def __init__(self, gdb: ParGDBBase) -> None:
         """
@@ -11227,19 +9779,29 @@ class ParticleContainer_pureSoA_1_0_polymorphic:
         """
 
     @overload
-    def __init__(self, arg0: Vector_Geometry, arg1: Vector_DistributionMapping, arg2: Vector_BoxArray, arg3: Vector_int, /) -> None: ...
-
+    def __init__(
+        self,
+        arg0: Vector_Geometry,
+        arg1: Vector_DistributionMapping,
+        arg2: Vector_BoxArray,
+        arg3: Vector_int,
+        /,
+    ) -> None: ...
     @overload
-    def __init__(self, arg0: Vector_Geometry, arg1: Vector_DistributionMapping, arg2: Vector_BoxArray, arg3: Vector_IntVect, /) -> None: ...
-
+    def __init__(
+        self,
+        arg0: Vector_Geometry,
+        arg1: Vector_DistributionMapping,
+        arg2: Vector_BoxArray,
+        arg3: Vector_IntVect,
+        /,
+    ) -> None: ...
     def define(self, gdb: ParGDBBase) -> None:
         """Define this container from a particle metadata broker."""
 
     def make_alike(self) -> ParticleContainer_pureSoA_1_0_polymorphic: ...
-
     @property
     def arena(self) -> Arena: ...
-
     @arena.setter
     def arena(self, arg: Arena, /) -> None: ...
 
@@ -11276,26 +9838,23 @@ class ParticleContainer_pureSoA_1_0_polymorphic:
 
     @property
     def num_position_components(self) -> int: ...
-
     @property
     def byte_spread(self) -> list[int]: ...
-
-    def set_soa_compile_time_names(self, arg0: Sequence[str], arg1: Sequence[str], /) -> None: ...
-
+    def set_soa_compile_time_names(
+        self, arg0: Sequence[str], arg1: Sequence[str], /
+    ) -> None: ...
     @overload
     def add_real_comp(self, communicate: int = 1) -> None:
         """add a new runtime component with type Real"""
 
     @overload
     def add_real_comp(self, name: str, communicate: int = 1) -> None: ...
-
     @overload
     def add_int_comp(self, communicate: int = 1) -> None:
         """add a new runtime component with type Int"""
 
     @overload
     def add_int_comp(self, name: str, communicate: int = 1) -> None: ...
-
     @property
     def real_soa_names(self) -> list[str]:
         """Get the names for the Real SoA components"""
@@ -11318,50 +9877,70 @@ class ParticleContainer_pureSoA_1_0_polymorphic:
 
     @property
     def finest_level(self) -> int: ...
-
     @overload
-    def Define(self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray, /) -> None: ...
-
+    def Define(
+        self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray, /
+    ) -> None: ...
     @overload
-    def Define(self, arg0: Vector_Geometry, arg1: Vector_DistributionMapping, arg2: Vector_BoxArray, arg3: Vector_int, /) -> None: ...
-
+    def Define(
+        self,
+        arg0: Vector_Geometry,
+        arg1: Vector_DistributionMapping,
+        arg2: Vector_BoxArray,
+        arg3: Vector_int,
+        /,
+    ) -> None: ...
     @overload
-    def Define(self, arg0: Vector_Geometry, arg1: Vector_DistributionMapping, arg2: Vector_BoxArray, arg3: Vector_IntVect, /) -> None: ...
-
+    def Define(
+        self,
+        arg0: Vector_Geometry,
+        arg1: Vector_DistributionMapping,
+        arg2: Vector_BoxArray,
+        arg3: Vector_IntVect,
+        /,
+    ) -> None: ...
     def num_local_tiles_at_level(self, level: int) -> int: ...
-
     def reserve_data(self) -> None: ...
-
     def resize_data(self) -> None: ...
-
     def increment(self, arg0: MultiFab, arg1: int, /) -> None: ...
-
     @overload
-    def redistribute(self, lev_min: int = 0, lev_max: int = -1, nGrow: int = 0, local: int = 0, remove_negative: bool = True) -> None: ...
-
+    def redistribute(
+        self,
+        lev_min: int = 0,
+        lev_max: int = -1,
+        nGrow: int = 0,
+        local: int = 0,
+        remove_negative: bool = True,
+    ) -> None: ...
     @overload
-    def redistribute(self, lev_min: int = 0, lev_max: int = -1, nGrow: IntVect1D = ..., local: bool = False, max_cells_moved: IntVect1D = ..., remove_negative: bool = True) -> None: ...
-
+    def redistribute(
+        self,
+        lev_min: int = 0,
+        lev_max: int = -1,
+        nGrow: IntVect1D = ...,
+        local: bool = False,
+        max_cells_moved: IntVect1D = ...,
+        remove_negative: bool = True,
+    ) -> None: ...
     def sort_particles_by_cell(self) -> None: ...
-
     def sort_particles_by_bin(self, arg: IntVect1D, /) -> None: ...
-
     def OK(self, lev_min: int = 0, lev_max: int = -1, nGrow: int = 0) -> bool: ...
-
     def print_capacity(self) -> list[int]: ...
-
     def shrink_t_fit(self) -> None: ...
-
-    def number_of_particles_at_level(self, level: int, only_valid: bool = True, only_local: bool = False) -> int: ...
-
-    def number_of_particles_in_grid(self, level: int, only_valid: bool = True, only_local: bool = False) -> Vector_Long: ...
-
+    def number_of_particles_at_level(
+        self, level: int, only_valid: bool = True, only_local: bool = False
+    ) -> int: ...
+    def number_of_particles_in_grid(
+        self, level: int, only_valid: bool = True, only_local: bool = False
+    ) -> Vector_Long: ...
     def number_of_particles(self, only_local: bool = False) -> int:
         """
         Return the number of valid particles on all MPI ranks, unless only_local is specified.
         """
 
-    def total_number_of_particles(self, only_valid: bool = True, only_local: bool = False) -> int:
+    def total_number_of_particles(
+        self, only_valid: bool = True, only_local: bool = False
+    ) -> int:
         """
         Return the number of particles (only valid or including invalid) on all MPI ranks, unless only_local is specified.
         """
@@ -11371,24 +9950,26 @@ class ParticleContainer_pureSoA_1_0_polymorphic:
         """Return the number of valid particles on all MPI ranks"""
 
     def remove_particles_at_level(self, arg: int, /) -> None: ...
-
     def remove_particles_not_at_finestLevel(self) -> None: ...
-
-    def add_particles_at_level(self, particles: ParticleTile_pureSoA_1_0_polymorphic, level: int, ngrow: int = 0) -> None: ...
-
+    def add_particles_at_level(
+        self,
+        particles: ParticleTile_pureSoA_1_0_polymorphic,
+        level: int,
+        ngrow: int = 0,
+    ) -> None: ...
     def clear_particles(self) -> None: ...
-
-    def add_particles(self, other: ParticleContainer_pureSoA_1_0_polymorphic, local: bool = False) -> None: ...
-
+    def add_particles(
+        self, other: ParticleContainer_pureSoA_1_0_polymorphic, local: bool = False
+    ) -> None: ...
     def restart(self, dir: str, file: str) -> None: ...
-
     def restart_checkpoint(self, dir: str, file: str, is_checkpoint: bool) -> None: ...
-
     def write_plotfile(self, dir: str, name: str) -> None: ...
-
-    def get_particles(self, level: int) -> dict[tuple[int, int], ParticleTile_pureSoA_1_0_polymorphic]: ...
-
-    def define_and_return_particle_tile(self, lev: int, grid: int, tile: int) -> ParticleTile_pureSoA_1_0_polymorphic:
+    def get_particles(
+        self, level: int
+    ) -> dict[tuple[int, int], ParticleTile_pureSoA_1_0_polymorphic]: ...
+    def define_and_return_particle_tile(
+        self, lev: int, grid: int, tile: int
+    ) -> ParticleTile_pureSoA_1_0_polymorphic:
         """
         Define, if necessary, and return the particle tile at ``(lev, grid, tile)``.
 
@@ -11396,7 +9977,15 @@ class ParticleContainer_pureSoA_1_0_polymorphic:
         The returned tile is owned by the particle container.
         """
 
-    def init_random(self, arg0: int, arg1: int, arg2: ParticleInitType_pureSoA_1_0, arg3: bool, arg4: RealBox, /) -> None: ...
+    def init_random(
+        self,
+        arg0: int,
+        arg1: int,
+        arg2: ParticleInitType_pureSoA_1_0,
+        arg3: bool,
+        arg4: RealBox,
+        /,
+    ) -> None: ...
 
     Iterator: object = ...
     """amrex iterator for particle boxes"""
@@ -11407,18 +9996,13 @@ class ParticleContainer_pureSoA_1_0_polymorphic:
 class Particle_2_1:
     @overload
     def __init__(self, **kwargs) -> None: ...
-
     @overload
     def __init__(self, arg: float, /) -> None: ...
-
     @overload
     def __init__(self, arg0: float, /, *args) -> None: ...
-
     @overload
     def __init__(self, arg0: float, /, **kwargs) -> None: ...
-
     def __repr__(self) -> str: ...
-
     def __str__(self) -> str: ...
 
     NReal: int = ...
@@ -11429,74 +10013,51 @@ class Particle_2_1:
 
     @overload
     def pos(self, arg: int, /) -> float: ...
-
     @overload
     def pos(self) -> RealVect: ...
-
     @overload
     def setPos(self, arg0: int, arg1: float, /) -> None: ...
-
     @overload
     def setPos(self, arg: RealVect, /) -> None: ...
-
     @overload
     def setPos(self, arg: Sequence[float], /) -> None: ...
-
     @overload
     def get_rdata(self, arg: int, /) -> float: ...
-
     @overload
     def get_rdata(self) -> list[float]: ...
-
     @overload
     def set_rdata(self, arg0: int, arg1: float, /) -> None: ...
-
     @overload
     def set_rdata(self, arg: Sequence[float], /) -> None: ...
-
     @overload
     def get_idata(self, arg: int, /) -> int: ...
-
     @overload
     def get_idata(self) -> list[int]: ...
-
     @overload
     def set_idata(self, arg0: int, arg1: int, /) -> None: ...
-
     @overload
     def set_idata(self, arg: Sequence[int], /) -> None: ...
-
     def cpu(self) -> int: ...
-
     def id(self) -> int: ...
-
     @overload
     def NextID(self) -> int: ...
-
     @overload
     def NextID(self, arg: int, /) -> None: ...
-
     @property
     def x(self) -> float: ...
-
     @x.setter
     def x(self, arg: float, /) -> None: ...
 
 class Particle_5_2:
     @overload
     def __init__(self, **kwargs) -> None: ...
-
     @overload
     def __init__(self, arg: float, /) -> None: ...
-
     @overload
     def __init__(self, arg0: float, /, *args) -> None: ...
-
     @overload
     def __init__(self, arg0: float, /, **kwargs) -> None: ...
-
     def __repr__(self) -> str: ...
-
     def __str__(self) -> str: ...
 
     NReal: int = ...
@@ -11507,240 +10068,154 @@ class Particle_5_2:
 
     @overload
     def pos(self, arg: int, /) -> float: ...
-
     @overload
     def pos(self) -> RealVect: ...
-
     @overload
     def setPos(self, arg0: int, arg1: float, /) -> None: ...
-
     @overload
     def setPos(self, arg: RealVect, /) -> None: ...
-
     @overload
     def setPos(self, arg: Sequence[float], /) -> None: ...
-
     @overload
     def get_rdata(self, arg: int, /) -> float: ...
-
     @overload
     def get_rdata(self) -> list[float]: ...
-
     @overload
     def set_rdata(self, arg0: int, arg1: float, /) -> None: ...
-
     @overload
     def set_rdata(self, arg: Sequence[float], /) -> None: ...
-
     @overload
     def get_idata(self, arg: int, /) -> int: ...
-
     @overload
     def get_idata(self) -> list[int]: ...
-
     @overload
     def set_idata(self, arg0: int, arg1: int, /) -> None: ...
-
     @overload
     def set_idata(self, arg: Sequence[int], /) -> None: ...
-
     def cpu(self) -> int: ...
-
     def id(self) -> int: ...
-
     @overload
     def NextID(self) -> int: ...
-
     @overload
     def NextID(self, arg: int, /) -> None: ...
-
     @property
     def x(self) -> float: ...
-
     @x.setter
     def x(self, arg: float, /) -> None: ...
 
 class ArrayOfStructs_2_1_pinned:
     def __init__(self) -> None: ...
-
     def size(self) -> int: ...
-
     def numParticles(self) -> int: ...
-
     def numRealParticles(self) -> int: ...
-
     def numNeighborParticles(self) -> int: ...
-
     def numTotalParticles(self) -> int: ...
-
     def setNumNeighbors(self, arg: int, /) -> None: ...
-
     def getNumNeighbors(self) -> int: ...
-
     @overload
     def empty(self) -> bool: ...
-
     @overload
     def empty(self) -> bool: ...
-
     def push_back(self, arg: Particle_2_1, /) -> None: ...
-
     def pop_back(self) -> None: ...
-
     def back(self) -> Particle_2_1:
         """get back member.  Problem!!!!! this is perfo"""
 
     @property
     def __array_interface__(self) -> dict: ...
-
     @property
     def __cuda_array_interface__(self) -> dict: ...
-
     def test_sizes() -> None: ...
-
     def __setitem__(self, arg0: int, arg1: Particle_2_1, /) -> None: ...
-
     def __getitem__(self, arg: int, /) -> Particle_2_1: ...
-
     def to_host(self) -> ArrayOfStructs_2_1_pinned: ...
 
 class ArrayOfStructs_2_1_default:
     def __init__(self) -> None: ...
-
     def size(self) -> int: ...
-
     def numParticles(self) -> int: ...
-
     def numRealParticles(self) -> int: ...
-
     def numNeighborParticles(self) -> int: ...
-
     def numTotalParticles(self) -> int: ...
-
     def setNumNeighbors(self, arg: int, /) -> None: ...
-
     def getNumNeighbors(self) -> int: ...
-
     @overload
     def empty(self) -> bool: ...
-
     @overload
     def empty(self) -> bool: ...
-
     def push_back(self, arg: Particle_2_1, /) -> None: ...
-
     def pop_back(self) -> None: ...
-
     def back(self) -> Particle_2_1:
         """get back member.  Problem!!!!! this is perfo"""
 
     @property
     def __array_interface__(self) -> dict: ...
-
     @property
     def __cuda_array_interface__(self) -> dict: ...
-
     def test_sizes() -> None: ...
-
     def __setitem__(self, arg0: int, arg1: Particle_2_1, /) -> None: ...
-
     def __getitem__(self, arg: int, /) -> Particle_2_1: ...
-
     def to_host(self) -> ArrayOfStructs_2_1_pinned: ...
 
 class ArrayOfStructs_2_1_arena:
     def __init__(self) -> None: ...
-
     def size(self) -> int: ...
-
     def numParticles(self) -> int: ...
-
     def numRealParticles(self) -> int: ...
-
     def numNeighborParticles(self) -> int: ...
-
     def numTotalParticles(self) -> int: ...
-
     def setNumNeighbors(self, arg: int, /) -> None: ...
-
     def getNumNeighbors(self) -> int: ...
-
     @overload
     def empty(self) -> bool: ...
-
     @overload
     def empty(self) -> bool: ...
-
     def push_back(self, arg: Particle_2_1, /) -> None: ...
-
     def pop_back(self) -> None: ...
-
     def back(self) -> Particle_2_1:
         """get back member.  Problem!!!!! this is perfo"""
 
     @property
     def __array_interface__(self) -> dict: ...
-
     @property
     def __cuda_array_interface__(self) -> dict: ...
-
     def test_sizes() -> None: ...
-
     def __setitem__(self, arg0: int, arg1: Particle_2_1, /) -> None: ...
-
     def __getitem__(self, arg: int, /) -> Particle_2_1: ...
-
     def to_host(self) -> ArrayOfStructs_2_1_pinned: ...
 
 class ArrayOfStructs_2_1_polymorphic:
     def __init__(self) -> None: ...
-
     def size(self) -> int: ...
-
     def numParticles(self) -> int: ...
-
     def numRealParticles(self) -> int: ...
-
     def numNeighborParticles(self) -> int: ...
-
     def numTotalParticles(self) -> int: ...
-
     def setNumNeighbors(self, arg: int, /) -> None: ...
-
     def getNumNeighbors(self) -> int: ...
-
     @overload
     def empty(self) -> bool: ...
-
     @overload
     def empty(self) -> bool: ...
-
     def push_back(self, arg: Particle_2_1, /) -> None: ...
-
     def pop_back(self) -> None: ...
-
     def back(self) -> Particle_2_1:
         """get back member.  Problem!!!!! this is perfo"""
 
     @property
     def __array_interface__(self) -> dict: ...
-
     @property
     def __cuda_array_interface__(self) -> dict: ...
-
     def test_sizes() -> None: ...
-
     def __setitem__(self, arg0: int, arg1: Particle_2_1, /) -> None: ...
-
     def __getitem__(self, arg: int, /) -> Particle_2_1: ...
-
     def to_host(self) -> ArrayOfStructs_2_1_pinned: ...
 
 class StructOfArrays_3_1_pinned:
     def __init__(self) -> None: ...
-
-    def define(self, arg0: int, arg1: int, arg2: Sequence[str], arg3: Sequence[str], /) -> None: ...
-
+    def define(
+        self, arg0: int, arg1: int, arg2: Sequence[str], arg3: Sequence[str], /
+    ) -> None: ...
     @property
     def num_real_comps(self) -> int:
         """Get the number of compile-time + runtime Real components"""
@@ -11802,24 +10277,21 @@ class StructOfArrays_3_1_pinned:
 
     @property
     def num_particles(self) -> int: ...
-
     @property
     def num_real_particles(self) -> int: ...
-
     @property
     def num_total_particles(self) -> int: ...
-
     def set_num_neighbors(self, arg: int, /) -> None: ...
-
     def get_num_neighbors(self) -> int: ...
-
-    def resize(self, new_size: int, strategy: GrowthStrategy = GrowthStrategy.Poisson) -> None: ...
+    def resize(
+        self, new_size: int, strategy: GrowthStrategy = GrowthStrategy.Poisson
+    ) -> None: ...
 
 class StructOfArrays_3_1_default:
     def __init__(self) -> None: ...
-
-    def define(self, arg0: int, arg1: int, arg2: Sequence[str], arg3: Sequence[str], /) -> None: ...
-
+    def define(
+        self, arg0: int, arg1: int, arg2: Sequence[str], arg3: Sequence[str], /
+    ) -> None: ...
     @property
     def num_real_comps(self) -> int:
         """Get the number of compile-time + runtime Real components"""
@@ -11881,24 +10353,21 @@ class StructOfArrays_3_1_default:
 
     @property
     def num_particles(self) -> int: ...
-
     @property
     def num_real_particles(self) -> int: ...
-
     @property
     def num_total_particles(self) -> int: ...
-
     def set_num_neighbors(self, arg: int, /) -> None: ...
-
     def get_num_neighbors(self) -> int: ...
-
-    def resize(self, new_size: int, strategy: GrowthStrategy = GrowthStrategy.Poisson) -> None: ...
+    def resize(
+        self, new_size: int, strategy: GrowthStrategy = GrowthStrategy.Poisson
+    ) -> None: ...
 
 class StructOfArrays_3_1_arena:
     def __init__(self) -> None: ...
-
-    def define(self, arg0: int, arg1: int, arg2: Sequence[str], arg3: Sequence[str], /) -> None: ...
-
+    def define(
+        self, arg0: int, arg1: int, arg2: Sequence[str], arg3: Sequence[str], /
+    ) -> None: ...
     @property
     def num_real_comps(self) -> int:
         """Get the number of compile-time + runtime Real components"""
@@ -11960,24 +10429,21 @@ class StructOfArrays_3_1_arena:
 
     @property
     def num_particles(self) -> int: ...
-
     @property
     def num_real_particles(self) -> int: ...
-
     @property
     def num_total_particles(self) -> int: ...
-
     def set_num_neighbors(self, arg: int, /) -> None: ...
-
     def get_num_neighbors(self) -> int: ...
-
-    def resize(self, new_size: int, strategy: GrowthStrategy = GrowthStrategy.Poisson) -> None: ...
+    def resize(
+        self, new_size: int, strategy: GrowthStrategy = GrowthStrategy.Poisson
+    ) -> None: ...
 
 class StructOfArrays_3_1_polymorphic:
     def __init__(self) -> None: ...
-
-    def define(self, arg0: int, arg1: int, arg2: Sequence[str], arg3: Sequence[str], /) -> None: ...
-
+    def define(
+        self, arg0: int, arg1: int, arg2: Sequence[str], arg3: Sequence[str], /
+    ) -> None: ...
     @property
     def num_real_comps(self) -> int:
         """Get the number of compile-time + runtime Real components"""
@@ -12039,37 +10505,27 @@ class StructOfArrays_3_1_polymorphic:
 
     @property
     def num_particles(self) -> int: ...
-
     @property
     def num_real_particles(self) -> int: ...
-
     @property
     def num_total_particles(self) -> int: ...
-
     def set_num_neighbors(self, arg: int, /) -> None: ...
-
     def get_num_neighbors(self) -> int: ...
-
-    def resize(self, new_size: int, strategy: GrowthStrategy = GrowthStrategy.Poisson) -> None: ...
+    def resize(
+        self, new_size: int, strategy: GrowthStrategy = GrowthStrategy.Poisson
+    ) -> None: ...
 
 class ParticleTileData_2_1_3_1:
     def __init__(self) -> None: ...
-
     @property
     def m_size(self) -> int: ...
-
     @property
     def m_num_runtime_real(self) -> int: ...
-
     @property
     def m_num_runtime_int(self) -> int: ...
-
     def get_super_particle(self, arg: int, /) -> Particle_5_2: ...
-
     def set_super_particle(self, arg0: Particle_5_2, arg1: int, /) -> None: ...
-
     def __setitem__(self, arg0: int, arg1: Particle_5_2, /) -> None: ...
-
     def __getitem__(self, arg: int, /) -> Particle_5_2: ...
 
 class ParticleTile_2_1_3_1_pinned:
@@ -12081,83 +10537,65 @@ class ParticleTile_2_1_3_1_pinned:
     NAI: int = ...
     """(arg: object, /) -> int"""
 
-    def define(self, arg0: int, arg1: int, arg2: Sequence[str], arg3: Sequence[str], arg4: Arena, /) -> None: ...
-
+    def define(
+        self,
+        arg0: int,
+        arg1: int,
+        arg2: Sequence[str],
+        arg3: Sequence[str],
+        arg4: Arena,
+        /,
+    ) -> None: ...
     def get_struct_of_arrays(self) -> StructOfArrays_3_1_pinned: ...
-
     @property
     def empty(self) -> bool: ...
-
     @property
     def size(self) -> int: ...
-
     @property
     def num_particles(self) -> int: ...
-
     @property
     def num_real_particles(self) -> int: ...
-
     @property
     def num_neighbor_particles(self) -> int: ...
-
     @property
     def num_total_particles(self) -> int: ...
-
     def set_num_neighbors(self, arg: int, /) -> None: ...
-
     def get_num_neighbors(self) -> int: ...
-
-    def resize(self, count: int, strategy: GrowthStrategy = GrowthStrategy.Poisson) -> None: ...
-
+    def resize(
+        self, count: int, strategy: GrowthStrategy = GrowthStrategy.Poisson
+    ) -> None: ...
     @overload
     def push_back(self, arg: Particle_2_1, /) -> None:
         """Add one particle to this tile."""
 
     @overload
     def push_back(self, arg: Particle_5_2, /) -> None: ...
-
     @overload
     def push_back_real(self, arg0: int, arg1: float, /) -> None: ...
-
     @overload
     def push_back_real(self, arg: Sequence[float], /) -> None: ...
-
     @overload
     def push_back_real(self, arg0: int, arg1: int, arg2: float, /) -> None: ...
-
     @overload
     def push_back_int(self, arg0: int, arg1: int, /) -> None: ...
-
     @overload
     def push_back_int(self, arg: Sequence[int], /) -> None: ...
-
     @overload
     def push_back_int(self, arg0: int, arg1: int, arg2: int, /) -> None: ...
-
     @property
     def num_real_comps(self) -> int: ...
-
     @property
     def num_int_comps(self) -> int: ...
-
     @property
     def num_runtime_real_comps(self) -> int: ...
-
     @property
     def num_runtime_int_comps(self) -> int: ...
-
     def shrink_to_fit(self) -> None: ...
-
     def capacity(self) -> int: ...
-
     def swap(self, arg: ParticleTile_2_1_3_1_pinned, /) -> None: ...
-
     def get_particle_tile_data(self) -> ParticleTileData_2_1_3_1: ...
-
     def __setitem__(self, arg0: int, arg1: Particle_5_2, /) -> None: ...
-
     def __getitem__(self, arg: int, /) -> Particle_5_2: ...
-
     def get_array_of_structs(self) -> ArrayOfStructs_2_1_pinned: ...
 
 class ParticleTile_2_1_3_1_default:
@@ -12169,83 +10607,65 @@ class ParticleTile_2_1_3_1_default:
     NAI: int = ...
     """(arg: object, /) -> int"""
 
-    def define(self, arg0: int, arg1: int, arg2: Sequence[str], arg3: Sequence[str], arg4: Arena, /) -> None: ...
-
+    def define(
+        self,
+        arg0: int,
+        arg1: int,
+        arg2: Sequence[str],
+        arg3: Sequence[str],
+        arg4: Arena,
+        /,
+    ) -> None: ...
     def get_struct_of_arrays(self) -> StructOfArrays_3_1_default: ...
-
     @property
     def empty(self) -> bool: ...
-
     @property
     def size(self) -> int: ...
-
     @property
     def num_particles(self) -> int: ...
-
     @property
     def num_real_particles(self) -> int: ...
-
     @property
     def num_neighbor_particles(self) -> int: ...
-
     @property
     def num_total_particles(self) -> int: ...
-
     def set_num_neighbors(self, arg: int, /) -> None: ...
-
     def get_num_neighbors(self) -> int: ...
-
-    def resize(self, count: int, strategy: GrowthStrategy = GrowthStrategy.Poisson) -> None: ...
-
+    def resize(
+        self, count: int, strategy: GrowthStrategy = GrowthStrategy.Poisson
+    ) -> None: ...
     @overload
     def push_back(self, arg: Particle_2_1, /) -> None:
         """Add one particle to this tile."""
 
     @overload
     def push_back(self, arg: Particle_5_2, /) -> None: ...
-
     @overload
     def push_back_real(self, arg0: int, arg1: float, /) -> None: ...
-
     @overload
     def push_back_real(self, arg: Sequence[float], /) -> None: ...
-
     @overload
     def push_back_real(self, arg0: int, arg1: int, arg2: float, /) -> None: ...
-
     @overload
     def push_back_int(self, arg0: int, arg1: int, /) -> None: ...
-
     @overload
     def push_back_int(self, arg: Sequence[int], /) -> None: ...
-
     @overload
     def push_back_int(self, arg0: int, arg1: int, arg2: int, /) -> None: ...
-
     @property
     def num_real_comps(self) -> int: ...
-
     @property
     def num_int_comps(self) -> int: ...
-
     @property
     def num_runtime_real_comps(self) -> int: ...
-
     @property
     def num_runtime_int_comps(self) -> int: ...
-
     def shrink_to_fit(self) -> None: ...
-
     def capacity(self) -> int: ...
-
     def swap(self, arg: ParticleTile_2_1_3_1_default, /) -> None: ...
-
     def get_particle_tile_data(self) -> ParticleTileData_2_1_3_1: ...
-
     def __setitem__(self, arg0: int, arg1: Particle_5_2, /) -> None: ...
-
     def __getitem__(self, arg: int, /) -> Particle_5_2: ...
-
     def get_array_of_structs(self) -> ArrayOfStructs_2_1_default: ...
 
 class ParticleTile_2_1_3_1_arena:
@@ -12257,83 +10677,65 @@ class ParticleTile_2_1_3_1_arena:
     NAI: int = ...
     """(arg: object, /) -> int"""
 
-    def define(self, arg0: int, arg1: int, arg2: Sequence[str], arg3: Sequence[str], arg4: Arena, /) -> None: ...
-
+    def define(
+        self,
+        arg0: int,
+        arg1: int,
+        arg2: Sequence[str],
+        arg3: Sequence[str],
+        arg4: Arena,
+        /,
+    ) -> None: ...
     def get_struct_of_arrays(self) -> StructOfArrays_3_1_arena: ...
-
     @property
     def empty(self) -> bool: ...
-
     @property
     def size(self) -> int: ...
-
     @property
     def num_particles(self) -> int: ...
-
     @property
     def num_real_particles(self) -> int: ...
-
     @property
     def num_neighbor_particles(self) -> int: ...
-
     @property
     def num_total_particles(self) -> int: ...
-
     def set_num_neighbors(self, arg: int, /) -> None: ...
-
     def get_num_neighbors(self) -> int: ...
-
-    def resize(self, count: int, strategy: GrowthStrategy = GrowthStrategy.Poisson) -> None: ...
-
+    def resize(
+        self, count: int, strategy: GrowthStrategy = GrowthStrategy.Poisson
+    ) -> None: ...
     @overload
     def push_back(self, arg: Particle_2_1, /) -> None:
         """Add one particle to this tile."""
 
     @overload
     def push_back(self, arg: Particle_5_2, /) -> None: ...
-
     @overload
     def push_back_real(self, arg0: int, arg1: float, /) -> None: ...
-
     @overload
     def push_back_real(self, arg: Sequence[float], /) -> None: ...
-
     @overload
     def push_back_real(self, arg0: int, arg1: int, arg2: float, /) -> None: ...
-
     @overload
     def push_back_int(self, arg0: int, arg1: int, /) -> None: ...
-
     @overload
     def push_back_int(self, arg: Sequence[int], /) -> None: ...
-
     @overload
     def push_back_int(self, arg0: int, arg1: int, arg2: int, /) -> None: ...
-
     @property
     def num_real_comps(self) -> int: ...
-
     @property
     def num_int_comps(self) -> int: ...
-
     @property
     def num_runtime_real_comps(self) -> int: ...
-
     @property
     def num_runtime_int_comps(self) -> int: ...
-
     def shrink_to_fit(self) -> None: ...
-
     def capacity(self) -> int: ...
-
     def swap(self, arg: ParticleTile_2_1_3_1_arena, /) -> None: ...
-
     def get_particle_tile_data(self) -> ParticleTileData_2_1_3_1: ...
-
     def __setitem__(self, arg0: int, arg1: Particle_5_2, /) -> None: ...
-
     def __getitem__(self, arg: int, /) -> Particle_5_2: ...
-
     def get_array_of_structs(self) -> ArrayOfStructs_2_1_arena: ...
 
 class ParticleTile_2_1_3_1_polymorphic:
@@ -12345,83 +10747,65 @@ class ParticleTile_2_1_3_1_polymorphic:
     NAI: int = ...
     """(arg: object, /) -> int"""
 
-    def define(self, arg0: int, arg1: int, arg2: Sequence[str], arg3: Sequence[str], arg4: Arena, /) -> None: ...
-
+    def define(
+        self,
+        arg0: int,
+        arg1: int,
+        arg2: Sequence[str],
+        arg3: Sequence[str],
+        arg4: Arena,
+        /,
+    ) -> None: ...
     def get_struct_of_arrays(self) -> StructOfArrays_3_1_polymorphic: ...
-
     @property
     def empty(self) -> bool: ...
-
     @property
     def size(self) -> int: ...
-
     @property
     def num_particles(self) -> int: ...
-
     @property
     def num_real_particles(self) -> int: ...
-
     @property
     def num_neighbor_particles(self) -> int: ...
-
     @property
     def num_total_particles(self) -> int: ...
-
     def set_num_neighbors(self, arg: int, /) -> None: ...
-
     def get_num_neighbors(self) -> int: ...
-
-    def resize(self, count: int, strategy: GrowthStrategy = GrowthStrategy.Poisson) -> None: ...
-
+    def resize(
+        self, count: int, strategy: GrowthStrategy = GrowthStrategy.Poisson
+    ) -> None: ...
     @overload
     def push_back(self, arg: Particle_2_1, /) -> None:
         """Add one particle to this tile."""
 
     @overload
     def push_back(self, arg: Particle_5_2, /) -> None: ...
-
     @overload
     def push_back_real(self, arg0: int, arg1: float, /) -> None: ...
-
     @overload
     def push_back_real(self, arg: Sequence[float], /) -> None: ...
-
     @overload
     def push_back_real(self, arg0: int, arg1: int, arg2: float, /) -> None: ...
-
     @overload
     def push_back_int(self, arg0: int, arg1: int, /) -> None: ...
-
     @overload
     def push_back_int(self, arg: Sequence[int], /) -> None: ...
-
     @overload
     def push_back_int(self, arg0: int, arg1: int, arg2: int, /) -> None: ...
-
     @property
     def num_real_comps(self) -> int: ...
-
     @property
     def num_int_comps(self) -> int: ...
-
     @property
     def num_runtime_real_comps(self) -> int: ...
-
     @property
     def num_runtime_int_comps(self) -> int: ...
-
     def shrink_to_fit(self) -> None: ...
-
     def capacity(self) -> int: ...
-
     def swap(self, arg: ParticleTile_2_1_3_1_polymorphic, /) -> None: ...
-
     def get_particle_tile_data(self) -> ParticleTileData_2_1_3_1: ...
-
     def __setitem__(self, arg0: int, arg1: Particle_5_2, /) -> None: ...
-
     def __getitem__(self, arg: int, /) -> Particle_5_2: ...
-
     def get_array_of_structs(self) -> ArrayOfStructs_2_1_polymorphic: ...
 
 class ParticleInitType_2_1_3_1:
@@ -12432,33 +10816,26 @@ class ParticleInitType_2_1_3_1:
 
     @property
     def real_array_data(self) -> list[float]: ...
-
     @real_array_data.setter
     def real_array_data(self, arg: Sequence[float], /) -> None: ...
-
     @property
     def int_array_data(self) -> list[int]: ...
-
     @int_array_data.setter
     def int_array_data(self, arg: Sequence[int], /) -> None: ...
-
     @property
     def real_struct_data(self) -> list[float]: ...
-
     @real_struct_data.setter
     def real_struct_data(self, arg: Sequence[float], /) -> None: ...
-
     @property
     def int_struct_data(self) -> list[int]: ...
-
     @int_struct_data.setter
     def int_struct_data(self, arg: Sequence[int], /) -> None: ...
 
 class ParIterBase_2_1_3_1_pinned(MFIter):
-    def __init__(self, particle_container: ParticleContainer_2_1_3_1_pinned, level: int) -> None: ...
-
+    def __init__(
+        self, particle_container: ParticleContainer_2_1_3_1_pinned, level: int
+    ) -> None: ...
     def particle_tile(self) -> ParticleTile_2_1_3_1_pinned: ...
-
     def soa(self) -> StructOfArrays_3_1_pinned: ...
 
     is_soa_particle: bool = ...
@@ -12470,41 +10847,34 @@ class ParIterBase_2_1_3_1_pinned(MFIter):
 
     @property
     def num_particles(self) -> int: ...
-
     @property
     def num_real_particles(self) -> int: ...
-
     @property
     def num_neighbor_particles(self) -> int: ...
-
     @property
     def level(self) -> int: ...
-
     @property
     def pair_index(self) -> tuple[int, int]: ...
-
     @property
     def is_valid(self) -> bool: ...
-
     def geom(self, level: int) -> Geometry: ...
-
     def finalize(self) -> None: ...
-
     def aos(self) -> ArrayOfStructs_2_1_pinned: ...
 
 class ParIter_2_1_3_1_pinned(ParIterBase_2_1_3_1_pinned):
-    def __init__(self, particle_container: ParticleContainer_2_1_3_1_pinned, level: int) -> None: ...
-
+    def __init__(
+        self, particle_container: ParticleContainer_2_1_3_1_pinned, level: int
+    ) -> None: ...
     def __repr__(self) -> str: ...
 
     is_soa_particle: bool = ...
     """(arg: object, /) -> bool"""
 
 class ParConstIterBase_2_1_3_1_pinned(MFIter):
-    def __init__(self, particle_container: ParticleContainer_2_1_3_1_pinned, level: int) -> None: ...
-
+    def __init__(
+        self, particle_container: ParticleContainer_2_1_3_1_pinned, level: int
+    ) -> None: ...
     def particle_tile(self) -> ParticleTile_2_1_3_1_pinned: ...
-
     def soa(self) -> StructOfArrays_3_1_pinned: ...
 
     is_soa_particle: bool = ...
@@ -12516,31 +10886,24 @@ class ParConstIterBase_2_1_3_1_pinned(MFIter):
 
     @property
     def num_particles(self) -> int: ...
-
     @property
     def num_real_particles(self) -> int: ...
-
     @property
     def num_neighbor_particles(self) -> int: ...
-
     @property
     def level(self) -> int: ...
-
     @property
     def pair_index(self) -> tuple[int, int]: ...
-
     @property
     def is_valid(self) -> bool: ...
-
     def geom(self, level: int) -> Geometry: ...
-
     def finalize(self) -> None: ...
-
     def aos(self) -> ArrayOfStructs_2_1_pinned: ...
 
 class ParConstIter_2_1_3_1_pinned(ParConstIterBase_2_1_3_1_pinned):
-    def __init__(self, particle_container: ParticleContainer_2_1_3_1_pinned, level: int) -> None: ...
-
+    def __init__(
+        self, particle_container: ParticleContainer_2_1_3_1_pinned, level: int
+    ) -> None: ...
     def __repr__(self) -> str: ...
 
     is_soa_particle: bool = ...
@@ -12549,10 +10912,10 @@ class ParConstIter_2_1_3_1_pinned(ParConstIterBase_2_1_3_1_pinned):
 class ParticleContainer_2_1_3_1_pinned:
     @overload
     def __init__(self) -> None: ...
-
     @overload
-    def __init__(self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray, /) -> None: ...
-
+    def __init__(
+        self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray, /
+    ) -> None: ...
     @overload
     def __init__(self, gdb: ParGDBBase) -> None:
         """
@@ -12560,19 +10923,29 @@ class ParticleContainer_2_1_3_1_pinned:
         """
 
     @overload
-    def __init__(self, arg0: Vector_Geometry, arg1: Vector_DistributionMapping, arg2: Vector_BoxArray, arg3: Vector_int, /) -> None: ...
-
+    def __init__(
+        self,
+        arg0: Vector_Geometry,
+        arg1: Vector_DistributionMapping,
+        arg2: Vector_BoxArray,
+        arg3: Vector_int,
+        /,
+    ) -> None: ...
     @overload
-    def __init__(self, arg0: Vector_Geometry, arg1: Vector_DistributionMapping, arg2: Vector_BoxArray, arg3: Vector_IntVect, /) -> None: ...
-
+    def __init__(
+        self,
+        arg0: Vector_Geometry,
+        arg1: Vector_DistributionMapping,
+        arg2: Vector_BoxArray,
+        arg3: Vector_IntVect,
+        /,
+    ) -> None: ...
     def define(self, gdb: ParGDBBase) -> None:
         """Define this container from a particle metadata broker."""
 
     def make_alike(self) -> ParticleContainer_2_1_3_1_pinned: ...
-
     @property
     def arena(self) -> Arena: ...
-
     @arena.setter
     def arena(self, arg: Arena, /) -> None: ...
 
@@ -12609,26 +10982,23 @@ class ParticleContainer_2_1_3_1_pinned:
 
     @property
     def num_position_components(self) -> int: ...
-
     @property
     def byte_spread(self) -> list[int]: ...
-
-    def set_soa_compile_time_names(self, arg0: Sequence[str], arg1: Sequence[str], /) -> None: ...
-
+    def set_soa_compile_time_names(
+        self, arg0: Sequence[str], arg1: Sequence[str], /
+    ) -> None: ...
     @overload
     def add_real_comp(self, communicate: int = 1) -> None:
         """add a new runtime component with type Real"""
 
     @overload
     def add_real_comp(self, name: str, communicate: int = 1) -> None: ...
-
     @overload
     def add_int_comp(self, communicate: int = 1) -> None:
         """add a new runtime component with type Int"""
 
     @overload
     def add_int_comp(self, name: str, communicate: int = 1) -> None: ...
-
     @property
     def real_soa_names(self) -> list[str]:
         """Get the names for the Real SoA components"""
@@ -12651,50 +11021,70 @@ class ParticleContainer_2_1_3_1_pinned:
 
     @property
     def finest_level(self) -> int: ...
-
     @overload
-    def Define(self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray, /) -> None: ...
-
+    def Define(
+        self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray, /
+    ) -> None: ...
     @overload
-    def Define(self, arg0: Vector_Geometry, arg1: Vector_DistributionMapping, arg2: Vector_BoxArray, arg3: Vector_int, /) -> None: ...
-
+    def Define(
+        self,
+        arg0: Vector_Geometry,
+        arg1: Vector_DistributionMapping,
+        arg2: Vector_BoxArray,
+        arg3: Vector_int,
+        /,
+    ) -> None: ...
     @overload
-    def Define(self, arg0: Vector_Geometry, arg1: Vector_DistributionMapping, arg2: Vector_BoxArray, arg3: Vector_IntVect, /) -> None: ...
-
+    def Define(
+        self,
+        arg0: Vector_Geometry,
+        arg1: Vector_DistributionMapping,
+        arg2: Vector_BoxArray,
+        arg3: Vector_IntVect,
+        /,
+    ) -> None: ...
     def num_local_tiles_at_level(self, level: int) -> int: ...
-
     def reserve_data(self) -> None: ...
-
     def resize_data(self) -> None: ...
-
     def increment(self, arg0: MultiFab, arg1: int, /) -> None: ...
-
     @overload
-    def redistribute(self, lev_min: int = 0, lev_max: int = -1, nGrow: int = 0, local: int = 0, remove_negative: bool = True) -> None: ...
-
+    def redistribute(
+        self,
+        lev_min: int = 0,
+        lev_max: int = -1,
+        nGrow: int = 0,
+        local: int = 0,
+        remove_negative: bool = True,
+    ) -> None: ...
     @overload
-    def redistribute(self, lev_min: int = 0, lev_max: int = -1, nGrow: IntVect1D = ..., local: bool = False, max_cells_moved: IntVect1D = ..., remove_negative: bool = True) -> None: ...
-
+    def redistribute(
+        self,
+        lev_min: int = 0,
+        lev_max: int = -1,
+        nGrow: IntVect1D = ...,
+        local: bool = False,
+        max_cells_moved: IntVect1D = ...,
+        remove_negative: bool = True,
+    ) -> None: ...
     def sort_particles_by_cell(self) -> None: ...
-
     def sort_particles_by_bin(self, arg: IntVect1D, /) -> None: ...
-
     def OK(self, lev_min: int = 0, lev_max: int = -1, nGrow: int = 0) -> bool: ...
-
     def print_capacity(self) -> list[int]: ...
-
     def shrink_t_fit(self) -> None: ...
-
-    def number_of_particles_at_level(self, level: int, only_valid: bool = True, only_local: bool = False) -> int: ...
-
-    def number_of_particles_in_grid(self, level: int, only_valid: bool = True, only_local: bool = False) -> Vector_Long: ...
-
+    def number_of_particles_at_level(
+        self, level: int, only_valid: bool = True, only_local: bool = False
+    ) -> int: ...
+    def number_of_particles_in_grid(
+        self, level: int, only_valid: bool = True, only_local: bool = False
+    ) -> Vector_Long: ...
     def number_of_particles(self, only_local: bool = False) -> int:
         """
         Return the number of valid particles on all MPI ranks, unless only_local is specified.
         """
 
-    def total_number_of_particles(self, only_valid: bool = True, only_local: bool = False) -> int:
+    def total_number_of_particles(
+        self, only_valid: bool = True, only_local: bool = False
+    ) -> int:
         """
         Return the number of particles (only valid or including invalid) on all MPI ranks, unless only_local is specified.
         """
@@ -12704,24 +11094,23 @@ class ParticleContainer_2_1_3_1_pinned:
         """Return the number of valid particles on all MPI ranks"""
 
     def remove_particles_at_level(self, arg: int, /) -> None: ...
-
     def remove_particles_not_at_finestLevel(self) -> None: ...
-
-    def add_particles_at_level(self, particles: ParticleTile_2_1_3_1_pinned, level: int, ngrow: int = 0) -> None: ...
-
+    def add_particles_at_level(
+        self, particles: ParticleTile_2_1_3_1_pinned, level: int, ngrow: int = 0
+    ) -> None: ...
     def clear_particles(self) -> None: ...
-
-    def add_particles(self, other: ParticleContainer_2_1_3_1_pinned, local: bool = False) -> None: ...
-
+    def add_particles(
+        self, other: ParticleContainer_2_1_3_1_pinned, local: bool = False
+    ) -> None: ...
     def restart(self, dir: str, file: str) -> None: ...
-
     def restart_checkpoint(self, dir: str, file: str, is_checkpoint: bool) -> None: ...
-
     def write_plotfile(self, dir: str, name: str) -> None: ...
-
-    def get_particles(self, level: int) -> dict[tuple[int, int], ParticleTile_2_1_3_1_pinned]: ...
-
-    def define_and_return_particle_tile(self, lev: int, grid: int, tile: int) -> ParticleTile_2_1_3_1_pinned:
+    def get_particles(
+        self, level: int
+    ) -> dict[tuple[int, int], ParticleTile_2_1_3_1_pinned]: ...
+    def define_and_return_particle_tile(
+        self, lev: int, grid: int, tile: int
+    ) -> ParticleTile_2_1_3_1_pinned:
         """
         Define, if necessary, and return the particle tile at ``(lev, grid, tile)``.
 
@@ -12729,11 +11118,21 @@ class ParticleContainer_2_1_3_1_pinned:
         The returned tile is owned by the particle container.
         """
 
-    def init_random(self, arg0: int, arg1: int, arg2: ParticleInitType_2_1_3_1, arg3: bool, arg4: RealBox, /) -> None: ...
-
-    def init_random_per_box(self, arg0: int, arg1: int, arg2: ParticleInitType_2_1_3_1, /) -> None: ...
-
-    def init_one_per_cell(self, arg0: float, arg1: float, arg2: float, arg3: ParticleInitType_2_1_3_1, /) -> None: ...
+    def init_random(
+        self,
+        arg0: int,
+        arg1: int,
+        arg2: ParticleInitType_2_1_3_1,
+        arg3: bool,
+        arg4: RealBox,
+        /,
+    ) -> None: ...
+    def init_random_per_box(
+        self, arg0: int, arg1: int, arg2: ParticleInitType_2_1_3_1, /
+    ) -> None: ...
+    def init_one_per_cell(
+        self, arg0: float, arg1: float, arg2: float, arg3: ParticleInitType_2_1_3_1, /
+    ) -> None: ...
 
     Iterator: object = ...
     """amrex iterator for particle boxes"""
@@ -12742,10 +11141,10 @@ class ParticleContainer_2_1_3_1_pinned:
     """amrex constant iterator for particle boxes (read-only)"""
 
 class ParIterBase_2_1_3_1_default(MFIter):
-    def __init__(self, particle_container: ParticleContainer_2_1_3_1_default, level: int) -> None: ...
-
+    def __init__(
+        self, particle_container: ParticleContainer_2_1_3_1_default, level: int
+    ) -> None: ...
     def particle_tile(self) -> ParticleTile_2_1_3_1_default: ...
-
     def soa(self) -> StructOfArrays_3_1_default: ...
 
     is_soa_particle: bool = ...
@@ -12757,41 +11156,34 @@ class ParIterBase_2_1_3_1_default(MFIter):
 
     @property
     def num_particles(self) -> int: ...
-
     @property
     def num_real_particles(self) -> int: ...
-
     @property
     def num_neighbor_particles(self) -> int: ...
-
     @property
     def level(self) -> int: ...
-
     @property
     def pair_index(self) -> tuple[int, int]: ...
-
     @property
     def is_valid(self) -> bool: ...
-
     def geom(self, level: int) -> Geometry: ...
-
     def finalize(self) -> None: ...
-
     def aos(self) -> ArrayOfStructs_2_1_default: ...
 
 class ParIter_2_1_3_1_default(ParIterBase_2_1_3_1_default):
-    def __init__(self, particle_container: ParticleContainer_2_1_3_1_default, level: int) -> None: ...
-
+    def __init__(
+        self, particle_container: ParticleContainer_2_1_3_1_default, level: int
+    ) -> None: ...
     def __repr__(self) -> str: ...
 
     is_soa_particle: bool = ...
     """(arg: object, /) -> bool"""
 
 class ParConstIterBase_2_1_3_1_default(MFIter):
-    def __init__(self, particle_container: ParticleContainer_2_1_3_1_default, level: int) -> None: ...
-
+    def __init__(
+        self, particle_container: ParticleContainer_2_1_3_1_default, level: int
+    ) -> None: ...
     def particle_tile(self) -> ParticleTile_2_1_3_1_default: ...
-
     def soa(self) -> StructOfArrays_3_1_default: ...
 
     is_soa_particle: bool = ...
@@ -12803,31 +11195,24 @@ class ParConstIterBase_2_1_3_1_default(MFIter):
 
     @property
     def num_particles(self) -> int: ...
-
     @property
     def num_real_particles(self) -> int: ...
-
     @property
     def num_neighbor_particles(self) -> int: ...
-
     @property
     def level(self) -> int: ...
-
     @property
     def pair_index(self) -> tuple[int, int]: ...
-
     @property
     def is_valid(self) -> bool: ...
-
     def geom(self, level: int) -> Geometry: ...
-
     def finalize(self) -> None: ...
-
     def aos(self) -> ArrayOfStructs_2_1_default: ...
 
 class ParConstIter_2_1_3_1_default(ParConstIterBase_2_1_3_1_default):
-    def __init__(self, particle_container: ParticleContainer_2_1_3_1_default, level: int) -> None: ...
-
+    def __init__(
+        self, particle_container: ParticleContainer_2_1_3_1_default, level: int
+    ) -> None: ...
     def __repr__(self) -> str: ...
 
     is_soa_particle: bool = ...
@@ -12836,10 +11221,10 @@ class ParConstIter_2_1_3_1_default(ParConstIterBase_2_1_3_1_default):
 class ParticleContainer_2_1_3_1_default:
     @overload
     def __init__(self) -> None: ...
-
     @overload
-    def __init__(self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray, /) -> None: ...
-
+    def __init__(
+        self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray, /
+    ) -> None: ...
     @overload
     def __init__(self, gdb: ParGDBBase) -> None:
         """
@@ -12847,19 +11232,29 @@ class ParticleContainer_2_1_3_1_default:
         """
 
     @overload
-    def __init__(self, arg0: Vector_Geometry, arg1: Vector_DistributionMapping, arg2: Vector_BoxArray, arg3: Vector_int, /) -> None: ...
-
+    def __init__(
+        self,
+        arg0: Vector_Geometry,
+        arg1: Vector_DistributionMapping,
+        arg2: Vector_BoxArray,
+        arg3: Vector_int,
+        /,
+    ) -> None: ...
     @overload
-    def __init__(self, arg0: Vector_Geometry, arg1: Vector_DistributionMapping, arg2: Vector_BoxArray, arg3: Vector_IntVect, /) -> None: ...
-
+    def __init__(
+        self,
+        arg0: Vector_Geometry,
+        arg1: Vector_DistributionMapping,
+        arg2: Vector_BoxArray,
+        arg3: Vector_IntVect,
+        /,
+    ) -> None: ...
     def define(self, gdb: ParGDBBase) -> None:
         """Define this container from a particle metadata broker."""
 
     def make_alike(self) -> ParticleContainer_2_1_3_1_default: ...
-
     @property
     def arena(self) -> Arena: ...
-
     @arena.setter
     def arena(self, arg: Arena, /) -> None: ...
 
@@ -12896,26 +11291,23 @@ class ParticleContainer_2_1_3_1_default:
 
     @property
     def num_position_components(self) -> int: ...
-
     @property
     def byte_spread(self) -> list[int]: ...
-
-    def set_soa_compile_time_names(self, arg0: Sequence[str], arg1: Sequence[str], /) -> None: ...
-
+    def set_soa_compile_time_names(
+        self, arg0: Sequence[str], arg1: Sequence[str], /
+    ) -> None: ...
     @overload
     def add_real_comp(self, communicate: int = 1) -> None:
         """add a new runtime component with type Real"""
 
     @overload
     def add_real_comp(self, name: str, communicate: int = 1) -> None: ...
-
     @overload
     def add_int_comp(self, communicate: int = 1) -> None:
         """add a new runtime component with type Int"""
 
     @overload
     def add_int_comp(self, name: str, communicate: int = 1) -> None: ...
-
     @property
     def real_soa_names(self) -> list[str]:
         """Get the names for the Real SoA components"""
@@ -12938,50 +11330,70 @@ class ParticleContainer_2_1_3_1_default:
 
     @property
     def finest_level(self) -> int: ...
-
     @overload
-    def Define(self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray, /) -> None: ...
-
+    def Define(
+        self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray, /
+    ) -> None: ...
     @overload
-    def Define(self, arg0: Vector_Geometry, arg1: Vector_DistributionMapping, arg2: Vector_BoxArray, arg3: Vector_int, /) -> None: ...
-
+    def Define(
+        self,
+        arg0: Vector_Geometry,
+        arg1: Vector_DistributionMapping,
+        arg2: Vector_BoxArray,
+        arg3: Vector_int,
+        /,
+    ) -> None: ...
     @overload
-    def Define(self, arg0: Vector_Geometry, arg1: Vector_DistributionMapping, arg2: Vector_BoxArray, arg3: Vector_IntVect, /) -> None: ...
-
+    def Define(
+        self,
+        arg0: Vector_Geometry,
+        arg1: Vector_DistributionMapping,
+        arg2: Vector_BoxArray,
+        arg3: Vector_IntVect,
+        /,
+    ) -> None: ...
     def num_local_tiles_at_level(self, level: int) -> int: ...
-
     def reserve_data(self) -> None: ...
-
     def resize_data(self) -> None: ...
-
     def increment(self, arg0: MultiFab, arg1: int, /) -> None: ...
-
     @overload
-    def redistribute(self, lev_min: int = 0, lev_max: int = -1, nGrow: int = 0, local: int = 0, remove_negative: bool = True) -> None: ...
-
+    def redistribute(
+        self,
+        lev_min: int = 0,
+        lev_max: int = -1,
+        nGrow: int = 0,
+        local: int = 0,
+        remove_negative: bool = True,
+    ) -> None: ...
     @overload
-    def redistribute(self, lev_min: int = 0, lev_max: int = -1, nGrow: IntVect1D = ..., local: bool = False, max_cells_moved: IntVect1D = ..., remove_negative: bool = True) -> None: ...
-
+    def redistribute(
+        self,
+        lev_min: int = 0,
+        lev_max: int = -1,
+        nGrow: IntVect1D = ...,
+        local: bool = False,
+        max_cells_moved: IntVect1D = ...,
+        remove_negative: bool = True,
+    ) -> None: ...
     def sort_particles_by_cell(self) -> None: ...
-
     def sort_particles_by_bin(self, arg: IntVect1D, /) -> None: ...
-
     def OK(self, lev_min: int = 0, lev_max: int = -1, nGrow: int = 0) -> bool: ...
-
     def print_capacity(self) -> list[int]: ...
-
     def shrink_t_fit(self) -> None: ...
-
-    def number_of_particles_at_level(self, level: int, only_valid: bool = True, only_local: bool = False) -> int: ...
-
-    def number_of_particles_in_grid(self, level: int, only_valid: bool = True, only_local: bool = False) -> Vector_Long: ...
-
+    def number_of_particles_at_level(
+        self, level: int, only_valid: bool = True, only_local: bool = False
+    ) -> int: ...
+    def number_of_particles_in_grid(
+        self, level: int, only_valid: bool = True, only_local: bool = False
+    ) -> Vector_Long: ...
     def number_of_particles(self, only_local: bool = False) -> int:
         """
         Return the number of valid particles on all MPI ranks, unless only_local is specified.
         """
 
-    def total_number_of_particles(self, only_valid: bool = True, only_local: bool = False) -> int:
+    def total_number_of_particles(
+        self, only_valid: bool = True, only_local: bool = False
+    ) -> int:
         """
         Return the number of particles (only valid or including invalid) on all MPI ranks, unless only_local is specified.
         """
@@ -12991,24 +11403,23 @@ class ParticleContainer_2_1_3_1_default:
         """Return the number of valid particles on all MPI ranks"""
 
     def remove_particles_at_level(self, arg: int, /) -> None: ...
-
     def remove_particles_not_at_finestLevel(self) -> None: ...
-
-    def add_particles_at_level(self, particles: ParticleTile_2_1_3_1_default, level: int, ngrow: int = 0) -> None: ...
-
+    def add_particles_at_level(
+        self, particles: ParticleTile_2_1_3_1_default, level: int, ngrow: int = 0
+    ) -> None: ...
     def clear_particles(self) -> None: ...
-
-    def add_particles(self, other: ParticleContainer_2_1_3_1_default, local: bool = False) -> None: ...
-
+    def add_particles(
+        self, other: ParticleContainer_2_1_3_1_default, local: bool = False
+    ) -> None: ...
     def restart(self, dir: str, file: str) -> None: ...
-
     def restart_checkpoint(self, dir: str, file: str, is_checkpoint: bool) -> None: ...
-
     def write_plotfile(self, dir: str, name: str) -> None: ...
-
-    def get_particles(self, level: int) -> dict[tuple[int, int], ParticleTile_2_1_3_1_default]: ...
-
-    def define_and_return_particle_tile(self, lev: int, grid: int, tile: int) -> ParticleTile_2_1_3_1_default:
+    def get_particles(
+        self, level: int
+    ) -> dict[tuple[int, int], ParticleTile_2_1_3_1_default]: ...
+    def define_and_return_particle_tile(
+        self, lev: int, grid: int, tile: int
+    ) -> ParticleTile_2_1_3_1_default:
         """
         Define, if necessary, and return the particle tile at ``(lev, grid, tile)``.
 
@@ -13016,11 +11427,21 @@ class ParticleContainer_2_1_3_1_default:
         The returned tile is owned by the particle container.
         """
 
-    def init_random(self, arg0: int, arg1: int, arg2: ParticleInitType_2_1_3_1, arg3: bool, arg4: RealBox, /) -> None: ...
-
-    def init_random_per_box(self, arg0: int, arg1: int, arg2: ParticleInitType_2_1_3_1, /) -> None: ...
-
-    def init_one_per_cell(self, arg0: float, arg1: float, arg2: float, arg3: ParticleInitType_2_1_3_1, /) -> None: ...
+    def init_random(
+        self,
+        arg0: int,
+        arg1: int,
+        arg2: ParticleInitType_2_1_3_1,
+        arg3: bool,
+        arg4: RealBox,
+        /,
+    ) -> None: ...
+    def init_random_per_box(
+        self, arg0: int, arg1: int, arg2: ParticleInitType_2_1_3_1, /
+    ) -> None: ...
+    def init_one_per_cell(
+        self, arg0: float, arg1: float, arg2: float, arg3: ParticleInitType_2_1_3_1, /
+    ) -> None: ...
 
     Iterator: object = ...
     """amrex iterator for particle boxes"""
@@ -13029,10 +11450,10 @@ class ParticleContainer_2_1_3_1_default:
     """amrex constant iterator for particle boxes (read-only)"""
 
 class ParIterBase_2_1_3_1_arena(MFIter):
-    def __init__(self, particle_container: ParticleContainer_2_1_3_1_arena, level: int) -> None: ...
-
+    def __init__(
+        self, particle_container: ParticleContainer_2_1_3_1_arena, level: int
+    ) -> None: ...
     def particle_tile(self) -> ParticleTile_2_1_3_1_arena: ...
-
     def soa(self) -> StructOfArrays_3_1_arena: ...
 
     is_soa_particle: bool = ...
@@ -13044,41 +11465,34 @@ class ParIterBase_2_1_3_1_arena(MFIter):
 
     @property
     def num_particles(self) -> int: ...
-
     @property
     def num_real_particles(self) -> int: ...
-
     @property
     def num_neighbor_particles(self) -> int: ...
-
     @property
     def level(self) -> int: ...
-
     @property
     def pair_index(self) -> tuple[int, int]: ...
-
     @property
     def is_valid(self) -> bool: ...
-
     def geom(self, level: int) -> Geometry: ...
-
     def finalize(self) -> None: ...
-
     def aos(self) -> ArrayOfStructs_2_1_arena: ...
 
 class ParIter_2_1_3_1_arena(ParIterBase_2_1_3_1_arena):
-    def __init__(self, particle_container: ParticleContainer_2_1_3_1_arena, level: int) -> None: ...
-
+    def __init__(
+        self, particle_container: ParticleContainer_2_1_3_1_arena, level: int
+    ) -> None: ...
     def __repr__(self) -> str: ...
 
     is_soa_particle: bool = ...
     """(arg: object, /) -> bool"""
 
 class ParConstIterBase_2_1_3_1_arena(MFIter):
-    def __init__(self, particle_container: ParticleContainer_2_1_3_1_arena, level: int) -> None: ...
-
+    def __init__(
+        self, particle_container: ParticleContainer_2_1_3_1_arena, level: int
+    ) -> None: ...
     def particle_tile(self) -> ParticleTile_2_1_3_1_arena: ...
-
     def soa(self) -> StructOfArrays_3_1_arena: ...
 
     is_soa_particle: bool = ...
@@ -13090,31 +11504,24 @@ class ParConstIterBase_2_1_3_1_arena(MFIter):
 
     @property
     def num_particles(self) -> int: ...
-
     @property
     def num_real_particles(self) -> int: ...
-
     @property
     def num_neighbor_particles(self) -> int: ...
-
     @property
     def level(self) -> int: ...
-
     @property
     def pair_index(self) -> tuple[int, int]: ...
-
     @property
     def is_valid(self) -> bool: ...
-
     def geom(self, level: int) -> Geometry: ...
-
     def finalize(self) -> None: ...
-
     def aos(self) -> ArrayOfStructs_2_1_arena: ...
 
 class ParConstIter_2_1_3_1_arena(ParConstIterBase_2_1_3_1_arena):
-    def __init__(self, particle_container: ParticleContainer_2_1_3_1_arena, level: int) -> None: ...
-
+    def __init__(
+        self, particle_container: ParticleContainer_2_1_3_1_arena, level: int
+    ) -> None: ...
     def __repr__(self) -> str: ...
 
     is_soa_particle: bool = ...
@@ -13123,10 +11530,10 @@ class ParConstIter_2_1_3_1_arena(ParConstIterBase_2_1_3_1_arena):
 class ParticleContainer_2_1_3_1_arena:
     @overload
     def __init__(self) -> None: ...
-
     @overload
-    def __init__(self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray, /) -> None: ...
-
+    def __init__(
+        self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray, /
+    ) -> None: ...
     @overload
     def __init__(self, gdb: ParGDBBase) -> None:
         """
@@ -13134,19 +11541,29 @@ class ParticleContainer_2_1_3_1_arena:
         """
 
     @overload
-    def __init__(self, arg0: Vector_Geometry, arg1: Vector_DistributionMapping, arg2: Vector_BoxArray, arg3: Vector_int, /) -> None: ...
-
+    def __init__(
+        self,
+        arg0: Vector_Geometry,
+        arg1: Vector_DistributionMapping,
+        arg2: Vector_BoxArray,
+        arg3: Vector_int,
+        /,
+    ) -> None: ...
     @overload
-    def __init__(self, arg0: Vector_Geometry, arg1: Vector_DistributionMapping, arg2: Vector_BoxArray, arg3: Vector_IntVect, /) -> None: ...
-
+    def __init__(
+        self,
+        arg0: Vector_Geometry,
+        arg1: Vector_DistributionMapping,
+        arg2: Vector_BoxArray,
+        arg3: Vector_IntVect,
+        /,
+    ) -> None: ...
     def define(self, gdb: ParGDBBase) -> None:
         """Define this container from a particle metadata broker."""
 
     def make_alike(self) -> ParticleContainer_2_1_3_1_arena: ...
-
     @property
     def arena(self) -> Arena: ...
-
     @arena.setter
     def arena(self, arg: Arena, /) -> None: ...
 
@@ -13183,26 +11600,23 @@ class ParticleContainer_2_1_3_1_arena:
 
     @property
     def num_position_components(self) -> int: ...
-
     @property
     def byte_spread(self) -> list[int]: ...
-
-    def set_soa_compile_time_names(self, arg0: Sequence[str], arg1: Sequence[str], /) -> None: ...
-
+    def set_soa_compile_time_names(
+        self, arg0: Sequence[str], arg1: Sequence[str], /
+    ) -> None: ...
     @overload
     def add_real_comp(self, communicate: int = 1) -> None:
         """add a new runtime component with type Real"""
 
     @overload
     def add_real_comp(self, name: str, communicate: int = 1) -> None: ...
-
     @overload
     def add_int_comp(self, communicate: int = 1) -> None:
         """add a new runtime component with type Int"""
 
     @overload
     def add_int_comp(self, name: str, communicate: int = 1) -> None: ...
-
     @property
     def real_soa_names(self) -> list[str]:
         """Get the names for the Real SoA components"""
@@ -13225,50 +11639,70 @@ class ParticleContainer_2_1_3_1_arena:
 
     @property
     def finest_level(self) -> int: ...
-
     @overload
-    def Define(self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray, /) -> None: ...
-
+    def Define(
+        self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray, /
+    ) -> None: ...
     @overload
-    def Define(self, arg0: Vector_Geometry, arg1: Vector_DistributionMapping, arg2: Vector_BoxArray, arg3: Vector_int, /) -> None: ...
-
+    def Define(
+        self,
+        arg0: Vector_Geometry,
+        arg1: Vector_DistributionMapping,
+        arg2: Vector_BoxArray,
+        arg3: Vector_int,
+        /,
+    ) -> None: ...
     @overload
-    def Define(self, arg0: Vector_Geometry, arg1: Vector_DistributionMapping, arg2: Vector_BoxArray, arg3: Vector_IntVect, /) -> None: ...
-
+    def Define(
+        self,
+        arg0: Vector_Geometry,
+        arg1: Vector_DistributionMapping,
+        arg2: Vector_BoxArray,
+        arg3: Vector_IntVect,
+        /,
+    ) -> None: ...
     def num_local_tiles_at_level(self, level: int) -> int: ...
-
     def reserve_data(self) -> None: ...
-
     def resize_data(self) -> None: ...
-
     def increment(self, arg0: MultiFab, arg1: int, /) -> None: ...
-
     @overload
-    def redistribute(self, lev_min: int = 0, lev_max: int = -1, nGrow: int = 0, local: int = 0, remove_negative: bool = True) -> None: ...
-
+    def redistribute(
+        self,
+        lev_min: int = 0,
+        lev_max: int = -1,
+        nGrow: int = 0,
+        local: int = 0,
+        remove_negative: bool = True,
+    ) -> None: ...
     @overload
-    def redistribute(self, lev_min: int = 0, lev_max: int = -1, nGrow: IntVect1D = ..., local: bool = False, max_cells_moved: IntVect1D = ..., remove_negative: bool = True) -> None: ...
-
+    def redistribute(
+        self,
+        lev_min: int = 0,
+        lev_max: int = -1,
+        nGrow: IntVect1D = ...,
+        local: bool = False,
+        max_cells_moved: IntVect1D = ...,
+        remove_negative: bool = True,
+    ) -> None: ...
     def sort_particles_by_cell(self) -> None: ...
-
     def sort_particles_by_bin(self, arg: IntVect1D, /) -> None: ...
-
     def OK(self, lev_min: int = 0, lev_max: int = -1, nGrow: int = 0) -> bool: ...
-
     def print_capacity(self) -> list[int]: ...
-
     def shrink_t_fit(self) -> None: ...
-
-    def number_of_particles_at_level(self, level: int, only_valid: bool = True, only_local: bool = False) -> int: ...
-
-    def number_of_particles_in_grid(self, level: int, only_valid: bool = True, only_local: bool = False) -> Vector_Long: ...
-
+    def number_of_particles_at_level(
+        self, level: int, only_valid: bool = True, only_local: bool = False
+    ) -> int: ...
+    def number_of_particles_in_grid(
+        self, level: int, only_valid: bool = True, only_local: bool = False
+    ) -> Vector_Long: ...
     def number_of_particles(self, only_local: bool = False) -> int:
         """
         Return the number of valid particles on all MPI ranks, unless only_local is specified.
         """
 
-    def total_number_of_particles(self, only_valid: bool = True, only_local: bool = False) -> int:
+    def total_number_of_particles(
+        self, only_valid: bool = True, only_local: bool = False
+    ) -> int:
         """
         Return the number of particles (only valid or including invalid) on all MPI ranks, unless only_local is specified.
         """
@@ -13278,24 +11712,23 @@ class ParticleContainer_2_1_3_1_arena:
         """Return the number of valid particles on all MPI ranks"""
 
     def remove_particles_at_level(self, arg: int, /) -> None: ...
-
     def remove_particles_not_at_finestLevel(self) -> None: ...
-
-    def add_particles_at_level(self, particles: ParticleTile_2_1_3_1_arena, level: int, ngrow: int = 0) -> None: ...
-
+    def add_particles_at_level(
+        self, particles: ParticleTile_2_1_3_1_arena, level: int, ngrow: int = 0
+    ) -> None: ...
     def clear_particles(self) -> None: ...
-
-    def add_particles(self, other: ParticleContainer_2_1_3_1_arena, local: bool = False) -> None: ...
-
+    def add_particles(
+        self, other: ParticleContainer_2_1_3_1_arena, local: bool = False
+    ) -> None: ...
     def restart(self, dir: str, file: str) -> None: ...
-
     def restart_checkpoint(self, dir: str, file: str, is_checkpoint: bool) -> None: ...
-
     def write_plotfile(self, dir: str, name: str) -> None: ...
-
-    def get_particles(self, level: int) -> dict[tuple[int, int], ParticleTile_2_1_3_1_arena]: ...
-
-    def define_and_return_particle_tile(self, lev: int, grid: int, tile: int) -> ParticleTile_2_1_3_1_arena:
+    def get_particles(
+        self, level: int
+    ) -> dict[tuple[int, int], ParticleTile_2_1_3_1_arena]: ...
+    def define_and_return_particle_tile(
+        self, lev: int, grid: int, tile: int
+    ) -> ParticleTile_2_1_3_1_arena:
         """
         Define, if necessary, and return the particle tile at ``(lev, grid, tile)``.
 
@@ -13303,11 +11736,21 @@ class ParticleContainer_2_1_3_1_arena:
         The returned tile is owned by the particle container.
         """
 
-    def init_random(self, arg0: int, arg1: int, arg2: ParticleInitType_2_1_3_1, arg3: bool, arg4: RealBox, /) -> None: ...
-
-    def init_random_per_box(self, arg0: int, arg1: int, arg2: ParticleInitType_2_1_3_1, /) -> None: ...
-
-    def init_one_per_cell(self, arg0: float, arg1: float, arg2: float, arg3: ParticleInitType_2_1_3_1, /) -> None: ...
+    def init_random(
+        self,
+        arg0: int,
+        arg1: int,
+        arg2: ParticleInitType_2_1_3_1,
+        arg3: bool,
+        arg4: RealBox,
+        /,
+    ) -> None: ...
+    def init_random_per_box(
+        self, arg0: int, arg1: int, arg2: ParticleInitType_2_1_3_1, /
+    ) -> None: ...
+    def init_one_per_cell(
+        self, arg0: float, arg1: float, arg2: float, arg3: ParticleInitType_2_1_3_1, /
+    ) -> None: ...
 
     Iterator: object = ...
     """amrex iterator for particle boxes"""
@@ -13316,10 +11759,10 @@ class ParticleContainer_2_1_3_1_arena:
     """amrex constant iterator for particle boxes (read-only)"""
 
 class ParIterBase_2_1_3_1_polymorphic(MFIter):
-    def __init__(self, particle_container: ParticleContainer_2_1_3_1_polymorphic, level: int) -> None: ...
-
+    def __init__(
+        self, particle_container: ParticleContainer_2_1_3_1_polymorphic, level: int
+    ) -> None: ...
     def particle_tile(self) -> ParticleTile_2_1_3_1_polymorphic: ...
-
     def soa(self) -> StructOfArrays_3_1_polymorphic: ...
 
     is_soa_particle: bool = ...
@@ -13331,41 +11774,34 @@ class ParIterBase_2_1_3_1_polymorphic(MFIter):
 
     @property
     def num_particles(self) -> int: ...
-
     @property
     def num_real_particles(self) -> int: ...
-
     @property
     def num_neighbor_particles(self) -> int: ...
-
     @property
     def level(self) -> int: ...
-
     @property
     def pair_index(self) -> tuple[int, int]: ...
-
     @property
     def is_valid(self) -> bool: ...
-
     def geom(self, level: int) -> Geometry: ...
-
     def finalize(self) -> None: ...
-
     def aos(self) -> ArrayOfStructs_2_1_polymorphic: ...
 
 class ParIter_2_1_3_1_polymorphic(ParIterBase_2_1_3_1_polymorphic):
-    def __init__(self, particle_container: ParticleContainer_2_1_3_1_polymorphic, level: int) -> None: ...
-
+    def __init__(
+        self, particle_container: ParticleContainer_2_1_3_1_polymorphic, level: int
+    ) -> None: ...
     def __repr__(self) -> str: ...
 
     is_soa_particle: bool = ...
     """(arg: object, /) -> bool"""
 
 class ParConstIterBase_2_1_3_1_polymorphic(MFIter):
-    def __init__(self, particle_container: ParticleContainer_2_1_3_1_polymorphic, level: int) -> None: ...
-
+    def __init__(
+        self, particle_container: ParticleContainer_2_1_3_1_polymorphic, level: int
+    ) -> None: ...
     def particle_tile(self) -> ParticleTile_2_1_3_1_polymorphic: ...
-
     def soa(self) -> StructOfArrays_3_1_polymorphic: ...
 
     is_soa_particle: bool = ...
@@ -13377,31 +11813,24 @@ class ParConstIterBase_2_1_3_1_polymorphic(MFIter):
 
     @property
     def num_particles(self) -> int: ...
-
     @property
     def num_real_particles(self) -> int: ...
-
     @property
     def num_neighbor_particles(self) -> int: ...
-
     @property
     def level(self) -> int: ...
-
     @property
     def pair_index(self) -> tuple[int, int]: ...
-
     @property
     def is_valid(self) -> bool: ...
-
     def geom(self, level: int) -> Geometry: ...
-
     def finalize(self) -> None: ...
-
     def aos(self) -> ArrayOfStructs_2_1_polymorphic: ...
 
 class ParConstIter_2_1_3_1_polymorphic(ParConstIterBase_2_1_3_1_polymorphic):
-    def __init__(self, particle_container: ParticleContainer_2_1_3_1_polymorphic, level: int) -> None: ...
-
+    def __init__(
+        self, particle_container: ParticleContainer_2_1_3_1_polymorphic, level: int
+    ) -> None: ...
     def __repr__(self) -> str: ...
 
     is_soa_particle: bool = ...
@@ -13410,10 +11839,10 @@ class ParConstIter_2_1_3_1_polymorphic(ParConstIterBase_2_1_3_1_polymorphic):
 class ParticleContainer_2_1_3_1_polymorphic:
     @overload
     def __init__(self) -> None: ...
-
     @overload
-    def __init__(self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray, /) -> None: ...
-
+    def __init__(
+        self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray, /
+    ) -> None: ...
     @overload
     def __init__(self, gdb: ParGDBBase) -> None:
         """
@@ -13421,19 +11850,29 @@ class ParticleContainer_2_1_3_1_polymorphic:
         """
 
     @overload
-    def __init__(self, arg0: Vector_Geometry, arg1: Vector_DistributionMapping, arg2: Vector_BoxArray, arg3: Vector_int, /) -> None: ...
-
+    def __init__(
+        self,
+        arg0: Vector_Geometry,
+        arg1: Vector_DistributionMapping,
+        arg2: Vector_BoxArray,
+        arg3: Vector_int,
+        /,
+    ) -> None: ...
     @overload
-    def __init__(self, arg0: Vector_Geometry, arg1: Vector_DistributionMapping, arg2: Vector_BoxArray, arg3: Vector_IntVect, /) -> None: ...
-
+    def __init__(
+        self,
+        arg0: Vector_Geometry,
+        arg1: Vector_DistributionMapping,
+        arg2: Vector_BoxArray,
+        arg3: Vector_IntVect,
+        /,
+    ) -> None: ...
     def define(self, gdb: ParGDBBase) -> None:
         """Define this container from a particle metadata broker."""
 
     def make_alike(self) -> ParticleContainer_2_1_3_1_polymorphic: ...
-
     @property
     def arena(self) -> Arena: ...
-
     @arena.setter
     def arena(self, arg: Arena, /) -> None: ...
 
@@ -13470,26 +11909,23 @@ class ParticleContainer_2_1_3_1_polymorphic:
 
     @property
     def num_position_components(self) -> int: ...
-
     @property
     def byte_spread(self) -> list[int]: ...
-
-    def set_soa_compile_time_names(self, arg0: Sequence[str], arg1: Sequence[str], /) -> None: ...
-
+    def set_soa_compile_time_names(
+        self, arg0: Sequence[str], arg1: Sequence[str], /
+    ) -> None: ...
     @overload
     def add_real_comp(self, communicate: int = 1) -> None:
         """add a new runtime component with type Real"""
 
     @overload
     def add_real_comp(self, name: str, communicate: int = 1) -> None: ...
-
     @overload
     def add_int_comp(self, communicate: int = 1) -> None:
         """add a new runtime component with type Int"""
 
     @overload
     def add_int_comp(self, name: str, communicate: int = 1) -> None: ...
-
     @property
     def real_soa_names(self) -> list[str]:
         """Get the names for the Real SoA components"""
@@ -13512,50 +11948,70 @@ class ParticleContainer_2_1_3_1_polymorphic:
 
     @property
     def finest_level(self) -> int: ...
-
     @overload
-    def Define(self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray, /) -> None: ...
-
+    def Define(
+        self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray, /
+    ) -> None: ...
     @overload
-    def Define(self, arg0: Vector_Geometry, arg1: Vector_DistributionMapping, arg2: Vector_BoxArray, arg3: Vector_int, /) -> None: ...
-
+    def Define(
+        self,
+        arg0: Vector_Geometry,
+        arg1: Vector_DistributionMapping,
+        arg2: Vector_BoxArray,
+        arg3: Vector_int,
+        /,
+    ) -> None: ...
     @overload
-    def Define(self, arg0: Vector_Geometry, arg1: Vector_DistributionMapping, arg2: Vector_BoxArray, arg3: Vector_IntVect, /) -> None: ...
-
+    def Define(
+        self,
+        arg0: Vector_Geometry,
+        arg1: Vector_DistributionMapping,
+        arg2: Vector_BoxArray,
+        arg3: Vector_IntVect,
+        /,
+    ) -> None: ...
     def num_local_tiles_at_level(self, level: int) -> int: ...
-
     def reserve_data(self) -> None: ...
-
     def resize_data(self) -> None: ...
-
     def increment(self, arg0: MultiFab, arg1: int, /) -> None: ...
-
     @overload
-    def redistribute(self, lev_min: int = 0, lev_max: int = -1, nGrow: int = 0, local: int = 0, remove_negative: bool = True) -> None: ...
-
+    def redistribute(
+        self,
+        lev_min: int = 0,
+        lev_max: int = -1,
+        nGrow: int = 0,
+        local: int = 0,
+        remove_negative: bool = True,
+    ) -> None: ...
     @overload
-    def redistribute(self, lev_min: int = 0, lev_max: int = -1, nGrow: IntVect1D = ..., local: bool = False, max_cells_moved: IntVect1D = ..., remove_negative: bool = True) -> None: ...
-
+    def redistribute(
+        self,
+        lev_min: int = 0,
+        lev_max: int = -1,
+        nGrow: IntVect1D = ...,
+        local: bool = False,
+        max_cells_moved: IntVect1D = ...,
+        remove_negative: bool = True,
+    ) -> None: ...
     def sort_particles_by_cell(self) -> None: ...
-
     def sort_particles_by_bin(self, arg: IntVect1D, /) -> None: ...
-
     def OK(self, lev_min: int = 0, lev_max: int = -1, nGrow: int = 0) -> bool: ...
-
     def print_capacity(self) -> list[int]: ...
-
     def shrink_t_fit(self) -> None: ...
-
-    def number_of_particles_at_level(self, level: int, only_valid: bool = True, only_local: bool = False) -> int: ...
-
-    def number_of_particles_in_grid(self, level: int, only_valid: bool = True, only_local: bool = False) -> Vector_Long: ...
-
+    def number_of_particles_at_level(
+        self, level: int, only_valid: bool = True, only_local: bool = False
+    ) -> int: ...
+    def number_of_particles_in_grid(
+        self, level: int, only_valid: bool = True, only_local: bool = False
+    ) -> Vector_Long: ...
     def number_of_particles(self, only_local: bool = False) -> int:
         """
         Return the number of valid particles on all MPI ranks, unless only_local is specified.
         """
 
-    def total_number_of_particles(self, only_valid: bool = True, only_local: bool = False) -> int:
+    def total_number_of_particles(
+        self, only_valid: bool = True, only_local: bool = False
+    ) -> int:
         """
         Return the number of particles (only valid or including invalid) on all MPI ranks, unless only_local is specified.
         """
@@ -13565,24 +12021,23 @@ class ParticleContainer_2_1_3_1_polymorphic:
         """Return the number of valid particles on all MPI ranks"""
 
     def remove_particles_at_level(self, arg: int, /) -> None: ...
-
     def remove_particles_not_at_finestLevel(self) -> None: ...
-
-    def add_particles_at_level(self, particles: ParticleTile_2_1_3_1_polymorphic, level: int, ngrow: int = 0) -> None: ...
-
+    def add_particles_at_level(
+        self, particles: ParticleTile_2_1_3_1_polymorphic, level: int, ngrow: int = 0
+    ) -> None: ...
     def clear_particles(self) -> None: ...
-
-    def add_particles(self, other: ParticleContainer_2_1_3_1_polymorphic, local: bool = False) -> None: ...
-
+    def add_particles(
+        self, other: ParticleContainer_2_1_3_1_polymorphic, local: bool = False
+    ) -> None: ...
     def restart(self, dir: str, file: str) -> None: ...
-
     def restart_checkpoint(self, dir: str, file: str, is_checkpoint: bool) -> None: ...
-
     def write_plotfile(self, dir: str, name: str) -> None: ...
-
-    def get_particles(self, level: int) -> dict[tuple[int, int], ParticleTile_2_1_3_1_polymorphic]: ...
-
-    def define_and_return_particle_tile(self, lev: int, grid: int, tile: int) -> ParticleTile_2_1_3_1_polymorphic:
+    def get_particles(
+        self, level: int
+    ) -> dict[tuple[int, int], ParticleTile_2_1_3_1_polymorphic]: ...
+    def define_and_return_particle_tile(
+        self, lev: int, grid: int, tile: int
+    ) -> ParticleTile_2_1_3_1_polymorphic:
         """
         Define, if necessary, and return the particle tile at ``(lev, grid, tile)``.
 
@@ -13590,11 +12045,21 @@ class ParticleContainer_2_1_3_1_polymorphic:
         The returned tile is owned by the particle container.
         """
 
-    def init_random(self, arg0: int, arg1: int, arg2: ParticleInitType_2_1_3_1, arg3: bool, arg4: RealBox, /) -> None: ...
-
-    def init_random_per_box(self, arg0: int, arg1: int, arg2: ParticleInitType_2_1_3_1, /) -> None: ...
-
-    def init_one_per_cell(self, arg0: float, arg1: float, arg2: float, arg3: ParticleInitType_2_1_3_1, /) -> None: ...
+    def init_random(
+        self,
+        arg0: int,
+        arg1: int,
+        arg2: ParticleInitType_2_1_3_1,
+        arg3: bool,
+        arg4: RealBox,
+        /,
+    ) -> None: ...
+    def init_random_per_box(
+        self, arg0: int, arg1: int, arg2: ParticleInitType_2_1_3_1, /
+    ) -> None: ...
+    def init_one_per_cell(
+        self, arg0: float, arg1: float, arg2: float, arg3: ParticleInitType_2_1_3_1, /
+    ) -> None: ...
 
     Iterator: object = ...
     """amrex iterator for particle boxes"""
@@ -13605,18 +12070,13 @@ class ParticleContainer_2_1_3_1_polymorphic:
 class Particle_16_4:
     @overload
     def __init__(self, **kwargs) -> None: ...
-
     @overload
     def __init__(self, arg: float, /) -> None: ...
-
     @overload
     def __init__(self, arg0: float, /, *args) -> None: ...
-
     @overload
     def __init__(self, arg0: float, /, **kwargs) -> None: ...
-
     def __repr__(self) -> str: ...
-
     def __str__(self) -> str: ...
 
     NReal: int = ...
@@ -13627,240 +12087,154 @@ class Particle_16_4:
 
     @overload
     def pos(self, arg: int, /) -> float: ...
-
     @overload
     def pos(self) -> RealVect: ...
-
     @overload
     def setPos(self, arg0: int, arg1: float, /) -> None: ...
-
     @overload
     def setPos(self, arg: RealVect, /) -> None: ...
-
     @overload
     def setPos(self, arg: Sequence[float], /) -> None: ...
-
     @overload
     def get_rdata(self, arg: int, /) -> float: ...
-
     @overload
     def get_rdata(self) -> list[float]: ...
-
     @overload
     def set_rdata(self, arg0: int, arg1: float, /) -> None: ...
-
     @overload
     def set_rdata(self, arg: Sequence[float], /) -> None: ...
-
     @overload
     def get_idata(self, arg: int, /) -> int: ...
-
     @overload
     def get_idata(self) -> list[int]: ...
-
     @overload
     def set_idata(self, arg0: int, arg1: int, /) -> None: ...
-
     @overload
     def set_idata(self, arg: Sequence[int], /) -> None: ...
-
     def cpu(self) -> int: ...
-
     def id(self) -> int: ...
-
     @overload
     def NextID(self) -> int: ...
-
     @overload
     def NextID(self, arg: int, /) -> None: ...
-
     @property
     def x(self) -> float: ...
-
     @x.setter
     def x(self, arg: float, /) -> None: ...
 
 class ArrayOfStructs_16_4_pinned:
     def __init__(self) -> None: ...
-
     def size(self) -> int: ...
-
     def numParticles(self) -> int: ...
-
     def numRealParticles(self) -> int: ...
-
     def numNeighborParticles(self) -> int: ...
-
     def numTotalParticles(self) -> int: ...
-
     def setNumNeighbors(self, arg: int, /) -> None: ...
-
     def getNumNeighbors(self) -> int: ...
-
     @overload
     def empty(self) -> bool: ...
-
     @overload
     def empty(self) -> bool: ...
-
     def push_back(self, arg: Particle_16_4, /) -> None: ...
-
     def pop_back(self) -> None: ...
-
     def back(self) -> Particle_16_4:
         """get back member.  Problem!!!!! this is perfo"""
 
     @property
     def __array_interface__(self) -> dict: ...
-
     @property
     def __cuda_array_interface__(self) -> dict: ...
-
     def test_sizes() -> None: ...
-
     def __setitem__(self, arg0: int, arg1: Particle_16_4, /) -> None: ...
-
     def __getitem__(self, arg: int, /) -> Particle_16_4: ...
-
     def to_host(self) -> ArrayOfStructs_16_4_pinned: ...
 
 class ArrayOfStructs_16_4_default:
     def __init__(self) -> None: ...
-
     def size(self) -> int: ...
-
     def numParticles(self) -> int: ...
-
     def numRealParticles(self) -> int: ...
-
     def numNeighborParticles(self) -> int: ...
-
     def numTotalParticles(self) -> int: ...
-
     def setNumNeighbors(self, arg: int, /) -> None: ...
-
     def getNumNeighbors(self) -> int: ...
-
     @overload
     def empty(self) -> bool: ...
-
     @overload
     def empty(self) -> bool: ...
-
     def push_back(self, arg: Particle_16_4, /) -> None: ...
-
     def pop_back(self) -> None: ...
-
     def back(self) -> Particle_16_4:
         """get back member.  Problem!!!!! this is perfo"""
 
     @property
     def __array_interface__(self) -> dict: ...
-
     @property
     def __cuda_array_interface__(self) -> dict: ...
-
     def test_sizes() -> None: ...
-
     def __setitem__(self, arg0: int, arg1: Particle_16_4, /) -> None: ...
-
     def __getitem__(self, arg: int, /) -> Particle_16_4: ...
-
     def to_host(self) -> ArrayOfStructs_16_4_pinned: ...
 
 class ArrayOfStructs_16_4_arena:
     def __init__(self) -> None: ...
-
     def size(self) -> int: ...
-
     def numParticles(self) -> int: ...
-
     def numRealParticles(self) -> int: ...
-
     def numNeighborParticles(self) -> int: ...
-
     def numTotalParticles(self) -> int: ...
-
     def setNumNeighbors(self, arg: int, /) -> None: ...
-
     def getNumNeighbors(self) -> int: ...
-
     @overload
     def empty(self) -> bool: ...
-
     @overload
     def empty(self) -> bool: ...
-
     def push_back(self, arg: Particle_16_4, /) -> None: ...
-
     def pop_back(self) -> None: ...
-
     def back(self) -> Particle_16_4:
         """get back member.  Problem!!!!! this is perfo"""
 
     @property
     def __array_interface__(self) -> dict: ...
-
     @property
     def __cuda_array_interface__(self) -> dict: ...
-
     def test_sizes() -> None: ...
-
     def __setitem__(self, arg0: int, arg1: Particle_16_4, /) -> None: ...
-
     def __getitem__(self, arg: int, /) -> Particle_16_4: ...
-
     def to_host(self) -> ArrayOfStructs_16_4_pinned: ...
 
 class ArrayOfStructs_16_4_polymorphic:
     def __init__(self) -> None: ...
-
     def size(self) -> int: ...
-
     def numParticles(self) -> int: ...
-
     def numRealParticles(self) -> int: ...
-
     def numNeighborParticles(self) -> int: ...
-
     def numTotalParticles(self) -> int: ...
-
     def setNumNeighbors(self, arg: int, /) -> None: ...
-
     def getNumNeighbors(self) -> int: ...
-
     @overload
     def empty(self) -> bool: ...
-
     @overload
     def empty(self) -> bool: ...
-
     def push_back(self, arg: Particle_16_4, /) -> None: ...
-
     def pop_back(self) -> None: ...
-
     def back(self) -> Particle_16_4:
         """get back member.  Problem!!!!! this is perfo"""
 
     @property
     def __array_interface__(self) -> dict: ...
-
     @property
     def __cuda_array_interface__(self) -> dict: ...
-
     def test_sizes() -> None: ...
-
     def __setitem__(self, arg0: int, arg1: Particle_16_4, /) -> None: ...
-
     def __getitem__(self, arg: int, /) -> Particle_16_4: ...
-
     def to_host(self) -> ArrayOfStructs_16_4_pinned: ...
 
 class StructOfArrays_0_0_pinned:
     def __init__(self) -> None: ...
-
-    def define(self, arg0: int, arg1: int, arg2: Sequence[str], arg3: Sequence[str], /) -> None: ...
-
+    def define(
+        self, arg0: int, arg1: int, arg2: Sequence[str], arg3: Sequence[str], /
+    ) -> None: ...
     @property
     def num_real_comps(self) -> int:
         """Get the number of compile-time + runtime Real components"""
@@ -13922,24 +12296,21 @@ class StructOfArrays_0_0_pinned:
 
     @property
     def num_particles(self) -> int: ...
-
     @property
     def num_real_particles(self) -> int: ...
-
     @property
     def num_total_particles(self) -> int: ...
-
     def set_num_neighbors(self, arg: int, /) -> None: ...
-
     def get_num_neighbors(self) -> int: ...
-
-    def resize(self, new_size: int, strategy: GrowthStrategy = GrowthStrategy.Poisson) -> None: ...
+    def resize(
+        self, new_size: int, strategy: GrowthStrategy = GrowthStrategy.Poisson
+    ) -> None: ...
 
 class StructOfArrays_0_0_default:
     def __init__(self) -> None: ...
-
-    def define(self, arg0: int, arg1: int, arg2: Sequence[str], arg3: Sequence[str], /) -> None: ...
-
+    def define(
+        self, arg0: int, arg1: int, arg2: Sequence[str], arg3: Sequence[str], /
+    ) -> None: ...
     @property
     def num_real_comps(self) -> int:
         """Get the number of compile-time + runtime Real components"""
@@ -14001,24 +12372,21 @@ class StructOfArrays_0_0_default:
 
     @property
     def num_particles(self) -> int: ...
-
     @property
     def num_real_particles(self) -> int: ...
-
     @property
     def num_total_particles(self) -> int: ...
-
     def set_num_neighbors(self, arg: int, /) -> None: ...
-
     def get_num_neighbors(self) -> int: ...
-
-    def resize(self, new_size: int, strategy: GrowthStrategy = GrowthStrategy.Poisson) -> None: ...
+    def resize(
+        self, new_size: int, strategy: GrowthStrategy = GrowthStrategy.Poisson
+    ) -> None: ...
 
 class StructOfArrays_0_0_arena:
     def __init__(self) -> None: ...
-
-    def define(self, arg0: int, arg1: int, arg2: Sequence[str], arg3: Sequence[str], /) -> None: ...
-
+    def define(
+        self, arg0: int, arg1: int, arg2: Sequence[str], arg3: Sequence[str], /
+    ) -> None: ...
     @property
     def num_real_comps(self) -> int:
         """Get the number of compile-time + runtime Real components"""
@@ -14080,24 +12448,21 @@ class StructOfArrays_0_0_arena:
 
     @property
     def num_particles(self) -> int: ...
-
     @property
     def num_real_particles(self) -> int: ...
-
     @property
     def num_total_particles(self) -> int: ...
-
     def set_num_neighbors(self, arg: int, /) -> None: ...
-
     def get_num_neighbors(self) -> int: ...
-
-    def resize(self, new_size: int, strategy: GrowthStrategy = GrowthStrategy.Poisson) -> None: ...
+    def resize(
+        self, new_size: int, strategy: GrowthStrategy = GrowthStrategy.Poisson
+    ) -> None: ...
 
 class StructOfArrays_0_0_polymorphic:
     def __init__(self) -> None: ...
-
-    def define(self, arg0: int, arg1: int, arg2: Sequence[str], arg3: Sequence[str], /) -> None: ...
-
+    def define(
+        self, arg0: int, arg1: int, arg2: Sequence[str], arg3: Sequence[str], /
+    ) -> None: ...
     @property
     def num_real_comps(self) -> int:
         """Get the number of compile-time + runtime Real components"""
@@ -14159,37 +12524,27 @@ class StructOfArrays_0_0_polymorphic:
 
     @property
     def num_particles(self) -> int: ...
-
     @property
     def num_real_particles(self) -> int: ...
-
     @property
     def num_total_particles(self) -> int: ...
-
     def set_num_neighbors(self, arg: int, /) -> None: ...
-
     def get_num_neighbors(self) -> int: ...
-
-    def resize(self, new_size: int, strategy: GrowthStrategy = GrowthStrategy.Poisson) -> None: ...
+    def resize(
+        self, new_size: int, strategy: GrowthStrategy = GrowthStrategy.Poisson
+    ) -> None: ...
 
 class ParticleTileData_16_4_0_0:
     def __init__(self) -> None: ...
-
     @property
     def m_size(self) -> int: ...
-
     @property
     def m_num_runtime_real(self) -> int: ...
-
     @property
     def m_num_runtime_int(self) -> int: ...
-
     def get_super_particle(self, arg: int, /) -> Particle_16_4: ...
-
     def set_super_particle(self, arg0: Particle_16_4, arg1: int, /) -> None: ...
-
     def __setitem__(self, arg0: int, arg1: Particle_16_4, /) -> None: ...
-
     def __getitem__(self, arg: int, /) -> Particle_16_4: ...
 
 class ParticleTile_16_4_0_0_pinned:
@@ -14201,83 +12556,65 @@ class ParticleTile_16_4_0_0_pinned:
     NAI: int = ...
     """(arg: object, /) -> int"""
 
-    def define(self, arg0: int, arg1: int, arg2: Sequence[str], arg3: Sequence[str], arg4: Arena, /) -> None: ...
-
+    def define(
+        self,
+        arg0: int,
+        arg1: int,
+        arg2: Sequence[str],
+        arg3: Sequence[str],
+        arg4: Arena,
+        /,
+    ) -> None: ...
     def get_struct_of_arrays(self) -> StructOfArrays_0_0_pinned: ...
-
     @property
     def empty(self) -> bool: ...
-
     @property
     def size(self) -> int: ...
-
     @property
     def num_particles(self) -> int: ...
-
     @property
     def num_real_particles(self) -> int: ...
-
     @property
     def num_neighbor_particles(self) -> int: ...
-
     @property
     def num_total_particles(self) -> int: ...
-
     def set_num_neighbors(self, arg: int, /) -> None: ...
-
     def get_num_neighbors(self) -> int: ...
-
-    def resize(self, count: int, strategy: GrowthStrategy = GrowthStrategy.Poisson) -> None: ...
-
+    def resize(
+        self, count: int, strategy: GrowthStrategy = GrowthStrategy.Poisson
+    ) -> None: ...
     @overload
     def push_back(self, arg: Particle_16_4, /) -> None:
         """Add one particle to this tile."""
 
     @overload
     def push_back(self, arg: Particle_16_4, /) -> None: ...
-
     @overload
     def push_back_real(self, arg0: int, arg1: float, /) -> None: ...
-
     @overload
     def push_back_real(self, arg: Sequence[float], /) -> None: ...
-
     @overload
     def push_back_real(self, arg0: int, arg1: int, arg2: float, /) -> None: ...
-
     @overload
     def push_back_int(self, arg0: int, arg1: int, /) -> None: ...
-
     @overload
     def push_back_int(self, arg: Sequence[int], /) -> None: ...
-
     @overload
     def push_back_int(self, arg0: int, arg1: int, arg2: int, /) -> None: ...
-
     @property
     def num_real_comps(self) -> int: ...
-
     @property
     def num_int_comps(self) -> int: ...
-
     @property
     def num_runtime_real_comps(self) -> int: ...
-
     @property
     def num_runtime_int_comps(self) -> int: ...
-
     def shrink_to_fit(self) -> None: ...
-
     def capacity(self) -> int: ...
-
     def swap(self, arg: ParticleTile_16_4_0_0_pinned, /) -> None: ...
-
     def get_particle_tile_data(self) -> ParticleTileData_16_4_0_0: ...
-
     def __setitem__(self, arg0: int, arg1: Particle_16_4, /) -> None: ...
-
     def __getitem__(self, arg: int, /) -> Particle_16_4: ...
-
     def get_array_of_structs(self) -> ArrayOfStructs_16_4_pinned: ...
 
 class ParticleTile_16_4_0_0_default:
@@ -14289,83 +12626,65 @@ class ParticleTile_16_4_0_0_default:
     NAI: int = ...
     """(arg: object, /) -> int"""
 
-    def define(self, arg0: int, arg1: int, arg2: Sequence[str], arg3: Sequence[str], arg4: Arena, /) -> None: ...
-
+    def define(
+        self,
+        arg0: int,
+        arg1: int,
+        arg2: Sequence[str],
+        arg3: Sequence[str],
+        arg4: Arena,
+        /,
+    ) -> None: ...
     def get_struct_of_arrays(self) -> StructOfArrays_0_0_default: ...
-
     @property
     def empty(self) -> bool: ...
-
     @property
     def size(self) -> int: ...
-
     @property
     def num_particles(self) -> int: ...
-
     @property
     def num_real_particles(self) -> int: ...
-
     @property
     def num_neighbor_particles(self) -> int: ...
-
     @property
     def num_total_particles(self) -> int: ...
-
     def set_num_neighbors(self, arg: int, /) -> None: ...
-
     def get_num_neighbors(self) -> int: ...
-
-    def resize(self, count: int, strategy: GrowthStrategy = GrowthStrategy.Poisson) -> None: ...
-
+    def resize(
+        self, count: int, strategy: GrowthStrategy = GrowthStrategy.Poisson
+    ) -> None: ...
     @overload
     def push_back(self, arg: Particle_16_4, /) -> None:
         """Add one particle to this tile."""
 
     @overload
     def push_back(self, arg: Particle_16_4, /) -> None: ...
-
     @overload
     def push_back_real(self, arg0: int, arg1: float, /) -> None: ...
-
     @overload
     def push_back_real(self, arg: Sequence[float], /) -> None: ...
-
     @overload
     def push_back_real(self, arg0: int, arg1: int, arg2: float, /) -> None: ...
-
     @overload
     def push_back_int(self, arg0: int, arg1: int, /) -> None: ...
-
     @overload
     def push_back_int(self, arg: Sequence[int], /) -> None: ...
-
     @overload
     def push_back_int(self, arg0: int, arg1: int, arg2: int, /) -> None: ...
-
     @property
     def num_real_comps(self) -> int: ...
-
     @property
     def num_int_comps(self) -> int: ...
-
     @property
     def num_runtime_real_comps(self) -> int: ...
-
     @property
     def num_runtime_int_comps(self) -> int: ...
-
     def shrink_to_fit(self) -> None: ...
-
     def capacity(self) -> int: ...
-
     def swap(self, arg: ParticleTile_16_4_0_0_default, /) -> None: ...
-
     def get_particle_tile_data(self) -> ParticleTileData_16_4_0_0: ...
-
     def __setitem__(self, arg0: int, arg1: Particle_16_4, /) -> None: ...
-
     def __getitem__(self, arg: int, /) -> Particle_16_4: ...
-
     def get_array_of_structs(self) -> ArrayOfStructs_16_4_default: ...
 
 class ParticleTile_16_4_0_0_arena:
@@ -14377,83 +12696,65 @@ class ParticleTile_16_4_0_0_arena:
     NAI: int = ...
     """(arg: object, /) -> int"""
 
-    def define(self, arg0: int, arg1: int, arg2: Sequence[str], arg3: Sequence[str], arg4: Arena, /) -> None: ...
-
+    def define(
+        self,
+        arg0: int,
+        arg1: int,
+        arg2: Sequence[str],
+        arg3: Sequence[str],
+        arg4: Arena,
+        /,
+    ) -> None: ...
     def get_struct_of_arrays(self) -> StructOfArrays_0_0_arena: ...
-
     @property
     def empty(self) -> bool: ...
-
     @property
     def size(self) -> int: ...
-
     @property
     def num_particles(self) -> int: ...
-
     @property
     def num_real_particles(self) -> int: ...
-
     @property
     def num_neighbor_particles(self) -> int: ...
-
     @property
     def num_total_particles(self) -> int: ...
-
     def set_num_neighbors(self, arg: int, /) -> None: ...
-
     def get_num_neighbors(self) -> int: ...
-
-    def resize(self, count: int, strategy: GrowthStrategy = GrowthStrategy.Poisson) -> None: ...
-
+    def resize(
+        self, count: int, strategy: GrowthStrategy = GrowthStrategy.Poisson
+    ) -> None: ...
     @overload
     def push_back(self, arg: Particle_16_4, /) -> None:
         """Add one particle to this tile."""
 
     @overload
     def push_back(self, arg: Particle_16_4, /) -> None: ...
-
     @overload
     def push_back_real(self, arg0: int, arg1: float, /) -> None: ...
-
     @overload
     def push_back_real(self, arg: Sequence[float], /) -> None: ...
-
     @overload
     def push_back_real(self, arg0: int, arg1: int, arg2: float, /) -> None: ...
-
     @overload
     def push_back_int(self, arg0: int, arg1: int, /) -> None: ...
-
     @overload
     def push_back_int(self, arg: Sequence[int], /) -> None: ...
-
     @overload
     def push_back_int(self, arg0: int, arg1: int, arg2: int, /) -> None: ...
-
     @property
     def num_real_comps(self) -> int: ...
-
     @property
     def num_int_comps(self) -> int: ...
-
     @property
     def num_runtime_real_comps(self) -> int: ...
-
     @property
     def num_runtime_int_comps(self) -> int: ...
-
     def shrink_to_fit(self) -> None: ...
-
     def capacity(self) -> int: ...
-
     def swap(self, arg: ParticleTile_16_4_0_0_arena, /) -> None: ...
-
     def get_particle_tile_data(self) -> ParticleTileData_16_4_0_0: ...
-
     def __setitem__(self, arg0: int, arg1: Particle_16_4, /) -> None: ...
-
     def __getitem__(self, arg: int, /) -> Particle_16_4: ...
-
     def get_array_of_structs(self) -> ArrayOfStructs_16_4_arena: ...
 
 class ParticleTile_16_4_0_0_polymorphic:
@@ -14465,83 +12766,65 @@ class ParticleTile_16_4_0_0_polymorphic:
     NAI: int = ...
     """(arg: object, /) -> int"""
 
-    def define(self, arg0: int, arg1: int, arg2: Sequence[str], arg3: Sequence[str], arg4: Arena, /) -> None: ...
-
+    def define(
+        self,
+        arg0: int,
+        arg1: int,
+        arg2: Sequence[str],
+        arg3: Sequence[str],
+        arg4: Arena,
+        /,
+    ) -> None: ...
     def get_struct_of_arrays(self) -> StructOfArrays_0_0_polymorphic: ...
-
     @property
     def empty(self) -> bool: ...
-
     @property
     def size(self) -> int: ...
-
     @property
     def num_particles(self) -> int: ...
-
     @property
     def num_real_particles(self) -> int: ...
-
     @property
     def num_neighbor_particles(self) -> int: ...
-
     @property
     def num_total_particles(self) -> int: ...
-
     def set_num_neighbors(self, arg: int, /) -> None: ...
-
     def get_num_neighbors(self) -> int: ...
-
-    def resize(self, count: int, strategy: GrowthStrategy = GrowthStrategy.Poisson) -> None: ...
-
+    def resize(
+        self, count: int, strategy: GrowthStrategy = GrowthStrategy.Poisson
+    ) -> None: ...
     @overload
     def push_back(self, arg: Particle_16_4, /) -> None:
         """Add one particle to this tile."""
 
     @overload
     def push_back(self, arg: Particle_16_4, /) -> None: ...
-
     @overload
     def push_back_real(self, arg0: int, arg1: float, /) -> None: ...
-
     @overload
     def push_back_real(self, arg: Sequence[float], /) -> None: ...
-
     @overload
     def push_back_real(self, arg0: int, arg1: int, arg2: float, /) -> None: ...
-
     @overload
     def push_back_int(self, arg0: int, arg1: int, /) -> None: ...
-
     @overload
     def push_back_int(self, arg: Sequence[int], /) -> None: ...
-
     @overload
     def push_back_int(self, arg0: int, arg1: int, arg2: int, /) -> None: ...
-
     @property
     def num_real_comps(self) -> int: ...
-
     @property
     def num_int_comps(self) -> int: ...
-
     @property
     def num_runtime_real_comps(self) -> int: ...
-
     @property
     def num_runtime_int_comps(self) -> int: ...
-
     def shrink_to_fit(self) -> None: ...
-
     def capacity(self) -> int: ...
-
     def swap(self, arg: ParticleTile_16_4_0_0_polymorphic, /) -> None: ...
-
     def get_particle_tile_data(self) -> ParticleTileData_16_4_0_0: ...
-
     def __setitem__(self, arg0: int, arg1: Particle_16_4, /) -> None: ...
-
     def __getitem__(self, arg: int, /) -> Particle_16_4: ...
-
     def get_array_of_structs(self) -> ArrayOfStructs_16_4_polymorphic: ...
 
 class ParticleInitType_16_4_0_0:
@@ -14552,33 +12835,26 @@ class ParticleInitType_16_4_0_0:
 
     @property
     def real_array_data(self) -> list[float]: ...
-
     @real_array_data.setter
     def real_array_data(self, arg: Sequence[float], /) -> None: ...
-
     @property
     def int_array_data(self) -> list[int]: ...
-
     @int_array_data.setter
     def int_array_data(self, arg: Sequence[int], /) -> None: ...
-
     @property
     def real_struct_data(self) -> list[float]: ...
-
     @real_struct_data.setter
     def real_struct_data(self, arg: Sequence[float], /) -> None: ...
-
     @property
     def int_struct_data(self) -> list[int]: ...
-
     @int_struct_data.setter
     def int_struct_data(self, arg: Sequence[int], /) -> None: ...
 
 class ParIterBase_16_4_0_0_pinned(MFIter):
-    def __init__(self, particle_container: ParticleContainer_16_4_0_0_pinned, level: int) -> None: ...
-
+    def __init__(
+        self, particle_container: ParticleContainer_16_4_0_0_pinned, level: int
+    ) -> None: ...
     def particle_tile(self) -> ParticleTile_16_4_0_0_pinned: ...
-
     def soa(self) -> StructOfArrays_0_0_pinned: ...
 
     is_soa_particle: bool = ...
@@ -14590,41 +12866,34 @@ class ParIterBase_16_4_0_0_pinned(MFIter):
 
     @property
     def num_particles(self) -> int: ...
-
     @property
     def num_real_particles(self) -> int: ...
-
     @property
     def num_neighbor_particles(self) -> int: ...
-
     @property
     def level(self) -> int: ...
-
     @property
     def pair_index(self) -> tuple[int, int]: ...
-
     @property
     def is_valid(self) -> bool: ...
-
     def geom(self, level: int) -> Geometry: ...
-
     def finalize(self) -> None: ...
-
     def aos(self) -> ArrayOfStructs_16_4_pinned: ...
 
 class ParIter_16_4_0_0_pinned(ParIterBase_16_4_0_0_pinned):
-    def __init__(self, particle_container: ParticleContainer_16_4_0_0_pinned, level: int) -> None: ...
-
+    def __init__(
+        self, particle_container: ParticleContainer_16_4_0_0_pinned, level: int
+    ) -> None: ...
     def __repr__(self) -> str: ...
 
     is_soa_particle: bool = ...
     """(arg: object, /) -> bool"""
 
 class ParConstIterBase_16_4_0_0_pinned(MFIter):
-    def __init__(self, particle_container: ParticleContainer_16_4_0_0_pinned, level: int) -> None: ...
-
+    def __init__(
+        self, particle_container: ParticleContainer_16_4_0_0_pinned, level: int
+    ) -> None: ...
     def particle_tile(self) -> ParticleTile_16_4_0_0_pinned: ...
-
     def soa(self) -> StructOfArrays_0_0_pinned: ...
 
     is_soa_particle: bool = ...
@@ -14636,31 +12905,24 @@ class ParConstIterBase_16_4_0_0_pinned(MFIter):
 
     @property
     def num_particles(self) -> int: ...
-
     @property
     def num_real_particles(self) -> int: ...
-
     @property
     def num_neighbor_particles(self) -> int: ...
-
     @property
     def level(self) -> int: ...
-
     @property
     def pair_index(self) -> tuple[int, int]: ...
-
     @property
     def is_valid(self) -> bool: ...
-
     def geom(self, level: int) -> Geometry: ...
-
     def finalize(self) -> None: ...
-
     def aos(self) -> ArrayOfStructs_16_4_pinned: ...
 
 class ParConstIter_16_4_0_0_pinned(ParConstIterBase_16_4_0_0_pinned):
-    def __init__(self, particle_container: ParticleContainer_16_4_0_0_pinned, level: int) -> None: ...
-
+    def __init__(
+        self, particle_container: ParticleContainer_16_4_0_0_pinned, level: int
+    ) -> None: ...
     def __repr__(self) -> str: ...
 
     is_soa_particle: bool = ...
@@ -14669,10 +12931,10 @@ class ParConstIter_16_4_0_0_pinned(ParConstIterBase_16_4_0_0_pinned):
 class ParticleContainer_16_4_0_0_pinned:
     @overload
     def __init__(self) -> None: ...
-
     @overload
-    def __init__(self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray, /) -> None: ...
-
+    def __init__(
+        self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray, /
+    ) -> None: ...
     @overload
     def __init__(self, gdb: ParGDBBase) -> None:
         """
@@ -14680,19 +12942,29 @@ class ParticleContainer_16_4_0_0_pinned:
         """
 
     @overload
-    def __init__(self, arg0: Vector_Geometry, arg1: Vector_DistributionMapping, arg2: Vector_BoxArray, arg3: Vector_int, /) -> None: ...
-
+    def __init__(
+        self,
+        arg0: Vector_Geometry,
+        arg1: Vector_DistributionMapping,
+        arg2: Vector_BoxArray,
+        arg3: Vector_int,
+        /,
+    ) -> None: ...
     @overload
-    def __init__(self, arg0: Vector_Geometry, arg1: Vector_DistributionMapping, arg2: Vector_BoxArray, arg3: Vector_IntVect, /) -> None: ...
-
+    def __init__(
+        self,
+        arg0: Vector_Geometry,
+        arg1: Vector_DistributionMapping,
+        arg2: Vector_BoxArray,
+        arg3: Vector_IntVect,
+        /,
+    ) -> None: ...
     def define(self, gdb: ParGDBBase) -> None:
         """Define this container from a particle metadata broker."""
 
     def make_alike(self) -> ParticleContainer_16_4_0_0_pinned: ...
-
     @property
     def arena(self) -> Arena: ...
-
     @arena.setter
     def arena(self, arg: Arena, /) -> None: ...
 
@@ -14729,26 +13001,23 @@ class ParticleContainer_16_4_0_0_pinned:
 
     @property
     def num_position_components(self) -> int: ...
-
     @property
     def byte_spread(self) -> list[int]: ...
-
-    def set_soa_compile_time_names(self, arg0: Sequence[str], arg1: Sequence[str], /) -> None: ...
-
+    def set_soa_compile_time_names(
+        self, arg0: Sequence[str], arg1: Sequence[str], /
+    ) -> None: ...
     @overload
     def add_real_comp(self, communicate: int = 1) -> None:
         """add a new runtime component with type Real"""
 
     @overload
     def add_real_comp(self, name: str, communicate: int = 1) -> None: ...
-
     @overload
     def add_int_comp(self, communicate: int = 1) -> None:
         """add a new runtime component with type Int"""
 
     @overload
     def add_int_comp(self, name: str, communicate: int = 1) -> None: ...
-
     @property
     def real_soa_names(self) -> list[str]:
         """Get the names for the Real SoA components"""
@@ -14771,50 +13040,70 @@ class ParticleContainer_16_4_0_0_pinned:
 
     @property
     def finest_level(self) -> int: ...
-
     @overload
-    def Define(self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray, /) -> None: ...
-
+    def Define(
+        self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray, /
+    ) -> None: ...
     @overload
-    def Define(self, arg0: Vector_Geometry, arg1: Vector_DistributionMapping, arg2: Vector_BoxArray, arg3: Vector_int, /) -> None: ...
-
+    def Define(
+        self,
+        arg0: Vector_Geometry,
+        arg1: Vector_DistributionMapping,
+        arg2: Vector_BoxArray,
+        arg3: Vector_int,
+        /,
+    ) -> None: ...
     @overload
-    def Define(self, arg0: Vector_Geometry, arg1: Vector_DistributionMapping, arg2: Vector_BoxArray, arg3: Vector_IntVect, /) -> None: ...
-
+    def Define(
+        self,
+        arg0: Vector_Geometry,
+        arg1: Vector_DistributionMapping,
+        arg2: Vector_BoxArray,
+        arg3: Vector_IntVect,
+        /,
+    ) -> None: ...
     def num_local_tiles_at_level(self, level: int) -> int: ...
-
     def reserve_data(self) -> None: ...
-
     def resize_data(self) -> None: ...
-
     def increment(self, arg0: MultiFab, arg1: int, /) -> None: ...
-
     @overload
-    def redistribute(self, lev_min: int = 0, lev_max: int = -1, nGrow: int = 0, local: int = 0, remove_negative: bool = True) -> None: ...
-
+    def redistribute(
+        self,
+        lev_min: int = 0,
+        lev_max: int = -1,
+        nGrow: int = 0,
+        local: int = 0,
+        remove_negative: bool = True,
+    ) -> None: ...
     @overload
-    def redistribute(self, lev_min: int = 0, lev_max: int = -1, nGrow: IntVect1D = ..., local: bool = False, max_cells_moved: IntVect1D = ..., remove_negative: bool = True) -> None: ...
-
+    def redistribute(
+        self,
+        lev_min: int = 0,
+        lev_max: int = -1,
+        nGrow: IntVect1D = ...,
+        local: bool = False,
+        max_cells_moved: IntVect1D = ...,
+        remove_negative: bool = True,
+    ) -> None: ...
     def sort_particles_by_cell(self) -> None: ...
-
     def sort_particles_by_bin(self, arg: IntVect1D, /) -> None: ...
-
     def OK(self, lev_min: int = 0, lev_max: int = -1, nGrow: int = 0) -> bool: ...
-
     def print_capacity(self) -> list[int]: ...
-
     def shrink_t_fit(self) -> None: ...
-
-    def number_of_particles_at_level(self, level: int, only_valid: bool = True, only_local: bool = False) -> int: ...
-
-    def number_of_particles_in_grid(self, level: int, only_valid: bool = True, only_local: bool = False) -> Vector_Long: ...
-
+    def number_of_particles_at_level(
+        self, level: int, only_valid: bool = True, only_local: bool = False
+    ) -> int: ...
+    def number_of_particles_in_grid(
+        self, level: int, only_valid: bool = True, only_local: bool = False
+    ) -> Vector_Long: ...
     def number_of_particles(self, only_local: bool = False) -> int:
         """
         Return the number of valid particles on all MPI ranks, unless only_local is specified.
         """
 
-    def total_number_of_particles(self, only_valid: bool = True, only_local: bool = False) -> int:
+    def total_number_of_particles(
+        self, only_valid: bool = True, only_local: bool = False
+    ) -> int:
         """
         Return the number of particles (only valid or including invalid) on all MPI ranks, unless only_local is specified.
         """
@@ -14824,24 +13113,23 @@ class ParticleContainer_16_4_0_0_pinned:
         """Return the number of valid particles on all MPI ranks"""
 
     def remove_particles_at_level(self, arg: int, /) -> None: ...
-
     def remove_particles_not_at_finestLevel(self) -> None: ...
-
-    def add_particles_at_level(self, particles: ParticleTile_16_4_0_0_pinned, level: int, ngrow: int = 0) -> None: ...
-
+    def add_particles_at_level(
+        self, particles: ParticleTile_16_4_0_0_pinned, level: int, ngrow: int = 0
+    ) -> None: ...
     def clear_particles(self) -> None: ...
-
-    def add_particles(self, other: ParticleContainer_16_4_0_0_pinned, local: bool = False) -> None: ...
-
+    def add_particles(
+        self, other: ParticleContainer_16_4_0_0_pinned, local: bool = False
+    ) -> None: ...
     def restart(self, dir: str, file: str) -> None: ...
-
     def restart_checkpoint(self, dir: str, file: str, is_checkpoint: bool) -> None: ...
-
     def write_plotfile(self, dir: str, name: str) -> None: ...
-
-    def get_particles(self, level: int) -> dict[tuple[int, int], ParticleTile_16_4_0_0_pinned]: ...
-
-    def define_and_return_particle_tile(self, lev: int, grid: int, tile: int) -> ParticleTile_16_4_0_0_pinned:
+    def get_particles(
+        self, level: int
+    ) -> dict[tuple[int, int], ParticleTile_16_4_0_0_pinned]: ...
+    def define_and_return_particle_tile(
+        self, lev: int, grid: int, tile: int
+    ) -> ParticleTile_16_4_0_0_pinned:
         """
         Define, if necessary, and return the particle tile at ``(lev, grid, tile)``.
 
@@ -14849,11 +13137,21 @@ class ParticleContainer_16_4_0_0_pinned:
         The returned tile is owned by the particle container.
         """
 
-    def init_random(self, arg0: int, arg1: int, arg2: ParticleInitType_16_4_0_0, arg3: bool, arg4: RealBox, /) -> None: ...
-
-    def init_random_per_box(self, arg0: int, arg1: int, arg2: ParticleInitType_16_4_0_0, /) -> None: ...
-
-    def init_one_per_cell(self, arg0: float, arg1: float, arg2: float, arg3: ParticleInitType_16_4_0_0, /) -> None: ...
+    def init_random(
+        self,
+        arg0: int,
+        arg1: int,
+        arg2: ParticleInitType_16_4_0_0,
+        arg3: bool,
+        arg4: RealBox,
+        /,
+    ) -> None: ...
+    def init_random_per_box(
+        self, arg0: int, arg1: int, arg2: ParticleInitType_16_4_0_0, /
+    ) -> None: ...
+    def init_one_per_cell(
+        self, arg0: float, arg1: float, arg2: float, arg3: ParticleInitType_16_4_0_0, /
+    ) -> None: ...
 
     Iterator: object = ...
     """amrex iterator for particle boxes"""
@@ -14862,10 +13160,10 @@ class ParticleContainer_16_4_0_0_pinned:
     """amrex constant iterator for particle boxes (read-only)"""
 
 class ParIterBase_16_4_0_0_default(MFIter):
-    def __init__(self, particle_container: ParticleContainer_16_4_0_0_default, level: int) -> None: ...
-
+    def __init__(
+        self, particle_container: ParticleContainer_16_4_0_0_default, level: int
+    ) -> None: ...
     def particle_tile(self) -> ParticleTile_16_4_0_0_default: ...
-
     def soa(self) -> StructOfArrays_0_0_default: ...
 
     is_soa_particle: bool = ...
@@ -14877,41 +13175,34 @@ class ParIterBase_16_4_0_0_default(MFIter):
 
     @property
     def num_particles(self) -> int: ...
-
     @property
     def num_real_particles(self) -> int: ...
-
     @property
     def num_neighbor_particles(self) -> int: ...
-
     @property
     def level(self) -> int: ...
-
     @property
     def pair_index(self) -> tuple[int, int]: ...
-
     @property
     def is_valid(self) -> bool: ...
-
     def geom(self, level: int) -> Geometry: ...
-
     def finalize(self) -> None: ...
-
     def aos(self) -> ArrayOfStructs_16_4_default: ...
 
 class ParIter_16_4_0_0_default(ParIterBase_16_4_0_0_default):
-    def __init__(self, particle_container: ParticleContainer_16_4_0_0_default, level: int) -> None: ...
-
+    def __init__(
+        self, particle_container: ParticleContainer_16_4_0_0_default, level: int
+    ) -> None: ...
     def __repr__(self) -> str: ...
 
     is_soa_particle: bool = ...
     """(arg: object, /) -> bool"""
 
 class ParConstIterBase_16_4_0_0_default(MFIter):
-    def __init__(self, particle_container: ParticleContainer_16_4_0_0_default, level: int) -> None: ...
-
+    def __init__(
+        self, particle_container: ParticleContainer_16_4_0_0_default, level: int
+    ) -> None: ...
     def particle_tile(self) -> ParticleTile_16_4_0_0_default: ...
-
     def soa(self) -> StructOfArrays_0_0_default: ...
 
     is_soa_particle: bool = ...
@@ -14923,31 +13214,24 @@ class ParConstIterBase_16_4_0_0_default(MFIter):
 
     @property
     def num_particles(self) -> int: ...
-
     @property
     def num_real_particles(self) -> int: ...
-
     @property
     def num_neighbor_particles(self) -> int: ...
-
     @property
     def level(self) -> int: ...
-
     @property
     def pair_index(self) -> tuple[int, int]: ...
-
     @property
     def is_valid(self) -> bool: ...
-
     def geom(self, level: int) -> Geometry: ...
-
     def finalize(self) -> None: ...
-
     def aos(self) -> ArrayOfStructs_16_4_default: ...
 
 class ParConstIter_16_4_0_0_default(ParConstIterBase_16_4_0_0_default):
-    def __init__(self, particle_container: ParticleContainer_16_4_0_0_default, level: int) -> None: ...
-
+    def __init__(
+        self, particle_container: ParticleContainer_16_4_0_0_default, level: int
+    ) -> None: ...
     def __repr__(self) -> str: ...
 
     is_soa_particle: bool = ...
@@ -14956,10 +13240,10 @@ class ParConstIter_16_4_0_0_default(ParConstIterBase_16_4_0_0_default):
 class ParticleContainer_16_4_0_0_default:
     @overload
     def __init__(self) -> None: ...
-
     @overload
-    def __init__(self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray, /) -> None: ...
-
+    def __init__(
+        self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray, /
+    ) -> None: ...
     @overload
     def __init__(self, gdb: ParGDBBase) -> None:
         """
@@ -14967,19 +13251,29 @@ class ParticleContainer_16_4_0_0_default:
         """
 
     @overload
-    def __init__(self, arg0: Vector_Geometry, arg1: Vector_DistributionMapping, arg2: Vector_BoxArray, arg3: Vector_int, /) -> None: ...
-
+    def __init__(
+        self,
+        arg0: Vector_Geometry,
+        arg1: Vector_DistributionMapping,
+        arg2: Vector_BoxArray,
+        arg3: Vector_int,
+        /,
+    ) -> None: ...
     @overload
-    def __init__(self, arg0: Vector_Geometry, arg1: Vector_DistributionMapping, arg2: Vector_BoxArray, arg3: Vector_IntVect, /) -> None: ...
-
+    def __init__(
+        self,
+        arg0: Vector_Geometry,
+        arg1: Vector_DistributionMapping,
+        arg2: Vector_BoxArray,
+        arg3: Vector_IntVect,
+        /,
+    ) -> None: ...
     def define(self, gdb: ParGDBBase) -> None:
         """Define this container from a particle metadata broker."""
 
     def make_alike(self) -> ParticleContainer_16_4_0_0_default: ...
-
     @property
     def arena(self) -> Arena: ...
-
     @arena.setter
     def arena(self, arg: Arena, /) -> None: ...
 
@@ -15016,26 +13310,23 @@ class ParticleContainer_16_4_0_0_default:
 
     @property
     def num_position_components(self) -> int: ...
-
     @property
     def byte_spread(self) -> list[int]: ...
-
-    def set_soa_compile_time_names(self, arg0: Sequence[str], arg1: Sequence[str], /) -> None: ...
-
+    def set_soa_compile_time_names(
+        self, arg0: Sequence[str], arg1: Sequence[str], /
+    ) -> None: ...
     @overload
     def add_real_comp(self, communicate: int = 1) -> None:
         """add a new runtime component with type Real"""
 
     @overload
     def add_real_comp(self, name: str, communicate: int = 1) -> None: ...
-
     @overload
     def add_int_comp(self, communicate: int = 1) -> None:
         """add a new runtime component with type Int"""
 
     @overload
     def add_int_comp(self, name: str, communicate: int = 1) -> None: ...
-
     @property
     def real_soa_names(self) -> list[str]:
         """Get the names for the Real SoA components"""
@@ -15058,50 +13349,70 @@ class ParticleContainer_16_4_0_0_default:
 
     @property
     def finest_level(self) -> int: ...
-
     @overload
-    def Define(self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray, /) -> None: ...
-
+    def Define(
+        self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray, /
+    ) -> None: ...
     @overload
-    def Define(self, arg0: Vector_Geometry, arg1: Vector_DistributionMapping, arg2: Vector_BoxArray, arg3: Vector_int, /) -> None: ...
-
+    def Define(
+        self,
+        arg0: Vector_Geometry,
+        arg1: Vector_DistributionMapping,
+        arg2: Vector_BoxArray,
+        arg3: Vector_int,
+        /,
+    ) -> None: ...
     @overload
-    def Define(self, arg0: Vector_Geometry, arg1: Vector_DistributionMapping, arg2: Vector_BoxArray, arg3: Vector_IntVect, /) -> None: ...
-
+    def Define(
+        self,
+        arg0: Vector_Geometry,
+        arg1: Vector_DistributionMapping,
+        arg2: Vector_BoxArray,
+        arg3: Vector_IntVect,
+        /,
+    ) -> None: ...
     def num_local_tiles_at_level(self, level: int) -> int: ...
-
     def reserve_data(self) -> None: ...
-
     def resize_data(self) -> None: ...
-
     def increment(self, arg0: MultiFab, arg1: int, /) -> None: ...
-
     @overload
-    def redistribute(self, lev_min: int = 0, lev_max: int = -1, nGrow: int = 0, local: int = 0, remove_negative: bool = True) -> None: ...
-
+    def redistribute(
+        self,
+        lev_min: int = 0,
+        lev_max: int = -1,
+        nGrow: int = 0,
+        local: int = 0,
+        remove_negative: bool = True,
+    ) -> None: ...
     @overload
-    def redistribute(self, lev_min: int = 0, lev_max: int = -1, nGrow: IntVect1D = ..., local: bool = False, max_cells_moved: IntVect1D = ..., remove_negative: bool = True) -> None: ...
-
+    def redistribute(
+        self,
+        lev_min: int = 0,
+        lev_max: int = -1,
+        nGrow: IntVect1D = ...,
+        local: bool = False,
+        max_cells_moved: IntVect1D = ...,
+        remove_negative: bool = True,
+    ) -> None: ...
     def sort_particles_by_cell(self) -> None: ...
-
     def sort_particles_by_bin(self, arg: IntVect1D, /) -> None: ...
-
     def OK(self, lev_min: int = 0, lev_max: int = -1, nGrow: int = 0) -> bool: ...
-
     def print_capacity(self) -> list[int]: ...
-
     def shrink_t_fit(self) -> None: ...
-
-    def number_of_particles_at_level(self, level: int, only_valid: bool = True, only_local: bool = False) -> int: ...
-
-    def number_of_particles_in_grid(self, level: int, only_valid: bool = True, only_local: bool = False) -> Vector_Long: ...
-
+    def number_of_particles_at_level(
+        self, level: int, only_valid: bool = True, only_local: bool = False
+    ) -> int: ...
+    def number_of_particles_in_grid(
+        self, level: int, only_valid: bool = True, only_local: bool = False
+    ) -> Vector_Long: ...
     def number_of_particles(self, only_local: bool = False) -> int:
         """
         Return the number of valid particles on all MPI ranks, unless only_local is specified.
         """
 
-    def total_number_of_particles(self, only_valid: bool = True, only_local: bool = False) -> int:
+    def total_number_of_particles(
+        self, only_valid: bool = True, only_local: bool = False
+    ) -> int:
         """
         Return the number of particles (only valid or including invalid) on all MPI ranks, unless only_local is specified.
         """
@@ -15111,24 +13422,23 @@ class ParticleContainer_16_4_0_0_default:
         """Return the number of valid particles on all MPI ranks"""
 
     def remove_particles_at_level(self, arg: int, /) -> None: ...
-
     def remove_particles_not_at_finestLevel(self) -> None: ...
-
-    def add_particles_at_level(self, particles: ParticleTile_16_4_0_0_default, level: int, ngrow: int = 0) -> None: ...
-
+    def add_particles_at_level(
+        self, particles: ParticleTile_16_4_0_0_default, level: int, ngrow: int = 0
+    ) -> None: ...
     def clear_particles(self) -> None: ...
-
-    def add_particles(self, other: ParticleContainer_16_4_0_0_default, local: bool = False) -> None: ...
-
+    def add_particles(
+        self, other: ParticleContainer_16_4_0_0_default, local: bool = False
+    ) -> None: ...
     def restart(self, dir: str, file: str) -> None: ...
-
     def restart_checkpoint(self, dir: str, file: str, is_checkpoint: bool) -> None: ...
-
     def write_plotfile(self, dir: str, name: str) -> None: ...
-
-    def get_particles(self, level: int) -> dict[tuple[int, int], ParticleTile_16_4_0_0_default]: ...
-
-    def define_and_return_particle_tile(self, lev: int, grid: int, tile: int) -> ParticleTile_16_4_0_0_default:
+    def get_particles(
+        self, level: int
+    ) -> dict[tuple[int, int], ParticleTile_16_4_0_0_default]: ...
+    def define_and_return_particle_tile(
+        self, lev: int, grid: int, tile: int
+    ) -> ParticleTile_16_4_0_0_default:
         """
         Define, if necessary, and return the particle tile at ``(lev, grid, tile)``.
 
@@ -15136,11 +13446,21 @@ class ParticleContainer_16_4_0_0_default:
         The returned tile is owned by the particle container.
         """
 
-    def init_random(self, arg0: int, arg1: int, arg2: ParticleInitType_16_4_0_0, arg3: bool, arg4: RealBox, /) -> None: ...
-
-    def init_random_per_box(self, arg0: int, arg1: int, arg2: ParticleInitType_16_4_0_0, /) -> None: ...
-
-    def init_one_per_cell(self, arg0: float, arg1: float, arg2: float, arg3: ParticleInitType_16_4_0_0, /) -> None: ...
+    def init_random(
+        self,
+        arg0: int,
+        arg1: int,
+        arg2: ParticleInitType_16_4_0_0,
+        arg3: bool,
+        arg4: RealBox,
+        /,
+    ) -> None: ...
+    def init_random_per_box(
+        self, arg0: int, arg1: int, arg2: ParticleInitType_16_4_0_0, /
+    ) -> None: ...
+    def init_one_per_cell(
+        self, arg0: float, arg1: float, arg2: float, arg3: ParticleInitType_16_4_0_0, /
+    ) -> None: ...
 
     Iterator: object = ...
     """amrex iterator for particle boxes"""
@@ -15149,10 +13469,10 @@ class ParticleContainer_16_4_0_0_default:
     """amrex constant iterator for particle boxes (read-only)"""
 
 class ParIterBase_16_4_0_0_arena(MFIter):
-    def __init__(self, particle_container: ParticleContainer_16_4_0_0_arena, level: int) -> None: ...
-
+    def __init__(
+        self, particle_container: ParticleContainer_16_4_0_0_arena, level: int
+    ) -> None: ...
     def particle_tile(self) -> ParticleTile_16_4_0_0_arena: ...
-
     def soa(self) -> StructOfArrays_0_0_arena: ...
 
     is_soa_particle: bool = ...
@@ -15164,41 +13484,34 @@ class ParIterBase_16_4_0_0_arena(MFIter):
 
     @property
     def num_particles(self) -> int: ...
-
     @property
     def num_real_particles(self) -> int: ...
-
     @property
     def num_neighbor_particles(self) -> int: ...
-
     @property
     def level(self) -> int: ...
-
     @property
     def pair_index(self) -> tuple[int, int]: ...
-
     @property
     def is_valid(self) -> bool: ...
-
     def geom(self, level: int) -> Geometry: ...
-
     def finalize(self) -> None: ...
-
     def aos(self) -> ArrayOfStructs_16_4_arena: ...
 
 class ParIter_16_4_0_0_arena(ParIterBase_16_4_0_0_arena):
-    def __init__(self, particle_container: ParticleContainer_16_4_0_0_arena, level: int) -> None: ...
-
+    def __init__(
+        self, particle_container: ParticleContainer_16_4_0_0_arena, level: int
+    ) -> None: ...
     def __repr__(self) -> str: ...
 
     is_soa_particle: bool = ...
     """(arg: object, /) -> bool"""
 
 class ParConstIterBase_16_4_0_0_arena(MFIter):
-    def __init__(self, particle_container: ParticleContainer_16_4_0_0_arena, level: int) -> None: ...
-
+    def __init__(
+        self, particle_container: ParticleContainer_16_4_0_0_arena, level: int
+    ) -> None: ...
     def particle_tile(self) -> ParticleTile_16_4_0_0_arena: ...
-
     def soa(self) -> StructOfArrays_0_0_arena: ...
 
     is_soa_particle: bool = ...
@@ -15210,31 +13523,24 @@ class ParConstIterBase_16_4_0_0_arena(MFIter):
 
     @property
     def num_particles(self) -> int: ...
-
     @property
     def num_real_particles(self) -> int: ...
-
     @property
     def num_neighbor_particles(self) -> int: ...
-
     @property
     def level(self) -> int: ...
-
     @property
     def pair_index(self) -> tuple[int, int]: ...
-
     @property
     def is_valid(self) -> bool: ...
-
     def geom(self, level: int) -> Geometry: ...
-
     def finalize(self) -> None: ...
-
     def aos(self) -> ArrayOfStructs_16_4_arena: ...
 
 class ParConstIter_16_4_0_0_arena(ParConstIterBase_16_4_0_0_arena):
-    def __init__(self, particle_container: ParticleContainer_16_4_0_0_arena, level: int) -> None: ...
-
+    def __init__(
+        self, particle_container: ParticleContainer_16_4_0_0_arena, level: int
+    ) -> None: ...
     def __repr__(self) -> str: ...
 
     is_soa_particle: bool = ...
@@ -15243,10 +13549,10 @@ class ParConstIter_16_4_0_0_arena(ParConstIterBase_16_4_0_0_arena):
 class ParticleContainer_16_4_0_0_arena:
     @overload
     def __init__(self) -> None: ...
-
     @overload
-    def __init__(self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray, /) -> None: ...
-
+    def __init__(
+        self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray, /
+    ) -> None: ...
     @overload
     def __init__(self, gdb: ParGDBBase) -> None:
         """
@@ -15254,19 +13560,29 @@ class ParticleContainer_16_4_0_0_arena:
         """
 
     @overload
-    def __init__(self, arg0: Vector_Geometry, arg1: Vector_DistributionMapping, arg2: Vector_BoxArray, arg3: Vector_int, /) -> None: ...
-
+    def __init__(
+        self,
+        arg0: Vector_Geometry,
+        arg1: Vector_DistributionMapping,
+        arg2: Vector_BoxArray,
+        arg3: Vector_int,
+        /,
+    ) -> None: ...
     @overload
-    def __init__(self, arg0: Vector_Geometry, arg1: Vector_DistributionMapping, arg2: Vector_BoxArray, arg3: Vector_IntVect, /) -> None: ...
-
+    def __init__(
+        self,
+        arg0: Vector_Geometry,
+        arg1: Vector_DistributionMapping,
+        arg2: Vector_BoxArray,
+        arg3: Vector_IntVect,
+        /,
+    ) -> None: ...
     def define(self, gdb: ParGDBBase) -> None:
         """Define this container from a particle metadata broker."""
 
     def make_alike(self) -> ParticleContainer_16_4_0_0_arena: ...
-
     @property
     def arena(self) -> Arena: ...
-
     @arena.setter
     def arena(self, arg: Arena, /) -> None: ...
 
@@ -15303,26 +13619,23 @@ class ParticleContainer_16_4_0_0_arena:
 
     @property
     def num_position_components(self) -> int: ...
-
     @property
     def byte_spread(self) -> list[int]: ...
-
-    def set_soa_compile_time_names(self, arg0: Sequence[str], arg1: Sequence[str], /) -> None: ...
-
+    def set_soa_compile_time_names(
+        self, arg0: Sequence[str], arg1: Sequence[str], /
+    ) -> None: ...
     @overload
     def add_real_comp(self, communicate: int = 1) -> None:
         """add a new runtime component with type Real"""
 
     @overload
     def add_real_comp(self, name: str, communicate: int = 1) -> None: ...
-
     @overload
     def add_int_comp(self, communicate: int = 1) -> None:
         """add a new runtime component with type Int"""
 
     @overload
     def add_int_comp(self, name: str, communicate: int = 1) -> None: ...
-
     @property
     def real_soa_names(self) -> list[str]:
         """Get the names for the Real SoA components"""
@@ -15345,50 +13658,70 @@ class ParticleContainer_16_4_0_0_arena:
 
     @property
     def finest_level(self) -> int: ...
-
     @overload
-    def Define(self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray, /) -> None: ...
-
+    def Define(
+        self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray, /
+    ) -> None: ...
     @overload
-    def Define(self, arg0: Vector_Geometry, arg1: Vector_DistributionMapping, arg2: Vector_BoxArray, arg3: Vector_int, /) -> None: ...
-
+    def Define(
+        self,
+        arg0: Vector_Geometry,
+        arg1: Vector_DistributionMapping,
+        arg2: Vector_BoxArray,
+        arg3: Vector_int,
+        /,
+    ) -> None: ...
     @overload
-    def Define(self, arg0: Vector_Geometry, arg1: Vector_DistributionMapping, arg2: Vector_BoxArray, arg3: Vector_IntVect, /) -> None: ...
-
+    def Define(
+        self,
+        arg0: Vector_Geometry,
+        arg1: Vector_DistributionMapping,
+        arg2: Vector_BoxArray,
+        arg3: Vector_IntVect,
+        /,
+    ) -> None: ...
     def num_local_tiles_at_level(self, level: int) -> int: ...
-
     def reserve_data(self) -> None: ...
-
     def resize_data(self) -> None: ...
-
     def increment(self, arg0: MultiFab, arg1: int, /) -> None: ...
-
     @overload
-    def redistribute(self, lev_min: int = 0, lev_max: int = -1, nGrow: int = 0, local: int = 0, remove_negative: bool = True) -> None: ...
-
+    def redistribute(
+        self,
+        lev_min: int = 0,
+        lev_max: int = -1,
+        nGrow: int = 0,
+        local: int = 0,
+        remove_negative: bool = True,
+    ) -> None: ...
     @overload
-    def redistribute(self, lev_min: int = 0, lev_max: int = -1, nGrow: IntVect1D = ..., local: bool = False, max_cells_moved: IntVect1D = ..., remove_negative: bool = True) -> None: ...
-
+    def redistribute(
+        self,
+        lev_min: int = 0,
+        lev_max: int = -1,
+        nGrow: IntVect1D = ...,
+        local: bool = False,
+        max_cells_moved: IntVect1D = ...,
+        remove_negative: bool = True,
+    ) -> None: ...
     def sort_particles_by_cell(self) -> None: ...
-
     def sort_particles_by_bin(self, arg: IntVect1D, /) -> None: ...
-
     def OK(self, lev_min: int = 0, lev_max: int = -1, nGrow: int = 0) -> bool: ...
-
     def print_capacity(self) -> list[int]: ...
-
     def shrink_t_fit(self) -> None: ...
-
-    def number_of_particles_at_level(self, level: int, only_valid: bool = True, only_local: bool = False) -> int: ...
-
-    def number_of_particles_in_grid(self, level: int, only_valid: bool = True, only_local: bool = False) -> Vector_Long: ...
-
+    def number_of_particles_at_level(
+        self, level: int, only_valid: bool = True, only_local: bool = False
+    ) -> int: ...
+    def number_of_particles_in_grid(
+        self, level: int, only_valid: bool = True, only_local: bool = False
+    ) -> Vector_Long: ...
     def number_of_particles(self, only_local: bool = False) -> int:
         """
         Return the number of valid particles on all MPI ranks, unless only_local is specified.
         """
 
-    def total_number_of_particles(self, only_valid: bool = True, only_local: bool = False) -> int:
+    def total_number_of_particles(
+        self, only_valid: bool = True, only_local: bool = False
+    ) -> int:
         """
         Return the number of particles (only valid or including invalid) on all MPI ranks, unless only_local is specified.
         """
@@ -15398,24 +13731,23 @@ class ParticleContainer_16_4_0_0_arena:
         """Return the number of valid particles on all MPI ranks"""
 
     def remove_particles_at_level(self, arg: int, /) -> None: ...
-
     def remove_particles_not_at_finestLevel(self) -> None: ...
-
-    def add_particles_at_level(self, particles: ParticleTile_16_4_0_0_arena, level: int, ngrow: int = 0) -> None: ...
-
+    def add_particles_at_level(
+        self, particles: ParticleTile_16_4_0_0_arena, level: int, ngrow: int = 0
+    ) -> None: ...
     def clear_particles(self) -> None: ...
-
-    def add_particles(self, other: ParticleContainer_16_4_0_0_arena, local: bool = False) -> None: ...
-
+    def add_particles(
+        self, other: ParticleContainer_16_4_0_0_arena, local: bool = False
+    ) -> None: ...
     def restart(self, dir: str, file: str) -> None: ...
-
     def restart_checkpoint(self, dir: str, file: str, is_checkpoint: bool) -> None: ...
-
     def write_plotfile(self, dir: str, name: str) -> None: ...
-
-    def get_particles(self, level: int) -> dict[tuple[int, int], ParticleTile_16_4_0_0_arena]: ...
-
-    def define_and_return_particle_tile(self, lev: int, grid: int, tile: int) -> ParticleTile_16_4_0_0_arena:
+    def get_particles(
+        self, level: int
+    ) -> dict[tuple[int, int], ParticleTile_16_4_0_0_arena]: ...
+    def define_and_return_particle_tile(
+        self, lev: int, grid: int, tile: int
+    ) -> ParticleTile_16_4_0_0_arena:
         """
         Define, if necessary, and return the particle tile at ``(lev, grid, tile)``.
 
@@ -15423,11 +13755,21 @@ class ParticleContainer_16_4_0_0_arena:
         The returned tile is owned by the particle container.
         """
 
-    def init_random(self, arg0: int, arg1: int, arg2: ParticleInitType_16_4_0_0, arg3: bool, arg4: RealBox, /) -> None: ...
-
-    def init_random_per_box(self, arg0: int, arg1: int, arg2: ParticleInitType_16_4_0_0, /) -> None: ...
-
-    def init_one_per_cell(self, arg0: float, arg1: float, arg2: float, arg3: ParticleInitType_16_4_0_0, /) -> None: ...
+    def init_random(
+        self,
+        arg0: int,
+        arg1: int,
+        arg2: ParticleInitType_16_4_0_0,
+        arg3: bool,
+        arg4: RealBox,
+        /,
+    ) -> None: ...
+    def init_random_per_box(
+        self, arg0: int, arg1: int, arg2: ParticleInitType_16_4_0_0, /
+    ) -> None: ...
+    def init_one_per_cell(
+        self, arg0: float, arg1: float, arg2: float, arg3: ParticleInitType_16_4_0_0, /
+    ) -> None: ...
 
     Iterator: object = ...
     """amrex iterator for particle boxes"""
@@ -15436,10 +13778,10 @@ class ParticleContainer_16_4_0_0_arena:
     """amrex constant iterator for particle boxes (read-only)"""
 
 class ParIterBase_16_4_0_0_polymorphic(MFIter):
-    def __init__(self, particle_container: ParticleContainer_16_4_0_0_polymorphic, level: int) -> None: ...
-
+    def __init__(
+        self, particle_container: ParticleContainer_16_4_0_0_polymorphic, level: int
+    ) -> None: ...
     def particle_tile(self) -> ParticleTile_16_4_0_0_polymorphic: ...
-
     def soa(self) -> StructOfArrays_0_0_polymorphic: ...
 
     is_soa_particle: bool = ...
@@ -15451,41 +13793,34 @@ class ParIterBase_16_4_0_0_polymorphic(MFIter):
 
     @property
     def num_particles(self) -> int: ...
-
     @property
     def num_real_particles(self) -> int: ...
-
     @property
     def num_neighbor_particles(self) -> int: ...
-
     @property
     def level(self) -> int: ...
-
     @property
     def pair_index(self) -> tuple[int, int]: ...
-
     @property
     def is_valid(self) -> bool: ...
-
     def geom(self, level: int) -> Geometry: ...
-
     def finalize(self) -> None: ...
-
     def aos(self) -> ArrayOfStructs_16_4_polymorphic: ...
 
 class ParIter_16_4_0_0_polymorphic(ParIterBase_16_4_0_0_polymorphic):
-    def __init__(self, particle_container: ParticleContainer_16_4_0_0_polymorphic, level: int) -> None: ...
-
+    def __init__(
+        self, particle_container: ParticleContainer_16_4_0_0_polymorphic, level: int
+    ) -> None: ...
     def __repr__(self) -> str: ...
 
     is_soa_particle: bool = ...
     """(arg: object, /) -> bool"""
 
 class ParConstIterBase_16_4_0_0_polymorphic(MFIter):
-    def __init__(self, particle_container: ParticleContainer_16_4_0_0_polymorphic, level: int) -> None: ...
-
+    def __init__(
+        self, particle_container: ParticleContainer_16_4_0_0_polymorphic, level: int
+    ) -> None: ...
     def particle_tile(self) -> ParticleTile_16_4_0_0_polymorphic: ...
-
     def soa(self) -> StructOfArrays_0_0_polymorphic: ...
 
     is_soa_particle: bool = ...
@@ -15497,31 +13832,24 @@ class ParConstIterBase_16_4_0_0_polymorphic(MFIter):
 
     @property
     def num_particles(self) -> int: ...
-
     @property
     def num_real_particles(self) -> int: ...
-
     @property
     def num_neighbor_particles(self) -> int: ...
-
     @property
     def level(self) -> int: ...
-
     @property
     def pair_index(self) -> tuple[int, int]: ...
-
     @property
     def is_valid(self) -> bool: ...
-
     def geom(self, level: int) -> Geometry: ...
-
     def finalize(self) -> None: ...
-
     def aos(self) -> ArrayOfStructs_16_4_polymorphic: ...
 
 class ParConstIter_16_4_0_0_polymorphic(ParConstIterBase_16_4_0_0_polymorphic):
-    def __init__(self, particle_container: ParticleContainer_16_4_0_0_polymorphic, level: int) -> None: ...
-
+    def __init__(
+        self, particle_container: ParticleContainer_16_4_0_0_polymorphic, level: int
+    ) -> None: ...
     def __repr__(self) -> str: ...
 
     is_soa_particle: bool = ...
@@ -15530,10 +13858,10 @@ class ParConstIter_16_4_0_0_polymorphic(ParConstIterBase_16_4_0_0_polymorphic):
 class ParticleContainer_16_4_0_0_polymorphic:
     @overload
     def __init__(self) -> None: ...
-
     @overload
-    def __init__(self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray, /) -> None: ...
-
+    def __init__(
+        self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray, /
+    ) -> None: ...
     @overload
     def __init__(self, gdb: ParGDBBase) -> None:
         """
@@ -15541,19 +13869,29 @@ class ParticleContainer_16_4_0_0_polymorphic:
         """
 
     @overload
-    def __init__(self, arg0: Vector_Geometry, arg1: Vector_DistributionMapping, arg2: Vector_BoxArray, arg3: Vector_int, /) -> None: ...
-
+    def __init__(
+        self,
+        arg0: Vector_Geometry,
+        arg1: Vector_DistributionMapping,
+        arg2: Vector_BoxArray,
+        arg3: Vector_int,
+        /,
+    ) -> None: ...
     @overload
-    def __init__(self, arg0: Vector_Geometry, arg1: Vector_DistributionMapping, arg2: Vector_BoxArray, arg3: Vector_IntVect, /) -> None: ...
-
+    def __init__(
+        self,
+        arg0: Vector_Geometry,
+        arg1: Vector_DistributionMapping,
+        arg2: Vector_BoxArray,
+        arg3: Vector_IntVect,
+        /,
+    ) -> None: ...
     def define(self, gdb: ParGDBBase) -> None:
         """Define this container from a particle metadata broker."""
 
     def make_alike(self) -> ParticleContainer_16_4_0_0_polymorphic: ...
-
     @property
     def arena(self) -> Arena: ...
-
     @arena.setter
     def arena(self, arg: Arena, /) -> None: ...
 
@@ -15590,26 +13928,23 @@ class ParticleContainer_16_4_0_0_polymorphic:
 
     @property
     def num_position_components(self) -> int: ...
-
     @property
     def byte_spread(self) -> list[int]: ...
-
-    def set_soa_compile_time_names(self, arg0: Sequence[str], arg1: Sequence[str], /) -> None: ...
-
+    def set_soa_compile_time_names(
+        self, arg0: Sequence[str], arg1: Sequence[str], /
+    ) -> None: ...
     @overload
     def add_real_comp(self, communicate: int = 1) -> None:
         """add a new runtime component with type Real"""
 
     @overload
     def add_real_comp(self, name: str, communicate: int = 1) -> None: ...
-
     @overload
     def add_int_comp(self, communicate: int = 1) -> None:
         """add a new runtime component with type Int"""
 
     @overload
     def add_int_comp(self, name: str, communicate: int = 1) -> None: ...
-
     @property
     def real_soa_names(self) -> list[str]:
         """Get the names for the Real SoA components"""
@@ -15632,50 +13967,70 @@ class ParticleContainer_16_4_0_0_polymorphic:
 
     @property
     def finest_level(self) -> int: ...
-
     @overload
-    def Define(self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray, /) -> None: ...
-
+    def Define(
+        self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray, /
+    ) -> None: ...
     @overload
-    def Define(self, arg0: Vector_Geometry, arg1: Vector_DistributionMapping, arg2: Vector_BoxArray, arg3: Vector_int, /) -> None: ...
-
+    def Define(
+        self,
+        arg0: Vector_Geometry,
+        arg1: Vector_DistributionMapping,
+        arg2: Vector_BoxArray,
+        arg3: Vector_int,
+        /,
+    ) -> None: ...
     @overload
-    def Define(self, arg0: Vector_Geometry, arg1: Vector_DistributionMapping, arg2: Vector_BoxArray, arg3: Vector_IntVect, /) -> None: ...
-
+    def Define(
+        self,
+        arg0: Vector_Geometry,
+        arg1: Vector_DistributionMapping,
+        arg2: Vector_BoxArray,
+        arg3: Vector_IntVect,
+        /,
+    ) -> None: ...
     def num_local_tiles_at_level(self, level: int) -> int: ...
-
     def reserve_data(self) -> None: ...
-
     def resize_data(self) -> None: ...
-
     def increment(self, arg0: MultiFab, arg1: int, /) -> None: ...
-
     @overload
-    def redistribute(self, lev_min: int = 0, lev_max: int = -1, nGrow: int = 0, local: int = 0, remove_negative: bool = True) -> None: ...
-
+    def redistribute(
+        self,
+        lev_min: int = 0,
+        lev_max: int = -1,
+        nGrow: int = 0,
+        local: int = 0,
+        remove_negative: bool = True,
+    ) -> None: ...
     @overload
-    def redistribute(self, lev_min: int = 0, lev_max: int = -1, nGrow: IntVect1D = ..., local: bool = False, max_cells_moved: IntVect1D = ..., remove_negative: bool = True) -> None: ...
-
+    def redistribute(
+        self,
+        lev_min: int = 0,
+        lev_max: int = -1,
+        nGrow: IntVect1D = ...,
+        local: bool = False,
+        max_cells_moved: IntVect1D = ...,
+        remove_negative: bool = True,
+    ) -> None: ...
     def sort_particles_by_cell(self) -> None: ...
-
     def sort_particles_by_bin(self, arg: IntVect1D, /) -> None: ...
-
     def OK(self, lev_min: int = 0, lev_max: int = -1, nGrow: int = 0) -> bool: ...
-
     def print_capacity(self) -> list[int]: ...
-
     def shrink_t_fit(self) -> None: ...
-
-    def number_of_particles_at_level(self, level: int, only_valid: bool = True, only_local: bool = False) -> int: ...
-
-    def number_of_particles_in_grid(self, level: int, only_valid: bool = True, only_local: bool = False) -> Vector_Long: ...
-
+    def number_of_particles_at_level(
+        self, level: int, only_valid: bool = True, only_local: bool = False
+    ) -> int: ...
+    def number_of_particles_in_grid(
+        self, level: int, only_valid: bool = True, only_local: bool = False
+    ) -> Vector_Long: ...
     def number_of_particles(self, only_local: bool = False) -> int:
         """
         Return the number of valid particles on all MPI ranks, unless only_local is specified.
         """
 
-    def total_number_of_particles(self, only_valid: bool = True, only_local: bool = False) -> int:
+    def total_number_of_particles(
+        self, only_valid: bool = True, only_local: bool = False
+    ) -> int:
         """
         Return the number of particles (only valid or including invalid) on all MPI ranks, unless only_local is specified.
         """
@@ -15685,24 +14040,23 @@ class ParticleContainer_16_4_0_0_polymorphic:
         """Return the number of valid particles on all MPI ranks"""
 
     def remove_particles_at_level(self, arg: int, /) -> None: ...
-
     def remove_particles_not_at_finestLevel(self) -> None: ...
-
-    def add_particles_at_level(self, particles: ParticleTile_16_4_0_0_polymorphic, level: int, ngrow: int = 0) -> None: ...
-
+    def add_particles_at_level(
+        self, particles: ParticleTile_16_4_0_0_polymorphic, level: int, ngrow: int = 0
+    ) -> None: ...
     def clear_particles(self) -> None: ...
-
-    def add_particles(self, other: ParticleContainer_16_4_0_0_polymorphic, local: bool = False) -> None: ...
-
+    def add_particles(
+        self, other: ParticleContainer_16_4_0_0_polymorphic, local: bool = False
+    ) -> None: ...
     def restart(self, dir: str, file: str) -> None: ...
-
     def restart_checkpoint(self, dir: str, file: str, is_checkpoint: bool) -> None: ...
-
     def write_plotfile(self, dir: str, name: str) -> None: ...
-
-    def get_particles(self, level: int) -> dict[tuple[int, int], ParticleTile_16_4_0_0_polymorphic]: ...
-
-    def define_and_return_particle_tile(self, lev: int, grid: int, tile: int) -> ParticleTile_16_4_0_0_polymorphic:
+    def get_particles(
+        self, level: int
+    ) -> dict[tuple[int, int], ParticleTile_16_4_0_0_polymorphic]: ...
+    def define_and_return_particle_tile(
+        self, lev: int, grid: int, tile: int
+    ) -> ParticleTile_16_4_0_0_polymorphic:
         """
         Define, if necessary, and return the particle tile at ``(lev, grid, tile)``.
 
@@ -15710,11 +14064,21 @@ class ParticleContainer_16_4_0_0_polymorphic:
         The returned tile is owned by the particle container.
         """
 
-    def init_random(self, arg0: int, arg1: int, arg2: ParticleInitType_16_4_0_0, arg3: bool, arg4: RealBox, /) -> None: ...
-
-    def init_random_per_box(self, arg0: int, arg1: int, arg2: ParticleInitType_16_4_0_0, /) -> None: ...
-
-    def init_one_per_cell(self, arg0: float, arg1: float, arg2: float, arg3: ParticleInitType_16_4_0_0, /) -> None: ...
+    def init_random(
+        self,
+        arg0: int,
+        arg1: int,
+        arg2: ParticleInitType_16_4_0_0,
+        arg3: bool,
+        arg4: RealBox,
+        /,
+    ) -> None: ...
+    def init_random_per_box(
+        self, arg0: int, arg1: int, arg2: ParticleInitType_16_4_0_0, /
+    ) -> None: ...
+    def init_one_per_cell(
+        self, arg0: float, arg1: float, arg2: float, arg3: ParticleInitType_16_4_0_0, /
+    ) -> None: ...
 
     Iterator: object = ...
     """amrex iterator for particle boxes"""
@@ -15725,18 +14089,13 @@ class ParticleContainer_16_4_0_0_polymorphic:
 class Particle_11_0:
     @overload
     def __init__(self, **kwargs) -> None: ...
-
     @overload
     def __init__(self, arg: float, /) -> None: ...
-
     @overload
     def __init__(self, arg0: float, /, *args) -> None: ...
-
     @overload
     def __init__(self, arg0: float, /, **kwargs) -> None: ...
-
     def __repr__(self) -> str: ...
-
     def __str__(self) -> str: ...
 
     NReal: int = ...
@@ -15747,64 +14106,46 @@ class Particle_11_0:
 
     @overload
     def pos(self, arg: int, /) -> float: ...
-
     @overload
     def pos(self) -> RealVect: ...
-
     @overload
     def setPos(self, arg0: int, arg1: float, /) -> None: ...
-
     @overload
     def setPos(self, arg: RealVect, /) -> None: ...
-
     @overload
     def setPos(self, arg: Sequence[float], /) -> None: ...
-
     @overload
     def get_rdata(self, arg: int, /) -> float: ...
-
     @overload
     def get_rdata(self) -> list[float]: ...
-
     @overload
     def set_rdata(self, arg0: int, arg1: float, /) -> None: ...
-
     @overload
     def set_rdata(self, arg: Sequence[float], /) -> None: ...
-
     @overload
     def get_idata(self, arg: int, /) -> object: ...
-
     @overload
     def get_idata(self) -> object: ...
-
     @overload
     def set_idata(self, arg0: int, arg1: int, /) -> None: ...
-
     @overload
     def set_idata(self, arg: Sequence[int], /) -> None: ...
-
     def cpu(self) -> int: ...
-
     def id(self) -> int: ...
-
     @overload
     def NextID(self) -> int: ...
-
     @overload
     def NextID(self, arg: int, /) -> None: ...
-
     @property
     def x(self) -> float: ...
-
     @x.setter
     def x(self, arg: float, /) -> None: ...
 
 class StructOfArrays_11_0_idcpu_polymorphic:
     def __init__(self) -> None: ...
-
-    def define(self, arg0: int, arg1: int, arg2: Sequence[str], arg3: Sequence[str], /) -> None: ...
-
+    def define(
+        self, arg0: int, arg1: int, arg2: Sequence[str], arg3: Sequence[str], /
+    ) -> None: ...
     @property
     def num_real_comps(self) -> int:
         """Get the number of compile-time + runtime Real components"""
@@ -15866,40 +14207,29 @@ class StructOfArrays_11_0_idcpu_polymorphic:
 
     @property
     def num_particles(self) -> int: ...
-
     @property
     def num_real_particles(self) -> int: ...
-
     @property
     def num_total_particles(self) -> int: ...
-
     def set_num_neighbors(self, arg: int, /) -> None: ...
-
     def get_num_neighbors(self) -> int: ...
-
-    def resize(self, new_size: int, strategy: GrowthStrategy = GrowthStrategy.Poisson) -> None: ...
-
+    def resize(
+        self, new_size: int, strategy: GrowthStrategy = GrowthStrategy.Poisson
+    ) -> None: ...
     def get_idcpu_data(self) -> PODVector_uint64_polymorphic:
         """Get access to a particle IdCPU component Array"""
 
 class ParticleTileData_pureSoA_11_0:
     def __init__(self) -> None: ...
-
     @property
     def m_size(self) -> int: ...
-
     @property
     def m_num_runtime_real(self) -> int: ...
-
     @property
     def m_num_runtime_int(self) -> int: ...
-
     def get_super_particle(self, arg: int, /) -> Particle_11_0: ...
-
     def set_super_particle(self, arg0: Particle_11_0, arg1: int, /) -> None: ...
-
     def __setitem__(self, arg0: int, arg1: Particle_11_0, /) -> None: ...
-
     def __getitem__(self, arg: int, /) -> Particle_11_0: ...
 
 class ParticleTile_pureSoA_11_0_polymorphic:
@@ -15911,77 +14241,61 @@ class ParticleTile_pureSoA_11_0_polymorphic:
     NAI: int = ...
     """(arg: object, /) -> int"""
 
-    def define(self, arg0: int, arg1: int, arg2: Sequence[str], arg3: Sequence[str], arg4: Arena, /) -> None: ...
-
+    def define(
+        self,
+        arg0: int,
+        arg1: int,
+        arg2: Sequence[str],
+        arg3: Sequence[str],
+        arg4: Arena,
+        /,
+    ) -> None: ...
     def get_struct_of_arrays(self) -> StructOfArrays_11_0_idcpu_polymorphic: ...
-
     @property
     def empty(self) -> bool: ...
-
     @property
     def size(self) -> int: ...
-
     @property
     def num_particles(self) -> int: ...
-
     @property
     def num_real_particles(self) -> int: ...
-
     @property
     def num_neighbor_particles(self) -> int: ...
-
     @property
     def num_total_particles(self) -> int: ...
-
     def set_num_neighbors(self, arg: int, /) -> None: ...
-
     def get_num_neighbors(self) -> int: ...
-
-    def resize(self, count: int, strategy: GrowthStrategy = GrowthStrategy.Poisson) -> None: ...
-
+    def resize(
+        self, count: int, strategy: GrowthStrategy = GrowthStrategy.Poisson
+    ) -> None: ...
     def push_back(self, arg: Particle_11_0, /) -> None:
         """Add one particle to this tile."""
 
     @overload
     def push_back_real(self, arg0: int, arg1: float, /) -> None: ...
-
     @overload
     def push_back_real(self, arg: Sequence[float], /) -> None: ...
-
     @overload
     def push_back_real(self, arg0: int, arg1: int, arg2: float, /) -> None: ...
-
     @overload
     def push_back_int(self, arg0: int, arg1: int, /) -> None: ...
-
     @overload
     def push_back_int(self, arg: Sequence[int], /) -> None: ...
-
     @overload
     def push_back_int(self, arg0: int, arg1: int, arg2: int, /) -> None: ...
-
     @property
     def num_real_comps(self) -> int: ...
-
     @property
     def num_int_comps(self) -> int: ...
-
     @property
     def num_runtime_real_comps(self) -> int: ...
-
     @property
     def num_runtime_int_comps(self) -> int: ...
-
     def shrink_to_fit(self) -> None: ...
-
     def capacity(self) -> int: ...
-
     def swap(self, arg: ParticleTile_pureSoA_11_0_polymorphic, /) -> None: ...
-
     def get_particle_tile_data(self) -> ParticleTileData_pureSoA_11_0: ...
-
     def __setitem__(self, arg0: int, arg1: Particle_11_0, /) -> None: ...
-
     def __getitem__(self, arg: int, /) -> Particle_11_0: ...
 
 class ParticleInitType_pureSoA_11_0:
@@ -15992,21 +14306,18 @@ class ParticleInitType_pureSoA_11_0:
 
     @property
     def real_array_data(self) -> list[float]: ...
-
     @real_array_data.setter
     def real_array_data(self, arg: Sequence[float], /) -> None: ...
-
     @property
     def int_array_data(self) -> list[int]: ...
-
     @int_array_data.setter
     def int_array_data(self, arg: Sequence[int], /) -> None: ...
 
 class ParIterBase_pureSoA_11_0_polymorphic(MFIter):
-    def __init__(self, particle_container: ParticleContainer_pureSoA_11_0_polymorphic, level: int) -> None: ...
-
+    def __init__(
+        self, particle_container: ParticleContainer_pureSoA_11_0_polymorphic, level: int
+    ) -> None: ...
     def particle_tile(self) -> ParticleTile_pureSoA_11_0_polymorphic: ...
-
     def soa(self) -> StructOfArrays_11_0_idcpu_polymorphic: ...
 
     is_soa_particle: bool = ...
@@ -16018,39 +14329,33 @@ class ParIterBase_pureSoA_11_0_polymorphic(MFIter):
 
     @property
     def num_particles(self) -> int: ...
-
     @property
     def num_real_particles(self) -> int: ...
-
     @property
     def num_neighbor_particles(self) -> int: ...
-
     @property
     def level(self) -> int: ...
-
     @property
     def pair_index(self) -> tuple[int, int]: ...
-
     @property
     def is_valid(self) -> bool: ...
-
     def geom(self, level: int) -> Geometry: ...
-
     def finalize(self) -> None: ...
 
 class ParIter_pureSoA_11_0_polymorphic(ParIterBase_pureSoA_11_0_polymorphic):
-    def __init__(self, particle_container: ParticleContainer_pureSoA_11_0_polymorphic, level: int) -> None: ...
-
+    def __init__(
+        self, particle_container: ParticleContainer_pureSoA_11_0_polymorphic, level: int
+    ) -> None: ...
     def __repr__(self) -> str: ...
 
     is_soa_particle: bool = ...
     """(arg: object, /) -> bool"""
 
 class ParConstIterBase_pureSoA_11_0_polymorphic(MFIter):
-    def __init__(self, particle_container: ParticleContainer_pureSoA_11_0_polymorphic, level: int) -> None: ...
-
+    def __init__(
+        self, particle_container: ParticleContainer_pureSoA_11_0_polymorphic, level: int
+    ) -> None: ...
     def particle_tile(self) -> ParticleTile_pureSoA_11_0_polymorphic: ...
-
     def soa(self) -> StructOfArrays_11_0_idcpu_polymorphic: ...
 
     is_soa_particle: bool = ...
@@ -16062,29 +14367,23 @@ class ParConstIterBase_pureSoA_11_0_polymorphic(MFIter):
 
     @property
     def num_particles(self) -> int: ...
-
     @property
     def num_real_particles(self) -> int: ...
-
     @property
     def num_neighbor_particles(self) -> int: ...
-
     @property
     def level(self) -> int: ...
-
     @property
     def pair_index(self) -> tuple[int, int]: ...
-
     @property
     def is_valid(self) -> bool: ...
-
     def geom(self, level: int) -> Geometry: ...
-
     def finalize(self) -> None: ...
 
 class ParConstIter_pureSoA_11_0_polymorphic(ParConstIterBase_pureSoA_11_0_polymorphic):
-    def __init__(self, particle_container: ParticleContainer_pureSoA_11_0_polymorphic, level: int) -> None: ...
-
+    def __init__(
+        self, particle_container: ParticleContainer_pureSoA_11_0_polymorphic, level: int
+    ) -> None: ...
     def __repr__(self) -> str: ...
 
     is_soa_particle: bool = ...
@@ -16093,10 +14392,10 @@ class ParConstIter_pureSoA_11_0_polymorphic(ParConstIterBase_pureSoA_11_0_polymo
 class ParticleContainer_pureSoA_11_0_polymorphic:
     @overload
     def __init__(self) -> None: ...
-
     @overload
-    def __init__(self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray, /) -> None: ...
-
+    def __init__(
+        self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray, /
+    ) -> None: ...
     @overload
     def __init__(self, gdb: ParGDBBase) -> None:
         """
@@ -16104,19 +14403,29 @@ class ParticleContainer_pureSoA_11_0_polymorphic:
         """
 
     @overload
-    def __init__(self, arg0: Vector_Geometry, arg1: Vector_DistributionMapping, arg2: Vector_BoxArray, arg3: Vector_int, /) -> None: ...
-
+    def __init__(
+        self,
+        arg0: Vector_Geometry,
+        arg1: Vector_DistributionMapping,
+        arg2: Vector_BoxArray,
+        arg3: Vector_int,
+        /,
+    ) -> None: ...
     @overload
-    def __init__(self, arg0: Vector_Geometry, arg1: Vector_DistributionMapping, arg2: Vector_BoxArray, arg3: Vector_IntVect, /) -> None: ...
-
+    def __init__(
+        self,
+        arg0: Vector_Geometry,
+        arg1: Vector_DistributionMapping,
+        arg2: Vector_BoxArray,
+        arg3: Vector_IntVect,
+        /,
+    ) -> None: ...
     def define(self, gdb: ParGDBBase) -> None:
         """Define this container from a particle metadata broker."""
 
     def make_alike(self) -> ParticleContainer_pureSoA_11_0_polymorphic: ...
-
     @property
     def arena(self) -> Arena: ...
-
     @arena.setter
     def arena(self, arg: Arena, /) -> None: ...
 
@@ -16153,26 +14462,23 @@ class ParticleContainer_pureSoA_11_0_polymorphic:
 
     @property
     def num_position_components(self) -> int: ...
-
     @property
     def byte_spread(self) -> list[int]: ...
-
-    def set_soa_compile_time_names(self, arg0: Sequence[str], arg1: Sequence[str], /) -> None: ...
-
+    def set_soa_compile_time_names(
+        self, arg0: Sequence[str], arg1: Sequence[str], /
+    ) -> None: ...
     @overload
     def add_real_comp(self, communicate: int = 1) -> None:
         """add a new runtime component with type Real"""
 
     @overload
     def add_real_comp(self, name: str, communicate: int = 1) -> None: ...
-
     @overload
     def add_int_comp(self, communicate: int = 1) -> None:
         """add a new runtime component with type Int"""
 
     @overload
     def add_int_comp(self, name: str, communicate: int = 1) -> None: ...
-
     @property
     def real_soa_names(self) -> list[str]:
         """Get the names for the Real SoA components"""
@@ -16195,50 +14501,70 @@ class ParticleContainer_pureSoA_11_0_polymorphic:
 
     @property
     def finest_level(self) -> int: ...
-
     @overload
-    def Define(self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray, /) -> None: ...
-
+    def Define(
+        self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray, /
+    ) -> None: ...
     @overload
-    def Define(self, arg0: Vector_Geometry, arg1: Vector_DistributionMapping, arg2: Vector_BoxArray, arg3: Vector_int, /) -> None: ...
-
+    def Define(
+        self,
+        arg0: Vector_Geometry,
+        arg1: Vector_DistributionMapping,
+        arg2: Vector_BoxArray,
+        arg3: Vector_int,
+        /,
+    ) -> None: ...
     @overload
-    def Define(self, arg0: Vector_Geometry, arg1: Vector_DistributionMapping, arg2: Vector_BoxArray, arg3: Vector_IntVect, /) -> None: ...
-
+    def Define(
+        self,
+        arg0: Vector_Geometry,
+        arg1: Vector_DistributionMapping,
+        arg2: Vector_BoxArray,
+        arg3: Vector_IntVect,
+        /,
+    ) -> None: ...
     def num_local_tiles_at_level(self, level: int) -> int: ...
-
     def reserve_data(self) -> None: ...
-
     def resize_data(self) -> None: ...
-
     def increment(self, arg0: MultiFab, arg1: int, /) -> None: ...
-
     @overload
-    def redistribute(self, lev_min: int = 0, lev_max: int = -1, nGrow: int = 0, local: int = 0, remove_negative: bool = True) -> None: ...
-
+    def redistribute(
+        self,
+        lev_min: int = 0,
+        lev_max: int = -1,
+        nGrow: int = 0,
+        local: int = 0,
+        remove_negative: bool = True,
+    ) -> None: ...
     @overload
-    def redistribute(self, lev_min: int = 0, lev_max: int = -1, nGrow: IntVect1D = ..., local: bool = False, max_cells_moved: IntVect1D = ..., remove_negative: bool = True) -> None: ...
-
+    def redistribute(
+        self,
+        lev_min: int = 0,
+        lev_max: int = -1,
+        nGrow: IntVect1D = ...,
+        local: bool = False,
+        max_cells_moved: IntVect1D = ...,
+        remove_negative: bool = True,
+    ) -> None: ...
     def sort_particles_by_cell(self) -> None: ...
-
     def sort_particles_by_bin(self, arg: IntVect1D, /) -> None: ...
-
     def OK(self, lev_min: int = 0, lev_max: int = -1, nGrow: int = 0) -> bool: ...
-
     def print_capacity(self) -> list[int]: ...
-
     def shrink_t_fit(self) -> None: ...
-
-    def number_of_particles_at_level(self, level: int, only_valid: bool = True, only_local: bool = False) -> int: ...
-
-    def number_of_particles_in_grid(self, level: int, only_valid: bool = True, only_local: bool = False) -> Vector_Long: ...
-
+    def number_of_particles_at_level(
+        self, level: int, only_valid: bool = True, only_local: bool = False
+    ) -> int: ...
+    def number_of_particles_in_grid(
+        self, level: int, only_valid: bool = True, only_local: bool = False
+    ) -> Vector_Long: ...
     def number_of_particles(self, only_local: bool = False) -> int:
         """
         Return the number of valid particles on all MPI ranks, unless only_local is specified.
         """
 
-    def total_number_of_particles(self, only_valid: bool = True, only_local: bool = False) -> int:
+    def total_number_of_particles(
+        self, only_valid: bool = True, only_local: bool = False
+    ) -> int:
         """
         Return the number of particles (only valid or including invalid) on all MPI ranks, unless only_local is specified.
         """
@@ -16248,24 +14574,26 @@ class ParticleContainer_pureSoA_11_0_polymorphic:
         """Return the number of valid particles on all MPI ranks"""
 
     def remove_particles_at_level(self, arg: int, /) -> None: ...
-
     def remove_particles_not_at_finestLevel(self) -> None: ...
-
-    def add_particles_at_level(self, particles: ParticleTile_pureSoA_11_0_polymorphic, level: int, ngrow: int = 0) -> None: ...
-
+    def add_particles_at_level(
+        self,
+        particles: ParticleTile_pureSoA_11_0_polymorphic,
+        level: int,
+        ngrow: int = 0,
+    ) -> None: ...
     def clear_particles(self) -> None: ...
-
-    def add_particles(self, other: ParticleContainer_pureSoA_11_0_polymorphic, local: bool = False) -> None: ...
-
+    def add_particles(
+        self, other: ParticleContainer_pureSoA_11_0_polymorphic, local: bool = False
+    ) -> None: ...
     def restart(self, dir: str, file: str) -> None: ...
-
     def restart_checkpoint(self, dir: str, file: str, is_checkpoint: bool) -> None: ...
-
     def write_plotfile(self, dir: str, name: str) -> None: ...
-
-    def get_particles(self, level: int) -> dict[tuple[int, int], ParticleTile_pureSoA_11_0_polymorphic]: ...
-
-    def define_and_return_particle_tile(self, lev: int, grid: int, tile: int) -> ParticleTile_pureSoA_11_0_polymorphic:
+    def get_particles(
+        self, level: int
+    ) -> dict[tuple[int, int], ParticleTile_pureSoA_11_0_polymorphic]: ...
+    def define_and_return_particle_tile(
+        self, lev: int, grid: int, tile: int
+    ) -> ParticleTile_pureSoA_11_0_polymorphic:
         """
         Define, if necessary, and return the particle tile at ``(lev, grid, tile)``.
 
@@ -16273,7 +14601,15 @@ class ParticleContainer_pureSoA_11_0_polymorphic:
         The returned tile is owned by the particle container.
         """
 
-    def init_random(self, arg0: int, arg1: int, arg2: ParticleInitType_pureSoA_11_0, arg3: bool, arg4: RealBox, /) -> None: ...
+    def init_random(
+        self,
+        arg0: int,
+        arg1: int,
+        arg2: ParticleInitType_pureSoA_11_0,
+        arg3: bool,
+        arg4: RealBox,
+        /,
+    ) -> None: ...
 
     Iterator: object = ...
     """amrex iterator for particle boxes"""
@@ -16284,18 +14620,13 @@ class ParticleContainer_pureSoA_11_0_polymorphic:
 class Particle_5_0:
     @overload
     def __init__(self, **kwargs) -> None: ...
-
     @overload
     def __init__(self, arg: float, /) -> None: ...
-
     @overload
     def __init__(self, arg0: float, /, *args) -> None: ...
-
     @overload
     def __init__(self, arg0: float, /, **kwargs) -> None: ...
-
     def __repr__(self) -> str: ...
-
     def __str__(self) -> str: ...
 
     NReal: int = ...
@@ -16306,64 +14637,46 @@ class Particle_5_0:
 
     @overload
     def pos(self, arg: int, /) -> float: ...
-
     @overload
     def pos(self) -> RealVect: ...
-
     @overload
     def setPos(self, arg0: int, arg1: float, /) -> None: ...
-
     @overload
     def setPos(self, arg: RealVect, /) -> None: ...
-
     @overload
     def setPos(self, arg: Sequence[float], /) -> None: ...
-
     @overload
     def get_rdata(self, arg: int, /) -> float: ...
-
     @overload
     def get_rdata(self) -> list[float]: ...
-
     @overload
     def set_rdata(self, arg0: int, arg1: float, /) -> None: ...
-
     @overload
     def set_rdata(self, arg: Sequence[float], /) -> None: ...
-
     @overload
     def get_idata(self, arg: int, /) -> object: ...
-
     @overload
     def get_idata(self) -> object: ...
-
     @overload
     def set_idata(self, arg0: int, arg1: int, /) -> None: ...
-
     @overload
     def set_idata(self, arg: Sequence[int], /) -> None: ...
-
     def cpu(self) -> int: ...
-
     def id(self) -> int: ...
-
     @overload
     def NextID(self) -> int: ...
-
     @overload
     def NextID(self, arg: int, /) -> None: ...
-
     @property
     def x(self) -> float: ...
-
     @x.setter
     def x(self, arg: float, /) -> None: ...
 
 class StructOfArrays_5_0_idcpu_polymorphic:
     def __init__(self) -> None: ...
-
-    def define(self, arg0: int, arg1: int, arg2: Sequence[str], arg3: Sequence[str], /) -> None: ...
-
+    def define(
+        self, arg0: int, arg1: int, arg2: Sequence[str], arg3: Sequence[str], /
+    ) -> None: ...
     @property
     def num_real_comps(self) -> int:
         """Get the number of compile-time + runtime Real components"""
@@ -16425,40 +14738,29 @@ class StructOfArrays_5_0_idcpu_polymorphic:
 
     @property
     def num_particles(self) -> int: ...
-
     @property
     def num_real_particles(self) -> int: ...
-
     @property
     def num_total_particles(self) -> int: ...
-
     def set_num_neighbors(self, arg: int, /) -> None: ...
-
     def get_num_neighbors(self) -> int: ...
-
-    def resize(self, new_size: int, strategy: GrowthStrategy = GrowthStrategy.Poisson) -> None: ...
-
+    def resize(
+        self, new_size: int, strategy: GrowthStrategy = GrowthStrategy.Poisson
+    ) -> None: ...
     def get_idcpu_data(self) -> PODVector_uint64_polymorphic:
         """Get access to a particle IdCPU component Array"""
 
 class ParticleTileData_pureSoA_5_0:
     def __init__(self) -> None: ...
-
     @property
     def m_size(self) -> int: ...
-
     @property
     def m_num_runtime_real(self) -> int: ...
-
     @property
     def m_num_runtime_int(self) -> int: ...
-
     def get_super_particle(self, arg: int, /) -> Particle_5_0: ...
-
     def set_super_particle(self, arg0: Particle_5_0, arg1: int, /) -> None: ...
-
     def __setitem__(self, arg0: int, arg1: Particle_5_0, /) -> None: ...
-
     def __getitem__(self, arg: int, /) -> Particle_5_0: ...
 
 class ParticleTile_pureSoA_5_0_polymorphic:
@@ -16470,77 +14772,61 @@ class ParticleTile_pureSoA_5_0_polymorphic:
     NAI: int = ...
     """(arg: object, /) -> int"""
 
-    def define(self, arg0: int, arg1: int, arg2: Sequence[str], arg3: Sequence[str], arg4: Arena, /) -> None: ...
-
+    def define(
+        self,
+        arg0: int,
+        arg1: int,
+        arg2: Sequence[str],
+        arg3: Sequence[str],
+        arg4: Arena,
+        /,
+    ) -> None: ...
     def get_struct_of_arrays(self) -> StructOfArrays_5_0_idcpu_polymorphic: ...
-
     @property
     def empty(self) -> bool: ...
-
     @property
     def size(self) -> int: ...
-
     @property
     def num_particles(self) -> int: ...
-
     @property
     def num_real_particles(self) -> int: ...
-
     @property
     def num_neighbor_particles(self) -> int: ...
-
     @property
     def num_total_particles(self) -> int: ...
-
     def set_num_neighbors(self, arg: int, /) -> None: ...
-
     def get_num_neighbors(self) -> int: ...
-
-    def resize(self, count: int, strategy: GrowthStrategy = GrowthStrategy.Poisson) -> None: ...
-
+    def resize(
+        self, count: int, strategy: GrowthStrategy = GrowthStrategy.Poisson
+    ) -> None: ...
     def push_back(self, arg: Particle_5_0, /) -> None:
         """Add one particle to this tile."""
 
     @overload
     def push_back_real(self, arg0: int, arg1: float, /) -> None: ...
-
     @overload
     def push_back_real(self, arg: Sequence[float], /) -> None: ...
-
     @overload
     def push_back_real(self, arg0: int, arg1: int, arg2: float, /) -> None: ...
-
     @overload
     def push_back_int(self, arg0: int, arg1: int, /) -> None: ...
-
     @overload
     def push_back_int(self, arg: Sequence[int], /) -> None: ...
-
     @overload
     def push_back_int(self, arg0: int, arg1: int, arg2: int, /) -> None: ...
-
     @property
     def num_real_comps(self) -> int: ...
-
     @property
     def num_int_comps(self) -> int: ...
-
     @property
     def num_runtime_real_comps(self) -> int: ...
-
     @property
     def num_runtime_int_comps(self) -> int: ...
-
     def shrink_to_fit(self) -> None: ...
-
     def capacity(self) -> int: ...
-
     def swap(self, arg: ParticleTile_pureSoA_5_0_polymorphic, /) -> None: ...
-
     def get_particle_tile_data(self) -> ParticleTileData_pureSoA_5_0: ...
-
     def __setitem__(self, arg0: int, arg1: Particle_5_0, /) -> None: ...
-
     def __getitem__(self, arg: int, /) -> Particle_5_0: ...
 
 class ParticleInitType_pureSoA_5_0:
@@ -16551,21 +14837,18 @@ class ParticleInitType_pureSoA_5_0:
 
     @property
     def real_array_data(self) -> list[float]: ...
-
     @real_array_data.setter
     def real_array_data(self, arg: Sequence[float], /) -> None: ...
-
     @property
     def int_array_data(self) -> list[int]: ...
-
     @int_array_data.setter
     def int_array_data(self, arg: Sequence[int], /) -> None: ...
 
 class ParIterBase_pureSoA_5_0_polymorphic(MFIter):
-    def __init__(self, particle_container: ParticleContainer_pureSoA_5_0_polymorphic, level: int) -> None: ...
-
+    def __init__(
+        self, particle_container: ParticleContainer_pureSoA_5_0_polymorphic, level: int
+    ) -> None: ...
     def particle_tile(self) -> ParticleTile_pureSoA_5_0_polymorphic: ...
-
     def soa(self) -> StructOfArrays_5_0_idcpu_polymorphic: ...
 
     is_soa_particle: bool = ...
@@ -16577,39 +14860,33 @@ class ParIterBase_pureSoA_5_0_polymorphic(MFIter):
 
     @property
     def num_particles(self) -> int: ...
-
     @property
     def num_real_particles(self) -> int: ...
-
     @property
     def num_neighbor_particles(self) -> int: ...
-
     @property
     def level(self) -> int: ...
-
     @property
     def pair_index(self) -> tuple[int, int]: ...
-
     @property
     def is_valid(self) -> bool: ...
-
     def geom(self, level: int) -> Geometry: ...
-
     def finalize(self) -> None: ...
 
 class ParIter_pureSoA_5_0_polymorphic(ParIterBase_pureSoA_5_0_polymorphic):
-    def __init__(self, particle_container: ParticleContainer_pureSoA_5_0_polymorphic, level: int) -> None: ...
-
+    def __init__(
+        self, particle_container: ParticleContainer_pureSoA_5_0_polymorphic, level: int
+    ) -> None: ...
     def __repr__(self) -> str: ...
 
     is_soa_particle: bool = ...
     """(arg: object, /) -> bool"""
 
 class ParConstIterBase_pureSoA_5_0_polymorphic(MFIter):
-    def __init__(self, particle_container: ParticleContainer_pureSoA_5_0_polymorphic, level: int) -> None: ...
-
+    def __init__(
+        self, particle_container: ParticleContainer_pureSoA_5_0_polymorphic, level: int
+    ) -> None: ...
     def particle_tile(self) -> ParticleTile_pureSoA_5_0_polymorphic: ...
-
     def soa(self) -> StructOfArrays_5_0_idcpu_polymorphic: ...
 
     is_soa_particle: bool = ...
@@ -16621,29 +14898,23 @@ class ParConstIterBase_pureSoA_5_0_polymorphic(MFIter):
 
     @property
     def num_particles(self) -> int: ...
-
     @property
     def num_real_particles(self) -> int: ...
-
     @property
     def num_neighbor_particles(self) -> int: ...
-
     @property
     def level(self) -> int: ...
-
     @property
     def pair_index(self) -> tuple[int, int]: ...
-
     @property
     def is_valid(self) -> bool: ...
-
     def geom(self, level: int) -> Geometry: ...
-
     def finalize(self) -> None: ...
 
 class ParConstIter_pureSoA_5_0_polymorphic(ParConstIterBase_pureSoA_5_0_polymorphic):
-    def __init__(self, particle_container: ParticleContainer_pureSoA_5_0_polymorphic, level: int) -> None: ...
-
+    def __init__(
+        self, particle_container: ParticleContainer_pureSoA_5_0_polymorphic, level: int
+    ) -> None: ...
     def __repr__(self) -> str: ...
 
     is_soa_particle: bool = ...
@@ -16652,10 +14923,10 @@ class ParConstIter_pureSoA_5_0_polymorphic(ParConstIterBase_pureSoA_5_0_polymorp
 class ParticleContainer_pureSoA_5_0_polymorphic:
     @overload
     def __init__(self) -> None: ...
-
     @overload
-    def __init__(self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray, /) -> None: ...
-
+    def __init__(
+        self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray, /
+    ) -> None: ...
     @overload
     def __init__(self, gdb: ParGDBBase) -> None:
         """
@@ -16663,19 +14934,29 @@ class ParticleContainer_pureSoA_5_0_polymorphic:
         """
 
     @overload
-    def __init__(self, arg0: Vector_Geometry, arg1: Vector_DistributionMapping, arg2: Vector_BoxArray, arg3: Vector_int, /) -> None: ...
-
+    def __init__(
+        self,
+        arg0: Vector_Geometry,
+        arg1: Vector_DistributionMapping,
+        arg2: Vector_BoxArray,
+        arg3: Vector_int,
+        /,
+    ) -> None: ...
     @overload
-    def __init__(self, arg0: Vector_Geometry, arg1: Vector_DistributionMapping, arg2: Vector_BoxArray, arg3: Vector_IntVect, /) -> None: ...
-
+    def __init__(
+        self,
+        arg0: Vector_Geometry,
+        arg1: Vector_DistributionMapping,
+        arg2: Vector_BoxArray,
+        arg3: Vector_IntVect,
+        /,
+    ) -> None: ...
     def define(self, gdb: ParGDBBase) -> None:
         """Define this container from a particle metadata broker."""
 
     def make_alike(self) -> ParticleContainer_pureSoA_5_0_polymorphic: ...
-
     @property
     def arena(self) -> Arena: ...
-
     @arena.setter
     def arena(self, arg: Arena, /) -> None: ...
 
@@ -16712,26 +14993,23 @@ class ParticleContainer_pureSoA_5_0_polymorphic:
 
     @property
     def num_position_components(self) -> int: ...
-
     @property
     def byte_spread(self) -> list[int]: ...
-
-    def set_soa_compile_time_names(self, arg0: Sequence[str], arg1: Sequence[str], /) -> None: ...
-
+    def set_soa_compile_time_names(
+        self, arg0: Sequence[str], arg1: Sequence[str], /
+    ) -> None: ...
     @overload
     def add_real_comp(self, communicate: int = 1) -> None:
         """add a new runtime component with type Real"""
 
     @overload
     def add_real_comp(self, name: str, communicate: int = 1) -> None: ...
-
     @overload
     def add_int_comp(self, communicate: int = 1) -> None:
         """add a new runtime component with type Int"""
 
     @overload
     def add_int_comp(self, name: str, communicate: int = 1) -> None: ...
-
     @property
     def real_soa_names(self) -> list[str]:
         """Get the names for the Real SoA components"""
@@ -16754,50 +15032,70 @@ class ParticleContainer_pureSoA_5_0_polymorphic:
 
     @property
     def finest_level(self) -> int: ...
-
     @overload
-    def Define(self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray, /) -> None: ...
-
+    def Define(
+        self, arg0: Geometry, arg1: DistributionMapping, arg2: BoxArray, /
+    ) -> None: ...
     @overload
-    def Define(self, arg0: Vector_Geometry, arg1: Vector_DistributionMapping, arg2: Vector_BoxArray, arg3: Vector_int, /) -> None: ...
-
+    def Define(
+        self,
+        arg0: Vector_Geometry,
+        arg1: Vector_DistributionMapping,
+        arg2: Vector_BoxArray,
+        arg3: Vector_int,
+        /,
+    ) -> None: ...
     @overload
-    def Define(self, arg0: Vector_Geometry, arg1: Vector_DistributionMapping, arg2: Vector_BoxArray, arg3: Vector_IntVect, /) -> None: ...
-
+    def Define(
+        self,
+        arg0: Vector_Geometry,
+        arg1: Vector_DistributionMapping,
+        arg2: Vector_BoxArray,
+        arg3: Vector_IntVect,
+        /,
+    ) -> None: ...
     def num_local_tiles_at_level(self, level: int) -> int: ...
-
     def reserve_data(self) -> None: ...
-
     def resize_data(self) -> None: ...
-
     def increment(self, arg0: MultiFab, arg1: int, /) -> None: ...
-
     @overload
-    def redistribute(self, lev_min: int = 0, lev_max: int = -1, nGrow: int = 0, local: int = 0, remove_negative: bool = True) -> None: ...
-
+    def redistribute(
+        self,
+        lev_min: int = 0,
+        lev_max: int = -1,
+        nGrow: int = 0,
+        local: int = 0,
+        remove_negative: bool = True,
+    ) -> None: ...
     @overload
-    def redistribute(self, lev_min: int = 0, lev_max: int = -1, nGrow: IntVect1D = ..., local: bool = False, max_cells_moved: IntVect1D = ..., remove_negative: bool = True) -> None: ...
-
+    def redistribute(
+        self,
+        lev_min: int = 0,
+        lev_max: int = -1,
+        nGrow: IntVect1D = ...,
+        local: bool = False,
+        max_cells_moved: IntVect1D = ...,
+        remove_negative: bool = True,
+    ) -> None: ...
     def sort_particles_by_cell(self) -> None: ...
-
     def sort_particles_by_bin(self, arg: IntVect1D, /) -> None: ...
-
     def OK(self, lev_min: int = 0, lev_max: int = -1, nGrow: int = 0) -> bool: ...
-
     def print_capacity(self) -> list[int]: ...
-
     def shrink_t_fit(self) -> None: ...
-
-    def number_of_particles_at_level(self, level: int, only_valid: bool = True, only_local: bool = False) -> int: ...
-
-    def number_of_particles_in_grid(self, level: int, only_valid: bool = True, only_local: bool = False) -> Vector_Long: ...
-
+    def number_of_particles_at_level(
+        self, level: int, only_valid: bool = True, only_local: bool = False
+    ) -> int: ...
+    def number_of_particles_in_grid(
+        self, level: int, only_valid: bool = True, only_local: bool = False
+    ) -> Vector_Long: ...
     def number_of_particles(self, only_local: bool = False) -> int:
         """
         Return the number of valid particles on all MPI ranks, unless only_local is specified.
         """
 
-    def total_number_of_particles(self, only_valid: bool = True, only_local: bool = False) -> int:
+    def total_number_of_particles(
+        self, only_valid: bool = True, only_local: bool = False
+    ) -> int:
         """
         Return the number of particles (only valid or including invalid) on all MPI ranks, unless only_local is specified.
         """
@@ -16807,24 +15105,26 @@ class ParticleContainer_pureSoA_5_0_polymorphic:
         """Return the number of valid particles on all MPI ranks"""
 
     def remove_particles_at_level(self, arg: int, /) -> None: ...
-
     def remove_particles_not_at_finestLevel(self) -> None: ...
-
-    def add_particles_at_level(self, particles: ParticleTile_pureSoA_5_0_polymorphic, level: int, ngrow: int = 0) -> None: ...
-
+    def add_particles_at_level(
+        self,
+        particles: ParticleTile_pureSoA_5_0_polymorphic,
+        level: int,
+        ngrow: int = 0,
+    ) -> None: ...
     def clear_particles(self) -> None: ...
-
-    def add_particles(self, other: ParticleContainer_pureSoA_5_0_polymorphic, local: bool = False) -> None: ...
-
+    def add_particles(
+        self, other: ParticleContainer_pureSoA_5_0_polymorphic, local: bool = False
+    ) -> None: ...
     def restart(self, dir: str, file: str) -> None: ...
-
     def restart_checkpoint(self, dir: str, file: str, is_checkpoint: bool) -> None: ...
-
     def write_plotfile(self, dir: str, name: str) -> None: ...
-
-    def get_particles(self, level: int) -> dict[tuple[int, int], ParticleTile_pureSoA_5_0_polymorphic]: ...
-
-    def define_and_return_particle_tile(self, lev: int, grid: int, tile: int) -> ParticleTile_pureSoA_5_0_polymorphic:
+    def get_particles(
+        self, level: int
+    ) -> dict[tuple[int, int], ParticleTile_pureSoA_5_0_polymorphic]: ...
+    def define_and_return_particle_tile(
+        self, lev: int, grid: int, tile: int
+    ) -> ParticleTile_pureSoA_5_0_polymorphic:
         """
         Define, if necessary, and return the particle tile at ``(lev, grid, tile)``.
 
@@ -16832,7 +15132,15 @@ class ParticleContainer_pureSoA_5_0_polymorphic:
         The returned tile is owned by the particle container.
         """
 
-    def init_random(self, arg0: int, arg1: int, arg2: ParticleInitType_pureSoA_5_0, arg3: bool, arg4: RealBox, /) -> None: ...
+    def init_random(
+        self,
+        arg0: int,
+        arg1: int,
+        arg2: ParticleInitType_pureSoA_5_0,
+        arg3: bool,
+        arg4: RealBox,
+        /,
+    ) -> None: ...
 
     Iterator: object = ...
     """amrex iterator for particle boxes"""
@@ -16840,75 +15148,67 @@ class ParticleContainer_pureSoA_5_0_polymorphic:
     ConstIterator: object = ...
     """amrex constant iterator for particle boxes (read-only)"""
 
-def pack_ids(arg0: Annotated[NDArray[numpy.uint64], dict(shape=(None,))], arg1: Annotated[NDArray[numpy.int64], dict(shape=(None,))], /) -> object: ...
-
-def pack_cpus(arg0: Annotated[NDArray[numpy.uint64], dict(shape=(None,))], arg1: Annotated[NDArray[numpy.int32], dict(shape=(None,))], /) -> object: ...
-
+def pack_ids(
+    arg0: Annotated[NDArray[numpy.uint64], dict(shape=(None,))],
+    arg1: Annotated[NDArray[numpy.int64], dict(shape=(None,))],
+    /,
+) -> object: ...
+def pack_cpus(
+    arg0: Annotated[NDArray[numpy.uint64], dict(shape=(None,))],
+    arg1: Annotated[NDArray[numpy.int32], dict(shape=(None,))],
+    /,
+) -> object: ...
 @overload
 def unpack_ids(arg: int, /) -> int: ...
-
 @overload
-def unpack_ids(arg: Annotated[NDArray[numpy.uint64], dict(order='C')], /) -> object: ...
-
+def unpack_ids(arg: Annotated[NDArray[numpy.uint64], dict(order="C")], /) -> object: ...
 @overload
 def unpack_cpus(arg: int, /) -> int: ...
-
 @overload
-def unpack_cpus(arg: Annotated[NDArray[numpy.uint64], dict(order='C')], /) -> object: ...
-
+def unpack_cpus(
+    arg: Annotated[NDArray[numpy.uint64], dict(order="C")], /
+) -> object: ...
 def make_invalid(arg: int, /) -> int: ...
-
 def make_valid(arg: int, /) -> int: ...
-
 def is_valid(arg: int, /) -> bool: ...
-
-def write_single_level_plotfile(plotfilename: str, mf: MultiFab, varnames: Vector_string, geom: Geometry, time: float, level_step: int, versionName: str = 'HyperCLaw-V1.1', levelPrefix: str = 'Level_', mfPrefix: str = 'Cell', extra_dirs: Vector_string = ...) -> None:
+def write_single_level_plotfile(
+    plotfilename: str,
+    mf: MultiFab,
+    varnames: Vector_string,
+    geom: Geometry,
+    time: float,
+    level_step: int,
+    versionName: str = "HyperCLaw-V1.1",
+    levelPrefix: str = "Level_",
+    mfPrefix: str = "Cell",
+    extra_dirs: Vector_string = ...,
+) -> None:
     """Writes single level plotfile"""
 
 class PlotFileData:
     def __init__(self, arg: str, /) -> None: ...
-
     def spaceDim(self) -> int: ...
-
     def time(self) -> float: ...
-
     def finestLevel(self) -> int: ...
-
     def refRatio(self, arg: int, /) -> int: ...
-
     def levelStep(self, arg: int, /) -> int: ...
-
     def boxArray(self, arg: int, /) -> BoxArray: ...
-
     def DistributionMap(self, arg: int, /) -> DistributionMapping: ...
-
     @overload
     def syncDistributionMap(self, arg: PlotFileData, /) -> None: ...
-
     @overload
     def syncDistributionMap(self, arg0: int, arg1: PlotFileData, /) -> None: ...
-
     def coordSys(self) -> int: ...
-
     def probDomain(self, arg: int, /) -> Box: ...
-
     def probSize(self) -> list[float]: ...
-
     def probLo(self) -> list[float]: ...
-
     def probHi(self) -> list[float]: ...
-
     def cellSize(self, arg: int, /) -> list[float]: ...
-
     def varNames(self) -> Vector_string: ...
-
     def nComp(self) -> int: ...
-
     def nGrowVect(self, arg: int, /) -> IntVect1D: ...
-
     @overload
     def get(self, arg: int, /) -> MultiFab: ...
-
     @overload
     def get(self, arg0: int, arg1: str, /) -> MultiFab: ...
 
@@ -16934,4 +15234,4 @@ class VisMF:
 
 __author__: str = ...
 
-__license__: str = 'BSD-3-Clause-LBNL'
+__license__: str = "BSD-3-Clause-LBNL"
