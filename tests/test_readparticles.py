@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import os
 import shutil
 
 import numpy as np
@@ -104,5 +105,181 @@ def test_read_particles_roundtrip():
             np.testing.assert_allclose(
                 soa.get_real_data(w_idx).to_numpy(copy=False), 1.2345
             )
+
+    shutil.rmtree(plt_file_name)
+
+
+@pytest.mark.skipif(amr.Config.spacedim != 3, reason="Requires AMREX_SPACEDIM = 3")
+def test_read_particles_missing_header():
+    """Wrong paths raise a catchable Python exception instead of aborting."""
+    plt_file_name = "plt_read_missing"
+    write_test_plotfile(plt_file_name, 5)
+
+    # wrong particle sub-directory
+    with pytest.raises(FileNotFoundError, match="particle Header"):
+        amr.read_particles(plt_file_name, "no_such_dir")
+
+    # non-existing plotfile directory
+    with pytest.raises(FileNotFoundError, match="particle Header"):
+        amr.read_particles("no_such_plotfile", "particles")
+
+    shutil.rmtree(plt_file_name)
+
+
+@pytest.mark.skipif(amr.Config.spacedim != 3, reason="Requires AMREX_SPACEDIM = 3")
+def test_read_particles_particle_only_output():
+    """A bare particle output without a top-level plotfile Header raises with
+    container=None and reads fine into a user-provided container.
+
+    Note: conforming AMReX particle plotfiles always include a top-level
+    plotfile Header (applications write a dummy MultiFab for pure-particle
+    outputs to ensure that), so this layout is off-spec - but it must fail
+    with a clear Python exception, not an amrex::Abort.
+    """
+    plt_file_name = "plt_read_ponly"
+    n_part = 10
+
+    domain_box = amr.Box([0, 0, 0], [31, 31, 31])
+    real_box = amr.RealBox([-0.5, -0.5, -0.5], [0.5, 0.5, 0.5])
+    geom = amr.Geometry(domain_box, real_box, amr.CoordSys.cartesian, [0, 0, 0])
+    ba = amr.BoxArray(domain_box)
+    dm = amr.DistributionMapping(ba, 1)
+
+    pc = amr.ParticleContainer_pureSoA_3_0_polymorphic(geom, dm, ba)
+    pc.arena = amr.The_Arena()
+    myt = amr.ParticleInitType_pureSoA_3_0()
+    myt.real_array_data = [0.0, 0.0, 0.0]  # x, y, z (overwritten by init_random)
+    myt.int_array_data = []
+    pc.init_random(n_part, 1, myt, False, real_box)
+    pc.write_plotfile(
+        plt_file_name, "particles", amr.Vector_string([]), amr.Vector_string([])
+    )
+
+    with pytest.raises(FileNotFoundError, match="plotfile Header"):
+        amr.read_particles(plt_file_name, "particles")
+
+    # reading into an explicitly geometry-defined container works
+    pc_read = amr.ParticleContainer_pureSoA_3_0_polymorphic(geom, dm, ba)
+    pc_read.arena = amr.The_Arena()
+    pc_read = amr.read_particles(plt_file_name, "particles", container=pc_read)
+    assert pc_read.total_number_of_particles() == n_part
+
+    shutil.rmtree(plt_file_name)
+
+
+@pytest.mark.skipif(amr.Config.spacedim != 3, reason="Requires AMREX_SPACEDIM = 3")
+def test_read_particles_checkpoint_needs_container():
+    """An application checkpoint's top-level Header is not in plotfile format:
+    geometry recovery must fail with a clear error pointing to 'container'."""
+    plt_file_name = "plt_read_chk_src"
+    chk_file_name = "chk_read_fake"
+    write_test_plotfile(plt_file_name, 5)
+
+    # fake an application checkpoint: valid particle data next to a
+    # checkpoint-format top-level Header (as written by amrex::Amr::checkPoint)
+    os.makedirs(chk_file_name)
+    shutil.copytree(
+        os.path.join(plt_file_name, "particles"),
+        os.path.join(chk_file_name, "particles"),
+    )
+    with open(os.path.join(chk_file_name, "Header"), "w") as f:
+        f.write("CheckPointVersion_1.0\n")
+
+    with pytest.raises(ValueError, match="container"):
+        amr.read_particles(chk_file_name, "particles")
+
+    shutil.rmtree(plt_file_name)
+    shutil.rmtree(chk_file_name)
+
+
+@pytest.mark.skipif(amr.Config.spacedim != 3, reason="Requires AMREX_SPACEDIM = 3")
+def test_read_particles_multilevel():
+    """Particles from a multi-level plotfile are read back completely: the
+    auto-created container is single-level and gathers them all on level 0."""
+    plt_file_name = "plt_read_ml"
+    n_part = 24
+
+    # two-level AmrCore hierarchy over [-0.5, 0.5]^3 with 16^3 coarse cells;
+    # only the upper-x half of the domain is refined, so particles end up
+    # distributed over both levels and the fine-level BoxArray covers neither
+    # the whole domain nor the coarse index space
+    class HalfRefinedCore(amr.AmrCore):
+        def make_new_level_from_scratch(self, lev, time, ba, dm):
+            pass
+
+        def make_new_level_from_coarse(self, lev, time, ba, dm):
+            pass
+
+        def remake_level(self, lev, time, ba, dm):
+            pass
+
+        def clear_level(self, lev):
+            pass
+
+        def error_est(self, lev, tags, time, ngrow):
+            tags.set_val(amr.TagBox.SET, amr.Box([8, 0, 0], [15, 15, 15]))
+
+    real_box = amr.RealBox([-0.5, -0.5, -0.5], [0.5, 0.5, 0.5])
+    core = HalfRefinedCore(
+        real_box,
+        1,
+        amr.Vector_int([16, 16, 16]),
+        0,  # cartesian
+        amr.Vector_IntVect([amr.IntVect(2)]),
+        [0, 0, 0],
+    )
+    core.init_from_scratch(0.0)
+    assert core.finest_level == 1
+    gdb = core.get_par_gdb()
+
+    # matching two-level mesh plotfile, so the geometry can be recovered
+    mfs = []
+    for lev in range(2):
+        mf = amr.MultiFab(gdb.box_array(lev), gdb.dist_map(lev), 1, 0)
+        mf.set_val(np.pi)
+        mfs.append(mf)
+    amr.write_multi_level_plotfile(
+        plt_file_name,
+        mfs,
+        ["density"],
+        [core.geom(0), core.geom(1)],
+        1.0,
+        [200, 200],
+        [amr.IntVect(2)],
+    )
+
+    # multi-level pure-SoA particle container with a runtime component
+    pc = amr.ParticleContainer_pureSoA_3_0_polymorphic(gdb)
+    pc.arena = amr.The_Arena()
+    myt = amr.ParticleInitType_pureSoA_3_0()
+    myt.real_array_data = [0.0, 0.0, 0.0]  # x, y, z (overwritten by init_random)
+    myt.int_array_data = []
+    pc.init_random(n_part, 1, myt, False, real_box)
+    pc.add_real_comp("w", True)
+    for lvl in range(pc.finest_level + 1):
+        for pti in pc.iterator(level=lvl):
+            pti.soa().get_real_data(3).assign(1.2345)  # "w": after x,y,z
+    pc.redistribute()
+
+    # the particle file must exercise both levels
+    n_lev = [pc.number_of_particles_at_level(lvl) for lvl in range(2)]
+    assert n_lev[0] > 0 and n_lev[1] > 0
+    assert sum(n_lev) == n_part
+
+    pc.write_plotfile(
+        plt_file_name, "particles", amr.Vector_string(["w"]), amr.Vector_string([])
+    )
+    header = amr.ParticleHeader.read(plt_file_name, "particles")
+    assert header.finest_level == 1
+
+    pc_read = amr.read_particles(plt_file_name, "particles")
+    assert pc_read.finest_level == 0
+    assert pc_read.total_number_of_particles() == n_part
+
+    w_idx = pc_read.get_real_comp_index("w")
+    for pti in pc_read.iterator(level=0):
+        np.testing.assert_allclose(
+            pti.soa().get_real_data(w_idx).to_numpy(copy=False), 1.2345
+        )
 
     shutil.rmtree(plt_file_name)

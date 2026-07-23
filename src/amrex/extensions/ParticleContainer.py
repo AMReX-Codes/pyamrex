@@ -6,6 +6,7 @@ Authors: Axel Huebl
 License: BSD-3-Clause-LBNL
 """
 
+import os
 import warnings
 
 from .Iterator import getitem, next
@@ -199,22 +200,63 @@ def read_particles(
     container : ParticleContainer, optional
         An existing, geometry-defined container to restart into. If ``None``
         (default), the geometry is recovered from the plotfile's
-        :py:class:`amrex.PlotFileData` and a fresh polymorphic pure-SoA
-        container is created.
+        :py:class:`amrex.PlotFileData` and a fresh polymorphic pure-SoA,
+        single-level container is created. Particles from all levels in the
+        file are read; in the auto-created container they are all placed on
+        level 0 (positions are preserved, the MR level assignment is not).
+        Since plotfiles do not record periodicity, the auto-created geometry
+        is non-periodic. Application *checkpoints* store their geometry in an
+        application-specific format, so reading those requires passing a
+        ``container``.
 
     Returns
     -------
     ParticleContainer
         The populated particle container. Iterate the data via, e.g.,
         ``for pti in pc.iterator(level=0): soa = pti.soa()``.
+
+    Raises
+    ------
+    FileNotFoundError
+        If there is no particle ``Header`` under ``plotfile/particle_dir``, or
+        if ``container`` is ``None`` and there is no top-level plotfile
+        ``Header`` to recover the AMR geometry from.
+    ValueError
+        If ``container`` is ``None`` and ``plotfile`` is an application
+        checkpoint, whose top-level ``Header`` does not describe the geometry.
     """
+    particle_header = os.path.join(plotfile, particle_dir, "Header")
+    if not os.path.isfile(particle_header):
+        raise FileNotFoundError(
+            f"read_particles: no particle Header found at '{particle_header}'. "
+            f"Check that '{plotfile}' is an AMReX plotfile/checkpoint directory "
+            f"and that it contains particle output under '{particle_dir}/'."
+        )
     header = amr.ParticleHeader.read(plotfile, particle_dir)
 
     pc = container
     if pc is None:
-        # recover the AMR geometry from the plotfile metadata
+        # recover the AMR geometry from the plotfile metadata. Conforming
+        # particle plotfiles always contain a top-level plotfile Header: AMReX
+        # writes a dummy MultiFab for pure-particle outputs to ensure that.
+        plotfile_header = os.path.join(plotfile, "Header")
+        if not os.path.isfile(plotfile_header):
+            raise FileNotFoundError(
+                f"read_particles: no plotfile Header found at "
+                f"'{plotfile_header}', so the AMR geometry cannot be "
+                "recovered. To read anyway, pass an existing, geometry-defined "
+                "'container'."
+            )
+        with open(plotfile_header) as f:
+            first_line = f.readline().strip()
+        if first_line.startswith("CheckPointVersion"):
+            raise ValueError(
+                f"read_particles: '{plotfile}' is an application checkpoint, "
+                "not a plotfile; its top-level Header does not describe the "
+                "AMR geometry. Pass an existing, geometry-defined 'container' "
+                "to read into instead."
+            )
         plt = amr.PlotFileData(plotfile)
-        finest = plt.finestLevel()
         prob_domain = plt.probDomain(0)
         domain_box = amr.Box(prob_domain.small_end, prob_domain.big_end)
         real_box = amr.RealBox(plt.probLo(), plt.probHi())
@@ -229,7 +271,10 @@ def read_particles(
             raise AttributeError(
                 f"pyAMReX was built without the pure-SoA container '{pc_type_name}'."
             ) from e
-        pc = pc_type(geom, plt.DistributionMap(finest), plt.boxArray(finest))
+        # a single-level container defined on the coarsest level: Restart reads
+        # particles from every level in the file and Redistribute() then places
+        # them all on level 0
+        pc = pc_type(geom, plt.DistributionMap(0), plt.boxArray(0))
         # the polymorphic allocator needs an arena before any tile allocation
         pc.arena = amr.The_Arena()
 
