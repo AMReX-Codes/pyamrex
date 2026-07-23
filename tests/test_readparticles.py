@@ -67,7 +67,16 @@ def test_read_particles_header():
     n_part = 15
     real_names, int_names = write_test_plotfile(plt_file_name, n_part)
 
+    # Manual: Read Particle Header START
+    # inspect the on-disk particle component layout, without reading the data
     header = amr.ParticleHeader.read(plt_file_name, "particles")
+
+    print(header.real_comp_names)  # e.g., ["w"]
+    print(header.int_comp_names)  # e.g., ["i1", "i2"]
+    print(header.num_particles)  # e.g., 15
+    print(header.is_checkpoint)  # False for plotfiles, True for checkpoints
+    # Manual: Read Particle Header END
+
     assert header.dim == 3
     # pure SoA: the AMREX_SPACEDIM positions are implicit, so only the runtime
     # real component "w" is counted here
@@ -88,7 +97,22 @@ def test_read_particles_roundtrip():
     n_part = 15
     real_names, int_names = write_test_plotfile(plt_file_name, n_part)
 
+    # Manual: Read Plotfile Particles START
+    # read all particles from <plotfile>/particles/ into a new container;
+    # the component names and layout are discovered from the file
     pc = amr.read_particles(plt_file_name, "particles")
+
+    # access the data per tile, e.g., as zero-copy numpy/cupy arrays ...
+    w_idx = pc.get_real_comp_index("w")  # runtime component from the file
+    for lvl in range(pc.finest_level + 1):
+        for pti in pc.iterator(level=lvl):
+            soa = pti.soa()
+            x = soa.get_real_data(0).to_xp()  # position x
+            w = soa.get_real_data(w_idx).to_xp()  # runtime component "w"
+
+    # ... or copy all (MPI rank-local) particles into a pandas DataFrame
+    # df = pc.to_df()
+    # Manual: Read Plotfile Particles END
 
     # the runtime layout was reconstructed from the file
     for name in real_names:
@@ -98,13 +122,8 @@ def test_read_particles_roundtrip():
     assert pc.total_number_of_particles() == n_part
 
     # and the runtime component values round-tripped
-    w_idx = pc.get_real_comp_index("w")
-    for lvl in range(pc.finest_level + 1):
-        for pti in pc.iterator(level=lvl):
-            soa = pti.soa()
-            np.testing.assert_allclose(
-                soa.get_real_data(w_idx).to_numpy(copy=False), 1.2345
-            )
+    assert x.size == n_part
+    np.testing.assert_allclose(w, 1.2345)
 
     shutil.rmtree(plt_file_name)
 
@@ -159,9 +178,13 @@ def test_read_particles_particle_only_output():
         amr.read_particles(plt_file_name, "particles")
 
     # reading into an explicitly geometry-defined container works
+    # Manual: Read Particles Existing Container START
+    # define the geometry in the application, e.g., for a checkpoint restart,
+    # then fill the container from the file
     pc_read = amr.ParticleContainer_pureSoA_3_0_polymorphic(geom, dm, ba)
     pc_read.arena = amr.The_Arena()
     pc_read = amr.read_particles(plt_file_name, "particles", container=pc_read)
+    # Manual: Read Particles Existing Container END
     assert pc_read.total_number_of_particles() == n_part
 
     shutil.rmtree(plt_file_name)
