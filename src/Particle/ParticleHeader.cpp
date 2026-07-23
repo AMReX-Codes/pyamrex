@@ -13,7 +13,26 @@ void init_ParticleHeader(py::module& m)
 {
     using namespace amrex;
 
-    py::class_<ParticleHeader>(m, "ParticleHeader")
+    py::class_<ParticleHeader> particle_header(m, "ParticleHeader");
+
+    py::class_<ParticleHeader::GridEntry>(particle_header, "GridEntry")
+        .def(py::init<>())
+        .def_readwrite("which", &ParticleHeader::GridEntry::which,
+            "index of the binary data file (DATA_XXXXX) holding this grid's particles")
+        .def_readwrite("count", &ParticleHeader::GridEntry::count,
+            "number of particles stored for this grid")
+        .def_readwrite("where", &ParticleHeader::GridEntry::where,
+            "byte offset of this grid's particle data within the data file")
+        .def("__repr__",
+            [](ParticleHeader::GridEntry const & e) {
+                return "<amrex.ParticleHeader.GridEntry: DATA_" +
+                    std::to_string(e.which) + ", " +
+                    std::to_string(e.count) + " particles at byte " +
+                    std::to_string(e.where) + ">";
+            })
+        ;
+
+    particle_header
         .def(py::init<>())
 
         .def_static("read", &ParticleHeader::read,
@@ -53,6 +72,22 @@ void init_ParticleHeader(py::module& m)
             "the next particle id to hand out")
         .def_readwrite("finest_level", &ParticleHeader::finest_level,
             "finest level present in the file")
+        .def_property_readonly("grids",
+            [](ParticleHeader const & h) {
+                py::list levels;
+                for (auto const & lev : h.grids) {
+                    py::list entries;
+                    for (auto const & entry : lev) {
+                        entries.append(entry);
+                    }
+                    levels.append(entries);
+                }
+                return levels;
+            },
+            "per level and grid: where each grid's binary particle data is\n"
+            "stored, as a list (levels) of lists of\n"
+            ":py:class:`~amrex.ParticleHeader.GridEntry`. Grids without\n"
+            "particles have a zero ``count``.")
 
         .def("__repr__",
             [](ParticleHeader const & h) {
