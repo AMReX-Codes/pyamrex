@@ -172,6 +172,47 @@ def pc_to_df(self, local=True, comm=None, root_rank=0):
     return df
 
 
+def list_particle_species(plotfile):
+    """List the particle species stored in a plotfile or checkpoint.
+
+    Particle data lives in sub-directories of a plotfile, named by the writing
+    application (e.g. ``"particles"``, ``"electrons"``, ``"particle0"``). This
+    scans the plotfile for sub-directories that contain a particle ``Header``
+    file and returns their names, ready to be passed as ``particle_dir`` to
+    :py:func:`read_particles` or :py:class:`amrex.ParticleHeader`.
+
+    Parameters
+    ----------
+    plotfile : str
+        Path to the plotfile / checkpoint directory.
+
+    Returns
+    -------
+    list of str
+        Names of the particle species sub-directories, sorted alphabetically.
+    """
+    import os
+
+    species = []
+    for entry in sorted(os.scandir(plotfile), key=lambda e: e.name):
+        if not entry.is_dir():
+            continue
+        header = os.path.join(entry.path, "Header")
+        if not os.path.isfile(header):
+            continue
+        try:
+            with open(header) as f:
+                first_token = f.readline().strip()
+        except OSError:
+            continue
+        # particle Headers start with a version string like
+        # "Version_Two_Dot_One_double"; the mesh Header sits at the top level
+        # and mesh level directories (Level_*) contain no Header file
+        if first_token.startswith("Version_"):
+            species.append(entry.name)
+    return species
+
+
 def read_particles(
     amr, plotfile, particle_dir="particles", communicate=True, container=None
 ):
