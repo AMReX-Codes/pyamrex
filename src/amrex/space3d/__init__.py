@@ -48,3 +48,18 @@ register_SmallMatrix_extension(amrex_3d_pybind)
 register_SoA_extension(amrex_3d_pybind)
 register_AoS_extension(amrex_3d_pybind)
 register_ParticleContainer_extension(amrex_3d_pybind)
+
+
+from ..extensions.ParticleContainer import read_particles as _read_particles
+
+
+def read_particles(
+    plotfile, particle_dir="particles", communicate=True, container=None
+):
+    """Read AMReX particle data from a plotfile/checkpoint into a container.
+
+    See :py:func:`amrex.extensions.ParticleContainer.read_particles` for details.
+    """
+    return _read_particles(
+        amrex_3d_pybind, plotfile, particle_dir, communicate, container
+    )

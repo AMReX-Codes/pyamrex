@@ -70,3 +70,37 @@ def test_plotfiledata_read():
             nboxes += 1
 
         assert nboxes == 1
+
+
+@pytest.mark.skipif(amr.Config.spacedim != 3, reason="Requires AMREX_SPACEDIM = 3")
+def test_plotfiledata_read_docs():
+    """Read a plotfile: compact example included in the manual."""
+    plt_filename = "test_plt00200_docs"
+    write_test_plotfile(plt_filename)
+
+    # Manual: Read Plotfile Mesh START
+    plt = amr.PlotFileData(plt_filename)
+
+    # meta-data: AMR levels, domain extent and cell sizes
+    finest_level = plt.finestLevel()
+    prob_lo = plt.probLo()  # physical coordinates of the lower domain corner
+    prob_hi = plt.probHi()  # ... and the upper domain corner
+    cell_size = plt.cellSize(0)  # cell sizes (dx, dy, dz) on level 0
+    var_names = plt.varNames()  # stored field components, e.g., ["density"]
+
+    # read a field component on a level as a MultiFab ...
+    mf_density = plt.get(0, "density")
+
+    # ... and access its blocks as numpy/cupy arrays (zero-copy views)
+    total = 0.0
+    for mfi in mf_density:
+        marr_xp = mf_density.array(mfi).to_xp()
+        total += marr_xp.sum()  # compute, plot, analyze, ...
+    # Manual: Read Plotfile Mesh END
+
+    assert finest_level == 0
+    assert prob_lo == [-0.5, -0.5, -0.5]
+    assert prob_hi == [0.5, 0.5, 0.5]
+    assert cell_size == [1.0 / 32.0] * 3
+    assert var_names == amr.Vector_string(["density"])
+    assert np.isclose(total, np.pi * 32**3)

@@ -1,19 +1,19 @@
+.. _usage-how-to:
 .. _usage-workflows:
 
-Workflows
-=========
+How-To Guides
+=============
 
 This section collects typical user workflows and best practices for pyAMReX.
-
-.. note::
-
-   TODO: Add more workflows as in https://warpx.readthedocs.io/en/latest/usage/workflows.html
 
 .. toctree::
    :maxdepth: 2
 
+   workflows/read_plotfiles
 ..   workflows/parallelization
 ..   workflows/profiling
-   workflows/debugging
-..   workflows/libensemble
-..   workflows/plot_distribution_mapping
+..   workflows/debugging
+
+.. note::
+
+   TODO: Add more workflows as in https://warpx.readthedocs.io/en/latest/usage/workflows.html
