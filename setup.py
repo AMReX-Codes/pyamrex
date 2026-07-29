@@ -14,7 +14,7 @@ import subprocess
 import sys
 import sysconfig
 
-from setuptools import Extension, setup
+from setuptools import Distribution, Extension, setup
 from setuptools.command.build import build
 from setuptools.command.build_ext import build_ext
 
@@ -45,8 +45,17 @@ class CopyPreBuild(build):
             PYAMREX_libdir,
             dst_path,
             dirs_exist_ok=True,
-            ignore=shutil.ignore_patterns("chk*", "diags*", "plt*"),
+            ignore=shutil.ignore_patterns(
+                "__pycache__", "*.pyc", "chk*", "diags*", "plt*"
+            ),
         )
+
+
+class BinaryDistribution(Distribution):
+    """Keep prebuilt-artifact wheels correctly tagged as platform wheels."""
+
+    def has_ext_modules(self):
+        return True
 
 
 class CMakeExtension(Extension):
@@ -273,6 +282,7 @@ setup(
     },
     # CMake: self-built as extension module
     ext_modules=cxx_modules,
+    distclass=BinaryDistribution,
     cmdclass=cmdclass,
     zip_safe=False,
     python_requires=">=3.11",
