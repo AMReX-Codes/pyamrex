@@ -222,6 +222,7 @@ from amrex.space3d.amrex_3d_pybind import (
     ParticleContainer_pureSoA_3_0_polymorphic,
     ParticleContainer_pureSoA_7_0_polymorphic,
     ParticleContainer_pureSoA_11_0_polymorphic,
+    ParticleHeader,
     ParticleInitType_2_1_3_1,
     ParticleInitType_16_4_0_0,
     ParticleInitType_pureSoA_3_0,
@@ -351,6 +352,7 @@ from amrex.space3d.amrex_3d_pybind import (
     ubound,
     unpack_cpus,
     unpack_ids,
+    write_multi_level_plotfile,
     write_single_level_plotfile,
 )
 from amrex.space3d.amrex_3d_pybind import IntVect3D as IntVect
@@ -581,6 +583,7 @@ __all__: list[str] = [
     "ParticleContainer_pureSoA_3_0_pinned",
     "ParticleContainer_pureSoA_3_0_polymorphic",
     "ParticleContainer_pureSoA_7_0_polymorphic",
+    "ParticleHeader",
     "ParticleInitType_16_4_0_0",
     "ParticleInitType_2_1_3_1",
     "ParticleInitType_pureSoA_11_0",
@@ -708,6 +711,7 @@ __all__: list[str] = [
     "min",
     "pack_cpus",
     "pack_ids",
+    "read_particles",
     "refine",
     "register_AoS_extension",
     "register_Array4_extension",
@@ -722,6 +726,7 @@ __all__: list[str] = [
     "unpack_cpus",
     "unpack_ids",
     "volume",
+    "write_multi_level_plotfile",
     "write_single_level_plotfile",
 ]
 
@@ -735,12 +740,22 @@ def d_decl(x, y, z):
     Return a tuple of the three passed elements
     """
 
+def read_particles(
+    plotfile, particle_dir="particles", communicate=True, container=None
+):
+    """
+    Read AMReX particle data from a plotfile/checkpoint into a container.
+
+        See :py:func:`amrex.extensions.ParticleContainer.read_particles` for details.
+
+    """
+
 Exact: amrex_3d_pybind.GrowthStrategy
 Geometric: amrex_3d_pybind.GrowthStrategy
 Poisson: amrex_3d_pybind.GrowthStrategy
 __author__: str = "Axel Huebl, Ryan T. Sandberg, Shreyas Ananthan, David P. Grote, Revathi Jambunathan, Edoardo Zoni, Remi Lehe, Andrew Myers, Weiqun Zhang"
 __license__: str = "BSD-3-Clause-LBNL"
-__version__: str = "26.07-29-g8addf4d92318"
+__version__: str = "26.07-54-gaa5b8cc69640"
 basic: amrex_3d_pybind.EBSupport
 full: amrex_3d_pybind.EBSupport
 volume: amrex_3d_pybind.EBSupport

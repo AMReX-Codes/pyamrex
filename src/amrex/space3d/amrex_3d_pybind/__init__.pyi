@@ -253,6 +253,7 @@ __all__: list[str] = [
     "ParticleContainer_pureSoA_3_0_pinned",
     "ParticleContainer_pureSoA_3_0_polymorphic",
     "ParticleContainer_pureSoA_7_0_polymorphic",
+    "ParticleHeader",
     "ParticleInitType_16_4_0_0",
     "ParticleInitType_2_1_3_1",
     "ParticleInitType_pureSoA_11_0",
@@ -383,6 +384,7 @@ __all__: list[str] = [
     "unpack_cpus",
     "unpack_ids",
     "volume",
+    "write_multi_level_plotfile",
     "write_single_level_plotfile",
 ]
 
@@ -397,7 +399,7 @@ class AMReX:
     def top() -> AMReX: ...
 
 class Config:
-    amrex_version: typing.ClassVar[str] = "26.07-29-g8addf4d92318"
+    amrex_version: typing.ClassVar[str] = "26.07-54-gaa5b8cc69640"
     gpu_backend = None
     have_eb: typing.ClassVar[bool] = True
     have_gpu: typing.ClassVar[bool] = False
@@ -18635,7 +18637,20 @@ class ParticleContainer_pureSoA_3_0_pinned:
         """
         Return the number of particles (only valid or including invalid) on all MPI ranks, unless only_local is specified.
         """
+    @typing.overload
     def write_plotfile(self, dir: str, name: str) -> None: ...
+    @typing.overload
+    def write_plotfile(
+        self,
+        dir: str,
+        name: str,
+        real_comp_names: Vector_string,
+        int_comp_names: Vector_string,
+    ) -> None:
+        """
+        Write a particle plotfile, naming the real and integer components.
+        For pure SoA containers, real_comp_names excludes the AMREX_SPACEDIM position components.
+        """
     @property
     def byte_spread(self) -> typing.Annotated[list[int], "FixedSize(3)"]: ...
     @property
@@ -19123,7 +19138,20 @@ class ParticleContainer_pureSoA_3_0_default:
         """
         Return the number of particles (only valid or including invalid) on all MPI ranks, unless only_local is specified.
         """
+    @typing.overload
     def write_plotfile(self, dir: str, name: str) -> None: ...
+    @typing.overload
+    def write_plotfile(
+        self,
+        dir: str,
+        name: str,
+        real_comp_names: Vector_string,
+        int_comp_names: Vector_string,
+    ) -> None:
+        """
+        Write a particle plotfile, naming the real and integer components.
+        For pure SoA containers, real_comp_names excludes the AMREX_SPACEDIM position components.
+        """
     @property
     def byte_spread(self) -> typing.Annotated[list[int], "FixedSize(3)"]: ...
     @property
@@ -19611,7 +19639,20 @@ class ParticleContainer_pureSoA_3_0_arena:
         """
         Return the number of particles (only valid or including invalid) on all MPI ranks, unless only_local is specified.
         """
+    @typing.overload
     def write_plotfile(self, dir: str, name: str) -> None: ...
+    @typing.overload
+    def write_plotfile(
+        self,
+        dir: str,
+        name: str,
+        real_comp_names: Vector_string,
+        int_comp_names: Vector_string,
+    ) -> None:
+        """
+        Write a particle plotfile, naming the real and integer components.
+        For pure SoA containers, real_comp_names excludes the AMREX_SPACEDIM position components.
+        """
     @property
     def byte_spread(self) -> typing.Annotated[list[int], "FixedSize(3)"]: ...
     @property
@@ -20099,7 +20140,20 @@ class ParticleContainer_pureSoA_3_0_polymorphic:
         """
         Return the number of particles (only valid or including invalid) on all MPI ranks, unless only_local is specified.
         """
+    @typing.overload
     def write_plotfile(self, dir: str, name: str) -> None: ...
+    @typing.overload
+    def write_plotfile(
+        self,
+        dir: str,
+        name: str,
+        real_comp_names: Vector_string,
+        int_comp_names: Vector_string,
+    ) -> None:
+        """
+        Write a particle plotfile, naming the real and integer components.
+        For pure SoA containers, real_comp_names excludes the AMREX_SPACEDIM position components.
+        """
     @property
     def byte_spread(self) -> typing.Annotated[list[int], "FixedSize(3)"]: ...
     @property
@@ -22363,7 +22417,20 @@ class ParticleContainer_2_1_3_1_pinned:
         """
         Return the number of particles (only valid or including invalid) on all MPI ranks, unless only_local is specified.
         """
+    @typing.overload
     def write_plotfile(self, dir: str, name: str) -> None: ...
+    @typing.overload
+    def write_plotfile(
+        self,
+        dir: str,
+        name: str,
+        real_comp_names: Vector_string,
+        int_comp_names: Vector_string,
+    ) -> None:
+        """
+        Write a particle plotfile, naming the real and integer components.
+        For pure SoA containers, real_comp_names excludes the AMREX_SPACEDIM position components.
+        """
     @property
     def byte_spread(self) -> typing.Annotated[list[int], "FixedSize(3)"]: ...
     @property
@@ -22866,7 +22933,20 @@ class ParticleContainer_2_1_3_1_default:
         """
         Return the number of particles (only valid or including invalid) on all MPI ranks, unless only_local is specified.
         """
+    @typing.overload
     def write_plotfile(self, dir: str, name: str) -> None: ...
+    @typing.overload
+    def write_plotfile(
+        self,
+        dir: str,
+        name: str,
+        real_comp_names: Vector_string,
+        int_comp_names: Vector_string,
+    ) -> None:
+        """
+        Write a particle plotfile, naming the real and integer components.
+        For pure SoA containers, real_comp_names excludes the AMREX_SPACEDIM position components.
+        """
     @property
     def byte_spread(self) -> typing.Annotated[list[int], "FixedSize(3)"]: ...
     @property
@@ -23369,7 +23449,20 @@ class ParticleContainer_2_1_3_1_arena:
         """
         Return the number of particles (only valid or including invalid) on all MPI ranks, unless only_local is specified.
         """
+    @typing.overload
     def write_plotfile(self, dir: str, name: str) -> None: ...
+    @typing.overload
+    def write_plotfile(
+        self,
+        dir: str,
+        name: str,
+        real_comp_names: Vector_string,
+        int_comp_names: Vector_string,
+    ) -> None:
+        """
+        Write a particle plotfile, naming the real and integer components.
+        For pure SoA containers, real_comp_names excludes the AMREX_SPACEDIM position components.
+        """
     @property
     def byte_spread(self) -> typing.Annotated[list[int], "FixedSize(3)"]: ...
     @property
@@ -23872,7 +23965,20 @@ class ParticleContainer_2_1_3_1_polymorphic:
         """
         Return the number of particles (only valid or including invalid) on all MPI ranks, unless only_local is specified.
         """
+    @typing.overload
     def write_plotfile(self, dir: str, name: str) -> None: ...
+    @typing.overload
+    def write_plotfile(
+        self,
+        dir: str,
+        name: str,
+        real_comp_names: Vector_string,
+        int_comp_names: Vector_string,
+    ) -> None:
+        """
+        Write a particle plotfile, naming the real and integer components.
+        For pure SoA containers, real_comp_names excludes the AMREX_SPACEDIM position components.
+        """
     @property
     def byte_spread(self) -> typing.Annotated[list[int], "FixedSize(3)"]: ...
     @property
@@ -26029,7 +26135,20 @@ class ParticleContainer_16_4_0_0_pinned:
         """
         Return the number of particles (only valid or including invalid) on all MPI ranks, unless only_local is specified.
         """
+    @typing.overload
     def write_plotfile(self, dir: str, name: str) -> None: ...
+    @typing.overload
+    def write_plotfile(
+        self,
+        dir: str,
+        name: str,
+        real_comp_names: Vector_string,
+        int_comp_names: Vector_string,
+    ) -> None:
+        """
+        Write a particle plotfile, naming the real and integer components.
+        For pure SoA containers, real_comp_names excludes the AMREX_SPACEDIM position components.
+        """
     @property
     def byte_spread(self) -> typing.Annotated[list[int], "FixedSize(3)"]: ...
     @property
@@ -26532,7 +26651,20 @@ class ParticleContainer_16_4_0_0_default:
         """
         Return the number of particles (only valid or including invalid) on all MPI ranks, unless only_local is specified.
         """
+    @typing.overload
     def write_plotfile(self, dir: str, name: str) -> None: ...
+    @typing.overload
+    def write_plotfile(
+        self,
+        dir: str,
+        name: str,
+        real_comp_names: Vector_string,
+        int_comp_names: Vector_string,
+    ) -> None:
+        """
+        Write a particle plotfile, naming the real and integer components.
+        For pure SoA containers, real_comp_names excludes the AMREX_SPACEDIM position components.
+        """
     @property
     def byte_spread(self) -> typing.Annotated[list[int], "FixedSize(3)"]: ...
     @property
@@ -27035,7 +27167,20 @@ class ParticleContainer_16_4_0_0_arena:
         """
         Return the number of particles (only valid or including invalid) on all MPI ranks, unless only_local is specified.
         """
+    @typing.overload
     def write_plotfile(self, dir: str, name: str) -> None: ...
+    @typing.overload
+    def write_plotfile(
+        self,
+        dir: str,
+        name: str,
+        real_comp_names: Vector_string,
+        int_comp_names: Vector_string,
+    ) -> None:
+        """
+        Write a particle plotfile, naming the real and integer components.
+        For pure SoA containers, real_comp_names excludes the AMREX_SPACEDIM position components.
+        """
     @property
     def byte_spread(self) -> typing.Annotated[list[int], "FixedSize(3)"]: ...
     @property
@@ -27538,7 +27683,20 @@ class ParticleContainer_16_4_0_0_polymorphic:
         """
         Return the number of particles (only valid or including invalid) on all MPI ranks, unless only_local is specified.
         """
+    @typing.overload
     def write_plotfile(self, dir: str, name: str) -> None: ...
+    @typing.overload
+    def write_plotfile(
+        self,
+        dir: str,
+        name: str,
+        real_comp_names: Vector_string,
+        int_comp_names: Vector_string,
+    ) -> None:
+        """
+        Write a particle plotfile, naming the real and integer components.
+        For pure SoA containers, real_comp_names excludes the AMREX_SPACEDIM position components.
+        """
     @property
     def byte_spread(self) -> typing.Annotated[list[int], "FixedSize(3)"]: ...
     @property
@@ -28449,7 +28607,20 @@ class ParticleContainer_pureSoA_11_0_polymorphic:
         """
         Return the number of particles (only valid or including invalid) on all MPI ranks, unless only_local is specified.
         """
+    @typing.overload
     def write_plotfile(self, dir: str, name: str) -> None: ...
+    @typing.overload
+    def write_plotfile(
+        self,
+        dir: str,
+        name: str,
+        real_comp_names: Vector_string,
+        int_comp_names: Vector_string,
+    ) -> None:
+        """
+        Write a particle plotfile, naming the real and integer components.
+        For pure SoA containers, real_comp_names excludes the AMREX_SPACEDIM position components.
+        """
     @property
     def byte_spread(self) -> typing.Annotated[list[int], "FixedSize(3)"]: ...
     @property
@@ -29360,7 +29531,20 @@ class ParticleContainer_pureSoA_7_0_polymorphic:
         """
         Return the number of particles (only valid or including invalid) on all MPI ranks, unless only_local is specified.
         """
+    @typing.overload
     def write_plotfile(self, dir: str, name: str) -> None: ...
+    @typing.overload
+    def write_plotfile(
+        self,
+        dir: str,
+        name: str,
+        real_comp_names: Vector_string,
+        int_comp_names: Vector_string,
+    ) -> None:
+        """
+        Write a particle plotfile, naming the real and integer components.
+        For pure SoA containers, real_comp_names excludes the AMREX_SPACEDIM position components.
+        """
     @property
     def byte_spread(self) -> typing.Annotated[list[int], "FixedSize(3)"]: ...
     @property
@@ -29402,6 +29586,112 @@ class ParticleContainer_pureSoA_7_0_polymorphic:
         """
         Return the number of valid particles on all MPI ranks
         """
+
+class ParticleHeader:
+    @staticmethod
+    def read(dir: str, file: str) -> ParticleHeader:
+        """
+        Read and parse the ``Header`` of a particle plotfile/checkpoint.
+
+        This discovers the on-disk layout (number and names of real/int
+        components, precision, checkpoint flag, ...) without constructing a
+        matching ParticleContainer first.
+
+        Parameters
+        ----------
+        dir : str
+            plotfile/checkpoint directory
+        file : str
+            particle sub-directory name (e.g. ``"particle0"``)
+        """
+    def __init__(self) -> None: ...
+    def __repr__(self) -> str: ...
+    @property
+    def convert_ids(self) -> bool:
+        """
+        whether particle ids need conversion (Version_Two_Dot_One+)
+        """
+    @convert_ids.setter
+    def convert_ids(self, arg0: bool) -> None: ...
+    @property
+    def dim(self) -> int:
+        """
+        AMREX_SPACEDIM the file was written with
+        """
+    @dim.setter
+    def dim(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> None: ...
+    @property
+    def finest_level(self) -> int:
+        """
+        finest level present in the file
+        """
+    @finest_level.setter
+    def finest_level(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> None: ...
+    @property
+    def how(self) -> str:
+        """
+        precision the data was written in: 'single' or 'double'
+        """
+    @how.setter
+    def how(self, arg0: str) -> None: ...
+    @property
+    def int_comp_names(self) -> Vector_string:
+        """
+        names of the integer components (len == num_int)
+        """
+    @int_comp_names.setter
+    def int_comp_names(self, arg0: Vector_string) -> None: ...
+    @property
+    def is_checkpoint(self) -> bool:
+        """
+        True if the file is a checkpoint, False for a plotfile
+        """
+    @is_checkpoint.setter
+    def is_checkpoint(self, arg0: bool) -> None: ...
+    @property
+    def next_id(self) -> int:
+        """
+        the next particle id to hand out
+        """
+    @next_id.setter
+    def next_id(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> None: ...
+    @property
+    def num_int(self) -> int:
+        """
+        number of integer components
+        """
+    @num_int.setter
+    def num_int(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> None: ...
+    @property
+    def num_particles(self) -> int:
+        """
+        total number of particles in the file
+        """
+    @num_particles.setter
+    def num_particles(
+        self, arg0: typing.SupportsInt | typing.SupportsIndex
+    ) -> None: ...
+    @property
+    def num_real(self) -> int:
+        """
+        number of real components (pure SoA: excludes the positions)
+        """
+    @num_real.setter
+    def num_real(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> None: ...
+    @property
+    def real_comp_names(self) -> Vector_string:
+        """
+        names of the real components (len == num_real)
+        """
+    @real_comp_names.setter
+    def real_comp_names(self, arg0: Vector_string) -> None: ...
+    @property
+    def version(self) -> str:
+        """
+        raw version string of the file format
+        """
+    @version.setter
+    def version(self, arg0: str) -> None: ...
 
 class MPMD_Copier:
     @typing.overload
@@ -29954,6 +30244,23 @@ def unpack_cpus(
 def unpack_ids(
     arg0: typing.Annotated[numpy.typing.ArrayLike, numpy.uint64],
 ) -> typing.Any: ...
+def write_multi_level_plotfile(
+    plotfilename: str,
+    mf: collections.abc.Sequence[MultiFab],
+    varnames: collections.abc.Sequence[str],
+    geom: collections.abc.Sequence[Geometry],
+    time: typing.SupportsFloat | typing.SupportsIndex,
+    level_steps: collections.abc.Sequence[typing.SupportsInt | typing.SupportsIndex],
+    ref_ratio: collections.abc.Sequence[IntVect3D],
+    versionName: str = "HyperCLaw-V1.1",
+    levelPrefix: str = "Level_",
+    mfPrefix: str = "Cell",
+    extra_dirs: collections.abc.Sequence[str] = ...,
+) -> None:
+    """
+    Writes a multi-level plotfile: one MultiFab, Geometry and level step per level, and one refinement ratio per coarse level.
+    """
+
 def write_single_level_plotfile(
     plotfilename: str,
     mf: MultiFab,
@@ -29975,7 +30282,7 @@ Geometric: GrowthStrategy
 Poisson: GrowthStrategy
 __author__: str = "Axel Huebl, Ryan T. Sandberg, Shreyas Ananthan, David P. Grote, Revathi Jambunathan, Edoardo Zoni, Remi Lehe, Andrew Myers, Weiqun Zhang"
 __license__: str = "BSD-3-Clause-LBNL"
-__version__: str = "26.07-29-g8addf4d92318"
+__version__: str = "26.07-54-gaa5b8cc69640"
 basic: EBSupport
 full: EBSupport
 volume: EBSupport
