@@ -8,7 +8,7 @@
 #include "SmallMatrix.H"
 
 
-void init_SmallMatrix (py::module &m)
+void init_SmallMatrix (nb::module_ &m)
 {
     using namespace pyAMReX;
 

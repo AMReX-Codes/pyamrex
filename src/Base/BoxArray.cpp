@@ -13,14 +13,14 @@
 #include <sstream>
 
 
-void init_BoxArray(py::module &m) {
+void init_BoxArray(nb::module_ &m) {
     using namespace amrex;
 
     /* A collection of Boxes stored in an Array.  It is a
      * reference-counted concrete class, not a polymorphic one; i.e. you
      * cannot use any of the List member functions with a BoxList
      */
-    py::class_< BoxArray >(m, "BoxArray")
+    nb::class_< BoxArray >(m, "BoxArray")
         .def("__repr__",
             [](BoxArray const & ba) {
                 std::stringstream s;
@@ -30,44 +30,44 @@ void init_BoxArray(py::module &m) {
         )
 
         // Construct an empty BoxArray
-        .def(py::init<>())
+        .def(nb::init<>())
         // Copy a BoxArray
-        .def(py::init< BoxArray const & >())
+        .def(nb::init< BoxArray const & >())
 
         // Construct a BoxArray from a single Box.
-        .def(py::init< Box const & >())
+        .def(nb::init< Box const & >())
         // Construct a BoxArray from a list of Boxes.
-        .def(py::init([](Vector<Box> bl) {
-             return BoxArray(bl.dataPtr(), bl.size());
-        }))
+        .def("__init__", [](BoxArray *self, Vector<Box> bl) {
+             new (self) BoxArray(bl.dataPtr(), bl.size());
+        })
 
         // Construct a BoxArray from a BoxList.
-        //.def(py::init< BoxList const& >())
+        //.def(nb::init< BoxList const& >())
 
         //BoxArray (const BoxArray& rhs, const BATransformer& trans);
         //BoxArray (BoxList&& bl, IntVect const& max_grid_size);
 
-        .def_property_readonly("size", &BoxArray::size)
-        .def_property_readonly("capacity", &BoxArray::capacity)
-        .def_property_readonly("empty", &BoxArray::empty)
-        .def_property_readonly("numPts", &BoxArray::numPts)
-        .def_property_readonly("d_numPts", &BoxArray::d_numPts)
+        .def_prop_ro("size", &BoxArray::size)
+        .def_prop_ro("capacity", &BoxArray::capacity)
+        .def_prop_ro("empty", &BoxArray::empty)
+        .def_prop_ro("numPts", &BoxArray::numPts)
+        .def_prop_ro("d_numPts", &BoxArray::d_numPts)
 /*
-        .def_property("type",
-            py::overload_cast<>(&BoxArray::type, py::const_),
+        .def_prop_rw("type",
+            nb::overload_cast<>(&BoxArray::type, nb::const_),
             &Box::setType)
 
-        .def_property_readonly("length",
-            py::overload_cast<>(&Box::length, py::const_))
-        .def_property_readonly("is_empty", &Box::isEmpty)
+        .def_prop_ro("length",
+            nb::overload_cast<>(&Box::length, nb::const_))
+        .def_prop_ro("is_empty", &Box::isEmpty)
 */
 
         .def("define",
-            py::overload_cast< Box const & >(&BoxArray::define))
+            nb::overload_cast< Box const & >(&BoxArray::define))
         //.def("define",
-        //    py::overload_cast< BoxList const & >(&BoxArray::define))
+        //    nb::overload_cast< BoxList const & >(&BoxArray::define))
         //.def("define",
-        //    py::overload_cast< BoxList&& >(&BoxArray::define))
+        //    nb::overload_cast< BoxList&& >(&BoxArray::define))
 
         .def("clear", &BoxArray::clear)
         .def("resize", &BoxArray::resize)
@@ -75,28 +75,28 @@ void init_BoxArray(py::module &m) {
         .def("cell_equal", &BoxArray::CellEqual)
 
         .def("max_size",
-            py::overload_cast< int >(&BoxArray::maxSize))
+            nb::overload_cast< int >(&BoxArray::maxSize))
         .def("max_size",
-            py::overload_cast< IntVect const& >(&BoxArray::maxSize))
+            nb::overload_cast< IntVect const& >(&BoxArray::maxSize))
 
         .def("refine",
-            py::overload_cast< int >(&BoxArray::refine))
+            nb::overload_cast< int >(&BoxArray::refine))
         .def("refine",
-            py::overload_cast< IntVect const & >(&BoxArray::refine))
+            nb::overload_cast< IntVect const & >(&BoxArray::refine))
 
         //! Coarsen each Box in the BoxArray to the specified ratio.
         .def("coarsen",
-            py::overload_cast< IntVect const & >(&BoxArray::coarsen))
+            nb::overload_cast< IntVect const & >(&BoxArray::coarsen))
         .def("coarsen",
-            py::overload_cast< int >(&BoxArray::coarsen))
+            nb::overload_cast< int >(&BoxArray::coarsen))
 
         //! Coarsen each Box in the BoxArray to the specified ratio.
         .def("coarsenable",
-            py::overload_cast< int, int >(&BoxArray::coarsenable, py::const_))
+            nb::overload_cast< int, int >(&BoxArray::coarsenable, nb::const_))
         .def("coarsenable",
-            py::overload_cast< IntVect const &, int >(&BoxArray::coarsenable, py::const_))
+            nb::overload_cast< IntVect const &, int >(&BoxArray::coarsenable, nb::const_))
         .def("coarsenable",
-            py::overload_cast< IntVect const &, IntVect const & >(&BoxArray::coarsenable, py::const_))
+            nb::overload_cast< IntVect const &, IntVect const & >(&BoxArray::coarsenable, nb::const_))
 
 /*
     //! Grow and then coarsen each Box in the BoxArray.
@@ -125,21 +125,21 @@ void init_BoxArray(py::module &m) {
     //! \brief Apply surroundingNodes(Box,int) to each Box in
     //! BoxArray.  See the documentation of Box for details.
     .def("surroundingNodes",
-            py::overload_cast<>(&BoxArray::surroundingNodes))
+            nb::overload_cast<>(&BoxArray::surroundingNodes))
     .def("surroundingNodes",
-            py::overload_cast<int>(&BoxArray::surroundingNodes))
+            nb::overload_cast<int>(&BoxArray::surroundingNodes))
 
     //! Apply Box::enclosedCells() to each Box in the BoxArray.
     .def("enclosed_cells",
-            py::overload_cast<>(&BoxArray::enclosedCells))
+            nb::overload_cast<>(&BoxArray::enclosedCells))
     .def("enclosed_cells",
-            py::overload_cast<int>(&BoxArray::enclosedCells))
+            nb::overload_cast<int>(&BoxArray::enclosedCells))
 
     //! Convert nodality of each box in the BoxArray
     .def("convert",
-            py::overload_cast< IndexType >(&BoxArray::convert))
+            nb::overload_cast< IndexType >(&BoxArray::convert))
     .def("convert",
-            py::overload_cast< IntVect const &>(&BoxArray::convert))
+            nb::overload_cast< IntVect const &>(&BoxArray::convert))
 /*
     //! Apply Box::shift(int,int) to each Box in the BoxArray.
     BoxArray& shift (int dir, int nzones);
@@ -161,10 +161,11 @@ void init_BoxArray(py::module &m) {
         .def("__getitem__",
              [](const BoxArray& ba, const int i) {
                  const int ii = (i >= 0) ? i : ba.size() + i;
-                 if ((ii < 0) || (ii >= ba.size()))
-                     throw py::index_error(
-                         "Index must be between 0 and " +
-                         std::to_string(ba.size()));
+                 if ((ii < 0) || (ii >= ba.size())) {
+                    auto message = "Index must be between 0 and " +
+                                   std::to_string(ba.size());
+                    throw nb::index_error(message.c_str());
+                 }
                  return ba[ii];
              })
 
@@ -203,7 +204,7 @@ void init_BoxArray(py::module &m) {
 */
         //! Return smallest Box that contains all Boxes in this BoxArray.
         .def("minimal_box",
-            py::overload_cast<>(&BoxArray::minimalBox, py::const_))
+            nb::overload_cast<>(&BoxArray::minimalBox, nb::const_))
 
 /*
     Box minimalBox (Long& npts_avg_box) const;

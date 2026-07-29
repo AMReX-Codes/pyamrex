@@ -94,6 +94,10 @@ option(pyAMReX_INSTALL
     "Enable install targets for pyAMReX"
     ON
 )
+option(pyAMReX_BUILD_STUBS
+    "Regenerate the committed nanobind type stubs"
+    OFF
+)
 
 # change the default build type to Release (or RelWithDebInfo) instead of Debug
 set_default_build_type("Release")
@@ -121,17 +125,26 @@ find_package(Python 3.8.0 COMPONENTS Interpreter Development.Module REQUIRED)
 # default installation directories: Python
 pyamrex_set_default_install_dirs_python()
 
-# pybind11
-#   builds pybind11 from git (default), form local source or
+# nanobind
+#   builds nanobind from git (default), from local source or
 #   finds an existing install
-include(${pyAMReX_SOURCE_DIR}/cmake/dependencies/pybind11.cmake)
+include(${pyAMReX_SOURCE_DIR}/cmake/dependencies/nanobind.cmake)
 
 
 # Targets #####################################################################
 #
 foreach(D IN LISTS AMReX_SPACEDIM)
     # collect all objects for compilation
-    add_library(pyAMReX_${D}d MODULE src/pyAMReX.cpp)
+    # nanobind owns the extension suffix and runtime linkage. pyAMReX owns
+    # optimization and stripping decisions, so disable nanobind's size and
+    # strip transformations. pyAMReX_IPO below remains the single owner of
+    # interprocedural optimization.
+    set(_pyAMReX_nanobind_options
+        NB_STATIC NB_SUPPRESS_WARNINGS NOMINSIZE NOSTRIP)
+    nanobind_add_module(pyAMReX_${D}d
+        ${_pyAMReX_nanobind_options}
+        src/pyAMReX.cpp
+    )
     add_library(pyAMReX::pyAMReX_${D}d ALIAS pyAMReX_${D}d)
 
     # own headers
@@ -144,6 +157,13 @@ foreach(D IN LISTS AMReX_SPACEDIM)
     target_link_libraries(pyAMReX_${D}d PRIVATE buildInfo::pyAMReX_${D}d)
 endforeach()
 
+# CI passes strict warning flags through CXXFLAGS, which also reaches compiled
+# third-party dependencies. Keep nanobind diagnostics visible without treating
+# warnings in its runtime implementation as pyAMReX build failures.
+if(TARGET nanobind-static AND NOT MSVC)
+    target_compile_options(nanobind-static PRIVATE -Wno-error)
+endif()
+
 # add sources
 add_subdirectory(src)
 
@@ -151,24 +171,17 @@ add_subdirectory(src)
 foreach(D IN LISTS AMReX_SPACEDIM)
     # link dependencies
     target_link_libraries(pyAMReX_${D}d PUBLIC AMReX::amrex_${D}d)
-    target_link_libraries(pyAMReX_${D}d PRIVATE pybind11::module pybind11::windows_extras)
     if(pyAMReX_IPO)
-        if(DEFINED CMAKE_INTERPROCEDURAL_OPTIMIZATION)
-            pyamrex_enable_IPO(pyAMReX_${D}d)
-        else()
-            # conditionally defined target in pybind11
-            # https://github.com/pybind/pybind11/blob/v2.13.0/tools/pybind11Common.cmake#L407-L413
-            target_link_libraries(pyAMReX_${D}d PRIVATE pybind11::lto)
-        endif()
+        pyamrex_enable_IPO(pyAMReX_${D}d)
     endif()
 
     # set Python module properties
     set_target_properties(pyAMReX_${D}d PROPERTIES
-        # hide symbols for combining multiple pybind11 modules downstream & for
+        # hide symbols for combining multiple nanobind modules downstream & for
         # reduced binary size
         CXX_VISIBILITY_PRESET "hidden"
         CUDA_VISIBILITY_PRESET "hidden"
-        # name of the pybind-generated python module, which is wrapped in another
+        # historical private module basename, wrapped by the public pure-Python
         # fluffy front-end modules, so we can extend it with pure Python
         ARCHIVE_OUTPUT_NAME amrex_${D}d_pybind
         LIBRARY_OUTPUT_NAME amrex_${D}d_pybind
@@ -195,13 +208,7 @@ foreach(D IN LISTS AMReX_SPACEDIM)
         endforeach()
     endif()
     if(EMSCRIPTEN)
-        set_target_properties(pyAMReX_${D}d PROPERTIES
-            PREFIX "")
-    else()
-        pybind11_extension(pyAMReX_${D}d)
-    endif()
-    if(NOT MSVC AND NOT ${CMAKE_BUILD_TYPE} MATCHES Debug|RelWithDebInfo)
-        pybind11_strip(pyAMReX_${D}d)
+        set_target_properties(pyAMReX_${D}d PROPERTIES PREFIX "")
     endif()
 
     # C++ properties: at least a C++20 capable compiler is needed
@@ -365,6 +372,24 @@ add_custom_target(pyAMReX_python_sources ALL
     VERBATIM
 )
 add_dependencies(pyAMReX_python_sources pyAMReX_${AMReX_SPACEDIM_LAST}d)
+
+# Generate the private extension stubs without importing the public wrapper
+# package.  The wrapper monkey-patches convenience methods onto bound classes;
+# importing the bare extension keeps those Python helpers in their hand-written
+# wrapper stubs and lets nanobind describe only the native API it owns.
+if(pyAMReX_BUILD_STUBS)
+    add_custom_target(pyAMReX_stubs)
+    foreach(D IN LISTS AMReX_SPACEDIM)
+        nanobind_add_stub(pyAMReX_${D}d_stub
+            MODULE amrex_${D}d_pybind
+            OUTPUT
+                ${pyAMReX_SOURCE_DIR}/src/amrex/space${D}d/amrex_${D}d_pybind/__init__.pyi
+            PYTHON_PATH $<TARGET_FILE_DIR:pyAMReX_${D}d>
+            DEPENDS pyAMReX_${D}d
+        )
+        add_dependencies(pyAMReX_stubs pyAMReX_${D}d_stub)
+    endforeach()
+endif()
 
 
 # Tests #######################################################################

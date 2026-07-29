@@ -14,7 +14,7 @@
 #include <type_traits>
 
 
-void init_Vector(py::module& m)
+void init_Vector(nb::module_& m)
 {
     using namespace amrex;
 

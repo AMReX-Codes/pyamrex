@@ -14,11 +14,11 @@
 #include <sstream>
 
 
-void init_Periodicity(py::module &m)
+void init_Periodicity(nb::module_ &m)
 {
     using namespace amrex;
 
-    py::class_< Periodicity >(m, "Periodicity")
+    nb::class_< Periodicity >(m, "Periodicity")
         .def("__repr__",
             [](Periodicity const & p) {
                 std::stringstream s;
@@ -31,22 +31,22 @@ void init_Periodicity(py::module &m)
             }
         )
 
-        .def(py::init<>())
-        .def(py::init< IntVect const & >())
+        .def(nb::init<>())
+        .def(nb::init< IntVect const & >())
 
-        .def_property_readonly("is_any_periodic", &Periodicity::isAnyPeriodic)
-        .def_property_readonly("is_all_periodic", &Periodicity::isAllPeriodic)
-        .def_property_readonly("domain", &Periodicity::Domain,
+        .def_prop_ro("is_any_periodic", &Periodicity::isAnyPeriodic)
+        .def_prop_ro("is_all_periodic", &Periodicity::isAllPeriodic)
+        .def_prop_ro("domain", &Periodicity::Domain,
                                "Cell-centered domain Box \"infinitely\" long in non-periodic directions.")
-        .def_property_readonly("shift_IntVect", &Periodicity::shiftIntVect)
+        .def_prop_ro("shift_IntVect", &Periodicity::shiftIntVect)
 
         .def("is_periodic", &Periodicity::isPeriodic,
-             py::arg("dir"))
+             nb::arg("dir"))
         .def("__getitem__", &Periodicity::isPeriodic,
-             py::arg("dir"))
+             nb::arg("dir"))
 
-        .def(pybind11::self == pybind11::self)
-        //.def(pybind11::self != pybind11::self)
+        .def(nanobind::self == nanobind::self)
+        //.def(nanobind::self != nanobind::self)
 
         .def_static("non_periodic", &Periodicity::NonPeriodic,
             "Return the Periodicity object that is not periodic in any direction")

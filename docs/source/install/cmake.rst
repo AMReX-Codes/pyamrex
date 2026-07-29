@@ -115,10 +115,10 @@ CMake Option                  Default & Values                               Des
 ``pyAMReX_amrex_repo``        ``https://github.com/AMReX-Codes/amrex.git``   Repository URI to pull and build AMReX from
 ``pyAMReX_amrex_branch``      *we set and maintain a compatible commit*      Repository branch for ``pyAMReX_amrex_repo``
 ``pyAMReX_amrex_internal``    **ON**/OFF                                     Needs a pre-installed AMReX library if set to ``OFF``
-``pyAMReX_pybind11_src``      *None*                                         Path to pybind11 source directory (preferred if set)
-``pyAMReX_pybind11_repo``     ``https://github.com/pybind/pybind11.git``     Repository URI to pull and build pybind11 from
-``pyAMReX_pybind11_branch``   *we set and maintain a compatible commit*      Repository branch for ``pyAMReX_pybind11_repo``
-``pyAMReX_pybind11_internal`` **ON**/OFF                                     Needs a pre-installed pybind11 module if set to ``OFF``
+``pyAMReX_nanobind_src``      *None*                                         Path to nanobind source directory (preferred if set)
+``pyAMReX_nanobind_repo``     ``https://github.com/wjakob/nanobind.git``     Repository URI to pull and build nanobind from
+``pyAMReX_nanobind_branch``   *we set and maintain a compatible release*     Repository branch for ``pyAMReX_nanobind_repo``
+``pyAMReX_nanobind_internal`` **ON**/OFF                                     Needs a pre-installed nanobind package if set to ``OFF``
 ============================= ============================================== ===================================================================
 
 For example, one can also build against a local AMReX copy.

@@ -17,7 +17,7 @@
 
 
 template <typename T_ParticleType, int NArrayReal, int NArrayInt>
-void make_ParticleTileData(py::module &m)
+void make_ParticleTileData(nb::module_ &m)
 {
     using namespace amrex;
 
@@ -41,12 +41,12 @@ void make_ParticleTileData(py::module &m)
         std::to_string(NArrayReal) + "_" +
         std::to_string(NArrayInt);
 
-    py::class_<ParticleTileDataType>(m, particle_tile_data_type.c_str())
-            .def(py::init())
+    nb::class_<ParticleTileDataType>(m, particle_tile_data_type.c_str())
+            .def(nb::init())
 
-            .def_property_readonly("m_size", [](ParticleTileDataType const & ptd){ return ptd.m_size; })
-            .def_property_readonly("m_num_runtime_real", [](ParticleTileDataType const & ptd){ return ptd.m_num_runtime_real; })
-            .def_property_readonly("m_num_runtime_int", [](ParticleTileDataType const & ptd){ return ptd.m_num_runtime_int; })
+            .def_prop_ro("m_size", [](ParticleTileDataType const & ptd){ return ptd.m_size; })
+            .def_prop_ro("m_num_runtime_real", [](ParticleTileDataType const & ptd){ return ptd.m_num_runtime_real; })
+            .def_prop_ro("m_num_runtime_int", [](ParticleTileDataType const & ptd){ return ptd.m_num_runtime_int; })
 
             .def("get_super_particle", [](ParticleTileDataType &pdt, int const v) -> SuperParticleType { return pdt.getSuperParticle(v); })
             .def("set_super_particle", [](ParticleTileDataType &pdt, SuperParticleType const& sp, int const v) { pdt.setSuperParticle(sp, v); })
@@ -61,7 +61,7 @@ void make_ParticleTileData(py::module &m)
 
 template <typename T_ParticleType, int NArrayReal, int NArrayInt,
           template<class> class Allocator=amrex::DefaultAllocator>
-void make_ParticleTile(py::module &m, std::string allocstr)
+void make_ParticleTile(nb::module_ &m, std::string allocstr)
 {
     using namespace amrex;
 
@@ -84,27 +84,27 @@ void make_ParticleTile(py::module &m, std::string allocstr)
     particle_tile_type += std::to_string(NArrayReal) + "_" +
                           std::to_string(NArrayInt) + "_" + allocstr;
 
-    auto py_particle_tile = py::class_<ParticleTileType>(m, particle_tile_type.c_str())
-        .def(py::init())
-        .def_readonly_static("NAR", &ParticleTileType::NAR)
-        .def_readonly_static("NAI", &ParticleTileType::NAI)
+    auto py_particle_tile = nb::class_<ParticleTileType>(m, particle_tile_type.c_str())
+        .def(nb::init())
+        .def_ro_static("NAR", &ParticleTileType::NAR)
+        .def_ro_static("NAI", &ParticleTileType::NAI)
         .def("define", &ParticleTileType::define)
-        .def("get_struct_of_arrays", py::overload_cast<>(&ParticleTileType::GetStructOfArrays),
-            py::return_value_policy::reference_internal)
+        .def("get_struct_of_arrays", nb::overload_cast<>(&ParticleTileType::GetStructOfArrays),
+            nb::rv_policy::reference_internal)
 
-        .def_property_readonly("empty", &ParticleTileType::empty)
-        .def_property_readonly("size", &ParticleTileType::size)
-        .def_property_readonly("num_particles", &ParticleTileType::numParticles)
-        .def_property_readonly("num_real_particles", &ParticleTileType::numRealParticles)
-        .def_property_readonly("num_neighbor_particles", &ParticleTileType::numNeighborParticles)
-        .def_property_readonly("num_total_particles", &ParticleTileType::numTotalParticles)
+        .def_prop_ro("empty", &ParticleTileType::empty)
+        .def_prop_ro("size", &ParticleTileType::size)
+        .def_prop_ro("num_particles", &ParticleTileType::numParticles)
+        .def_prop_ro("num_real_particles", &ParticleTileType::numRealParticles)
+        .def_prop_ro("num_neighbor_particles", &ParticleTileType::numNeighborParticles)
+        .def_prop_ro("num_total_particles", &ParticleTileType::numTotalParticles)
 
         .def("set_num_neighbors", &ParticleTileType::setNumNeighbors)
         .def("get_num_neighbors", &ParticleTileType::getNumNeighbors)
         .def("resize",
             &ParticleTileType::resize,
-            py::arg("count"),
-            py::arg("strategy") = GrowthStrategy::Poisson
+            nb::arg("count"),
+            nb::arg("strategy") = GrowthStrategy::Poisson
         )
     ;
 
@@ -137,16 +137,16 @@ void make_ParticleTile(py::module &m, std::string allocstr)
                                 int v)
                                 {ptile.push_back_int(comp, npar, v);})
 
-        .def_property_readonly("num_real_comps", &ParticleTileType::NumRealComps)
-        .def_property_readonly("num_int_comps", &ParticleTileType::NumIntComps)
-        .def_property_readonly("num_runtime_real_comps", &ParticleTileType::NumRuntimeRealComps)
-        .def_property_readonly("num_runtime_int_comps", &ParticleTileType::NumRuntimeIntComps)
+        .def_prop_ro("num_real_comps", &ParticleTileType::NumRealComps)
+        .def_prop_ro("num_int_comps", &ParticleTileType::NumIntComps)
+        .def_prop_ro("num_runtime_real_comps", &ParticleTileType::NumRuntimeRealComps)
+        .def_prop_ro("num_runtime_int_comps", &ParticleTileType::NumRuntimeIntComps)
 
         .def("shrink_to_fit", &ParticleTileType::shrink_to_fit)
         .def("capacity", &ParticleTileType::capacity)
         .def("swap",&ParticleTileType::swap)
         .def("get_particle_tile_data", &ParticleTileType::getParticleTileData,
-             py::keep_alive<0, 1>())
+             nb::keep_alive<0, 1>())
         .def("__setitem__", [](ParticleTileType & pt, int const v, SuperParticleType const value){ pt.getParticleTileData().setSuperParticle( value, v); })
         .def("__getitem__", [](ParticleTileType & pt, int const v){ return pt.getParticleTileData().getSuperParticle(v); })
     ;
@@ -154,14 +154,14 @@ void make_ParticleTile(py::module &m, std::string allocstr)
     if constexpr (!T_ParticleType::is_soa_particle) {
         py_particle_tile
             .def("get_array_of_structs",
-                 py::overload_cast<>(&ParticleTileType::GetArrayOfStructs),
-                 py::return_value_policy::reference_internal)
+                 nb::overload_cast<>(&ParticleTileType::GetArrayOfStructs),
+                 nb::rv_policy::reference_internal)
         ;
     }
 }
 
 template <typename T_ParticleType, int NArrayReal, int NArrayInt, bool only_polymorphic=false>
-void make_ParticleTile(py::module &m)
+void make_ParticleTile(nb::module_ &m)
 {
     if constexpr (T_ParticleType::is_soa_particle) {
         make_ParticleTileData<amrex::SoAParticleBase, NArrayReal, NArrayInt>(m);
@@ -179,7 +179,8 @@ void make_ParticleTile(py::module &m)
         //   !AMREX_USE_GPU: DefaultAllocator = std::allocator
         //    AMREX_USE_GPU: DefaultAllocator = amrex::ArenaAllocator
 
-        //   work-around for https://github.com/pybind/pybind11/pull/4581
+        // Register each concrete allocator type only once: DefaultAllocator is
+        // an alias of std::allocator on CPU and ArenaAllocator on GPU.
         //make_ParticleTile<T_ParticleType, NArrayReal, NArrayInt,
         //                  std::allocator>(m, "std");
         //make_ParticleTile<T_ParticleType, NArrayReal, NArrayInt,

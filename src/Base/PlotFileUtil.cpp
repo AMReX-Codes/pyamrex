@@ -13,16 +13,16 @@
 #include <string>
 #include <vector>
 
-namespace py = pybind11;
+namespace nb = nanobind;
 using namespace amrex;
 
-void init_PlotFileUtil(py::module &m) {
+void init_PlotFileUtil(nb::module_ &m) {
   m.def("write_single_level_plotfile", &amrex::WriteSingleLevelPlotfile,
-        "Writes single level plotfile", py::arg("plotfilename"), py::arg("mf"),
-        py::arg("varnames"), py::arg("geom"), py::arg("time"),
-        py::arg("level_step"), py::arg("versionName") = "HyperCLaw-V1.1",
-        py::arg("levelPrefix") = "Level_", py::arg("mfPrefix") = "Cell",
-        py::arg_v("extra_dirs", Vector<std::string>(), "list[str]"));
+        "Writes single level plotfile", nb::arg("plotfilename"), nb::arg("mf"),
+        nb::arg("varnames"), nb::arg("geom"), nb::arg("time"),
+        nb::arg("level_step"), nb::arg("versionName") = "HyperCLaw-V1.1",
+        nb::arg("levelPrefix") = "Level_", nb::arg("mfPrefix") = "Cell",
+        nb::arg("extra_dirs") = Vector<std::string>());
 
   m.def("write_multi_level_plotfile",
         [](std::string const & plotfilename,
@@ -59,15 +59,15 @@ void init_PlotFileUtil(py::module &m) {
         },
         "Writes a multi-level plotfile: one MultiFab, Geometry and level step "
         "per level, and one refinement ratio per coarse level.",
-        py::arg("plotfilename"), py::arg("mf"), py::arg("varnames"),
-        py::arg("geom"), py::arg("time"), py::arg("level_steps"),
-        py::arg("ref_ratio"), py::arg("versionName") = "HyperCLaw-V1.1",
-        py::arg("levelPrefix") = "Level_", py::arg("mfPrefix") = "Cell",
-        py::arg_v("extra_dirs", std::vector<std::string>(), "list[str]"));
+        nb::arg("plotfilename"), nb::arg("mf"), nb::arg("varnames"),
+        nb::arg("geom"), nb::arg("time"), nb::arg("level_steps"),
+        nb::arg("ref_ratio"), nb::arg("versionName") = "HyperCLaw-V1.1",
+        nb::arg("levelPrefix") = "Level_", nb::arg("mfPrefix") = "Cell",
+        nb::arg("extra_dirs") = std::vector<std::string>());
 
-  py::class_<PlotFileData>(m, "PlotFileData")
+  nb::class_<PlotFileData>(m, "PlotFileData")
       // explicitly provide constructor argument types
-      .def(py::init<std::string const&>())
+      .def(nb::init<std::string const&>())
 
       .def("spaceDim", &PlotFileData::spaceDim)
       .def("time", &PlotFileData::time)
@@ -76,8 +76,8 @@ void init_PlotFileUtil(py::module &m) {
       .def("levelStep", &PlotFileData::levelStep)
       .def("boxArray", &PlotFileData::boxArray)
       .def("DistributionMap", &PlotFileData::DistributionMap)
-      .def("syncDistributionMap", py::overload_cast<PlotFileData const&>(&PlotFileData::syncDistributionMap))
-      .def("syncDistributionMap", py::overload_cast<int, PlotFileData const&>(&PlotFileData::syncDistributionMap))
+      .def("syncDistributionMap", nb::overload_cast<PlotFileData const&>(&PlotFileData::syncDistributionMap))
+      .def("syncDistributionMap", nb::overload_cast<int, PlotFileData const&>(&PlotFileData::syncDistributionMap))
 
       .def("coordSys", &PlotFileData::coordSys)
       .def("probDomain", &PlotFileData::probDomain)
@@ -89,6 +89,6 @@ void init_PlotFileUtil(py::module &m) {
       .def("nComp", &PlotFileData::nComp)
       .def("nGrowVect", &PlotFileData::nGrowVect)
 
-      .def("get", py::overload_cast<int>(&PlotFileData::get))
-      .def("get", py::overload_cast<int, std::string const&>(&PlotFileData::get));
+      .def("get", nb::overload_cast<int>(&PlotFileData::get))
+      .def("get", nb::overload_cast<int, std::string const&>(&PlotFileData::get));
 }

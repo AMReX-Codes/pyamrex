@@ -55,7 +55,7 @@ pyAMReX depends on the following popular third party software.
 - a mature [C++20](https://en.wikipedia.org/wiki/C%2B%2B20) compiler, e.g., GCC 12+, Clang 14, NVCC 12.4, MSVC 19.39 or newer
 - [CMake 3.24.0+](https://cmake.org)
 - [AMReX *development*](https://amrex-codes.github.io): we automatically download and compile a copy of AMReX
-- [pybind11](https://github.com/pybind/pybind11/) 3.0.0+: we automatically download and compile a copy of pybind11 ([new BSD](https://github.com/pybind/pybind11/blob/master/LICENSE))
+- [nanobind](https://github.com/wjakob/nanobind/) 2.12.0+: we automatically download and compile a copy of nanobind ([BSD 3-Clause](https://github.com/wjakob/nanobind/blob/master/LICENSE))
   - [Python](https://python.org) 3.11+
   - [Numpy](https://numpy.org) 1.15+
 
@@ -179,7 +179,10 @@ If you are using the pip-driven install, selected [AMReX CMake options](https://
 | `AMREX_REPO`                 | `https://github.com/AMReX-Codes/amrex.git` | Repository URI to pull and build AMReX from                  |
 | `AMREX_BRANCH`               | `development`                              | Repository branch for `AMREX_REPO`                           |
 | `AMREX_INTERNAL`             | **ON**/OFF                                 | Needs a pre-installed AMReX library if set to `OFF`          |
-| `PYBIND11_INTERNAL`          | **ON**/OFF                                 | Needs a pre-installed pybind11 library if set to `OFF`       |
+| `NANOBIND_INTERNAL`         | **ON**/OFF                                 | Needs a pre-installed nanobind package if set to `OFF`       |
+| `NANOBIND_SRC`              | *None*                                     | Absolute path to a local nanobind source tree                |
+| `NANOBIND_REPO`             | `https://github.com/wjakob/nanobind.git`   | Repository URI to pull and build nanobind from               |
+| `NANOBIND_BRANCH`           | `v2.12.0`                                  | Repository branch for `NANOBIND_REPO`                        |
 | `CMAKE_BUILD_PARALLEL_LEVEL` | 2                                          | Number of parallel build threads                             |
 | `PYAMREX_LIBDIR`             | *None*                                     | If set, search for pre-built a pyAMReX library               |
 | `PYAMREX_CCACHE`             | **ON**/OFF                                 | Search and use CCache to speed up rebuilds                   |
@@ -199,10 +202,10 @@ Furthermore, pyAMReX adds a few selected CMake build options:
 | `pyAMReX_amrex_internal`     | **ON**/OFF                                 | Needs a pre-installed AMReX library if set to `OFF`           |
 | `pyAMReX_amrex_repo`         | `https://github.com/AMReX-Codes/amrex.git` | Repository URI to pull and build AMReX from                   |
 | `pyAMReX_amrex_branch`       | `development`                              | Repository branch for `pyAMReX_amrex_repo`                    |
-| `pyAMReX_pybind11_src`       | *None*                                     | Absolute path to pybind11 source directory (preferred if set) |
-| `pyAMReX_pybind11_internal`  | **ON**/OFF                                 | Needs a pre-installed pybind11 library if set to `OFF`        |
-| `pyAMReX_pybind11_repo`      | `https://github.com/pybind/pybind11.git`   | Repository URI to pull and build pybind11 from                |
-| `pyAMReX_pybind11_branch`    | `v3.0.0`                                   | Repository branch for `pyAMReX_pybind11_repo`                 |
+| `pyAMReX_nanobind_src`       | *None*                                     | Absolute path to nanobind source directory (preferred if set) |
+| `pyAMReX_nanobind_internal`  | **ON**/OFF                                 | Needs a pre-installed nanobind package if set to `OFF`        |
+| `pyAMReX_nanobind_repo`      | `https://github.com/wjakob/nanobind.git`   | Repository URI to pull and build nanobind from                |
+| `pyAMReX_nanobind_branch`    | `v2.12.0`                                  | Repository branch for `pyAMReX_nanobind_repo`                 |
 | `Python_EXECUTABLE`          | (newest found)                             | Path to Python executable                                     |
 
 As one example, one can also build against a local AMReX copy.

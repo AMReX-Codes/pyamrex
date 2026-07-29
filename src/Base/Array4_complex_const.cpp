@@ -10,7 +10,7 @@
 #include <complex>
 
 
-void init_Array4_complex_const(py::module &m)
+void init_Array4_complex_const(nb::module_ &m)
 {
     using namespace pyAMReX;
 

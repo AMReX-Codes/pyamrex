@@ -8,7 +8,7 @@
 #include <AMReX_Particle.H>
 
 
-void init_ParticleContainer_tests(py::module& m) {
+void init_ParticleContainer_tests(nb::module_& m) {
     using namespace amrex;
 
     make_ParticleContainer_and_Iterators<Particle<2, 1>, 3, 1>(m);

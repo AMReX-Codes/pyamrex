@@ -8,7 +8,7 @@
 #include <AMReX_Particle.H>
 
 
-void init_ParticleContainer_WarpX(py::module& m) {
+void init_ParticleContainer_WarpX(nb::module_& m) {
     using namespace amrex;
 
     constexpr bool only_polymorphic = true;

@@ -24,38 +24,38 @@ namespace
      * https://numpy.org/doc/stable/reference/arrays.interface.html
      */
     template <class T, class Allocator = std::allocator<T> >
-    py::dict
+    nb::dict
     array_interface(amrex::Vector<T, Allocator> const & vector)
     {
-        auto d = py::dict();
+        auto d = nb::dict();
         bool const read_only = false;
-        d["data"] = py::make_tuple(std::intptr_t(vector.dataPtr()), read_only);
-        d["shape"] = py::make_tuple(vector.size());
-        d["strides"] = py::none();
-        d["typestr"] = py::format_descriptor<T>::format();
+        d["data"] = nb::make_tuple(std::intptr_t(vector.dataPtr()), read_only);
+        d["shape"] = nb::make_tuple(vector.size());
+        d["strides"] = nb::none();
+        d["typestr"] = pyAMReX::buffer_format<T>();
         d["version"] = 3;
         return d;
     }
 }
 
-/** Register an ``amrex::Vector`` type with pybind11.
+/** Register an ``amrex::Vector`` type with nanobind.
  *
  * Specialized for a specific data type ``T`` and memory ``Allocator``.
  *
  * @tparam T data type per vector element
  * @tparam Allocator the memory allocator, e.g., an AMReX Arena or std::allocator
- * @param m the pyAMReX pybind11 module object
+ * @param m the pyAMReX nanobind module object
  * @param typestr a unique suffix for the type ``T`` and ``Allocator``
  */
 template <class T, class Allocator = std::allocator<T> >
-void make_Vector(py::module &m, std::string typestr)
+void make_Vector(nb::module_ &m, std::string typestr)
 {
     using namespace amrex;
 
     using Vector_type = Vector<T, Allocator>;
     auto const v_name = std::string("Vector_").append(typestr);
 
-    auto py_vect = py::bind_vector<Vector_type>(m, v_name.c_str());
+    auto py_vect = nb::bind_vector<Vector_type>(m, v_name.c_str());
     py_vect
         .def("__repr__",
              [typestr](Vector_type const & v) {
@@ -71,8 +71,8 @@ void make_Vector(py::module &m, std::string typestr)
                  return rs.str();
              }
         )
-        .def(py::init<>())
-        .def(py::init<Vector_type const &>())
+        .def(nb::init<>())
+        .def(nb::init<Vector_type const &>())
 
         .def("size", &Vector_type::size)
     ;
@@ -80,10 +80,10 @@ void make_Vector(py::module &m, std::string typestr)
     if constexpr(std::is_fundamental_v<T>)
     {
       py_vect
-        .def_property_readonly("__array_interface__", [](Vector_type const & vector) {
+        .def_prop_ro("__array_interface__", [](Vector_type const & vector) {
             return array_interface(vector);
         })
-        .def_property_readonly("__cuda_array_interface__", [](Vector_type const & vector) {
+        .def_prop_ro("__cuda_array_interface__", [](Vector_type const & vector) {
             // Nvidia GPUs: __cuda_array_interface__ v3
             // https://numba.readthedocs.io/en/latest/cuda/cuda_array_interface.html
             auto d = array_interface(vector);
@@ -99,7 +99,7 @@ void make_Vector(py::module &m, std::string typestr)
             //   2: The per-thread default stream.
             //   Any other integer: a cudaStream_t represented as a Python integer.
             //   When None, no synchronization is required.
-            d["stream"] = py::none();
+            d["stream"] = nb::none();
 
             d["version"] = 3;
             return d;

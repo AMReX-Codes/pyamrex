@@ -9,7 +9,7 @@
 #include <AMReX_ParticleTile.H>
 
 
-void init_ParticleContainer_ImpactX(py::module& m) {
+void init_ParticleContainer_ImpactX(nb::module_& m) {
     using namespace amrex;
 
     constexpr bool only_polymorphic = true;

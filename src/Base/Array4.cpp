@@ -8,19 +8,19 @@
 #include "Array4.H"
 
 
-void init_Array4_float(py::module &m);
-void init_Array4_float_const(py::module &m);
+void init_Array4_float(nb::module_ &m);
+void init_Array4_float_const(nb::module_ &m);
 
-void init_Array4_complex(py::module &m);
-void init_Array4_complex_const(py::module &m);
+void init_Array4_complex(nb::module_ &m);
+void init_Array4_complex_const(nb::module_ &m);
 
-void init_Array4_int(py::module &m);
-void init_Array4_int_const(py::module &m);
+void init_Array4_int(nb::module_ &m);
+void init_Array4_int_const(nb::module_ &m);
 
-void init_Array4_uint(py::module &m);
-void init_Array4_uint_const(py::module &m);
+void init_Array4_uint(nb::module_ &m);
+void init_Array4_uint_const(nb::module_ &m);
 
-void init_Array4(py::module &m)
+void init_Array4(nb::module_ &m)
 {
     using namespace pyAMReX;
 
@@ -37,7 +37,7 @@ void init_Array4(py::module &m)
     init_Array4_uint_const(m);
 
     /*
-    py::class_< PolymorphicArray4, Array4 >(m, "PolymorphicArray4")
+    nb::class_< PolymorphicArray4, Array4 >(m, "PolymorphicArray4")
         .def("__repr__",
              [](PolymorphicArray4 const & pa4) {
                  std::stringstream s;

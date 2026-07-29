@@ -8,16 +8,16 @@
 #include <AMReX_VisMF.H>
 #include <AMReX_MultiFab.H>
 
-void init_VisMF(py::module &m)
+void init_VisMF(nb::module_ &m)
 {
-    py::class_< amrex::VisMF > py_VisMF(m, "VisMF");
+    nb::class_< amrex::VisMF > py_VisMF(m, "VisMF");
 
     py_VisMF
         .def_static("Write",
            [](const amrex::FabArray<amrex::FArrayBox> &mf, const std::string& name) {
                return amrex::VisMF::Write(mf, name);
            },
-           py::arg("mf"), py::arg("name"),
+           nb::arg("mf"), nb::arg("name"),
            "Writes a Multifab to the specified file")
         .def_static("Read",
            [](const std::string &name) {
@@ -29,8 +29,8 @@ void init_VisMF(py::module &m)
                }
                return mf;
                },
-           py::return_value_policy::move,
-           py::arg("name"),
+           nb::rv_policy::move,
+           nb::arg("name"),
            "Reads a MultiFab from the specified file")
         .def_static("Read",
            [](const std::string &name, amrex::MultiFab &mf) {
@@ -40,7 +40,7 @@ void init_VisMF(py::module &m)
                    throw std::runtime_error("MultiFab file " + name + " couldn't be found!");
                }
                },
-           py::arg("name"), py::arg("mf"),
+           nb::arg("name"), nb::arg("mf"),
            "Reads a MultiFab from the specified file into the given MultiFab. The BoxArray on the disk must match the BoxArray * in mf")
         ;
 }

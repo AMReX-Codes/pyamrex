@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import numpy as np
+import pytest
 
 import amrex.space3d as amr
 
@@ -192,3 +193,35 @@ def test_physbcfunct_user(std_box):
     assert np.isclose(mf.min(0), 0.0)
     assert np.isclose(mf.max(1), 99.0)
     assert np.isclose(mf.min(1), 99.0)
+
+
+def test_physbcfunct_user_exception_propagates(std_box):
+    ba = amr.BoxArray(std_box)
+    mf = amr.MultiFab(ba, amr.DistributionMapping(ba), 1, 0)
+
+    def fail(*_args):
+        raise ValueError("boundary callback failed")
+
+    physbc = amr.PhysBCFunctUser(fail)
+    with pytest.raises(ValueError, match="boundary callback failed"):
+        physbc(mf, 0, 1, amr.IntVect(0), 0.0, 0)
+
+
+def test_physbcfunct_user_keeps_callback_alive():
+    import gc
+    import weakref
+
+    class Fill:
+        def __call__(self, *_args):
+            pass
+
+    callback = Fill()
+    callback_ref = weakref.ref(callback)
+    physbc = amr.PhysBCFunctUser(callback)
+    del callback
+    gc.collect()
+    assert callback_ref() is not None
+
+    del physbc
+    gc.collect()
+    assert callback_ref() is None

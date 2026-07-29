@@ -18,14 +18,14 @@
 namespace
 {
     template<int dim>
-    void init_IntVectND(py::module &m)
+    void init_IntVectND(nb::module_ &m)
     {
         using namespace amrex;
 
         auto const iv_name = std::string("IntVect").append(std::to_string(dim)).append("D");
         using iv_type = IntVectND<dim>;
 
-        py::class_< iv_type > py_iv(m, iv_name.c_str());
+        nb::class_< iv_type > py_iv(m, iv_name.c_str());
         py_iv
             .def("__repr__",
                  [iv_name](const iv_type& iv) {
@@ -43,21 +43,21 @@ namespace
         ;
 
         if constexpr (dim == 2) {
-            py_iv.def(py::init<int, int>());
+            py_iv.def(nb::init<int, int>());
         } else if constexpr (dim == 3) {
-            py_iv.def(py::init<int, int, int>());
+            py_iv.def(nb::init<int, int, int>());
         }
 
         py_iv
-            .def(py::init<>())
-            .def(py::init<int>())
-            .def(py::init<const std::array<int, dim>&>())
+            .def(nb::init<>())
+            .def(nb::init<int>())
+            .def(nb::init<const std::array<int, dim>&>())
 
-            .def_property_readonly("sum", &iv_type::sum)
-            .def_property_readonly("max",
-                                   py::overload_cast<>(&iv_type::max, py::const_))
-            .def_property_readonly("min",
-                                   py::overload_cast<>(&iv_type::min, py::const_))
+            .def_prop_ro("sum", &iv_type::sum)
+            .def_prop_ro("max",
+                                   nb::overload_cast<>(&iv_type::max, nb::const_))
+            .def_prop_ro("min",
+                                   nb::overload_cast<>(&iv_type::min, nb::const_))
             .def_static("zero_vector", &iv_type::TheZeroVector)
             .def_static("unit_vector", &iv_type::TheUnitVector)
             .def_static("node_vector", &iv_type::TheNodeVector)
@@ -75,86 +75,86 @@ namespace
             .def("__getitem__",
                  [](const iv_type& v, const int i) {
                      const int ii = (i >= 0) ? i : dim + i;
-                     if ((ii < 0) || (ii >= dim))
-                         throw py::index_error(
-                                 "Index must be between 0 and " +
-                                 std::to_string(dim));
+                     if ((ii < 0) || (ii >= dim)) {
+                         auto message = "Index must be between 0 and " +
+                                        std::to_string(dim);
+                         throw nb::index_error(message.c_str());
+                     }
                      return v[ii];
                  })
             .def("__setitem__",
                  [](iv_type& v, const int i, const int& val) {
                      const int ii = (i >= 0) ? i : dim + i;
-                     if ((ii < 0) || (ii >= dim))
-                         throw py::index_error(
-                                 "Index must be between 0 and " +
-                                 std::to_string(dim));
+                     if ((ii < 0) || (ii >= dim)) {
+                         auto message = "Index must be between 0 and " +
+                                        std::to_string(dim);
+                         throw nb::index_error(message.c_str());
+                     }
                      return v[ii] = val;
                  })
 
             .def("__len__", [](iv_type const &) { return dim; })
             .def("__iter__", [](iv_type const & v) {
-                return py::make_iterator(v.begin(), v.end());
-            }, py::keep_alive<0, 1>()) /* Keep vector alive while iterator is used */
+                return nb::make_iterator(
+                    nb::type<iv_type>(), "Iterator", v.begin(), v.end()
+                );
+            }, nb::keep_alive<0, 1>()) /* Keep vector alive while iterator is used */
 
             .def("__eq__",
-                 py::overload_cast<int>(&iv_type::operator==, py::const_))
+                 nb::overload_cast<int>(&iv_type::operator==, nb::const_))
             .def("__eq__",
-                 py::overload_cast<const iv_type&>(&iv_type::operator==, py::const_))
+                 nb::overload_cast<const iv_type&>(&iv_type::operator==, nb::const_))
             .def("__ne__",
-                 py::overload_cast<int>(&iv_type::operator!=, py::const_))
+                 nb::overload_cast<int>(&iv_type::operator!=, nb::const_))
             .def("__ne__",
-                 py::overload_cast<const iv_type&>(&iv_type::operator!=, py::const_))
+                 nb::overload_cast<const iv_type&>(&iv_type::operator!=, nb::const_))
             .def("__lt__", &iv_type::operator<)
             .def("__le__", &iv_type::operator<=)
             .def("__gt__", &iv_type::operator>)
             .def("__ge__", &iv_type::operator>=)
 
             .def("__add__",
-                 py::overload_cast<int>(&iv_type::operator+, py::const_))
+                 nb::overload_cast<int>(&iv_type::operator+, nb::const_))
             .def("__add__",
-                 py::overload_cast<const iv_type&>(&iv_type::operator+, py::const_))
+                 nb::overload_cast<const iv_type&>(&iv_type::operator+, nb::const_))
             .def("__sub__",
-                 py::overload_cast<int>(&iv_type::operator-, py::const_))
+                 nb::overload_cast<int>(&iv_type::operator-, nb::const_))
             .def("__sub__",
-                 py::overload_cast<const iv_type&>(&iv_type::operator-, py::const_))
+                 nb::overload_cast<const iv_type&>(&iv_type::operator-, nb::const_))
             .def("__mul__",
-                 py::overload_cast<int>(&iv_type::operator*, py::const_))
+                 nb::overload_cast<int>(&iv_type::operator*, nb::const_))
             .def("__mul__",
-                 py::overload_cast<const iv_type&>(&iv_type::operator*, py::const_))
+                 nb::overload_cast<const iv_type&>(&iv_type::operator*, nb::const_))
             .def("__truediv__",
-                 py::overload_cast<int>(&iv_type::operator/, py::const_))
+                 nb::overload_cast<int>(&iv_type::operator/, nb::const_))
             .def("__truediv__",
-                 py::overload_cast<const iv_type&>(&iv_type::operator/, py::const_))
+                 nb::overload_cast<const iv_type&>(&iv_type::operator/, nb::const_))
             .def("__iadd__",
-                 py::overload_cast<int>(&iv_type::operator+=))
+                 nb::overload_cast<int>(&iv_type::operator+=))
             .def("__iadd__",
-                 py::overload_cast<const iv_type&>(&iv_type::operator+=))
+                 nb::overload_cast<const iv_type&>(&iv_type::operator+=))
             .def("__isub__",
-                 py::overload_cast<int>(&iv_type::operator-=))
+                 nb::overload_cast<int>(&iv_type::operator-=))
             .def("__isub__",
-                 py::overload_cast<const iv_type&>(&iv_type::operator-=))
+                 nb::overload_cast<const iv_type&>(&iv_type::operator-=))
             .def("__imul__",
-                 py::overload_cast<int>(&iv_type::operator*=))
+                 nb::overload_cast<int>(&iv_type::operator*=))
             .def("__imul__",
-                 py::overload_cast<const iv_type&>(&iv_type::operator*=))
+                 nb::overload_cast<const iv_type&>(&iv_type::operator*=))
             .def("__itruediv__",
-                 py::overload_cast<int>(&iv_type::operator/=))
+                 nb::overload_cast<int>(&iv_type::operator/=))
             .def("__itruediv__",
-                 py::overload_cast<const iv_type&>(&iv_type::operator/=))
+                 nb::overload_cast<const iv_type&>(&iv_type::operator/=))
 
             .def("numpy",
                  [](const iv_type& iv) {
-                     auto result = py::array(
-                             py::buffer_info(
-                                     nullptr,
-                                     sizeof(int),
-                                     py::format_descriptor<int>::value,
-                                     1,
-                                     { dim },
-                                     { sizeof(int) }
-                             ));
-                     auto buf = result.request();
-                     int* ptr = static_cast<int*>(buf.ptr);
+                     auto numpy = nb::module_::import_("numpy");
+                     auto result = numpy.attr("empty")(
+                         nb::make_tuple(dim),
+                         numpy.attr("dtype")(pyAMReX::buffer_format<int>())
+                     );
+                     auto array = nb::cast<nb::ndarray<nb::numpy, int, nb::ndim<1>>>(result);
+                     int* ptr = array.data();
                      for (int i=0; i < dim; ++i)
                          ptr[i] = iv[0];
 
@@ -163,18 +163,18 @@ namespace
         ;
 
         m.def("coarsen",
-              py::overload_cast<const iv_type&, const iv_type&>(&coarsen<dim>));
+              nb::overload_cast<const iv_type&, const iv_type&>(&coarsen<dim>));
         m.def("coarsen",
-              py::overload_cast<const Dim3&, const iv_type&>(&coarsen<dim>));
+              nb::overload_cast<const Dim3&, const iv_type&>(&coarsen<dim>));
         m.def("coarsen",
-              py::overload_cast<const iv_type&, int>(&coarsen<dim>));
+              nb::overload_cast<const iv_type&, int>(&coarsen<dim>));
         m.def("refine",
-              py::overload_cast<const Dim3&, const iv_type&>(&refine<dim>));
+              nb::overload_cast<const Dim3&, const iv_type&>(&refine<dim>));
     }
 }
 
 
-void init_IntVect(py::module &m)
+void init_IntVect(nb::module_ &m)
 {
     using namespace amrex;
 

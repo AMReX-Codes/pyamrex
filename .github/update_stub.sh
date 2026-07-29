@@ -1,28 +1,23 @@
 #!/usr/bin/env bash
 #
-# Copyright 2021-2023 The AMReX Community
-#
-# This script updates the .pyi stub files for documentation and interactive use.
-# To run this script, pyAMReX needs to be installed (all dimensions) and importable.
-#
-# Authors: Axel Huebl
+# Copyright 2021-2026 The AMReX Community
 # License: BSD-3-Clause-LBNL
 #
+# Regenerate the committed native-extension stubs with nanobind. Configure the
+# build with -DpyAMReX_BUILD_STUBS=ON first. The public package stubs are kept
+# separately because they describe the pure-Python convenience layer.
 set -eu -o pipefail
 
-# we are in the source directory, .github/
-this_dir=$(cd $(dirname $0) && pwd)
+repo_dir=$(cd "$(dirname "$0")/.." && pwd)
+build_dir=${1:-"${repo_dir}/build"}
+python=${PYTHON:-python3}
+pycache_dir=${PYTHONPYCACHEPREFIX:-"${TMPDIR:-/tmp}/pyamrex-pycache"}
 
-pybind11-stubgen --exit-code --enum-class-locations="GrowthStrategy:amrex.space1d" -o ${this_dir}/../src/ amrex.space1d
-pybind11-stubgen --exit-code --enum-class-locations="GrowthStrategy:amrex.space2d" -o ${this_dir}/../src/ amrex.space2d
-pybind11-stubgen --exit-code --enum-class-locations="GrowthStrategy:amrex.space3d" -o ${this_dir}/../src/ amrex.space3d
+cmake --build "${build_dir}" --target pyAMReX_stubs
 
-# Fix circular default argumetn for
-#   strategy: GrowthStrategy = amrex.space3d.GrowthStrategy.Poisson
-sed -i 's/amrex.space1d.GrowthStrategy/GrowthStrategy/g' src/amrex/space1d/amrex_1d_pybind/__init__.pyi
-sed -i 's/amrex.space2d.GrowthStrategy/GrowthStrategy/g' src/amrex/space2d/amrex_2d_pybind/__init__.pyi
-sed -i 's/amrex.space3d.GrowthStrategy/GrowthStrategy/g' src/amrex/space3d/amrex_3d_pybind/__init__.pyi
-
-sed -i 's/= GrowthStrategy.Poisson/= "GrowthStrategy.Poisson"/g' src/amrex/space1d/amrex_1d_pybind/__init__.pyi
-sed -i 's/= GrowthStrategy.Poisson/= "GrowthStrategy.Poisson"/g' src/amrex/space2d/amrex_2d_pybind/__init__.pyi
-sed -i 's/= GrowthStrategy.Poisson/= "GrowthStrategy.Poisson"/g' src/amrex/space3d/amrex_3d_pybind/__init__.pyi
+# A generated stub is executable Python syntax. Catch malformed docstrings or
+# annotations before the stale-stub workflow compares files.
+PYTHONPYCACHEPREFIX="${pycache_dir}" "${python}" -m py_compile \
+    "${repo_dir}/src/amrex/space1d/amrex_1d_pybind/__init__.pyi" \
+    "${repo_dir}/src/amrex/space2d/amrex_2d_pybind/__init__.pyi" \
+    "${repo_dir}/src/amrex/space3d/amrex_3d_pybind/__init__.pyi"

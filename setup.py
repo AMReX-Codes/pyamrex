@@ -120,7 +120,7 @@ class CMakeBuild(build_ext):
             "-DpyAMReX_IPO=" + PYAMREX_IPO,
             ## dependency control (developers & package managers)
             "-DpyAMReX_amrex_internal=" + AMReX_internal,
-            "-DpyAMReX_pybind11_internal=" + pybind11_internal,
+            "-DpyAMReX_nanobind_internal=" + nanobind_internal,
             # PEP-440 conformant version from package
             "-DpyAMReX_VERSION_INFO=" + self.distribution.get_version(),
             #        see PICSAR and openPMD below
@@ -139,6 +139,12 @@ class CMakeBuild(build_ext):
             cmake_args.append("-DpyAMReX_amrex_branch=" + AMReX_branch)
         if AMReX_src:
             cmake_args.append("-DpyAMReX_amrex_src=" + AMReX_src)
+        if nanobind_repo:
+            cmake_args.append("-DpyAMReX_nanobind_repo=" + nanobind_repo)
+        if nanobind_branch:
+            cmake_args.append("-DpyAMReX_nanobind_branch=" + nanobind_branch)
+        if nanobind_src:
+            cmake_args.append("-DpyAMReX_nanobind_src=" + nanobind_src)
 
         if sys.platform == "darwin":
             cmake_args.append("-DCMAKE_INSTALL_RPATH=@loader_path")
@@ -207,7 +213,10 @@ AMReX_src = os.environ.get("AMREX_SRC")
 AMReX_internal = os.environ.get("AMREX_INTERNAL", "ON")
 AMReX_repo = os.environ.get("AMREX_REPO")
 AMReX_branch = os.environ.get("AMREX_BRANCH")
-pybind11_internal = os.environ.get("PYBIND11_INTERNAL", "ON")
+nanobind_internal = os.environ.get("NANOBIND_INTERNAL", "ON")
+nanobind_repo = os.environ.get("NANOBIND_REPO")
+nanobind_branch = os.environ.get("NANOBIND_BRANCH")
+nanobind_src = os.environ.get("NANOBIND_SRC")
 
 # https://cmake.org/cmake/help/v3.0/command/if.html
 if AMReX_MPI.upper() in ["1", "ON", "TRUE", "YES"]:

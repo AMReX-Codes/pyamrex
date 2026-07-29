@@ -10,7 +10,7 @@
 #include <cstdint>
 
 
-void init_Array4_uint(py::module &m)
+void init_Array4_uint(nb::module_ &m)
 {
     using namespace pyAMReX;
 

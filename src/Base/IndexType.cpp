@@ -18,29 +18,30 @@ namespace {
     int check_index(const int i)
     {
         const int ii = (i >= 0) ? i : AMREX_SPACEDIM + i;
-        if ((ii < 0) || (ii >= AMREX_SPACEDIM))
-             throw py::index_error( "IndexType index " + std::to_string(i) + " out of bounds");
+        if ((ii < 0) || (ii >= AMREX_SPACEDIM)) {
+            auto message = "IndexType index " + std::to_string(i) + " out of bounds";
+            throw nb::index_error(message.c_str());
+        }
         return ii;
     }
 }
 
-void init_IndexType(py::module &m) {
+void init_IndexType(nb::module_ &m) {
     using namespace amrex;
 
-    py::class_< IndexType > index_type(m, "IndexType");
+    nb::class_< IndexType > index_type(m, "IndexType");
 
-    py::native_enum<IndexType::CellIndex>(index_type, "CellIndex", "enum.IntEnum")
+    nb::enum_<IndexType::CellIndex>(index_type, "CellIndex", nb::is_arithmetic())
         .value("CELL", IndexType::CellIndex::CELL)
         .value("NODE", IndexType::CellIndex::NODE)
         .export_values()
-        .finalize()
     ;
 
     index_type.def("__repr__",
-             [](py::object& obj) {
-                 py::str py_name = obj.attr("__class__").attr("__name__");
-                 const std::string name = py_name;
-                 const auto iv = obj.cast<IndexType>();
+             [](nb::object& obj) {
+                 nb::str py_name = obj.attr("__class__").attr("__name__");
+                 const std::string name = nb::cast<std::string>(py_name);
+                 const auto iv = nb::cast<IndexType>(obj);
                  std::stringstream s;
                  s << iv;
                  return "<amrex." + name + " " + s.str() + ">";
@@ -53,10 +54,10 @@ void init_IndexType(py::module &m) {
                  return s.str();
              })
 
-        .def(py::init<>())
-        .def(py::init<IndexType>())
+        .def(nb::init<>())
+        .def(nb::init<IndexType>())
 #if (AMREX_SPACEDIM > 1)
-        .def(py::init<AMREX_D_DECL(IndexType::CellIndex, IndexType::CellIndex, IndexType::CellIndex)>())
+        .def(nb::init<AMREX_D_DECL(IndexType::CellIndex, IndexType::CellIndex, IndexType::CellIndex)>())
 #endif
 
         .def("__getitem__",
@@ -67,9 +68,9 @@ void init_IndexType(py::module &m) {
 
         .def("__len__", [](IndexType const &) { return AMREX_SPACEDIM; })
         .def("__eq__",
-             py::overload_cast<const IndexType&>(&IndexType::operator==, py::const_))
+             nb::overload_cast<const IndexType&>(&IndexType::operator==, nb::const_))
         .def("__ne__",
-             py::overload_cast<const IndexType&>(&IndexType::operator!=, py::const_))
+             nb::overload_cast<const IndexType&>(&IndexType::operator!=, nb::const_))
         .def("__lt__", &IndexType::operator<)
 
         .def("set", [](IndexType& v, int i) {
@@ -93,12 +94,12 @@ void init_IndexType(py::module &m) {
                  v.flip(ii);
              })
 
-        .def("cell_centered", py::overload_cast<>(&IndexType::cellCentered, py::const_))
+        .def("cell_centered", nb::overload_cast<>(&IndexType::cellCentered, nb::const_))
         .def("cell_centered", [](const IndexType& v, int i) {
                  const int ii = check_index(i);
                  return v.cellCentered(ii);
              })
-        .def("node_centered", py::overload_cast<>(&IndexType::nodeCentered, py::const_))
+        .def("node_centered", nb::overload_cast<>(&IndexType::nodeCentered, nb::const_))
         .def("node_centered", [](const IndexType& v, int i) {
                  const int ii = check_index(i);
                  return v.nodeCentered(ii);
@@ -108,7 +109,7 @@ void init_IndexType(py::module &m) {
                  const int ii = check_index(i);
                  v.setType(ii, t);
              })
-        .def("ix_type", py::overload_cast<>(&IndexType::ixType, py::const_))
+        .def("ix_type", nb::overload_cast<>(&IndexType::ixType, nb::const_))
         .def("ix_type", [](const IndexType& v, int i) {
                  const int ii = check_index(i);
                  return v.ixType(ii);

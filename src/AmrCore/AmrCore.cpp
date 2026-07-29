@@ -33,16 +33,15 @@ namespace
      * a Python override (if present). Codes such as ImpactX and WarpX subclass
      * AmrCore in C++; this enables the same pattern from Python.
      *
-     * See pybind11 docs: "Overriding virtual functions in Python".
+     * See the nanobind documentation on overriding virtual functions.
      *
-     * Note: pyAMReX uses the classic std::unique_ptr holder (not smart_holder),
-     * so this trampoline must NOT inherit py::trampoline_self_life_support. The
-     * AmrCore instance is owned by the Python subclass object; lifetime of the
-     * dependent AmrParGDB / ParticleContainer is handled via py::keep_alive.
+     * The AmrCore instance is owned by the Python subclass object; lifetime of
+     * dependent AmrParGDB / ParticleContainer objects is handled via
+     * nb::keep_alive.
      */
     struct PyAmrCore : public amrex::AmrCore
     {
-        using amrex::AmrCore::AmrCore;  // inherit constructors
+        NB_TRAMPOLINE(amrex::AmrCore, 5);
 
         // We use the _NAME variants so Python subclasses override using
         // snake_case method names, consistent with pyAMReX conventions.
@@ -50,10 +49,13 @@ namespace
             int lev, amrex::TagBoxArray& tags, amrex::Real time, int ngrow
         ) override
         {
-            PYBIND11_OVERRIDE_PURE_NAME(
-                void, amrex::AmrCore, "error_est", ErrorEst,
-                lev, py::cast(&tags, py::return_value_policy::reference),
-                time, ngrow);
+            // The generic trampoline macro casts lvalue arguments with the
+            // automatic policy.  For this mutable, non-copyable callback
+            // argument that would attempt to create an owned Python object.
+            // Explicitly expose the existing AMReX object as a reference.
+            nb::detail::ticket ticket(nb_trampoline, "error_est", true);
+            nb_trampoline.base().attr(ticket.key)(
+                lev, nb::cast(&tags, nb::rv_policy::reference), time, ngrow);
         }
 
         void MakeNewLevelFromScratch (
@@ -61,8 +63,8 @@ namespace
             const amrex::BoxArray& ba, const amrex::DistributionMapping& dm
         ) override
         {
-            PYBIND11_OVERRIDE_PURE_NAME(
-                void, amrex::AmrCore, "make_new_level_from_scratch",
+            NB_OVERRIDE_PURE_NAME(
+                "make_new_level_from_scratch",
                 MakeNewLevelFromScratch, lev, time, ba, dm);
         }
 
@@ -71,8 +73,8 @@ namespace
             const amrex::BoxArray& ba, const amrex::DistributionMapping& dm
         ) override
         {
-            PYBIND11_OVERRIDE_PURE_NAME(
-                void, amrex::AmrCore, "make_new_level_from_coarse",
+            NB_OVERRIDE_PURE_NAME(
+                "make_new_level_from_coarse",
                 MakeNewLevelFromCoarse, lev, time, ba, dm);
         }
 
@@ -81,15 +83,14 @@ namespace
             const amrex::BoxArray& ba, const amrex::DistributionMapping& dm
         ) override
         {
-            PYBIND11_OVERRIDE_PURE_NAME(
-                void, amrex::AmrCore, "remake_level", RemakeLevel,
+            NB_OVERRIDE_PURE_NAME(
+                "remake_level", RemakeLevel,
                 lev, time, ba, dm);
         }
 
         void ClearLevel (int lev) override
         {
-            PYBIND11_OVERRIDE_PURE_NAME(
-                void, amrex::AmrCore, "clear_level", ClearLevel, lev);
+            NB_OVERRIDE_PURE_NAME("clear_level", ClearLevel, lev);
         }
     };
 
@@ -101,17 +102,17 @@ namespace
      * type stubs. The member functions are added later (init_AmrCore), once
      * the types AmrCore members reference (AmrParGDB) are registered, too.
      */
-    std::unique_ptr< py::class_< amrex::AmrCore, amrex::AmrMesh, PyAmrCore > >
+    std::unique_ptr< nb::class_< amrex::AmrCore, amrex::AmrMesh, PyAmrCore > >
         py_AmrCore;
 }
 
 
-void init_AmrCore_class (py::module& m)
+void init_AmrCore_class (nb::module_& m)
 {
     using namespace amrex;
 
     py_AmrCore = std::make_unique<
-        py::class_< AmrCore, AmrMesh, PyAmrCore > >(
+        nb::class_< AmrCore, AmrMesh, PyAmrCore > >(
             m, "AmrCore",
             R"pbdoc(
 Base class for Python AMR applications that manage an AMReX mesh hierarchy.
@@ -128,7 +129,7 @@ duration of the callback.
 )pbdoc");
 }
 
-void init_AmrCore (py::module& /* m */)
+void init_AmrCore (nb::module_& /* m */)
 {
     using namespace amrex;
 
@@ -141,13 +142,13 @@ void init_AmrCore (py::module& /* m */)
             }
         )
 
-        .def(py::init< >(),
+        .def(nb::init< >(),
              R"pbdoc(
 Construct an empty AMR core.
 
 The mesh metadata is read from AMReX runtime parameters when available.
 )pbdoc")
-        .def(py::init<
+        .def(nb::init<
                 const RealBox&,
                 int,
                 const Vector<int>&,
@@ -155,8 +156,8 @@ The mesh metadata is read from AMReX runtime parameters when available.
                 Vector<IntVect> const&,
                 Array<int, AMREX_SPACEDIM> const&
              >(),
-             py::arg("rb"), py::arg("max_level_in"), py::arg("n_cell_in"),
-             py::arg("coord"), py::arg("ref_ratios"), py::arg("is_per"),
+             nb::arg("rb"), nb::arg("max_level_in"), nb::arg("n_cell_in"),
+             nb::arg("coord"), nb::arg("ref_ratios"), nb::arg("is_per"),
              R"pbdoc(
 Construct an AMR core from an explicit level-0 problem domain.
 
@@ -176,13 +177,13 @@ ref_ratios : Vector_IntVect
 is_per : Sequence[int]
     Periodicity flags for each coordinate direction.
 )pbdoc")
-        .def(py::init< Geometry const&, AmrInfo const& >(),
-             py::arg("level_0_geom"), py::arg("amr_info"),
+        .def(nb::init< Geometry const&, AmrInfo const& >(),
+             nb::arg("level_0_geom"), nb::arg("amr_info"),
              R"pbdoc(
 Construct an AMR core from a level-0 geometry and an ``AmrInfo`` object.
 )pbdoc")
 
-        .def("init_from_scratch", &AmrCore::InitFromScratch, py::arg("time"),
+        .def("init_from_scratch", &AmrCore::InitFromScratch, nb::arg("time"),
              R"pbdoc(
 Create the AMR hierarchy from scratch at simulation time ``time``.
 
@@ -190,7 +191,7 @@ This calls the Python overrides that allocate level data and, when
 ``max_level`` is greater than 0, calls ``error_est`` to create refined grids.
 )pbdoc")
         .def("regrid", &AmrCore::regrid,
-             py::arg("lbase"), py::arg("time"), py::arg("initial") = false,
+             nb::arg("lbase"), nb::arg("time"), nb::arg("initial") = false,
              R"pbdoc(
 Rebuild levels finer than ``lbase`` at simulation time ``time``.
 
@@ -202,7 +203,7 @@ callbacks as needed.
         // The AmrParGDB is owned by the AmrCore (unique_ptr m_gdb). We hand out
         // a non-owning reference; keep the AmrCore alive while it is used.
         .def("get_par_gdb", &AmrCore::GetParGDB,
-             py::return_value_policy::reference_internal,
+             nb::rv_policy::reference_internal,
              R"pbdoc(
 Return the particle geometry/database broker owned by this AMR core.
 

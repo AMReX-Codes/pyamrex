@@ -29,18 +29,18 @@ struct pyAMReX_PyMPICommObject
 using pyAMReX_PyMPIIntracommObject = pyAMReX_PyMPICommObject;
 
 
-void init_MPMD(py::module &m) {
+void init_MPMD(nb::module_ &m) {
     using namespace amrex;
 
     // Several functions here are copied from AMReX.cpp
     m.def("MPMD_Initialize_without_split",
-          [](const py::list args) {
+          [](const nb::list args) {
               Vector<std::string> cargs{"amrex"};
               Vector<char*> argv;
 
               // Populate the "command line"
               for (const auto& v: args)
-                  cargs.push_back(v.cast<std::string>());
+                  cargs.push_back(nb::cast<std::string>(v));
               for (auto& v: cargs)
                   argv.push_back(&v[0]);
               int argc = argv.size();
@@ -55,13 +55,13 @@ void init_MPMD(py::module &m) {
 
     // This is AMReX::Initialize when MPMD exists
     m.def("initialize_when_MPMD",
-          [](const py::list args, py::object &app_comm_py) {
+          [](const nb::list args, nb::object &app_comm_py) {
               Vector<std::string> cargs{"amrex"};
               Vector<char*> argv;
 
               // Populate the "command line"
               for (const auto& v: args)
-                  cargs.push_back(v.cast<std::string>());
+                  cargs.push_back(nb::cast<std::string>(v));
               for (auto& v: cargs)
                   argv.push_back(&v[0]);
               int argc = argv.size();
@@ -73,16 +73,6 @@ void init_MPMD(py::module &m) {
               char** tmp = argv.data();
 
               const bool build_parm_parse = (cargs.size() > 1);
-
-              //! TODO perform mpi4py import test and check min-version
-              //!       careful: double MPI_Init risk? only import mpi4py.MPI?
-              //!       required C-API init? probably just checks:
-              //! refs:
-              //! -
-              //! https://bitbucket.org/mpi4py/mpi4py/src/3.0.0/demo/wrap-c/helloworld.c
-              //! - installed: include/mpi4py/mpi4py.MPI_api.h
-              //auto m_mpi4py = py::module::import("mpi4py");
-              //amrex::ignore_unused(m_mpi4py);
 
               if (app_comm_py.ptr() == Py_None)
                   throw std::runtime_error(
@@ -96,23 +86,18 @@ void init_MPMD(py::module &m) {
               //   __repr__ (unambiguous)
               //   mpi4py: <mpi4py.MPI.Intracomm object at 0x7f998e6e28d0>
               //   pyMPI:  ... (TODO)
-              py::str const comm_pystr = py::repr(app_comm_py);
-              std::string const comm_str = comm_pystr.cast<std::string>();
+              nb::str const comm_pystr = nb::repr(app_comm_py);
+              std::string const comm_str = nb::cast<std::string>(comm_pystr);
               if (comm_str.substr(0, 12) != std::string("<mpi4py.MPI."))
                   throw std::runtime_error(
                       "MPMD: comm is not an mpi4py communicator: " +
                       comm_str);
-              // only checks same layout, e.g. an `int` in `PyObject` could
-              // pass this
-              if (!py::isinstance<py::class_<pyAMReX_PyMPIIntracommObject> >(
-                      py::type::of(app_comm_py)))
-                  // TODO add mpi4py version from above import check to error
-                  // message
+              nb::object const mpi4py_intracomm =
+                  nb::module_::import_("mpi4py.MPI").attr("Intracomm");
+              if (!nb::isinstance(app_comm_py, mpi4py_intracomm))
                   throw std::runtime_error(
-                      "MPMD: comm has unexpected type layout in " +
-                      comm_str +
-                      " (Mismatched MPI at compile vs. runtime? "
-                      "Breaking mpi4py release?)");
+                      "MPMD: comm is not an mpi4py.MPI.Intracomm: " +
+                      comm_str);
 
               // todo other possible implementations:
               // - pyMPI (inactive since 2008?): import mpi; mpi.WORLD
@@ -133,7 +118,7 @@ void init_MPMD(py::module &m) {
               }
 
               return Initialize(argc, tmp, build_parm_parse, *mpiCommPtr);
-          }, py::return_value_policy::reference);
+          }, nb::rv_policy::reference);
 
     constexpr auto run_gc = []() {
         // explicitly run the garbage collector, so deleted objects
@@ -141,7 +126,7 @@ void init_MPMD(py::module &m) {
         // This is a convenience helper/bandage for making work with Python
         // garbage collectors in various implementations more easy.
         // https://github.com/AMReX-Codes/pyamrex/issues/81
-        auto m_gc = py::module::import("gc");
+        auto m_gc = nb::module_::import_("gc");
         auto collect = m_gc.attr("collect");
         collect();
     };
@@ -157,22 +142,22 @@ void init_MPMD(py::module &m) {
     m.def("MPMD_MyProgId",&MPMD::MyProgId);
 
     // Binding MPMD::Copier class
-    py::class_< MPMD::Copier >(m, "MPMD_Copier")
+    nb::class_< MPMD::Copier >(m, "MPMD_Copier")
         //! Construct an MPMD::Copier without BoxArray and DistributionMApping
-        .def(py::init <bool>())
+        .def(nb::init <bool>())
         //! Construct an MPMD::Copier with BoxArray and DistributionMApping
-        .def(py::init< BoxArray const&, DistributionMapping const&,bool>(),
-             py::arg("ba"),py::arg("dm"),py::arg("send_ba")=false)
+        .def(nb::init< BoxArray const&, DistributionMapping const&,bool>(),
+             nb::arg("ba"),nb::arg("dm"),nb::arg("send_ba")=false)
         // Copier function to send data
         .def("send",&MPMD::Copier::send<FArrayBox>)
         // Copier function to receive data
         .def("recv",&MPMD::Copier::recv<FArrayBox>)
         // Copier's BoxArray
         .def("box_array",&MPMD::Copier::boxArray,
-                py::return_value_policy::reference_internal)
+                nb::rv_policy::reference_internal)
         // Copier's DistributionMapping
         .def("distribution_map",&MPMD::Copier::DistributionMap,
-                py::return_value_policy::reference_internal)
+                nb::rv_policy::reference_internal)
     ;
 
 }
