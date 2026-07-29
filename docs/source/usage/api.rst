@@ -273,6 +273,12 @@ Utility
 
 .. autofunction:: amrex.space3d.write_single_level_plotfile
 
+.. autofunction:: amrex.space3d.write_multi_level_plotfile
+
+.. autoclass:: amrex.space3d.PlotFileData
+   :members:
+   :undoc-members:
+
 
 .. _usage-api-amrcore:
 
@@ -407,6 +413,17 @@ This is for the legacy, AoS + SoA particle containers only:
 ``amrex::Particle<T_NReal, T_NInt>`` is implemented for many numbers of extra Real and Int arguments, e.g.,
 
 .. autoclass:: amrex.space3d.Particle_2_1
+   :members:
+   :undoc-members:
+
+I/O
+"""
+
+Read back particle data from plotfiles and checkpoints, see :ref:`Read Back Plotfiles <usage-how-to-read-plotfiles>`:
+
+.. autofunction:: amrex.space3d.read_particles
+
+.. autoclass:: amrex.space3d.ParticleHeader
    :members:
    :undoc-members:
 
