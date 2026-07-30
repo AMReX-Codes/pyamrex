@@ -27,7 +27,12 @@ namespace
         std::string,
         std::optional<std::string>
     >;
-    using ConfigMap = std::map<std::string, ConfigValue>;
+    struct ConfigEntry
+    {
+        ConfigValue value;
+        char const * doc;
+    };
+    using ConfigMap = std::map<std::string, ConfigEntry>;
 
     std::string config_repr (ConfigMap const & config)
     {
@@ -41,12 +46,12 @@ namespace
         }
 
         std::string repr = "amrex.Config:";
-        for (auto const & [name, value] : config)
+        for (auto const & [name, entry] : config)
         {
             repr += "\n    " + name;
             repr.append(name_width - name.size(), ' ');
             repr += " = ";
-            repr += py::repr(py::cast(value)).cast<std::string>();
+            repr += py::repr(py::cast(entry.value)).cast<std::string>();
         }
         return repr;
     }
@@ -67,76 +72,69 @@ void init_Config (py::module& m)
 
     std::shared_ptr<ConfigMap const> const config = std::make_shared<ConfigMap>(
         ConfigMap{
-            {"amrex_version", Version()},
-            {"gpu_backend", gpu_backend},
-            {"have_eb",
+            {"amrex_version", {
+                Version(),
+                "AMReX library version"}},
+            {"gpu_backend", {
+                gpu_backend,
+                "GPU backend ('CUDA', 'HIP' or 'SYCL'), None without GPU support"}},
+            {"have_eb", {
 #ifdef AMREX_USE_EB
-                true
+                true,
 #else
-                false
+                false,
 #endif
-            },
-            {"have_gpu",
+                "Build supports embedded boundaries"}},
+            {"have_gpu", {
 #ifdef AMREX_USE_GPU
-                true
+                true,
 #else
-                false
+                false,
 #endif
-            },
-            {"have_mpi",
+                "Build supports GPUs"}},
+            {"have_mpi", {
 #ifdef AMREX_USE_MPI
-                true
+                true,
 #else
-                false
+                false,
 #endif
-            },
-            {"have_omp",
+                "Build supports MPI"}},
+            {"have_omp", {
 #ifdef AMREX_USE_OMP
-                true
+                true,
 #else
-                false
+                false,
 #endif
-            },
-            {"have_simd",
+                "Build supports OpenMP"}},
+            {"have_simd", {
 #ifdef AMREX_USE_SIMD
-                true
+                true,
 #else
-                false
+                false,
 #endif
-            },
-            {"precision",
+                "Build supports explicit SIMD vectorization"}},
+            {"precision", {
 #ifdef AMREX_USE_FLOAT
-                std::string{"SINGLE"}
+                std::string{"SINGLE"},
 #else
-                std::string{"DOUBLE"}
+                std::string{"DOUBLE"},
 #endif
-            },
-            {"precision_particles",
+                "Floating point precision of amrex::Real ('SINGLE' or 'DOUBLE')"}},
+            {"precision_particles", {
 #ifdef AMREX_SINGLE_PRECISION_PARTICLES
-                std::string{"SINGLE"}
+                std::string{"SINGLE"},
 #else
-                std::string{"DOUBLE"}
+                std::string{"DOUBLE"},
 #endif
-            },
-            {"simd_size",
-                static_cast<int>(amrex::simd::native_simd_size_real)},
-            {"spacedim", AMREX_SPACEDIM}
+                "Floating point precision of amrex::ParticleReal ('SINGLE' or 'DOUBLE')"}},
+            {"simd_size", {
+                static_cast<int>(amrex::simd::native_simd_size_real),
+                "Number of amrex::Real elements in a native SIMD vector"}},
+            {"spacedim", {
+                AMREX_SPACEDIM,
+                "Number of spatial dimensions (AMREX_SPACEDIM)"}}
         }
     );
-
-    std::map<std::string, char const *> const doc = {
-        {"amrex_version", "AMReX library version"},
-        {"gpu_backend", "GPU backend ('CUDA', 'HIP' or 'SYCL'), None without GPU support"},
-        {"have_eb", "Build supports embedded boundaries"},
-        {"have_gpu", "Build supports GPUs"},
-        {"have_mpi", "Build supports MPI"},
-        {"have_omp", "Build supports OpenMP"},
-        {"have_simd", "Build supports explicit SIMD vectorization"},
-        {"precision", "Floating point precision of amrex::Real ('SINGLE' or 'DOUBLE')"},
-        {"precision_particles", "Floating point precision of amrex::ParticleReal ('SINGLE' or 'DOUBLE')"},
-        {"simd_size", "Number of amrex::Real elements in a native SIMD vector"},
-        {"spacedim", "Number of spatial dimensions (AMREX_SPACEDIM)"}
-    };
 
     py::dict config_metaclass_namespace;
     config_metaclass_namespace["__module__"] = m.attr("__name__");
@@ -156,20 +154,25 @@ void init_Config (py::module& m)
     py::class_<Config> pyAMReXConfig(
         m, "Config", py::metaclass(config_metaclass)
     );
-    for (auto const & entry : *config)
+    for (auto const & [name, entry] : *config)
     {
         pyAMReXConfig.def_property_readonly_static(
-            entry.first.c_str(),
-            [config, name = entry.first](py::object const &) {
-                return config->at(name);
+            name.c_str(),
+            [config, name](py::object const &) {
+                return config->at(name).value;
             },
-            doc.at(entry.first)
+            entry.doc
         );
     }
     pyAMReXConfig.def_static(
         "to_dict",
         [config]() {
-            return *config;
+            py::dict d;
+            for (auto const & [name, entry] : *config)
+            {
+                d[name.c_str()] = entry.value;
+            }
+            return d;
         },
         "Return the AMReX build configuration as a dictionary."
     );
