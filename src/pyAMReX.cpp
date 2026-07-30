@@ -26,6 +26,7 @@ void init_BCUtil(py::module&);
 void init_Box(py::module &);
 void init_RealBox(py::module &);
 void init_BoxArray(py::module &);
+void init_Config(py::module&);
 void init_CoordSys(py::module&);
 void init_Dim3(py::module&);
 void init_DistributionMapping(py::module&);
@@ -125,6 +126,7 @@ PYBIND11_MODULE(amrex_3d_pybind, m) {
     // note: order from parent to child classes and argument usage
 
     init_AMReX(m);
+    init_Config(m);  // after AMReX (metaclass is derived from its type)
     init_Arena(m);
     init_Dim3(m);
     init_Algorithm(m);

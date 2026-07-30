@@ -17,6 +17,7 @@ foreach(D IN LISTS AMReX_SPACEDIM)
         Box.cpp
         RealBox.cpp
         BoxArray.cpp
+        Config.cpp
         CoordSys.cpp
         Dim3.cpp
         DistributionMapping.cpp
