@@ -75,9 +75,11 @@ void init_Config (py::module& m)
             {"amrex_version", {
                 Version(),
                 "AMReX library version"}},
+
             {"gpu_backend", {
                 gpu_backend,
                 "GPU backend ('CUDA', 'HIP' or 'SYCL'), None without GPU support"}},
+
             {"have_eb", {
 #ifdef AMREX_USE_EB
                 true,
@@ -85,6 +87,7 @@ void init_Config (py::module& m)
                 false,
 #endif
                 "Build supports embedded boundaries"}},
+
             {"have_gpu", {
 #ifdef AMREX_USE_GPU
                 true,
@@ -92,6 +95,7 @@ void init_Config (py::module& m)
                 false,
 #endif
                 "Build supports GPUs"}},
+
             {"have_mpi", {
 #ifdef AMREX_USE_MPI
                 true,
@@ -99,6 +103,7 @@ void init_Config (py::module& m)
                 false,
 #endif
                 "Build supports MPI"}},
+
             {"have_omp", {
 #ifdef AMREX_USE_OMP
                 true,
@@ -106,6 +111,7 @@ void init_Config (py::module& m)
                 false,
 #endif
                 "Build supports OpenMP"}},
+
             {"have_simd", {
 #ifdef AMREX_USE_SIMD
                 true,
@@ -113,6 +119,7 @@ void init_Config (py::module& m)
                 false,
 #endif
                 "Build supports explicit SIMD vectorization"}},
+
             {"precision", {
 #ifdef AMREX_USE_FLOAT
                 std::string{"SINGLE"},
@@ -120,6 +127,7 @@ void init_Config (py::module& m)
                 std::string{"DOUBLE"},
 #endif
                 "Floating point precision of amrex::Real ('SINGLE' or 'DOUBLE')"}},
+
             {"precision_particles", {
 #ifdef AMREX_SINGLE_PRECISION_PARTICLES
                 std::string{"SINGLE"},
@@ -127,9 +135,11 @@ void init_Config (py::module& m)
                 std::string{"DOUBLE"},
 #endif
                 "Floating point precision of amrex::ParticleReal ('SINGLE' or 'DOUBLE')"}},
+
             {"simd_size", {
                 static_cast<int>(amrex::simd::native_simd_size_real),
                 "Number of amrex::Real elements in a native SIMD vector"}},
+
             {"spacedim", {
                 AMREX_SPACEDIM,
                 "Number of spatial dimensions (AMREX_SPACEDIM)"}}
@@ -154,8 +164,10 @@ void init_Config (py::module& m)
     py::class_<Config> pyAMReXConfig(
         m, "Config", py::metaclass(config_metaclass)
     );
-    for (auto const & [name, entry] : *config)
+    for (auto const & kv : *config)
     {
+        std::string const & name = kv.first;
+        ConfigEntry const & entry = kv.second;
         pyAMReXConfig.def_property_readonly_static(
             name.c_str(),
             [config, name](py::object const &) {
