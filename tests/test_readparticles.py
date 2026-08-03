@@ -90,6 +90,52 @@ def test_read_particles_header():
 
 
 @pytest.mark.skipif(amr.Config.spacedim != 3, reason="Requires AMREX_SPACEDIM = 3")
+def test_read_particles_grid_table():
+    """The particle Header's grid table locates every grid's binary data."""
+    plt_file_name = "plt_read_grids"
+    n_part = 15
+    write_test_plotfile(plt_file_name, n_part)
+
+    # Manual: Read Particle Grid Table START
+    # the per-level grid table locates each grid's binary particle data:
+    # data file index (DATA_XXXXX), particle count and byte offset
+    header = amr.ParticleHeader.read(plt_file_name, "particles")
+
+    for lev, entries in enumerate(header.grids):
+        for entry in entries:
+            print(lev, entry.which, entry.count, entry.where)
+    # Manual: Read Particle Grid Table END
+
+    assert len(header.grids) == header.finest_level + 1
+    counted = sum(entry.count for entries in header.grids for entry in entries)
+    assert counted == header.num_particles == n_part
+    for entries in header.grids:
+        for entry in entries:
+            assert entry.which >= 0
+            assert entry.count >= 0
+            assert entry.where >= 0
+
+    shutil.rmtree(plt_file_name)
+
+
+@pytest.mark.skipif(amr.Config.spacedim != 3, reason="Requires AMREX_SPACEDIM = 3")
+def test_list_particle_species():
+    """Particle species sub-directories are discovered by name."""
+    plt_file_name = "plt_read_species"
+    write_test_plotfile(plt_file_name, 5)
+
+    # Manual: List Particle Species START
+    # discover the particle species stored in a plotfile
+    species = amr.list_particle_species(plt_file_name)
+    print(species)  # e.g., ["particles"]
+    # Manual: List Particle Species END
+
+    assert species == ["particles"]
+
+    shutil.rmtree(plt_file_name)
+
+
+@pytest.mark.skipif(amr.Config.spacedim != 3, reason="Requires AMREX_SPACEDIM = 3")
 def test_read_particles_roundtrip():
     """amr.read_particles reconstructs a container from a plotfile with no prior
     knowledge of its compile-time layout."""
@@ -294,6 +340,9 @@ def test_read_particles_multilevel():
     )
     header = amr.ParticleHeader.read(plt_file_name, "particles")
     assert header.finest_level == 1
+    # the grid table accounts for the particles level by level
+    table_lev = [sum(e.count for e in entries) for entries in header.grids]
+    assert table_lev == n_lev
 
     pc_read = amr.read_particles(plt_file_name, "particles")
     assert pc_read.finest_level == 0

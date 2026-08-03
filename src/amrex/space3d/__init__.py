@@ -50,6 +50,7 @@ register_AoS_extension(amrex_3d_pybind)
 register_ParticleContainer_extension(amrex_3d_pybind)
 
 
+from ..extensions.ParticleContainer import list_particle_species  # noqa
 from ..extensions.ParticleContainer import read_particles as _read_particles
 
 

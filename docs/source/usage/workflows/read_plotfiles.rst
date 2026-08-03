@@ -31,7 +31,15 @@ Particle Data
 -------------
 
 Particle data in a plotfile or checkpoint is stored in a sub-directory (often called ``particles``, per species name, or similar).
-Use :py:func:`~amrex.space3d.read_particles` to read it back into a particle container - no prior knowledge of the writing container's compile-time layout is needed, the number and names of the particle components are discovered from the file:
+Use :py:func:`~amrex.space3d.list_particle_species` to discover which particle sub-directories a file contains:
+
+.. literalinclude:: ../../../../tests/test_readparticles.py
+   :language: python3
+   :dedent: 4
+   :start-after: # Manual: List Particle Species START
+   :end-before: # Manual: List Particle Species END
+
+Use :py:func:`~amrex.space3d.read_particles` to read a species back into a particle container - no prior knowledge of the writing container's compile-time layout is needed, the number and names of the particle components are discovered from the file:
 
 .. literalinclude:: ../../../../tests/test_readparticles.py
    :language: python3
@@ -50,6 +58,14 @@ To only inspect the on-disk layout, e.g., to check which components a file conta
    :dedent: 4
    :start-after: # Manual: Read Particle Header START
    :end-before: # Manual: Read Particle Header END
+
+The header also exposes the per-level grid table that locates each grid's binary particle data on disk - useful for tools that process the file layout directly, e.g., converters and parallel readers:
+
+.. literalinclude:: ../../../../tests/test_readparticles.py
+   :language: python3
+   :dedent: 4
+   :start-after: # Manual: Read Particle Grid Table START
+   :end-before: # Manual: Read Particle Grid Table END
 
 
 Read Into an Existing Container
