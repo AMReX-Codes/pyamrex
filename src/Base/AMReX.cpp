@@ -3,14 +3,9 @@
 #include <AMReX.H>
 #include <AMReX_Vector.H>
 #include <AMReX_ParmParse.H>
-#include <AMReX_SIMD.H>
 
 #include <string>
 
-
-namespace amrex {
-   struct Config {};
-}
 
 void init_AMReX(py::module& m)
 {
@@ -23,101 +18,6 @@ void init_AMReX(py::module& m)
         .def_static("top", &AMReX::top,
                     py::return_value_policy::reference)
     ;
-
-    py::class_<Config>(m, "Config")
-        .def_property_readonly_static(
-            "amrex_version",
-            [](py::object) { return Version(); },
-            "AMReX library version")
-        .def_property_readonly_static(
-            "spacedim",
-            [](py::object) { return AMREX_SPACEDIM; })
-        .def_property_static(
-            "verbose",
-            [](py::object) { return Verbose(); },
-            [](py::object, const int v) { SetVerbose(v); })
-        .def_property_readonly_static(
-            "have_eb",
-            [](py::object){
-#ifdef AMREX_USE_EB
-                return true;
-#else
-                return false;
-#endif
-            })
-        .def_property_readonly_static(
-            "have_mpi",
-            [](py::object){
-#ifdef AMREX_USE_MPI
-                return true;
-#else
-                return false;
-#endif
-            })
-        .def_property_readonly_static(
-            "have_gpu",
-            [](py::object){
-#ifdef AMREX_USE_GPU
-                return true;
-#else
-                return false;
-#endif
-        })
-        .def_property_readonly_static(
-            "have_omp",
-            [](py::object){
-#ifdef AMREX_USE_OMP
-                return true;
-#else
-                return false;
-#endif
-        })
-        .def_property_readonly_static(
-            "have_simd",
-            [](py::object const &){
-#ifdef AMREX_USE_SIMD
-                return true;
-#else
-                return false;
-#endif
-        })
-        .def_property_readonly_static(
-            "simd_size",
-            [](py::object const &){
-                return amrex::simd::native_simd_size_real;
-        })
-        .def_property_readonly_static(
-            "gpu_backend",
-            [](py::object){
-#ifdef AMREX_USE_CUDA
-                return "CUDA";
-#elif defined(AMREX_USE_HIP)
-                return "HIP";
-#elif defined(AMREX_USE_DPCPP)
-                return "SYCL";
-#else
-                return py::none();
-#endif
-            })
-        .def_property_readonly_static(
-            "precision",
-            [](py::object){
-#ifdef AMREX_USE_FLOAT
-                return "SINGLE";
-#else
-                return "DOUBLE";
-#endif
-        })
-        .def_property_readonly_static(
-            "precision_particles",
-            [](py::object){
-#ifdef AMREX_SINGLE_PRECISION_PARTICLES
-                return "SINGLE";
-#else
-                return "DOUBLE";
-#endif
-            })
-        ;
 
     m.def("initialize",
           [](const py::list args) {
