@@ -29593,6 +29593,31 @@ class ParticleContainer_pureSoA_7_0_polymorphic:
         """
 
 class ParticleHeader:
+    class GridEntry:
+        def __init__(self) -> None: ...
+        def __repr__(self) -> str: ...
+        @property
+        def count(self) -> int:
+            """
+            number of particles stored for this grid
+            """
+        @count.setter
+        def count(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> None: ...
+        @property
+        def where(self) -> int:
+            """
+            byte offset of this grid's particle data within the data file
+            """
+        @where.setter
+        def where(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> None: ...
+        @property
+        def which(self) -> int:
+            """
+            index of the binary data file (DATA_XXXXX) holding this grid's particles
+            """
+        @which.setter
+        def which(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> None: ...
+
     @staticmethod
     def read(dir: str, file: str) -> ParticleHeader:
         """
@@ -29632,6 +29657,14 @@ class ParticleHeader:
         """
     @finest_level.setter
     def finest_level(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> None: ...
+    @property
+    def grids(self) -> list:
+        """
+        per level and grid: where each grid's binary particle data is
+        stored, as a list (levels) of lists of
+        :py:class:`~amrex.ParticleHeader.GridEntry`. Grids without
+        particles have a zero ``count``.
+        """
     @property
     def how(self) -> str:
         """

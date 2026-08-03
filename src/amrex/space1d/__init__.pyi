@@ -58,7 +58,10 @@ from amrex._dll import add_windows_dll_directories
 from amrex.extensions.Array4 import register_Array4_extension
 from amrex.extensions.ArrayOfStructs import register_AoS_extension
 from amrex.extensions.MultiFab import register_MultiFab_extension
-from amrex.extensions.ParticleContainer import register_ParticleContainer_extension
+from amrex.extensions.ParticleContainer import (
+    list_particle_species,
+    register_ParticleContainer_extension,
+)
 from amrex.extensions.PODVector import register_PODVector_extension
 from amrex.extensions.SmallMatrix import register_SmallMatrix_extension
 from amrex.extensions.StructOfArrays import register_SoA_extension
@@ -695,6 +698,7 @@ __all__: list[str] = [
     "is_valid",
     "lbound",
     "length",
+    "list_particle_species",
     "make_invalid",
     "make_valid",
     "max",
