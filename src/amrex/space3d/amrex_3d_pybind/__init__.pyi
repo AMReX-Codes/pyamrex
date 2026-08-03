@@ -399,7 +399,7 @@ class AMReX:
     def top() -> AMReX: ...
 
 class Config:
-    amrex_version: typing.ClassVar[str] = "26.07-54-gaa5b8cc69640"
+    amrex_version: typing.ClassVar[str] = "26.08"
     gpu_backend = None
     have_eb: typing.ClassVar[bool] = True
     have_gpu: typing.ClassVar[bool] = False
@@ -30320,7 +30320,7 @@ Geometric: GrowthStrategy
 Poisson: GrowthStrategy
 __author__: str = "Axel Huebl, Ryan T. Sandberg, Shreyas Ananthan, David P. Grote, Revathi Jambunathan, Edoardo Zoni, Remi Lehe, Andrew Myers, Weiqun Zhang"
 __license__: str = "BSD-3-Clause-LBNL"
-__version__: str = "26.07-54-gaa5b8cc69640"
+__version__: str = "26.08"
 basic: EBSupport
 full: EBSupport
 volume: EBSupport
