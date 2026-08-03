@@ -411,6 +411,11 @@ class Config:
     simd_size: typing.ClassVar[int] = 1
     spacedim: typing.ClassVar[int] = 3
     verbose: typing.ClassVar[int] = 1
+    @staticmethod
+    def to_dict() -> dict:
+        """
+        Return the AMReX build configuration as a dictionary.
+        """
 
 class Arena:
     @staticmethod
