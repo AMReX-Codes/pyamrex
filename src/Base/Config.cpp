@@ -72,10 +72,6 @@ void init_Config (py::module& m)
 
     std::shared_ptr<ConfigMap const> const config = std::make_shared<ConfigMap>(
         ConfigMap{
-            {"amrex_version", {
-                Version(),
-                "AMReX library version"}},
-
             {"gpu_backend", {
                 gpu_backend,
                 "GPU backend ('CUDA', 'HIP' or 'SYCL'), None without GPU support"}},
