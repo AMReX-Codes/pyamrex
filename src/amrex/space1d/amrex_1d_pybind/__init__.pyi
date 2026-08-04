@@ -392,7 +392,6 @@ class AMReX:
     def top() -> AMReX: ...
 
 class Config:
-    amrex_version: typing.ClassVar[str] = "26.08"
     gpu_backend = None
     have_eb: typing.ClassVar[bool] = False
     have_gpu: typing.ClassVar[bool] = False
