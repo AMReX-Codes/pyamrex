@@ -1,23 +1,43 @@
 /*!
-*  Copyright (c) 2017 by Contributors
+ *  Copyright (c) 2017 by Contributors
  * \file dlpack.h
  * \brief The common header of DLPack.
- *
- * Source: https://github.com/dmlc/dlpack/blob/v1.1/include/dlpack/dlpack.h
  */
-#ifndef AMREX_DLPACK_H_
-#define AMREX_DLPACK_H_
+#ifndef DLPACK_DLPACK_H_
+#define DLPACK_DLPACK_H_
 
-#include <AMReX_Extension.H>
-#include <AMReX_Gpu.H>
+/**
+ * \brief Compatibility with C++
+ */
+#ifdef __cplusplus
+#define DLPACK_EXTERN_C extern "C"
+#else
+#define DLPACK_EXTERN_C
+#endif
 
-#include <stdexcept>
-#include <type_traits>
+/*! \brief The current major version of dlpack */
+#define DLPACK_MAJOR_VERSION 1
 
-extern "C" {
+/*! \brief The current minor version of dlpack */
+#define DLPACK_MINOR_VERSION 1
+
+/*! \brief DLPACK_DLL prefix for windows */
+#ifdef _WIN32
+#ifdef DLPACK_EXPORTS
+#define DLPACK_DLL __declspec(dllexport)
+#else
+#define DLPACK_DLL __declspec(dllimport)
+#endif
+#else
+#define DLPACK_DLL
+#endif
 
 #include <stdint.h>
 #include <stddef.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /*!
  * \brief The DLPack version.
@@ -40,15 +60,19 @@ extern "C" {
  */
 typedef struct {
   /*! \brief DLPack major version. */
-  uint32_t major = 1;
+  uint32_t major;
   /*! \brief DLPack minor version. */
-  uint32_t minor = 1;
+  uint32_t minor;
 } DLPackVersion;
 
 /*!
  * \brief The device type in DLDevice.
  */
+#ifdef __cplusplus
 typedef enum : int32_t {
+#else
+typedef enum {
+#endif
   /*! \brief CPU device */
   kDLCPU = 1,
   /*! \brief CUDA GPU device */
@@ -85,6 +109,7 @@ typedef enum : int32_t {
    * \brief Unified shared memory allocated on a oneAPI non-partititioned
    * device. Call to oneAPI runtime is required to determine the device
    * type, the USM allocation type and the sycl context it is bound to.
+   *
    */
   kDLOneAPI = 14,
   /*! \brief GPU support for next generation WebGPU standard. */
@@ -197,7 +222,7 @@ typedef struct {
    * types. This pointer is always aligned to 256 bytes as in CUDA. The
    * `byte_offset` field should be used to point to the beginning of the data.
    *
-   * Note that as of Nov 2021, multiple libraries (CuPy, PyTorch, TensorFlow,
+   * Note that as of Nov 2021, multiply libraries (CuPy, PyTorch, TensorFlow,
    * TVM, perhaps others) do not adhere to this 256 byte aligment requirement
    * on CPU/CUDA/ROCm, and always use `byte_offset=0`.  This must be fixed
    * (after which this note will be updated); at the moment it is recommended
@@ -238,7 +263,37 @@ typedef struct {
   uint64_t byte_offset;
 } DLTensor;
 
-// bit masks used in the DLManagedTensorVersioned
+/*!
+ * \brief C Tensor object, manage memory of DLTensor. This data structure is
+ *  intended to facilitate the borrowing of DLTensor by another framework. It is
+ *  not meant to transfer the tensor. When the borrowing framework doesn't need
+ *  the tensor, it should call the deleter to notify the host that the resource
+ *  is no longer needed.
+ *
+ * \note This data structure is used as Legacy DLManagedTensor
+ *       in DLPack exchange and is deprecated after DLPack v0.8
+ *       Use DLManagedTensorVersioned instead.
+ *       This data structure may get renamed or deleted in future versions.
+ *
+ * \sa DLManagedTensorVersioned
+ */
+typedef struct DLManagedTensor {
+  /*! \brief DLTensor which is being memory managed */
+  DLTensor dl_tensor;
+  /*! \brief the context of the original host framework of DLManagedTensor in
+   *   which DLManagedTensor is used in the framework. It can also be NULL.
+   */
+  void * manager_ctx;
+  /*!
+   * \brief Destructor - this should be called
+   * to destruct the manager_ctx  which backs the DLManagedTensor. It can be
+   * NULL if there is no way for the caller to provide a reasonable destructor.
+   * The destructor deletes the argument self as well.
+   */
+  void (*deleter)(struct DLManagedTensor * self);
+} DLManagedTensor;
+
+// bit masks used in in the DLManagedTensorVersioned
 
 /*! \brief bit mask to indicate that the tensor is read only. */
 #define DLPACK_FLAG_BITMASK_READ_ONLY (1UL << 0UL)
@@ -305,133 +360,7 @@ struct DLManagedTensorVersioned {
   DLTensor dl_tensor;
 };
 
-} // extern "C"
-
-namespace pyAMReX::dlpack
-{
-
-    template<typename T>
-    AMREX_INLINE
-    DLDataType get_dlpack_dtype ()
-    {
-        using V = std::decay_t<T>;
-        DLDataType dtype{};
-
-        if constexpr (std::is_same_v<V, float>) {
-            dtype.code = kDLFloat;
-            dtype.bits = 32;
-            dtype.lanes = 1;
-        }
-        else if constexpr (std::is_same_v<V, double>) {
-            dtype.code = kDLFloat;
-            dtype.bits = 64;
-            dtype.lanes = 1;
-        }
-        else if constexpr (std::is_same_v<V, int32_t>) {
-            dtype.code = kDLInt;
-            dtype.bits = 32;
-            dtype.lanes = 1;
-        }
-        else if constexpr (std::is_same_v<V, int64_t>) {
-            dtype.code = kDLInt;
-            dtype.bits = 64;
-            dtype.lanes = 1;
-        }
-        else if constexpr (std::is_same_v<V, uint32_t>) {
-            dtype.code = kDLUInt;
-            dtype.bits = 32;
-            dtype.lanes = 1;
-        }
-        else if constexpr (std::is_same_v<V, uint64_t>) {
-            dtype.code = kDLUInt;
-            dtype.bits = 64;
-            dtype.lanes = 1;
-        }
-        else {
-            throw std::runtime_error("Unsupported dtype for DLPack");
-        }
-
-        return dtype;
-    }
-
-    AMREX_INLINE
-    DLDevice detect_device_from_pointer ([[maybe_unused]] const void* ptr)
-    {
-        DLDevice device{ kDLCPU, 0 };
-
-#ifdef AMREX_USE_CUDA
-        // Check if data is on GPU by checking if pointer is in CUDA memory
-        // note: cudaPointerGetAttributes is quite expensive, remove and
-        //       assume device-side if need be.
-        cudaPointerAttributes attr;
-        cudaError_t err = cudaPointerGetAttributes(&attr, ptr);
-        if (err == cudaSuccess && attr.type == cudaMemoryTypeDevice) {
-            device.device_type = kDLCUDA;
-            device.device_id = attr.device;
-        }
-#elif defined(AMREX_USE_HIP)
-        // Check if data is on GPU by checking if pointer is in HIP memory
-        // note: hipPointerGetAttributes is quite expensive, remove and
-        //       assume device-side if need be.
-        hipPointerAttribute_t attr;
-        hipError_t err = hipPointerGetAttributes(&attr, ptr);
-        if (err == hipSuccess && attr.memoryType == hipMemoryTypeDevice) {
-            device.device_type = kDLROCM;
-            device.device_id = attr.device;
-        }
-
-#elif defined(AMREX_USE_DPCPP)
-        // try {
-            // Get the SYCL context and queue from AMReX
-            auto const& queue = amrex::Gpu::Device::streamQueue();
-            auto const& context = queue.get_context();
-
-            // Try to get pointer attributes using SYCL USM queries
-            auto usm_type = sycl::get_pointer_type(ptr, context);
-
-            if (usm_type == sycl::usm::alloc::device ||
-                usm_type == sycl::usm::alloc::shared) {
-                device.device_type = kDLOneAPI;
-
-                // Try to get the actual device from the pointer
-                try {
-                    auto device_ptr = sycl::get_pointer_device(ptr, context);
-                    device.device_id = 0;  // Default to first device
-
-                    auto devices = context.get_devices();
-                    for (size_t i = 0; i < devices.size(); ++i) {
-                        if (devices[i] == device_ptr) {
-                            device.device_id = static_cast<int32_t>(i);
-                            break;
-                        }
-                    }
-                } catch (const sycl::exception&) {
-                    // If we can't determine the specific device, default to 0
-                    device.device_id = 0;
-                }
-            } else if (usm_type == sycl::usm::alloc::host) {
-                // Host USM allocation - still oneAPI but accessible from host
-                device.device_type = kDLOneAPI;
-                device.device_id = 0;
-            }
-            // If usm_type is sycl::usm::alloc::unknown, it might be regular CPU memory
-            // In that case, we keep the default CPU device type set above
-
-        /*
-        }
-        catch (const sycl::exception&) {
-            // If SYCL queries fail, assume it's regular CPU memory
-            // device remains as kDLCPU, 0 (set at function start)
-        } catch (...) {
-            // Handle any other exceptions gracefully
-            // device remains as kDLCPU, 0 (set at function start)
-        }
-        */
+#ifdef __cplusplus
+}  // DLPACK_EXTERN_C
 #endif
-
-        return device;
-    }
-
-} // namespace pyAMReX::dlpack
-
-#endif // AMREX_DLPACK_H_
+#endif  // DLPACK_DLPACK_H_
