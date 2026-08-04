@@ -1,9 +1,19 @@
 # -*- coding: utf-8 -*-
 
+import ctypes
+
 import numpy as np
 import pytest
 
 import amrex.space3d as amr
+
+
+def pycapsule_is_valid(capsule, name):
+    """Check a PyCapsule's name, without consuming it."""
+    PyCapsule_IsValid = ctypes.pythonapi.PyCapsule_IsValid
+    PyCapsule_IsValid.restype = ctypes.c_int
+    PyCapsule_IsValid.argtypes = [ctypes.py_object, ctypes.c_char_p]
+    return bool(PyCapsule_IsValid(capsule, name))
 
 
 def test_array4_empty():
@@ -47,7 +57,7 @@ def test_array4():
     assert arr[3, 2, 1] == 1
 
     # copy to numpy using DLPack
-    c_arr2np = np.from_dlpack(arr)
+    c_arr2np = np.from_dlpack(arr, copy=True)
     assert c_arr2np.ndim == 4
     assert c_arr2np.dtype == np.dtype("double")
     print(f"c_arr2np: {c_arr2np.__array_interface__}")
@@ -56,20 +66,103 @@ def test_array4():
 
     # view to numpy using DLPack
     v_arr2np = np.from_dlpack(arr)
-    assert c_arr2np.ndim == 4
+    assert v_arr2np.ndim == 4
     assert v_arr2np.dtype == np.dtype("double")
     np.testing.assert_array_equal(x, v_arr2np[0, :, :, :])
     assert v_arr2np[0, 1, 1, 1] == 42
 
     # change original buffer once more
     x[1, 1, 1] = 43
+    # the view reflects the change, the copy does not
     assert v_arr2np[0, 1, 1, 1] == 43
+    assert c_arr2np[0, 1, 1, 1] == 42
+
+    # write through the view
+    v_arr2np[0, 0, 0, 0] = 7
+    assert x[0, 0, 0] == 7
+    x[0, 0, 0] = 1
 
     # copy array4 (view)
     c_arr = amr.Array4_double(arr)
     v_carr2np = np.from_dlpack(c_arr)
     x[1, 1, 1] = 44
     assert v_carr2np[0, 1, 1, 1] == 44
+
+
+def test_array4_dlpack_capsules():
+    x = np.ones((2, 3, 4))
+    arr = amr.Array4_double(x)
+
+    # legacy consumers (max_version=None) get an unversioned "dltensor"
+    cap = arr.__dlpack__()
+    assert pycapsule_is_valid(cap, b"dltensor")
+    assert not pycapsule_is_valid(cap, b"dltensor_versioned")
+
+    # a max_version below (1, 0) also selects the legacy capsule
+    cap = arr.__dlpack__(max_version=(0, 8))
+    assert pycapsule_is_valid(cap, b"dltensor")
+
+    # DLPack 1.x consumers get a versioned capsule
+    cap = arr.__dlpack__(max_version=(1, 1))
+    assert pycapsule_is_valid(cap, b"dltensor_versioned")
+    cap = arr.__dlpack__(max_version=(1, 0))
+    assert pycapsule_is_valid(cap, b"dltensor_versioned")
+    del cap
+
+    # device info: host memory
+    assert arr.__dlpack_device__() == (int(amr.DLDeviceType.kDLCPU), 0)
+
+    # same-device request is fine, in tuple and enum form
+    np.from_dlpack(arr)
+    v = arr.__dlpack__(dl_device=(int(amr.DLDeviceType.kDLCPU), 0))
+    assert pycapsule_is_valid(v, b"dltensor")
+    v = arr.__dlpack__(dl_device=(amr.DLDeviceType.kDLCPU, 0))
+    assert pycapsule_is_valid(v, b"dltensor")
+
+
+def test_array4_dlpack_errors():
+    x = np.ones((2, 3, 4))
+    arr = amr.Array4_double(x)
+
+    # stream is undefined for CPU tensors
+    with pytest.raises(ValueError):
+        arr.__dlpack__(stream=1)
+
+    # transfers to non-CPU devices are unsupported
+    with pytest.raises(BufferError):
+        arr.__dlpack__(dl_device=(int(amr.DLDeviceType.kDLCUDA), 0))
+
+    # malformed keyword arguments
+    with pytest.raises(TypeError):
+        arr.__dlpack__(max_version=1)
+    with pytest.raises(TypeError):
+        arr.__dlpack__(dl_device=(1,))
+    with pytest.raises(TypeError):
+        arr.__dlpack__(copy=1)
+
+
+def test_array4_dlpack_keeps_alive(assert_keeps_python_alive):
+    x = np.ones((2, 3, 4))
+    arr = amr.Array4_double(x)
+
+    # the consuming array holds a reference on the producing Array4 ...
+    view = assert_keeps_python_alive(arr, lambda: np.from_dlpack(arr))
+    # ... and mutations round-trip
+    view[0, 0, 0, 0] = 3
+    assert arr[0, 0, 0] == 3
+
+    # a copy does not need to keep the producer alive, but stays valid
+    copied = np.from_dlpack(arr, copy=True)
+    arr = None
+    view = None
+    assert copied[0, 0, 0, 0] == 3
+
+
+def test_array4_dlpack_empty():
+    empty = amr.Array4_double()
+    assert empty.__dlpack_device__() == (int(amr.DLDeviceType.kDLCPU), 0)
+    v = np.from_dlpack(empty)
+    assert v.size == 0
 
 
 def test_array4_views_keep_sources_alive(assert_keeps_python_alive):
@@ -79,6 +172,74 @@ def test_array4_views_keep_sources_alive(assert_keeps_python_alive):
     assert_keeps_python_alive(arr, lambda: amr.Array4_double(arr))
     assert_keeps_python_alive(arr, lambda: amr.Array4_double(arr, 0))
     assert_keeps_python_alive(arr, lambda: amr.Array4_double(arr, 0, 1))
+
+
+@pytest.mark.skipif(
+    amr.Config.gpu_backend != "CUDA", reason="Requires AMReX_GPU_BACKEND=CUDA"
+)
+def test_array4_dlpack_cupy(mfab_device):
+    import cupy as cp
+
+    # AMReX -> cupy: zero-copy view on the device
+    for mfi in mfab_device:
+        arr = mfab_device.array(mfi)
+        device_type, device_id = arr.__dlpack_device__()
+        assert device_type == int(amr.DLDeviceType.kDLCUDA)
+        assert device_id >= 0
+
+        marr = cp.from_dlpack(arr)
+        assert marr.dtype == cp.float64
+        marr[...] = 5.0
+
+    # mutations through the view are visible in the MultiFab
+    for mfi in mfab_device:
+        marr = cp.from_dlpack(mfab_device.array(mfi))
+        assert cp.all(marr == 5.0)
+
+    # device-side copy: isolated from the source
+    for mfi in mfab_device:
+        arr = mfab_device.array(mfi)
+        c_marr = arr.to_cupy(copy=True, order="C")
+        c_marr[...] = 6.0
+        assert cp.all(cp.from_dlpack(arr) == 5.0)
+        break
+
+
+@pytest.mark.skipif(
+    amr.Config.gpu_backend != "CUDA", reason="Requires AMReX_GPU_BACKEND=CUDA"
+)
+def test_array4_dlpack_device_to_host(mfab_device):
+    # np.from_dlpack(..., device="cpu") requests dl_device=(kDLCPU, 0),
+    # which triggers a producer-side device-to-host copy
+    mfab_device.set_val(7.0)
+    for mfi in mfab_device:
+        arr = mfab_device.array(mfi)
+        host = np.from_dlpack(arr, device="cpu")
+        assert np.all(host == 7.0)
+
+        # copy=False must refuse the device-to-host transfer
+        with pytest.raises(BufferError):
+            arr.__dlpack__(dl_device=(int(amr.DLDeviceType.kDLCPU), 0), copy=False)
+        break
+
+
+@pytest.mark.skipif(
+    amr.Config.gpu_backend != "CUDA", reason="Requires AMReX_GPU_BACKEND=CUDA"
+)
+def test_array4_dlpack_pytorch(mfab_device):
+    import torch
+
+    mfab_device.set_val(1.0)
+    for mfi in mfab_device:
+        arr = mfab_device.array(mfi)
+        # zero-copy: torch passes its current stream for synchronization
+        t = torch.from_dlpack(arr)
+        assert t.is_cuda
+        t += 1.0
+
+    for mfi in mfab_device:
+        t = torch.from_dlpack(mfab_device.array(mfi))
+        assert torch.all(t == 2.0)
 
 
 @pytest.mark.skipif(

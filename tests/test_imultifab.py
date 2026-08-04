@@ -345,7 +345,9 @@ def test_imfab_ops_cuda_cupy(imfab_device):
             xp = cp.get_array_module(mm)
             assert xp.__name__ == "cupy"
             mm = xp.ones_like(mm) * 10
-            mm /= 2
+            # floor division: integer arrays do not support in-place
+            # true division
+            mm //= 2
             return mm
 
         for mfi in imfab_device:

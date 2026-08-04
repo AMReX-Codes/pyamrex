@@ -134,6 +134,76 @@ def test_to_device_from_device_vector():
     )
 
 
+def test_podvector_dlpack():
+    import numpy as np
+
+    podv = amr.PODVector_int_std()
+    for v in [1, 2, 1, 5]:
+        podv.push_back(v)
+
+    # host memory
+    assert podv.__dlpack_device__() == (int(amr.DLDeviceType.kDLCPU), 0)
+
+    # zero-copy view
+    view = np.from_dlpack(podv)
+    assert view.ndim == 1
+    assert view.shape == (4,)
+    view[2] = 3
+    assert podv[2] == 3
+
+    # isolated copy
+    copied = np.from_dlpack(podv, copy=True)
+    copied[0] = 42
+    assert podv[0] == 1
+
+
+def test_podvector_dlpack_keeps_alive(assert_keeps_python_alive):
+    import numpy as np
+
+    podv = amr.PODVector_real_std()
+    podv.push_back(1.0)
+    view = assert_keeps_python_alive(podv, lambda: np.from_dlpack(podv))
+    view[0] = 2.0
+    assert podv[0] == 2.0
+
+
+@pytest.mark.skipif(not amr.Config.have_gpu, reason="requires AMReX GPU support")
+def test_podvector_dlpack_device():
+    cp = pytest.importorskip("cupy")
+    import numpy as np
+
+    values = np.array([1.0, 2.5, -3.0], dtype=np.float64)
+    podv = amr.NonManagedDeviceVector_real.from_numpy(values)
+
+    device_type, _ = podv.__dlpack_device__()
+    assert device_type in (
+        int(amr.DLDeviceType.kDLCUDA),
+        int(amr.DLDeviceType.kDLROCM),
+        int(amr.DLDeviceType.kDLOneAPI),
+    )
+
+    # zero-copy view on the device
+    marr = cp.from_dlpack(podv)
+    cp.testing.assert_array_equal(marr, cp.asarray(values.astype(marr.dtype)))
+    marr[0] = 7.0
+    assert podv[0] == 7.0
+
+
+@pytest.mark.skipif(not amr.Config.have_gpu, reason="requires AMReX GPU support")
+def test_podvector_dlpack_pinned():
+    import numpy as np
+
+    # pinned memory is host-accessible: NumPy can view it directly
+    pinned = amr.HostVector_real()
+    pinned.push_back(1.0)
+    pinned.push_back(2.0)
+
+    view = np.from_dlpack(pinned)
+    np.testing.assert_array_equal(view, np.array([1.0, 2.0], dtype=view.dtype))
+    view[0] = 3.0
+    assert pinned[0] == 3.0
+
+
 @pytest.mark.skipif(not amr.Config.have_gpu, reason="requires AMReX GPU support")
 def test_from_numpy_device_only():
     # device-only allocator: the host-to-device copy must work without CuPy

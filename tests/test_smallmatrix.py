@@ -118,6 +118,30 @@ def test_smallmatrix_to_np():
     assert x.flags["F_CONTIGUOUS"]
 
 
+def test_smallmatrix_dlpack(assert_keeps_python_alive):
+    iden = amr.SmallMatrix_6x6_F_SI1_double.identity()
+
+    # DLPack and __array_interface__/to_numpy expose the same view
+    x = np.from_dlpack(iden)
+    np.testing.assert_array_equal(x, iden.to_numpy(order="C"))
+    assert x.sum() == 6
+    assert x.trace() == 6
+
+    # host memory
+    assert iden.__dlpack_device__() == (int(amr.DLDeviceType.kDLCPU), 0)
+
+    # writes through the view modify the matrix (a stack value type held
+    # alive by the capsule's producer reference)
+    view = assert_keeps_python_alive(iden, lambda: np.from_dlpack(iden))
+    view[0, 0] = 5.0
+    assert iden[1, 1] == 5.0
+
+    # long double has no DLPack representation: the protocol is not bound
+    ld = amr.SmallMatrix_6x6_F_SI1_longdouble.zero()
+    assert not hasattr(ld, "__dlpack__")
+    assert not hasattr(ld, "__dlpack_device__")
+
+
 def test_smallmatrix_smallvector():
     v3 = amr.SmallMatrix_6x1_F_SI1_double.zero()
     v3[1] = 1.0

@@ -203,6 +203,10 @@ def test_define_and_return_particle_tile():
     not hasattr(amr, "ParticleContainer_pureSoA_11_0_polymorphic"),
     reason="ImpactX pure-SoA particle container not built",
 )
+@pytest.mark.skipif(
+    amr.Config.have_gpu,
+    reason="writes through host NumPy views into The_Arena() (device) memory",
+)
 def test_pure_soa_container_from_gdb_add_particles():
     """End-to-end: AmrCore -> ParGDB -> pure-SoA PC -> in-place particle add.
 

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import numpy as np
+import pytest
 
 import amrex.space3d as amr
 
@@ -57,6 +58,11 @@ def test_fill_domain_boundary_foextrap(std_box):
         assert np.all(arr == inner)
 
 
+@pytest.mark.skipif(
+    amr.Config.have_gpu,
+    reason="assigns host NumPy arrays into device (CuPy) views; "
+    "needs an xp-aware rewrite",
+)
 def test_fill_domain_boundary_linear(std_box):
     """foextrap continues a linear-in-x field flat at the x faces"""
     sd = amr.Config.spacedim
@@ -108,6 +114,11 @@ def test_physbcfunct_noop(std_box):
         assert np.all(arr == sentinel)
 
 
+@pytest.mark.skipif(
+    amr.Config.have_gpu,
+    reason="CpuBndryFuncFab runs on the host and requires host-accessible "
+    "MultiFab data",
+)
 def test_physbcfunct_cpu(std_box):
     """PhysBCFunct_CpuBndryFuncFab fills domain ghost cells like
     fill_domain_boundary"""
@@ -136,6 +147,11 @@ def test_physbcfunct_cpu(std_box):
         assert np.all(arr == inner)
 
 
+@pytest.mark.skipif(
+    amr.Config.have_gpu,
+    reason="CpuBndryFuncFab runs on the host and requires host-accessible "
+    "MultiFab data",
+)
 def test_physbcfunct_cpu_with_offsets(std_box):
     sd = amr.Config.spacedim
     geom = make_geometry(std_box)

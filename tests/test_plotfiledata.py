@@ -91,11 +91,13 @@ def test_plotfiledata_read_docs():
     # read a field component on a level as a MultiFab ...
     mf_density = plt.get(0, "density")
 
-    # ... and access its blocks as numpy/cupy arrays (zero-copy views)
+    # ... and access its blocks as numpy/cupy/dpnp arrays (zero-copy views)
     total = 0.0
     for mfi in mf_density:
         marr_xp = mf_density.array(mfi).to_xp()
-        total += marr_xp.sum()  # compute, plot, analyze, ...
+        # float() coerces the per-block reduction to a host scalar for any
+        # array module (NumPy/CuPy/dpnp)
+        total += float(marr_xp.sum())  # compute, plot, analyze, ...
     # Manual: Read Plotfile Mesh END
 
     assert finest_level == 0

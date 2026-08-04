@@ -29,3 +29,30 @@ def test_basefab_array4_constructor_keeps_array4_alive(
     assert_keeps_python_alive(
         arr, lambda: amr.BaseFab_Real(arr, amr.IndexType.cell_type())
     )
+
+
+def test_basefab_dlpack(assert_keeps_python_alive):
+    box = amr.Box((0, 0, 0), (7, 7, 7))
+    # pinned memory is host-accessible in CPU and GPU builds alike
+    bf = amr.BaseFab_Real(box, 2, amr.The_Pinned_Arena())
+
+    view = np.from_dlpack(bf)
+    assert view.shape == (2, 8, 8, 8)
+    view[...] = 3.0
+    assert np.all(np.from_dlpack(bf) == 3.0)
+
+    # the consuming array keeps the BaseFab alive
+    assert_keeps_python_alive(bf, lambda: np.from_dlpack(bf))
+
+
+def test_basefab_dlpack_readonly():
+    box = amr.Box((0, 0, 0), (3, 3, 3))
+    bf = amr.BaseFab_Real(box, 1, amr.The_Pinned_Arena())
+
+    # a const Array4 exports as a read-only tensor (DLPack >= 1.0 consumers)
+    cview = np.from_dlpack(bf.const_array())
+    assert not cview.flags.writeable
+
+    # the non-const path stays writable
+    view = np.from_dlpack(bf.array())
+    assert view.flags.writeable
