@@ -63,7 +63,7 @@ jobs:
 
         python3 -m pip install -U pip setuptools[core] wheel
         python3 -m pip install -U mpi4py pytest pre-commit
-        python3 -m pip install -U "pybind11-stubgen @ git+https://github.com/ax3l/pybind11-stubgen.git@fix-enum-py-protected-members"
+        python3 -m pip install -U "pybind11-stubgen @ git+https://github.com/pybind/pybind11-stubgen.git@89f0899809ac88b4378d8ea70b31906f6697c958"
         cmake -S . -B build -DAMReX_SPACEDIM="1;2;3" -DAMReX_EB=ON -DpyAMReX_IPO=OFF
         cmake --build build -j 4 --target pip_install
 
