@@ -13,7 +13,7 @@ Please see installation instructions below.
 - `pybind11 3.0.0+ <https://github.com/pybind/pybind11/>`__: we automatically download and compile a copy
 - `Python 3.11+ <https://www.python.org>`__
 
-  - `numpy 1.15+ <https://numpy.org>`__
+  - `numpy 1.15+ <https://numpy.org>`__ (1.23+ for ``numpy.from_dlpack``, 2.1+ for DLPack device requests and read-only views)
 
 Optional dependencies include:
 
@@ -29,7 +29,8 @@ Optional dependencies include:
 - `Python dependencies <https://www.python.org>`__
 
   - `mpi4py 2.1+ <https://mpi4py.readthedocs.io>`__: for multi-node and/or multi-GPU execution
-  - `cupy 12.2+ <https://github.com/cupy/cupy#installation>`__
+  - `cupy 12.2+ <https://github.com/cupy/cupy#installation>`__ (13.0+ for DLPack copy/device requests): for CUDA/ROCm GPU zero-copy views
+  - `dpnp 0.16+ <https://intelpython.github.io/dpnp/>`__: for Intel (SYCL) GPU zero-copy views
   - `numba 0.56+ <https://numba.readthedocs.io/en/stable/user/installing.html>`__
   - `pandas 2+ <https://pandas.pydata.org>`__: for DataFrame support
   - `torch 1.12+ <https://pytorch.org/get-started/locally/>`__
