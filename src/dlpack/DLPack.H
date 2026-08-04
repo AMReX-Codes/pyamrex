@@ -6,6 +6,14 @@
 #pragma once
 
 #include "pyAMReX.H"
+// dlpack.h is re-vendored byte-identical from upstream v1.1. We stay on the
+// 1.1 minor to maximize consumer compatibility (numpy/cupy/dpnp/torch), and
+// emit both versioned and legacy capsules based on the consumer's max_version.
+// v1.2/v1.3 were reviewed and are additive-only for our use: the kDLTrn device
+// type and the opt-in __dlpack_c_exchange_api__ fast-exchange protocol, neither
+// of which we produce or consume; the DLManagedTensorVersioned ABI is unchanged.
+// v1.2 also made strides non-null mandatory when ndim>0 (see PODVector.cpp),
+// which we already satisfy.
 #include "dlpack.h"
 
 #include <complex>

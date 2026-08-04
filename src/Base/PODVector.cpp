@@ -372,7 +372,9 @@ void bind_dlpack(py::class_<amrex::PODVector<T, Allocator> > & cl)
             info.dtype = dlpack::get_dlpack_dtype<T>();
             info.shape = {static_cast<std::int64_t>(podvector.size())};
             // explicit unit stride: some consumers (e.g., dpnp/dpctl) mishandle
-            // a null strides pointer, so we do not rely on the compact default
+            // a null strides pointer, so we do not rely on the compact default.
+            // This also satisfies the DLPack >= 1.2 requirement that strides be
+            // non-null when ndim > 0.
             info.strides = {1};
             info.read_only = false;
             info.itemsize = sizeof(T);
