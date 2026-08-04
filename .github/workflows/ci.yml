@@ -1,6 +1,17 @@
 name: 👑 CI
 
-on: [push, pull_request]
+on:
+  # Developers work from forks, whose pushes never trigger us here; the only
+  # branches pushed directly to this repo are mainline and the pre-commit.ci /
+  # dependabot update branches, which open PRs and are covered by the
+  # pull_request trigger below. Running on those pushes as well would only
+  # duplicate the CI and store a second, redundant set of Actions caches under
+  # refs/heads/<branch> next to the refs/pull/<n>/merge ones.
+  # A branch filter also excludes tag pushes, which would otherwise cache under
+  # the never-restorable refs/heads/refs/tags/<tag>.
+  push:
+    branches: [development]
+  pull_request:
 
 concurrency:
   group: ${{ github.ref }}-${{ github.head_ref }}-ci
