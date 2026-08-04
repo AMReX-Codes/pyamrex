@@ -94,7 +94,7 @@ jobs:
       # live on the Windows-side workspace. The build below copies it into a
       # native ext4 directory inside WSL (fast) for the actual ccache I/O and
       # writes it back here at the end, avoiding slow 9p-mounted ccache access.
-      uses: actions/cache@v4
+      uses: actions/cache@v6
       with:
         path: ${{ github.workspace }}/.ccache
         key: ccache-${{ github.workflow }}-${{ github.job }}-git-${{ github.sha }}
