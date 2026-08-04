@@ -6,6 +6,7 @@
 #pragma once
 
 #include "pyAMReX.H"
+#include "dlpack/DLPack.H"
 
 #include <AMReX_SmallMatrix.H>
 
@@ -19,32 +20,6 @@
 
 namespace
 {
-    // helper type traits
-    template <typename T>
-    struct get_value_type { using value_type = T; };
-    template <typename T>
-    struct get_value_type<std::complex<T>> { using value_type = T; };
-    template <typename T>
-    using get_value_type_t = typename get_value_type<T>::value_type;
-
-    // helper to check if Array4<T> is of constant value type T
-    template <typename T>
-    constexpr bool is_not_const ()
-    {
-        return std::is_same_v<
-            std::remove_cv_t<
-                T
-            >,
-            T
-        > &&
-        std::is_same_v<
-            std::remove_cv_t<
-                get_value_type_t<T>
-            >,
-            get_value_type_t<T>
-        >;
-    }
-
     /** CPU: __array_interface__ v3
      *
      * https://numpy.org/doc/stable/reference/arrays.interface.html
@@ -143,7 +118,7 @@ namespace
         ;
 
         // setter
-        if constexpr (is_not_const<T>())
+        if constexpr (pyAMReX::is_not_const<T>())
         {
             py_sm
                 .def("__setitem__", [](SM & sm, std::array<int, 2> const & key, T_no_cv const value){
@@ -328,15 +303,39 @@ namespace
             })
 
 
-            // TODO: __dlpack__ __dlpack_device__
-            // DLPack protocol (CPU, NVIDIA GPU, AMD GPU, Intel GPU, etc.)
-            // https://dmlc.github.io/dlpack/latest/
-            // https://data-apis.org/array-api/latest/design_topics/data_interchange.html
-            // https://github.com/data-apis/consortium-feedback/issues/1
-            // https://github.com/dmlc/dlpack/blob/master/include/dlpack/dlpack.h
-            // https://docs.cupy.dev/en/stable/user_guide/interoperability.html#dlpack-data-exchange-protocol
-
         ;
+
+        // DLPack protocol (CPU, NVIDIA GPU, AMD GPU, Intel GPU, etc.)
+        // https://dmlc.github.io/dlpack/latest/
+        // note: element types without a DLPack representation (long double)
+        //       do not receive __dlpack__/__dlpack_device__ at all
+        if constexpr (pyAMReX::dlpack::has_dlpack_dtype_v<T_no_cv>)
+        {
+            namespace dlpack = pyAMReX::dlpack;
+
+            dlpack::add_dlpack(py_sm, [](SM const & sm) {
+                dlpack::DLPackInfo info;
+                info.data = const_cast<void*>(
+                    static_cast<void const*>(&sm.template get<0>()));
+                // SmallMatrix data lives in the pybind11-owned object itself
+                // (host memory); the capsule's producer reference keeps the
+                // stack value type alive
+                info.device = DLDevice{kDLCPU, 0};
+                info.dtype = dlpack::get_dlpack_dtype<T_no_cv>();
+                // C index order for shape and strides (in elements),
+                // mirroring array_interface above
+                if (SM::ordering == amrex::Order::F) {
+                    info.shape = {SM::row_size, SM::column_size};
+                    info.strides = {SM::column_size, 1};
+                } else {
+                    info.shape = {SM::column_size, SM::row_size};
+                    info.strides = {SM::row_size, 1};
+                }
+                info.read_only = !pyAMReX::is_not_const<T>();
+                info.itemsize = sizeof(T_no_cv);
+                return info;
+            });
+        }
 
         // vector setter/getter
         if constexpr (column_size == 1 || row_size == 1) {

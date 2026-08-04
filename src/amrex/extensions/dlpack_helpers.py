@@ -1,0 +1,124 @@
+"""
+This file is part of pyAMReX
+
+Shared building blocks for the ``to_numpy``/``to_cupy``/``to_dpnp``/``to_xp``
+conversion helpers of the per-class extension modules
+(Array4, MultiFab, PODVector, SmallMatrix, StructOfArrays).
+
+All converters exchange data through the standardized DLPack protocol
+(``__dlpack__``/``__dlpack_device__``) implemented by the pyAMReX C++
+classes. CuPy and dpnp remain optional dependencies: they are imported
+lazily, only when a conversion to them is actually requested.
+
+Copyright 2025-2026 AMReX community
+Authors: Axel Huebl
+License: BSD-3-Clause-LBNL
+"""
+
+# DLPack device types (DLDeviceType values) with host-side memory
+kDLCPU = 1
+kDLCUDAHost = 3
+kDLROCMHost = 11
+
+
+def reorder(data, order):
+    """Apply pyAMReX's index order convention to a C-indexed array view.
+
+    pyAMReX data (e.g., Array4) is exported in C index order (z, y, x).
+    ``order="F"`` returns the transposed view, indexing as x, y, z like
+    AMReX; ``order="C"`` returns the view unchanged.
+    """
+    if order == "F":
+        # full reversal of axes (x, y, z, n <- n, z, y, x); .T is deprecated
+        # for non-2D dpnp arrays, so use an explicit transpose
+        return data.transpose(tuple(range(data.ndim - 1, -1, -1)))
+    elif order == "C":
+        return data
+    else:
+        raise ValueError("The order argument must be F or C.")
+
+
+def dlpack_to_numpy(self, copy=False):
+    """Import a pyAMReX object into NumPy via DLPack.
+
+    ``copy=False`` returns a zero-copy view (host-accessible data only);
+    ``copy=True`` returns an isolated copy, transferring device data to the
+    host as needed.
+    """
+    import numpy as np
+
+    if copy:
+        device_type, _ = self.__dlpack_device__()
+        if device_type in (kDLCPU, kDLCUDAHost, kDLROCMHost):
+            return np.from_dlpack(self).copy()
+        # device data: producer-side device-to-host copy
+        # (requires NumPy >= 2.1 for the device/copy arguments)
+        return np.from_dlpack(self, device="cpu", copy=True)
+    return np.from_dlpack(self)
+
+
+def dlpack_to_cupy(self, copy=False):
+    """Import a pyAMReX object into CuPy via DLPack.
+
+    Device data is imported zero-copy (or as an isolated device-side copy
+    for ``copy=True``). Host-side data is always copied to the device,
+    since a cross-device view is not possible.
+    """
+    import cupy as cp
+
+    device_type, _ = self.__dlpack_device__()
+    if device_type == kDLCPU:
+        import numpy as np
+
+        return cp.asarray(np.from_dlpack(self))
+    try:
+        # CuPy >= 14: request a producer-side copy via DLPack
+        return cp.from_dlpack(self, copy=True if copy else None)
+    except TypeError:
+        # CuPy <= 13: from_dlpack accepts no keyword arguments
+        arr = cp.from_dlpack(self)
+        return arr.copy() if copy else arr
+
+
+def dlpack_to_dpnp(self, copy=False):
+    """Import a pyAMReX object into dpnp via DLPack.
+
+    SYCL USM data is imported zero-copy (or as an isolated copy for
+    ``copy=True``). Host-side data is always copied to the device, since
+    a cross-device view is not possible.
+    """
+    import dpnp as dp
+
+    device_type, _ = self.__dlpack_device__()
+    if device_type == kDLCPU:
+        import numpy as np
+
+        return dp.asarray(np.from_dlpack(self))
+    # note: we deliberately do not pass copy= to dpnp.from_dlpack; as of
+    # dpnp 0.20/dpctl 0.22, importing a producer-made copy crashes. The
+    # consumer-side copy below is equivalent (and dpnp-owned).
+    arr = dp.from_dlpack(self)
+    return arr.copy() if copy else arr
+
+
+def xp_module_name(amr):
+    """The array module matching the AMReX build, as portable
+    NumPy/CuPy/dpnp short-hand ``xp``:
+    https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
+
+    Parameters
+    ----------
+    amr :
+        The amrex.space*d module of the object to convert.
+
+    Returns
+    -------
+    str
+        "numpy", "cupy" or "dpnp".
+    """
+    if amr.Config.have_gpu:
+        if amr.Config.gpu_backend == "SYCL":
+            return "dpnp"
+        else:  # CUDA, HIP
+            return "cupy"
+    return "numpy"

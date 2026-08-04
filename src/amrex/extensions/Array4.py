@@ -1,10 +1,12 @@
 """
 This file is part of pyAMReX
 
-Copyright 2023-2025 AMReX community
+Copyright 2023-2026 AMReX community
 Authors: Axel Huebl
 License: BSD-3-Clause-LBNL
 """
+
+from .dlpack_helpers import dlpack_to_cupy, dlpack_to_dpnp, reorder, xp_module_name
 
 
 def array4_to_numpy(self, copy=False, order="F"):
@@ -40,14 +42,12 @@ def array4_to_numpy(self, copy=False, order="F"):
         # This supports a device-to-host copy.
         data = self.to_host()
     else:
+        # host-accessible memory (CPU, pinned, managed/shared USM): the
+        # __array_interface__ exposes the host pointer regardless of the
+        # DLPack device tag, unlike np.from_dlpack which is host-device only
         data = np.array(self, copy=False)
 
-    if order == "F":
-        return data.T
-    elif order == "C":
-        return data
-    else:
-        raise ValueError("The order argument must be F or C.")
+    return reorder(data, order)
 
 
 def array4_to_cupy(self, copy=False, order="F"):
@@ -82,14 +82,7 @@ def array4_to_cupy(self, copy=False, order="F"):
     ImportError
         Raises an exception if cupy is not installed
     """
-    import cupy as cp
-
-    if order == "F":
-        return cp.array(self, copy=copy).T
-    elif order == "C":
-        return cp.array(self, copy=copy)
-    else:
-        raise ValueError("The order argument must be F or C.")
+    return reorder(dlpack_to_cupy(self, copy), order)
 
 
 def array4_to_dpnp(self, copy=False, order="F"):
@@ -124,14 +117,7 @@ def array4_to_dpnp(self, copy=False, order="F"):
     ImportError
         Raises an exception if dpnp is not installed
     """
-    import dpnp as dp
-
-    if order == "F":
-        return dp.from_dlpack(self, copy=copy).T
-    elif order == "C":
-        return dp.from_dlpack(self, copy=copy)
-    else:
-        raise ValueError("The order argument must be F or C.")
+    return reorder(dlpack_to_dpnp(self, copy), order)
 
 
 def array4_to_xp(self, copy=False, order="F"):
@@ -168,15 +154,7 @@ def array4_to_xp(self, copy=False, order="F"):
     import inspect
 
     amr = inspect.getmodule(self)
-
-    if amr.Config.have_gpu:
-        if amr.Config.gpu_backend == "SYCL":
-            return self.to_dpnp(copy, order)
-        else:  # if not SYCL use cupy
-            return self.to_cupy(copy, order)
-
-    # if no GPU, use NumPy
-    return self.to_numpy(copy, order)
+    return getattr(self, "to_" + xp_module_name(amr))(copy, order)
 
 
 def register_Array4_extension(amr):

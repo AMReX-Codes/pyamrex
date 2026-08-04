@@ -138,6 +138,13 @@ void make_ArrayOfStructs(py::module &m, std::string allocstr)
             d["version"] = 3;
             return d;
         })
+
+        // note: no __dlpack__/__dlpack_device__ here on purpose.
+        // ArrayOfStructs elements are records (Particle<NReal, NInt>) and
+        // DLPack cannot express record/struct dtypes, unlike the
+        // __array_interface__ "descr" above. Use the per-component
+        // struct-of-arrays (SoA) data for DLPack exchange instead.
+
         .def("test_sizes", [](){ })
         .def("__setitem__", [](AOSType &aos, int const v,  const ParticleType& p){ aos[v] = p; })
         .def("__getitem__", [](AOSType &aos, int const v) -> ParticleType& { return aos[v]; },

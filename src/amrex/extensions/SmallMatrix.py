@@ -1,10 +1,12 @@
 """
 This file is part of pyAMReX
 
-Copyright 2025 AMReX community
+Copyright 2025-2026 AMReX community
 Authors: Axel Huebl
 License: BSD-3-Clause-LBNL
 """
+
+from .dlpack_helpers import dlpack_to_cupy, dlpack_to_dpnp, reorder, xp_module_name
 
 
 def smallmatrix_to_numpy(self, copy=False, order="F"):
@@ -34,18 +36,11 @@ def smallmatrix_to_numpy(self, copy=False, order="F"):
     """
     import numpy as np
 
-    if copy:
-        data = np.array(self, copy=True)
-    else:
-        data = np.array(self, copy=False)
+    # SmallMatrix data is always host-side
+    data = np.array(self, copy=copy)
 
     # TODO: Check self.order == "F" ?
-    if order == "F":
-        return data.T
-    elif order == "C":
-        return data
-    else:
-        raise ValueError("The order argument must be F or C.")
+    return reorder(data, order)
 
 
 def smallmatrix_to_cupy(self, copy=False, order="F"):
@@ -78,15 +73,40 @@ def smallmatrix_to_cupy(self, copy=False, order="F"):
     ImportError
         Raises an exception if cupy is not installed
     """
-    import cupy as cp
-
+    # SmallMatrix data is always host-side: importing into CuPy copies
+    # to the device, independent of the copy argument
     # TODO: Check self.order == "F" ?
-    if order == "F":
-        return cp.array(self, copy=copy).T
-    elif order == "C":
-        return cp.array(self, copy=copy)
-    else:
-        raise ValueError("The order argument must be F or C.")
+    return reorder(dlpack_to_cupy(self, copy), order)
+
+
+def smallmatrix_to_dpnp(self, copy=False, order="F"):
+    """
+    Provide a dpnp copy of a SmallMatrix.
+
+    SmallMatrix data is always host-side: importing into dpnp copies to the
+    device, independent of the copy argument.
+
+    Parameters
+    ----------
+    self : amrex.SmallMatrix_*
+        A SmallMatrix class in pyAMReX
+    copy : bool, optional
+        Copy the data if true, otherwise create a view (default).
+    order : string, optional
+        F order (default) or C. C is faster with external libraries.
+
+    Returns
+    -------
+    dpnp.array
+        A dpnp 2-dimensional array.
+
+    Raises
+    ------
+    ImportError
+        Raises an exception if dpnp is not installed
+    """
+    # TODO: Check self.order == "F" ?
+    return reorder(dlpack_to_dpnp(self, copy), order)
 
 
 def smallmatrix_to_xp(self, copy=False, order="F"):
@@ -120,9 +140,7 @@ def smallmatrix_to_xp(self, copy=False, order="F"):
     import inspect
 
     amr = inspect.getmodule(self)
-    return (
-        self.to_cupy(copy, order) if amr.Config.have_gpu else self.to_numpy(copy, order)
-    )
+    return getattr(self, "to_" + xp_module_name(amr))(copy, order)
 
 
 def register_SmallMatrix_extension(amr):
@@ -141,4 +159,5 @@ def register_SmallMatrix_extension(amr):
     ):
         SmallMatrix_type.to_numpy = smallmatrix_to_numpy
         SmallMatrix_type.to_cupy = smallmatrix_to_cupy
+        SmallMatrix_type.to_dpnp = smallmatrix_to_dpnp
         SmallMatrix_type.to_xp = smallmatrix_to_xp

@@ -6,7 +6,7 @@
 #pragma once
 
 #include "pyAMReX.H"
-#include "dlpack/dlpack.h"
+#include "dlpack/DLPack.H"
 
 #include <AMReX_Array4.H>
 #include <AMReX_BLassert.H>
@@ -20,35 +20,6 @@
 #include <type_traits>
 #include <vector>
 
-
-namespace
-{
-    // helper type traits
-    template <typename T>
-    struct get_value_type { using value_type = T; };
-    template <typename T>
-    struct get_value_type<std::complex<T>> { using value_type = T; };
-    template <typename T>
-    using get_value_type_t = typename get_value_type<T>::value_type;
-
-    // helper to check if Array4<T> is of constant value type T
-    template <typename T>
-    constexpr bool is_not_const ()
-    {
-        return std::is_same_v<
-            std::remove_cv_t<
-                T
-            >,
-            T
-        > &&
-        std::is_same_v<
-            std::remove_cv_t<
-                get_value_type_t<T>
-            >,
-            get_value_type_t<T>
-        >;
-    }
-}
 
 namespace pyAMReX
 {
@@ -107,6 +78,40 @@ namespace pyAMReX
 
         d["version"] = 3;
         return d;
+    }
+
+    /** DLPack tensor description of an Array4
+     *
+     * https://dmlc.github.io/dlpack/latest/
+     */
+    template<typename T>
+    dlpack::DLPackInfo
+    dlpack_info (Array4<T> const & a4)
+    {
+        using T_no_cv = std::remove_cv_t<T>;
+
+        dlpack::DLPackInfo info;
+        info.data = const_cast<void*>(static_cast<void const*>(a4.dataPtr()));
+        info.device = dlpack::detect_device_from_pointer(a4.dataPtr());
+        info.dtype = dlpack::get_dlpack_dtype<T_no_cv>();
+        // F->C index conversion here, as in array_interface above;
+        // DLPack (unlike the buffer protocol) expects true zero extents
+        info.shape = {
+            std::int64_t(a4.end[3] <= a4.begin[3] ? 0 : a4.end[3]-a4.begin[3]),
+            std::int64_t(a4.end[2] <= a4.begin[2] ? 0 : a4.end[2]-a4.begin[2]),
+            std::int64_t(a4.end[1] <= a4.begin[1] ? 0 : a4.end[1]-a4.begin[1]),
+            std::int64_t(a4.end[0] <= a4.begin[0] ? 0 : a4.end[0]-a4.begin[0]) // fastest varying index
+        };
+        // DLPack strides are in elements, as are AMReX strides
+        info.strides = {
+            std::int64_t(a4.template get_stride<3>()),
+            std::int64_t(a4.template get_stride<2>()),
+            std::int64_t(a4.template get_stride<1>()),
+            std::int64_t(1)  // fastest varying index
+        };
+        info.read_only = !is_not_const<T>();
+        info.itemsize = sizeof(T_no_cv);
+        return info;
     }
 
     template< typename T >
@@ -197,7 +202,6 @@ namespace pyAMReX
              */
 
 
-            /*
             // CPU: __array_interface__ v3
             // https://numpy.org/doc/stable/reference/arrays.interface.html
             .def_property_readonly("__array_interface__", [](Array4<T> const & a4) {
@@ -233,79 +237,6 @@ namespace pyAMReX
                 d["version"] = 3;
                 return d;
             })
-            */
-
-
-            // DLPack v1.1 protocol (CPU, NVIDIA GPU, AMD GPU, Intel GPU, etc.)
-            // https://dmlc.github.io/dlpack/latest/
-            // https://github.com/dmlc/dlpack/blob/master/include/dlpack/dlpack.h
-            // https://docs.cupy.dev/en/stable/user_guide/interoperability.html#dlpack-data-exchange-protocol
-            .def("__dlpack__", [](
-                    Array4<T> const &a4,
-                    /* TODO: Handle keyword arguments */
-                    [[maybe_unused]] std::optional<py::handle> stream = std::nullopt,
-                    [[maybe_unused]] std::optional<std::tuple<int, int>> max_version = std::nullopt,
-                    [[maybe_unused]] std::optional<std::tuple<DLDeviceType, int32_t>> dl_device = std::nullopt,
-                    [[maybe_unused]] std::optional<bool> copy = std::nullopt
-
-            )
-            {
-                // Allocate shape/strides arrays
-                constexpr int ndim = 4;
-                auto const len = length(a4);
-
-                // Construct DLManagedTensorVersioned (DLPack 1.1 standard)
-                auto *dl_mgt_tensor = new DLManagedTensorVersioned;
-                dl_mgt_tensor->version = DLPackVersion{};
-                dl_mgt_tensor->flags = 0; // No special flags
-                dl_mgt_tensor->dl_tensor.data = const_cast<void*>(static_cast<const void*>(a4.dataPtr()));
-                dl_mgt_tensor->dl_tensor.device = dlpack::detect_device_from_pointer(a4.dataPtr());
-                dl_mgt_tensor->dl_tensor.ndim = ndim;
-                dl_mgt_tensor->dl_tensor.dtype = dlpack::get_dlpack_dtype<T>();
-                dl_mgt_tensor->dl_tensor.shape = new int64_t[ndim]{a4.nComp(), len.z, len.y, len.x};
-                dl_mgt_tensor->dl_tensor.strides = new int64_t[ndim]{a4.nstride, a4.kstride, a4.jstride, 1};
-                dl_mgt_tensor->dl_tensor.byte_offset = 0;
-                dl_mgt_tensor->manager_ctx = nullptr;  // TODO: we can increase/decrease the Python ref counter of the producer here
-                dl_mgt_tensor->deleter = [](DLManagedTensorVersioned *self) {
-                    delete[] self->dl_tensor.shape;
-                    delete[] self->dl_tensor.strides;
-                    delete self;
-                };
-                // Return as Python capsule
-                return py::capsule(
-                    dl_mgt_tensor,
-                    "dltensor_versioned",
-                    /*[](void* ptr) {
-                        auto* tensor = static_cast<DLManagedTensorVersioned*>(ptr);
-                        tensor->deleter(tensor);
-                    }*/
-                    [](PyObject *capsule)
-                    {
-                        if (PyCapsule_IsValid(capsule, "used_dltensor_versioned")) {
-                            return;  /* Do nothing if the capsule has been consumed. */
-                        }
-                        auto *p = static_cast<DLManagedTensorVersioned*>(
-                            PyCapsule_GetPointer(capsule, "dltensor_versioned"));
-                        if (p && p->deleter)
-                            p->deleter(p);
-                    }
-                );
-            },
-                py::arg("stream") = py::none(),
-                py::arg("max_version") = py::none(),
-                py::arg("dl_device") = py::none(),
-                py::arg("copy") = py::none(),
-                R"doc(
-                DLPack protocol for zero-copy tensor exchange.
-                See https://dmlc.github.io/dlpack/latest/ for details.
-                )doc"
-            )
-            .def("__dlpack_device__", [](Array4<T> const &a4) {
-                DLDevice device = dlpack::detect_device_from_pointer(a4.dataPtr());
-                return std::make_tuple(static_cast<int32_t>(device.device_type), device.device_id);
-            }, R"doc(
-                DLPack device info (device_type, device_id).
-            )doc")
 
 
             .def("to_host", [](Array4<T> const & a4) {
@@ -345,6 +276,14 @@ namespace pyAMReX
                 return a4(key[0], key[1], key[2]);
             })
         ;
+
+        // DLPack v1.1 protocol (CPU, NVIDIA GPU, AMD GPU, Intel GPU, etc.)
+        // https://dmlc.github.io/dlpack/latest/
+        // https://docs.cupy.dev/en/stable/user_guide/interoperability.html#dlpack-data-exchange-protocol
+        if constexpr (dlpack::has_dlpack_dtype_v<T_no_cv>)
+        {
+            dlpack::add_dlpack(py_array4, &dlpack_info<T>);
+        }
 
         // setter
         if constexpr (is_not_const<T>())

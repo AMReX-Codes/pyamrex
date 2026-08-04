@@ -63,6 +63,86 @@ def mf_to_numpy(self, copy=False, order="F"):
     return views
 
 
+def mf_to_cupy(self, copy=False, order="F"):
+    """
+    Provide a CuPy view into a MultiFab.
+
+    This includes ngrow guard cells of each box.
+
+    Note on the order of indices:
+    By default, this is as in AMReX in Fortran contiguous order, indexing as
+    x,y,z. This has performance implications for use in external libraries such
+    as cupy.
+    The order="C" option will index as z,y,x and perform better with cupy.
+    https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+    Parameters
+    ----------
+    self : amrex.MultiFab
+        A MultiFab class in pyAMReX
+    copy : bool, optional
+        Copy the data if true, otherwise create a view (default).
+    order : string, optional
+        F order (default) or C. C is faster with external libraries.
+
+    Returns
+    -------
+    list of cupy.array
+        A list of CuPy n-dimensional arrays, for each local block in the
+        MultiFab.
+
+    Raises
+    ------
+    ImportError
+        Raises an exception if cupy is not installed
+    """
+    views = []
+    for mfi in self:
+        views.append(self.array(mfi).to_cupy(copy, order))
+
+    return views
+
+
+def mf_to_dpnp(self, copy=False, order="F"):
+    """
+    Provide a dpnp view into a MultiFab.
+
+    This includes ngrow guard cells of each box.
+
+    Note on the order of indices:
+    By default, this is as in AMReX in Fortran contiguous order, indexing as
+    x,y,z. This has performance implications for use in external libraries such
+    as dpnp.
+    The order="C" option will index as z,y,x and may perform better.
+    https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+    Parameters
+    ----------
+    self : amrex.MultiFab
+        A MultiFab class in pyAMReX
+    copy : bool, optional
+        Copy the data if true, otherwise create a view (default).
+    order : string, optional
+        F order (default) or C. C is faster with external libraries.
+
+    Returns
+    -------
+    list of dpnp.array
+        A list of dpnp n-dimensional arrays, for each local block in the
+        MultiFab.
+
+    Raises
+    ------
+    ImportError
+        Raises an exception if dpnp is not installed
+    """
+    views = []
+    for mfi in self:
+        views.append(self.array(mfi).to_dpnp(copy, order))
+
+    return views
+
+
 def mf_to_xp(self, copy=False, order="F"):
     """
     Provide a NumPy, CuPy or dpnp view into a MultiFab,
@@ -623,6 +703,8 @@ def register_MultiFab_extension(amr):
     amr.MultiFab.__iter__ = lambda mfab: amr.MFIter(mfab)
 
     amr.MultiFab.to_numpy = mf_to_numpy
+    amr.MultiFab.to_cupy = mf_to_cupy
+    amr.MultiFab.to_dpnp = mf_to_dpnp
     amr.MultiFab.to_xp = mf_to_xp
 
     amr.MultiFab.copy = lambda self: copy_multifab(amr, self)
@@ -638,6 +720,8 @@ def register_MultiFab_extension(amr):
     amr.iMultiFab.__iter__ = lambda imfab: amr.MFIter(imfab)
 
     amr.iMultiFab.to_numpy = mf_to_numpy
+    amr.iMultiFab.to_cupy = mf_to_cupy
+    amr.iMultiFab.to_dpnp = mf_to_dpnp
     amr.iMultiFab.to_xp = mf_to_xp
 
     amr.iMultiFab.copy = lambda self: copy_multifab(amr, self)
