@@ -39,6 +39,8 @@ jobs:
     - uses: actions/setup-python@v5
       name: Install Python
       with:
+        # Intentionally the lowest supported Python version. The committed .pyi
+        # stubs are generated here and emitted types are fw compatible.
         python-version: '3.11'
 
     - name: Dependencies
@@ -63,6 +65,10 @@ jobs:
 
         python3 -m pip install -U pip setuptools[core] wheel
         python3 -m pip install -U mpi4py pytest pre-commit
+        # pybind11 v3 annotates DLPack __dlpack__ as typing_extensions.CapsuleType
+        # on Python < 3.13; pybind11-stubgen must be able to import it to resolve
+        # the signature (CapsuleType was added in typing_extensions 4.12)
+        python3 -m pip install -U "typing_extensions>=4.12"
         python3 -m pip install -U "pybind11-stubgen @ git+https://github.com/pybind/pybind11-stubgen.git@89f0899809ac88b4378d8ea70b31906f6697c958"
         cmake -S . -B build -DAMReX_SPACEDIM="1;2;3" -DAMReX_EB=ON -DpyAMReX_IPO=OFF
         cmake --build build -j 4 --target pip_install

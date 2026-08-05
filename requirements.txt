@@ -1,1 +1,5 @@
 numpy>=1.15
+# type-checking the shipped .pyi stubs: pybind11 v3 annotates DLPack's
+# __dlpack__ return as typing_extensions.CapsuleType on Python < 3.13
+# (CapsuleType was added in typing_extensions 4.12); not needed at runtime
+typing_extensions>=4.12

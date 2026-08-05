@@ -14,6 +14,7 @@ Please see installation instructions below.
 - `Python 3.11+ <https://www.python.org>`__
 
   - `numpy 1.15+ <https://numpy.org>`__ (1.23+ for ``numpy.from_dlpack``, 2.1+ for DLPack device requests and read-only views)
+  - `typing_extensions 4.12+ <https://pypi.org/project/typing-extensions/>`__ (used in our ``.pyi`` stubs files)
 
 Optional dependencies include:
 
