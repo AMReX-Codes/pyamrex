@@ -3,7 +3,7 @@
  * Authors: Axel Huebl
  * License: BSD-3-Clause-LBNL
  */
-#include "DLPack.H"
+#include "DLPackHelpers.H"
 
 #include <AMReX_Arena.H>
 #include <AMReX_Gpu.H>

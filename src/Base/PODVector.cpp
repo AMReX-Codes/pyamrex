@@ -5,7 +5,7 @@
  */
 #include "pyAMReX.H"
 
-#include "dlpack/DLPack.H"
+#include "dlpack/DLPackHelpers.H"
 
 #include <AMReX_PODVector.H>
 #include <AMReX_GpuContainers.H>
