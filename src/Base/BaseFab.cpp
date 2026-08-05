@@ -19,7 +19,8 @@ namespace
     template< typename T >
     void init_bf(py::module &m, std::string typestr) {
         auto const bf_name = std::string("BaseFab_").append(typestr);
-        py::class_< BaseFab<T> >(m, bf_name.c_str())
+        py::class_< BaseFab<T> > py_bf(m, bf_name.c_str());
+        py_bf
             .def("__repr__",
                  [bf_name](BaseFab<Real> const & bf) {
                      std::string r = "<amrex.";
@@ -127,14 +128,6 @@ namespace
             })
 
 
-            // TODO: __dlpack__ __dlpack_device__
-            // DLPack protocol (CPU, NVIDIA GPU, AMD GPU, Intel GPU, etc.)
-            // https://dmlc.github.io/dlpack/latest/
-            // https://data-apis.org/array-api/latest/design_topics/data_interchange.html
-            // https://github.com/data-apis/consortium-feedback/issues/1
-            // https://github.com/dmlc/dlpack/blob/master/include/dlpack/dlpack.h
-            // https://docs.cupy.dev/en/stable/user_guide/interoperability.html#dlpack-data-exchange-protocol
-
             // getVal
             // setVal
             // setValIf
@@ -182,6 +175,18 @@ namespace
 
             // SetBoxType
         ;
+
+        // DLPack protocol (CPU, NVIDIA GPU, AMD GPU, Intel GPU, etc.)
+        // https://dmlc.github.io/dlpack/latest/
+        // https://docs.cupy.dev/en/stable/user_guide/interoperability.html#dlpack-data-exchange-protocol
+        if constexpr (pyAMReX::dlpack::has_dlpack_dtype_v<T>)
+        {
+            // non-const: bf.array() on a const BaseFab would produce an
+            // Array4<T const> and export a read-only tensor
+            pyAMReX::dlpack::add_dlpack(py_bf, [](BaseFab<T> & bf) {
+                return pyAMReX::dlpack_info(bf.array());
+            });
+        }
     }
 }
 

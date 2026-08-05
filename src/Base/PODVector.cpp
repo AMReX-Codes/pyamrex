@@ -5,10 +5,13 @@
  */
 #include "pyAMReX.H"
 
+#include "dlpack/DLPackHelpers.H"
+
 #include <AMReX_PODVector.H>
 #include <AMReX_GpuContainers.H>
 
 #include <algorithm>
+#include <cstdint>
 #include <sstream>
 
 
@@ -350,6 +353,57 @@ void add_host_device(PODVectorClass &... cls)
     (bind_host_device(cls), ...);
 }
 
+/** Bind the DLPack protocol on a single PODVector class.
+ *
+ * https://dmlc.github.io/dlpack/latest/
+ */
+template <class T, class Allocator>
+void bind_dlpack(py::class_<amrex::PODVector<T, Allocator> > & cl)
+{
+    namespace dlpack = pyAMReX::dlpack;
+
+    if constexpr (dlpack::has_dlpack_dtype_v<T>)
+    {
+        dlpack::add_dlpack(cl, [](amrex::PODVector<T, Allocator> const & podvector) {
+            dlpack::DLPackInfo info;
+            info.data = const_cast<void*>(
+                static_cast<void const*>(podvector.dataPtr()));
+            // an empty PODVector has a null data pointer, which cannot be
+            // classified by pointer query; fall back to the allocator's arena
+            // kind so an empty vector reports the same device as once allocated
+            if (podvector.dataPtr() != nullptr) {
+                info.device = dlpack::detect_device_from_pointer(podvector.dataPtr());
+            } else if constexpr (amrex::IsArenaAllocator<Allocator>::value) {
+                info.device = dlpack::device_from_arena(
+                    static_cast<Allocator const &>(podvector).arena());
+            } else {
+                info.device = DLDevice{kDLCPU, 0};  // std::allocator: host memory
+            }
+            // host-accessibility comes from the allocator arena (correct for
+            // empty vectors too, and for shared/managed memory that the DLPack
+            // device type collapses into a device type)
+            info.host_accessible = is_host_accessible(podvector);
+            info.dtype = dlpack::get_dlpack_dtype<T>();
+            info.shape = {static_cast<std::int64_t>(podvector.size())};
+            // explicit unit stride: some consumers (e.g., dpnp/dpctl) mishandle
+            // a null strides pointer, so we do not rely on the compact default.
+            // This also satisfies the DLPack >= 1.2 requirement that strides be
+            // non-null when ndim > 0.
+            info.strides = {1};
+            info.read_only = false;
+            info.itemsize = sizeof(T);
+            return info;
+        });
+    }
+}
+
+/** Bind the DLPack protocol on each of the given PODVector classes. */
+template <class... PODVectorClass>
+void add_dlpack_all(PODVectorClass &... cls)
+{
+    (bind_dlpack(cls), ...);
+}
+
 template <class T>
 void make_PODVector(py::module &m, std::string typestr)
 {
@@ -367,6 +421,19 @@ void make_PODVector(py::module &m, std::string typestr)
     // bind to_host/to_device now that every PODVector allocator class is
     // registered, so their PODVector return types resolve to known Python types
     add_host_device(
+        pv_pinned,
+        pv_arena,
+        pv_std,
+#ifdef AMREX_USE_GPU
+        pv_device,
+        pv_managed,
+        pv_async,
+#endif
+        pv_polymorphic
+    );
+
+    // bind the DLPack protocol on every PODVector allocator class
+    add_dlpack_all(
         pv_pinned,
         pv_arena,
         pv_std,

@@ -16,6 +16,9 @@ pyAMReX implements the following `standardized data APIs <https://data-apis.org>
 
 - ``__array_interface__`` (CPU)
 - ``__cuda_array_interface__`` (CUDA GPU)
-- ``DLPack`` (`coming soon <https://github.com/AMReX-Codes/pyamrex/issues/9#issuecomment-1644288546>`__)
+- `DLPack <https://dmlc.github.io/dlpack/latest/>`__ v1.1 via ``__dlpack__`` and ``__dlpack_device__`` (CPU and CUDA, ROCm & SYCL GPUs)
 
-These APIs are automatically used when creating "views" (non-copy) numpy arrays, cupy arrays, PyTorch tensors, etc. from AMReX objects such as ``Array4`` and particle arrays.
+These APIs are automatically used when creating "views" (non-copy) numpy arrays, cupy arrays, dpnp arrays, PyTorch tensors, etc. from AMReX objects such as ``Array4`` and particle arrays.
+
+DLPack is implemented once in ``src/dlpack/DLPackHelpers.H`` (kwarg protocol, capsule creation, producer keep-alive, copy & stream synchronization) and bound per container class (``Array4``, ``BaseFab``, ``PODVector``, ``Vector``, ``SmallMatrix``) with a small adapter describing the exported tensor.
+An exception is ``ArrayOfStructs``: DLPack cannot describe record (struct) element types, so it only implements the structured array interfaces above.

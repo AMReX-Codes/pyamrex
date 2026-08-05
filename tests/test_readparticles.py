@@ -169,7 +169,9 @@ def test_read_particles_roundtrip():
 
     # and the runtime component values round-tripped
     assert x.size == n_part
-    np.testing.assert_allclose(w, 1.2345)
+    # float() coerces a scalar reduction to the host for any array module
+    # (NumPy/CuPy/dpnp), unlike np.allclose which forces a NumPy conversion
+    assert np.isclose(float(w.min()), 1.2345) and np.isclose(float(w.max()), 1.2345)
 
     shutil.rmtree(plt_file_name)
 
@@ -350,8 +352,8 @@ def test_read_particles_multilevel():
 
     w_idx = pc_read.get_real_comp_index("w")
     for pti in pc_read.iterator(level=0):
-        np.testing.assert_allclose(
-            pti.soa().get_real_data(w_idx).to_numpy(copy=False), 1.2345
-        )
+        # float() coerces a scalar reduction to the host for any array module
+        w = pti.soa().get_real_data(w_idx).to_xp()
+        assert np.isclose(float(w.min()), 1.2345) and np.isclose(float(w.max()), 1.2345)
 
     shutil.rmtree(plt_file_name)

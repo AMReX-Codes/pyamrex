@@ -103,10 +103,50 @@ def mf_to_cupy(self, copy=False, order="F"):
     return views
 
 
+def mf_to_dpnp(self, copy=False, order="F"):
+    """
+    Provide a dpnp view into a MultiFab.
+
+    This includes ngrow guard cells of each box.
+
+    Note on the order of indices:
+    By default, this is as in AMReX in Fortran contiguous order, indexing as
+    x,y,z. This has performance implications for use in external libraries such
+    as dpnp.
+    The order="C" option will index as z,y,x and may perform better.
+    https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+    Parameters
+    ----------
+    self : amrex.MultiFab
+        A MultiFab class in pyAMReX
+    copy : bool, optional
+        Copy the data if true, otherwise create a view (default).
+    order : string, optional
+        F order (default) or C. C is faster with external libraries.
+
+    Returns
+    -------
+    list of dpnp.array
+        A list of dpnp n-dimensional arrays, for each local block in the
+        MultiFab.
+
+    Raises
+    ------
+    ImportError
+        Raises an exception if dpnp is not installed
+    """
+    views = []
+    for mfi in self:
+        views.append(self.array(mfi).to_dpnp(copy, order))
+
+    return views
+
+
 def mf_to_xp(self, copy=False, order="F"):
     """
-    Provide a NumPy or CuPy view into a MultiFab,
-    depending on amr.Config.have_gpu .
+    Provide a NumPy, CuPy or dpnp view into a MultiFab,
+    depending on amr.Config.have_gpu and amr.Config.gpu_backend .
 
     This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
     https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
@@ -132,15 +172,14 @@ def mf_to_xp(self, copy=False, order="F"):
     Returns
     -------
     list of xp.array
-        A list of NumPy or CuPy n-dimensional arrays, for each local block in the
-        MultiFab.
+        A list of NumPy, CuPy or dpnp n-dimensional arrays, for each local block
+        in the MultiFab.
     """
-    import inspect
+    views = []
+    for mfi in self:
+        views.append(self.array(mfi).to_xp(copy, order))
 
-    amr = inspect.getmodule(self)
-    return (
-        self.to_cupy(copy, order) if amr.Config.have_gpu else self.to_numpy(copy, order)
-    )
+    return views
 
 
 def copy_multifab(amr, self):
@@ -492,6 +531,10 @@ def __getitem__(self, index, with_internal_ghosts=False):
         Whether to include internal ghost cells. When true, data from ghost cells may be used that
         overlaps valid cells.
     """
+    import inspect
+
+    amr = inspect.getmodule(self)
+
     index4 = _process_index(self, index)
 
     # Gather the data to be included in a list to be sent to other processes
@@ -505,17 +548,19 @@ def __getitem__(self, index, with_internal_ghosts=False):
             device_arr = _get_field(self, mfi)
             slice_arr = device_arr[block_slices]
             try:
-                # Copy data from host to device using cupy syntax
-                slice_arr = slice_arr.get()
+                if amr.Config.gpu_backend == "SYCL":
+                    import dpnp
+
+                    slice_arr = dpnp.asnumpy(slice_arr)
+                else:
+                    # Copy data from host to device using cupy syntax
+                    slice_arr = slice_arr.get()
             except AttributeError:
                 # Array is already a numpy array on the host
                 pass
             datalist.append((global_slices, slice_arr))
 
     # Gather the data from all processors
-    import inspect
-
-    amr = inspect.getmodule(self)
     if amr.Config.have_mpi:
         npes = amr.ParallelDescriptor.NProcs()
     else:
@@ -606,7 +651,10 @@ def __setitem__(self, index, value):
 
     amr = inspect.getmodule(self)
     if amr.Config.have_gpu:
-        import cupy as xp
+        if amr.Config.gpu_backend == "SYCL":
+            import dpnp as xp
+        else:
+            import cupy as xp
     else:
         xp = np
 
@@ -656,6 +704,7 @@ def register_MultiFab_extension(amr):
 
     amr.MultiFab.to_numpy = mf_to_numpy
     amr.MultiFab.to_cupy = mf_to_cupy
+    amr.MultiFab.to_dpnp = mf_to_dpnp
     amr.MultiFab.to_xp = mf_to_xp
 
     amr.MultiFab.copy = lambda self: copy_multifab(amr, self)
@@ -672,6 +721,7 @@ def register_MultiFab_extension(amr):
 
     amr.iMultiFab.to_numpy = mf_to_numpy
     amr.iMultiFab.to_cupy = mf_to_cupy
+    amr.iMultiFab.to_dpnp = mf_to_dpnp
     amr.iMultiFab.to_xp = mf_to_xp
 
     amr.iMultiFab.copy = lambda self: copy_multifab(amr, self)

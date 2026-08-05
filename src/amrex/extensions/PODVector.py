@@ -1,10 +1,12 @@
 """
 This file is part of pyAMReX
 
-Copyright 2023 AMReX community
+Copyright 2023-2026 AMReX community
 Authors: Axel Huebl
 License: BSD-3-Clause-LBNL
 """
+
+from .dlpack_helpers import dlpack_to_cupy, dlpack_to_dpnp, xp_module_name
 
 
 def podvector_to_numpy(self, copy=False):
@@ -38,6 +40,9 @@ def podvector_to_numpy(self, copy=False):
             assert ret.base is tmp
             return ret
         else:
+            # host-accessible memory (CPU, pinned, managed/shared USM): the
+            # __array_interface__ exposes the host pointer regardless of the
+            # DLPack device tag, unlike np.from_dlpack which is host-device only
             return np.array(self, copy=False)
     else:
         raise ValueError("Vector is empty.")
@@ -64,18 +69,43 @@ def podvector_to_cupy(self, copy=False):
     ImportError
         Raises an exception if cupy is not installed
     """
-    import cupy as cp
-
     if self.size() > 0:
-        return cp.array(self, copy=copy)
+        return dlpack_to_cupy(self, copy)
+    else:
+        raise ValueError("Vector is empty.")
+
+
+def podvector_to_dpnp(self, copy=False):
+    """
+    Provide a dpnp view into a PODVector (e.g., RealVector, IntVector).
+
+    Parameters
+    ----------
+    self : amrex.PODVector_*
+        A PODVector class in pyAMReX
+    copy : bool, optional
+        Copy the data if true, otherwise create a view (default).
+
+    Returns
+    -------
+    dpnp.array
+        A 1D dpnp array.
+
+    Raises
+    ------
+    ImportError
+        Raises an exception if dpnp is not installed
+    """
+    if self.size() > 0:
+        return dlpack_to_dpnp(self, copy)
     else:
         raise ValueError("Vector is empty.")
 
 
 def podvector_to_xp(self, copy=False):
     """
-    Provide a NumPy or CuPy view into a PODVector (e.g., RealVector, IntVector),
-    depending on amr.Config.have_gpu .
+    Provide a NumPy, CuPy or dpnp view into a PODVector (e.g., RealVector,
+    IntVector), depending on amr.Config.have_gpu and amr.Config.gpu_backend .
 
     This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
     https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
@@ -90,12 +120,12 @@ def podvector_to_xp(self, copy=False):
     Returns
     -------
     xp.array
-        A 1D NumPy or CuPy array.
+        A 1D NumPy, CuPy or dpnp array.
     """
     import inspect
 
     amr = inspect.getmodule(self)
-    return self.to_cupy(copy) if amr.Config.have_gpu else self.to_numpy(copy)
+    return getattr(self, "to_" + xp_module_name(amr))(copy)
 
 
 def _is_host_accessible(cls):
@@ -162,10 +192,48 @@ def podvector_from_cupy(cls, arr):
     return pv
 
 
+def podvector_from_dpnp(cls, arr):
+    """
+    Create a new PODVector from a dpnp array (or array-like).
+
+    Always copies the data into a newly allocated PODVector.
+    Works for every allocator type: for host-only allocators the
+    data is staged to the host through NumPy automatically.
+
+    Parameters
+    ----------
+    cls : type
+        The PODVector type to construct.
+    arr : array_like
+        Input data, convertible to a dpnp array.
+
+    Returns
+    -------
+    PODVector
+        A new PODVector with a copy of the data.
+    """
+    import dpnp as dp
+
+    arr_dp = dp.asarray(arr)
+    n = len(arr_dp)
+    if n == 0:
+        return cls()
+    pv = cls(n)
+    if _is_host_accessible(cls):
+        import numpy as np
+
+        np.array(pv, copy=False)[:] = dp.asnumpy(arr_dp)
+    else:
+        # dp.from_dlpack yields a true zero-copy view that writes back into
+        # the PODVector; dp.asarray would instead make an isolated copy
+        dp.from_dlpack(pv)[:] = arr_dp
+    return pv
+
+
 def podvector_from_xp(cls, arr):
     """
-    Create a new PODVector from a NumPy or CuPy array,
-    depending on amr.Config.have_gpu .
+    Create a new PODVector from a NumPy, CuPy or dpnp array,
+    depending on amr.Config.have_gpu and amr.Config.gpu_backend .
 
     Always copies the data into a newly allocated PODVector.
     Unlike :meth:`to_xp`, a zero-copy view is not possible here because
@@ -179,7 +247,7 @@ def podvector_from_xp(cls, arr):
     cls : type
         The PODVector type to construct.
     arr : array_like
-        Input data (NumPy or CuPy array).
+        Input data (NumPy, CuPy or dpnp array).
 
     Returns
     -------
@@ -188,8 +256,15 @@ def podvector_from_xp(cls, arr):
     """
     if _is_host_accessible(cls):
         return cls.from_numpy(arr)
-    else:
-        return cls.from_cupy(arr)
+
+    import inspect
+
+    from .dlpack_helpers import xp_module_name
+
+    amr = inspect.getmodule(cls)
+    if xp_module_name(amr) == "dpnp":
+        return cls.from_dpnp(arr)
+    return cls.from_cupy(arr)
 
 
 def register_PODVector_extension(amr):
@@ -209,9 +284,11 @@ def register_PODVector_extension(amr):
         # instance methods: PODVector -> array
         POD_type.to_numpy = podvector_to_numpy
         POD_type.to_cupy = podvector_to_cupy
+        POD_type.to_dpnp = podvector_to_dpnp
         POD_type.to_xp = podvector_to_xp
 
         # class methods: array -> PODVector
         # (from_numpy is provided in C++ as a static method)
         POD_type.from_cupy = classmethod(podvector_from_cupy)
+        POD_type.from_dpnp = classmethod(podvector_from_dpnp)
         POD_type.from_xp = classmethod(podvector_from_xp)

@@ -6,6 +6,7 @@
 #pragma once
 
 #include "pyAMReX.H"
+#include "dlpack/DLPackHelpers.H"
 
 #include <AMReX_Array4.H>
 #include <AMReX_BLassert.H>
@@ -19,35 +20,6 @@
 #include <type_traits>
 #include <vector>
 
-
-namespace
-{
-    // helper type traits
-    template <typename T>
-    struct get_value_type { using value_type = T; };
-    template <typename T>
-    struct get_value_type<std::complex<T>> { using value_type = T; };
-    template <typename T>
-    using get_value_type_t = typename get_value_type<T>::value_type;
-
-    // helper to check if Array4<T> is of constant value type T
-    template <typename T>
-    constexpr bool is_not_const ()
-    {
-        return std::is_same_v<
-            std::remove_cv_t<
-                T
-            >,
-            T
-        > &&
-        std::is_same_v<
-            std::remove_cv_t<
-                get_value_type_t<T>
-            >,
-            get_value_type_t<T>
-        >;
-    }
-}
 
 namespace pyAMReX
 {
@@ -106,6 +78,41 @@ namespace pyAMReX
 
         d["version"] = 3;
         return d;
+    }
+
+    /** DLPack tensor description of an Array4
+     *
+     * https://dmlc.github.io/dlpack/latest/
+     */
+    template<typename T>
+    dlpack::DLPackInfo
+    dlpack_info (Array4<T> const & a4)
+    {
+        using T_no_cv = std::remove_cv_t<T>;
+
+        dlpack::DLPackInfo info;
+        info.data = const_cast<void*>(static_cast<void const*>(a4.dataPtr()));
+        info.device = dlpack::detect_device_from_pointer(a4.dataPtr(),
+                                                         &info.host_accessible);
+        info.dtype = dlpack::get_dlpack_dtype<T_no_cv>();
+        // F->C index conversion here, as in array_interface above;
+        // DLPack (unlike the buffer protocol) expects true zero extents
+        info.shape = {
+            std::int64_t(a4.end[3] <= a4.begin[3] ? 0 : a4.end[3]-a4.begin[3]),
+            std::int64_t(a4.end[2] <= a4.begin[2] ? 0 : a4.end[2]-a4.begin[2]),
+            std::int64_t(a4.end[1] <= a4.begin[1] ? 0 : a4.end[1]-a4.begin[1]),
+            std::int64_t(a4.end[0] <= a4.begin[0] ? 0 : a4.end[0]-a4.begin[0]) // fastest varying index
+        };
+        // DLPack strides are in elements, as are AMReX strides
+        info.strides = {
+            std::int64_t(a4.template get_stride<3>()),
+            std::int64_t(a4.template get_stride<2>()),
+            std::int64_t(a4.template get_stride<1>()),
+            std::int64_t(1)  // fastest varying index
+        };
+        info.read_only = !is_not_const<T>();
+        info.itemsize = sizeof(T_no_cv);
+        return info;
     }
 
     template< typename T >
@@ -233,14 +240,6 @@ namespace pyAMReX
             })
 
 
-            // TODO: __dlpack__ __dlpack_device__
-            // DLPack protocol (CPU, NVIDIA GPU, AMD GPU, Intel GPU, etc.)
-            // https://dmlc.github.io/dlpack/latest/
-            // https://data-apis.org/array-api/latest/design_topics/data_interchange.html
-            // https://github.com/data-apis/consortium-feedback/issues/1
-            // https://github.com/dmlc/dlpack/blob/master/include/dlpack/dlpack.h
-            // https://docs.cupy.dev/en/stable/user_guide/interoperability.html#dlpack-data-exchange-protocol
-
             .def("to_host", [](Array4<T> const & a4) {
                 // py::tuple to std::vector
                 auto const a4i = pyAMReX::array_interface(a4);
@@ -278,6 +277,14 @@ namespace pyAMReX
                 return a4(key[0], key[1], key[2]);
             })
         ;
+
+        // DLPack v1.1 protocol (CPU, NVIDIA GPU, AMD GPU, Intel GPU, etc.)
+        // https://dmlc.github.io/dlpack/latest/
+        // https://docs.cupy.dev/en/stable/user_guide/interoperability.html#dlpack-data-exchange-protocol
+        if constexpr (dlpack::has_dlpack_dtype_v<T_no_cv>)
+        {
+            dlpack::add_dlpack(py_array4, &dlpack_info<T>);
+        }
 
         // setter
         if constexpr (is_not_const<T>())

@@ -6,6 +6,7 @@
 #pragma once
 
 #include "pyAMReX.H"
+#include "dlpack/DLPackHelpers.H"
 
 #include <AMReX_Vector.H>
 
@@ -104,6 +105,27 @@ void make_Vector(py::module &m, std::string typestr)
             d["version"] = 3;
             return d;
         });
+
+      // DLPack protocol (CPU, NVIDIA GPU, AMD GPU, Intel GPU, etc.)
+      // https://dmlc.github.io/dlpack/latest/
+      if constexpr (pyAMReX::dlpack::has_dlpack_dtype_v<T>)
+      {
+          namespace dlpack = pyAMReX::dlpack;
+
+          dlpack::add_dlpack(py_vect, [](Vector_type const & vector) {
+              dlpack::DLPackInfo info;
+              info.data = const_cast<void*>(
+                  static_cast<void const*>(vector.dataPtr()));
+              // amrex::Vector memory is always host-side
+              info.device = DLDevice{kDLCPU, 0};
+              info.dtype = dlpack::get_dlpack_dtype<T>();
+              info.shape = {static_cast<std::int64_t>(vector.size())};
+              // compact 1-D data: no strides needed
+              info.read_only = false;
+              info.itemsize = sizeof(T);
+              return info;
+          });
+      }
     }
 
     py_vect
