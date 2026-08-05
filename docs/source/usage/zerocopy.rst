@@ -82,5 +82,5 @@ Frameworks not covered above can exchange data with pyAMReX through the standard
 Data objects of pyAMReX implement ``__dlpack__`` and ``__dlpack_device__`` and can be consumed by, e.g., ``numpy.from_dlpack``, ``cupy.from_dlpack``, ``dpnp.from_dlpack``, ``torch.from_dlpack`` or ``jax.dlpack``.
 Both DLPack 1.x ("versioned") and legacy consumers are supported, including device-to-host transfers via ``from_dlpack(..., device="cpu")``.
 
-An exception is the particle ``ArrayOfStructs``: DLPack cannot describe its record (struct) element type.
+An exception is the `deprecated <https://github.com/AMReX-Codes/pyamrex/issues/459>`__ particle ``ArrayOfStructs``: DLPack cannot describe its record (struct) element type.
 Use its structured ``__array_interface__``/``__cuda_array_interface__`` or the per-component particle struct-of-arrays data instead.

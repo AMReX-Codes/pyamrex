@@ -30,7 +30,7 @@ Optional dependencies include:
 - `Python dependencies <https://www.python.org>`__
 
   - `mpi4py 2.1+ <https://mpi4py.readthedocs.io>`__: for multi-node and/or multi-GPU execution
-  - `cupy 12.2+ <https://github.com/cupy/cupy#installation>`__ (13.0+ for DLPack copy/device requests): for CUDA/ROCm GPU zero-copy views
+  - `cupy 13.0+ <https://github.com/cupy/cupy#installation>`__: for CUDA/ROCm GPU zero-copy views
   - `dpnp 0.16+ <https://intelpython.github.io/dpnp/>`__: for Intel (SYCL) GPU zero-copy views
   - `numba 0.56+ <https://numba.readthedocs.io/en/stable/user/installing.html>`__
   - `pandas 2+ <https://pandas.pydata.org>`__: for DataFrame support
