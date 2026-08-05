@@ -552,10 +552,12 @@ namespace pyAMReX::dlpack
             (requested_device->device_type == info.device.device_type &&
              requested_device->device_id == info.device.device_id);
 
-        // cross-device export: only (kDLCPU, 0) requests are supported
+        // cross-device export: only (kDLCPU, 0) requests are supported.
+        // CPU is always device 0, so a non-zero id is an unsupported device.
         bool to_host = false;
         if (!same_device) {
-            if (requested_device->device_type != kDLCPU) {
+            if (requested_device->device_type != kDLCPU ||
+                requested_device->device_id != 0) {
                 throw py::buffer_error(
                     "__dlpack__: exporting to a different device is only "
                     "supported for dl_device=(kDLCPU, 0)");

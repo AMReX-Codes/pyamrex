@@ -74,13 +74,18 @@ def dlpack_to_cupy(self, copy=False):
         import numpy as np
 
         return cp.asarray(np.from_dlpack(self))
-    try:
-        # CuPy >= 14: request a producer-side copy via DLPack
-        return cp.from_dlpack(self, copy=True if copy else None)
-    except TypeError:
-        # CuPy <= 13: from_dlpack accepts no keyword arguments
-        arr = cp.from_dlpack(self)
-        return arr.copy() if copy else arr
+    # device data: zero-copy import, then a consumer-side copy if requested.
+    # We do not pass copy= to cp.from_dlpack: CuPy >= 14 forwards its current
+    # stream to __dlpack__, which the exporter rejects together with copy=True
+    # (a producer-made copy requires stream=None).
+    arr = cp.from_dlpack(self)
+    if not copy:
+        return arr
+    result = arr.copy()
+    # ensure the copy has finished reading the source before the DLPack view
+    # (and thus the producer) is released
+    cp.cuda.get_current_stream().synchronize()
+    return result
 
 
 def dlpack_to_dpnp(self, copy=False):
@@ -98,11 +103,17 @@ def dlpack_to_dpnp(self, copy=False):
         import numpy as np
 
         return dp.asarray(np.from_dlpack(self))
-    # note: we deliberately do not pass copy= to dpnp.from_dlpack; as of
-    # dpnp 0.20/dpctl 0.22, importing a producer-made copy crashes. The
-    # consumer-side copy below is equivalent (and dpnp-owned).
+    # device data: zero-copy import, then a consumer-side copy if requested.
+    # We do not pass copy= to dpnp.from_dlpack (a producer-made copy requires
+    # stream=None, and importing one crashes dpnp 0.20/dpctl 0.22).
     arr = dp.from_dlpack(self)
-    return arr.copy() if copy else arr
+    if not copy:
+        return arr
+    result = arr.copy()
+    # ensure the copy has finished reading the source before the DLPack view
+    # (and thus the producer) is released
+    result.sycl_queue.wait()
+    return result
 
 
 def xp_module_name(amr):

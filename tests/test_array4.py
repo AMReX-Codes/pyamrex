@@ -136,6 +136,10 @@ def test_array4_dlpack_errors():
     with pytest.raises(BufferError):
         arr.__dlpack__(dl_device=(int(amr.DLDeviceType.kDLCUDA), 0))
 
+    # CPU is always device 0: a non-zero CPU device id is unsupported
+    with pytest.raises(BufferError):
+        arr.__dlpack__(dl_device=(int(amr.DLDeviceType.kDLCPU), 7))
+
     # malformed keyword arguments
     with pytest.raises(TypeError):
         arr.__dlpack__(max_version=1)
