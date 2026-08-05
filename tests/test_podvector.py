@@ -205,6 +205,25 @@ def test_podvector_dlpack_pinned():
 
 
 @pytest.mark.skipif(not amr.Config.have_gpu, reason="requires AMReX GPU support")
+def test_podvector_dlpack_managed_host_view():
+    # managed/shared (unified) memory is host-accessible even though its DLPack
+    # device type is a device type (kDLCUDAManaged / kDLOneAPI / kDLROCM). A CPU
+    # request must therefore be zero-copy: copy=False must succeed, not raise.
+    import numpy as np
+
+    mv = amr.ManagedVector_real()
+    for v in [1.0, 2.0, 3.0]:
+        mv.push_back(v)
+
+    host = np.from_dlpack(mv, device="cpu", copy=False)
+    np.testing.assert_array_equal(host, np.array([1.0, 2.0, 3.0]))
+
+    # zero-copy: writing through the host view modifies the source
+    host[0] = 9.0
+    assert mv[0] == 9.0
+
+
+@pytest.mark.skipif(not amr.Config.have_gpu, reason="requires AMReX GPU support")
 def test_podvector_dlpack_pinned_to_cupy():
     # pinned host memory is advertised as kDLCUDAHost/kDLROCMHost, which CuPy's
     # from_dlpack rejects; to_cupy() must stage a host-to-device copy instead

@@ -92,7 +92,8 @@ namespace pyAMReX
 
         dlpack::DLPackInfo info;
         info.data = const_cast<void*>(static_cast<void const*>(a4.dataPtr()));
-        info.device = dlpack::detect_device_from_pointer(a4.dataPtr());
+        info.device = dlpack::detect_device_from_pointer(a4.dataPtr(),
+                                                         &info.host_accessible);
         info.dtype = dlpack::get_dlpack_dtype<T_no_cv>();
         // F->C index conversion here, as in array_interface above;
         // DLPack (unlike the buffer protocol) expects true zero extents

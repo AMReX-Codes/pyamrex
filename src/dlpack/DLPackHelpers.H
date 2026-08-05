@@ -108,8 +108,14 @@ namespace pyAMReX::dlpack
      * Note: the underlying pointer attribute queries are not free. Containers
      * that know their memory space at compile time (e.g., purely host-side
      * classes) can fill DLPackInfo::device directly instead.
+     *
+     * If host_accessible is non-null, it is set to whether the host can
+     * dereference the memory in place (true for plain host, pinned, CUDA
+     * managed, SYCL shared/host USM and HIP managed/unified; false for pure
+     * device memory).
      */
-    DLDevice detect_device_from_pointer (void const* ptr);
+    DLDevice detect_device_from_pointer (void const* ptr,
+                                         bool* host_accessible = nullptr);
 
     /** Classify a container's memory space from its AMReX allocator arena.
      *
@@ -117,9 +123,11 @@ namespace pyAMReX::dlpack
      * whose dataPtr() is null), the memory space cannot be detected from the
      * pointer. This mirrors detect_device_from_pointer() from the arena's kind
      * (managed / pinned / device) so that an empty container reports the same
-     * DLPack device as it will once it holds data.
+     * DLPack device as it will once it holds data. host_accessible, if
+     * non-null, is set as in detect_device_from_pointer().
      */
-    DLDevice device_from_arena (amrex::Arena const* arena);
+    DLDevice device_from_arena (amrex::Arena const* arena,
+                                bool* host_accessible = nullptr);
 
     /** Everything a container must provide to export a DLPack tensor */
     struct DLPackInfo
@@ -140,6 +148,11 @@ namespace pyAMReX::dlpack
         bool read_only = false;
         //! bytes per element
         std::size_t itemsize = 0;
+        //! whether the host can dereference the data in place. Distinct from
+        //! the DLPack device type, which collapses host-accessible shared/
+        //! managed USM into a device type (kDLOneAPI, kDLROCM); used to serve
+        //! a dl_device=(kDLCPU, 0) request zero-copy where possible.
+        bool host_accessible = true;
     };
 
     /** Build a DLPack PyCapsule around an existing (or copied) allocation.

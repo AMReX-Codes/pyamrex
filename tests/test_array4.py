@@ -265,6 +265,29 @@ def test_array4_dlpack_managed_device_id(boxarr, distmap):
         break
 
 
+@pytest.mark.skipif(not amr.Config.have_gpu, reason="requires AMReX GPU support")
+def test_array4_dlpack_managed_host_view(boxarr, distmap):
+    # managed/shared (unified) memory is host-accessible even though its DLPack
+    # device type may be a device type (kDLOneAPI on SYCL, kDLROCM on HIP;
+    # kDLCUDAManaged on CUDA). A CPU request must be zero-copy: copy=False must
+    # succeed. This exercises the pointer-query host_accessible branch
+    # (Array4.H dlpack_info), distinct from the allocator-derived PODVector one.
+    import numpy as np
+
+    mf = amr.MultiFab(
+        boxarr, distmap, 1, 0, amr.MFInfo().set_arena(amr.The_Managed_Arena())
+    )
+    mf.set_val(3.0)
+    for mfi in mf:
+        arr = mf.array(mfi)
+        host = np.from_dlpack(arr, device="cpu", copy=False)
+        assert np.all(host == 3.0)
+        # zero-copy: writing through the host view modifies the managed data
+        host[0, 0, 0, 0] = 9.0
+        assert arr[0, 0, 0] == 9.0
+        break
+
+
 @pytest.mark.skipif(
     amr.Config.gpu_backend != "CUDA", reason="Requires AMReX_GPU_BACKEND=CUDA"
 )

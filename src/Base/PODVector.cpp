@@ -379,6 +379,10 @@ void bind_dlpack(py::class_<amrex::PODVector<T, Allocator> > & cl)
             } else {
                 info.device = DLDevice{kDLCPU, 0};  // std::allocator: host memory
             }
+            // host-accessibility comes from the allocator arena (correct for
+            // empty vectors too, and for shared/managed memory that the DLPack
+            // device type collapses into a device type)
+            info.host_accessible = is_host_accessible(podvector);
             info.dtype = dlpack::get_dlpack_dtype<T>();
             info.shape = {static_cast<std::int64_t>(podvector.size())};
             // explicit unit stride: some consumers (e.g., dpnp/dpctl) mishandle

@@ -382,9 +382,13 @@ namespace
 
 namespace pyAMReX::dlpack
 {
-    DLDevice detect_device_from_pointer ([[maybe_unused]] void const* ptr)
+    DLDevice detect_device_from_pointer ([[maybe_unused]] void const* ptr,
+                                         bool* host_accessible)
     {
         DLDevice device {kDLCPU, 0};
+        // plain host memory (and the GPU-less default) is host-accessible;
+        // set false only for pure device memory below
+        bool host_ok = true;
 
 #if defined(AMREX_USE_CUDA)
         cudaPointerAttributes attr;
@@ -392,12 +396,13 @@ namespace pyAMReX::dlpack
         if (err == cudaSuccess) {
             if (attr.type == cudaMemoryTypeDevice) {
                 device = DLDevice{kDLCUDA, attr.device};
+                host_ok = false;
             } else if (attr.type == cudaMemoryTypeManaged) {
                 // DLPack convention (see dlpack.h): device_id is 0 for
                 // vanilla CPU, pinned and managed memory
-                device = DLDevice{kDLCUDAManaged, 0};
+                device = DLDevice{kDLCUDAManaged, 0};  // host-accessible
             } else if (attr.type == cudaMemoryTypeHost) {
-                device = DLDevice{kDLCUDAHost, 0};
+                device = DLDevice{kDLCUDAHost, 0};  // pinned: host-accessible
             }
             // cudaMemoryTypeUnregistered: plain host memory -> kDLCPU
         } else {
@@ -414,12 +419,14 @@ namespace pyAMReX::dlpack
 #endif
             if (type == hipMemoryTypeDevice) {
                 device = DLDevice{kDLROCM, attr.device};
+                host_ok = false;
             } else if (type == hipMemoryTypeUnified ||
                        type == hipMemoryTypeManaged) {
-                // DLPack has no managed type for ROCm; the device can access it
-                device = DLDevice{kDLROCM, attr.device};
+                // DLPack has no managed type for ROCm; the device can access
+                // it, and so can the host (unified/managed)
+                device = DLDevice{kDLROCM, attr.device};  // host-accessible
             } else if (type == hipMemoryTypeHost) {
-                device = DLDevice{kDLROCMHost, 0};
+                device = DLDevice{kDLROCMHost, 0};  // pinned: host-accessible
             }
         } else {
             (void)hipGetLastError();  // clear the error state
@@ -434,6 +441,8 @@ namespace pyAMReX::dlpack
             {
                 device.device_type = kDLOneAPI;
                 device.device_id = 0;
+                // device USM is device-only; shared USM is host-accessible
+                host_ok = (usm_type == sycl::usm::alloc::shared);
                 auto const dev = sycl::get_pointer_device(ptr, context);
                 auto const devices = context.get_devices();
                 for (std::size_t i = 0; i < devices.size(); ++i) {
@@ -451,14 +460,21 @@ namespace pyAMReX::dlpack
         }
 #endif
 
+        if (host_accessible) { *host_accessible = host_ok; }
         return device;
     }
 
-    DLDevice device_from_arena ([[maybe_unused]] amrex::Arena const* arena)
+    DLDevice device_from_arena ([[maybe_unused]] amrex::Arena const* arena,
+                                bool* host_accessible)
     {
         // mirror detect_device_from_pointer() from the arena's kind, so an
         // empty container reports the same device as it will once allocated
         // (isManaged / isDevice / isPinned are mutually exclusive)
+        if (host_accessible) {
+            // managed, pinned and plain-host arenas are host-accessible;
+            // ask the arena directly so this stays correct for custom arenas
+            *host_accessible = arena->isHostAccessible();
+        }
 #if defined(AMREX_USE_CUDA)
         if (arena->isManaged()) { return DLDevice{kDLCUDAManaged, 0}; }
         if (arena->isPinned())  { return DLDevice{kDLCUDAHost, 0}; }
@@ -562,8 +578,11 @@ namespace pyAMReX::dlpack
                     "__dlpack__: exporting to a different device is only "
                     "supported for dl_device=(kDLCPU, 0)");
             }
-            if (is_host_accessible(info.device.device_type)) {
-                // pinned/managed memory: the host can use it in place
+            if (info.host_accessible) {
+                // pinned / managed / shared (unified) memory: the host can use
+                // it in place, so re-badge as CPU without copying. This uses
+                // the pointer/arena-derived flag, since the DLPack device type
+                // collapses host-accessible shared USM into kDLOneAPI/kDLROCM.
                 info.device = DLDevice{kDLCPU, 0};
             } else if (copy_request.has_value() && !copy_request.value()) {
                 throw py::buffer_error(
