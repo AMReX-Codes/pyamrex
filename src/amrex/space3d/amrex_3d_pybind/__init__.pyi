@@ -60,6 +60,7 @@ import typing
 
 import numpy
 import numpy.typing
+import typing_extensions
 
 from . import ParallelDescriptor
 
@@ -116,6 +117,7 @@ __all__: list[str] = [
     "Config",
     "CoordSys",
     "CpuBndryFuncFab",
+    "DLDeviceType",
     "DeviceVector_int",
     "DeviceVector_real",
     "DeviceVector_uint64",
@@ -368,6 +370,21 @@ __all__: list[str] = [
     "initialize_when_MPMD",
     "initialized",
     "is_valid",
+    "kDLCPU",
+    "kDLCUDA",
+    "kDLCUDAHost",
+    "kDLCUDAManaged",
+    "kDLExtDev",
+    "kDLHexagon",
+    "kDLMAIA",
+    "kDLMetal",
+    "kDLOneAPI",
+    "kDLOpenCL",
+    "kDLROCM",
+    "kDLROCMHost",
+    "kDLVPI",
+    "kDLVulkan",
+    "kDLWebGPU",
     "lbound",
     "length",
     "makeEBFabFactory",
@@ -387,6 +404,26 @@ __all__: list[str] = [
     "write_multi_level_plotfile",
     "write_single_level_plotfile",
 ]
+
+class DLDeviceType(enum.IntEnum):
+    kDLCPU: typing.ClassVar[DLDeviceType]
+    kDLCUDA: typing.ClassVar[DLDeviceType]
+    kDLCUDAHost: typing.ClassVar[DLDeviceType]
+    kDLCUDAManaged: typing.ClassVar[DLDeviceType]
+    kDLExtDev: typing.ClassVar[DLDeviceType]
+    kDLHexagon: typing.ClassVar[DLDeviceType]
+    kDLMAIA: typing.ClassVar[DLDeviceType]
+    kDLMetal: typing.ClassVar[DLDeviceType]
+    kDLOneAPI: typing.ClassVar[DLDeviceType]
+    kDLOpenCL: typing.ClassVar[DLDeviceType]
+    kDLROCM: typing.ClassVar[DLDeviceType]
+    kDLROCMHost: typing.ClassVar[DLDeviceType]
+    kDLVPI: typing.ClassVar[DLDeviceType]
+    kDLVulkan: typing.ClassVar[DLDeviceType]
+    kDLWebGPU: typing.ClassVar[DLDeviceType]
+    @classmethod
+    def __new__(cls, value): ...
+    def __format__(self, format_spec): ...
 
 class AMReX:
     @staticmethod
@@ -1400,6 +1437,67 @@ class Periodicity:
     def shift_IntVect(self, arg1: IntVect3D) -> list[IntVect3D]: ...
 
 class Array4_float:
+    def __dlpack__(
+        self,
+        *,
+        stream: typing.Any = None,
+        max_version: typing.Any = None,
+        dl_device: typing.Any = None,
+        copy: typing.Any = None,
+    ) -> typing_extensions.CapsuleType:
+        """
+        Export the data as a DLPack capsule for zero-copy tensor exchange.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+
+        Parameters
+        ----------
+        stream: int, optional
+            Consumer stream (CUDA/ROCm device data only) the data shall be
+            made ready for, e.g., by an event wait. -1 requests no
+            synchronization. Must be None for host-side data.
+        max_version: tuple of int, optional
+            Highest DLPack version the consumer supports. None or a major
+            version below 1 yields a legacy "dltensor" capsule, otherwise a
+            "dltensor_versioned" capsule (DLPack 1.1) is returned.
+        dl_device: tuple of (DLDeviceType, int), optional
+            Requested device of the returned tensor. Besides the producer
+            device, (kDLCPU, 0) is supported: zero-copy for host-accessible
+            memory, otherwise a device-to-host copy (unless copy=False).
+        copy: bool, optional
+            True always copies (the copy is solely owned by the consumer);
+            False never copies (raises BufferError if a copy is needed);
+            None (default) copies only if required.
+            A producer-made copy is synchronized before hand-off, so the data
+            is ready on any consumer stream. Because the copy cannot be run on
+            a consumer-provided stream, copy=True requires stream=None and
+            raises BufferError for any other stream value.
+
+        Returns
+        -------
+        A PyCapsule wrapping a DLPack managed tensor.
+
+        Raises
+        ------
+        BufferError
+            If an unsupported device transfer or copy is requested.
+
+        Notes
+        -----
+        Capsules that own a copy of device data (copy=True on GPU data or
+        device-to-host transfers) allocate from an AMReX Arena and must be
+        freed (i.e., the consuming array garbage collected) before
+        amrex.finalize().
+
+        Legacy "dltensor" capsules cannot communicate read-only tensors;
+        like __array_interface__, such exports are marked writable.
+        """
+    def __dlpack_device__(self) -> tuple[int, int]:
+        """
+        DLPack device of the data, as a (device_type, device_id) tuple of int.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+        """
     @typing.overload
     def __getitem__(self, arg0: IntVect3D) -> float: ...
     @typing.overload
@@ -1504,6 +1602,39 @@ class Array4_float:
             Raises an exception if cupy is not installed
 
         """
+    def to_dpnp(self, copy=False, order="F"):
+        """
+        Provide a dpnp view into an Array4.
+
+        This includes ngrow guard cells of the box.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as dpnp.
+        The order="C" option will index as z,y,x and may perform better.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        dpnp.array
+            A dpnp n-dimensional array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if dpnp is not installed
+
+        """
     def to_host(self) -> numpy.typing.NDArray[numpy.float32]: ...
     def to_numpy(self, copy=False, order="F"):
         """
@@ -1535,7 +1666,8 @@ class Array4_float:
         """
     def to_xp(self, copy=False, order="F"):
         """
-        Provide a NumPy or CuPy view into an Array4, depending on amr.Config.have_gpu .
+        Provide a NumPy, CuPy or dpnp view into an Array4, depending on amr.Config.have_gpu
+        and amr.Config.gpu_backend .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
         https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
@@ -1561,7 +1693,7 @@ class Array4_float:
         Returns
         -------
         xp.array
-            A NumPy or CuPy n-dimensional array.
+            A NumPy, CuPy or dpnp n-dimensional array.
 
         """
     @property
@@ -1576,6 +1708,67 @@ class Array4_float:
     def size(self) -> int: ...
 
 class Array4_double:
+    def __dlpack__(
+        self,
+        *,
+        stream: typing.Any = None,
+        max_version: typing.Any = None,
+        dl_device: typing.Any = None,
+        copy: typing.Any = None,
+    ) -> typing_extensions.CapsuleType:
+        """
+        Export the data as a DLPack capsule for zero-copy tensor exchange.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+
+        Parameters
+        ----------
+        stream: int, optional
+            Consumer stream (CUDA/ROCm device data only) the data shall be
+            made ready for, e.g., by an event wait. -1 requests no
+            synchronization. Must be None for host-side data.
+        max_version: tuple of int, optional
+            Highest DLPack version the consumer supports. None or a major
+            version below 1 yields a legacy "dltensor" capsule, otherwise a
+            "dltensor_versioned" capsule (DLPack 1.1) is returned.
+        dl_device: tuple of (DLDeviceType, int), optional
+            Requested device of the returned tensor. Besides the producer
+            device, (kDLCPU, 0) is supported: zero-copy for host-accessible
+            memory, otherwise a device-to-host copy (unless copy=False).
+        copy: bool, optional
+            True always copies (the copy is solely owned by the consumer);
+            False never copies (raises BufferError if a copy is needed);
+            None (default) copies only if required.
+            A producer-made copy is synchronized before hand-off, so the data
+            is ready on any consumer stream. Because the copy cannot be run on
+            a consumer-provided stream, copy=True requires stream=None and
+            raises BufferError for any other stream value.
+
+        Returns
+        -------
+        A PyCapsule wrapping a DLPack managed tensor.
+
+        Raises
+        ------
+        BufferError
+            If an unsupported device transfer or copy is requested.
+
+        Notes
+        -----
+        Capsules that own a copy of device data (copy=True on GPU data or
+        device-to-host transfers) allocate from an AMReX Arena and must be
+        freed (i.e., the consuming array garbage collected) before
+        amrex.finalize().
+
+        Legacy "dltensor" capsules cannot communicate read-only tensors;
+        like __array_interface__, such exports are marked writable.
+        """
+    def __dlpack_device__(self) -> tuple[int, int]:
+        """
+        DLPack device of the data, as a (device_type, device_id) tuple of int.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+        """
     @typing.overload
     def __getitem__(self, arg0: IntVect3D) -> float: ...
     @typing.overload
@@ -1680,6 +1873,39 @@ class Array4_double:
             Raises an exception if cupy is not installed
 
         """
+    def to_dpnp(self, copy=False, order="F"):
+        """
+        Provide a dpnp view into an Array4.
+
+        This includes ngrow guard cells of the box.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as dpnp.
+        The order="C" option will index as z,y,x and may perform better.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        dpnp.array
+            A dpnp n-dimensional array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if dpnp is not installed
+
+        """
     def to_host(self) -> numpy.typing.NDArray[numpy.float64]: ...
     def to_numpy(self, copy=False, order="F"):
         """
@@ -1711,7 +1937,8 @@ class Array4_double:
         """
     def to_xp(self, copy=False, order="F"):
         """
-        Provide a NumPy or CuPy view into an Array4, depending on amr.Config.have_gpu .
+        Provide a NumPy, CuPy or dpnp view into an Array4, depending on amr.Config.have_gpu
+        and amr.Config.gpu_backend .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
         https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
@@ -1737,7 +1964,7 @@ class Array4_double:
         Returns
         -------
         xp.array
-            A NumPy or CuPy n-dimensional array.
+            A NumPy, CuPy or dpnp n-dimensional array.
 
         """
     @property
@@ -1856,6 +2083,39 @@ class Array4_longdouble:
             Raises an exception if cupy is not installed
 
         """
+    def to_dpnp(self, copy=False, order="F"):
+        """
+        Provide a dpnp view into an Array4.
+
+        This includes ngrow guard cells of the box.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as dpnp.
+        The order="C" option will index as z,y,x and may perform better.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        dpnp.array
+            A dpnp n-dimensional array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if dpnp is not installed
+
+        """
     def to_host(self) -> numpy.typing.NDArray[numpy.longdouble]: ...
     def to_numpy(self, copy=False, order="F"):
         """
@@ -1887,7 +2147,8 @@ class Array4_longdouble:
         """
     def to_xp(self, copy=False, order="F"):
         """
-        Provide a NumPy or CuPy view into an Array4, depending on amr.Config.have_gpu .
+        Provide a NumPy, CuPy or dpnp view into an Array4, depending on amr.Config.have_gpu
+        and amr.Config.gpu_backend .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
         https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
@@ -1913,7 +2174,7 @@ class Array4_longdouble:
         Returns
         -------
         xp.array
-            A NumPy or CuPy n-dimensional array.
+            A NumPy, CuPy or dpnp n-dimensional array.
 
         """
     @property
@@ -1928,6 +2189,67 @@ class Array4_longdouble:
     def size(self) -> int: ...
 
 class Array4_float_const:
+    def __dlpack__(
+        self,
+        *,
+        stream: typing.Any = None,
+        max_version: typing.Any = None,
+        dl_device: typing.Any = None,
+        copy: typing.Any = None,
+    ) -> typing_extensions.CapsuleType:
+        """
+        Export the data as a DLPack capsule for zero-copy tensor exchange.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+
+        Parameters
+        ----------
+        stream: int, optional
+            Consumer stream (CUDA/ROCm device data only) the data shall be
+            made ready for, e.g., by an event wait. -1 requests no
+            synchronization. Must be None for host-side data.
+        max_version: tuple of int, optional
+            Highest DLPack version the consumer supports. None or a major
+            version below 1 yields a legacy "dltensor" capsule, otherwise a
+            "dltensor_versioned" capsule (DLPack 1.1) is returned.
+        dl_device: tuple of (DLDeviceType, int), optional
+            Requested device of the returned tensor. Besides the producer
+            device, (kDLCPU, 0) is supported: zero-copy for host-accessible
+            memory, otherwise a device-to-host copy (unless copy=False).
+        copy: bool, optional
+            True always copies (the copy is solely owned by the consumer);
+            False never copies (raises BufferError if a copy is needed);
+            None (default) copies only if required.
+            A producer-made copy is synchronized before hand-off, so the data
+            is ready on any consumer stream. Because the copy cannot be run on
+            a consumer-provided stream, copy=True requires stream=None and
+            raises BufferError for any other stream value.
+
+        Returns
+        -------
+        A PyCapsule wrapping a DLPack managed tensor.
+
+        Raises
+        ------
+        BufferError
+            If an unsupported device transfer or copy is requested.
+
+        Notes
+        -----
+        Capsules that own a copy of device data (copy=True on GPU data or
+        device-to-host transfers) allocate from an AMReX Arena and must be
+        freed (i.e., the consuming array garbage collected) before
+        amrex.finalize().
+
+        Legacy "dltensor" capsules cannot communicate read-only tensors;
+        like __array_interface__, such exports are marked writable.
+        """
+    def __dlpack_device__(self) -> tuple[int, int]:
+        """
+        DLPack device of the data, as a (device_type, device_id) tuple of int.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+        """
     @typing.overload
     def __getitem__(self, arg0: IntVect3D) -> float: ...
     @typing.overload
@@ -2010,6 +2332,39 @@ class Array4_float_const:
             Raises an exception if cupy is not installed
 
         """
+    def to_dpnp(self, copy=False, order="F"):
+        """
+        Provide a dpnp view into an Array4.
+
+        This includes ngrow guard cells of the box.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as dpnp.
+        The order="C" option will index as z,y,x and may perform better.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        dpnp.array
+            A dpnp n-dimensional array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if dpnp is not installed
+
+        """
     def to_host(self) -> numpy.typing.NDArray[numpy.float32]: ...
     def to_numpy(self, copy=False, order="F"):
         """
@@ -2041,7 +2396,8 @@ class Array4_float_const:
         """
     def to_xp(self, copy=False, order="F"):
         """
-        Provide a NumPy or CuPy view into an Array4, depending on amr.Config.have_gpu .
+        Provide a NumPy, CuPy or dpnp view into an Array4, depending on amr.Config.have_gpu
+        and amr.Config.gpu_backend .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
         https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
@@ -2067,7 +2423,7 @@ class Array4_float_const:
         Returns
         -------
         xp.array
-            A NumPy or CuPy n-dimensional array.
+            A NumPy, CuPy or dpnp n-dimensional array.
 
         """
     @property
@@ -2082,6 +2438,67 @@ class Array4_float_const:
     def size(self) -> int: ...
 
 class Array4_double_const:
+    def __dlpack__(
+        self,
+        *,
+        stream: typing.Any = None,
+        max_version: typing.Any = None,
+        dl_device: typing.Any = None,
+        copy: typing.Any = None,
+    ) -> typing_extensions.CapsuleType:
+        """
+        Export the data as a DLPack capsule for zero-copy tensor exchange.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+
+        Parameters
+        ----------
+        stream: int, optional
+            Consumer stream (CUDA/ROCm device data only) the data shall be
+            made ready for, e.g., by an event wait. -1 requests no
+            synchronization. Must be None for host-side data.
+        max_version: tuple of int, optional
+            Highest DLPack version the consumer supports. None or a major
+            version below 1 yields a legacy "dltensor" capsule, otherwise a
+            "dltensor_versioned" capsule (DLPack 1.1) is returned.
+        dl_device: tuple of (DLDeviceType, int), optional
+            Requested device of the returned tensor. Besides the producer
+            device, (kDLCPU, 0) is supported: zero-copy for host-accessible
+            memory, otherwise a device-to-host copy (unless copy=False).
+        copy: bool, optional
+            True always copies (the copy is solely owned by the consumer);
+            False never copies (raises BufferError if a copy is needed);
+            None (default) copies only if required.
+            A producer-made copy is synchronized before hand-off, so the data
+            is ready on any consumer stream. Because the copy cannot be run on
+            a consumer-provided stream, copy=True requires stream=None and
+            raises BufferError for any other stream value.
+
+        Returns
+        -------
+        A PyCapsule wrapping a DLPack managed tensor.
+
+        Raises
+        ------
+        BufferError
+            If an unsupported device transfer or copy is requested.
+
+        Notes
+        -----
+        Capsules that own a copy of device data (copy=True on GPU data or
+        device-to-host transfers) allocate from an AMReX Arena and must be
+        freed (i.e., the consuming array garbage collected) before
+        amrex.finalize().
+
+        Legacy "dltensor" capsules cannot communicate read-only tensors;
+        like __array_interface__, such exports are marked writable.
+        """
+    def __dlpack_device__(self) -> tuple[int, int]:
+        """
+        DLPack device of the data, as a (device_type, device_id) tuple of int.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+        """
     @typing.overload
     def __getitem__(self, arg0: IntVect3D) -> float: ...
     @typing.overload
@@ -2164,6 +2581,39 @@ class Array4_double_const:
             Raises an exception if cupy is not installed
 
         """
+    def to_dpnp(self, copy=False, order="F"):
+        """
+        Provide a dpnp view into an Array4.
+
+        This includes ngrow guard cells of the box.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as dpnp.
+        The order="C" option will index as z,y,x and may perform better.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        dpnp.array
+            A dpnp n-dimensional array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if dpnp is not installed
+
+        """
     def to_host(self) -> numpy.typing.NDArray[numpy.float64]: ...
     def to_numpy(self, copy=False, order="F"):
         """
@@ -2195,7 +2645,8 @@ class Array4_double_const:
         """
     def to_xp(self, copy=False, order="F"):
         """
-        Provide a NumPy or CuPy view into an Array4, depending on amr.Config.have_gpu .
+        Provide a NumPy, CuPy or dpnp view into an Array4, depending on amr.Config.have_gpu
+        and amr.Config.gpu_backend .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
         https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
@@ -2221,7 +2672,7 @@ class Array4_double_const:
         Returns
         -------
         xp.array
-            A NumPy or CuPy n-dimensional array.
+            A NumPy, CuPy or dpnp n-dimensional array.
 
         """
     @property
@@ -2320,6 +2771,39 @@ class Array4_longdouble_const:
             Raises an exception if cupy is not installed
 
         """
+    def to_dpnp(self, copy=False, order="F"):
+        """
+        Provide a dpnp view into an Array4.
+
+        This includes ngrow guard cells of the box.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as dpnp.
+        The order="C" option will index as z,y,x and may perform better.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        dpnp.array
+            A dpnp n-dimensional array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if dpnp is not installed
+
+        """
     def to_host(self) -> numpy.typing.NDArray[numpy.longdouble]: ...
     def to_numpy(self, copy=False, order="F"):
         """
@@ -2351,7 +2835,8 @@ class Array4_longdouble_const:
         """
     def to_xp(self, copy=False, order="F"):
         """
-        Provide a NumPy or CuPy view into an Array4, depending on amr.Config.have_gpu .
+        Provide a NumPy, CuPy or dpnp view into an Array4, depending on amr.Config.have_gpu
+        and amr.Config.gpu_backend .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
         https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
@@ -2377,7 +2862,7 @@ class Array4_longdouble_const:
         Returns
         -------
         xp.array
-            A NumPy or CuPy n-dimensional array.
+            A NumPy, CuPy or dpnp n-dimensional array.
 
         """
     @property
@@ -2392,6 +2877,67 @@ class Array4_longdouble_const:
     def size(self) -> int: ...
 
 class Array4_cfloat:
+    def __dlpack__(
+        self,
+        *,
+        stream: typing.Any = None,
+        max_version: typing.Any = None,
+        dl_device: typing.Any = None,
+        copy: typing.Any = None,
+    ) -> typing_extensions.CapsuleType:
+        """
+        Export the data as a DLPack capsule for zero-copy tensor exchange.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+
+        Parameters
+        ----------
+        stream: int, optional
+            Consumer stream (CUDA/ROCm device data only) the data shall be
+            made ready for, e.g., by an event wait. -1 requests no
+            synchronization. Must be None for host-side data.
+        max_version: tuple of int, optional
+            Highest DLPack version the consumer supports. None or a major
+            version below 1 yields a legacy "dltensor" capsule, otherwise a
+            "dltensor_versioned" capsule (DLPack 1.1) is returned.
+        dl_device: tuple of (DLDeviceType, int), optional
+            Requested device of the returned tensor. Besides the producer
+            device, (kDLCPU, 0) is supported: zero-copy for host-accessible
+            memory, otherwise a device-to-host copy (unless copy=False).
+        copy: bool, optional
+            True always copies (the copy is solely owned by the consumer);
+            False never copies (raises BufferError if a copy is needed);
+            None (default) copies only if required.
+            A producer-made copy is synchronized before hand-off, so the data
+            is ready on any consumer stream. Because the copy cannot be run on
+            a consumer-provided stream, copy=True requires stream=None and
+            raises BufferError for any other stream value.
+
+        Returns
+        -------
+        A PyCapsule wrapping a DLPack managed tensor.
+
+        Raises
+        ------
+        BufferError
+            If an unsupported device transfer or copy is requested.
+
+        Notes
+        -----
+        Capsules that own a copy of device data (copy=True on GPU data or
+        device-to-host transfers) allocate from an AMReX Arena and must be
+        freed (i.e., the consuming array garbage collected) before
+        amrex.finalize().
+
+        Legacy "dltensor" capsules cannot communicate read-only tensors;
+        like __array_interface__, such exports are marked writable.
+        """
+    def __dlpack_device__(self) -> tuple[int, int]:
+        """
+        DLPack device of the data, as a (device_type, device_id) tuple of int.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+        """
     @typing.overload
     def __getitem__(self, arg0: IntVect3D) -> complex: ...
     @typing.overload
@@ -2498,6 +3044,39 @@ class Array4_cfloat:
             Raises an exception if cupy is not installed
 
         """
+    def to_dpnp(self, copy=False, order="F"):
+        """
+        Provide a dpnp view into an Array4.
+
+        This includes ngrow guard cells of the box.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as dpnp.
+        The order="C" option will index as z,y,x and may perform better.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        dpnp.array
+            A dpnp n-dimensional array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if dpnp is not installed
+
+        """
     def to_host(self) -> numpy.typing.NDArray[numpy.complex64]: ...
     def to_numpy(self, copy=False, order="F"):
         """
@@ -2529,7 +3108,8 @@ class Array4_cfloat:
         """
     def to_xp(self, copy=False, order="F"):
         """
-        Provide a NumPy or CuPy view into an Array4, depending on amr.Config.have_gpu .
+        Provide a NumPy, CuPy or dpnp view into an Array4, depending on amr.Config.have_gpu
+        and amr.Config.gpu_backend .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
         https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
@@ -2555,7 +3135,7 @@ class Array4_cfloat:
         Returns
         -------
         xp.array
-            A NumPy or CuPy n-dimensional array.
+            A NumPy, CuPy or dpnp n-dimensional array.
 
         """
     @property
@@ -2570,6 +3150,67 @@ class Array4_cfloat:
     def size(self) -> int: ...
 
 class Array4_cdouble:
+    def __dlpack__(
+        self,
+        *,
+        stream: typing.Any = None,
+        max_version: typing.Any = None,
+        dl_device: typing.Any = None,
+        copy: typing.Any = None,
+    ) -> typing_extensions.CapsuleType:
+        """
+        Export the data as a DLPack capsule for zero-copy tensor exchange.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+
+        Parameters
+        ----------
+        stream: int, optional
+            Consumer stream (CUDA/ROCm device data only) the data shall be
+            made ready for, e.g., by an event wait. -1 requests no
+            synchronization. Must be None for host-side data.
+        max_version: tuple of int, optional
+            Highest DLPack version the consumer supports. None or a major
+            version below 1 yields a legacy "dltensor" capsule, otherwise a
+            "dltensor_versioned" capsule (DLPack 1.1) is returned.
+        dl_device: tuple of (DLDeviceType, int), optional
+            Requested device of the returned tensor. Besides the producer
+            device, (kDLCPU, 0) is supported: zero-copy for host-accessible
+            memory, otherwise a device-to-host copy (unless copy=False).
+        copy: bool, optional
+            True always copies (the copy is solely owned by the consumer);
+            False never copies (raises BufferError if a copy is needed);
+            None (default) copies only if required.
+            A producer-made copy is synchronized before hand-off, so the data
+            is ready on any consumer stream. Because the copy cannot be run on
+            a consumer-provided stream, copy=True requires stream=None and
+            raises BufferError for any other stream value.
+
+        Returns
+        -------
+        A PyCapsule wrapping a DLPack managed tensor.
+
+        Raises
+        ------
+        BufferError
+            If an unsupported device transfer or copy is requested.
+
+        Notes
+        -----
+        Capsules that own a copy of device data (copy=True on GPU data or
+        device-to-host transfers) allocate from an AMReX Arena and must be
+        freed (i.e., the consuming array garbage collected) before
+        amrex.finalize().
+
+        Legacy "dltensor" capsules cannot communicate read-only tensors;
+        like __array_interface__, such exports are marked writable.
+        """
+    def __dlpack_device__(self) -> tuple[int, int]:
+        """
+        DLPack device of the data, as a (device_type, device_id) tuple of int.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+        """
     @typing.overload
     def __getitem__(self, arg0: IntVect3D) -> complex: ...
     @typing.overload
@@ -2676,6 +3317,39 @@ class Array4_cdouble:
             Raises an exception if cupy is not installed
 
         """
+    def to_dpnp(self, copy=False, order="F"):
+        """
+        Provide a dpnp view into an Array4.
+
+        This includes ngrow guard cells of the box.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as dpnp.
+        The order="C" option will index as z,y,x and may perform better.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        dpnp.array
+            A dpnp n-dimensional array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if dpnp is not installed
+
+        """
     def to_host(self) -> numpy.typing.NDArray[numpy.complex128]: ...
     def to_numpy(self, copy=False, order="F"):
         """
@@ -2707,7 +3381,8 @@ class Array4_cdouble:
         """
     def to_xp(self, copy=False, order="F"):
         """
-        Provide a NumPy or CuPy view into an Array4, depending on amr.Config.have_gpu .
+        Provide a NumPy, CuPy or dpnp view into an Array4, depending on amr.Config.have_gpu
+        and amr.Config.gpu_backend .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
         https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
@@ -2733,7 +3408,7 @@ class Array4_cdouble:
         Returns
         -------
         xp.array
-            A NumPy or CuPy n-dimensional array.
+            A NumPy, CuPy or dpnp n-dimensional array.
 
         """
     @property
@@ -2748,6 +3423,67 @@ class Array4_cdouble:
     def size(self) -> int: ...
 
 class Array4_cfloat_const:
+    def __dlpack__(
+        self,
+        *,
+        stream: typing.Any = None,
+        max_version: typing.Any = None,
+        dl_device: typing.Any = None,
+        copy: typing.Any = None,
+    ) -> typing_extensions.CapsuleType:
+        """
+        Export the data as a DLPack capsule for zero-copy tensor exchange.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+
+        Parameters
+        ----------
+        stream: int, optional
+            Consumer stream (CUDA/ROCm device data only) the data shall be
+            made ready for, e.g., by an event wait. -1 requests no
+            synchronization. Must be None for host-side data.
+        max_version: tuple of int, optional
+            Highest DLPack version the consumer supports. None or a major
+            version below 1 yields a legacy "dltensor" capsule, otherwise a
+            "dltensor_versioned" capsule (DLPack 1.1) is returned.
+        dl_device: tuple of (DLDeviceType, int), optional
+            Requested device of the returned tensor. Besides the producer
+            device, (kDLCPU, 0) is supported: zero-copy for host-accessible
+            memory, otherwise a device-to-host copy (unless copy=False).
+        copy: bool, optional
+            True always copies (the copy is solely owned by the consumer);
+            False never copies (raises BufferError if a copy is needed);
+            None (default) copies only if required.
+            A producer-made copy is synchronized before hand-off, so the data
+            is ready on any consumer stream. Because the copy cannot be run on
+            a consumer-provided stream, copy=True requires stream=None and
+            raises BufferError for any other stream value.
+
+        Returns
+        -------
+        A PyCapsule wrapping a DLPack managed tensor.
+
+        Raises
+        ------
+        BufferError
+            If an unsupported device transfer or copy is requested.
+
+        Notes
+        -----
+        Capsules that own a copy of device data (copy=True on GPU data or
+        device-to-host transfers) allocate from an AMReX Arena and must be
+        freed (i.e., the consuming array garbage collected) before
+        amrex.finalize().
+
+        Legacy "dltensor" capsules cannot communicate read-only tensors;
+        like __array_interface__, such exports are marked writable.
+        """
+    def __dlpack_device__(self) -> tuple[int, int]:
+        """
+        DLPack device of the data, as a (device_type, device_id) tuple of int.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+        """
     @typing.overload
     def __getitem__(self, arg0: IntVect3D) -> complex: ...
     @typing.overload
@@ -2834,6 +3570,39 @@ class Array4_cfloat_const:
             Raises an exception if cupy is not installed
 
         """
+    def to_dpnp(self, copy=False, order="F"):
+        """
+        Provide a dpnp view into an Array4.
+
+        This includes ngrow guard cells of the box.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as dpnp.
+        The order="C" option will index as z,y,x and may perform better.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        dpnp.array
+            A dpnp n-dimensional array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if dpnp is not installed
+
+        """
     def to_host(self) -> numpy.typing.NDArray[numpy.complex64]: ...
     def to_numpy(self, copy=False, order="F"):
         """
@@ -2865,7 +3634,8 @@ class Array4_cfloat_const:
         """
     def to_xp(self, copy=False, order="F"):
         """
-        Provide a NumPy or CuPy view into an Array4, depending on amr.Config.have_gpu .
+        Provide a NumPy, CuPy or dpnp view into an Array4, depending on amr.Config.have_gpu
+        and amr.Config.gpu_backend .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
         https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
@@ -2891,7 +3661,7 @@ class Array4_cfloat_const:
         Returns
         -------
         xp.array
-            A NumPy or CuPy n-dimensional array.
+            A NumPy, CuPy or dpnp n-dimensional array.
 
         """
     @property
@@ -2906,6 +3676,67 @@ class Array4_cfloat_const:
     def size(self) -> int: ...
 
 class Array4_cdouble_const:
+    def __dlpack__(
+        self,
+        *,
+        stream: typing.Any = None,
+        max_version: typing.Any = None,
+        dl_device: typing.Any = None,
+        copy: typing.Any = None,
+    ) -> typing_extensions.CapsuleType:
+        """
+        Export the data as a DLPack capsule for zero-copy tensor exchange.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+
+        Parameters
+        ----------
+        stream: int, optional
+            Consumer stream (CUDA/ROCm device data only) the data shall be
+            made ready for, e.g., by an event wait. -1 requests no
+            synchronization. Must be None for host-side data.
+        max_version: tuple of int, optional
+            Highest DLPack version the consumer supports. None or a major
+            version below 1 yields a legacy "dltensor" capsule, otherwise a
+            "dltensor_versioned" capsule (DLPack 1.1) is returned.
+        dl_device: tuple of (DLDeviceType, int), optional
+            Requested device of the returned tensor. Besides the producer
+            device, (kDLCPU, 0) is supported: zero-copy for host-accessible
+            memory, otherwise a device-to-host copy (unless copy=False).
+        copy: bool, optional
+            True always copies (the copy is solely owned by the consumer);
+            False never copies (raises BufferError if a copy is needed);
+            None (default) copies only if required.
+            A producer-made copy is synchronized before hand-off, so the data
+            is ready on any consumer stream. Because the copy cannot be run on
+            a consumer-provided stream, copy=True requires stream=None and
+            raises BufferError for any other stream value.
+
+        Returns
+        -------
+        A PyCapsule wrapping a DLPack managed tensor.
+
+        Raises
+        ------
+        BufferError
+            If an unsupported device transfer or copy is requested.
+
+        Notes
+        -----
+        Capsules that own a copy of device data (copy=True on GPU data or
+        device-to-host transfers) allocate from an AMReX Arena and must be
+        freed (i.e., the consuming array garbage collected) before
+        amrex.finalize().
+
+        Legacy "dltensor" capsules cannot communicate read-only tensors;
+        like __array_interface__, such exports are marked writable.
+        """
+    def __dlpack_device__(self) -> tuple[int, int]:
+        """
+        DLPack device of the data, as a (device_type, device_id) tuple of int.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+        """
     @typing.overload
     def __getitem__(self, arg0: IntVect3D) -> complex: ...
     @typing.overload
@@ -2994,6 +3825,39 @@ class Array4_cdouble_const:
             Raises an exception if cupy is not installed
 
         """
+    def to_dpnp(self, copy=False, order="F"):
+        """
+        Provide a dpnp view into an Array4.
+
+        This includes ngrow guard cells of the box.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as dpnp.
+        The order="C" option will index as z,y,x and may perform better.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        dpnp.array
+            A dpnp n-dimensional array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if dpnp is not installed
+
+        """
     def to_host(self) -> numpy.typing.NDArray[numpy.complex128]: ...
     def to_numpy(self, copy=False, order="F"):
         """
@@ -3025,7 +3889,8 @@ class Array4_cdouble_const:
         """
     def to_xp(self, copy=False, order="F"):
         """
-        Provide a NumPy or CuPy view into an Array4, depending on amr.Config.have_gpu .
+        Provide a NumPy, CuPy or dpnp view into an Array4, depending on amr.Config.have_gpu
+        and amr.Config.gpu_backend .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
         https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
@@ -3051,7 +3916,7 @@ class Array4_cdouble_const:
         Returns
         -------
         xp.array
-            A NumPy or CuPy n-dimensional array.
+            A NumPy, CuPy or dpnp n-dimensional array.
 
         """
     @property
@@ -3066,6 +3931,67 @@ class Array4_cdouble_const:
     def size(self) -> int: ...
 
 class Array4_short:
+    def __dlpack__(
+        self,
+        *,
+        stream: typing.Any = None,
+        max_version: typing.Any = None,
+        dl_device: typing.Any = None,
+        copy: typing.Any = None,
+    ) -> typing_extensions.CapsuleType:
+        """
+        Export the data as a DLPack capsule for zero-copy tensor exchange.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+
+        Parameters
+        ----------
+        stream: int, optional
+            Consumer stream (CUDA/ROCm device data only) the data shall be
+            made ready for, e.g., by an event wait. -1 requests no
+            synchronization. Must be None for host-side data.
+        max_version: tuple of int, optional
+            Highest DLPack version the consumer supports. None or a major
+            version below 1 yields a legacy "dltensor" capsule, otherwise a
+            "dltensor_versioned" capsule (DLPack 1.1) is returned.
+        dl_device: tuple of (DLDeviceType, int), optional
+            Requested device of the returned tensor. Besides the producer
+            device, (kDLCPU, 0) is supported: zero-copy for host-accessible
+            memory, otherwise a device-to-host copy (unless copy=False).
+        copy: bool, optional
+            True always copies (the copy is solely owned by the consumer);
+            False never copies (raises BufferError if a copy is needed);
+            None (default) copies only if required.
+            A producer-made copy is synchronized before hand-off, so the data
+            is ready on any consumer stream. Because the copy cannot be run on
+            a consumer-provided stream, copy=True requires stream=None and
+            raises BufferError for any other stream value.
+
+        Returns
+        -------
+        A PyCapsule wrapping a DLPack managed tensor.
+
+        Raises
+        ------
+        BufferError
+            If an unsupported device transfer or copy is requested.
+
+        Notes
+        -----
+        Capsules that own a copy of device data (copy=True on GPU data or
+        device-to-host transfers) allocate from an AMReX Arena and must be
+        freed (i.e., the consuming array garbage collected) before
+        amrex.finalize().
+
+        Legacy "dltensor" capsules cannot communicate read-only tensors;
+        like __array_interface__, such exports are marked writable.
+        """
+    def __dlpack_device__(self) -> tuple[int, int]:
+        """
+        DLPack device of the data, as a (device_type, device_id) tuple of int.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+        """
     @typing.overload
     def __getitem__(self, arg0: IntVect3D) -> int: ...
     @typing.overload
@@ -3170,6 +4096,39 @@ class Array4_short:
             Raises an exception if cupy is not installed
 
         """
+    def to_dpnp(self, copy=False, order="F"):
+        """
+        Provide a dpnp view into an Array4.
+
+        This includes ngrow guard cells of the box.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as dpnp.
+        The order="C" option will index as z,y,x and may perform better.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        dpnp.array
+            A dpnp n-dimensional array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if dpnp is not installed
+
+        """
     def to_host(self) -> numpy.typing.NDArray[numpy.int16]: ...
     def to_numpy(self, copy=False, order="F"):
         """
@@ -3201,7 +4160,8 @@ class Array4_short:
         """
     def to_xp(self, copy=False, order="F"):
         """
-        Provide a NumPy or CuPy view into an Array4, depending on amr.Config.have_gpu .
+        Provide a NumPy, CuPy or dpnp view into an Array4, depending on amr.Config.have_gpu
+        and amr.Config.gpu_backend .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
         https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
@@ -3227,7 +4187,7 @@ class Array4_short:
         Returns
         -------
         xp.array
-            A NumPy or CuPy n-dimensional array.
+            A NumPy, CuPy or dpnp n-dimensional array.
 
         """
     @property
@@ -3242,6 +4202,67 @@ class Array4_short:
     def size(self) -> int: ...
 
 class Array4_int:
+    def __dlpack__(
+        self,
+        *,
+        stream: typing.Any = None,
+        max_version: typing.Any = None,
+        dl_device: typing.Any = None,
+        copy: typing.Any = None,
+    ) -> typing_extensions.CapsuleType:
+        """
+        Export the data as a DLPack capsule for zero-copy tensor exchange.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+
+        Parameters
+        ----------
+        stream: int, optional
+            Consumer stream (CUDA/ROCm device data only) the data shall be
+            made ready for, e.g., by an event wait. -1 requests no
+            synchronization. Must be None for host-side data.
+        max_version: tuple of int, optional
+            Highest DLPack version the consumer supports. None or a major
+            version below 1 yields a legacy "dltensor" capsule, otherwise a
+            "dltensor_versioned" capsule (DLPack 1.1) is returned.
+        dl_device: tuple of (DLDeviceType, int), optional
+            Requested device of the returned tensor. Besides the producer
+            device, (kDLCPU, 0) is supported: zero-copy for host-accessible
+            memory, otherwise a device-to-host copy (unless copy=False).
+        copy: bool, optional
+            True always copies (the copy is solely owned by the consumer);
+            False never copies (raises BufferError if a copy is needed);
+            None (default) copies only if required.
+            A producer-made copy is synchronized before hand-off, so the data
+            is ready on any consumer stream. Because the copy cannot be run on
+            a consumer-provided stream, copy=True requires stream=None and
+            raises BufferError for any other stream value.
+
+        Returns
+        -------
+        A PyCapsule wrapping a DLPack managed tensor.
+
+        Raises
+        ------
+        BufferError
+            If an unsupported device transfer or copy is requested.
+
+        Notes
+        -----
+        Capsules that own a copy of device data (copy=True on GPU data or
+        device-to-host transfers) allocate from an AMReX Arena and must be
+        freed (i.e., the consuming array garbage collected) before
+        amrex.finalize().
+
+        Legacy "dltensor" capsules cannot communicate read-only tensors;
+        like __array_interface__, such exports are marked writable.
+        """
+    def __dlpack_device__(self) -> tuple[int, int]:
+        """
+        DLPack device of the data, as a (device_type, device_id) tuple of int.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+        """
     @typing.overload
     def __getitem__(self, arg0: IntVect3D) -> int: ...
     @typing.overload
@@ -3346,6 +4367,39 @@ class Array4_int:
             Raises an exception if cupy is not installed
 
         """
+    def to_dpnp(self, copy=False, order="F"):
+        """
+        Provide a dpnp view into an Array4.
+
+        This includes ngrow guard cells of the box.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as dpnp.
+        The order="C" option will index as z,y,x and may perform better.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        dpnp.array
+            A dpnp n-dimensional array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if dpnp is not installed
+
+        """
     def to_host(self) -> numpy.typing.NDArray[numpy.int32]: ...
     def to_numpy(self, copy=False, order="F"):
         """
@@ -3377,7 +4431,8 @@ class Array4_int:
         """
     def to_xp(self, copy=False, order="F"):
         """
-        Provide a NumPy or CuPy view into an Array4, depending on amr.Config.have_gpu .
+        Provide a NumPy, CuPy or dpnp view into an Array4, depending on amr.Config.have_gpu
+        and amr.Config.gpu_backend .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
         https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
@@ -3403,7 +4458,7 @@ class Array4_int:
         Returns
         -------
         xp.array
-            A NumPy or CuPy n-dimensional array.
+            A NumPy, CuPy or dpnp n-dimensional array.
 
         """
     @property
@@ -3418,6 +4473,67 @@ class Array4_int:
     def size(self) -> int: ...
 
 class Array4_long:
+    def __dlpack__(
+        self,
+        *,
+        stream: typing.Any = None,
+        max_version: typing.Any = None,
+        dl_device: typing.Any = None,
+        copy: typing.Any = None,
+    ) -> typing_extensions.CapsuleType:
+        """
+        Export the data as a DLPack capsule for zero-copy tensor exchange.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+
+        Parameters
+        ----------
+        stream: int, optional
+            Consumer stream (CUDA/ROCm device data only) the data shall be
+            made ready for, e.g., by an event wait. -1 requests no
+            synchronization. Must be None for host-side data.
+        max_version: tuple of int, optional
+            Highest DLPack version the consumer supports. None or a major
+            version below 1 yields a legacy "dltensor" capsule, otherwise a
+            "dltensor_versioned" capsule (DLPack 1.1) is returned.
+        dl_device: tuple of (DLDeviceType, int), optional
+            Requested device of the returned tensor. Besides the producer
+            device, (kDLCPU, 0) is supported: zero-copy for host-accessible
+            memory, otherwise a device-to-host copy (unless copy=False).
+        copy: bool, optional
+            True always copies (the copy is solely owned by the consumer);
+            False never copies (raises BufferError if a copy is needed);
+            None (default) copies only if required.
+            A producer-made copy is synchronized before hand-off, so the data
+            is ready on any consumer stream. Because the copy cannot be run on
+            a consumer-provided stream, copy=True requires stream=None and
+            raises BufferError for any other stream value.
+
+        Returns
+        -------
+        A PyCapsule wrapping a DLPack managed tensor.
+
+        Raises
+        ------
+        BufferError
+            If an unsupported device transfer or copy is requested.
+
+        Notes
+        -----
+        Capsules that own a copy of device data (copy=True on GPU data or
+        device-to-host transfers) allocate from an AMReX Arena and must be
+        freed (i.e., the consuming array garbage collected) before
+        amrex.finalize().
+
+        Legacy "dltensor" capsules cannot communicate read-only tensors;
+        like __array_interface__, such exports are marked writable.
+        """
+    def __dlpack_device__(self) -> tuple[int, int]:
+        """
+        DLPack device of the data, as a (device_type, device_id) tuple of int.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+        """
     @typing.overload
     def __getitem__(self, arg0: IntVect3D) -> int: ...
     @typing.overload
@@ -3522,6 +4638,39 @@ class Array4_long:
             Raises an exception if cupy is not installed
 
         """
+    def to_dpnp(self, copy=False, order="F"):
+        """
+        Provide a dpnp view into an Array4.
+
+        This includes ngrow guard cells of the box.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as dpnp.
+        The order="C" option will index as z,y,x and may perform better.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        dpnp.array
+            A dpnp n-dimensional array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if dpnp is not installed
+
+        """
     def to_host(self) -> numpy.typing.NDArray[numpy.int64]: ...
     def to_numpy(self, copy=False, order="F"):
         """
@@ -3553,7 +4702,8 @@ class Array4_long:
         """
     def to_xp(self, copy=False, order="F"):
         """
-        Provide a NumPy or CuPy view into an Array4, depending on amr.Config.have_gpu .
+        Provide a NumPy, CuPy or dpnp view into an Array4, depending on amr.Config.have_gpu
+        and amr.Config.gpu_backend .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
         https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
@@ -3579,7 +4729,7 @@ class Array4_long:
         Returns
         -------
         xp.array
-            A NumPy or CuPy n-dimensional array.
+            A NumPy, CuPy or dpnp n-dimensional array.
 
         """
     @property
@@ -3594,6 +4744,67 @@ class Array4_long:
     def size(self) -> int: ...
 
 class Array4_longlong:
+    def __dlpack__(
+        self,
+        *,
+        stream: typing.Any = None,
+        max_version: typing.Any = None,
+        dl_device: typing.Any = None,
+        copy: typing.Any = None,
+    ) -> typing_extensions.CapsuleType:
+        """
+        Export the data as a DLPack capsule for zero-copy tensor exchange.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+
+        Parameters
+        ----------
+        stream: int, optional
+            Consumer stream (CUDA/ROCm device data only) the data shall be
+            made ready for, e.g., by an event wait. -1 requests no
+            synchronization. Must be None for host-side data.
+        max_version: tuple of int, optional
+            Highest DLPack version the consumer supports. None or a major
+            version below 1 yields a legacy "dltensor" capsule, otherwise a
+            "dltensor_versioned" capsule (DLPack 1.1) is returned.
+        dl_device: tuple of (DLDeviceType, int), optional
+            Requested device of the returned tensor. Besides the producer
+            device, (kDLCPU, 0) is supported: zero-copy for host-accessible
+            memory, otherwise a device-to-host copy (unless copy=False).
+        copy: bool, optional
+            True always copies (the copy is solely owned by the consumer);
+            False never copies (raises BufferError if a copy is needed);
+            None (default) copies only if required.
+            A producer-made copy is synchronized before hand-off, so the data
+            is ready on any consumer stream. Because the copy cannot be run on
+            a consumer-provided stream, copy=True requires stream=None and
+            raises BufferError for any other stream value.
+
+        Returns
+        -------
+        A PyCapsule wrapping a DLPack managed tensor.
+
+        Raises
+        ------
+        BufferError
+            If an unsupported device transfer or copy is requested.
+
+        Notes
+        -----
+        Capsules that own a copy of device data (copy=True on GPU data or
+        device-to-host transfers) allocate from an AMReX Arena and must be
+        freed (i.e., the consuming array garbage collected) before
+        amrex.finalize().
+
+        Legacy "dltensor" capsules cannot communicate read-only tensors;
+        like __array_interface__, such exports are marked writable.
+        """
+    def __dlpack_device__(self) -> tuple[int, int]:
+        """
+        DLPack device of the data, as a (device_type, device_id) tuple of int.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+        """
     @typing.overload
     def __getitem__(self, arg0: IntVect3D) -> int: ...
     @typing.overload
@@ -3698,6 +4909,39 @@ class Array4_longlong:
             Raises an exception if cupy is not installed
 
         """
+    def to_dpnp(self, copy=False, order="F"):
+        """
+        Provide a dpnp view into an Array4.
+
+        This includes ngrow guard cells of the box.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as dpnp.
+        The order="C" option will index as z,y,x and may perform better.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        dpnp.array
+            A dpnp n-dimensional array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if dpnp is not installed
+
+        """
     def to_host(self) -> numpy.typing.NDArray[numpy.int64]: ...
     def to_numpy(self, copy=False, order="F"):
         """
@@ -3729,7 +4973,8 @@ class Array4_longlong:
         """
     def to_xp(self, copy=False, order="F"):
         """
-        Provide a NumPy or CuPy view into an Array4, depending on amr.Config.have_gpu .
+        Provide a NumPy, CuPy or dpnp view into an Array4, depending on amr.Config.have_gpu
+        and amr.Config.gpu_backend .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
         https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
@@ -3755,7 +5000,7 @@ class Array4_longlong:
         Returns
         -------
         xp.array
-            A NumPy or CuPy n-dimensional array.
+            A NumPy, CuPy or dpnp n-dimensional array.
 
         """
     @property
@@ -3770,6 +5015,67 @@ class Array4_longlong:
     def size(self) -> int: ...
 
 class Array4_short_const:
+    def __dlpack__(
+        self,
+        *,
+        stream: typing.Any = None,
+        max_version: typing.Any = None,
+        dl_device: typing.Any = None,
+        copy: typing.Any = None,
+    ) -> typing_extensions.CapsuleType:
+        """
+        Export the data as a DLPack capsule for zero-copy tensor exchange.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+
+        Parameters
+        ----------
+        stream: int, optional
+            Consumer stream (CUDA/ROCm device data only) the data shall be
+            made ready for, e.g., by an event wait. -1 requests no
+            synchronization. Must be None for host-side data.
+        max_version: tuple of int, optional
+            Highest DLPack version the consumer supports. None or a major
+            version below 1 yields a legacy "dltensor" capsule, otherwise a
+            "dltensor_versioned" capsule (DLPack 1.1) is returned.
+        dl_device: tuple of (DLDeviceType, int), optional
+            Requested device of the returned tensor. Besides the producer
+            device, (kDLCPU, 0) is supported: zero-copy for host-accessible
+            memory, otherwise a device-to-host copy (unless copy=False).
+        copy: bool, optional
+            True always copies (the copy is solely owned by the consumer);
+            False never copies (raises BufferError if a copy is needed);
+            None (default) copies only if required.
+            A producer-made copy is synchronized before hand-off, so the data
+            is ready on any consumer stream. Because the copy cannot be run on
+            a consumer-provided stream, copy=True requires stream=None and
+            raises BufferError for any other stream value.
+
+        Returns
+        -------
+        A PyCapsule wrapping a DLPack managed tensor.
+
+        Raises
+        ------
+        BufferError
+            If an unsupported device transfer or copy is requested.
+
+        Notes
+        -----
+        Capsules that own a copy of device data (copy=True on GPU data or
+        device-to-host transfers) allocate from an AMReX Arena and must be
+        freed (i.e., the consuming array garbage collected) before
+        amrex.finalize().
+
+        Legacy "dltensor" capsules cannot communicate read-only tensors;
+        like __array_interface__, such exports are marked writable.
+        """
+    def __dlpack_device__(self) -> tuple[int, int]:
+        """
+        DLPack device of the data, as a (device_type, device_id) tuple of int.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+        """
     @typing.overload
     def __getitem__(self, arg0: IntVect3D) -> int: ...
     @typing.overload
@@ -3852,6 +5158,39 @@ class Array4_short_const:
             Raises an exception if cupy is not installed
 
         """
+    def to_dpnp(self, copy=False, order="F"):
+        """
+        Provide a dpnp view into an Array4.
+
+        This includes ngrow guard cells of the box.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as dpnp.
+        The order="C" option will index as z,y,x and may perform better.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        dpnp.array
+            A dpnp n-dimensional array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if dpnp is not installed
+
+        """
     def to_host(self) -> numpy.typing.NDArray[numpy.int16]: ...
     def to_numpy(self, copy=False, order="F"):
         """
@@ -3883,7 +5222,8 @@ class Array4_short_const:
         """
     def to_xp(self, copy=False, order="F"):
         """
-        Provide a NumPy or CuPy view into an Array4, depending on amr.Config.have_gpu .
+        Provide a NumPy, CuPy or dpnp view into an Array4, depending on amr.Config.have_gpu
+        and amr.Config.gpu_backend .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
         https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
@@ -3909,7 +5249,7 @@ class Array4_short_const:
         Returns
         -------
         xp.array
-            A NumPy or CuPy n-dimensional array.
+            A NumPy, CuPy or dpnp n-dimensional array.
 
         """
     @property
@@ -3924,6 +5264,67 @@ class Array4_short_const:
     def size(self) -> int: ...
 
 class Array4_int_const:
+    def __dlpack__(
+        self,
+        *,
+        stream: typing.Any = None,
+        max_version: typing.Any = None,
+        dl_device: typing.Any = None,
+        copy: typing.Any = None,
+    ) -> typing_extensions.CapsuleType:
+        """
+        Export the data as a DLPack capsule for zero-copy tensor exchange.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+
+        Parameters
+        ----------
+        stream: int, optional
+            Consumer stream (CUDA/ROCm device data only) the data shall be
+            made ready for, e.g., by an event wait. -1 requests no
+            synchronization. Must be None for host-side data.
+        max_version: tuple of int, optional
+            Highest DLPack version the consumer supports. None or a major
+            version below 1 yields a legacy "dltensor" capsule, otherwise a
+            "dltensor_versioned" capsule (DLPack 1.1) is returned.
+        dl_device: tuple of (DLDeviceType, int), optional
+            Requested device of the returned tensor. Besides the producer
+            device, (kDLCPU, 0) is supported: zero-copy for host-accessible
+            memory, otherwise a device-to-host copy (unless copy=False).
+        copy: bool, optional
+            True always copies (the copy is solely owned by the consumer);
+            False never copies (raises BufferError if a copy is needed);
+            None (default) copies only if required.
+            A producer-made copy is synchronized before hand-off, so the data
+            is ready on any consumer stream. Because the copy cannot be run on
+            a consumer-provided stream, copy=True requires stream=None and
+            raises BufferError for any other stream value.
+
+        Returns
+        -------
+        A PyCapsule wrapping a DLPack managed tensor.
+
+        Raises
+        ------
+        BufferError
+            If an unsupported device transfer or copy is requested.
+
+        Notes
+        -----
+        Capsules that own a copy of device data (copy=True on GPU data or
+        device-to-host transfers) allocate from an AMReX Arena and must be
+        freed (i.e., the consuming array garbage collected) before
+        amrex.finalize().
+
+        Legacy "dltensor" capsules cannot communicate read-only tensors;
+        like __array_interface__, such exports are marked writable.
+        """
+    def __dlpack_device__(self) -> tuple[int, int]:
+        """
+        DLPack device of the data, as a (device_type, device_id) tuple of int.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+        """
     @typing.overload
     def __getitem__(self, arg0: IntVect3D) -> int: ...
     @typing.overload
@@ -4006,6 +5407,39 @@ class Array4_int_const:
             Raises an exception if cupy is not installed
 
         """
+    def to_dpnp(self, copy=False, order="F"):
+        """
+        Provide a dpnp view into an Array4.
+
+        This includes ngrow guard cells of the box.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as dpnp.
+        The order="C" option will index as z,y,x and may perform better.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        dpnp.array
+            A dpnp n-dimensional array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if dpnp is not installed
+
+        """
     def to_host(self) -> numpy.typing.NDArray[numpy.int32]: ...
     def to_numpy(self, copy=False, order="F"):
         """
@@ -4037,7 +5471,8 @@ class Array4_int_const:
         """
     def to_xp(self, copy=False, order="F"):
         """
-        Provide a NumPy or CuPy view into an Array4, depending on amr.Config.have_gpu .
+        Provide a NumPy, CuPy or dpnp view into an Array4, depending on amr.Config.have_gpu
+        and amr.Config.gpu_backend .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
         https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
@@ -4063,7 +5498,7 @@ class Array4_int_const:
         Returns
         -------
         xp.array
-            A NumPy or CuPy n-dimensional array.
+            A NumPy, CuPy or dpnp n-dimensional array.
 
         """
     @property
@@ -4078,6 +5513,67 @@ class Array4_int_const:
     def size(self) -> int: ...
 
 class Array4_long_const:
+    def __dlpack__(
+        self,
+        *,
+        stream: typing.Any = None,
+        max_version: typing.Any = None,
+        dl_device: typing.Any = None,
+        copy: typing.Any = None,
+    ) -> typing_extensions.CapsuleType:
+        """
+        Export the data as a DLPack capsule for zero-copy tensor exchange.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+
+        Parameters
+        ----------
+        stream: int, optional
+            Consumer stream (CUDA/ROCm device data only) the data shall be
+            made ready for, e.g., by an event wait. -1 requests no
+            synchronization. Must be None for host-side data.
+        max_version: tuple of int, optional
+            Highest DLPack version the consumer supports. None or a major
+            version below 1 yields a legacy "dltensor" capsule, otherwise a
+            "dltensor_versioned" capsule (DLPack 1.1) is returned.
+        dl_device: tuple of (DLDeviceType, int), optional
+            Requested device of the returned tensor. Besides the producer
+            device, (kDLCPU, 0) is supported: zero-copy for host-accessible
+            memory, otherwise a device-to-host copy (unless copy=False).
+        copy: bool, optional
+            True always copies (the copy is solely owned by the consumer);
+            False never copies (raises BufferError if a copy is needed);
+            None (default) copies only if required.
+            A producer-made copy is synchronized before hand-off, so the data
+            is ready on any consumer stream. Because the copy cannot be run on
+            a consumer-provided stream, copy=True requires stream=None and
+            raises BufferError for any other stream value.
+
+        Returns
+        -------
+        A PyCapsule wrapping a DLPack managed tensor.
+
+        Raises
+        ------
+        BufferError
+            If an unsupported device transfer or copy is requested.
+
+        Notes
+        -----
+        Capsules that own a copy of device data (copy=True on GPU data or
+        device-to-host transfers) allocate from an AMReX Arena and must be
+        freed (i.e., the consuming array garbage collected) before
+        amrex.finalize().
+
+        Legacy "dltensor" capsules cannot communicate read-only tensors;
+        like __array_interface__, such exports are marked writable.
+        """
+    def __dlpack_device__(self) -> tuple[int, int]:
+        """
+        DLPack device of the data, as a (device_type, device_id) tuple of int.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+        """
     @typing.overload
     def __getitem__(self, arg0: IntVect3D) -> int: ...
     @typing.overload
@@ -4160,6 +5656,39 @@ class Array4_long_const:
             Raises an exception if cupy is not installed
 
         """
+    def to_dpnp(self, copy=False, order="F"):
+        """
+        Provide a dpnp view into an Array4.
+
+        This includes ngrow guard cells of the box.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as dpnp.
+        The order="C" option will index as z,y,x and may perform better.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        dpnp.array
+            A dpnp n-dimensional array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if dpnp is not installed
+
+        """
     def to_host(self) -> numpy.typing.NDArray[numpy.int64]: ...
     def to_numpy(self, copy=False, order="F"):
         """
@@ -4191,7 +5720,8 @@ class Array4_long_const:
         """
     def to_xp(self, copy=False, order="F"):
         """
-        Provide a NumPy or CuPy view into an Array4, depending on amr.Config.have_gpu .
+        Provide a NumPy, CuPy or dpnp view into an Array4, depending on amr.Config.have_gpu
+        and amr.Config.gpu_backend .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
         https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
@@ -4217,7 +5747,7 @@ class Array4_long_const:
         Returns
         -------
         xp.array
-            A NumPy or CuPy n-dimensional array.
+            A NumPy, CuPy or dpnp n-dimensional array.
 
         """
     @property
@@ -4232,6 +5762,67 @@ class Array4_long_const:
     def size(self) -> int: ...
 
 class Array4_longlong_const:
+    def __dlpack__(
+        self,
+        *,
+        stream: typing.Any = None,
+        max_version: typing.Any = None,
+        dl_device: typing.Any = None,
+        copy: typing.Any = None,
+    ) -> typing_extensions.CapsuleType:
+        """
+        Export the data as a DLPack capsule for zero-copy tensor exchange.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+
+        Parameters
+        ----------
+        stream: int, optional
+            Consumer stream (CUDA/ROCm device data only) the data shall be
+            made ready for, e.g., by an event wait. -1 requests no
+            synchronization. Must be None for host-side data.
+        max_version: tuple of int, optional
+            Highest DLPack version the consumer supports. None or a major
+            version below 1 yields a legacy "dltensor" capsule, otherwise a
+            "dltensor_versioned" capsule (DLPack 1.1) is returned.
+        dl_device: tuple of (DLDeviceType, int), optional
+            Requested device of the returned tensor. Besides the producer
+            device, (kDLCPU, 0) is supported: zero-copy for host-accessible
+            memory, otherwise a device-to-host copy (unless copy=False).
+        copy: bool, optional
+            True always copies (the copy is solely owned by the consumer);
+            False never copies (raises BufferError if a copy is needed);
+            None (default) copies only if required.
+            A producer-made copy is synchronized before hand-off, so the data
+            is ready on any consumer stream. Because the copy cannot be run on
+            a consumer-provided stream, copy=True requires stream=None and
+            raises BufferError for any other stream value.
+
+        Returns
+        -------
+        A PyCapsule wrapping a DLPack managed tensor.
+
+        Raises
+        ------
+        BufferError
+            If an unsupported device transfer or copy is requested.
+
+        Notes
+        -----
+        Capsules that own a copy of device data (copy=True on GPU data or
+        device-to-host transfers) allocate from an AMReX Arena and must be
+        freed (i.e., the consuming array garbage collected) before
+        amrex.finalize().
+
+        Legacy "dltensor" capsules cannot communicate read-only tensors;
+        like __array_interface__, such exports are marked writable.
+        """
+    def __dlpack_device__(self) -> tuple[int, int]:
+        """
+        DLPack device of the data, as a (device_type, device_id) tuple of int.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+        """
     @typing.overload
     def __getitem__(self, arg0: IntVect3D) -> int: ...
     @typing.overload
@@ -4316,6 +5907,39 @@ class Array4_longlong_const:
             Raises an exception if cupy is not installed
 
         """
+    def to_dpnp(self, copy=False, order="F"):
+        """
+        Provide a dpnp view into an Array4.
+
+        This includes ngrow guard cells of the box.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as dpnp.
+        The order="C" option will index as z,y,x and may perform better.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        dpnp.array
+            A dpnp n-dimensional array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if dpnp is not installed
+
+        """
     def to_host(self) -> numpy.typing.NDArray[numpy.int64]: ...
     def to_numpy(self, copy=False, order="F"):
         """
@@ -4347,7 +5971,8 @@ class Array4_longlong_const:
         """
     def to_xp(self, copy=False, order="F"):
         """
-        Provide a NumPy or CuPy view into an Array4, depending on amr.Config.have_gpu .
+        Provide a NumPy, CuPy or dpnp view into an Array4, depending on amr.Config.have_gpu
+        and amr.Config.gpu_backend .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
         https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
@@ -4373,7 +5998,7 @@ class Array4_longlong_const:
         Returns
         -------
         xp.array
-            A NumPy or CuPy n-dimensional array.
+            A NumPy, CuPy or dpnp n-dimensional array.
 
         """
     @property
@@ -4388,6 +6013,67 @@ class Array4_longlong_const:
     def size(self) -> int: ...
 
 class Array4_ushort:
+    def __dlpack__(
+        self,
+        *,
+        stream: typing.Any = None,
+        max_version: typing.Any = None,
+        dl_device: typing.Any = None,
+        copy: typing.Any = None,
+    ) -> typing_extensions.CapsuleType:
+        """
+        Export the data as a DLPack capsule for zero-copy tensor exchange.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+
+        Parameters
+        ----------
+        stream: int, optional
+            Consumer stream (CUDA/ROCm device data only) the data shall be
+            made ready for, e.g., by an event wait. -1 requests no
+            synchronization. Must be None for host-side data.
+        max_version: tuple of int, optional
+            Highest DLPack version the consumer supports. None or a major
+            version below 1 yields a legacy "dltensor" capsule, otherwise a
+            "dltensor_versioned" capsule (DLPack 1.1) is returned.
+        dl_device: tuple of (DLDeviceType, int), optional
+            Requested device of the returned tensor. Besides the producer
+            device, (kDLCPU, 0) is supported: zero-copy for host-accessible
+            memory, otherwise a device-to-host copy (unless copy=False).
+        copy: bool, optional
+            True always copies (the copy is solely owned by the consumer);
+            False never copies (raises BufferError if a copy is needed);
+            None (default) copies only if required.
+            A producer-made copy is synchronized before hand-off, so the data
+            is ready on any consumer stream. Because the copy cannot be run on
+            a consumer-provided stream, copy=True requires stream=None and
+            raises BufferError for any other stream value.
+
+        Returns
+        -------
+        A PyCapsule wrapping a DLPack managed tensor.
+
+        Raises
+        ------
+        BufferError
+            If an unsupported device transfer or copy is requested.
+
+        Notes
+        -----
+        Capsules that own a copy of device data (copy=True on GPU data or
+        device-to-host transfers) allocate from an AMReX Arena and must be
+        freed (i.e., the consuming array garbage collected) before
+        amrex.finalize().
+
+        Legacy "dltensor" capsules cannot communicate read-only tensors;
+        like __array_interface__, such exports are marked writable.
+        """
+    def __dlpack_device__(self) -> tuple[int, int]:
+        """
+        DLPack device of the data, as a (device_type, device_id) tuple of int.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+        """
     @typing.overload
     def __getitem__(self, arg0: IntVect3D) -> int: ...
     @typing.overload
@@ -4492,6 +6178,39 @@ class Array4_ushort:
             Raises an exception if cupy is not installed
 
         """
+    def to_dpnp(self, copy=False, order="F"):
+        """
+        Provide a dpnp view into an Array4.
+
+        This includes ngrow guard cells of the box.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as dpnp.
+        The order="C" option will index as z,y,x and may perform better.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        dpnp.array
+            A dpnp n-dimensional array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if dpnp is not installed
+
+        """
     def to_host(self) -> numpy.typing.NDArray[numpy.uint16]: ...
     def to_numpy(self, copy=False, order="F"):
         """
@@ -4523,7 +6242,8 @@ class Array4_ushort:
         """
     def to_xp(self, copy=False, order="F"):
         """
-        Provide a NumPy or CuPy view into an Array4, depending on amr.Config.have_gpu .
+        Provide a NumPy, CuPy or dpnp view into an Array4, depending on amr.Config.have_gpu
+        and amr.Config.gpu_backend .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
         https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
@@ -4549,7 +6269,7 @@ class Array4_ushort:
         Returns
         -------
         xp.array
-            A NumPy or CuPy n-dimensional array.
+            A NumPy, CuPy or dpnp n-dimensional array.
 
         """
     @property
@@ -4564,6 +6284,67 @@ class Array4_ushort:
     def size(self) -> int: ...
 
 class Array4_uint:
+    def __dlpack__(
+        self,
+        *,
+        stream: typing.Any = None,
+        max_version: typing.Any = None,
+        dl_device: typing.Any = None,
+        copy: typing.Any = None,
+    ) -> typing_extensions.CapsuleType:
+        """
+        Export the data as a DLPack capsule for zero-copy tensor exchange.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+
+        Parameters
+        ----------
+        stream: int, optional
+            Consumer stream (CUDA/ROCm device data only) the data shall be
+            made ready for, e.g., by an event wait. -1 requests no
+            synchronization. Must be None for host-side data.
+        max_version: tuple of int, optional
+            Highest DLPack version the consumer supports. None or a major
+            version below 1 yields a legacy "dltensor" capsule, otherwise a
+            "dltensor_versioned" capsule (DLPack 1.1) is returned.
+        dl_device: tuple of (DLDeviceType, int), optional
+            Requested device of the returned tensor. Besides the producer
+            device, (kDLCPU, 0) is supported: zero-copy for host-accessible
+            memory, otherwise a device-to-host copy (unless copy=False).
+        copy: bool, optional
+            True always copies (the copy is solely owned by the consumer);
+            False never copies (raises BufferError if a copy is needed);
+            None (default) copies only if required.
+            A producer-made copy is synchronized before hand-off, so the data
+            is ready on any consumer stream. Because the copy cannot be run on
+            a consumer-provided stream, copy=True requires stream=None and
+            raises BufferError for any other stream value.
+
+        Returns
+        -------
+        A PyCapsule wrapping a DLPack managed tensor.
+
+        Raises
+        ------
+        BufferError
+            If an unsupported device transfer or copy is requested.
+
+        Notes
+        -----
+        Capsules that own a copy of device data (copy=True on GPU data or
+        device-to-host transfers) allocate from an AMReX Arena and must be
+        freed (i.e., the consuming array garbage collected) before
+        amrex.finalize().
+
+        Legacy "dltensor" capsules cannot communicate read-only tensors;
+        like __array_interface__, such exports are marked writable.
+        """
+    def __dlpack_device__(self) -> tuple[int, int]:
+        """
+        DLPack device of the data, as a (device_type, device_id) tuple of int.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+        """
     @typing.overload
     def __getitem__(self, arg0: IntVect3D) -> int: ...
     @typing.overload
@@ -4668,6 +6449,39 @@ class Array4_uint:
             Raises an exception if cupy is not installed
 
         """
+    def to_dpnp(self, copy=False, order="F"):
+        """
+        Provide a dpnp view into an Array4.
+
+        This includes ngrow guard cells of the box.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as dpnp.
+        The order="C" option will index as z,y,x and may perform better.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        dpnp.array
+            A dpnp n-dimensional array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if dpnp is not installed
+
+        """
     def to_host(self) -> numpy.typing.NDArray[numpy.uint32]: ...
     def to_numpy(self, copy=False, order="F"):
         """
@@ -4699,7 +6513,8 @@ class Array4_uint:
         """
     def to_xp(self, copy=False, order="F"):
         """
-        Provide a NumPy or CuPy view into an Array4, depending on amr.Config.have_gpu .
+        Provide a NumPy, CuPy or dpnp view into an Array4, depending on amr.Config.have_gpu
+        and amr.Config.gpu_backend .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
         https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
@@ -4725,7 +6540,7 @@ class Array4_uint:
         Returns
         -------
         xp.array
-            A NumPy or CuPy n-dimensional array.
+            A NumPy, CuPy or dpnp n-dimensional array.
 
         """
     @property
@@ -4740,6 +6555,67 @@ class Array4_uint:
     def size(self) -> int: ...
 
 class Array4_ulong:
+    def __dlpack__(
+        self,
+        *,
+        stream: typing.Any = None,
+        max_version: typing.Any = None,
+        dl_device: typing.Any = None,
+        copy: typing.Any = None,
+    ) -> typing_extensions.CapsuleType:
+        """
+        Export the data as a DLPack capsule for zero-copy tensor exchange.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+
+        Parameters
+        ----------
+        stream: int, optional
+            Consumer stream (CUDA/ROCm device data only) the data shall be
+            made ready for, e.g., by an event wait. -1 requests no
+            synchronization. Must be None for host-side data.
+        max_version: tuple of int, optional
+            Highest DLPack version the consumer supports. None or a major
+            version below 1 yields a legacy "dltensor" capsule, otherwise a
+            "dltensor_versioned" capsule (DLPack 1.1) is returned.
+        dl_device: tuple of (DLDeviceType, int), optional
+            Requested device of the returned tensor. Besides the producer
+            device, (kDLCPU, 0) is supported: zero-copy for host-accessible
+            memory, otherwise a device-to-host copy (unless copy=False).
+        copy: bool, optional
+            True always copies (the copy is solely owned by the consumer);
+            False never copies (raises BufferError if a copy is needed);
+            None (default) copies only if required.
+            A producer-made copy is synchronized before hand-off, so the data
+            is ready on any consumer stream. Because the copy cannot be run on
+            a consumer-provided stream, copy=True requires stream=None and
+            raises BufferError for any other stream value.
+
+        Returns
+        -------
+        A PyCapsule wrapping a DLPack managed tensor.
+
+        Raises
+        ------
+        BufferError
+            If an unsupported device transfer or copy is requested.
+
+        Notes
+        -----
+        Capsules that own a copy of device data (copy=True on GPU data or
+        device-to-host transfers) allocate from an AMReX Arena and must be
+        freed (i.e., the consuming array garbage collected) before
+        amrex.finalize().
+
+        Legacy "dltensor" capsules cannot communicate read-only tensors;
+        like __array_interface__, such exports are marked writable.
+        """
+    def __dlpack_device__(self) -> tuple[int, int]:
+        """
+        DLPack device of the data, as a (device_type, device_id) tuple of int.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+        """
     @typing.overload
     def __getitem__(self, arg0: IntVect3D) -> int: ...
     @typing.overload
@@ -4844,6 +6720,39 @@ class Array4_ulong:
             Raises an exception if cupy is not installed
 
         """
+    def to_dpnp(self, copy=False, order="F"):
+        """
+        Provide a dpnp view into an Array4.
+
+        This includes ngrow guard cells of the box.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as dpnp.
+        The order="C" option will index as z,y,x and may perform better.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        dpnp.array
+            A dpnp n-dimensional array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if dpnp is not installed
+
+        """
     def to_host(self) -> numpy.typing.NDArray[numpy.uint64]: ...
     def to_numpy(self, copy=False, order="F"):
         """
@@ -4875,7 +6784,8 @@ class Array4_ulong:
         """
     def to_xp(self, copy=False, order="F"):
         """
-        Provide a NumPy or CuPy view into an Array4, depending on amr.Config.have_gpu .
+        Provide a NumPy, CuPy or dpnp view into an Array4, depending on amr.Config.have_gpu
+        and amr.Config.gpu_backend .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
         https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
@@ -4901,7 +6811,7 @@ class Array4_ulong:
         Returns
         -------
         xp.array
-            A NumPy or CuPy n-dimensional array.
+            A NumPy, CuPy or dpnp n-dimensional array.
 
         """
     @property
@@ -4916,6 +6826,67 @@ class Array4_ulong:
     def size(self) -> int: ...
 
 class Array4_ulonglong:
+    def __dlpack__(
+        self,
+        *,
+        stream: typing.Any = None,
+        max_version: typing.Any = None,
+        dl_device: typing.Any = None,
+        copy: typing.Any = None,
+    ) -> typing_extensions.CapsuleType:
+        """
+        Export the data as a DLPack capsule for zero-copy tensor exchange.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+
+        Parameters
+        ----------
+        stream: int, optional
+            Consumer stream (CUDA/ROCm device data only) the data shall be
+            made ready for, e.g., by an event wait. -1 requests no
+            synchronization. Must be None for host-side data.
+        max_version: tuple of int, optional
+            Highest DLPack version the consumer supports. None or a major
+            version below 1 yields a legacy "dltensor" capsule, otherwise a
+            "dltensor_versioned" capsule (DLPack 1.1) is returned.
+        dl_device: tuple of (DLDeviceType, int), optional
+            Requested device of the returned tensor. Besides the producer
+            device, (kDLCPU, 0) is supported: zero-copy for host-accessible
+            memory, otherwise a device-to-host copy (unless copy=False).
+        copy: bool, optional
+            True always copies (the copy is solely owned by the consumer);
+            False never copies (raises BufferError if a copy is needed);
+            None (default) copies only if required.
+            A producer-made copy is synchronized before hand-off, so the data
+            is ready on any consumer stream. Because the copy cannot be run on
+            a consumer-provided stream, copy=True requires stream=None and
+            raises BufferError for any other stream value.
+
+        Returns
+        -------
+        A PyCapsule wrapping a DLPack managed tensor.
+
+        Raises
+        ------
+        BufferError
+            If an unsupported device transfer or copy is requested.
+
+        Notes
+        -----
+        Capsules that own a copy of device data (copy=True on GPU data or
+        device-to-host transfers) allocate from an AMReX Arena and must be
+        freed (i.e., the consuming array garbage collected) before
+        amrex.finalize().
+
+        Legacy "dltensor" capsules cannot communicate read-only tensors;
+        like __array_interface__, such exports are marked writable.
+        """
+    def __dlpack_device__(self) -> tuple[int, int]:
+        """
+        DLPack device of the data, as a (device_type, device_id) tuple of int.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+        """
     @typing.overload
     def __getitem__(self, arg0: IntVect3D) -> int: ...
     @typing.overload
@@ -5020,6 +6991,39 @@ class Array4_ulonglong:
             Raises an exception if cupy is not installed
 
         """
+    def to_dpnp(self, copy=False, order="F"):
+        """
+        Provide a dpnp view into an Array4.
+
+        This includes ngrow guard cells of the box.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as dpnp.
+        The order="C" option will index as z,y,x and may perform better.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        dpnp.array
+            A dpnp n-dimensional array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if dpnp is not installed
+
+        """
     def to_host(self) -> numpy.typing.NDArray[numpy.uint64]: ...
     def to_numpy(self, copy=False, order="F"):
         """
@@ -5051,7 +7055,8 @@ class Array4_ulonglong:
         """
     def to_xp(self, copy=False, order="F"):
         """
-        Provide a NumPy or CuPy view into an Array4, depending on amr.Config.have_gpu .
+        Provide a NumPy, CuPy or dpnp view into an Array4, depending on amr.Config.have_gpu
+        and amr.Config.gpu_backend .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
         https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
@@ -5077,7 +7082,7 @@ class Array4_ulonglong:
         Returns
         -------
         xp.array
-            A NumPy or CuPy n-dimensional array.
+            A NumPy, CuPy or dpnp n-dimensional array.
 
         """
     @property
@@ -5092,6 +7097,67 @@ class Array4_ulonglong:
     def size(self) -> int: ...
 
 class Array4_ushort_const:
+    def __dlpack__(
+        self,
+        *,
+        stream: typing.Any = None,
+        max_version: typing.Any = None,
+        dl_device: typing.Any = None,
+        copy: typing.Any = None,
+    ) -> typing_extensions.CapsuleType:
+        """
+        Export the data as a DLPack capsule for zero-copy tensor exchange.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+
+        Parameters
+        ----------
+        stream: int, optional
+            Consumer stream (CUDA/ROCm device data only) the data shall be
+            made ready for, e.g., by an event wait. -1 requests no
+            synchronization. Must be None for host-side data.
+        max_version: tuple of int, optional
+            Highest DLPack version the consumer supports. None or a major
+            version below 1 yields a legacy "dltensor" capsule, otherwise a
+            "dltensor_versioned" capsule (DLPack 1.1) is returned.
+        dl_device: tuple of (DLDeviceType, int), optional
+            Requested device of the returned tensor. Besides the producer
+            device, (kDLCPU, 0) is supported: zero-copy for host-accessible
+            memory, otherwise a device-to-host copy (unless copy=False).
+        copy: bool, optional
+            True always copies (the copy is solely owned by the consumer);
+            False never copies (raises BufferError if a copy is needed);
+            None (default) copies only if required.
+            A producer-made copy is synchronized before hand-off, so the data
+            is ready on any consumer stream. Because the copy cannot be run on
+            a consumer-provided stream, copy=True requires stream=None and
+            raises BufferError for any other stream value.
+
+        Returns
+        -------
+        A PyCapsule wrapping a DLPack managed tensor.
+
+        Raises
+        ------
+        BufferError
+            If an unsupported device transfer or copy is requested.
+
+        Notes
+        -----
+        Capsules that own a copy of device data (copy=True on GPU data or
+        device-to-host transfers) allocate from an AMReX Arena and must be
+        freed (i.e., the consuming array garbage collected) before
+        amrex.finalize().
+
+        Legacy "dltensor" capsules cannot communicate read-only tensors;
+        like __array_interface__, such exports are marked writable.
+        """
+    def __dlpack_device__(self) -> tuple[int, int]:
+        """
+        DLPack device of the data, as a (device_type, device_id) tuple of int.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+        """
     @typing.overload
     def __getitem__(self, arg0: IntVect3D) -> int: ...
     @typing.overload
@@ -5174,6 +7240,39 @@ class Array4_ushort_const:
             Raises an exception if cupy is not installed
 
         """
+    def to_dpnp(self, copy=False, order="F"):
+        """
+        Provide a dpnp view into an Array4.
+
+        This includes ngrow guard cells of the box.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as dpnp.
+        The order="C" option will index as z,y,x and may perform better.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        dpnp.array
+            A dpnp n-dimensional array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if dpnp is not installed
+
+        """
     def to_host(self) -> numpy.typing.NDArray[numpy.uint16]: ...
     def to_numpy(self, copy=False, order="F"):
         """
@@ -5205,7 +7304,8 @@ class Array4_ushort_const:
         """
     def to_xp(self, copy=False, order="F"):
         """
-        Provide a NumPy or CuPy view into an Array4, depending on amr.Config.have_gpu .
+        Provide a NumPy, CuPy or dpnp view into an Array4, depending on amr.Config.have_gpu
+        and amr.Config.gpu_backend .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
         https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
@@ -5231,7 +7331,7 @@ class Array4_ushort_const:
         Returns
         -------
         xp.array
-            A NumPy or CuPy n-dimensional array.
+            A NumPy, CuPy or dpnp n-dimensional array.
 
         """
     @property
@@ -5246,6 +7346,67 @@ class Array4_ushort_const:
     def size(self) -> int: ...
 
 class Array4_uint_const:
+    def __dlpack__(
+        self,
+        *,
+        stream: typing.Any = None,
+        max_version: typing.Any = None,
+        dl_device: typing.Any = None,
+        copy: typing.Any = None,
+    ) -> typing_extensions.CapsuleType:
+        """
+        Export the data as a DLPack capsule for zero-copy tensor exchange.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+
+        Parameters
+        ----------
+        stream: int, optional
+            Consumer stream (CUDA/ROCm device data only) the data shall be
+            made ready for, e.g., by an event wait. -1 requests no
+            synchronization. Must be None for host-side data.
+        max_version: tuple of int, optional
+            Highest DLPack version the consumer supports. None or a major
+            version below 1 yields a legacy "dltensor" capsule, otherwise a
+            "dltensor_versioned" capsule (DLPack 1.1) is returned.
+        dl_device: tuple of (DLDeviceType, int), optional
+            Requested device of the returned tensor. Besides the producer
+            device, (kDLCPU, 0) is supported: zero-copy for host-accessible
+            memory, otherwise a device-to-host copy (unless copy=False).
+        copy: bool, optional
+            True always copies (the copy is solely owned by the consumer);
+            False never copies (raises BufferError if a copy is needed);
+            None (default) copies only if required.
+            A producer-made copy is synchronized before hand-off, so the data
+            is ready on any consumer stream. Because the copy cannot be run on
+            a consumer-provided stream, copy=True requires stream=None and
+            raises BufferError for any other stream value.
+
+        Returns
+        -------
+        A PyCapsule wrapping a DLPack managed tensor.
+
+        Raises
+        ------
+        BufferError
+            If an unsupported device transfer or copy is requested.
+
+        Notes
+        -----
+        Capsules that own a copy of device data (copy=True on GPU data or
+        device-to-host transfers) allocate from an AMReX Arena and must be
+        freed (i.e., the consuming array garbage collected) before
+        amrex.finalize().
+
+        Legacy "dltensor" capsules cannot communicate read-only tensors;
+        like __array_interface__, such exports are marked writable.
+        """
+    def __dlpack_device__(self) -> tuple[int, int]:
+        """
+        DLPack device of the data, as a (device_type, device_id) tuple of int.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+        """
     @typing.overload
     def __getitem__(self, arg0: IntVect3D) -> int: ...
     @typing.overload
@@ -5328,6 +7489,39 @@ class Array4_uint_const:
             Raises an exception if cupy is not installed
 
         """
+    def to_dpnp(self, copy=False, order="F"):
+        """
+        Provide a dpnp view into an Array4.
+
+        This includes ngrow guard cells of the box.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as dpnp.
+        The order="C" option will index as z,y,x and may perform better.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        dpnp.array
+            A dpnp n-dimensional array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if dpnp is not installed
+
+        """
     def to_host(self) -> numpy.typing.NDArray[numpy.uint32]: ...
     def to_numpy(self, copy=False, order="F"):
         """
@@ -5359,7 +7553,8 @@ class Array4_uint_const:
         """
     def to_xp(self, copy=False, order="F"):
         """
-        Provide a NumPy or CuPy view into an Array4, depending on amr.Config.have_gpu .
+        Provide a NumPy, CuPy or dpnp view into an Array4, depending on amr.Config.have_gpu
+        and amr.Config.gpu_backend .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
         https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
@@ -5385,7 +7580,7 @@ class Array4_uint_const:
         Returns
         -------
         xp.array
-            A NumPy or CuPy n-dimensional array.
+            A NumPy, CuPy or dpnp n-dimensional array.
 
         """
     @property
@@ -5400,6 +7595,67 @@ class Array4_uint_const:
     def size(self) -> int: ...
 
 class Array4_ulong_const:
+    def __dlpack__(
+        self,
+        *,
+        stream: typing.Any = None,
+        max_version: typing.Any = None,
+        dl_device: typing.Any = None,
+        copy: typing.Any = None,
+    ) -> typing_extensions.CapsuleType:
+        """
+        Export the data as a DLPack capsule for zero-copy tensor exchange.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+
+        Parameters
+        ----------
+        stream: int, optional
+            Consumer stream (CUDA/ROCm device data only) the data shall be
+            made ready for, e.g., by an event wait. -1 requests no
+            synchronization. Must be None for host-side data.
+        max_version: tuple of int, optional
+            Highest DLPack version the consumer supports. None or a major
+            version below 1 yields a legacy "dltensor" capsule, otherwise a
+            "dltensor_versioned" capsule (DLPack 1.1) is returned.
+        dl_device: tuple of (DLDeviceType, int), optional
+            Requested device of the returned tensor. Besides the producer
+            device, (kDLCPU, 0) is supported: zero-copy for host-accessible
+            memory, otherwise a device-to-host copy (unless copy=False).
+        copy: bool, optional
+            True always copies (the copy is solely owned by the consumer);
+            False never copies (raises BufferError if a copy is needed);
+            None (default) copies only if required.
+            A producer-made copy is synchronized before hand-off, so the data
+            is ready on any consumer stream. Because the copy cannot be run on
+            a consumer-provided stream, copy=True requires stream=None and
+            raises BufferError for any other stream value.
+
+        Returns
+        -------
+        A PyCapsule wrapping a DLPack managed tensor.
+
+        Raises
+        ------
+        BufferError
+            If an unsupported device transfer or copy is requested.
+
+        Notes
+        -----
+        Capsules that own a copy of device data (copy=True on GPU data or
+        device-to-host transfers) allocate from an AMReX Arena and must be
+        freed (i.e., the consuming array garbage collected) before
+        amrex.finalize().
+
+        Legacy "dltensor" capsules cannot communicate read-only tensors;
+        like __array_interface__, such exports are marked writable.
+        """
+    def __dlpack_device__(self) -> tuple[int, int]:
+        """
+        DLPack device of the data, as a (device_type, device_id) tuple of int.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+        """
     @typing.overload
     def __getitem__(self, arg0: IntVect3D) -> int: ...
     @typing.overload
@@ -5482,6 +7738,39 @@ class Array4_ulong_const:
             Raises an exception if cupy is not installed
 
         """
+    def to_dpnp(self, copy=False, order="F"):
+        """
+        Provide a dpnp view into an Array4.
+
+        This includes ngrow guard cells of the box.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as dpnp.
+        The order="C" option will index as z,y,x and may perform better.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        dpnp.array
+            A dpnp n-dimensional array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if dpnp is not installed
+
+        """
     def to_host(self) -> numpy.typing.NDArray[numpy.uint64]: ...
     def to_numpy(self, copy=False, order="F"):
         """
@@ -5513,7 +7802,8 @@ class Array4_ulong_const:
         """
     def to_xp(self, copy=False, order="F"):
         """
-        Provide a NumPy or CuPy view into an Array4, depending on amr.Config.have_gpu .
+        Provide a NumPy, CuPy or dpnp view into an Array4, depending on amr.Config.have_gpu
+        and amr.Config.gpu_backend .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
         https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
@@ -5539,7 +7829,7 @@ class Array4_ulong_const:
         Returns
         -------
         xp.array
-            A NumPy or CuPy n-dimensional array.
+            A NumPy, CuPy or dpnp n-dimensional array.
 
         """
     @property
@@ -5554,6 +7844,67 @@ class Array4_ulong_const:
     def size(self) -> int: ...
 
 class Array4_ulonglong_const:
+    def __dlpack__(
+        self,
+        *,
+        stream: typing.Any = None,
+        max_version: typing.Any = None,
+        dl_device: typing.Any = None,
+        copy: typing.Any = None,
+    ) -> typing_extensions.CapsuleType:
+        """
+        Export the data as a DLPack capsule for zero-copy tensor exchange.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+
+        Parameters
+        ----------
+        stream: int, optional
+            Consumer stream (CUDA/ROCm device data only) the data shall be
+            made ready for, e.g., by an event wait. -1 requests no
+            synchronization. Must be None for host-side data.
+        max_version: tuple of int, optional
+            Highest DLPack version the consumer supports. None or a major
+            version below 1 yields a legacy "dltensor" capsule, otherwise a
+            "dltensor_versioned" capsule (DLPack 1.1) is returned.
+        dl_device: tuple of (DLDeviceType, int), optional
+            Requested device of the returned tensor. Besides the producer
+            device, (kDLCPU, 0) is supported: zero-copy for host-accessible
+            memory, otherwise a device-to-host copy (unless copy=False).
+        copy: bool, optional
+            True always copies (the copy is solely owned by the consumer);
+            False never copies (raises BufferError if a copy is needed);
+            None (default) copies only if required.
+            A producer-made copy is synchronized before hand-off, so the data
+            is ready on any consumer stream. Because the copy cannot be run on
+            a consumer-provided stream, copy=True requires stream=None and
+            raises BufferError for any other stream value.
+
+        Returns
+        -------
+        A PyCapsule wrapping a DLPack managed tensor.
+
+        Raises
+        ------
+        BufferError
+            If an unsupported device transfer or copy is requested.
+
+        Notes
+        -----
+        Capsules that own a copy of device data (copy=True on GPU data or
+        device-to-host transfers) allocate from an AMReX Arena and must be
+        freed (i.e., the consuming array garbage collected) before
+        amrex.finalize().
+
+        Legacy "dltensor" capsules cannot communicate read-only tensors;
+        like __array_interface__, such exports are marked writable.
+        """
+    def __dlpack_device__(self) -> tuple[int, int]:
+        """
+        DLPack device of the data, as a (device_type, device_id) tuple of int.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+        """
     @typing.overload
     def __getitem__(self, arg0: IntVect3D) -> int: ...
     @typing.overload
@@ -5638,6 +7989,39 @@ class Array4_ulonglong_const:
             Raises an exception if cupy is not installed
 
         """
+    def to_dpnp(self, copy=False, order="F"):
+        """
+        Provide a dpnp view into an Array4.
+
+        This includes ngrow guard cells of the box.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as dpnp.
+        The order="C" option will index as z,y,x and may perform better.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.Array4_*
+            An Array4 class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        dpnp.array
+            A dpnp n-dimensional array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if dpnp is not installed
+
+        """
     def to_host(self) -> numpy.typing.NDArray[numpy.uint64]: ...
     def to_numpy(self, copy=False, order="F"):
         """
@@ -5669,7 +8053,8 @@ class Array4_ulonglong_const:
         """
     def to_xp(self, copy=False, order="F"):
         """
-        Provide a NumPy or CuPy view into an Array4, depending on amr.Config.have_gpu .
+        Provide a NumPy, CuPy or dpnp view into an Array4, depending on amr.Config.have_gpu
+        and amr.Config.gpu_backend .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
         https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
@@ -5695,7 +8080,7 @@ class Array4_ulonglong_const:
         Returns
         -------
         xp.array
-            A NumPy or CuPy n-dimensional array.
+            A NumPy, CuPy or dpnp n-dimensional array.
 
         """
     @property
@@ -5717,6 +8102,67 @@ class SmallMatrix_6x6_F_SI1_float:
     def __add__(
         self, arg0: SmallMatrix_6x6_F_SI1_float
     ) -> SmallMatrix_6x6_F_SI1_float: ...
+    def __dlpack__(
+        self,
+        *,
+        stream: typing.Any = None,
+        max_version: typing.Any = None,
+        dl_device: typing.Any = None,
+        copy: typing.Any = None,
+    ) -> typing_extensions.CapsuleType:
+        """
+        Export the data as a DLPack capsule for zero-copy tensor exchange.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+
+        Parameters
+        ----------
+        stream: int, optional
+            Consumer stream (CUDA/ROCm device data only) the data shall be
+            made ready for, e.g., by an event wait. -1 requests no
+            synchronization. Must be None for host-side data.
+        max_version: tuple of int, optional
+            Highest DLPack version the consumer supports. None or a major
+            version below 1 yields a legacy "dltensor" capsule, otherwise a
+            "dltensor_versioned" capsule (DLPack 1.1) is returned.
+        dl_device: tuple of (DLDeviceType, int), optional
+            Requested device of the returned tensor. Besides the producer
+            device, (kDLCPU, 0) is supported: zero-copy for host-accessible
+            memory, otherwise a device-to-host copy (unless copy=False).
+        copy: bool, optional
+            True always copies (the copy is solely owned by the consumer);
+            False never copies (raises BufferError if a copy is needed);
+            None (default) copies only if required.
+            A producer-made copy is synchronized before hand-off, so the data
+            is ready on any consumer stream. Because the copy cannot be run on
+            a consumer-provided stream, copy=True requires stream=None and
+            raises BufferError for any other stream value.
+
+        Returns
+        -------
+        A PyCapsule wrapping a DLPack managed tensor.
+
+        Raises
+        ------
+        BufferError
+            If an unsupported device transfer or copy is requested.
+
+        Notes
+        -----
+        Capsules that own a copy of device data (copy=True on GPU data or
+        device-to-host transfers) allocate from an AMReX Arena and must be
+        freed (i.e., the consuming array garbage collected) before
+        amrex.finalize().
+
+        Legacy "dltensor" capsules cannot communicate read-only tensors;
+        like __array_interface__, such exports are marked writable.
+        """
+    def __dlpack_device__(self) -> tuple[int, int]:
+        """
+        DLPack device of the data, as a (device_type, device_id) tuple of int.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+        """
     def __getitem__(
         self,
         arg0: typing.Annotated[
@@ -5800,6 +8246,33 @@ class SmallMatrix_6x6_F_SI1_float:
         ------
         ImportError
             Raises an exception if cupy is not installed
+
+        """
+    def to_dpnp(self, copy=False, order="F"):
+        """
+        Provide a dpnp copy of a SmallMatrix.
+
+        SmallMatrix data is always host-side: importing into dpnp copies to the
+        device, independent of the copy argument.
+
+        Parameters
+        ----------
+        self : amrex.SmallMatrix_*
+            A SmallMatrix class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        dpnp.array
+            A dpnp 2-dimensional array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if dpnp is not installed
 
         """
     def to_numpy(self, copy=False, order="F"):
@@ -5887,6 +8360,67 @@ class SmallMatrix_6x1_F_SI1_float:
     def __add__(
         self, arg0: SmallMatrix_6x1_F_SI1_float
     ) -> SmallMatrix_6x1_F_SI1_float: ...
+    def __dlpack__(
+        self,
+        *,
+        stream: typing.Any = None,
+        max_version: typing.Any = None,
+        dl_device: typing.Any = None,
+        copy: typing.Any = None,
+    ) -> typing_extensions.CapsuleType:
+        """
+        Export the data as a DLPack capsule for zero-copy tensor exchange.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+
+        Parameters
+        ----------
+        stream: int, optional
+            Consumer stream (CUDA/ROCm device data only) the data shall be
+            made ready for, e.g., by an event wait. -1 requests no
+            synchronization. Must be None for host-side data.
+        max_version: tuple of int, optional
+            Highest DLPack version the consumer supports. None or a major
+            version below 1 yields a legacy "dltensor" capsule, otherwise a
+            "dltensor_versioned" capsule (DLPack 1.1) is returned.
+        dl_device: tuple of (DLDeviceType, int), optional
+            Requested device of the returned tensor. Besides the producer
+            device, (kDLCPU, 0) is supported: zero-copy for host-accessible
+            memory, otherwise a device-to-host copy (unless copy=False).
+        copy: bool, optional
+            True always copies (the copy is solely owned by the consumer);
+            False never copies (raises BufferError if a copy is needed);
+            None (default) copies only if required.
+            A producer-made copy is synchronized before hand-off, so the data
+            is ready on any consumer stream. Because the copy cannot be run on
+            a consumer-provided stream, copy=True requires stream=None and
+            raises BufferError for any other stream value.
+
+        Returns
+        -------
+        A PyCapsule wrapping a DLPack managed tensor.
+
+        Raises
+        ------
+        BufferError
+            If an unsupported device transfer or copy is requested.
+
+        Notes
+        -----
+        Capsules that own a copy of device data (copy=True on GPU data or
+        device-to-host transfers) allocate from an AMReX Arena and must be
+        freed (i.e., the consuming array garbage collected) before
+        amrex.finalize().
+
+        Legacy "dltensor" capsules cannot communicate read-only tensors;
+        like __array_interface__, such exports are marked writable.
+        """
+    def __dlpack_device__(self) -> tuple[int, int]:
+        """
+        DLPack device of the data, as a (device_type, device_id) tuple of int.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+        """
     @typing.overload
     def __getitem__(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> float: ...
     @typing.overload
@@ -6017,6 +8551,33 @@ class SmallMatrix_6x1_F_SI1_float:
             Raises an exception if cupy is not installed
 
         """
+    def to_dpnp(self, copy=False, order="F"):
+        """
+        Provide a dpnp copy of a SmallMatrix.
+
+        SmallMatrix data is always host-side: importing into dpnp copies to the
+        device, independent of the copy argument.
+
+        Parameters
+        ----------
+        self : amrex.SmallMatrix_*
+            A SmallMatrix class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        dpnp.array
+            A dpnp 2-dimensional array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if dpnp is not installed
+
+        """
     def to_numpy(self, copy=False, order="F"):
         """
         Provide a NumPy view into an SmallMatrix.
@@ -6100,6 +8661,67 @@ class SmallMatrix_1x6_F_SI1_float:
     def __add__(
         self, arg0: SmallMatrix_1x6_F_SI1_float
     ) -> SmallMatrix_1x6_F_SI1_float: ...
+    def __dlpack__(
+        self,
+        *,
+        stream: typing.Any = None,
+        max_version: typing.Any = None,
+        dl_device: typing.Any = None,
+        copy: typing.Any = None,
+    ) -> typing_extensions.CapsuleType:
+        """
+        Export the data as a DLPack capsule for zero-copy tensor exchange.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+
+        Parameters
+        ----------
+        stream: int, optional
+            Consumer stream (CUDA/ROCm device data only) the data shall be
+            made ready for, e.g., by an event wait. -1 requests no
+            synchronization. Must be None for host-side data.
+        max_version: tuple of int, optional
+            Highest DLPack version the consumer supports. None or a major
+            version below 1 yields a legacy "dltensor" capsule, otherwise a
+            "dltensor_versioned" capsule (DLPack 1.1) is returned.
+        dl_device: tuple of (DLDeviceType, int), optional
+            Requested device of the returned tensor. Besides the producer
+            device, (kDLCPU, 0) is supported: zero-copy for host-accessible
+            memory, otherwise a device-to-host copy (unless copy=False).
+        copy: bool, optional
+            True always copies (the copy is solely owned by the consumer);
+            False never copies (raises BufferError if a copy is needed);
+            None (default) copies only if required.
+            A producer-made copy is synchronized before hand-off, so the data
+            is ready on any consumer stream. Because the copy cannot be run on
+            a consumer-provided stream, copy=True requires stream=None and
+            raises BufferError for any other stream value.
+
+        Returns
+        -------
+        A PyCapsule wrapping a DLPack managed tensor.
+
+        Raises
+        ------
+        BufferError
+            If an unsupported device transfer or copy is requested.
+
+        Notes
+        -----
+        Capsules that own a copy of device data (copy=True on GPU data or
+        device-to-host transfers) allocate from an AMReX Arena and must be
+        freed (i.e., the consuming array garbage collected) before
+        amrex.finalize().
+
+        Legacy "dltensor" capsules cannot communicate read-only tensors;
+        like __array_interface__, such exports are marked writable.
+        """
+    def __dlpack_device__(self) -> tuple[int, int]:
+        """
+        DLPack device of the data, as a (device_type, device_id) tuple of int.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+        """
     @typing.overload
     def __getitem__(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> float: ...
     @typing.overload
@@ -6230,6 +8852,33 @@ class SmallMatrix_1x6_F_SI1_float:
             Raises an exception if cupy is not installed
 
         """
+    def to_dpnp(self, copy=False, order="F"):
+        """
+        Provide a dpnp copy of a SmallMatrix.
+
+        SmallMatrix data is always host-side: importing into dpnp copies to the
+        device, independent of the copy argument.
+
+        Parameters
+        ----------
+        self : amrex.SmallMatrix_*
+            A SmallMatrix class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        dpnp.array
+            A dpnp 2-dimensional array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if dpnp is not installed
+
+        """
     def to_numpy(self, copy=False, order="F"):
         """
         Provide a NumPy view into an SmallMatrix.
@@ -6310,6 +8959,67 @@ class SmallMatrix_6x6_F_SI1_double:
     def __add__(
         self, arg0: SmallMatrix_6x6_F_SI1_double
     ) -> SmallMatrix_6x6_F_SI1_double: ...
+    def __dlpack__(
+        self,
+        *,
+        stream: typing.Any = None,
+        max_version: typing.Any = None,
+        dl_device: typing.Any = None,
+        copy: typing.Any = None,
+    ) -> typing_extensions.CapsuleType:
+        """
+        Export the data as a DLPack capsule for zero-copy tensor exchange.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+
+        Parameters
+        ----------
+        stream: int, optional
+            Consumer stream (CUDA/ROCm device data only) the data shall be
+            made ready for, e.g., by an event wait. -1 requests no
+            synchronization. Must be None for host-side data.
+        max_version: tuple of int, optional
+            Highest DLPack version the consumer supports. None or a major
+            version below 1 yields a legacy "dltensor" capsule, otherwise a
+            "dltensor_versioned" capsule (DLPack 1.1) is returned.
+        dl_device: tuple of (DLDeviceType, int), optional
+            Requested device of the returned tensor. Besides the producer
+            device, (kDLCPU, 0) is supported: zero-copy for host-accessible
+            memory, otherwise a device-to-host copy (unless copy=False).
+        copy: bool, optional
+            True always copies (the copy is solely owned by the consumer);
+            False never copies (raises BufferError if a copy is needed);
+            None (default) copies only if required.
+            A producer-made copy is synchronized before hand-off, so the data
+            is ready on any consumer stream. Because the copy cannot be run on
+            a consumer-provided stream, copy=True requires stream=None and
+            raises BufferError for any other stream value.
+
+        Returns
+        -------
+        A PyCapsule wrapping a DLPack managed tensor.
+
+        Raises
+        ------
+        BufferError
+            If an unsupported device transfer or copy is requested.
+
+        Notes
+        -----
+        Capsules that own a copy of device data (copy=True on GPU data or
+        device-to-host transfers) allocate from an AMReX Arena and must be
+        freed (i.e., the consuming array garbage collected) before
+        amrex.finalize().
+
+        Legacy "dltensor" capsules cannot communicate read-only tensors;
+        like __array_interface__, such exports are marked writable.
+        """
+    def __dlpack_device__(self) -> tuple[int, int]:
+        """
+        DLPack device of the data, as a (device_type, device_id) tuple of int.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+        """
     def __getitem__(
         self,
         arg0: typing.Annotated[
@@ -6393,6 +9103,33 @@ class SmallMatrix_6x6_F_SI1_double:
         ------
         ImportError
             Raises an exception if cupy is not installed
+
+        """
+    def to_dpnp(self, copy=False, order="F"):
+        """
+        Provide a dpnp copy of a SmallMatrix.
+
+        SmallMatrix data is always host-side: importing into dpnp copies to the
+        device, independent of the copy argument.
+
+        Parameters
+        ----------
+        self : amrex.SmallMatrix_*
+            A SmallMatrix class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        dpnp.array
+            A dpnp 2-dimensional array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if dpnp is not installed
 
         """
     def to_numpy(self, copy=False, order="F"):
@@ -6480,6 +9217,67 @@ class SmallMatrix_6x1_F_SI1_double:
     def __add__(
         self, arg0: SmallMatrix_6x1_F_SI1_double
     ) -> SmallMatrix_6x1_F_SI1_double: ...
+    def __dlpack__(
+        self,
+        *,
+        stream: typing.Any = None,
+        max_version: typing.Any = None,
+        dl_device: typing.Any = None,
+        copy: typing.Any = None,
+    ) -> typing_extensions.CapsuleType:
+        """
+        Export the data as a DLPack capsule for zero-copy tensor exchange.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+
+        Parameters
+        ----------
+        stream: int, optional
+            Consumer stream (CUDA/ROCm device data only) the data shall be
+            made ready for, e.g., by an event wait. -1 requests no
+            synchronization. Must be None for host-side data.
+        max_version: tuple of int, optional
+            Highest DLPack version the consumer supports. None or a major
+            version below 1 yields a legacy "dltensor" capsule, otherwise a
+            "dltensor_versioned" capsule (DLPack 1.1) is returned.
+        dl_device: tuple of (DLDeviceType, int), optional
+            Requested device of the returned tensor. Besides the producer
+            device, (kDLCPU, 0) is supported: zero-copy for host-accessible
+            memory, otherwise a device-to-host copy (unless copy=False).
+        copy: bool, optional
+            True always copies (the copy is solely owned by the consumer);
+            False never copies (raises BufferError if a copy is needed);
+            None (default) copies only if required.
+            A producer-made copy is synchronized before hand-off, so the data
+            is ready on any consumer stream. Because the copy cannot be run on
+            a consumer-provided stream, copy=True requires stream=None and
+            raises BufferError for any other stream value.
+
+        Returns
+        -------
+        A PyCapsule wrapping a DLPack managed tensor.
+
+        Raises
+        ------
+        BufferError
+            If an unsupported device transfer or copy is requested.
+
+        Notes
+        -----
+        Capsules that own a copy of device data (copy=True on GPU data or
+        device-to-host transfers) allocate from an AMReX Arena and must be
+        freed (i.e., the consuming array garbage collected) before
+        amrex.finalize().
+
+        Legacy "dltensor" capsules cannot communicate read-only tensors;
+        like __array_interface__, such exports are marked writable.
+        """
+    def __dlpack_device__(self) -> tuple[int, int]:
+        """
+        DLPack device of the data, as a (device_type, device_id) tuple of int.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+        """
     @typing.overload
     def __getitem__(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> float: ...
     @typing.overload
@@ -6610,6 +9408,33 @@ class SmallMatrix_6x1_F_SI1_double:
             Raises an exception if cupy is not installed
 
         """
+    def to_dpnp(self, copy=False, order="F"):
+        """
+        Provide a dpnp copy of a SmallMatrix.
+
+        SmallMatrix data is always host-side: importing into dpnp copies to the
+        device, independent of the copy argument.
+
+        Parameters
+        ----------
+        self : amrex.SmallMatrix_*
+            A SmallMatrix class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        dpnp.array
+            A dpnp 2-dimensional array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if dpnp is not installed
+
+        """
     def to_numpy(self, copy=False, order="F"):
         """
         Provide a NumPy view into an SmallMatrix.
@@ -6693,6 +9518,67 @@ class SmallMatrix_1x6_F_SI1_double:
     def __add__(
         self, arg0: SmallMatrix_1x6_F_SI1_double
     ) -> SmallMatrix_1x6_F_SI1_double: ...
+    def __dlpack__(
+        self,
+        *,
+        stream: typing.Any = None,
+        max_version: typing.Any = None,
+        dl_device: typing.Any = None,
+        copy: typing.Any = None,
+    ) -> typing_extensions.CapsuleType:
+        """
+        Export the data as a DLPack capsule for zero-copy tensor exchange.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+
+        Parameters
+        ----------
+        stream: int, optional
+            Consumer stream (CUDA/ROCm device data only) the data shall be
+            made ready for, e.g., by an event wait. -1 requests no
+            synchronization. Must be None for host-side data.
+        max_version: tuple of int, optional
+            Highest DLPack version the consumer supports. None or a major
+            version below 1 yields a legacy "dltensor" capsule, otherwise a
+            "dltensor_versioned" capsule (DLPack 1.1) is returned.
+        dl_device: tuple of (DLDeviceType, int), optional
+            Requested device of the returned tensor. Besides the producer
+            device, (kDLCPU, 0) is supported: zero-copy for host-accessible
+            memory, otherwise a device-to-host copy (unless copy=False).
+        copy: bool, optional
+            True always copies (the copy is solely owned by the consumer);
+            False never copies (raises BufferError if a copy is needed);
+            None (default) copies only if required.
+            A producer-made copy is synchronized before hand-off, so the data
+            is ready on any consumer stream. Because the copy cannot be run on
+            a consumer-provided stream, copy=True requires stream=None and
+            raises BufferError for any other stream value.
+
+        Returns
+        -------
+        A PyCapsule wrapping a DLPack managed tensor.
+
+        Raises
+        ------
+        BufferError
+            If an unsupported device transfer or copy is requested.
+
+        Notes
+        -----
+        Capsules that own a copy of device data (copy=True on GPU data or
+        device-to-host transfers) allocate from an AMReX Arena and must be
+        freed (i.e., the consuming array garbage collected) before
+        amrex.finalize().
+
+        Legacy "dltensor" capsules cannot communicate read-only tensors;
+        like __array_interface__, such exports are marked writable.
+        """
+    def __dlpack_device__(self) -> tuple[int, int]:
+        """
+        DLPack device of the data, as a (device_type, device_id) tuple of int.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+        """
     @typing.overload
     def __getitem__(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> float: ...
     @typing.overload
@@ -6821,6 +9707,33 @@ class SmallMatrix_1x6_F_SI1_double:
         ------
         ImportError
             Raises an exception if cupy is not installed
+
+        """
+    def to_dpnp(self, copy=False, order="F"):
+        """
+        Provide a dpnp copy of a SmallMatrix.
+
+        SmallMatrix data is always host-side: importing into dpnp copies to the
+        device, independent of the copy argument.
+
+        Parameters
+        ----------
+        self : amrex.SmallMatrix_*
+            A SmallMatrix class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        dpnp.array
+            A dpnp 2-dimensional array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if dpnp is not installed
 
         """
     def to_numpy(self, copy=False, order="F"):
@@ -6986,6 +9899,33 @@ class SmallMatrix_6x6_F_SI1_longdouble:
         ------
         ImportError
             Raises an exception if cupy is not installed
+
+        """
+    def to_dpnp(self, copy=False, order="F"):
+        """
+        Provide a dpnp copy of a SmallMatrix.
+
+        SmallMatrix data is always host-side: importing into dpnp copies to the
+        device, independent of the copy argument.
+
+        Parameters
+        ----------
+        self : amrex.SmallMatrix_*
+            A SmallMatrix class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        dpnp.array
+            A dpnp 2-dimensional array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if dpnp is not installed
 
         """
     def to_numpy(self, copy=False, order="F"):
@@ -7203,6 +10143,33 @@ class SmallMatrix_6x1_F_SI1_longdouble:
             Raises an exception if cupy is not installed
 
         """
+    def to_dpnp(self, copy=False, order="F"):
+        """
+        Provide a dpnp copy of a SmallMatrix.
+
+        SmallMatrix data is always host-side: importing into dpnp copies to the
+        device, independent of the copy argument.
+
+        Parameters
+        ----------
+        self : amrex.SmallMatrix_*
+            A SmallMatrix class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        dpnp.array
+            A dpnp 2-dimensional array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if dpnp is not installed
+
+        """
     def to_numpy(self, copy=False, order="F"):
         """
         Provide a NumPy view into an SmallMatrix.
@@ -7416,6 +10383,33 @@ class SmallMatrix_1x6_F_SI1_longdouble:
             Raises an exception if cupy is not installed
 
         """
+    def to_dpnp(self, copy=False, order="F"):
+        """
+        Provide a dpnp copy of a SmallMatrix.
+
+        SmallMatrix data is always host-side: importing into dpnp copies to the
+        device, independent of the copy argument.
+
+        Parameters
+        ----------
+        self : amrex.SmallMatrix_*
+            A SmallMatrix class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        dpnp.array
+            A dpnp 2-dimensional array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if dpnp is not installed
+
+        """
     def to_numpy(self, copy=False, order="F"):
         """
         Provide a NumPy view into an SmallMatrix.
@@ -7494,6 +10488,67 @@ class SmallMatrix_3x6_F_SI1_float:
     def __add__(
         self, arg0: SmallMatrix_3x6_F_SI1_float
     ) -> SmallMatrix_3x6_F_SI1_float: ...
+    def __dlpack__(
+        self,
+        *,
+        stream: typing.Any = None,
+        max_version: typing.Any = None,
+        dl_device: typing.Any = None,
+        copy: typing.Any = None,
+    ) -> typing_extensions.CapsuleType:
+        """
+        Export the data as a DLPack capsule for zero-copy tensor exchange.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+
+        Parameters
+        ----------
+        stream: int, optional
+            Consumer stream (CUDA/ROCm device data only) the data shall be
+            made ready for, e.g., by an event wait. -1 requests no
+            synchronization. Must be None for host-side data.
+        max_version: tuple of int, optional
+            Highest DLPack version the consumer supports. None or a major
+            version below 1 yields a legacy "dltensor" capsule, otherwise a
+            "dltensor_versioned" capsule (DLPack 1.1) is returned.
+        dl_device: tuple of (DLDeviceType, int), optional
+            Requested device of the returned tensor. Besides the producer
+            device, (kDLCPU, 0) is supported: zero-copy for host-accessible
+            memory, otherwise a device-to-host copy (unless copy=False).
+        copy: bool, optional
+            True always copies (the copy is solely owned by the consumer);
+            False never copies (raises BufferError if a copy is needed);
+            None (default) copies only if required.
+            A producer-made copy is synchronized before hand-off, so the data
+            is ready on any consumer stream. Because the copy cannot be run on
+            a consumer-provided stream, copy=True requires stream=None and
+            raises BufferError for any other stream value.
+
+        Returns
+        -------
+        A PyCapsule wrapping a DLPack managed tensor.
+
+        Raises
+        ------
+        BufferError
+            If an unsupported device transfer or copy is requested.
+
+        Notes
+        -----
+        Capsules that own a copy of device data (copy=True on GPU data or
+        device-to-host transfers) allocate from an AMReX Arena and must be
+        freed (i.e., the consuming array garbage collected) before
+        amrex.finalize().
+
+        Legacy "dltensor" capsules cannot communicate read-only tensors;
+        like __array_interface__, such exports are marked writable.
+        """
+    def __dlpack_device__(self) -> tuple[int, int]:
+        """
+        DLPack device of the data, as a (device_type, device_id) tuple of int.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+        """
     def __getitem__(
         self,
         arg0: typing.Annotated[
@@ -7575,6 +10630,33 @@ class SmallMatrix_3x6_F_SI1_float:
             Raises an exception if cupy is not installed
 
         """
+    def to_dpnp(self, copy=False, order="F"):
+        """
+        Provide a dpnp copy of a SmallMatrix.
+
+        SmallMatrix data is always host-side: importing into dpnp copies to the
+        device, independent of the copy argument.
+
+        Parameters
+        ----------
+        self : amrex.SmallMatrix_*
+            A SmallMatrix class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        dpnp.array
+            A dpnp 2-dimensional array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if dpnp is not installed
+
+        """
     def to_numpy(self, copy=False, order="F"):
         """
         Provide a NumPy view into an SmallMatrix.
@@ -7653,6 +10735,67 @@ class SmallMatrix_1x3_F_SI1_float:
     def __add__(
         self, arg0: SmallMatrix_1x3_F_SI1_float
     ) -> SmallMatrix_1x3_F_SI1_float: ...
+    def __dlpack__(
+        self,
+        *,
+        stream: typing.Any = None,
+        max_version: typing.Any = None,
+        dl_device: typing.Any = None,
+        copy: typing.Any = None,
+    ) -> typing_extensions.CapsuleType:
+        """
+        Export the data as a DLPack capsule for zero-copy tensor exchange.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+
+        Parameters
+        ----------
+        stream: int, optional
+            Consumer stream (CUDA/ROCm device data only) the data shall be
+            made ready for, e.g., by an event wait. -1 requests no
+            synchronization. Must be None for host-side data.
+        max_version: tuple of int, optional
+            Highest DLPack version the consumer supports. None or a major
+            version below 1 yields a legacy "dltensor" capsule, otherwise a
+            "dltensor_versioned" capsule (DLPack 1.1) is returned.
+        dl_device: tuple of (DLDeviceType, int), optional
+            Requested device of the returned tensor. Besides the producer
+            device, (kDLCPU, 0) is supported: zero-copy for host-accessible
+            memory, otherwise a device-to-host copy (unless copy=False).
+        copy: bool, optional
+            True always copies (the copy is solely owned by the consumer);
+            False never copies (raises BufferError if a copy is needed);
+            None (default) copies only if required.
+            A producer-made copy is synchronized before hand-off, so the data
+            is ready on any consumer stream. Because the copy cannot be run on
+            a consumer-provided stream, copy=True requires stream=None and
+            raises BufferError for any other stream value.
+
+        Returns
+        -------
+        A PyCapsule wrapping a DLPack managed tensor.
+
+        Raises
+        ------
+        BufferError
+            If an unsupported device transfer or copy is requested.
+
+        Notes
+        -----
+        Capsules that own a copy of device data (copy=True on GPU data or
+        device-to-host transfers) allocate from an AMReX Arena and must be
+        freed (i.e., the consuming array garbage collected) before
+        amrex.finalize().
+
+        Legacy "dltensor" capsules cannot communicate read-only tensors;
+        like __array_interface__, such exports are marked writable.
+        """
+    def __dlpack_device__(self) -> tuple[int, int]:
+        """
+        DLPack device of the data, as a (device_type, device_id) tuple of int.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+        """
     @typing.overload
     def __getitem__(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> float: ...
     @typing.overload
@@ -7734,6 +10877,33 @@ class SmallMatrix_1x3_F_SI1_float:
             Raises an exception if cupy is not installed
 
         """
+    def to_dpnp(self, copy=False, order="F"):
+        """
+        Provide a dpnp copy of a SmallMatrix.
+
+        SmallMatrix data is always host-side: importing into dpnp copies to the
+        device, independent of the copy argument.
+
+        Parameters
+        ----------
+        self : amrex.SmallMatrix_*
+            A SmallMatrix class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        dpnp.array
+            A dpnp 2-dimensional array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if dpnp is not installed
+
+        """
     def to_numpy(self, copy=False, order="F"):
         """
         Provide a NumPy view into an SmallMatrix.
@@ -7812,6 +10982,67 @@ class SmallMatrix_6x3_F_SI1_float:
     def __add__(
         self, arg0: SmallMatrix_6x3_F_SI1_float
     ) -> SmallMatrix_6x3_F_SI1_float: ...
+    def __dlpack__(
+        self,
+        *,
+        stream: typing.Any = None,
+        max_version: typing.Any = None,
+        dl_device: typing.Any = None,
+        copy: typing.Any = None,
+    ) -> typing_extensions.CapsuleType:
+        """
+        Export the data as a DLPack capsule for zero-copy tensor exchange.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+
+        Parameters
+        ----------
+        stream: int, optional
+            Consumer stream (CUDA/ROCm device data only) the data shall be
+            made ready for, e.g., by an event wait. -1 requests no
+            synchronization. Must be None for host-side data.
+        max_version: tuple of int, optional
+            Highest DLPack version the consumer supports. None or a major
+            version below 1 yields a legacy "dltensor" capsule, otherwise a
+            "dltensor_versioned" capsule (DLPack 1.1) is returned.
+        dl_device: tuple of (DLDeviceType, int), optional
+            Requested device of the returned tensor. Besides the producer
+            device, (kDLCPU, 0) is supported: zero-copy for host-accessible
+            memory, otherwise a device-to-host copy (unless copy=False).
+        copy: bool, optional
+            True always copies (the copy is solely owned by the consumer);
+            False never copies (raises BufferError if a copy is needed);
+            None (default) copies only if required.
+            A producer-made copy is synchronized before hand-off, so the data
+            is ready on any consumer stream. Because the copy cannot be run on
+            a consumer-provided stream, copy=True requires stream=None and
+            raises BufferError for any other stream value.
+
+        Returns
+        -------
+        A PyCapsule wrapping a DLPack managed tensor.
+
+        Raises
+        ------
+        BufferError
+            If an unsupported device transfer or copy is requested.
+
+        Notes
+        -----
+        Capsules that own a copy of device data (copy=True on GPU data or
+        device-to-host transfers) allocate from an AMReX Arena and must be
+        freed (i.e., the consuming array garbage collected) before
+        amrex.finalize().
+
+        Legacy "dltensor" capsules cannot communicate read-only tensors;
+        like __array_interface__, such exports are marked writable.
+        """
+    def __dlpack_device__(self) -> tuple[int, int]:
+        """
+        DLPack device of the data, as a (device_type, device_id) tuple of int.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+        """
     def __getitem__(
         self,
         arg0: typing.Annotated[
@@ -7881,6 +11112,33 @@ class SmallMatrix_6x3_F_SI1_float:
         ------
         ImportError
             Raises an exception if cupy is not installed
+
+        """
+    def to_dpnp(self, copy=False, order="F"):
+        """
+        Provide a dpnp copy of a SmallMatrix.
+
+        SmallMatrix data is always host-side: importing into dpnp copies to the
+        device, independent of the copy argument.
+
+        Parameters
+        ----------
+        self : amrex.SmallMatrix_*
+            A SmallMatrix class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        dpnp.array
+            A dpnp 2-dimensional array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if dpnp is not installed
 
         """
     def to_numpy(self, copy=False, order="F"):
@@ -7961,6 +11219,67 @@ class SmallMatrix_3x1_F_SI1_float:
     def __add__(
         self, arg0: SmallMatrix_3x1_F_SI1_float
     ) -> SmallMatrix_3x1_F_SI1_float: ...
+    def __dlpack__(
+        self,
+        *,
+        stream: typing.Any = None,
+        max_version: typing.Any = None,
+        dl_device: typing.Any = None,
+        copy: typing.Any = None,
+    ) -> typing_extensions.CapsuleType:
+        """
+        Export the data as a DLPack capsule for zero-copy tensor exchange.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+
+        Parameters
+        ----------
+        stream: int, optional
+            Consumer stream (CUDA/ROCm device data only) the data shall be
+            made ready for, e.g., by an event wait. -1 requests no
+            synchronization. Must be None for host-side data.
+        max_version: tuple of int, optional
+            Highest DLPack version the consumer supports. None or a major
+            version below 1 yields a legacy "dltensor" capsule, otherwise a
+            "dltensor_versioned" capsule (DLPack 1.1) is returned.
+        dl_device: tuple of (DLDeviceType, int), optional
+            Requested device of the returned tensor. Besides the producer
+            device, (kDLCPU, 0) is supported: zero-copy for host-accessible
+            memory, otherwise a device-to-host copy (unless copy=False).
+        copy: bool, optional
+            True always copies (the copy is solely owned by the consumer);
+            False never copies (raises BufferError if a copy is needed);
+            None (default) copies only if required.
+            A producer-made copy is synchronized before hand-off, so the data
+            is ready on any consumer stream. Because the copy cannot be run on
+            a consumer-provided stream, copy=True requires stream=None and
+            raises BufferError for any other stream value.
+
+        Returns
+        -------
+        A PyCapsule wrapping a DLPack managed tensor.
+
+        Raises
+        ------
+        BufferError
+            If an unsupported device transfer or copy is requested.
+
+        Notes
+        -----
+        Capsules that own a copy of device data (copy=True on GPU data or
+        device-to-host transfers) allocate from an AMReX Arena and must be
+        freed (i.e., the consuming array garbage collected) before
+        amrex.finalize().
+
+        Legacy "dltensor" capsules cannot communicate read-only tensors;
+        like __array_interface__, such exports are marked writable.
+        """
+    def __dlpack_device__(self) -> tuple[int, int]:
+        """
+        DLPack device of the data, as a (device_type, device_id) tuple of int.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+        """
     @typing.overload
     def __getitem__(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> float: ...
     @typing.overload
@@ -8042,6 +11361,33 @@ class SmallMatrix_3x1_F_SI1_float:
             Raises an exception if cupy is not installed
 
         """
+    def to_dpnp(self, copy=False, order="F"):
+        """
+        Provide a dpnp copy of a SmallMatrix.
+
+        SmallMatrix data is always host-side: importing into dpnp copies to the
+        device, independent of the copy argument.
+
+        Parameters
+        ----------
+        self : amrex.SmallMatrix_*
+            A SmallMatrix class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        dpnp.array
+            A dpnp 2-dimensional array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if dpnp is not installed
+
+        """
     def to_numpy(self, copy=False, order="F"):
         """
         Provide a NumPy view into an SmallMatrix.
@@ -8120,6 +11466,67 @@ class SmallMatrix_3x6_F_SI1_double:
     def __add__(
         self, arg0: SmallMatrix_3x6_F_SI1_double
     ) -> SmallMatrix_3x6_F_SI1_double: ...
+    def __dlpack__(
+        self,
+        *,
+        stream: typing.Any = None,
+        max_version: typing.Any = None,
+        dl_device: typing.Any = None,
+        copy: typing.Any = None,
+    ) -> typing_extensions.CapsuleType:
+        """
+        Export the data as a DLPack capsule for zero-copy tensor exchange.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+
+        Parameters
+        ----------
+        stream: int, optional
+            Consumer stream (CUDA/ROCm device data only) the data shall be
+            made ready for, e.g., by an event wait. -1 requests no
+            synchronization. Must be None for host-side data.
+        max_version: tuple of int, optional
+            Highest DLPack version the consumer supports. None or a major
+            version below 1 yields a legacy "dltensor" capsule, otherwise a
+            "dltensor_versioned" capsule (DLPack 1.1) is returned.
+        dl_device: tuple of (DLDeviceType, int), optional
+            Requested device of the returned tensor. Besides the producer
+            device, (kDLCPU, 0) is supported: zero-copy for host-accessible
+            memory, otherwise a device-to-host copy (unless copy=False).
+        copy: bool, optional
+            True always copies (the copy is solely owned by the consumer);
+            False never copies (raises BufferError if a copy is needed);
+            None (default) copies only if required.
+            A producer-made copy is synchronized before hand-off, so the data
+            is ready on any consumer stream. Because the copy cannot be run on
+            a consumer-provided stream, copy=True requires stream=None and
+            raises BufferError for any other stream value.
+
+        Returns
+        -------
+        A PyCapsule wrapping a DLPack managed tensor.
+
+        Raises
+        ------
+        BufferError
+            If an unsupported device transfer or copy is requested.
+
+        Notes
+        -----
+        Capsules that own a copy of device data (copy=True on GPU data or
+        device-to-host transfers) allocate from an AMReX Arena and must be
+        freed (i.e., the consuming array garbage collected) before
+        amrex.finalize().
+
+        Legacy "dltensor" capsules cannot communicate read-only tensors;
+        like __array_interface__, such exports are marked writable.
+        """
+    def __dlpack_device__(self) -> tuple[int, int]:
+        """
+        DLPack device of the data, as a (device_type, device_id) tuple of int.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+        """
     def __getitem__(
         self,
         arg0: typing.Annotated[
@@ -8201,6 +11608,33 @@ class SmallMatrix_3x6_F_SI1_double:
             Raises an exception if cupy is not installed
 
         """
+    def to_dpnp(self, copy=False, order="F"):
+        """
+        Provide a dpnp copy of a SmallMatrix.
+
+        SmallMatrix data is always host-side: importing into dpnp copies to the
+        device, independent of the copy argument.
+
+        Parameters
+        ----------
+        self : amrex.SmallMatrix_*
+            A SmallMatrix class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        dpnp.array
+            A dpnp 2-dimensional array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if dpnp is not installed
+
+        """
     def to_numpy(self, copy=False, order="F"):
         """
         Provide a NumPy view into an SmallMatrix.
@@ -8279,6 +11713,67 @@ class SmallMatrix_1x3_F_SI1_double:
     def __add__(
         self, arg0: SmallMatrix_1x3_F_SI1_double
     ) -> SmallMatrix_1x3_F_SI1_double: ...
+    def __dlpack__(
+        self,
+        *,
+        stream: typing.Any = None,
+        max_version: typing.Any = None,
+        dl_device: typing.Any = None,
+        copy: typing.Any = None,
+    ) -> typing_extensions.CapsuleType:
+        """
+        Export the data as a DLPack capsule for zero-copy tensor exchange.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+
+        Parameters
+        ----------
+        stream: int, optional
+            Consumer stream (CUDA/ROCm device data only) the data shall be
+            made ready for, e.g., by an event wait. -1 requests no
+            synchronization. Must be None for host-side data.
+        max_version: tuple of int, optional
+            Highest DLPack version the consumer supports. None or a major
+            version below 1 yields a legacy "dltensor" capsule, otherwise a
+            "dltensor_versioned" capsule (DLPack 1.1) is returned.
+        dl_device: tuple of (DLDeviceType, int), optional
+            Requested device of the returned tensor. Besides the producer
+            device, (kDLCPU, 0) is supported: zero-copy for host-accessible
+            memory, otherwise a device-to-host copy (unless copy=False).
+        copy: bool, optional
+            True always copies (the copy is solely owned by the consumer);
+            False never copies (raises BufferError if a copy is needed);
+            None (default) copies only if required.
+            A producer-made copy is synchronized before hand-off, so the data
+            is ready on any consumer stream. Because the copy cannot be run on
+            a consumer-provided stream, copy=True requires stream=None and
+            raises BufferError for any other stream value.
+
+        Returns
+        -------
+        A PyCapsule wrapping a DLPack managed tensor.
+
+        Raises
+        ------
+        BufferError
+            If an unsupported device transfer or copy is requested.
+
+        Notes
+        -----
+        Capsules that own a copy of device data (copy=True on GPU data or
+        device-to-host transfers) allocate from an AMReX Arena and must be
+        freed (i.e., the consuming array garbage collected) before
+        amrex.finalize().
+
+        Legacy "dltensor" capsules cannot communicate read-only tensors;
+        like __array_interface__, such exports are marked writable.
+        """
+    def __dlpack_device__(self) -> tuple[int, int]:
+        """
+        DLPack device of the data, as a (device_type, device_id) tuple of int.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+        """
     @typing.overload
     def __getitem__(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> float: ...
     @typing.overload
@@ -8360,6 +11855,33 @@ class SmallMatrix_1x3_F_SI1_double:
             Raises an exception if cupy is not installed
 
         """
+    def to_dpnp(self, copy=False, order="F"):
+        """
+        Provide a dpnp copy of a SmallMatrix.
+
+        SmallMatrix data is always host-side: importing into dpnp copies to the
+        device, independent of the copy argument.
+
+        Parameters
+        ----------
+        self : amrex.SmallMatrix_*
+            A SmallMatrix class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        dpnp.array
+            A dpnp 2-dimensional array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if dpnp is not installed
+
+        """
     def to_numpy(self, copy=False, order="F"):
         """
         Provide a NumPy view into an SmallMatrix.
@@ -8438,6 +11960,67 @@ class SmallMatrix_6x3_F_SI1_double:
     def __add__(
         self, arg0: SmallMatrix_6x3_F_SI1_double
     ) -> SmallMatrix_6x3_F_SI1_double: ...
+    def __dlpack__(
+        self,
+        *,
+        stream: typing.Any = None,
+        max_version: typing.Any = None,
+        dl_device: typing.Any = None,
+        copy: typing.Any = None,
+    ) -> typing_extensions.CapsuleType:
+        """
+        Export the data as a DLPack capsule for zero-copy tensor exchange.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+
+        Parameters
+        ----------
+        stream: int, optional
+            Consumer stream (CUDA/ROCm device data only) the data shall be
+            made ready for, e.g., by an event wait. -1 requests no
+            synchronization. Must be None for host-side data.
+        max_version: tuple of int, optional
+            Highest DLPack version the consumer supports. None or a major
+            version below 1 yields a legacy "dltensor" capsule, otherwise a
+            "dltensor_versioned" capsule (DLPack 1.1) is returned.
+        dl_device: tuple of (DLDeviceType, int), optional
+            Requested device of the returned tensor. Besides the producer
+            device, (kDLCPU, 0) is supported: zero-copy for host-accessible
+            memory, otherwise a device-to-host copy (unless copy=False).
+        copy: bool, optional
+            True always copies (the copy is solely owned by the consumer);
+            False never copies (raises BufferError if a copy is needed);
+            None (default) copies only if required.
+            A producer-made copy is synchronized before hand-off, so the data
+            is ready on any consumer stream. Because the copy cannot be run on
+            a consumer-provided stream, copy=True requires stream=None and
+            raises BufferError for any other stream value.
+
+        Returns
+        -------
+        A PyCapsule wrapping a DLPack managed tensor.
+
+        Raises
+        ------
+        BufferError
+            If an unsupported device transfer or copy is requested.
+
+        Notes
+        -----
+        Capsules that own a copy of device data (copy=True on GPU data or
+        device-to-host transfers) allocate from an AMReX Arena and must be
+        freed (i.e., the consuming array garbage collected) before
+        amrex.finalize().
+
+        Legacy "dltensor" capsules cannot communicate read-only tensors;
+        like __array_interface__, such exports are marked writable.
+        """
+    def __dlpack_device__(self) -> tuple[int, int]:
+        """
+        DLPack device of the data, as a (device_type, device_id) tuple of int.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+        """
     def __getitem__(
         self,
         arg0: typing.Annotated[
@@ -8507,6 +12090,33 @@ class SmallMatrix_6x3_F_SI1_double:
         ------
         ImportError
             Raises an exception if cupy is not installed
+
+        """
+    def to_dpnp(self, copy=False, order="F"):
+        """
+        Provide a dpnp copy of a SmallMatrix.
+
+        SmallMatrix data is always host-side: importing into dpnp copies to the
+        device, independent of the copy argument.
+
+        Parameters
+        ----------
+        self : amrex.SmallMatrix_*
+            A SmallMatrix class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        dpnp.array
+            A dpnp 2-dimensional array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if dpnp is not installed
 
         """
     def to_numpy(self, copy=False, order="F"):
@@ -8587,6 +12197,67 @@ class SmallMatrix_3x1_F_SI1_double:
     def __add__(
         self, arg0: SmallMatrix_3x1_F_SI1_double
     ) -> SmallMatrix_3x1_F_SI1_double: ...
+    def __dlpack__(
+        self,
+        *,
+        stream: typing.Any = None,
+        max_version: typing.Any = None,
+        dl_device: typing.Any = None,
+        copy: typing.Any = None,
+    ) -> typing_extensions.CapsuleType:
+        """
+        Export the data as a DLPack capsule for zero-copy tensor exchange.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+
+        Parameters
+        ----------
+        stream: int, optional
+            Consumer stream (CUDA/ROCm device data only) the data shall be
+            made ready for, e.g., by an event wait. -1 requests no
+            synchronization. Must be None for host-side data.
+        max_version: tuple of int, optional
+            Highest DLPack version the consumer supports. None or a major
+            version below 1 yields a legacy "dltensor" capsule, otherwise a
+            "dltensor_versioned" capsule (DLPack 1.1) is returned.
+        dl_device: tuple of (DLDeviceType, int), optional
+            Requested device of the returned tensor. Besides the producer
+            device, (kDLCPU, 0) is supported: zero-copy for host-accessible
+            memory, otherwise a device-to-host copy (unless copy=False).
+        copy: bool, optional
+            True always copies (the copy is solely owned by the consumer);
+            False never copies (raises BufferError if a copy is needed);
+            None (default) copies only if required.
+            A producer-made copy is synchronized before hand-off, so the data
+            is ready on any consumer stream. Because the copy cannot be run on
+            a consumer-provided stream, copy=True requires stream=None and
+            raises BufferError for any other stream value.
+
+        Returns
+        -------
+        A PyCapsule wrapping a DLPack managed tensor.
+
+        Raises
+        ------
+        BufferError
+            If an unsupported device transfer or copy is requested.
+
+        Notes
+        -----
+        Capsules that own a copy of device data (copy=True on GPU data or
+        device-to-host transfers) allocate from an AMReX Arena and must be
+        freed (i.e., the consuming array garbage collected) before
+        amrex.finalize().
+
+        Legacy "dltensor" capsules cannot communicate read-only tensors;
+        like __array_interface__, such exports are marked writable.
+        """
+    def __dlpack_device__(self) -> tuple[int, int]:
+        """
+        DLPack device of the data, as a (device_type, device_id) tuple of int.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+        """
     @typing.overload
     def __getitem__(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> float: ...
     @typing.overload
@@ -8666,6 +12337,33 @@ class SmallMatrix_3x1_F_SI1_double:
         ------
         ImportError
             Raises an exception if cupy is not installed
+
+        """
+    def to_dpnp(self, copy=False, order="F"):
+        """
+        Provide a dpnp copy of a SmallMatrix.
+
+        SmallMatrix data is always host-side: importing into dpnp copies to the
+        device, independent of the copy argument.
+
+        Parameters
+        ----------
+        self : amrex.SmallMatrix_*
+            A SmallMatrix class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        dpnp.array
+            A dpnp 2-dimensional array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if dpnp is not installed
 
         """
     def to_numpy(self, copy=False, order="F"):
@@ -8827,6 +12525,33 @@ class SmallMatrix_3x6_F_SI1_longdouble:
             Raises an exception if cupy is not installed
 
         """
+    def to_dpnp(self, copy=False, order="F"):
+        """
+        Provide a dpnp copy of a SmallMatrix.
+
+        SmallMatrix data is always host-side: importing into dpnp copies to the
+        device, independent of the copy argument.
+
+        Parameters
+        ----------
+        self : amrex.SmallMatrix_*
+            A SmallMatrix class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        dpnp.array
+            A dpnp 2-dimensional array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if dpnp is not installed
+
+        """
     def to_numpy(self, copy=False, order="F"):
         """
         Provide a NumPy view into an SmallMatrix.
@@ -8986,6 +12711,33 @@ class SmallMatrix_1x3_F_SI1_longdouble:
             Raises an exception if cupy is not installed
 
         """
+    def to_dpnp(self, copy=False, order="F"):
+        """
+        Provide a dpnp copy of a SmallMatrix.
+
+        SmallMatrix data is always host-side: importing into dpnp copies to the
+        device, independent of the copy argument.
+
+        Parameters
+        ----------
+        self : amrex.SmallMatrix_*
+            A SmallMatrix class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        dpnp.array
+            A dpnp 2-dimensional array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if dpnp is not installed
+
+        """
     def to_numpy(self, copy=False, order="F"):
         """
         Provide a NumPy view into an SmallMatrix.
@@ -9133,6 +12885,33 @@ class SmallMatrix_6x3_F_SI1_longdouble:
         ------
         ImportError
             Raises an exception if cupy is not installed
+
+        """
+    def to_dpnp(self, copy=False, order="F"):
+        """
+        Provide a dpnp copy of a SmallMatrix.
+
+        SmallMatrix data is always host-side: importing into dpnp copies to the
+        device, independent of the copy argument.
+
+        Parameters
+        ----------
+        self : amrex.SmallMatrix_*
+            A SmallMatrix class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        dpnp.array
+            A dpnp 2-dimensional array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if dpnp is not installed
 
         """
     def to_numpy(self, copy=False, order="F"):
@@ -9294,6 +13073,33 @@ class SmallMatrix_3x1_F_SI1_longdouble:
             Raises an exception if cupy is not installed
 
         """
+    def to_dpnp(self, copy=False, order="F"):
+        """
+        Provide a dpnp copy of a SmallMatrix.
+
+        SmallMatrix data is always host-side: importing into dpnp copies to the
+        device, independent of the copy argument.
+
+        Parameters
+        ----------
+        self : amrex.SmallMatrix_*
+            A SmallMatrix class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        dpnp.array
+            A dpnp 2-dimensional array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if dpnp is not installed
+
+        """
     def to_numpy(self, copy=False, order="F"):
         """
         Provide a NumPy view into an SmallMatrix.
@@ -9385,6 +13191,67 @@ class Vector_Real:
     def __delitem__(self, arg0: slice) -> None:
         """
         Delete list elements using a slice object
+        """
+    def __dlpack__(
+        self,
+        *,
+        stream: typing.Any = None,
+        max_version: typing.Any = None,
+        dl_device: typing.Any = None,
+        copy: typing.Any = None,
+    ) -> typing_extensions.CapsuleType:
+        """
+        Export the data as a DLPack capsule for zero-copy tensor exchange.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+
+        Parameters
+        ----------
+        stream: int, optional
+            Consumer stream (CUDA/ROCm device data only) the data shall be
+            made ready for, e.g., by an event wait. -1 requests no
+            synchronization. Must be None for host-side data.
+        max_version: tuple of int, optional
+            Highest DLPack version the consumer supports. None or a major
+            version below 1 yields a legacy "dltensor" capsule, otherwise a
+            "dltensor_versioned" capsule (DLPack 1.1) is returned.
+        dl_device: tuple of (DLDeviceType, int), optional
+            Requested device of the returned tensor. Besides the producer
+            device, (kDLCPU, 0) is supported: zero-copy for host-accessible
+            memory, otherwise a device-to-host copy (unless copy=False).
+        copy: bool, optional
+            True always copies (the copy is solely owned by the consumer);
+            False never copies (raises BufferError if a copy is needed);
+            None (default) copies only if required.
+            A producer-made copy is synchronized before hand-off, so the data
+            is ready on any consumer stream. Because the copy cannot be run on
+            a consumer-provided stream, copy=True requires stream=None and
+            raises BufferError for any other stream value.
+
+        Returns
+        -------
+        A PyCapsule wrapping a DLPack managed tensor.
+
+        Raises
+        ------
+        BufferError
+            If an unsupported device transfer or copy is requested.
+
+        Notes
+        -----
+        Capsules that own a copy of device data (copy=True on GPU data or
+        device-to-host transfers) allocate from an AMReX Arena and must be
+        freed (i.e., the consuming array garbage collected) before
+        amrex.finalize().
+
+        Legacy "dltensor" capsules cannot communicate read-only tensors;
+        like __array_interface__, such exports are marked writable.
+        """
+    def __dlpack_device__(self) -> tuple[int, int]:
+        """
+        DLPack device of the data, as a (device_type, device_id) tuple of int.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
         """
     def __eq__(self, arg0: Vector_Real) -> bool: ...
     @typing.overload
@@ -9506,6 +13373,67 @@ class Vector_int:
         """
         Delete list elements using a slice object
         """
+    def __dlpack__(
+        self,
+        *,
+        stream: typing.Any = None,
+        max_version: typing.Any = None,
+        dl_device: typing.Any = None,
+        copy: typing.Any = None,
+    ) -> typing_extensions.CapsuleType:
+        """
+        Export the data as a DLPack capsule for zero-copy tensor exchange.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+
+        Parameters
+        ----------
+        stream: int, optional
+            Consumer stream (CUDA/ROCm device data only) the data shall be
+            made ready for, e.g., by an event wait. -1 requests no
+            synchronization. Must be None for host-side data.
+        max_version: tuple of int, optional
+            Highest DLPack version the consumer supports. None or a major
+            version below 1 yields a legacy "dltensor" capsule, otherwise a
+            "dltensor_versioned" capsule (DLPack 1.1) is returned.
+        dl_device: tuple of (DLDeviceType, int), optional
+            Requested device of the returned tensor. Besides the producer
+            device, (kDLCPU, 0) is supported: zero-copy for host-accessible
+            memory, otherwise a device-to-host copy (unless copy=False).
+        copy: bool, optional
+            True always copies (the copy is solely owned by the consumer);
+            False never copies (raises BufferError if a copy is needed);
+            None (default) copies only if required.
+            A producer-made copy is synchronized before hand-off, so the data
+            is ready on any consumer stream. Because the copy cannot be run on
+            a consumer-provided stream, copy=True requires stream=None and
+            raises BufferError for any other stream value.
+
+        Returns
+        -------
+        A PyCapsule wrapping a DLPack managed tensor.
+
+        Raises
+        ------
+        BufferError
+            If an unsupported device transfer or copy is requested.
+
+        Notes
+        -----
+        Capsules that own a copy of device data (copy=True on GPU data or
+        device-to-host transfers) allocate from an AMReX Arena and must be
+        freed (i.e., the consuming array garbage collected) before
+        amrex.finalize().
+
+        Legacy "dltensor" capsules cannot communicate read-only tensors;
+        like __array_interface__, such exports are marked writable.
+        """
+    def __dlpack_device__(self) -> tuple[int, int]:
+        """
+        DLPack device of the data, as a (device_type, device_id) tuple of int.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+        """
     def __eq__(self, arg0: Vector_int) -> bool: ...
     @typing.overload
     def __getitem__(self, s: slice) -> Vector_int:
@@ -9625,6 +13553,67 @@ class Vector_Long:
     def __delitem__(self, arg0: slice) -> None:
         """
         Delete list elements using a slice object
+        """
+    def __dlpack__(
+        self,
+        *,
+        stream: typing.Any = None,
+        max_version: typing.Any = None,
+        dl_device: typing.Any = None,
+        copy: typing.Any = None,
+    ) -> typing_extensions.CapsuleType:
+        """
+        Export the data as a DLPack capsule for zero-copy tensor exchange.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+
+        Parameters
+        ----------
+        stream: int, optional
+            Consumer stream (CUDA/ROCm device data only) the data shall be
+            made ready for, e.g., by an event wait. -1 requests no
+            synchronization. Must be None for host-side data.
+        max_version: tuple of int, optional
+            Highest DLPack version the consumer supports. None or a major
+            version below 1 yields a legacy "dltensor" capsule, otherwise a
+            "dltensor_versioned" capsule (DLPack 1.1) is returned.
+        dl_device: tuple of (DLDeviceType, int), optional
+            Requested device of the returned tensor. Besides the producer
+            device, (kDLCPU, 0) is supported: zero-copy for host-accessible
+            memory, otherwise a device-to-host copy (unless copy=False).
+        copy: bool, optional
+            True always copies (the copy is solely owned by the consumer);
+            False never copies (raises BufferError if a copy is needed);
+            None (default) copies only if required.
+            A producer-made copy is synchronized before hand-off, so the data
+            is ready on any consumer stream. Because the copy cannot be run on
+            a consumer-provided stream, copy=True requires stream=None and
+            raises BufferError for any other stream value.
+
+        Returns
+        -------
+        A PyCapsule wrapping a DLPack managed tensor.
+
+        Raises
+        ------
+        BufferError
+            If an unsupported device transfer or copy is requested.
+
+        Notes
+        -----
+        Capsules that own a copy of device data (copy=True on GPU data or
+        device-to-host transfers) allocate from an AMReX Arena and must be
+        freed (i.e., the consuming array garbage collected) before
+        amrex.finalize().
+
+        Legacy "dltensor" capsules cannot communicate read-only tensors;
+        like __array_interface__, such exports are marked writable.
+        """
+    def __dlpack_device__(self) -> tuple[int, int]:
+        """
+        DLPack device of the data, as a (device_type, device_id) tuple of int.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
         """
     def __eq__(self, arg0: Vector_Long) -> bool: ...
     @typing.overload
@@ -10901,6 +14890,67 @@ class Vector_DistributionMapping:
     def size(self) -> int: ...
 
 class BaseFab_Real:
+    def __dlpack__(
+        self,
+        *,
+        stream: typing.Any = None,
+        max_version: typing.Any = None,
+        dl_device: typing.Any = None,
+        copy: typing.Any = None,
+    ) -> typing_extensions.CapsuleType:
+        """
+        Export the data as a DLPack capsule for zero-copy tensor exchange.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+
+        Parameters
+        ----------
+        stream: int, optional
+            Consumer stream (CUDA/ROCm device data only) the data shall be
+            made ready for, e.g., by an event wait. -1 requests no
+            synchronization. Must be None for host-side data.
+        max_version: tuple of int, optional
+            Highest DLPack version the consumer supports. None or a major
+            version below 1 yields a legacy "dltensor" capsule, otherwise a
+            "dltensor_versioned" capsule (DLPack 1.1) is returned.
+        dl_device: tuple of (DLDeviceType, int), optional
+            Requested device of the returned tensor. Besides the producer
+            device, (kDLCPU, 0) is supported: zero-copy for host-accessible
+            memory, otherwise a device-to-host copy (unless copy=False).
+        copy: bool, optional
+            True always copies (the copy is solely owned by the consumer);
+            False never copies (raises BufferError if a copy is needed);
+            None (default) copies only if required.
+            A producer-made copy is synchronized before hand-off, so the data
+            is ready on any consumer stream. Because the copy cannot be run on
+            a consumer-provided stream, copy=True requires stream=None and
+            raises BufferError for any other stream value.
+
+        Returns
+        -------
+        A PyCapsule wrapping a DLPack managed tensor.
+
+        Raises
+        ------
+        BufferError
+            If an unsupported device transfer or copy is requested.
+
+        Notes
+        -----
+        Capsules that own a copy of device data (copy=True on GPU data or
+        device-to-host transfers) allocate from an AMReX Arena and must be
+        freed (i.e., the consuming array garbage collected) before
+        amrex.finalize().
+
+        Legacy "dltensor" capsules cannot communicate read-only tensors;
+        like __array_interface__, such exports are marked writable.
+        """
+    def __dlpack_device__(self) -> tuple[int, int]:
+        """
+        DLPack device of the data, as a (device_type, device_id) tuple of int.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+        """
     @typing.overload
     def __init__(self) -> None: ...
     @typing.overload
@@ -12890,6 +16940,40 @@ class iMultiFab(FabArray_IArrayBox):
             Raises an exception if cupy is not installed
 
         """
+    def to_dpnp(self, copy=False, order="F"):
+        """
+        Provide a dpnp view into a MultiFab.
+
+        This includes ngrow guard cells of each box.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as dpnp.
+        The order="C" option will index as z,y,x and may perform better.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.MultiFab
+            A MultiFab class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        list of dpnp.array
+            A list of dpnp n-dimensional arrays, for each local block in the
+            MultiFab.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if dpnp is not installed
+
+        """
     def to_numpy(self, copy=False, order="F"):
         """
         Provide a NumPy view into a MultiFab.
@@ -12921,8 +17005,8 @@ class iMultiFab(FabArray_IArrayBox):
         """
     def to_xp(self, copy=False, order="F"):
         """
-        Provide a NumPy or CuPy view into a MultiFab,
-        depending on amr.Config.have_gpu .
+        Provide a NumPy, CuPy or dpnp view into a MultiFab,
+        depending on amr.Config.have_gpu and amr.Config.gpu_backend .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
         https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
@@ -12948,8 +17032,8 @@ class iMultiFab(FabArray_IArrayBox):
         Returns
         -------
         list of xp.array
-            A list of NumPy or CuPy n-dimensional arrays, for each local block in the
-            MultiFab.
+            A list of NumPy, CuPy or dpnp n-dimensional arrays, for each local block
+            in the MultiFab.
 
         """
     @property
@@ -14016,6 +18100,40 @@ class MultiFab(FabArray_FArrayBox):
             Raises an exception if cupy is not installed
 
         """
+    def to_dpnp(self, copy=False, order="F"):
+        """
+        Provide a dpnp view into a MultiFab.
+
+        This includes ngrow guard cells of each box.
+
+        Note on the order of indices:
+        By default, this is as in AMReX in Fortran contiguous order, indexing as
+        x,y,z. This has performance implications for use in external libraries such
+        as dpnp.
+        The order="C" option will index as z,y,x and may perform better.
+        https://github.com/AMReX-Codes/pyamrex/issues/55#issuecomment-1579610074
+
+        Parameters
+        ----------
+        self : amrex.MultiFab
+            A MultiFab class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+        order : string, optional
+            F order (default) or C. C is faster with external libraries.
+
+        Returns
+        -------
+        list of dpnp.array
+            A list of dpnp n-dimensional arrays, for each local block in the
+            MultiFab.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if dpnp is not installed
+
+        """
     def to_numpy(self, copy=False, order="F"):
         """
         Provide a NumPy view into a MultiFab.
@@ -14047,8 +18165,8 @@ class MultiFab(FabArray_FArrayBox):
         """
     def to_xp(self, copy=False, order="F"):
         """
-        Provide a NumPy or CuPy view into a MultiFab,
-        depending on amr.Config.have_gpu .
+        Provide a NumPy, CuPy or dpnp view into a MultiFab,
+        depending on amr.Config.have_gpu and amr.Config.gpu_backend .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
         https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
@@ -14074,8 +18192,8 @@ class MultiFab(FabArray_FArrayBox):
         Returns
         -------
         list of xp.array
-            A list of NumPy or CuPy n-dimensional arrays, for each local block in the
-            MultiFab.
+            A list of NumPy, CuPy or dpnp n-dimensional arrays, for each local block
+            in the MultiFab.
 
         """
     def weighted_sync(self, arg0: MultiFab, arg1: Periodicity) -> None: ...
@@ -14351,10 +18469,32 @@ class PODVector_real_pinned:
 
         """
     @classmethod
+    def from_dpnp(cls, arr):
+        """
+        Create a new PODVector from a dpnp array (or array-like).
+
+        Always copies the data into a newly allocated PODVector.
+        Works for every allocator type: for host-only allocators the
+        data is staged to the host through NumPy automatically.
+
+        Parameters
+        ----------
+        cls : type
+            The PODVector type to construct.
+        arr : array_like
+            Input data, convertible to a dpnp array.
+
+        Returns
+        -------
+        PODVector
+            A new PODVector with a copy of the data.
+
+        """
+    @classmethod
     def from_xp(cls, arr):
         """
-        Create a new PODVector from a NumPy or CuPy array,
-        depending on amr.Config.have_gpu .
+        Create a new PODVector from a NumPy, CuPy or dpnp array,
+        depending on amr.Config.have_gpu and amr.Config.gpu_backend .
 
         Always copies the data into a newly allocated PODVector.
         Unlike :meth:`to_xp`, a zero-copy view is not possible here because
@@ -14368,13 +18508,74 @@ class PODVector_real_pinned:
         cls : type
             The PODVector type to construct.
         arr : array_like
-            Input data (NumPy or CuPy array).
+            Input data (NumPy, CuPy or dpnp array).
 
         Returns
         -------
         PODVector
             A new PODVector with a copy of the data.
 
+        """
+    def __dlpack__(
+        self,
+        *,
+        stream: typing.Any = None,
+        max_version: typing.Any = None,
+        dl_device: typing.Any = None,
+        copy: typing.Any = None,
+    ) -> typing_extensions.CapsuleType:
+        """
+        Export the data as a DLPack capsule for zero-copy tensor exchange.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+
+        Parameters
+        ----------
+        stream: int, optional
+            Consumer stream (CUDA/ROCm device data only) the data shall be
+            made ready for, e.g., by an event wait. -1 requests no
+            synchronization. Must be None for host-side data.
+        max_version: tuple of int, optional
+            Highest DLPack version the consumer supports. None or a major
+            version below 1 yields a legacy "dltensor" capsule, otherwise a
+            "dltensor_versioned" capsule (DLPack 1.1) is returned.
+        dl_device: tuple of (DLDeviceType, int), optional
+            Requested device of the returned tensor. Besides the producer
+            device, (kDLCPU, 0) is supported: zero-copy for host-accessible
+            memory, otherwise a device-to-host copy (unless copy=False).
+        copy: bool, optional
+            True always copies (the copy is solely owned by the consumer);
+            False never copies (raises BufferError if a copy is needed);
+            None (default) copies only if required.
+            A producer-made copy is synchronized before hand-off, so the data
+            is ready on any consumer stream. Because the copy cannot be run on
+            a consumer-provided stream, copy=True requires stream=None and
+            raises BufferError for any other stream value.
+
+        Returns
+        -------
+        A PyCapsule wrapping a DLPack managed tensor.
+
+        Raises
+        ------
+        BufferError
+            If an unsupported device transfer or copy is requested.
+
+        Notes
+        -----
+        Capsules that own a copy of device data (copy=True on GPU data or
+        device-to-host transfers) allocate from an AMReX Arena and must be
+        freed (i.e., the consuming array garbage collected) before
+        amrex.finalize().
+
+        Legacy "dltensor" capsules cannot communicate read-only tensors;
+        like __array_interface__, such exports are marked writable.
+        """
+    def __dlpack_device__(self) -> tuple[int, int]:
+        """
+        DLPack device of the data, as a (device_type, device_id) tuple of int.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
         """
     def __getitem__(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> float: ...
     @typing.overload
@@ -14445,6 +18646,28 @@ class PODVector_real_pinned:
         """
         Copy this vector into a new amrex Gpu::DeviceVector (the arena allocator on GPU, std on CPU), transferring across memory spaces as needed. Mirrors to_host().
         """
+    def to_dpnp(self, copy=False):
+        """
+        Provide a dpnp view into a PODVector (e.g., RealVector, IntVector).
+
+        Parameters
+        ----------
+        self : amrex.PODVector_*
+            A PODVector class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        dpnp.array
+            A 1D dpnp array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if dpnp is not installed
+
+        """
     def to_host(self) -> PODVector_real_pinned:
         """
         Copy this vector into a new pinned (host) PODVector. Mirrors to_device().
@@ -14468,8 +18691,8 @@ class PODVector_real_pinned:
         """
     def to_xp(self, copy=False):
         """
-        Provide a NumPy or CuPy view into a PODVector (e.g., RealVector, IntVector),
-        depending on amr.Config.have_gpu .
+        Provide a NumPy, CuPy or dpnp view into a PODVector (e.g., RealVector,
+        IntVector), depending on amr.Config.have_gpu and amr.Config.gpu_backend .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
         https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
@@ -14484,7 +18707,7 @@ class PODVector_real_pinned:
         Returns
         -------
         xp.array
-            A 1D NumPy or CuPy array.
+            A 1D NumPy, CuPy or dpnp array.
 
         """
     @property
@@ -14540,10 +18763,32 @@ class PODVector_real_arena:
 
         """
     @classmethod
+    def from_dpnp(cls, arr):
+        """
+        Create a new PODVector from a dpnp array (or array-like).
+
+        Always copies the data into a newly allocated PODVector.
+        Works for every allocator type: for host-only allocators the
+        data is staged to the host through NumPy automatically.
+
+        Parameters
+        ----------
+        cls : type
+            The PODVector type to construct.
+        arr : array_like
+            Input data, convertible to a dpnp array.
+
+        Returns
+        -------
+        PODVector
+            A new PODVector with a copy of the data.
+
+        """
+    @classmethod
     def from_xp(cls, arr):
         """
-        Create a new PODVector from a NumPy or CuPy array,
-        depending on amr.Config.have_gpu .
+        Create a new PODVector from a NumPy, CuPy or dpnp array,
+        depending on amr.Config.have_gpu and amr.Config.gpu_backend .
 
         Always copies the data into a newly allocated PODVector.
         Unlike :meth:`to_xp`, a zero-copy view is not possible here because
@@ -14557,13 +18802,74 @@ class PODVector_real_arena:
         cls : type
             The PODVector type to construct.
         arr : array_like
-            Input data (NumPy or CuPy array).
+            Input data (NumPy, CuPy or dpnp array).
 
         Returns
         -------
         PODVector
             A new PODVector with a copy of the data.
 
+        """
+    def __dlpack__(
+        self,
+        *,
+        stream: typing.Any = None,
+        max_version: typing.Any = None,
+        dl_device: typing.Any = None,
+        copy: typing.Any = None,
+    ) -> typing_extensions.CapsuleType:
+        """
+        Export the data as a DLPack capsule for zero-copy tensor exchange.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+
+        Parameters
+        ----------
+        stream: int, optional
+            Consumer stream (CUDA/ROCm device data only) the data shall be
+            made ready for, e.g., by an event wait. -1 requests no
+            synchronization. Must be None for host-side data.
+        max_version: tuple of int, optional
+            Highest DLPack version the consumer supports. None or a major
+            version below 1 yields a legacy "dltensor" capsule, otherwise a
+            "dltensor_versioned" capsule (DLPack 1.1) is returned.
+        dl_device: tuple of (DLDeviceType, int), optional
+            Requested device of the returned tensor. Besides the producer
+            device, (kDLCPU, 0) is supported: zero-copy for host-accessible
+            memory, otherwise a device-to-host copy (unless copy=False).
+        copy: bool, optional
+            True always copies (the copy is solely owned by the consumer);
+            False never copies (raises BufferError if a copy is needed);
+            None (default) copies only if required.
+            A producer-made copy is synchronized before hand-off, so the data
+            is ready on any consumer stream. Because the copy cannot be run on
+            a consumer-provided stream, copy=True requires stream=None and
+            raises BufferError for any other stream value.
+
+        Returns
+        -------
+        A PyCapsule wrapping a DLPack managed tensor.
+
+        Raises
+        ------
+        BufferError
+            If an unsupported device transfer or copy is requested.
+
+        Notes
+        -----
+        Capsules that own a copy of device data (copy=True on GPU data or
+        device-to-host transfers) allocate from an AMReX Arena and must be
+        freed (i.e., the consuming array garbage collected) before
+        amrex.finalize().
+
+        Legacy "dltensor" capsules cannot communicate read-only tensors;
+        like __array_interface__, such exports are marked writable.
+        """
+    def __dlpack_device__(self) -> tuple[int, int]:
+        """
+        DLPack device of the data, as a (device_type, device_id) tuple of int.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
         """
     def __getitem__(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> float: ...
     @typing.overload
@@ -14634,6 +18940,28 @@ class PODVector_real_arena:
         """
         Copy this vector into a new amrex Gpu::DeviceVector (the arena allocator on GPU, std on CPU), transferring across memory spaces as needed. Mirrors to_host().
         """
+    def to_dpnp(self, copy=False):
+        """
+        Provide a dpnp view into a PODVector (e.g., RealVector, IntVector).
+
+        Parameters
+        ----------
+        self : amrex.PODVector_*
+            A PODVector class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        dpnp.array
+            A 1D dpnp array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if dpnp is not installed
+
+        """
     def to_host(self) -> PODVector_real_pinned:
         """
         Copy this vector into a new pinned (host) PODVector. Mirrors to_device().
@@ -14657,8 +18985,8 @@ class PODVector_real_arena:
         """
     def to_xp(self, copy=False):
         """
-        Provide a NumPy or CuPy view into a PODVector (e.g., RealVector, IntVector),
-        depending on amr.Config.have_gpu .
+        Provide a NumPy, CuPy or dpnp view into a PODVector (e.g., RealVector,
+        IntVector), depending on amr.Config.have_gpu and amr.Config.gpu_backend .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
         https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
@@ -14673,7 +19001,7 @@ class PODVector_real_arena:
         Returns
         -------
         xp.array
-            A 1D NumPy or CuPy array.
+            A 1D NumPy, CuPy or dpnp array.
 
         """
     @property
@@ -14729,10 +19057,32 @@ class PODVector_real_std:
 
         """
     @classmethod
+    def from_dpnp(cls, arr):
+        """
+        Create a new PODVector from a dpnp array (or array-like).
+
+        Always copies the data into a newly allocated PODVector.
+        Works for every allocator type: for host-only allocators the
+        data is staged to the host through NumPy automatically.
+
+        Parameters
+        ----------
+        cls : type
+            The PODVector type to construct.
+        arr : array_like
+            Input data, convertible to a dpnp array.
+
+        Returns
+        -------
+        PODVector
+            A new PODVector with a copy of the data.
+
+        """
+    @classmethod
     def from_xp(cls, arr):
         """
-        Create a new PODVector from a NumPy or CuPy array,
-        depending on amr.Config.have_gpu .
+        Create a new PODVector from a NumPy, CuPy or dpnp array,
+        depending on amr.Config.have_gpu and amr.Config.gpu_backend .
 
         Always copies the data into a newly allocated PODVector.
         Unlike :meth:`to_xp`, a zero-copy view is not possible here because
@@ -14746,13 +19096,74 @@ class PODVector_real_std:
         cls : type
             The PODVector type to construct.
         arr : array_like
-            Input data (NumPy or CuPy array).
+            Input data (NumPy, CuPy or dpnp array).
 
         Returns
         -------
         PODVector
             A new PODVector with a copy of the data.
 
+        """
+    def __dlpack__(
+        self,
+        *,
+        stream: typing.Any = None,
+        max_version: typing.Any = None,
+        dl_device: typing.Any = None,
+        copy: typing.Any = None,
+    ) -> typing_extensions.CapsuleType:
+        """
+        Export the data as a DLPack capsule for zero-copy tensor exchange.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+
+        Parameters
+        ----------
+        stream: int, optional
+            Consumer stream (CUDA/ROCm device data only) the data shall be
+            made ready for, e.g., by an event wait. -1 requests no
+            synchronization. Must be None for host-side data.
+        max_version: tuple of int, optional
+            Highest DLPack version the consumer supports. None or a major
+            version below 1 yields a legacy "dltensor" capsule, otherwise a
+            "dltensor_versioned" capsule (DLPack 1.1) is returned.
+        dl_device: tuple of (DLDeviceType, int), optional
+            Requested device of the returned tensor. Besides the producer
+            device, (kDLCPU, 0) is supported: zero-copy for host-accessible
+            memory, otherwise a device-to-host copy (unless copy=False).
+        copy: bool, optional
+            True always copies (the copy is solely owned by the consumer);
+            False never copies (raises BufferError if a copy is needed);
+            None (default) copies only if required.
+            A producer-made copy is synchronized before hand-off, so the data
+            is ready on any consumer stream. Because the copy cannot be run on
+            a consumer-provided stream, copy=True requires stream=None and
+            raises BufferError for any other stream value.
+
+        Returns
+        -------
+        A PyCapsule wrapping a DLPack managed tensor.
+
+        Raises
+        ------
+        BufferError
+            If an unsupported device transfer or copy is requested.
+
+        Notes
+        -----
+        Capsules that own a copy of device data (copy=True on GPU data or
+        device-to-host transfers) allocate from an AMReX Arena and must be
+        freed (i.e., the consuming array garbage collected) before
+        amrex.finalize().
+
+        Legacy "dltensor" capsules cannot communicate read-only tensors;
+        like __array_interface__, such exports are marked writable.
+        """
+    def __dlpack_device__(self) -> tuple[int, int]:
+        """
+        DLPack device of the data, as a (device_type, device_id) tuple of int.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
         """
     def __getitem__(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> float: ...
     @typing.overload
@@ -14823,6 +19234,28 @@ class PODVector_real_std:
         """
         Copy this vector into a new amrex Gpu::DeviceVector (the arena allocator on GPU, std on CPU), transferring across memory spaces as needed. Mirrors to_host().
         """
+    def to_dpnp(self, copy=False):
+        """
+        Provide a dpnp view into a PODVector (e.g., RealVector, IntVector).
+
+        Parameters
+        ----------
+        self : amrex.PODVector_*
+            A PODVector class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        dpnp.array
+            A 1D dpnp array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if dpnp is not installed
+
+        """
     def to_host(self) -> PODVector_real_pinned:
         """
         Copy this vector into a new pinned (host) PODVector. Mirrors to_device().
@@ -14846,8 +19279,8 @@ class PODVector_real_std:
         """
     def to_xp(self, copy=False):
         """
-        Provide a NumPy or CuPy view into a PODVector (e.g., RealVector, IntVector),
-        depending on amr.Config.have_gpu .
+        Provide a NumPy, CuPy or dpnp view into a PODVector (e.g., RealVector,
+        IntVector), depending on amr.Config.have_gpu and amr.Config.gpu_backend .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
         https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
@@ -14862,7 +19295,7 @@ class PODVector_real_std:
         Returns
         -------
         xp.array
-            A 1D NumPy or CuPy array.
+            A 1D NumPy, CuPy or dpnp array.
 
         """
     @property
@@ -14918,10 +19351,32 @@ class PODVector_real_polymorphic:
 
         """
     @classmethod
+    def from_dpnp(cls, arr):
+        """
+        Create a new PODVector from a dpnp array (or array-like).
+
+        Always copies the data into a newly allocated PODVector.
+        Works for every allocator type: for host-only allocators the
+        data is staged to the host through NumPy automatically.
+
+        Parameters
+        ----------
+        cls : type
+            The PODVector type to construct.
+        arr : array_like
+            Input data, convertible to a dpnp array.
+
+        Returns
+        -------
+        PODVector
+            A new PODVector with a copy of the data.
+
+        """
+    @classmethod
     def from_xp(cls, arr):
         """
-        Create a new PODVector from a NumPy or CuPy array,
-        depending on amr.Config.have_gpu .
+        Create a new PODVector from a NumPy, CuPy or dpnp array,
+        depending on amr.Config.have_gpu and amr.Config.gpu_backend .
 
         Always copies the data into a newly allocated PODVector.
         Unlike :meth:`to_xp`, a zero-copy view is not possible here because
@@ -14935,13 +19390,74 @@ class PODVector_real_polymorphic:
         cls : type
             The PODVector type to construct.
         arr : array_like
-            Input data (NumPy or CuPy array).
+            Input data (NumPy, CuPy or dpnp array).
 
         Returns
         -------
         PODVector
             A new PODVector with a copy of the data.
 
+        """
+    def __dlpack__(
+        self,
+        *,
+        stream: typing.Any = None,
+        max_version: typing.Any = None,
+        dl_device: typing.Any = None,
+        copy: typing.Any = None,
+    ) -> typing_extensions.CapsuleType:
+        """
+        Export the data as a DLPack capsule for zero-copy tensor exchange.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+
+        Parameters
+        ----------
+        stream: int, optional
+            Consumer stream (CUDA/ROCm device data only) the data shall be
+            made ready for, e.g., by an event wait. -1 requests no
+            synchronization. Must be None for host-side data.
+        max_version: tuple of int, optional
+            Highest DLPack version the consumer supports. None or a major
+            version below 1 yields a legacy "dltensor" capsule, otherwise a
+            "dltensor_versioned" capsule (DLPack 1.1) is returned.
+        dl_device: tuple of (DLDeviceType, int), optional
+            Requested device of the returned tensor. Besides the producer
+            device, (kDLCPU, 0) is supported: zero-copy for host-accessible
+            memory, otherwise a device-to-host copy (unless copy=False).
+        copy: bool, optional
+            True always copies (the copy is solely owned by the consumer);
+            False never copies (raises BufferError if a copy is needed);
+            None (default) copies only if required.
+            A producer-made copy is synchronized before hand-off, so the data
+            is ready on any consumer stream. Because the copy cannot be run on
+            a consumer-provided stream, copy=True requires stream=None and
+            raises BufferError for any other stream value.
+
+        Returns
+        -------
+        A PyCapsule wrapping a DLPack managed tensor.
+
+        Raises
+        ------
+        BufferError
+            If an unsupported device transfer or copy is requested.
+
+        Notes
+        -----
+        Capsules that own a copy of device data (copy=True on GPU data or
+        device-to-host transfers) allocate from an AMReX Arena and must be
+        freed (i.e., the consuming array garbage collected) before
+        amrex.finalize().
+
+        Legacy "dltensor" capsules cannot communicate read-only tensors;
+        like __array_interface__, such exports are marked writable.
+        """
+    def __dlpack_device__(self) -> tuple[int, int]:
+        """
+        DLPack device of the data, as a (device_type, device_id) tuple of int.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
         """
     def __getitem__(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> float: ...
     @typing.overload
@@ -15012,6 +19528,28 @@ class PODVector_real_polymorphic:
         """
         Copy this vector into a new amrex Gpu::DeviceVector (the arena allocator on GPU, std on CPU), transferring across memory spaces as needed. Mirrors to_host().
         """
+    def to_dpnp(self, copy=False):
+        """
+        Provide a dpnp view into a PODVector (e.g., RealVector, IntVector).
+
+        Parameters
+        ----------
+        self : amrex.PODVector_*
+            A PODVector class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        dpnp.array
+            A 1D dpnp array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if dpnp is not installed
+
+        """
     def to_host(self) -> PODVector_real_pinned:
         """
         Copy this vector into a new pinned (host) PODVector. Mirrors to_device().
@@ -15035,8 +19573,8 @@ class PODVector_real_polymorphic:
         """
     def to_xp(self, copy=False):
         """
-        Provide a NumPy or CuPy view into a PODVector (e.g., RealVector, IntVector),
-        depending on amr.Config.have_gpu .
+        Provide a NumPy, CuPy or dpnp view into a PODVector (e.g., RealVector,
+        IntVector), depending on amr.Config.have_gpu and amr.Config.gpu_backend .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
         https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
@@ -15051,7 +19589,7 @@ class PODVector_real_polymorphic:
         Returns
         -------
         xp.array
-            A 1D NumPy or CuPy array.
+            A 1D NumPy, CuPy or dpnp array.
 
         """
     @property
@@ -15107,10 +19645,32 @@ class PODVector_int_pinned:
 
         """
     @classmethod
+    def from_dpnp(cls, arr):
+        """
+        Create a new PODVector from a dpnp array (or array-like).
+
+        Always copies the data into a newly allocated PODVector.
+        Works for every allocator type: for host-only allocators the
+        data is staged to the host through NumPy automatically.
+
+        Parameters
+        ----------
+        cls : type
+            The PODVector type to construct.
+        arr : array_like
+            Input data, convertible to a dpnp array.
+
+        Returns
+        -------
+        PODVector
+            A new PODVector with a copy of the data.
+
+        """
+    @classmethod
     def from_xp(cls, arr):
         """
-        Create a new PODVector from a NumPy or CuPy array,
-        depending on amr.Config.have_gpu .
+        Create a new PODVector from a NumPy, CuPy or dpnp array,
+        depending on amr.Config.have_gpu and amr.Config.gpu_backend .
 
         Always copies the data into a newly allocated PODVector.
         Unlike :meth:`to_xp`, a zero-copy view is not possible here because
@@ -15124,13 +19684,74 @@ class PODVector_int_pinned:
         cls : type
             The PODVector type to construct.
         arr : array_like
-            Input data (NumPy or CuPy array).
+            Input data (NumPy, CuPy or dpnp array).
 
         Returns
         -------
         PODVector
             A new PODVector with a copy of the data.
 
+        """
+    def __dlpack__(
+        self,
+        *,
+        stream: typing.Any = None,
+        max_version: typing.Any = None,
+        dl_device: typing.Any = None,
+        copy: typing.Any = None,
+    ) -> typing_extensions.CapsuleType:
+        """
+        Export the data as a DLPack capsule for zero-copy tensor exchange.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+
+        Parameters
+        ----------
+        stream: int, optional
+            Consumer stream (CUDA/ROCm device data only) the data shall be
+            made ready for, e.g., by an event wait. -1 requests no
+            synchronization. Must be None for host-side data.
+        max_version: tuple of int, optional
+            Highest DLPack version the consumer supports. None or a major
+            version below 1 yields a legacy "dltensor" capsule, otherwise a
+            "dltensor_versioned" capsule (DLPack 1.1) is returned.
+        dl_device: tuple of (DLDeviceType, int), optional
+            Requested device of the returned tensor. Besides the producer
+            device, (kDLCPU, 0) is supported: zero-copy for host-accessible
+            memory, otherwise a device-to-host copy (unless copy=False).
+        copy: bool, optional
+            True always copies (the copy is solely owned by the consumer);
+            False never copies (raises BufferError if a copy is needed);
+            None (default) copies only if required.
+            A producer-made copy is synchronized before hand-off, so the data
+            is ready on any consumer stream. Because the copy cannot be run on
+            a consumer-provided stream, copy=True requires stream=None and
+            raises BufferError for any other stream value.
+
+        Returns
+        -------
+        A PyCapsule wrapping a DLPack managed tensor.
+
+        Raises
+        ------
+        BufferError
+            If an unsupported device transfer or copy is requested.
+
+        Notes
+        -----
+        Capsules that own a copy of device data (copy=True on GPU data or
+        device-to-host transfers) allocate from an AMReX Arena and must be
+        freed (i.e., the consuming array garbage collected) before
+        amrex.finalize().
+
+        Legacy "dltensor" capsules cannot communicate read-only tensors;
+        like __array_interface__, such exports are marked writable.
+        """
+    def __dlpack_device__(self) -> tuple[int, int]:
+        """
+        DLPack device of the data, as a (device_type, device_id) tuple of int.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
         """
     def __getitem__(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> int: ...
     @typing.overload
@@ -15201,6 +19822,28 @@ class PODVector_int_pinned:
         """
         Copy this vector into a new amrex Gpu::DeviceVector (the arena allocator on GPU, std on CPU), transferring across memory spaces as needed. Mirrors to_host().
         """
+    def to_dpnp(self, copy=False):
+        """
+        Provide a dpnp view into a PODVector (e.g., RealVector, IntVector).
+
+        Parameters
+        ----------
+        self : amrex.PODVector_*
+            A PODVector class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        dpnp.array
+            A 1D dpnp array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if dpnp is not installed
+
+        """
     def to_host(self) -> PODVector_int_pinned:
         """
         Copy this vector into a new pinned (host) PODVector. Mirrors to_device().
@@ -15224,8 +19867,8 @@ class PODVector_int_pinned:
         """
     def to_xp(self, copy=False):
         """
-        Provide a NumPy or CuPy view into a PODVector (e.g., RealVector, IntVector),
-        depending on amr.Config.have_gpu .
+        Provide a NumPy, CuPy or dpnp view into a PODVector (e.g., RealVector,
+        IntVector), depending on amr.Config.have_gpu and amr.Config.gpu_backend .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
         https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
@@ -15240,7 +19883,7 @@ class PODVector_int_pinned:
         Returns
         -------
         xp.array
-            A 1D NumPy or CuPy array.
+            A 1D NumPy, CuPy or dpnp array.
 
         """
     @property
@@ -15296,10 +19939,32 @@ class PODVector_int_arena:
 
         """
     @classmethod
+    def from_dpnp(cls, arr):
+        """
+        Create a new PODVector from a dpnp array (or array-like).
+
+        Always copies the data into a newly allocated PODVector.
+        Works for every allocator type: for host-only allocators the
+        data is staged to the host through NumPy automatically.
+
+        Parameters
+        ----------
+        cls : type
+            The PODVector type to construct.
+        arr : array_like
+            Input data, convertible to a dpnp array.
+
+        Returns
+        -------
+        PODVector
+            A new PODVector with a copy of the data.
+
+        """
+    @classmethod
     def from_xp(cls, arr):
         """
-        Create a new PODVector from a NumPy or CuPy array,
-        depending on amr.Config.have_gpu .
+        Create a new PODVector from a NumPy, CuPy or dpnp array,
+        depending on amr.Config.have_gpu and amr.Config.gpu_backend .
 
         Always copies the data into a newly allocated PODVector.
         Unlike :meth:`to_xp`, a zero-copy view is not possible here because
@@ -15313,13 +19978,74 @@ class PODVector_int_arena:
         cls : type
             The PODVector type to construct.
         arr : array_like
-            Input data (NumPy or CuPy array).
+            Input data (NumPy, CuPy or dpnp array).
 
         Returns
         -------
         PODVector
             A new PODVector with a copy of the data.
 
+        """
+    def __dlpack__(
+        self,
+        *,
+        stream: typing.Any = None,
+        max_version: typing.Any = None,
+        dl_device: typing.Any = None,
+        copy: typing.Any = None,
+    ) -> typing_extensions.CapsuleType:
+        """
+        Export the data as a DLPack capsule for zero-copy tensor exchange.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+
+        Parameters
+        ----------
+        stream: int, optional
+            Consumer stream (CUDA/ROCm device data only) the data shall be
+            made ready for, e.g., by an event wait. -1 requests no
+            synchronization. Must be None for host-side data.
+        max_version: tuple of int, optional
+            Highest DLPack version the consumer supports. None or a major
+            version below 1 yields a legacy "dltensor" capsule, otherwise a
+            "dltensor_versioned" capsule (DLPack 1.1) is returned.
+        dl_device: tuple of (DLDeviceType, int), optional
+            Requested device of the returned tensor. Besides the producer
+            device, (kDLCPU, 0) is supported: zero-copy for host-accessible
+            memory, otherwise a device-to-host copy (unless copy=False).
+        copy: bool, optional
+            True always copies (the copy is solely owned by the consumer);
+            False never copies (raises BufferError if a copy is needed);
+            None (default) copies only if required.
+            A producer-made copy is synchronized before hand-off, so the data
+            is ready on any consumer stream. Because the copy cannot be run on
+            a consumer-provided stream, copy=True requires stream=None and
+            raises BufferError for any other stream value.
+
+        Returns
+        -------
+        A PyCapsule wrapping a DLPack managed tensor.
+
+        Raises
+        ------
+        BufferError
+            If an unsupported device transfer or copy is requested.
+
+        Notes
+        -----
+        Capsules that own a copy of device data (copy=True on GPU data or
+        device-to-host transfers) allocate from an AMReX Arena and must be
+        freed (i.e., the consuming array garbage collected) before
+        amrex.finalize().
+
+        Legacy "dltensor" capsules cannot communicate read-only tensors;
+        like __array_interface__, such exports are marked writable.
+        """
+    def __dlpack_device__(self) -> tuple[int, int]:
+        """
+        DLPack device of the data, as a (device_type, device_id) tuple of int.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
         """
     def __getitem__(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> int: ...
     @typing.overload
@@ -15390,6 +20116,28 @@ class PODVector_int_arena:
         """
         Copy this vector into a new amrex Gpu::DeviceVector (the arena allocator on GPU, std on CPU), transferring across memory spaces as needed. Mirrors to_host().
         """
+    def to_dpnp(self, copy=False):
+        """
+        Provide a dpnp view into a PODVector (e.g., RealVector, IntVector).
+
+        Parameters
+        ----------
+        self : amrex.PODVector_*
+            A PODVector class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        dpnp.array
+            A 1D dpnp array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if dpnp is not installed
+
+        """
     def to_host(self) -> PODVector_int_pinned:
         """
         Copy this vector into a new pinned (host) PODVector. Mirrors to_device().
@@ -15413,8 +20161,8 @@ class PODVector_int_arena:
         """
     def to_xp(self, copy=False):
         """
-        Provide a NumPy or CuPy view into a PODVector (e.g., RealVector, IntVector),
-        depending on amr.Config.have_gpu .
+        Provide a NumPy, CuPy or dpnp view into a PODVector (e.g., RealVector,
+        IntVector), depending on amr.Config.have_gpu and amr.Config.gpu_backend .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
         https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
@@ -15429,7 +20177,7 @@ class PODVector_int_arena:
         Returns
         -------
         xp.array
-            A 1D NumPy or CuPy array.
+            A 1D NumPy, CuPy or dpnp array.
 
         """
     @property
@@ -15485,10 +20233,32 @@ class PODVector_int_std:
 
         """
     @classmethod
+    def from_dpnp(cls, arr):
+        """
+        Create a new PODVector from a dpnp array (or array-like).
+
+        Always copies the data into a newly allocated PODVector.
+        Works for every allocator type: for host-only allocators the
+        data is staged to the host through NumPy automatically.
+
+        Parameters
+        ----------
+        cls : type
+            The PODVector type to construct.
+        arr : array_like
+            Input data, convertible to a dpnp array.
+
+        Returns
+        -------
+        PODVector
+            A new PODVector with a copy of the data.
+
+        """
+    @classmethod
     def from_xp(cls, arr):
         """
-        Create a new PODVector from a NumPy or CuPy array,
-        depending on amr.Config.have_gpu .
+        Create a new PODVector from a NumPy, CuPy or dpnp array,
+        depending on amr.Config.have_gpu and amr.Config.gpu_backend .
 
         Always copies the data into a newly allocated PODVector.
         Unlike :meth:`to_xp`, a zero-copy view is not possible here because
@@ -15502,13 +20272,74 @@ class PODVector_int_std:
         cls : type
             The PODVector type to construct.
         arr : array_like
-            Input data (NumPy or CuPy array).
+            Input data (NumPy, CuPy or dpnp array).
 
         Returns
         -------
         PODVector
             A new PODVector with a copy of the data.
 
+        """
+    def __dlpack__(
+        self,
+        *,
+        stream: typing.Any = None,
+        max_version: typing.Any = None,
+        dl_device: typing.Any = None,
+        copy: typing.Any = None,
+    ) -> typing_extensions.CapsuleType:
+        """
+        Export the data as a DLPack capsule for zero-copy tensor exchange.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+
+        Parameters
+        ----------
+        stream: int, optional
+            Consumer stream (CUDA/ROCm device data only) the data shall be
+            made ready for, e.g., by an event wait. -1 requests no
+            synchronization. Must be None for host-side data.
+        max_version: tuple of int, optional
+            Highest DLPack version the consumer supports. None or a major
+            version below 1 yields a legacy "dltensor" capsule, otherwise a
+            "dltensor_versioned" capsule (DLPack 1.1) is returned.
+        dl_device: tuple of (DLDeviceType, int), optional
+            Requested device of the returned tensor. Besides the producer
+            device, (kDLCPU, 0) is supported: zero-copy for host-accessible
+            memory, otherwise a device-to-host copy (unless copy=False).
+        copy: bool, optional
+            True always copies (the copy is solely owned by the consumer);
+            False never copies (raises BufferError if a copy is needed);
+            None (default) copies only if required.
+            A producer-made copy is synchronized before hand-off, so the data
+            is ready on any consumer stream. Because the copy cannot be run on
+            a consumer-provided stream, copy=True requires stream=None and
+            raises BufferError for any other stream value.
+
+        Returns
+        -------
+        A PyCapsule wrapping a DLPack managed tensor.
+
+        Raises
+        ------
+        BufferError
+            If an unsupported device transfer or copy is requested.
+
+        Notes
+        -----
+        Capsules that own a copy of device data (copy=True on GPU data or
+        device-to-host transfers) allocate from an AMReX Arena and must be
+        freed (i.e., the consuming array garbage collected) before
+        amrex.finalize().
+
+        Legacy "dltensor" capsules cannot communicate read-only tensors;
+        like __array_interface__, such exports are marked writable.
+        """
+    def __dlpack_device__(self) -> tuple[int, int]:
+        """
+        DLPack device of the data, as a (device_type, device_id) tuple of int.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
         """
     def __getitem__(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> int: ...
     @typing.overload
@@ -15579,6 +20410,28 @@ class PODVector_int_std:
         """
         Copy this vector into a new amrex Gpu::DeviceVector (the arena allocator on GPU, std on CPU), transferring across memory spaces as needed. Mirrors to_host().
         """
+    def to_dpnp(self, copy=False):
+        """
+        Provide a dpnp view into a PODVector (e.g., RealVector, IntVector).
+
+        Parameters
+        ----------
+        self : amrex.PODVector_*
+            A PODVector class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        dpnp.array
+            A 1D dpnp array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if dpnp is not installed
+
+        """
     def to_host(self) -> PODVector_int_pinned:
         """
         Copy this vector into a new pinned (host) PODVector. Mirrors to_device().
@@ -15602,8 +20455,8 @@ class PODVector_int_std:
         """
     def to_xp(self, copy=False):
         """
-        Provide a NumPy or CuPy view into a PODVector (e.g., RealVector, IntVector),
-        depending on amr.Config.have_gpu .
+        Provide a NumPy, CuPy or dpnp view into a PODVector (e.g., RealVector,
+        IntVector), depending on amr.Config.have_gpu and amr.Config.gpu_backend .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
         https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
@@ -15618,7 +20471,7 @@ class PODVector_int_std:
         Returns
         -------
         xp.array
-            A 1D NumPy or CuPy array.
+            A 1D NumPy, CuPy or dpnp array.
 
         """
     @property
@@ -15674,10 +20527,32 @@ class PODVector_int_polymorphic:
 
         """
     @classmethod
+    def from_dpnp(cls, arr):
+        """
+        Create a new PODVector from a dpnp array (or array-like).
+
+        Always copies the data into a newly allocated PODVector.
+        Works for every allocator type: for host-only allocators the
+        data is staged to the host through NumPy automatically.
+
+        Parameters
+        ----------
+        cls : type
+            The PODVector type to construct.
+        arr : array_like
+            Input data, convertible to a dpnp array.
+
+        Returns
+        -------
+        PODVector
+            A new PODVector with a copy of the data.
+
+        """
+    @classmethod
     def from_xp(cls, arr):
         """
-        Create a new PODVector from a NumPy or CuPy array,
-        depending on amr.Config.have_gpu .
+        Create a new PODVector from a NumPy, CuPy or dpnp array,
+        depending on amr.Config.have_gpu and amr.Config.gpu_backend .
 
         Always copies the data into a newly allocated PODVector.
         Unlike :meth:`to_xp`, a zero-copy view is not possible here because
@@ -15691,13 +20566,74 @@ class PODVector_int_polymorphic:
         cls : type
             The PODVector type to construct.
         arr : array_like
-            Input data (NumPy or CuPy array).
+            Input data (NumPy, CuPy or dpnp array).
 
         Returns
         -------
         PODVector
             A new PODVector with a copy of the data.
 
+        """
+    def __dlpack__(
+        self,
+        *,
+        stream: typing.Any = None,
+        max_version: typing.Any = None,
+        dl_device: typing.Any = None,
+        copy: typing.Any = None,
+    ) -> typing_extensions.CapsuleType:
+        """
+        Export the data as a DLPack capsule for zero-copy tensor exchange.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+
+        Parameters
+        ----------
+        stream: int, optional
+            Consumer stream (CUDA/ROCm device data only) the data shall be
+            made ready for, e.g., by an event wait. -1 requests no
+            synchronization. Must be None for host-side data.
+        max_version: tuple of int, optional
+            Highest DLPack version the consumer supports. None or a major
+            version below 1 yields a legacy "dltensor" capsule, otherwise a
+            "dltensor_versioned" capsule (DLPack 1.1) is returned.
+        dl_device: tuple of (DLDeviceType, int), optional
+            Requested device of the returned tensor. Besides the producer
+            device, (kDLCPU, 0) is supported: zero-copy for host-accessible
+            memory, otherwise a device-to-host copy (unless copy=False).
+        copy: bool, optional
+            True always copies (the copy is solely owned by the consumer);
+            False never copies (raises BufferError if a copy is needed);
+            None (default) copies only if required.
+            A producer-made copy is synchronized before hand-off, so the data
+            is ready on any consumer stream. Because the copy cannot be run on
+            a consumer-provided stream, copy=True requires stream=None and
+            raises BufferError for any other stream value.
+
+        Returns
+        -------
+        A PyCapsule wrapping a DLPack managed tensor.
+
+        Raises
+        ------
+        BufferError
+            If an unsupported device transfer or copy is requested.
+
+        Notes
+        -----
+        Capsules that own a copy of device data (copy=True on GPU data or
+        device-to-host transfers) allocate from an AMReX Arena and must be
+        freed (i.e., the consuming array garbage collected) before
+        amrex.finalize().
+
+        Legacy "dltensor" capsules cannot communicate read-only tensors;
+        like __array_interface__, such exports are marked writable.
+        """
+    def __dlpack_device__(self) -> tuple[int, int]:
+        """
+        DLPack device of the data, as a (device_type, device_id) tuple of int.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
         """
     def __getitem__(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> int: ...
     @typing.overload
@@ -15768,6 +20704,28 @@ class PODVector_int_polymorphic:
         """
         Copy this vector into a new amrex Gpu::DeviceVector (the arena allocator on GPU, std on CPU), transferring across memory spaces as needed. Mirrors to_host().
         """
+    def to_dpnp(self, copy=False):
+        """
+        Provide a dpnp view into a PODVector (e.g., RealVector, IntVector).
+
+        Parameters
+        ----------
+        self : amrex.PODVector_*
+            A PODVector class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        dpnp.array
+            A 1D dpnp array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if dpnp is not installed
+
+        """
     def to_host(self) -> PODVector_int_pinned:
         """
         Copy this vector into a new pinned (host) PODVector. Mirrors to_device().
@@ -15791,8 +20749,8 @@ class PODVector_int_polymorphic:
         """
     def to_xp(self, copy=False):
         """
-        Provide a NumPy or CuPy view into a PODVector (e.g., RealVector, IntVector),
-        depending on amr.Config.have_gpu .
+        Provide a NumPy, CuPy or dpnp view into a PODVector (e.g., RealVector,
+        IntVector), depending on amr.Config.have_gpu and amr.Config.gpu_backend .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
         https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
@@ -15807,7 +20765,7 @@ class PODVector_int_polymorphic:
         Returns
         -------
         xp.array
-            A 1D NumPy or CuPy array.
+            A 1D NumPy, CuPy or dpnp array.
 
         """
     @property
@@ -15863,10 +20821,32 @@ class PODVector_uint64_pinned:
 
         """
     @classmethod
+    def from_dpnp(cls, arr):
+        """
+        Create a new PODVector from a dpnp array (or array-like).
+
+        Always copies the data into a newly allocated PODVector.
+        Works for every allocator type: for host-only allocators the
+        data is staged to the host through NumPy automatically.
+
+        Parameters
+        ----------
+        cls : type
+            The PODVector type to construct.
+        arr : array_like
+            Input data, convertible to a dpnp array.
+
+        Returns
+        -------
+        PODVector
+            A new PODVector with a copy of the data.
+
+        """
+    @classmethod
     def from_xp(cls, arr):
         """
-        Create a new PODVector from a NumPy or CuPy array,
-        depending on amr.Config.have_gpu .
+        Create a new PODVector from a NumPy, CuPy or dpnp array,
+        depending on amr.Config.have_gpu and amr.Config.gpu_backend .
 
         Always copies the data into a newly allocated PODVector.
         Unlike :meth:`to_xp`, a zero-copy view is not possible here because
@@ -15880,13 +20860,74 @@ class PODVector_uint64_pinned:
         cls : type
             The PODVector type to construct.
         arr : array_like
-            Input data (NumPy or CuPy array).
+            Input data (NumPy, CuPy or dpnp array).
 
         Returns
         -------
         PODVector
             A new PODVector with a copy of the data.
 
+        """
+    def __dlpack__(
+        self,
+        *,
+        stream: typing.Any = None,
+        max_version: typing.Any = None,
+        dl_device: typing.Any = None,
+        copy: typing.Any = None,
+    ) -> typing_extensions.CapsuleType:
+        """
+        Export the data as a DLPack capsule for zero-copy tensor exchange.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+
+        Parameters
+        ----------
+        stream: int, optional
+            Consumer stream (CUDA/ROCm device data only) the data shall be
+            made ready for, e.g., by an event wait. -1 requests no
+            synchronization. Must be None for host-side data.
+        max_version: tuple of int, optional
+            Highest DLPack version the consumer supports. None or a major
+            version below 1 yields a legacy "dltensor" capsule, otherwise a
+            "dltensor_versioned" capsule (DLPack 1.1) is returned.
+        dl_device: tuple of (DLDeviceType, int), optional
+            Requested device of the returned tensor. Besides the producer
+            device, (kDLCPU, 0) is supported: zero-copy for host-accessible
+            memory, otherwise a device-to-host copy (unless copy=False).
+        copy: bool, optional
+            True always copies (the copy is solely owned by the consumer);
+            False never copies (raises BufferError if a copy is needed);
+            None (default) copies only if required.
+            A producer-made copy is synchronized before hand-off, so the data
+            is ready on any consumer stream. Because the copy cannot be run on
+            a consumer-provided stream, copy=True requires stream=None and
+            raises BufferError for any other stream value.
+
+        Returns
+        -------
+        A PyCapsule wrapping a DLPack managed tensor.
+
+        Raises
+        ------
+        BufferError
+            If an unsupported device transfer or copy is requested.
+
+        Notes
+        -----
+        Capsules that own a copy of device data (copy=True on GPU data or
+        device-to-host transfers) allocate from an AMReX Arena and must be
+        freed (i.e., the consuming array garbage collected) before
+        amrex.finalize().
+
+        Legacy "dltensor" capsules cannot communicate read-only tensors;
+        like __array_interface__, such exports are marked writable.
+        """
+    def __dlpack_device__(self) -> tuple[int, int]:
+        """
+        DLPack device of the data, as a (device_type, device_id) tuple of int.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
         """
     def __getitem__(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> int: ...
     @typing.overload
@@ -15957,6 +20998,28 @@ class PODVector_uint64_pinned:
         """
         Copy this vector into a new amrex Gpu::DeviceVector (the arena allocator on GPU, std on CPU), transferring across memory spaces as needed. Mirrors to_host().
         """
+    def to_dpnp(self, copy=False):
+        """
+        Provide a dpnp view into a PODVector (e.g., RealVector, IntVector).
+
+        Parameters
+        ----------
+        self : amrex.PODVector_*
+            A PODVector class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        dpnp.array
+            A 1D dpnp array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if dpnp is not installed
+
+        """
     def to_host(self) -> PODVector_uint64_pinned:
         """
         Copy this vector into a new pinned (host) PODVector. Mirrors to_device().
@@ -15980,8 +21043,8 @@ class PODVector_uint64_pinned:
         """
     def to_xp(self, copy=False):
         """
-        Provide a NumPy or CuPy view into a PODVector (e.g., RealVector, IntVector),
-        depending on amr.Config.have_gpu .
+        Provide a NumPy, CuPy or dpnp view into a PODVector (e.g., RealVector,
+        IntVector), depending on amr.Config.have_gpu and amr.Config.gpu_backend .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
         https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
@@ -15996,7 +21059,7 @@ class PODVector_uint64_pinned:
         Returns
         -------
         xp.array
-            A 1D NumPy or CuPy array.
+            A 1D NumPy, CuPy or dpnp array.
 
         """
     @property
@@ -16052,10 +21115,32 @@ class PODVector_uint64_arena:
 
         """
     @classmethod
+    def from_dpnp(cls, arr):
+        """
+        Create a new PODVector from a dpnp array (or array-like).
+
+        Always copies the data into a newly allocated PODVector.
+        Works for every allocator type: for host-only allocators the
+        data is staged to the host through NumPy automatically.
+
+        Parameters
+        ----------
+        cls : type
+            The PODVector type to construct.
+        arr : array_like
+            Input data, convertible to a dpnp array.
+
+        Returns
+        -------
+        PODVector
+            A new PODVector with a copy of the data.
+
+        """
+    @classmethod
     def from_xp(cls, arr):
         """
-        Create a new PODVector from a NumPy or CuPy array,
-        depending on amr.Config.have_gpu .
+        Create a new PODVector from a NumPy, CuPy or dpnp array,
+        depending on amr.Config.have_gpu and amr.Config.gpu_backend .
 
         Always copies the data into a newly allocated PODVector.
         Unlike :meth:`to_xp`, a zero-copy view is not possible here because
@@ -16069,13 +21154,74 @@ class PODVector_uint64_arena:
         cls : type
             The PODVector type to construct.
         arr : array_like
-            Input data (NumPy or CuPy array).
+            Input data (NumPy, CuPy or dpnp array).
 
         Returns
         -------
         PODVector
             A new PODVector with a copy of the data.
 
+        """
+    def __dlpack__(
+        self,
+        *,
+        stream: typing.Any = None,
+        max_version: typing.Any = None,
+        dl_device: typing.Any = None,
+        copy: typing.Any = None,
+    ) -> typing_extensions.CapsuleType:
+        """
+        Export the data as a DLPack capsule for zero-copy tensor exchange.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+
+        Parameters
+        ----------
+        stream: int, optional
+            Consumer stream (CUDA/ROCm device data only) the data shall be
+            made ready for, e.g., by an event wait. -1 requests no
+            synchronization. Must be None for host-side data.
+        max_version: tuple of int, optional
+            Highest DLPack version the consumer supports. None or a major
+            version below 1 yields a legacy "dltensor" capsule, otherwise a
+            "dltensor_versioned" capsule (DLPack 1.1) is returned.
+        dl_device: tuple of (DLDeviceType, int), optional
+            Requested device of the returned tensor. Besides the producer
+            device, (kDLCPU, 0) is supported: zero-copy for host-accessible
+            memory, otherwise a device-to-host copy (unless copy=False).
+        copy: bool, optional
+            True always copies (the copy is solely owned by the consumer);
+            False never copies (raises BufferError if a copy is needed);
+            None (default) copies only if required.
+            A producer-made copy is synchronized before hand-off, so the data
+            is ready on any consumer stream. Because the copy cannot be run on
+            a consumer-provided stream, copy=True requires stream=None and
+            raises BufferError for any other stream value.
+
+        Returns
+        -------
+        A PyCapsule wrapping a DLPack managed tensor.
+
+        Raises
+        ------
+        BufferError
+            If an unsupported device transfer or copy is requested.
+
+        Notes
+        -----
+        Capsules that own a copy of device data (copy=True on GPU data or
+        device-to-host transfers) allocate from an AMReX Arena and must be
+        freed (i.e., the consuming array garbage collected) before
+        amrex.finalize().
+
+        Legacy "dltensor" capsules cannot communicate read-only tensors;
+        like __array_interface__, such exports are marked writable.
+        """
+    def __dlpack_device__(self) -> tuple[int, int]:
+        """
+        DLPack device of the data, as a (device_type, device_id) tuple of int.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
         """
     def __getitem__(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> int: ...
     @typing.overload
@@ -16146,6 +21292,28 @@ class PODVector_uint64_arena:
         """
         Copy this vector into a new amrex Gpu::DeviceVector (the arena allocator on GPU, std on CPU), transferring across memory spaces as needed. Mirrors to_host().
         """
+    def to_dpnp(self, copy=False):
+        """
+        Provide a dpnp view into a PODVector (e.g., RealVector, IntVector).
+
+        Parameters
+        ----------
+        self : amrex.PODVector_*
+            A PODVector class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        dpnp.array
+            A 1D dpnp array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if dpnp is not installed
+
+        """
     def to_host(self) -> PODVector_uint64_pinned:
         """
         Copy this vector into a new pinned (host) PODVector. Mirrors to_device().
@@ -16169,8 +21337,8 @@ class PODVector_uint64_arena:
         """
     def to_xp(self, copy=False):
         """
-        Provide a NumPy or CuPy view into a PODVector (e.g., RealVector, IntVector),
-        depending on amr.Config.have_gpu .
+        Provide a NumPy, CuPy or dpnp view into a PODVector (e.g., RealVector,
+        IntVector), depending on amr.Config.have_gpu and amr.Config.gpu_backend .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
         https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
@@ -16185,7 +21353,7 @@ class PODVector_uint64_arena:
         Returns
         -------
         xp.array
-            A 1D NumPy or CuPy array.
+            A 1D NumPy, CuPy or dpnp array.
 
         """
     @property
@@ -16241,10 +21409,32 @@ class PODVector_uint64_std:
 
         """
     @classmethod
+    def from_dpnp(cls, arr):
+        """
+        Create a new PODVector from a dpnp array (or array-like).
+
+        Always copies the data into a newly allocated PODVector.
+        Works for every allocator type: for host-only allocators the
+        data is staged to the host through NumPy automatically.
+
+        Parameters
+        ----------
+        cls : type
+            The PODVector type to construct.
+        arr : array_like
+            Input data, convertible to a dpnp array.
+
+        Returns
+        -------
+        PODVector
+            A new PODVector with a copy of the data.
+
+        """
+    @classmethod
     def from_xp(cls, arr):
         """
-        Create a new PODVector from a NumPy or CuPy array,
-        depending on amr.Config.have_gpu .
+        Create a new PODVector from a NumPy, CuPy or dpnp array,
+        depending on amr.Config.have_gpu and amr.Config.gpu_backend .
 
         Always copies the data into a newly allocated PODVector.
         Unlike :meth:`to_xp`, a zero-copy view is not possible here because
@@ -16258,13 +21448,74 @@ class PODVector_uint64_std:
         cls : type
             The PODVector type to construct.
         arr : array_like
-            Input data (NumPy or CuPy array).
+            Input data (NumPy, CuPy or dpnp array).
 
         Returns
         -------
         PODVector
             A new PODVector with a copy of the data.
 
+        """
+    def __dlpack__(
+        self,
+        *,
+        stream: typing.Any = None,
+        max_version: typing.Any = None,
+        dl_device: typing.Any = None,
+        copy: typing.Any = None,
+    ) -> typing_extensions.CapsuleType:
+        """
+        Export the data as a DLPack capsule for zero-copy tensor exchange.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+
+        Parameters
+        ----------
+        stream: int, optional
+            Consumer stream (CUDA/ROCm device data only) the data shall be
+            made ready for, e.g., by an event wait. -1 requests no
+            synchronization. Must be None for host-side data.
+        max_version: tuple of int, optional
+            Highest DLPack version the consumer supports. None or a major
+            version below 1 yields a legacy "dltensor" capsule, otherwise a
+            "dltensor_versioned" capsule (DLPack 1.1) is returned.
+        dl_device: tuple of (DLDeviceType, int), optional
+            Requested device of the returned tensor. Besides the producer
+            device, (kDLCPU, 0) is supported: zero-copy for host-accessible
+            memory, otherwise a device-to-host copy (unless copy=False).
+        copy: bool, optional
+            True always copies (the copy is solely owned by the consumer);
+            False never copies (raises BufferError if a copy is needed);
+            None (default) copies only if required.
+            A producer-made copy is synchronized before hand-off, so the data
+            is ready on any consumer stream. Because the copy cannot be run on
+            a consumer-provided stream, copy=True requires stream=None and
+            raises BufferError for any other stream value.
+
+        Returns
+        -------
+        A PyCapsule wrapping a DLPack managed tensor.
+
+        Raises
+        ------
+        BufferError
+            If an unsupported device transfer or copy is requested.
+
+        Notes
+        -----
+        Capsules that own a copy of device data (copy=True on GPU data or
+        device-to-host transfers) allocate from an AMReX Arena and must be
+        freed (i.e., the consuming array garbage collected) before
+        amrex.finalize().
+
+        Legacy "dltensor" capsules cannot communicate read-only tensors;
+        like __array_interface__, such exports are marked writable.
+        """
+    def __dlpack_device__(self) -> tuple[int, int]:
+        """
+        DLPack device of the data, as a (device_type, device_id) tuple of int.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
         """
     def __getitem__(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> int: ...
     @typing.overload
@@ -16335,6 +21586,28 @@ class PODVector_uint64_std:
         """
         Copy this vector into a new amrex Gpu::DeviceVector (the arena allocator on GPU, std on CPU), transferring across memory spaces as needed. Mirrors to_host().
         """
+    def to_dpnp(self, copy=False):
+        """
+        Provide a dpnp view into a PODVector (e.g., RealVector, IntVector).
+
+        Parameters
+        ----------
+        self : amrex.PODVector_*
+            A PODVector class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        dpnp.array
+            A 1D dpnp array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if dpnp is not installed
+
+        """
     def to_host(self) -> PODVector_uint64_pinned:
         """
         Copy this vector into a new pinned (host) PODVector. Mirrors to_device().
@@ -16358,8 +21631,8 @@ class PODVector_uint64_std:
         """
     def to_xp(self, copy=False):
         """
-        Provide a NumPy or CuPy view into a PODVector (e.g., RealVector, IntVector),
-        depending on amr.Config.have_gpu .
+        Provide a NumPy, CuPy or dpnp view into a PODVector (e.g., RealVector,
+        IntVector), depending on amr.Config.have_gpu and amr.Config.gpu_backend .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
         https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
@@ -16374,7 +21647,7 @@ class PODVector_uint64_std:
         Returns
         -------
         xp.array
-            A 1D NumPy or CuPy array.
+            A 1D NumPy, CuPy or dpnp array.
 
         """
     @property
@@ -16430,10 +21703,32 @@ class PODVector_uint64_polymorphic:
 
         """
     @classmethod
+    def from_dpnp(cls, arr):
+        """
+        Create a new PODVector from a dpnp array (or array-like).
+
+        Always copies the data into a newly allocated PODVector.
+        Works for every allocator type: for host-only allocators the
+        data is staged to the host through NumPy automatically.
+
+        Parameters
+        ----------
+        cls : type
+            The PODVector type to construct.
+        arr : array_like
+            Input data, convertible to a dpnp array.
+
+        Returns
+        -------
+        PODVector
+            A new PODVector with a copy of the data.
+
+        """
+    @classmethod
     def from_xp(cls, arr):
         """
-        Create a new PODVector from a NumPy or CuPy array,
-        depending on amr.Config.have_gpu .
+        Create a new PODVector from a NumPy, CuPy or dpnp array,
+        depending on amr.Config.have_gpu and amr.Config.gpu_backend .
 
         Always copies the data into a newly allocated PODVector.
         Unlike :meth:`to_xp`, a zero-copy view is not possible here because
@@ -16447,13 +21742,74 @@ class PODVector_uint64_polymorphic:
         cls : type
             The PODVector type to construct.
         arr : array_like
-            Input data (NumPy or CuPy array).
+            Input data (NumPy, CuPy or dpnp array).
 
         Returns
         -------
         PODVector
             A new PODVector with a copy of the data.
 
+        """
+    def __dlpack__(
+        self,
+        *,
+        stream: typing.Any = None,
+        max_version: typing.Any = None,
+        dl_device: typing.Any = None,
+        copy: typing.Any = None,
+    ) -> typing_extensions.CapsuleType:
+        """
+        Export the data as a DLPack capsule for zero-copy tensor exchange.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
+
+        Parameters
+        ----------
+        stream: int, optional
+            Consumer stream (CUDA/ROCm device data only) the data shall be
+            made ready for, e.g., by an event wait. -1 requests no
+            synchronization. Must be None for host-side data.
+        max_version: tuple of int, optional
+            Highest DLPack version the consumer supports. None or a major
+            version below 1 yields a legacy "dltensor" capsule, otherwise a
+            "dltensor_versioned" capsule (DLPack 1.1) is returned.
+        dl_device: tuple of (DLDeviceType, int), optional
+            Requested device of the returned tensor. Besides the producer
+            device, (kDLCPU, 0) is supported: zero-copy for host-accessible
+            memory, otherwise a device-to-host copy (unless copy=False).
+        copy: bool, optional
+            True always copies (the copy is solely owned by the consumer);
+            False never copies (raises BufferError if a copy is needed);
+            None (default) copies only if required.
+            A producer-made copy is synchronized before hand-off, so the data
+            is ready on any consumer stream. Because the copy cannot be run on
+            a consumer-provided stream, copy=True requires stream=None and
+            raises BufferError for any other stream value.
+
+        Returns
+        -------
+        A PyCapsule wrapping a DLPack managed tensor.
+
+        Raises
+        ------
+        BufferError
+            If an unsupported device transfer or copy is requested.
+
+        Notes
+        -----
+        Capsules that own a copy of device data (copy=True on GPU data or
+        device-to-host transfers) allocate from an AMReX Arena and must be
+        freed (i.e., the consuming array garbage collected) before
+        amrex.finalize().
+
+        Legacy "dltensor" capsules cannot communicate read-only tensors;
+        like __array_interface__, such exports are marked writable.
+        """
+    def __dlpack_device__(self) -> tuple[int, int]:
+        """
+        DLPack device of the data, as a (device_type, device_id) tuple of int.
+
+        https://dmlc.github.io/dlpack/latest/python_spec.html
         """
     def __getitem__(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> int: ...
     @typing.overload
@@ -16524,6 +21880,28 @@ class PODVector_uint64_polymorphic:
         """
         Copy this vector into a new amrex Gpu::DeviceVector (the arena allocator on GPU, std on CPU), transferring across memory spaces as needed. Mirrors to_host().
         """
+    def to_dpnp(self, copy=False):
+        """
+        Provide a dpnp view into a PODVector (e.g., RealVector, IntVector).
+
+        Parameters
+        ----------
+        self : amrex.PODVector_*
+            A PODVector class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        dpnp.array
+            A 1D dpnp array.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if dpnp is not installed
+
+        """
     def to_host(self) -> PODVector_uint64_pinned:
         """
         Copy this vector into a new pinned (host) PODVector. Mirrors to_device().
@@ -16547,8 +21925,8 @@ class PODVector_uint64_polymorphic:
         """
     def to_xp(self, copy=False):
         """
-        Provide a NumPy or CuPy view into a PODVector (e.g., RealVector, IntVector),
-        depending on amr.Config.have_gpu .
+        Provide a NumPy, CuPy or dpnp view into a PODVector (e.g., RealVector,
+        IntVector), depending on amr.Config.have_gpu and amr.Config.gpu_backend .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
         https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
@@ -16563,7 +21941,7 @@ class PODVector_uint64_polymorphic:
         Returns
         -------
         xp.array
-            A 1D NumPy or CuPy array.
+            A 1D NumPy, CuPy or dpnp array.
 
         """
     @property
@@ -17148,7 +22526,7 @@ class StructOfArrays_3_0_idcpu_pinned:
         -------
         namedtuple
             A tuple with real and int components that are each dicts
-            of 1D NumPy arrays. The dictionary key order is the same as
+            of 1D CuPy arrays. The dictionary key order is the same as
             in the C++ component order.
             For pure SoA particle layouts, an additional component idcpu
             with global particle indices is populated.
@@ -17157,6 +22535,32 @@ class StructOfArrays_3_0_idcpu_pinned:
         ------
         ImportError
             Raises an exception if cupy is not installed
+
+        """
+    def to_dpnp(self, copy=False):
+        """
+        Provide dpnp views into a StructOfArrays.
+
+        Parameters
+        ----------
+        self : amrex.StructOfArrays_*
+            A StructOfArrays class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        namedtuple
+            A tuple with real and int components that are each dicts
+            of 1D dpnp arrays. The dictionary key order is the same as
+            in the C++ component order.
+            For pure SoA particle layouts, an additional component idcpu
+            with global particle indices is populated.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if dpnp is not installed
 
         """
     def to_numpy(self, copy=False):
@@ -17182,7 +22586,8 @@ class StructOfArrays_3_0_idcpu_pinned:
         """
     def to_xp(self, copy=False):
         """
-        Provide NumPy or CuPy views into a StructOfArrays, depending on amr.Config.have_gpu .
+        Provide NumPy, CuPy or dpnp views into a StructOfArrays, depending on
+        amr.Config.have_gpu and amr.Config.gpu_backend .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
         https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
@@ -17198,8 +22603,8 @@ class StructOfArrays_3_0_idcpu_pinned:
         -------
         namedtuple
             A tuple with real and int components that are each dicts
-            of 1D NumPy or CuPy arrays. The dictionary key order is the same as
-            in the C++ component order.
+            of 1D NumPy, CuPy or dpnp arrays. The dictionary key order is the
+            same as in the C++ component order.
             For pure SoA particle layouts, an additional component idcpu
             with global particle indices is populated.
 
@@ -17318,7 +22723,7 @@ class StructOfArrays_3_0_idcpu_default:
         -------
         namedtuple
             A tuple with real and int components that are each dicts
-            of 1D NumPy arrays. The dictionary key order is the same as
+            of 1D CuPy arrays. The dictionary key order is the same as
             in the C++ component order.
             For pure SoA particle layouts, an additional component idcpu
             with global particle indices is populated.
@@ -17327,6 +22732,32 @@ class StructOfArrays_3_0_idcpu_default:
         ------
         ImportError
             Raises an exception if cupy is not installed
+
+        """
+    def to_dpnp(self, copy=False):
+        """
+        Provide dpnp views into a StructOfArrays.
+
+        Parameters
+        ----------
+        self : amrex.StructOfArrays_*
+            A StructOfArrays class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        namedtuple
+            A tuple with real and int components that are each dicts
+            of 1D dpnp arrays. The dictionary key order is the same as
+            in the C++ component order.
+            For pure SoA particle layouts, an additional component idcpu
+            with global particle indices is populated.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if dpnp is not installed
 
         """
     def to_numpy(self, copy=False):
@@ -17352,7 +22783,8 @@ class StructOfArrays_3_0_idcpu_default:
         """
     def to_xp(self, copy=False):
         """
-        Provide NumPy or CuPy views into a StructOfArrays, depending on amr.Config.have_gpu .
+        Provide NumPy, CuPy or dpnp views into a StructOfArrays, depending on
+        amr.Config.have_gpu and amr.Config.gpu_backend .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
         https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
@@ -17368,8 +22800,8 @@ class StructOfArrays_3_0_idcpu_default:
         -------
         namedtuple
             A tuple with real and int components that are each dicts
-            of 1D NumPy or CuPy arrays. The dictionary key order is the same as
-            in the C++ component order.
+            of 1D NumPy, CuPy or dpnp arrays. The dictionary key order is the
+            same as in the C++ component order.
             For pure SoA particle layouts, an additional component idcpu
             with global particle indices is populated.
 
@@ -17490,7 +22922,7 @@ class StructOfArrays_3_0_idcpu_arena:
         -------
         namedtuple
             A tuple with real and int components that are each dicts
-            of 1D NumPy arrays. The dictionary key order is the same as
+            of 1D CuPy arrays. The dictionary key order is the same as
             in the C++ component order.
             For pure SoA particle layouts, an additional component idcpu
             with global particle indices is populated.
@@ -17499,6 +22931,32 @@ class StructOfArrays_3_0_idcpu_arena:
         ------
         ImportError
             Raises an exception if cupy is not installed
+
+        """
+    def to_dpnp(self, copy=False):
+        """
+        Provide dpnp views into a StructOfArrays.
+
+        Parameters
+        ----------
+        self : amrex.StructOfArrays_*
+            A StructOfArrays class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        namedtuple
+            A tuple with real and int components that are each dicts
+            of 1D dpnp arrays. The dictionary key order is the same as
+            in the C++ component order.
+            For pure SoA particle layouts, an additional component idcpu
+            with global particle indices is populated.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if dpnp is not installed
 
         """
     def to_numpy(self, copy=False):
@@ -17524,7 +22982,8 @@ class StructOfArrays_3_0_idcpu_arena:
         """
     def to_xp(self, copy=False):
         """
-        Provide NumPy or CuPy views into a StructOfArrays, depending on amr.Config.have_gpu .
+        Provide NumPy, CuPy or dpnp views into a StructOfArrays, depending on
+        amr.Config.have_gpu and amr.Config.gpu_backend .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
         https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
@@ -17540,8 +22999,8 @@ class StructOfArrays_3_0_idcpu_arena:
         -------
         namedtuple
             A tuple with real and int components that are each dicts
-            of 1D NumPy or CuPy arrays. The dictionary key order is the same as
-            in the C++ component order.
+            of 1D NumPy, CuPy or dpnp arrays. The dictionary key order is the
+            same as in the C++ component order.
             For pure SoA particle layouts, an additional component idcpu
             with global particle indices is populated.
 
@@ -17662,7 +23121,7 @@ class StructOfArrays_3_0_idcpu_polymorphic:
         -------
         namedtuple
             A tuple with real and int components that are each dicts
-            of 1D NumPy arrays. The dictionary key order is the same as
+            of 1D CuPy arrays. The dictionary key order is the same as
             in the C++ component order.
             For pure SoA particle layouts, an additional component idcpu
             with global particle indices is populated.
@@ -17671,6 +23130,32 @@ class StructOfArrays_3_0_idcpu_polymorphic:
         ------
         ImportError
             Raises an exception if cupy is not installed
+
+        """
+    def to_dpnp(self, copy=False):
+        """
+        Provide dpnp views into a StructOfArrays.
+
+        Parameters
+        ----------
+        self : amrex.StructOfArrays_*
+            A StructOfArrays class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        namedtuple
+            A tuple with real and int components that are each dicts
+            of 1D dpnp arrays. The dictionary key order is the same as
+            in the C++ component order.
+            For pure SoA particle layouts, an additional component idcpu
+            with global particle indices is populated.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if dpnp is not installed
 
         """
     def to_numpy(self, copy=False):
@@ -17696,7 +23181,8 @@ class StructOfArrays_3_0_idcpu_polymorphic:
         """
     def to_xp(self, copy=False):
         """
-        Provide NumPy or CuPy views into a StructOfArrays, depending on amr.Config.have_gpu .
+        Provide NumPy, CuPy or dpnp views into a StructOfArrays, depending on
+        amr.Config.have_gpu and amr.Config.gpu_backend .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
         https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
@@ -17712,8 +23198,8 @@ class StructOfArrays_3_0_idcpu_polymorphic:
         -------
         namedtuple
             A tuple with real and int components that are each dicts
-            of 1D NumPy or CuPy arrays. The dictionary key order is the same as
-            in the C++ component order.
+            of 1D NumPy, CuPy or dpnp arrays. The dictionary key order is the
+            same as in the C++ component order.
             For pure SoA particle layouts, an additional component idcpu
             with global particle indices is populated.
 
@@ -20877,7 +26363,7 @@ class StructOfArrays_3_1_pinned:
         -------
         namedtuple
             A tuple with real and int components that are each dicts
-            of 1D NumPy arrays. The dictionary key order is the same as
+            of 1D CuPy arrays. The dictionary key order is the same as
             in the C++ component order.
             For pure SoA particle layouts, an additional component idcpu
             with global particle indices is populated.
@@ -20886,6 +26372,32 @@ class StructOfArrays_3_1_pinned:
         ------
         ImportError
             Raises an exception if cupy is not installed
+
+        """
+    def to_dpnp(self, copy=False):
+        """
+        Provide dpnp views into a StructOfArrays.
+
+        Parameters
+        ----------
+        self : amrex.StructOfArrays_*
+            A StructOfArrays class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        namedtuple
+            A tuple with real and int components that are each dicts
+            of 1D dpnp arrays. The dictionary key order is the same as
+            in the C++ component order.
+            For pure SoA particle layouts, an additional component idcpu
+            with global particle indices is populated.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if dpnp is not installed
 
         """
     def to_numpy(self, copy=False):
@@ -20911,7 +26423,8 @@ class StructOfArrays_3_1_pinned:
         """
     def to_xp(self, copy=False):
         """
-        Provide NumPy or CuPy views into a StructOfArrays, depending on amr.Config.have_gpu .
+        Provide NumPy, CuPy or dpnp views into a StructOfArrays, depending on
+        amr.Config.have_gpu and amr.Config.gpu_backend .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
         https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
@@ -20927,8 +26440,8 @@ class StructOfArrays_3_1_pinned:
         -------
         namedtuple
             A tuple with real and int components that are each dicts
-            of 1D NumPy or CuPy arrays. The dictionary key order is the same as
-            in the C++ component order.
+            of 1D NumPy, CuPy or dpnp arrays. The dictionary key order is the
+            same as in the C++ component order.
             For pure SoA particle layouts, an additional component idcpu
             with global particle indices is populated.
 
@@ -21043,7 +26556,7 @@ class StructOfArrays_3_1_default:
         -------
         namedtuple
             A tuple with real and int components that are each dicts
-            of 1D NumPy arrays. The dictionary key order is the same as
+            of 1D CuPy arrays. The dictionary key order is the same as
             in the C++ component order.
             For pure SoA particle layouts, an additional component idcpu
             with global particle indices is populated.
@@ -21052,6 +26565,32 @@ class StructOfArrays_3_1_default:
         ------
         ImportError
             Raises an exception if cupy is not installed
+
+        """
+    def to_dpnp(self, copy=False):
+        """
+        Provide dpnp views into a StructOfArrays.
+
+        Parameters
+        ----------
+        self : amrex.StructOfArrays_*
+            A StructOfArrays class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        namedtuple
+            A tuple with real and int components that are each dicts
+            of 1D dpnp arrays. The dictionary key order is the same as
+            in the C++ component order.
+            For pure SoA particle layouts, an additional component idcpu
+            with global particle indices is populated.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if dpnp is not installed
 
         """
     def to_numpy(self, copy=False):
@@ -21077,7 +26616,8 @@ class StructOfArrays_3_1_default:
         """
     def to_xp(self, copy=False):
         """
-        Provide NumPy or CuPy views into a StructOfArrays, depending on amr.Config.have_gpu .
+        Provide NumPy, CuPy or dpnp views into a StructOfArrays, depending on
+        amr.Config.have_gpu and amr.Config.gpu_backend .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
         https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
@@ -21093,8 +26633,8 @@ class StructOfArrays_3_1_default:
         -------
         namedtuple
             A tuple with real and int components that are each dicts
-            of 1D NumPy or CuPy arrays. The dictionary key order is the same as
-            in the C++ component order.
+            of 1D NumPy, CuPy or dpnp arrays. The dictionary key order is the
+            same as in the C++ component order.
             For pure SoA particle layouts, an additional component idcpu
             with global particle indices is populated.
 
@@ -21211,7 +26751,7 @@ class StructOfArrays_3_1_arena:
         -------
         namedtuple
             A tuple with real and int components that are each dicts
-            of 1D NumPy arrays. The dictionary key order is the same as
+            of 1D CuPy arrays. The dictionary key order is the same as
             in the C++ component order.
             For pure SoA particle layouts, an additional component idcpu
             with global particle indices is populated.
@@ -21220,6 +26760,32 @@ class StructOfArrays_3_1_arena:
         ------
         ImportError
             Raises an exception if cupy is not installed
+
+        """
+    def to_dpnp(self, copy=False):
+        """
+        Provide dpnp views into a StructOfArrays.
+
+        Parameters
+        ----------
+        self : amrex.StructOfArrays_*
+            A StructOfArrays class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        namedtuple
+            A tuple with real and int components that are each dicts
+            of 1D dpnp arrays. The dictionary key order is the same as
+            in the C++ component order.
+            For pure SoA particle layouts, an additional component idcpu
+            with global particle indices is populated.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if dpnp is not installed
 
         """
     def to_numpy(self, copy=False):
@@ -21245,7 +26811,8 @@ class StructOfArrays_3_1_arena:
         """
     def to_xp(self, copy=False):
         """
-        Provide NumPy or CuPy views into a StructOfArrays, depending on amr.Config.have_gpu .
+        Provide NumPy, CuPy or dpnp views into a StructOfArrays, depending on
+        amr.Config.have_gpu and amr.Config.gpu_backend .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
         https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
@@ -21261,8 +26828,8 @@ class StructOfArrays_3_1_arena:
         -------
         namedtuple
             A tuple with real and int components that are each dicts
-            of 1D NumPy or CuPy arrays. The dictionary key order is the same as
-            in the C++ component order.
+            of 1D NumPy, CuPy or dpnp arrays. The dictionary key order is the
+            same as in the C++ component order.
             For pure SoA particle layouts, an additional component idcpu
             with global particle indices is populated.
 
@@ -21379,7 +26946,7 @@ class StructOfArrays_3_1_polymorphic:
         -------
         namedtuple
             A tuple with real and int components that are each dicts
-            of 1D NumPy arrays. The dictionary key order is the same as
+            of 1D CuPy arrays. The dictionary key order is the same as
             in the C++ component order.
             For pure SoA particle layouts, an additional component idcpu
             with global particle indices is populated.
@@ -21388,6 +26955,32 @@ class StructOfArrays_3_1_polymorphic:
         ------
         ImportError
             Raises an exception if cupy is not installed
+
+        """
+    def to_dpnp(self, copy=False):
+        """
+        Provide dpnp views into a StructOfArrays.
+
+        Parameters
+        ----------
+        self : amrex.StructOfArrays_*
+            A StructOfArrays class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        namedtuple
+            A tuple with real and int components that are each dicts
+            of 1D dpnp arrays. The dictionary key order is the same as
+            in the C++ component order.
+            For pure SoA particle layouts, an additional component idcpu
+            with global particle indices is populated.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if dpnp is not installed
 
         """
     def to_numpy(self, copy=False):
@@ -21413,7 +27006,8 @@ class StructOfArrays_3_1_polymorphic:
         """
     def to_xp(self, copy=False):
         """
-        Provide NumPy or CuPy views into a StructOfArrays, depending on amr.Config.have_gpu .
+        Provide NumPy, CuPy or dpnp views into a StructOfArrays, depending on
+        amr.Config.have_gpu and amr.Config.gpu_backend .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
         https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
@@ -21429,8 +27023,8 @@ class StructOfArrays_3_1_polymorphic:
         -------
         namedtuple
             A tuple with real and int components that are each dicts
-            of 1D NumPy or CuPy arrays. The dictionary key order is the same as
-            in the C++ component order.
+            of 1D NumPy, CuPy or dpnp arrays. The dictionary key order is the
+            same as in the C++ component order.
             For pure SoA particle layouts, an additional component idcpu
             with global particle indices is populated.
 
@@ -24595,7 +30189,7 @@ class StructOfArrays_0_0_pinned:
         -------
         namedtuple
             A tuple with real and int components that are each dicts
-            of 1D NumPy arrays. The dictionary key order is the same as
+            of 1D CuPy arrays. The dictionary key order is the same as
             in the C++ component order.
             For pure SoA particle layouts, an additional component idcpu
             with global particle indices is populated.
@@ -24604,6 +30198,32 @@ class StructOfArrays_0_0_pinned:
         ------
         ImportError
             Raises an exception if cupy is not installed
+
+        """
+    def to_dpnp(self, copy=False):
+        """
+        Provide dpnp views into a StructOfArrays.
+
+        Parameters
+        ----------
+        self : amrex.StructOfArrays_*
+            A StructOfArrays class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        namedtuple
+            A tuple with real and int components that are each dicts
+            of 1D dpnp arrays. The dictionary key order is the same as
+            in the C++ component order.
+            For pure SoA particle layouts, an additional component idcpu
+            with global particle indices is populated.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if dpnp is not installed
 
         """
     def to_numpy(self, copy=False):
@@ -24629,7 +30249,8 @@ class StructOfArrays_0_0_pinned:
         """
     def to_xp(self, copy=False):
         """
-        Provide NumPy or CuPy views into a StructOfArrays, depending on amr.Config.have_gpu .
+        Provide NumPy, CuPy or dpnp views into a StructOfArrays, depending on
+        amr.Config.have_gpu and amr.Config.gpu_backend .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
         https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
@@ -24645,8 +30266,8 @@ class StructOfArrays_0_0_pinned:
         -------
         namedtuple
             A tuple with real and int components that are each dicts
-            of 1D NumPy or CuPy arrays. The dictionary key order is the same as
-            in the C++ component order.
+            of 1D NumPy, CuPy or dpnp arrays. The dictionary key order is the
+            same as in the C++ component order.
             For pure SoA particle layouts, an additional component idcpu
             with global particle indices is populated.
 
@@ -24761,7 +30382,7 @@ class StructOfArrays_0_0_default:
         -------
         namedtuple
             A tuple with real and int components that are each dicts
-            of 1D NumPy arrays. The dictionary key order is the same as
+            of 1D CuPy arrays. The dictionary key order is the same as
             in the C++ component order.
             For pure SoA particle layouts, an additional component idcpu
             with global particle indices is populated.
@@ -24770,6 +30391,32 @@ class StructOfArrays_0_0_default:
         ------
         ImportError
             Raises an exception if cupy is not installed
+
+        """
+    def to_dpnp(self, copy=False):
+        """
+        Provide dpnp views into a StructOfArrays.
+
+        Parameters
+        ----------
+        self : amrex.StructOfArrays_*
+            A StructOfArrays class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        namedtuple
+            A tuple with real and int components that are each dicts
+            of 1D dpnp arrays. The dictionary key order is the same as
+            in the C++ component order.
+            For pure SoA particle layouts, an additional component idcpu
+            with global particle indices is populated.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if dpnp is not installed
 
         """
     def to_numpy(self, copy=False):
@@ -24795,7 +30442,8 @@ class StructOfArrays_0_0_default:
         """
     def to_xp(self, copy=False):
         """
-        Provide NumPy or CuPy views into a StructOfArrays, depending on amr.Config.have_gpu .
+        Provide NumPy, CuPy or dpnp views into a StructOfArrays, depending on
+        amr.Config.have_gpu and amr.Config.gpu_backend .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
         https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
@@ -24811,8 +30459,8 @@ class StructOfArrays_0_0_default:
         -------
         namedtuple
             A tuple with real and int components that are each dicts
-            of 1D NumPy or CuPy arrays. The dictionary key order is the same as
-            in the C++ component order.
+            of 1D NumPy, CuPy or dpnp arrays. The dictionary key order is the
+            same as in the C++ component order.
             For pure SoA particle layouts, an additional component idcpu
             with global particle indices is populated.
 
@@ -24929,7 +30577,7 @@ class StructOfArrays_0_0_arena:
         -------
         namedtuple
             A tuple with real and int components that are each dicts
-            of 1D NumPy arrays. The dictionary key order is the same as
+            of 1D CuPy arrays. The dictionary key order is the same as
             in the C++ component order.
             For pure SoA particle layouts, an additional component idcpu
             with global particle indices is populated.
@@ -24938,6 +30586,32 @@ class StructOfArrays_0_0_arena:
         ------
         ImportError
             Raises an exception if cupy is not installed
+
+        """
+    def to_dpnp(self, copy=False):
+        """
+        Provide dpnp views into a StructOfArrays.
+
+        Parameters
+        ----------
+        self : amrex.StructOfArrays_*
+            A StructOfArrays class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        namedtuple
+            A tuple with real and int components that are each dicts
+            of 1D dpnp arrays. The dictionary key order is the same as
+            in the C++ component order.
+            For pure SoA particle layouts, an additional component idcpu
+            with global particle indices is populated.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if dpnp is not installed
 
         """
     def to_numpy(self, copy=False):
@@ -24963,7 +30637,8 @@ class StructOfArrays_0_0_arena:
         """
     def to_xp(self, copy=False):
         """
-        Provide NumPy or CuPy views into a StructOfArrays, depending on amr.Config.have_gpu .
+        Provide NumPy, CuPy or dpnp views into a StructOfArrays, depending on
+        amr.Config.have_gpu and amr.Config.gpu_backend .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
         https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
@@ -24979,8 +30654,8 @@ class StructOfArrays_0_0_arena:
         -------
         namedtuple
             A tuple with real and int components that are each dicts
-            of 1D NumPy or CuPy arrays. The dictionary key order is the same as
-            in the C++ component order.
+            of 1D NumPy, CuPy or dpnp arrays. The dictionary key order is the
+            same as in the C++ component order.
             For pure SoA particle layouts, an additional component idcpu
             with global particle indices is populated.
 
@@ -25097,7 +30772,7 @@ class StructOfArrays_0_0_polymorphic:
         -------
         namedtuple
             A tuple with real and int components that are each dicts
-            of 1D NumPy arrays. The dictionary key order is the same as
+            of 1D CuPy arrays. The dictionary key order is the same as
             in the C++ component order.
             For pure SoA particle layouts, an additional component idcpu
             with global particle indices is populated.
@@ -25106,6 +30781,32 @@ class StructOfArrays_0_0_polymorphic:
         ------
         ImportError
             Raises an exception if cupy is not installed
+
+        """
+    def to_dpnp(self, copy=False):
+        """
+        Provide dpnp views into a StructOfArrays.
+
+        Parameters
+        ----------
+        self : amrex.StructOfArrays_*
+            A StructOfArrays class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        namedtuple
+            A tuple with real and int components that are each dicts
+            of 1D dpnp arrays. The dictionary key order is the same as
+            in the C++ component order.
+            For pure SoA particle layouts, an additional component idcpu
+            with global particle indices is populated.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if dpnp is not installed
 
         """
     def to_numpy(self, copy=False):
@@ -25131,7 +30832,8 @@ class StructOfArrays_0_0_polymorphic:
         """
     def to_xp(self, copy=False):
         """
-        Provide NumPy or CuPy views into a StructOfArrays, depending on amr.Config.have_gpu .
+        Provide NumPy, CuPy or dpnp views into a StructOfArrays, depending on
+        amr.Config.have_gpu and amr.Config.gpu_backend .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
         https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
@@ -25147,8 +30849,8 @@ class StructOfArrays_0_0_polymorphic:
         -------
         namedtuple
             A tuple with real and int components that are each dicts
-            of 1D NumPy or CuPy arrays. The dictionary key order is the same as
-            in the C++ component order.
+            of 1D NumPy, CuPy or dpnp arrays. The dictionary key order is the
+            same as in the C++ component order.
             For pure SoA particle layouts, an additional component idcpu
             with global particle indices is populated.
 
@@ -27929,7 +33631,7 @@ class StructOfArrays_11_0_idcpu_polymorphic:
         -------
         namedtuple
             A tuple with real and int components that are each dicts
-            of 1D NumPy arrays. The dictionary key order is the same as
+            of 1D CuPy arrays. The dictionary key order is the same as
             in the C++ component order.
             For pure SoA particle layouts, an additional component idcpu
             with global particle indices is populated.
@@ -27938,6 +33640,32 @@ class StructOfArrays_11_0_idcpu_polymorphic:
         ------
         ImportError
             Raises an exception if cupy is not installed
+
+        """
+    def to_dpnp(self, copy=False):
+        """
+        Provide dpnp views into a StructOfArrays.
+
+        Parameters
+        ----------
+        self : amrex.StructOfArrays_*
+            A StructOfArrays class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        namedtuple
+            A tuple with real and int components that are each dicts
+            of 1D dpnp arrays. The dictionary key order is the same as
+            in the C++ component order.
+            For pure SoA particle layouts, an additional component idcpu
+            with global particle indices is populated.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if dpnp is not installed
 
         """
     def to_numpy(self, copy=False):
@@ -27963,7 +33691,8 @@ class StructOfArrays_11_0_idcpu_polymorphic:
         """
     def to_xp(self, copy=False):
         """
-        Provide NumPy or CuPy views into a StructOfArrays, depending on amr.Config.have_gpu .
+        Provide NumPy, CuPy or dpnp views into a StructOfArrays, depending on
+        amr.Config.have_gpu and amr.Config.gpu_backend .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
         https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
@@ -27979,8 +33708,8 @@ class StructOfArrays_11_0_idcpu_polymorphic:
         -------
         namedtuple
             A tuple with real and int components that are each dicts
-            of 1D NumPy or CuPy arrays. The dictionary key order is the same as
-            in the C++ component order.
+            of 1D NumPy, CuPy or dpnp arrays. The dictionary key order is the
+            same as in the C++ component order.
             For pure SoA particle layouts, an additional component idcpu
             with global particle indices is populated.
 
@@ -28853,7 +34582,7 @@ class StructOfArrays_7_0_idcpu_polymorphic:
         -------
         namedtuple
             A tuple with real and int components that are each dicts
-            of 1D NumPy arrays. The dictionary key order is the same as
+            of 1D CuPy arrays. The dictionary key order is the same as
             in the C++ component order.
             For pure SoA particle layouts, an additional component idcpu
             with global particle indices is populated.
@@ -28862,6 +34591,32 @@ class StructOfArrays_7_0_idcpu_polymorphic:
         ------
         ImportError
             Raises an exception if cupy is not installed
+
+        """
+    def to_dpnp(self, copy=False):
+        """
+        Provide dpnp views into a StructOfArrays.
+
+        Parameters
+        ----------
+        self : amrex.StructOfArrays_*
+            A StructOfArrays class in pyAMReX
+        copy : bool, optional
+            Copy the data if true, otherwise create a view (default).
+
+        Returns
+        -------
+        namedtuple
+            A tuple with real and int components that are each dicts
+            of 1D dpnp arrays. The dictionary key order is the same as
+            in the C++ component order.
+            For pure SoA particle layouts, an additional component idcpu
+            with global particle indices is populated.
+
+        Raises
+        ------
+        ImportError
+            Raises an exception if dpnp is not installed
 
         """
     def to_numpy(self, copy=False):
@@ -28887,7 +34642,8 @@ class StructOfArrays_7_0_idcpu_polymorphic:
         """
     def to_xp(self, copy=False):
         """
-        Provide NumPy or CuPy views into a StructOfArrays, depending on amr.Config.have_gpu .
+        Provide NumPy, CuPy or dpnp views into a StructOfArrays, depending on
+        amr.Config.have_gpu and amr.Config.gpu_backend .
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
         https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
@@ -28903,8 +34659,8 @@ class StructOfArrays_7_0_idcpu_polymorphic:
         -------
         namedtuple
             A tuple with real and int components that are each dicts
-            of 1D NumPy or CuPy arrays. The dictionary key order is the same as
-            in the C++ component order.
+            of 1D NumPy, CuPy or dpnp arrays. The dictionary key order is the
+            same as in the C++ component order.
             For pure SoA particle layouts, an additional component idcpu
             with global particle indices is populated.
 
@@ -30322,6 +36078,21 @@ __license__: str = "BSD-3-Clause-LBNL"
 __version__: str = "26.08"
 basic: EBSupport
 full: EBSupport
+kDLCPU: DLDeviceType
+kDLCUDA: DLDeviceType
+kDLCUDAHost: DLDeviceType
+kDLCUDAManaged: DLDeviceType
+kDLExtDev: DLDeviceType
+kDLHexagon: DLDeviceType
+kDLMAIA: DLDeviceType
+kDLMetal: DLDeviceType
+kDLOneAPI: DLDeviceType
+kDLOpenCL: DLDeviceType
+kDLROCM: DLDeviceType
+kDLROCMHost: DLDeviceType
+kDLVPI: DLDeviceType
+kDLVulkan: DLDeviceType
+kDLWebGPU: DLDeviceType
 volume: EBSupport
 IntVect = IntVect3D
 DeviceVector_real = PODVector_real_std

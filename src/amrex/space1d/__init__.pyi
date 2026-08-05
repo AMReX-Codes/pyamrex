@@ -118,6 +118,7 @@ from amrex.space1d.amrex_1d_pybind import (
     Dim3,
     Direction,
     DistributionMapping,
+    DLDeviceType,
     FabArray_FArrayBox,
     FabArray_IArrayBox,
     FabArrayBase,
@@ -445,6 +446,7 @@ __all__: list[str] = [
     "Config",
     "CoordSys",
     "CpuBndryFuncFab",
+    "DLDeviceType",
     "DeviceVector_int",
     "DeviceVector_real",
     "DeviceVector_uint64",
@@ -696,6 +698,21 @@ __all__: list[str] = [
     "initialize_when_MPMD",
     "initialized",
     "is_valid",
+    "kDLCPU",
+    "kDLCUDA",
+    "kDLCUDAHost",
+    "kDLCUDAManaged",
+    "kDLExtDev",
+    "kDLHexagon",
+    "kDLMAIA",
+    "kDLMetal",
+    "kDLOneAPI",
+    "kDLOpenCL",
+    "kDLROCM",
+    "kDLROCMHost",
+    "kDLVPI",
+    "kDLVulkan",
+    "kDLWebGPU",
     "lbound",
     "length",
     "list_particle_species",
@@ -749,3 +766,18 @@ Poisson: amrex_1d_pybind.GrowthStrategy
 __author__: str = "Axel Huebl, Ryan T. Sandberg, Shreyas Ananthan, David P. Grote, Revathi Jambunathan, Edoardo Zoni, Remi Lehe, Andrew Myers, Weiqun Zhang"
 __license__: str = "BSD-3-Clause-LBNL"
 __version__: str = "26.08"
+kDLCPU: amrex_1d_pybind.DLDeviceType
+kDLCUDA: amrex_1d_pybind.DLDeviceType
+kDLCUDAHost: amrex_1d_pybind.DLDeviceType
+kDLCUDAManaged: amrex_1d_pybind.DLDeviceType
+kDLExtDev: amrex_1d_pybind.DLDeviceType
+kDLHexagon: amrex_1d_pybind.DLDeviceType
+kDLMAIA: amrex_1d_pybind.DLDeviceType
+kDLMetal: amrex_1d_pybind.DLDeviceType
+kDLOneAPI: amrex_1d_pybind.DLDeviceType
+kDLOpenCL: amrex_1d_pybind.DLDeviceType
+kDLROCM: amrex_1d_pybind.DLDeviceType
+kDLROCMHost: amrex_1d_pybind.DLDeviceType
+kDLVPI: amrex_1d_pybind.DLDeviceType
+kDLVulkan: amrex_1d_pybind.DLDeviceType
+kDLWebGPU: amrex_1d_pybind.DLDeviceType
