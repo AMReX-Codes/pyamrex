@@ -8,14 +8,18 @@
 #include <AMReX_Arena.H>
 #include <AMReX_Gpu.H>
 
+#include <atomic>
 #include <cstring>
 #include <memory>
 #include <optional>
+#include <stdexcept>
 
 
 namespace
 {
     using namespace pyAMReX::dlpack;
+
+    std::atomic<std::size_t> num_outstanding_exports{0};
 
     /** Owns everything the exported tensor refers to.
      *
@@ -24,6 +28,19 @@ namespace
      */
     struct TensorHolder
     {
+        TensorHolder () noexcept
+        {
+            num_outstanding_exports.fetch_add(1, std::memory_order_relaxed);
+        }
+
+        ~TensorHolder ()
+        {
+            num_outstanding_exports.fetch_sub(1, std::memory_order_relaxed);
+        }
+
+        TensorHolder (TensorHolder const&) = delete;
+        TensorHolder& operator= (TensorHolder const&) = delete;
+
         //! owned reference keeping the producing Python object alive
         PyObject* producer = nullptr;
         std::vector<std::int64_t> shape;
@@ -34,6 +51,21 @@ namespace
         DLManagedTensorVersioned versioned{};
         DLManagedTensor legacy{};
     };
+
+#if defined(AMREX_USE_SYCL)
+    //! Root-device ordinal used by dpctl's process-global numeric selector.
+    std::int32_t oneapi_device_id (sycl::device const& device)
+    {
+        auto const devices = sycl::device::get_devices();
+        for (std::size_t i = 0; i < devices.size(); ++i) {
+            if (devices[i] == device) {
+                return static_cast<std::int32_t>(i);
+            }
+        }
+        throw std::runtime_error(
+            "DLPack: the selected SYCL device is not a visible root device");
+    }
+#endif
 
     void destroy_holder (TensorHolder* holder)
     {
@@ -384,6 +416,11 @@ namespace
 
 namespace pyAMReX::dlpack
 {
+    std::size_t outstanding_exports () noexcept
+    {
+        return num_outstanding_exports.load(std::memory_order_relaxed);
+    }
+
     DLDevice detect_device_from_pointer ([[maybe_unused]] void const* ptr,
                                          bool* host_accessible)
     {
@@ -442,17 +479,10 @@ namespace pyAMReX::dlpack
                 usm_type == sycl::usm::alloc::shared)
             {
                 device.device_type = kDLOneAPI;
-                device.device_id = 0;
                 // device USM is device-only; shared USM is host-accessible
                 host_ok = (usm_type == sycl::usm::alloc::shared);
                 auto const dev = sycl::get_pointer_device(ptr, context);
-                auto const devices = context.get_devices();
-                for (std::size_t i = 0; i < devices.size(); ++i) {
-                    if (devices[i] == dev) {
-                        device.device_id = static_cast<std::int32_t>(i);
-                        break;
-                    }
-                }
+                device.device_id = oneapi_device_id(dev);
             }
             // sycl::usm::alloc::host (pinned): host-accessible everywhere,
             // keep kDLCPU so host consumers (NumPy et al.) can view it
@@ -489,11 +519,12 @@ namespace pyAMReX::dlpack
 #elif defined(AMREX_USE_SYCL)
         // shared (managed) and device USM are kDLOneAPI; host USM is re-badged
         // to kDLCPU (as in detect_device_from_pointer) so host consumers work.
-        // device_id is the context-relative index: AMReX builds the SYCL
-        // context with only the selected device, so it is 0 (matching the
-        // pointer path), not the global Gpu::Device::deviceId()
-        if (arena->isManaged()) { return DLDevice{kDLOneAPI, 0}; }
-        if (arena->isDevice())  { return DLDevice{kDLOneAPI, 0}; }
+        // Use the process-global root-device ordinal expected by oneAPI
+        // DLPack consumers, not AMReX's platform-relative device id.
+        if (arena->isManaged() || arena->isDevice()) {
+            auto const device_id = oneapi_device_id(amrex::Gpu::Device::syclDevice());
+            return DLDevice{kDLOneAPI, device_id};
+        }
 #endif
         return DLDevice{kDLCPU, 0};
     }

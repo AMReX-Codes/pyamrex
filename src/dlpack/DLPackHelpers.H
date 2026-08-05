@@ -17,6 +17,7 @@
 #include "dlpack.h"
 
 #include <complex>
+#include <cstddef>
 #include <cstdint>
 #include <functional>
 #include <tuple>
@@ -58,6 +59,14 @@ namespace pyAMReX
 
 namespace pyAMReX::dlpack
 {
+    /** Number of DLPack exports whose managed tensor is still alive.
+     *
+     * An outstanding consumer can keep an AMReX object or arena allocation
+     * alive past amrex::Finalize(), so the Python finalization bindings use
+     * this count to reject unsafe teardown.
+     */
+    std::size_t outstanding_exports () noexcept;
+
     /** Does the element type T have a DLPack representation?
      *
      * Containers instantiated for element types without a DLPack

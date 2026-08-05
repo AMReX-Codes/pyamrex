@@ -1,9 +1,11 @@
 #include "pyAMReX.H"
+#include "dlpack/DLPackHelpers.H"
 
 #include <AMReX.H>
 #include <AMReX_Vector.H>
 #include <AMReX_ParmParse.H>
 
+#include <stdexcept>
 #include <string>
 
 
@@ -61,14 +63,26 @@ void init_AMReX(py::module& m)
         collect();
     };
 
+    constexpr auto prepare_finalize = [run_gc]() {
+        run_gc();
+        auto const exports = pyAMReX::dlpack::outstanding_exports();
+        if (exports != 0) {
+            throw std::runtime_error(
+                "amrex.finalize(): cannot finalize while " +
+                std::to_string(exports) +
+                " DLPack export(s) are still alive; delete all consuming "
+                "arrays and capsules, then retry");
+        }
+    };
+
     m.def("finalize",
-          [run_gc]() {
-              run_gc();
+          [prepare_finalize]() {
+              prepare_finalize();
               amrex::Finalize();
           });
     m.def("finalize",
-          [run_gc](AMReX* pamrex) {
-              run_gc();
+          [prepare_finalize](AMReX* pamrex) {
+              prepare_finalize();
               amrex::Finalize(pamrex);
           });
 }
