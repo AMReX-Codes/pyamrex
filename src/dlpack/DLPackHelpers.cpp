@@ -97,6 +97,7 @@ namespace
         return true;
     }
 
+#if defined(AMREX_USE_CUDA) || defined(AMREX_USE_HIP) || defined(AMREX_USE_SYCL)
     //! can the host access this memory in place?
     bool is_host_accessible (DLDeviceType device_type)
     {
@@ -105,6 +106,7 @@ namespace
                device_type == kDLROCMHost ||
                device_type == kDLCUDAManaged;
     }
+#endif
 
     bool want_versioned_capsule (py::object const& max_version)
     {
