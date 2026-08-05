@@ -73,7 +73,13 @@ def dlpack_to_cupy(self, copy=False):
         # host-to-device copy via NumPy
         import numpy as np
 
-        return cp.asarray(np.from_dlpack(self))
+        # cp.asarray does an asynchronous host-to-device copy; keep the host
+        # view (and thus the producer) alive and synchronize before returning
+        # so the copy finishes reading the source before it can be modified
+        host_view = np.from_dlpack(self)
+        arr = cp.asarray(host_view)
+        cp.cuda.get_current_stream().synchronize()
+        return arr
     # device data: zero-copy import, then a consumer-side copy if requested.
     # We do not pass copy= to cp.from_dlpack: CuPy >= 14 forwards its current
     # stream to __dlpack__, which the exporter rejects together with copy=True
@@ -102,7 +108,13 @@ def dlpack_to_dpnp(self, copy=False):
         # host-accessible memory: stage a host-to-device copy via NumPy
         import numpy as np
 
-        return dp.asarray(np.from_dlpack(self))
+        # dp.asarray does an asynchronous host-to-device copy; keep the host
+        # view (and thus the producer) alive and synchronize before returning
+        # so the copy finishes reading the source before it can be modified
+        host_view = np.from_dlpack(self)
+        arr = dp.asarray(host_view)
+        arr.sycl_queue.wait()
+        return arr
     # device data: zero-copy import, then a consumer-side copy if requested.
     # We do not pass copy= to dpnp.from_dlpack (a producer-made copy requires
     # stream=None, and importing one crashes dpnp 0.20/dpctl 0.22).

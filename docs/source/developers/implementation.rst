@@ -20,5 +20,5 @@ pyAMReX implements the following `standardized data APIs <https://data-apis.org>
 
 These APIs are automatically used when creating "views" (non-copy) numpy arrays, cupy arrays, dpnp arrays, PyTorch tensors, etc. from AMReX objects such as ``Array4`` and particle arrays.
 
-DLPack is implemented once in ``src/dlpack/DLPack.H`` (kwarg protocol, capsule creation, producer keep-alive, copy & stream synchronization) and bound per container class (``Array4``, ``BaseFab``, ``PODVector``, ``Vector``, ``SmallMatrix``) with a small adapter describing the exported tensor.
+DLPack is implemented once in ``src/dlpack/DLPackHelpers.H`` (kwarg protocol, capsule creation, producer keep-alive, copy & stream synchronization) and bound per container class (``Array4``, ``BaseFab``, ``PODVector``, ``Vector``, ``SmallMatrix``) with a small adapter describing the exported tensor.
 An exception is ``ArrayOfStructs``: DLPack cannot describe record (struct) element types, so it only implements the structured array interfaces above.

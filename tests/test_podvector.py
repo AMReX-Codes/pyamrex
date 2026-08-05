@@ -218,6 +218,11 @@ def test_podvector_dlpack_pinned_to_cupy():
     marr = pinned.to_cupy()
     cp.testing.assert_array_equal(marr, cp.asarray(np.array([1.0, 2.0, 3.0])))
 
+    # the host-to-device staging copy must be synchronized before returning:
+    # modifying the source afterwards must not change the (snapshot) result
+    pinned[0] = 42.0
+    cp.testing.assert_array_equal(marr, cp.asarray(np.array([1.0, 2.0, 3.0])))
+
 
 @pytest.mark.skipif(not amr.Config.have_gpu, reason="requires AMReX GPU support")
 @pytest.mark.parametrize(
