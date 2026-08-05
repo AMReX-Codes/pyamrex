@@ -159,25 +159,90 @@ namespace
         return py::cast<bool>(copy);
     }
 
-    /** Make the exported data ready for the consumer, per the DLPack stream
-     *  semantics of the exported device.
-     */
-    void handle_stream (py::object const& stream, DLDevice const& device)
+    //! CUDA/ROCm-family memory: consumers (e.g., CuPy) pass their stream
+    //! also for pinned and managed tensors
+    bool stream_capable (DLDevice const& device)
     {
-        // CUDA/ROCm-family memory: consumers (e.g., CuPy) pass their stream
-        // also for pinned and managed tensors
-        bool const stream_capable =
-            device.device_type == kDLCUDA ||
-            device.device_type == kDLCUDAHost ||
-            device.device_type == kDLCUDAManaged ||
-            device.device_type == kDLROCM ||
-            device.device_type == kDLROCMHost;
+        return device.device_type == kDLCUDA ||
+               device.device_type == kDLCUDAHost ||
+               device.device_type == kDLCUDAManaged ||
+               device.device_type == kDLROCM ||
+               device.device_type == kDLROCMHost;
+    }
 
-        if (!stream_capable) {
+    /** Validate the `stream` argument against the exported device.
+     *
+     * Raises on illegal stream/device combinations per the DLPack Python
+     * spec (e.g., a non-None stream for host/SYCL data, or the reserved
+     * stream values for CUDA/ROCm). Performs no synchronization, so it is
+     * safe to call on both the zero-copy and the copy path.
+     *
+     * @param is_copy the caller will hand over a producer-made copy, which is
+     *                synchronized on the AMReX stream before hand-off and
+     *                cannot run on a consumer-provided stream; stream=None is
+     *                then required (any other value raises)
+     */
+    void check_stream (py::object const& stream, DLDevice const& device,
+                       bool is_copy = false)
+    {
+        if (!stream_capable(device)) {
             if (!stream.is_none()) {
                 throw py::value_error(
                     "__dlpack__: 'stream' must be None for this device type");
             }
+            return;
+        }
+        if (is_copy) {
+            // A producer-made copy is issued and synchronized on the AMReX
+            // stream. DLPack requires a copy to run on the consumer-provided
+            // stream, which we cannot honor; require stream=None so the copy
+            // is synchronized and safe to use on any consumer stream.
+            if (!stream.is_none()) {
+                throw py::buffer_error(
+                    "__dlpack__: copy=True requires stream=None; a "
+                    "producer-made copy is synchronized before hand-off and "
+                    "cannot be executed on a consumer-provided stream");
+            }
+            return;
+        }
+        if (stream.is_none()) { return; }
+        if (!py::isinstance<py::int_>(stream)) {
+            throw py::type_error("__dlpack__: stream must be None or int");
+        }
+        auto const s = py::cast<std::intptr_t>(stream);
+        if (s < -1) {
+            // DLPack permits stream >= -1; smaller values would otherwise be
+            // reinterpreted as a (garbage) stream handle
+            throw py::value_error(
+                "__dlpack__: stream must be None or an int >= -1");
+        }
+        if (s == -1) { return; }  // consumer requests no synchronization
+#if defined(AMREX_USE_CUDA)
+        if (s == 0) {
+            throw py::value_error(
+                "__dlpack__: stream=0 is ambiguous on CUDA per the DLPack "
+                "spec; use None, 1, or 2");
+        }
+#elif defined(AMREX_USE_HIP)
+        if (s == 1 || s == 2) {
+            throw py::value_error(
+                "__dlpack__: stream=1 and stream=2 are not supported on ROCm "
+                "per the DLPack spec; use None, 0, or a stream handle");
+        }
+#endif
+    }
+
+    /** Make the exported data ready for the consumer, per the DLPack stream
+     *  semantics of the exported device.
+     *
+     * Only for the zero-copy path: a copy already fully synchronizes the
+     * producer stream, so its callers use check_stream() instead.
+     */
+    void handle_stream (py::object const& stream, DLDevice const& device)
+    {
+        check_stream(stream, device);
+
+        if (!stream_capable(device)) {
 #if defined(AMREX_USE_CUDA) || defined(AMREX_USE_HIP) || defined(AMREX_USE_SYCL)
             // host or SYCL export: make all pending device work on the data
             // visible to any consumer
@@ -197,16 +262,8 @@ namespace
         }
 
 #if defined(AMREX_USE_CUDA)
-        if (!py::isinstance<py::int_>(stream)) {
-            throw py::type_error("__dlpack__: stream must be None or int");
-        }
         auto const s = py::cast<std::intptr_t>(stream);
         if (s == -1) { return; }  // consumer requests no synchronization
-        if (s == 0) {
-            throw py::value_error(
-                "__dlpack__: stream=0 is ambiguous on CUDA per the DLPack "
-                "spec; use None, 1, or 2");
-        }
         cudaStream_t const consumer =
             (s == 1) ? cudaStreamLegacy :
             (s == 2) ? cudaStreamPerThread :
@@ -222,16 +279,8 @@ namespace
         // CUDA defers the destruction until the event completed
         AMREX_CUDA_SAFE_CALL(cudaEventDestroy(event));
 #elif defined(AMREX_USE_HIP)
-        if (!py::isinstance<py::int_>(stream)) {
-            throw py::type_error("__dlpack__: stream must be None or int");
-        }
         auto const s = py::cast<std::intptr_t>(stream);
         if (s == -1) { return; }  // consumer requests no synchronization
-        if (s == 1 || s == 2) {
-            throw py::value_error(
-                "__dlpack__: stream=1 and stream=2 are not supported on ROCm "
-                "per the DLPack spec; use None, 0, or a stream handle");
-        }
         hipStream_t const consumer =
             (s == 0) ? hipStream_t{nullptr} :  // default stream
                        reinterpret_cast<hipStream_t>(s);  // NOLINT(performance-no-int-to-ptr)
@@ -242,10 +291,6 @@ namespace
         AMREX_HIP_SAFE_CALL(hipEventRecord(event, producer));
         AMREX_HIP_SAFE_CALL(hipStreamWaitEvent(consumer, event, 0));
         AMREX_HIP_SAFE_CALL(hipEventDestroy(event));
-#else
-        throw py::value_error(
-            "__dlpack__: stream synchronization requested for a device type "
-            "this build does not support");
 #endif
     }
 
@@ -318,6 +363,10 @@ namespace
             amrex::Gpu::streamSynchronize();  // pending device writers
             std::memcpy(buf, info.data, nbytes);
         } else {
+            // synchronize the copy before returning: the fresh buffer and the
+            // source must both be safe for the deleter to free (buf) and for
+            // the producer to be released (source), and the data is then ready
+            // on any consumer stream without running the copy on it
             amrex::Gpu::dtod_memcpy_async(buf, info.data, nbytes);
             amrex::Gpu::streamSynchronize();
         }
@@ -344,7 +393,9 @@ namespace pyAMReX::dlpack
             if (attr.type == cudaMemoryTypeDevice) {
                 device = DLDevice{kDLCUDA, attr.device};
             } else if (attr.type == cudaMemoryTypeManaged) {
-                device = DLDevice{kDLCUDAManaged, attr.device};
+                // DLPack convention (see dlpack.h): device_id is 0 for
+                // vanilla CPU, pinned and managed memory
+                device = DLDevice{kDLCUDAManaged, 0};
             } else if (attr.type == cudaMemoryTypeHost) {
                 device = DLDevice{kDLCUDAHost, 0};
             }
@@ -401,6 +452,32 @@ namespace pyAMReX::dlpack
 #endif
 
         return device;
+    }
+
+    DLDevice device_from_arena ([[maybe_unused]] amrex::Arena const* arena)
+    {
+        // mirror detect_device_from_pointer() from the arena's kind, so an
+        // empty container reports the same device as it will once allocated
+        // (isManaged / isDevice / isPinned are mutually exclusive)
+#if defined(AMREX_USE_CUDA)
+        if (arena->isManaged()) { return DLDevice{kDLCUDAManaged, 0}; }
+        if (arena->isPinned())  { return DLDevice{kDLCUDAHost, 0}; }
+        if (arena->isDevice())  { return DLDevice{kDLCUDA, amrex::Gpu::Device::deviceId()}; }
+#elif defined(AMREX_USE_HIP)
+        // DLPack has no managed type for ROCm; managed maps to the device
+        if (arena->isManaged()) { return DLDevice{kDLROCM, amrex::Gpu::Device::deviceId()}; }
+        if (arena->isPinned())  { return DLDevice{kDLROCMHost, 0}; }
+        if (arena->isDevice())  { return DLDevice{kDLROCM, amrex::Gpu::Device::deviceId()}; }
+#elif defined(AMREX_USE_SYCL)
+        // shared (managed) and device USM are kDLOneAPI; host USM is re-badged
+        // to kDLCPU (as in detect_device_from_pointer) so host consumers work.
+        // device_id is the context-relative index: AMReX builds the SYCL
+        // context with only the selected device, so it is 0 (matching the
+        // pointer path), not the global Gpu::Device::deviceId()
+        if (arena->isManaged()) { return DLDevice{kDLOneAPI, 0}; }
+        if (arena->isDevice())  { return DLDevice{kDLOneAPI, 0}; }
+#endif
+        return DLDevice{kDLCPU, 0};
     }
 
     py::capsule make_dlpack_capsule (
@@ -501,6 +578,16 @@ namespace pyAMReX::dlpack
 
         std::function<void()> free_data;
         if (want_copy) {
+            // validate the stream against the DESTINATION device: a
+            // device-to-host copy hands over CPU memory (stream must be None),
+            // a same-device copy keeps the producer's GPU device
+            DLDevice const dst_device = to_host ? DLDevice{kDLCPU, 0} : info.device;
+            check_stream(stream, dst_device, /*is_copy=*/true);
+            // make_copy fully synchronizes, so the fresh buffer is complete and
+            // the source is no longer read: it is safe both to release the
+            // producer now and for the deleter to free the copy later. The copy
+            // requires stream=None (enforced above), so the synchronized data
+            // is ready for any subsequent consumer-stream use.
             free_data = make_copy(info, to_host);
             // the copy fully belongs to the consumer: no need to keep the
             // producer object alive

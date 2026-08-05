@@ -205,6 +205,52 @@ def test_podvector_dlpack_pinned():
 
 
 @pytest.mark.skipif(not amr.Config.have_gpu, reason="requires AMReX GPU support")
+def test_podvector_dlpack_pinned_to_cupy():
+    # pinned host memory is advertised as kDLCUDAHost/kDLROCMHost, which CuPy's
+    # from_dlpack rejects; to_cupy() must stage a host-to-device copy instead
+    cp = pytest.importorskip("cupy")
+    import numpy as np
+
+    pinned = amr.HostVector_real()
+    for v in [1.0, 2.0, 3.0]:
+        pinned.push_back(v)
+
+    marr = pinned.to_cupy()
+    cp.testing.assert_array_equal(marr, cp.asarray(np.array([1.0, 2.0, 3.0])))
+
+
+@pytest.mark.skipif(not amr.Config.have_gpu, reason="requires AMReX GPU support")
+@pytest.mark.parametrize(
+    "ctor_name",
+    ["NonManagedDeviceVector_real", "ManagedVector_real", "HostVector_real"],
+)
+def test_podvector_dlpack_empty_device_type(ctor_name):
+    # an empty vector has a null data pointer; its DLPack device must be
+    # classified from the allocator's arena kind so it does NOT change once
+    # the vector holds data (previously an empty device/managed/pinned vector
+    # was mislabeled kDLCPU and then flipped after the first push_back)
+    gpu = (
+        int(amr.DLDeviceType.kDLCUDA),
+        int(amr.DLDeviceType.kDLROCM),
+        int(amr.DLDeviceType.kDLOneAPI),
+    )
+
+    ctor = getattr(amr, ctor_name)
+    empty = ctor()
+    assert empty.size() == 0
+    empty_dev = empty.__dlpack_device__()
+
+    empty.push_back(1.0)
+    assert empty.__dlpack_device__() == empty_dev, (
+        "device type changed after allocation"
+    )
+
+    # a non-host-accessible allocator must report a GPU device even when empty
+    if ctor_name == "NonManagedDeviceVector_real":
+        assert empty_dev[0] in gpu
+
+
+@pytest.mark.skipif(not amr.Config.have_gpu, reason="requires AMReX GPU support")
 def test_from_numpy_device_only():
     # device-only allocator: the host-to-device copy must work without CuPy
     import numpy as np

@@ -368,7 +368,17 @@ void bind_dlpack(py::class_<amrex::PODVector<T, Allocator> > & cl)
             dlpack::DLPackInfo info;
             info.data = const_cast<void*>(
                 static_cast<void const*>(podvector.dataPtr()));
-            info.device = dlpack::detect_device_from_pointer(podvector.dataPtr());
+            // an empty PODVector has a null data pointer, which cannot be
+            // classified by pointer query; fall back to the allocator's arena
+            // kind so an empty vector reports the same device as once allocated
+            if (podvector.dataPtr() != nullptr) {
+                info.device = dlpack::detect_device_from_pointer(podvector.dataPtr());
+            } else if constexpr (amrex::IsArenaAllocator<Allocator>::value) {
+                info.device = dlpack::device_from_arena(
+                    static_cast<Allocator const &>(podvector).arena());
+            } else {
+                info.device = DLDevice{kDLCPU, 0};  // std::allocator: host memory
+            }
             info.dtype = dlpack::get_dlpack_dtype<T>();
             info.shape = {static_cast<std::int64_t>(podvector.size())};
             // explicit unit stride: some consumers (e.g., dpnp/dpctl) mishandle

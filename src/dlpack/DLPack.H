@@ -24,6 +24,8 @@
 #include <utility>
 #include <vector>
 
+namespace amrex { class Arena; }
+
 
 namespace pyAMReX
 {
@@ -108,6 +110,16 @@ namespace pyAMReX::dlpack
      * classes) can fill DLPackInfo::device directly instead.
      */
     DLDevice detect_device_from_pointer (void const* ptr);
+
+    /** Classify a container's memory space from its AMReX allocator arena.
+     *
+     * For allocations without a queryable pointer (e.g., an empty container
+     * whose dataPtr() is null), the memory space cannot be detected from the
+     * pointer. This mirrors detect_device_from_pointer() from the arena's kind
+     * (managed / pinned / device) so that an empty container reports the same
+     * DLPack device as it will once it holds data.
+     */
+    DLDevice device_from_arena (amrex::Arena const* arena);
 
     /** Everything a container must provide to export a DLPack tensor */
     struct DLPackInfo
@@ -194,6 +206,10 @@ namespace pyAMReX::dlpack
             True always copies (the copy is solely owned by the consumer);
             False never copies (raises BufferError if a copy is needed);
             None (default) copies only if required.
+            A producer-made copy is synchronized before hand-off, so the data
+            is ready on any consumer stream. Because the copy cannot be run on
+            a consumer-provided stream, copy=True requires stream=None and
+            raises BufferError for any other stream value.
 
         Returns
         -------

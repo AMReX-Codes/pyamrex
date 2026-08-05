@@ -67,7 +67,10 @@ def dlpack_to_cupy(self, copy=False):
     import cupy as cp
 
     device_type, _ = self.__dlpack_device__()
-    if device_type == kDLCPU:
+    if device_type in (kDLCPU, kDLCUDAHost, kDLROCMHost):
+        # host-accessible memory (plain host or CUDA/ROCm pinned): CuPy's
+        # from_dlpack rejects the pinned-host device types, so stage a
+        # host-to-device copy via NumPy
         import numpy as np
 
         return cp.asarray(np.from_dlpack(self))
@@ -90,7 +93,8 @@ def dlpack_to_dpnp(self, copy=False):
     import dpnp as dp
 
     device_type, _ = self.__dlpack_device__()
-    if device_type == kDLCPU:
+    if device_type in (kDLCPU, kDLCUDAHost, kDLROCMHost):
+        # host-accessible memory: stage a host-to-device copy via NumPy
         import numpy as np
 
         return dp.asarray(np.from_dlpack(self))

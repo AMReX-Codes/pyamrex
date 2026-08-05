@@ -124,9 +124,13 @@ def test_array4_dlpack_errors():
     x = np.ones((2, 3, 4))
     arr = amr.Array4_double(x)
 
-    # stream is undefined for CPU tensors
+    # stream is undefined for CPU tensors, on both the view and copy paths
     with pytest.raises(ValueError):
         arr.__dlpack__(stream=1)
+    with pytest.raises(ValueError):
+        arr.__dlpack__(stream=1, copy=True)
+    with pytest.raises(ValueError):
+        arr.__dlpack__(stream=2, copy=True)
 
     # transfers to non-CPU devices are unsupported
     with pytest.raises(BufferError):
@@ -220,6 +224,40 @@ def test_array4_dlpack_device_to_host(mfab_device):
         # copy=False must refuse the device-to-host transfer
         with pytest.raises(BufferError):
             arr.__dlpack__(dl_device=(int(amr.DLDeviceType.kDLCPU), 0), copy=False)
+
+        # a device-to-host copy hands over CPU memory, so a stream is invalid
+        # (validated against the destination device, not the GPU source)
+        with pytest.raises(ValueError):
+            arr.__dlpack__(dl_device=(int(amr.DLDeviceType.kDLCPU), 0), stream=1)
+
+        # DLPack only permits stream >= -1
+        with pytest.raises(ValueError):
+            arr.__dlpack__(stream=-2)
+        # stream=-1 (no synchronization) is accepted on a device tensor view
+        arr.__dlpack__(stream=-1)
+        # a producer-made copy cannot run on a consumer stream: it requires
+        # stream=None and rejects every other stream value
+        arr.__dlpack__(copy=True)  # stream=None (default): OK
+        for bad in (-1, 1, 2, 12345):
+            with pytest.raises(BufferError):
+                arr.__dlpack__(stream=bad, copy=True)
+        break
+
+
+@pytest.mark.skipif(
+    amr.Config.gpu_backend != "CUDA", reason="Requires AMReX_GPU_BACKEND=CUDA"
+)
+def test_array4_dlpack_managed_device_id(boxarr, distmap):
+    # DLPack requires device_id == 0 for managed memory (see dlpack.h)
+    mf = amr.MultiFab(
+        boxarr, distmap, 1, 0, amr.MFInfo().set_arena(amr.The_Managed_Arena())
+    )
+    mf.set_val(1.0)
+    for mfi in mf:
+        assert mf.array(mfi).__dlpack_device__() == (
+            int(amr.DLDeviceType.kDLCUDAManaged),
+            0,
+        )
         break
 
 
