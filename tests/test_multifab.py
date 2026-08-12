@@ -565,16 +565,31 @@ def test_mfab_tiles(mfab):
     # no tile size given -> whole boxes, same as plain iteration
     assert sum(1 for _mfi in mfab.tiles()) == nboxes
 
-    # a tile smaller than the 32^3 boxes subdivides them
     tiled = [mfi.tilebox() for mfi in mfab.tiles(tile=(16, 16, 16))]
-    assert len(tiled) == 8 * nboxes
+    if amr.Config.have_gpu:
+        # TilingIfNotGPU: never tile on GPU, where whole boxes are wanted
+        assert len(tiled) == nboxes
+    else:
+        # a tile smaller than the 32^3 boxes subdivides them
+        assert len(tiled) == 8 * nboxes
 
-    # the tiles cover this rank's valid region exactly once
+    # either way the tiles cover this rank's valid region exactly once
     local_pts = sum(mfi.validbox().num_pts for mfi in mfab)
     assert sum(bx.num_pts for bx in tiled) == local_pts
 
     # ix_type mirrors C++ mf.ixType().toIntVect()
     assert mfab.ix_type == mfab.box_array().ix_type().to_IntVect()
+
+
+def assert_xp_equal(actual, desired):
+    """Array equality that works on NumPy, CuPy and dpnp alike.
+
+    numpy.testing on a device array raises "Implicit conversion to a NumPy
+    array is not allowed", so compare on the device and coerce only the
+    resulting scalar.
+    """
+    assert actual.shape == desired.shape
+    assert bool((actual == desired).all())
 
 
 def test_mfab_array4_call(mfab):
@@ -591,8 +606,12 @@ def test_mfab_array4_call(mfab):
         # than sliced, or `comp` would land on k in a 1D/2D build
         assert view.ndim == amr.Config.spacedim
         assert view.shape == tuple(bx.size)
-        # a view, not a copy: writing through it reaches the MultiFab
-        assert view.base is not None
+
+        # a view, not a copy: a write through it is visible in a fresh view.
+        # Checked behaviorally rather than via .base, which dpnp arrays do
+        # not have.
+        view[...] = 7.0
+        assert bool((arr(bx) == 7.0).all())
 
         # matches a hand-sliced reference against the fab's global lower bound
         ref = arr.to_xp(copy=False, order="F")
@@ -605,19 +624,20 @@ def test_mfab_array4_call(mfab):
             )
             + (0,)
         ]
-        np.testing.assert_array_equal(view, expected)
+        assert_xp_equal(view, expected)
 
         # component selection
         for comp in range(mfab.num_comp):
             arr(bx, comp=comp)[...] = float(comp)
         for comp in range(mfab.num_comp):
-            np.testing.assert_allclose(arr(bx, comp=comp), float(comp))
+            np.testing.assert_allclose(float(arr(bx, comp=comp).min()), float(comp))
+            np.testing.assert_allclose(float(arr(bx, comp=comp).max()), float(comp))
 
         # shifted access reaches the guard cells
         if ng.max > 0:
             shifted = arr(bx, di=-1)
             assert shifted.shape == view.shape
-            np.testing.assert_array_equal(
+            assert_xp_equal(
                 shifted,
                 ref[
                     tuple(
@@ -630,6 +650,11 @@ def test_mfab_array4_call(mfab):
                     + (0,)
                 ],
             )
+            del shifted
+
+        # release the views: on a GPU build these are DLPack exports, and
+        # amrex.finalize() refuses to run while any are still alive
+        del view, ref, expected, arr
         break
 
 
