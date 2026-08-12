@@ -118,6 +118,7 @@ from amrex.space3d.amrex_3d_pybind import (
     Dim3,
     Direction,
     DistributionMapping,
+    DLDeviceType,
     EB2_Build,
     EBFArrayBoxFactory,
     EBSupport,
@@ -449,6 +450,7 @@ __all__: list[str] = [
     "Config",
     "CoordSys",
     "CpuBndryFuncFab",
+    "DLDeviceType",
     "DeviceVector_int",
     "DeviceVector_real",
     "DeviceVector_uint64",
@@ -705,6 +707,21 @@ __all__: list[str] = [
     "initialize_when_MPMD",
     "initialized",
     "is_valid",
+    "kDLCPU",
+    "kDLCUDA",
+    "kDLCUDAHost",
+    "kDLCUDAManaged",
+    "kDLExtDev",
+    "kDLHexagon",
+    "kDLMAIA",
+    "kDLMetal",
+    "kDLOneAPI",
+    "kDLOpenCL",
+    "kDLROCM",
+    "kDLROCMHost",
+    "kDLVPI",
+    "kDLVulkan",
+    "kDLWebGPU",
     "lbound",
     "length",
     "list_particle_species",
@@ -762,4 +779,19 @@ __license__: str = "BSD-3-Clause-LBNL"
 __version__: str = "26.08"
 basic: amrex_3d_pybind.EBSupport
 full: amrex_3d_pybind.EBSupport
+kDLCPU: amrex_3d_pybind.DLDeviceType
+kDLCUDA: amrex_3d_pybind.DLDeviceType
+kDLCUDAHost: amrex_3d_pybind.DLDeviceType
+kDLCUDAManaged: amrex_3d_pybind.DLDeviceType
+kDLExtDev: amrex_3d_pybind.DLDeviceType
+kDLHexagon: amrex_3d_pybind.DLDeviceType
+kDLMAIA: amrex_3d_pybind.DLDeviceType
+kDLMetal: amrex_3d_pybind.DLDeviceType
+kDLOneAPI: amrex_3d_pybind.DLDeviceType
+kDLOpenCL: amrex_3d_pybind.DLDeviceType
+kDLROCM: amrex_3d_pybind.DLDeviceType
+kDLROCMHost: amrex_3d_pybind.DLDeviceType
+kDLVPI: amrex_3d_pybind.DLDeviceType
+kDLVulkan: amrex_3d_pybind.DLDeviceType
+kDLWebGPU: amrex_3d_pybind.DLDeviceType
 volume: amrex_3d_pybind.EBSupport
