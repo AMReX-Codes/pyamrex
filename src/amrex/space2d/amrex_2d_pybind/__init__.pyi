@@ -2982,7 +2982,10 @@ class Array4_cfloat:
     def __setitem__(
         self,
         arg0: IntVect2D,
-        arg1: typing.SupportsComplex | typing.SupportsFloat | typing.SupportsIndex,
+        arg1: complex
+        | typing.SupportsComplex
+        | typing.SupportsFloat
+        | typing.SupportsIndex,
     ) -> None: ...
     @typing.overload
     def __setitem__(
@@ -2991,7 +2994,10 @@ class Array4_cfloat:
             collections.abc.Sequence[typing.SupportsInt | typing.SupportsIndex],
             "FixedSize(4)",
         ],
-        arg1: typing.SupportsComplex | typing.SupportsFloat | typing.SupportsIndex,
+        arg1: complex
+        | typing.SupportsComplex
+        | typing.SupportsFloat
+        | typing.SupportsIndex,
     ) -> None: ...
     @typing.overload
     def __setitem__(
@@ -3000,7 +3006,10 @@ class Array4_cfloat:
             collections.abc.Sequence[typing.SupportsInt | typing.SupportsIndex],
             "FixedSize(3)",
         ],
-        arg1: typing.SupportsComplex | typing.SupportsFloat | typing.SupportsIndex,
+        arg1: complex
+        | typing.SupportsComplex
+        | typing.SupportsFloat
+        | typing.SupportsIndex,
     ) -> None: ...
     @typing.overload
     def contains(
@@ -3255,7 +3264,10 @@ class Array4_cdouble:
     def __setitem__(
         self,
         arg0: IntVect2D,
-        arg1: typing.SupportsComplex | typing.SupportsFloat | typing.SupportsIndex,
+        arg1: complex
+        | typing.SupportsComplex
+        | typing.SupportsFloat
+        | typing.SupportsIndex,
     ) -> None: ...
     @typing.overload
     def __setitem__(
@@ -3264,7 +3276,10 @@ class Array4_cdouble:
             collections.abc.Sequence[typing.SupportsInt | typing.SupportsIndex],
             "FixedSize(4)",
         ],
-        arg1: typing.SupportsComplex | typing.SupportsFloat | typing.SupportsIndex,
+        arg1: complex
+        | typing.SupportsComplex
+        | typing.SupportsFloat
+        | typing.SupportsIndex,
     ) -> None: ...
     @typing.overload
     def __setitem__(
@@ -3273,7 +3288,10 @@ class Array4_cdouble:
             collections.abc.Sequence[typing.SupportsInt | typing.SupportsIndex],
             "FixedSize(3)",
         ],
-        arg1: typing.SupportsComplex | typing.SupportsFloat | typing.SupportsIndex,
+        arg1: complex
+        | typing.SupportsComplex
+        | typing.SupportsFloat
+        | typing.SupportsIndex,
     ) -> None: ...
     @typing.overload
     def contains(
@@ -3524,7 +3542,10 @@ class Array4_cfloat_const:
         self,
         arg0: typing.Annotated[
             numpy.typing.ArrayLike,
-            typing.SupportsComplex | typing.SupportsFloat | typing.SupportsIndex,
+            complex
+            | typing.SupportsComplex
+            | typing.SupportsFloat
+            | typing.SupportsIndex,
         ],
     ) -> None: ...
     def __repr__(self) -> str: ...
@@ -3779,7 +3800,10 @@ class Array4_cdouble_const:
         self,
         arg0: typing.Annotated[
             numpy.typing.ArrayLike,
-            typing.SupportsComplex | typing.SupportsFloat | typing.SupportsIndex,
+            complex
+            | typing.SupportsComplex
+            | typing.SupportsFloat
+            | typing.SupportsIndex,
         ],
     ) -> None: ...
     def __repr__(self) -> str: ...
@@ -18393,15 +18417,7 @@ class PhysBCFunctUser:
     def __init__(
         self,
         callback: collections.abc.Callable[
-            [
-                MultiFab,
-                typing.SupportsInt | typing.SupportsIndex,
-                typing.SupportsInt | typing.SupportsIndex,
-                IntVect2D,
-                typing.SupportsFloat | typing.SupportsIndex,
-                typing.SupportsInt | typing.SupportsIndex,
-            ],
-            None,
+            [MultiFab, int, int, IntVect2D, float, int], None
         ],
     ) -> None:
         """
