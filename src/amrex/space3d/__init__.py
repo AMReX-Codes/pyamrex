@@ -7,13 +7,9 @@ from .._dll import add_windows_dll_directories
 add_windows_dll_directories(__file__)
 
 # import core bindings to C++
+from .._module_api import setup_module as _setup_module
 from . import amrex_3d_pybind
 from .amrex_3d_pybind import *  # noqa
-
-__version__ = amrex_3d_pybind.__version__
-__doc__ = amrex_3d_pybind.__doc__
-__license__ = amrex_3d_pybind.__license__
-__author__ = amrex_3d_pybind.__author__
 
 
 # at this place we can enhance Python classes with additional methods written
@@ -24,43 +20,5 @@ def d_decl(x, y, z):
     return (x, y, z)
 
 
-def Print(*args, **kwargs):
-    """Wrap amrex::Print() - only the IO processor writes"""
-    if not initialized():  # noqa
-        print("warning: Print all - AMReX not initialized")
-        print(*args, **kwargs)
-    elif ParallelDescriptor.IOProcessor():  # noqa
-        print(*args, **kwargs)
-
-
-from ..extensions.Array4 import register_Array4_extension
-from ..extensions.ArrayOfStructs import register_AoS_extension
-from ..extensions.MultiFab import register_MultiFab_extension
-from ..extensions.ParticleContainer import register_ParticleContainer_extension
-from ..extensions.PODVector import register_PODVector_extension
-from ..extensions.SmallMatrix import register_SmallMatrix_extension
-from ..extensions.StructOfArrays import register_SoA_extension
-
-register_Array4_extension(amrex_3d_pybind)
-register_MultiFab_extension(amrex_3d_pybind)
-register_PODVector_extension(amrex_3d_pybind)
-register_SmallMatrix_extension(amrex_3d_pybind)
-register_SoA_extension(amrex_3d_pybind)
-register_AoS_extension(amrex_3d_pybind)
-register_ParticleContainer_extension(amrex_3d_pybind)
-
-
-from ..extensions.ParticleContainer import list_particle_species  # noqa
-from ..extensions.ParticleContainer import read_particles as _read_particles
-
-
-def read_particles(
-    plotfile, particle_dir="particles", communicate=True, container=None
-):
-    """Read AMReX particle data from a plotfile/checkpoint into a container.
-
-    See :py:func:`amrex.extensions.ParticleContainer.read_particles` for details.
-    """
-    return _read_particles(
-        amrex_3d_pybind, plotfile, particle_dir, communicate, container
-    )
+# everything else is the same for every dimensionality
+_setup_module(globals(), amrex_3d_pybind)
