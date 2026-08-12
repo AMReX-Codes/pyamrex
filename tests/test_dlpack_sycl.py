@@ -14,6 +14,7 @@ pytestmark = pytest.mark.skipif(
 
 
 def test_array4_dlpack_dpnp(mfab_device):
+    dpctl = pytest.importorskip("dpctl")
     dp = pytest.importorskip("dpnp")
 
     # device pointer is reported as a oneAPI device
@@ -26,6 +27,7 @@ def test_array4_dlpack_dpnp(mfab_device):
         # AMReX -> dpnp: zero-copy view on the device
         marr = arr.to_dpnp()
         assert marr.sycl_device.is_gpu
+        assert marr.sycl_device == dpctl.SyclDevice(str(device_id))
         marr[...] = 5.0
 
     # mutations through the view are visible in the MultiFab
@@ -40,6 +42,18 @@ def test_array4_dlpack_dpnp(mfab_device):
         c_marr[...] = 6.0
         assert float(dp.from_dlpack(arr).max()) == 5.0
         break
+
+
+def test_empty_device_vector_uses_selected_device_ordinal():
+    dpctl = pytest.importorskip("dpctl")
+
+    values = amr.DeviceVector_real()
+    empty_device = values.__dlpack_device__()
+    assert empty_device[0] == int(amr.DLDeviceType.kDLOneAPI)
+    assert dpctl.SyclDevice(str(empty_device[1])).is_gpu
+
+    values.push_back(1.0)
+    assert values.__dlpack_device__() == empty_device
 
 
 def test_array4_dlpack_dpnp_to_host(mfab_device):

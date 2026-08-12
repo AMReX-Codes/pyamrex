@@ -166,6 +166,18 @@ def test_array4_dlpack_keeps_alive(assert_keeps_python_alive):
     assert copied[0, 0, 0, 0] == 3
 
 
+def test_dlpack_export_blocks_finalize():
+    arr = amr.Array4_double(np.ones((2, 3, 4)))
+    capsule = arr.__dlpack__()
+
+    with pytest.raises(RuntimeError, match="DLPack export.*still alive"):
+        amr.finalize()
+
+    # The failed call leaves AMReX initialized. Releasing the managed tensor
+    # lets the fixture finalize the runtime normally.
+    del capsule
+
+
 def test_array4_dlpack_empty():
     empty = amr.Array4_double()
     assert empty.__dlpack_device__() == (int(amr.DLDeviceType.kDLCPU), 0)
