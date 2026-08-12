@@ -105,7 +105,9 @@ non-owning views and should not be stored after the override returns.
              py::arg("mfi"),
              // do not copy via brace init list
              py::return_value_policy::move,
-             "Return the Array4 (of char) of the tags in the box of mfi.")
+             "Return the Array4 (of char) of the tags in the box of mfi. "
+             "Viewed as an array, the dtype is a 1-byte integer whose "
+             "signedness follows the platform's plain char (int8 or uint8).")
         .def("const_array",
              [](TagBoxArray const& tags, MFIter const& mfi) {
                  return tags.const_array(mfi);
@@ -113,7 +115,10 @@ non-owning views and should not be stored after the override returns.
              py::arg("mfi"),
              // do not copy via brace init list
              py::return_value_policy::move,
-             "Return the read-only Array4 (of char) of the tags in the box of mfi.")
+             "Return the read-only Array4 (of char) of the tags in the box "
+             "of mfi. Viewed as an array, the dtype is a 1-byte integer "
+             "whose signedness follows the platform's plain char (int8 or "
+             "uint8).")
 
         .def("set_val",
              [](TagBoxArray& tags, TagBox::TagVal val) {

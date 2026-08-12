@@ -2,6 +2,7 @@
 import os
 
 import numpy as np
+import pytest
 
 import amrex.space3d as amr
 
@@ -104,6 +105,40 @@ def test_parmparse_query_get():
     assert pp.query_int_arr("ints") == (True, [4, 5, 6])
     assert pp.query_str_arr("strs") == (True, ["a", "b"])
     assert pp.query_real_arr("missing")[0] is False
+
+
+def test_parmparse_get_arr_start_ix():
+    """get_*_arr returns exactly the requested slice (regression test:
+    the leading start_ix entries used to be returned as default-
+    constructed padding, and an omitted num_val used to abort)"""
+    pp = amr.ParmParse("slice")
+    pp.addarr("ints", [1, 2, 3])
+    pp.addarr("reals", [1.5, 2.5, 3.5])
+    pp.addarr("strs", ["a", "b", "c"])
+
+    # explicit num_val
+    assert pp.get_int_arr("ints", 1, 2) == [2, 3]
+    assert np.allclose(pp.get_real_arr("reals", 1, 2), [2.5, 3.5])
+    assert pp.get_str_arr("strs", 1, 2) == ["b", "c"]
+
+    # num_val=-1 (the default): all values after start_ix
+    assert pp.get_int_arr("ints", 1) == [2, 3]
+    assert pp.get_int_arr("ints", 2) == [3]
+    assert np.allclose(pp.get_real_arr("reals", 1), [2.5, 3.5])
+    assert pp.get_str_arr("strs", 1) == ["b", "c"]
+
+    # start_ix at/past the end yields an empty list, not an abort
+    assert pp.get_int_arr("ints", 3) == []
+    assert pp.get_int_arr("ints", 5) == []
+
+    # explicitly requesting zero values
+    assert pp.get_int_arr("ints", 1, 0) == []
+
+    # invalid arguments raise instead of aborting
+    with pytest.raises(ValueError):
+        pp.get_int_arr("ints", -1)
+    with pytest.raises(ValueError):
+        pp.get_int_arr("ints", 0, -2)
 
 
 def test_parmparse_to_dict_prefixed():

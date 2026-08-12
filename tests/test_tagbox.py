@@ -49,7 +49,12 @@ def test_tagboxarray_array_mask(boxarr, distmap):
     for mfi in tba:
         bx = mfi.validbox()
         tags = tba.array(mfi).to_xp(copy=False, order="F")
-        assert tags.dtype == np.int8
+        # amrex::TagBox::TagType is plain char, whose signedness is
+        # implementation-defined: int8 where char is signed (x86-64,
+        # macOS, MSVC), uint8 where it is unsigned (e.g. Linux aarch64,
+        # ppc64le). Only the 1-byte integer nature is portable.
+        assert tags.dtype.kind in "iu"
+        assert tags.dtype.itemsize == 1
 
         # global index arrays for the local view (no ghost cells here)
         idx = [

@@ -201,7 +201,11 @@ void init_MultiFabUtil (py::module& m)
     m.def("average_node_to_cellcenter",
           [](MultiFab & cc, int dcomp, MultiFab const & nd,
              int scomp, int ncomp, int ngrow)
-          { average_node_to_cellcenter(cc, dcomp, nd, scomp, ncomp, ngrow); },
+          {
+              check_num_comp("cc", cc.nComp(), dcomp + ncomp);
+              check_num_comp("nd", nd.nComp(), scomp + ncomp);
+              average_node_to_cellcenter(cc, dcomp, nd, scomp, ncomp, ngrow);
+          },
           py::arg("cc"), py::arg("dcomp"),
           py::arg("nd"), py::arg("scomp"), py::arg("ncomp"),
           py::arg("ngrow") = 0,

@@ -142,6 +142,12 @@ def test_average_node_to_cellcenter():
         expected = (i + 0.5)[(slice(None),) + (np.newaxis,) * 3]
         assert np.allclose(arr, expected)
 
+    # out-of-range components raise instead of corrupting memory
+    with pytest.raises(ValueError):
+        amr.average_node_to_cellcenter(cc, 1, nd, 0, 1)
+    with pytest.raises(ValueError):
+        amr.average_node_to_cellcenter(cc, 0, nd, 1, 1)
+
 
 def test_average_down_faces():
     """average_down_faces conserves a constant field"""
