@@ -242,14 +242,16 @@ def test_imfab_ops(boxarr, distmap, nghost):
 def test_imfab_mfiter(imfab):
     assert len(imfab) == 8
 
-    assert iter(imfab).is_valid
-    assert iter(imfab).length == 8
+    # iter(imfab) is a generator driving an MFIter, not the MFIter itself, so
+    # that leaving a loop early still finalizes it. Ask the MFIter directly.
+    assert amr.MFIter(imfab).is_valid
+    assert amr.MFIter(imfab).length == 8
 
     cnt = 0
     for _mfi in imfab:
         cnt += 1
 
-    assert iter(imfab).length == cnt
+    assert amr.MFIter(imfab).length == cnt
 
 
 def test_imfab_mfiter_keeps_imfab_alive(imfab, assert_keeps_python_alive):

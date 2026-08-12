@@ -72,6 +72,98 @@ For many small CPU and GPU examples on how to compute on fields, see the followi
         :caption: This files is in ``tests/test_multifab.py``.
 
 
+.. _usage-compute-portable:
+
+Portable Kernels, OpenMP and Threading
+--------------------------------------
+
+A frequent question is how OpenMP parallelizes a pyAMReX ``MFIter`` loop.
+It does not, and it cannot: in C++, OpenMP works by wrapping the loop in ``#pragma omp parallel``, so that ``MFIter`` hands each thread a subset of the tiles.
+There is no way to express that from Python, and the GIL serializes the loop body anyway.
+**Your Python** ``for mfi in mfab:`` **loop is always single-threaded, whether or not you built with** ``AMREX_OMP=ON``.
+
+OpenMP is still doing work for you, just not there.
+Every AMReX operation you call from Python runs its own OpenMP-parallel loop internally: :py:meth:`~amrex.space3d.MultiFab.saxpy`, ``lin_comb``, the norms and reductions, ``FillBoundary``, ``ParallelCopy``, ``average_down``, plotfile I/O, particle ``Redistribute``, and so on.
+So the first lever is to prefer AMReX's own operations over a hand-written loop wherever one exists.
+
+For everything else, this is how to write a custom kernel once and have it run CPU-serial, CPU-threaded and on GPU:
+
+.. literalinclude:: ../../../tests/test_multifab.py
+   :language: python3
+   :dedent: 4
+   :start-after: # Manual: Portable Kernel START
+   :end-before: # Manual: Portable Kernel END
+
+:py:func:`~amrex.space3d.for_each_tile` is the ``MFIter`` loop as a decorator, so the Python reads in the same order as the C++ it replaces.
+The kernel receives the tilebox followed by one ``Array4`` per field.
+Index those with the box: ``f(bx)`` is the tile, and ``px(bx, di=-1)`` is the analogue of C++ ``px(i-1,j,k)`` over that tile.
+Unlike :py:meth:`~amrex.space3d.Array4_double.to_xp`, which is a locally zero-based view of the whole fab, this indexing is in AMReX global index space -- which is what makes it correct under tiling, where a whole-array expression would otherwise be applied once per tile to the entire fab.
+
+``amr.xp`` is the array namespace matching your build: NumPy on CPU, CuPy for CUDA/HIP, dpnp for SYCL.
+
+On-node parallelism
+^^^^^^^^^^^^^^^^^^^
+
+In rough order of what to try:
+
+#. **More MPI ranks.** This is the primary parallelism in pyAMReX and usually the best answer.
+   Over-decompose with ``ba.max_size(...)`` and run ``mpirun -np <cores> python script.py``.
+#. **Let AMReX run the loop**, using its built-in ``MultiFab`` operations where one fits.
+#. **The** ``threads=`` **argument**, as above.
+   It runs the per-tile kernels on a thread pool, which parallelizes because NumPy and CuPy release the GIL for the array operations a kernel body is made of.
+   It only helps if the per-tile work is element-local -- no ghost exchange, no cross-tile dependencies.
+#. **The GPU**, by building with CUDA/HIP/SYCL. The same kernel source then runs on the device.
+
+Do not reach for ``multiprocessing``: the field memory lives in one process and AMReX+MPI is not fork-safe.
+
+.. note::
+
+   ``threads=`` is a *separate* thread pool from the one an ``AMREX_OMP=ON`` build uses for AMReX's own kernels.
+   Using both oversubscribes the node. Pick one, or set ``OMP_NUM_THREADS=1``.
+
+Tiling
+^^^^^^
+
+:py:func:`~amrex.space3d.TilingIfNotGPU` tiles on CPU and never on GPU, like its C++ namesake, but the tile size has **no default** and tiling is opt-in.
+Plain ``for mfi in mfab:`` does not tile, and there is no global switch that changes that -- the ``fabarray.mfiter_tile_size`` runtime parameter only sets the size used *when* tiling is requested.
+
+Tiling costs more in Python than in C++, where a tile is nearly free: here each tile is a loop iteration plus an array view per field.
+It is worth it in one situation, when you have fewer boxes per rank than threads and want to feed the thread pool -- which is the same job it does for OpenMP threads in C++.
+Size tiles so that you get roughly one to a few per thread.
+Do not reuse AMReX's C++ default of ``(1024000, 8, 8)``: in Python it produces thousands of tiny work units and runs *slower than serial*.
+
+.. note::
+
+   Two things do not carry over from C++, by design.
+   There is no ``ParallelFor``, because device lambdas cannot be written in Python; and there is no OpenMP region.
+   Portability in pyAMReX means *array-expression* portability across NumPy/CuPy/dpnp, not *scalar-kernel* portability.
+   A kernel with per-cell control flow has to become a masked array expression rather than translating line for line.
+
+GPU streams and synchronization
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+You do not need to synchronize by hand.
+AMReX keeps a pool of GPU streams -- four by default, set with the ``amrex.max_gpu_streams`` runtime parameter -- and ``MFIter`` round-robins over them, advancing the stream index on every tile.
+``MFIter::Finalize()`` then synchronizes the streams it used, and pyAMReX runs it however the loop is left, including ``break``, ``return`` and exceptions, exactly as ``~MFIter()`` does in C++.
+
+Two consequences are specific to Python kernels.
+
+First, **you do not get the multi-stream overlap that C++ gets.**
+The round-robin only helps if the work is launched on AMReX's current stream, which is what ``ParallelFor`` does.
+A CuPy kernel launches on *CuPy's* current stream instead, so all tiles of a Python kernel serialize onto that one stream no matter which stream index ``MFIter`` has selected.
+
+Second, when you mix custom kernels with AMReX's own operations, correctness rests on those two stream sets being ordered.
+Today they are, because AMReX creates its pool with default flags -- making them *blocking* streams, which implicitly synchronize against the legacy default stream that CuPy uses by default.
+That is a coincidence of defaults, not a guarantee: it is lost if you open an explicit ``cupy.cuda.Stream()`` or set ``CUPY_CUDA_PER_THREAD_DEFAULT_STREAM=1``.
+In that case synchronize yourself between a Python kernel and the next AMReX call.
+
+.. note::
+
+   AMReX can also adopt a caller-supplied stream, via ``amrex::Gpu::setExternalGpuStream()`` and the RAII ``ExternalGpuStreamRegion``, which makes ``numGpuStreams()`` report 1 for as long as it is active.
+   Handing AMReX CuPy's stream that way would put both on one stream and remove the reliance on default-stream semantics.
+   pyAMReX does not bind this yet.
+
+
 .. _usage-compute-particles:
 
 Particles
