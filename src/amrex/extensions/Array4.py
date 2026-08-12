@@ -157,6 +157,73 @@ def array4_to_xp(self, copy=False, order="F"):
     return getattr(self, "to_" + xp_module_name(amr))(copy, order)
 
 
+def array4_call(self, bx, di=0, dj=0, dk=0, comp=0):
+    """Provide a view of this Array4 over a Box, in AMReX global indexing.
+
+    This is the array-expression analogue of indexing an ``Array4`` in C++:
+    ``a(bx, di=-1)`` corresponds to ``a(i-1, j, k)`` evaluated for every
+    ``(i,j,k)`` in ``bx``, so a stencil written in C++ as::
+
+        d(i,j,k) = inv2dr * (ex(i-1,j,k) - ex(i+1,j,k));
+
+    becomes::
+
+        d(bx)[...] = inv2dr * (ex(bx, di=-1) - ex(bx, di=+1))
+
+    Unlike :py:meth:`to_xp`, which is a view of the whole fab in local 0-based
+    indexing, ``bx`` here is in AMReX global index space. That is what makes it
+    usable under tiling: ``mfi.tilebox()`` names a sub-region of the fab, and
+    without restricting to it a whole-array expression would be applied once
+    per tile to the entire fab.
+
+    Reading offset cells (``di``/``dj``/``dk``) reaches into the guard cells,
+    so ``bx`` grown by the offsets must stay inside the fab; for a valid-region
+    ``bx`` that means the field needs enough ghost cells for the stencil.
+
+    Parameters
+    ----------
+    self : amrex.Array4_*
+        An Array4 class in pyAMReX.
+    bx : amrex.Box
+        Index-space region to view, in AMReX global indices.
+    di, dj, dk : int, optional
+        Shift the region by this many cells per direction (default 0).
+    comp : int, optional
+        Component to select (default 0).
+
+    Returns
+    -------
+    xp.array
+        A non-copying NumPy, CuPy or dpnp view of ``bx`` shifted by
+        ``(di, dj, dk)``, with ``AMREX_SPACEDIM`` dimensions.
+    """
+    import inspect
+
+    amr = inspect.getmodule(self)
+
+    arr = self.to_xp(copy=False, order="F")
+    lo = amr.lbound(self)
+    lo = (lo.x, lo.y, lo.z)
+    shift = (di, dj, dk)
+
+    # An Array4 is always 4D (i,j,k,n): unused directions carry extent 1 rather
+    # than being dropped. So always index all three spatial axes -- taking only
+    # AMREX_SPACEDIM of them would make `comp` land on k in 1D/2D. The unused
+    # ones are indexed with a scalar rather than sliced, which drops them, so
+    # the result has AMREX_SPACEDIM dimensions in every build.
+    dims = amr.Config.spacedim
+    slices = tuple(
+        slice(
+            bx.small_end[d] + shift[d] - lo[d],
+            bx.big_end[d] + shift[d] - lo[d] + 1,
+        )
+        if d < dims
+        else 0
+        for d in range(3)
+    )
+    return arr[slices + (comp,)]
+
+
 def register_Array4_extension(amr):
     """Array4 helper methods"""
     import inspect
@@ -175,3 +242,4 @@ def register_Array4_extension(amr):
         Array4_type.to_cupy = array4_to_cupy
         Array4_type.to_dpnp = array4_to_dpnp
         Array4_type.to_xp = array4_to_xp
+        Array4_type.__call__ = array4_call
