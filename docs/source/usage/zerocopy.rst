@@ -53,6 +53,18 @@ See the optional arguments of this API.
 
 Writing to the created NumPy/CuPy/dpnp array will also modify the underlying AMReX memory.
 
+The matching array library itself is available as ``xp`` on the pyAMReX module, for code that has
+to call into it rather than just hold its arrays:
+
+.. code-block:: python
+
+   import amrex.space3d as amr
+
+   arr = mfab.array(mfi).to_xp()
+   amr.xp.sin(arr, out=arr)  # numpy, cupy or dpnp, matching the build
+
+It is resolved on first access, so importing pyAMReX does not import a GPU array library.
+
 
 GPU: numba
 ----------

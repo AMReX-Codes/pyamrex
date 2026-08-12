@@ -64,3 +64,40 @@ def read_particles(
     return _read_particles(
         amrex_3d_pybind, plotfile, particle_dir, communicate, container
     )
+
+
+def __getattr__(name):
+    """Resolve ``xp`` lazily (PEP 562).
+
+    ``amr.xp`` is the array namespace matching this build: NumPy on CPU, CuPy
+    for CUDA/HIP, dpnp for SYCL. It is the module counterpart of the ``to_xp``
+    methods, for code that needs to call into the array library itself, e.g.
+    ``amr.xp.sin(...)``.
+
+    Like every other CuPy/dpnp use in pyAMReX, those are optional dependencies:
+    they are imported here on first access, never at import time, so ``import
+    amrex`` works on a GPU build without them. Only touching ``amr.xp`` (or a
+    ``to_cupy``/``to_dpnp``/``to_xp`` call) requires one to be installed.
+
+    Raises
+    ------
+    ImportError
+        On a GPU build whose array library (CuPy or dpnp) is not installed.
+    """
+    if name == "xp":
+        import importlib
+
+        from ..extensions.dlpack_helpers import xp_module_name
+
+        module_name = xp_module_name(amrex_3d_pybind)
+        try:
+            xp = importlib.import_module(module_name)
+        except ImportError as e:
+            raise ImportError(
+                f"amrex.xp needs {module_name!r}, which is an optional "
+                f"dependency of pyAMReX and is not installed. Install it, or "
+                f"use the to_numpy()/to_cupy()/to_dpnp() methods directly."
+            ) from e
+        globals()["xp"] = xp  # subsequent lookups skip __getattr__
+        return xp
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
