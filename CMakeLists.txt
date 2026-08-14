@@ -296,6 +296,15 @@ set(PY_PIP_OPTIONS "-v" CACHE STRING
     "Additional parameters to pass to `pip` as ; separated list")
 set(PY_PIP_INSTALL_OPTIONS "" CACHE STRING
     "Additional parameters to pass to `pip install` as ; separated list")
+option(pip-build-isolation
+    "Build the Python wheel in an isolated build environment"
+    OFF
+)
+if(pip-build-isolation)
+    set(_pyAMReX_PIP_BUILD_ISOLATION_OPTION "")
+else()
+    set(_pyAMReX_PIP_BUILD_ISOLATION_OPTION "--no-build-isolation")
+endif()
 
 # add a prefix to custom targets so we do not collide if used as a subproject
 if(CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
@@ -311,7 +320,9 @@ add_custom_target(${pyAMReX_CUSTOM_TARGET_PREFIX}pip_wheel
     ${CMAKE_COMMAND} -E rm -f -r amrex-whl
     COMMAND
         ${CMAKE_COMMAND} -E env PYAMREX_LIBDIR=${CMAKE_PYTHON_OUTPUT_DIRECTORY}/amrex/
-            ${Python_EXECUTABLE} -m pip ${PY_PIP_OPTIONS} wheel --no-deps --wheel-dir=amrex-whl "${pyAMReX_SOURCE_DIR}"
+            ${Python_EXECUTABLE} -m pip ${PY_PIP_OPTIONS} wheel
+            ${_pyAMReX_PIP_BUILD_ISOLATION_OPTION} --no-deps
+            --wheel-dir=amrex-whl "${pyAMReX_SOURCE_DIR}"
     COMMAND_EXPAND_LISTS VERBATIM
     WORKING_DIRECTORY
         ${pyAMReX_BINARY_DIR}
