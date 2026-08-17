@@ -11,14 +11,39 @@
 
 namespace
 {
-    /** Serializes amrex.initialize()/finalize().
+    /** Guards amrex.initialize()/finalize() against concurrent entry.
      *
      * Both mutate process-global state (the AMReX instance stack, ParmParse,
-     * the arenas, signal handlers). The threading contract says to call them
-     * from one thread; this makes a violation a clean serialization rather
-     * than a corrupted instance stack.
+     * the arenas, signal handlers), and the threading contract says to call
+     * them from one thread.
+     *
+     * We refuse rather than wait. finalize() runs the garbage collector, which
+     * on a free-threaded interpreter stops the world and waits for every
+     * attached thread to reach a safe point -- a thread blocked in
+     * lock() inside a pybind11 call is attached and never gets there, so
+     * waiting would deadlock. Failing loudly also matches what the docs
+     * promise: these are main-thread only.
      */
     std::mutex init_finalize_mutex;
+
+    /** Non-blocking lock; throws if another thread is already in there. */
+    class ScopedInitFinalizeLock
+    {
+    public:
+        ScopedInitFinalizeLock ()
+        {
+            if (!init_finalize_mutex.try_lock()) {
+                throw std::runtime_error(
+                    "amrex.initialize()/finalize() must be called from a "
+                    "single thread; another thread is inside one of them");
+            }
+        }
+        ~ScopedInitFinalizeLock () { init_finalize_mutex.unlock(); }
+        ScopedInitFinalizeLock (ScopedInitFinalizeLock const &) = delete;
+        ScopedInitFinalizeLock & operator= (ScopedInitFinalizeLock const &) = delete;
+        ScopedInitFinalizeLock (ScopedInitFinalizeLock &&) = delete;
+        ScopedInitFinalizeLock & operator= (ScopedInitFinalizeLock &&) = delete;
+    };
 }
 
 void init_AMReX(py::module& m)
@@ -35,7 +60,7 @@ void init_AMReX(py::module& m)
 
     m.def("initialize",
           [](const py::list args) {
-              std::scoped_lock lock(init_finalize_mutex);
+              ScopedInitFinalizeLock lock;
 
               Vector<std::string> cargs{"amrex"};
               Vector<char*> argv;
@@ -91,13 +116,13 @@ void init_AMReX(py::module& m)
 
     m.def("finalize",
           [prepare_finalize]() {
-              std::scoped_lock lock(init_finalize_mutex);
+              ScopedInitFinalizeLock lock;
               prepare_finalize();
               amrex::Finalize();
           });
     m.def("finalize",
           [prepare_finalize](AMReX* pamrex) {
-              std::scoped_lock lock(init_finalize_mutex);
+              ScopedInitFinalizeLock lock;
               prepare_finalize();
               amrex::Finalize(pamrex);
           });

@@ -7,11 +7,16 @@ Threads are spawned *inside* each test, never across tests: the autouse
 stays on one thread.
 
 Every test is written so that a data race shows up as a *wrong value*, not just
-as a crash, and every one of them is a valid (if serialized) test on a
-GIL-enabled build too. Run them repeatedly to shake out timing-dependent
-races::
+as a crash. Run them repeatedly to shake out timing-dependent races::
 
     pytest tests/test_free_threading.py --count=50
+
+Most of these drive one ``MFIter`` per thread, which needs an AMReX whose
+``MFIter::depth`` is per-thread (AMReX-Codes/amrex#5615). Older AMReX aborts
+the second concurrent iterator with "Nested or multiple active MFIters is not
+supported by default", so those tests are skipped there -- see
+``CONCURRENT_MFITER``. This is about the AMReX underneath, not about whether
+the GIL is enabled: they are equally valid, if serialized, on a GIL build.
 """
 
 import os
@@ -32,6 +37,64 @@ NTHREADS = max(2, min(8, os.cpu_count() or 2))
 
 #: Seconds a worker may wait for its peers at the start barrier.
 BARRIER_TIMEOUT = 120.0
+
+
+def _probe_concurrent_mfiter():
+    """Does the AMReX we are linked against allow one MFIter per thread?
+
+    Two iterators on *different* threads, both alive at once -- nesting them on
+    one thread is a different thing and is still rejected. Probed in a
+    subprocess because on an AMReX without AMReX-Codes/amrex#5615 the failure
+    leaves the global depth counter non-zero, which would poison every later
+    test in this process.
+    """
+    probe = """
+import threading
+import amrex.space3d as amr
+
+amr.initialize(['amrex.verbose=0', 'amrex.throw_exception=1',
+                'amrex.signal_handling=0', 'tiny_profiler.enabled=0'])
+bx = amr.Box(amr.IntVect(0, 0, 0), amr.IntVect(7, 7, 7))
+ba = amr.BoxArray(bx)
+mf = amr.MultiFab(ba, amr.DistributionMapping(ba), 1, 0)
+
+errors = []
+barrier = threading.Barrier(2)
+
+
+def work():
+    try:
+        barrier.wait(timeout=60)
+        it = amr.MFIter(mf)      # noqa: F841  -- held alive across the barrier
+        barrier.wait(timeout=60)
+    except Exception as e:       # noqa: BLE001
+        errors.append(e)
+
+
+threads = [threading.Thread(target=work) for _ in range(2)]
+for t in threads:
+    t.start()
+for t in threads:
+    t.join()
+if not errors:
+    print('yes')
+"""
+    proc = subprocess.run(
+        [sys.executable, "-c", probe],
+        capture_output=True,
+        text=True,
+        timeout=300,
+    )
+    return proc.returncode == 0 and proc.stdout.strip().endswith("yes")
+
+
+#: Whether AMReX supports one MFIter per thread (AMReX-Codes/amrex#5615).
+CONCURRENT_MFITER = _probe_concurrent_mfiter()
+
+needs_concurrent_mfiter = pytest.mark.skipif(
+    not CONCURRENT_MFITER,
+    reason="AMReX is too old for one MFIter per thread (AMReX-Codes/amrex#5615)",
+)
 
 
 def run_concurrently(fn, nthreads=NTHREADS):
@@ -124,6 +187,7 @@ def test_module_does_not_reenable_the_gil():
 # ---------------------------------------------------------------------------
 
 
+@needs_concurrent_mfiter
 def test_concurrent_multifab_lifetime(boxarr, distmap):
     """Concurrent MultiFab construction and destruction.
 
@@ -144,9 +208,12 @@ def test_concurrent_multifab_lifetime(boxarr, distmap):
             mf.clear()
         return t
 
+    # the real checks are the asserts inside work(); this only pins down that
+    # every thread ran and results came back in thread order
     assert run_concurrently(work) == list(range(NTHREADS))
 
 
+@needs_concurrent_mfiter
 def test_concurrent_mfiter_distinct_multifabs(boxarr, distmap):
     """Each thread iterates its own MultiFab -- the plainest data-parallel case."""
 
@@ -168,6 +235,7 @@ def test_concurrent_mfiter_distinct_multifabs(boxarr, distmap):
     assert len(set(counts)) == 1, counts
 
 
+@needs_concurrent_mfiter
 def test_concurrent_mfiter_same_multifab(mfab):
     """Each thread drives its *own* MFIter over one shared MultiFab.
 
@@ -199,6 +267,7 @@ def test_concurrent_mfiter_same_multifab(mfab):
         assert float(arr.max()) == expected, f"box {mfi.index}"
 
 
+@needs_concurrent_mfiter
 def test_concurrent_fill_boundary(boxarr, distmap):
     """Concurrent ``fill_boundary`` on distinct MultiFabs with identical shape.
 
@@ -237,6 +306,7 @@ def test_concurrent_fill_boundary(boxarr, distmap):
     assert run_concurrently(work) == [reference] * NTHREADS
 
 
+@needs_concurrent_mfiter
 def test_concurrent_sum_boundary(boxarr, distmap):
     """Concurrent ``sum_boundary`` -- exercises the global copy-plan cache
     (``FabArrayBase::getCPC``), which is likewise unlocked."""
@@ -253,9 +323,12 @@ def test_concurrent_sum_boundary(boxarr, distmap):
         )
 
     reference = total(build_and_sum(1.0))
+    assert reference > 0
 
     def work(t):
-        return total(build_and_sum(1.0))
+        # a per-thread value, so a thread reading another's buffer is visible
+        value = float(t) + 1.0
+        return total(build_and_sum(value)) / value
 
     for got in run_concurrently(work):
         assert got == pytest.approx(reference)
@@ -303,6 +376,7 @@ def test_concurrent_parmparse_query():
 # ---------------------------------------------------------------------------
 
 
+@needs_concurrent_mfiter
 def test_concurrent_particle_containers(std_geometry, distmap, boxarr):
     """Each thread builds, fills and redistributes its own ParticleContainer.
 
@@ -327,6 +401,7 @@ def test_concurrent_particle_containers(std_geometry, distmap, boxarr):
     assert run_concurrently(work) == [npart] * NTHREADS
 
 
+@needs_concurrent_mfiter
 def test_concurrent_soa_views(std_geometry, distmap, boxarr):
     """Concurrent zero-copy views onto particle SoA data."""
 
@@ -354,14 +429,15 @@ def test_concurrent_soa_views(std_geometry, distmap, boxarr):
 
 
 @pytest.mark.skipif(amr.Config.spacedim != 3, reason="requires AMREX_SPACEDIM = 3")
-def test_concurrent_plotfile_read():
+@needs_concurrent_mfiter
+def test_concurrent_plotfile_read(tmp_path):
     """Several threads read the same plotfile at once.
 
     AMReX caches an open ``ifstream`` per file name. That cache used to be
     process-global, so two threads reading the same file shared one stream --
     and therefore one read position.
     """
-    filename = "test_plt_free_threading"
+    filename = str(tmp_path / "test_plt_free_threading")
     domain_box = amr.Box([0, 0, 0], [31, 31, 31])
     real_box = amr.RealBox([-0.5, -0.5, -0.5], [0.5, 0.5, 0.5])
     geom = amr.Geometry(domain_box, real_box, amr.CoordSys.cartesian, [0, 0, 0])
@@ -411,13 +487,16 @@ def test_concurrent_pyobject_churn():
             acc += box.num_pts
         return acc
 
-    reference = sum(
-        amr.Box(amr.IntVect(0, 0, 0), amr.IntVect(1, k % 7 + 1, 3)).num_pts
-        for k in range(nreps)
-    )
-    assert run_concurrently(work)[0] == reference
+    def reference(t):
+        return sum(
+            amr.Box(amr.IntVect(0, 0, 0), amr.IntVect(t + 1, k % 7 + 1, 3)).num_pts
+            for k in range(nreps)
+        )
+
+    assert run_concurrently(work) == [reference(t) for t in range(NTHREADS)]
 
 
+@needs_concurrent_mfiter
 def test_concurrent_array_views(boxarr, distmap):
     """Concurrent creation and release of zero-copy array views.
 
@@ -435,4 +514,6 @@ def test_concurrent_array_views(boxarr, distmap):
             del views
         return t
 
+    # the real checks are the asserts inside work(); this only pins down that
+    # every thread ran and results came back in thread order
     assert run_concurrently(work) == list(range(NTHREADS))

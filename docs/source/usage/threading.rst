@@ -139,9 +139,9 @@ Python threads and an ``AMReX_OMP=ON`` build are two separate thread pools over
 the same cores. Running both oversubscribes the node and usually ends up slower
 than either alone -- pick one:
 
-* **Python threads** (``AMREX_OMP=OFF``, the default for pyAMReX wheels) when
+* **Python threads** (``AMReX_OMP=OFF``, the default for pyAMReX wheels) when
   the hot loop is Python.
-* **OpenMP** (``AMREX_OMP=ON``, ``OMP_NUM_THREADS=N``) when the hot loop is
+* **OpenMP** (``AMReX_OMP=ON``, ``OMP_NUM_THREADS=N``) when the hot loop is
   inside AMReX's own C++ kernels and Python is only orchestrating.
 
 If you must use both, cap them so the product matches the core count, e.g.
