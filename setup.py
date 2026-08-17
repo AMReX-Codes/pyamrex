@@ -303,6 +303,9 @@ setup(
         "Programming Language :: Python :: 3.12",
         "Programming Language :: Python :: 3.13",
         "Programming Language :: Python :: 3.14",
+        # bump to "3 - Stable" once the free-threading tests have soaked in CI
+        # across platforms; see docs/source/usage/threading.rst
+        "Programming Language :: Python :: Free Threading :: 2 - Beta",
     ],
     # new PEP 639 format
     license="BSD-3-Clause-LBNL",

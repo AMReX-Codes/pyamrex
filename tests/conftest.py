@@ -27,6 +27,13 @@ if amr.Config.have_mpi:
 basepath = os.getcwd()
 
 
+def pytest_configure(config):
+    config.addinivalue_line(
+        "markers",
+        "perf: timing-based scaling benchmark; set PYAMREX_BENCH=1 to run",
+    )
+
+
 @pytest.fixture(scope="function")
 def make_real_array4():
     """Create an Array4 of ones matching the compiled amrex::Real precision."""

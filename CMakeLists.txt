@@ -382,6 +382,19 @@ if(pyAMReX_BUILD_TESTING)
 
     # set PYTHONPATH and PATH (for .dll files)
     pyamrex_test_set_pythonpath(pytest.AMReX)
+
+    # Free-threading (PEP 703) concurrency tests, with the GIL forced off.
+    #   On a GIL-enabled interpreter PYTHON_GIL is ignored and these still run,
+    #   just serialized, so the test is registered unconditionally.
+    add_test(NAME pytest.AMReX.free_threading
+        COMMAND ${Python_EXECUTABLE} -m pytest -s -vvvv
+            ${pyAMReX_SOURCE_DIR}/tests/test_free_threading.py
+        WORKING_DIRECTORY
+            ${CMAKE_PYTHON_OUTPUT_DIRECTORY}
+    )
+    set_property(TEST pytest.AMReX.free_threading APPEND PROPERTY ENVIRONMENT
+        "OMP_NUM_THREADS=1" "PYTHON_GIL=0")
+    pyamrex_test_set_pythonpath(pytest.AMReX.free_threading)
 endif()
 
 

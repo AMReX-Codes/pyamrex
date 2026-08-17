@@ -152,5 +152,9 @@ Other C++ Calls
 pyAMReX exposes many more C++-written and GPU-accelerated AMReX functions for :py:class:`~amrex.space3d.MultiFab` and :ref:`particles <usage-api-particles>` to Python, which can be used to set, reduce, rescale, redistribute, etc. contained data.
 Check out the detailed :ref:`API docs for more details <usage-api>` and use further third party libraries at will on the exposed data structures, replacing the hot loops described above.
 
+On a free-threaded (PEP 703) interpreter, the per-block loops above can run on
+several Python threads at once; see :ref:`usage-threading` for the rules and the
+two patterns we support.
+
 You can also leave the Python world in pyAMReX and go back to C++ whenever needed.
 For :ref:`some applications <usage_run>`, pyAMReX might act as *scriptable glue* that transports fields and particles from one (C++) function to another without recompilation, by exposing the functions and methods to Python.

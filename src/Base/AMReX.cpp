@@ -5,9 +5,21 @@
 #include <AMReX_Vector.H>
 #include <AMReX_ParmParse.H>
 
+#include <mutex>
 #include <stdexcept>
 #include <string>
 
+namespace
+{
+    /** Serializes amrex.initialize()/finalize().
+     *
+     * Both mutate process-global state (the AMReX instance stack, ParmParse,
+     * the arenas, signal handlers). The threading contract says to call them
+     * from one thread; this makes a violation a clean serialization rather
+     * than a corrupted instance stack.
+     */
+    std::mutex init_finalize_mutex;
+}
 
 void init_AMReX(py::module& m)
 {
@@ -23,6 +35,8 @@ void init_AMReX(py::module& m)
 
     m.def("initialize",
           [](const py::list args) {
+              std::scoped_lock lock(init_finalize_mutex);
+
               Vector<std::string> cargs{"amrex"};
               Vector<char*> argv;
 
@@ -77,11 +91,13 @@ void init_AMReX(py::module& m)
 
     m.def("finalize",
           [prepare_finalize]() {
+              std::scoped_lock lock(init_finalize_mutex);
               prepare_finalize();
               amrex::Finalize();
           });
     m.def("finalize",
           [prepare_finalize](AMReX* pamrex) {
+              std::scoped_lock lock(init_finalize_mutex);
               prepare_finalize();
               amrex::Finalize(pamrex);
           });

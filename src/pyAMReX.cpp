@@ -62,12 +62,18 @@ void init_VisMF(py::module &);
 void init_EB(py::module &);
 #endif
 
+// py::mod_gil_not_used() declares that this module is safe to run on a
+// free-threaded (PEP 703) interpreter. Without it, CPython re-enables the GIL
+// process-wide the moment the module is imported.
+//
+// It is a promise, not a flag: see docs/source/usage/threading.rst for what
+// pyAMReX and AMReX do and do not guarantee across threads.
 #if AMREX_SPACEDIM == 1
-PYBIND11_MODULE(amrex_1d_pybind, m) {
+PYBIND11_MODULE(amrex_1d_pybind, m, py::mod_gil_not_used()) {
 #elif AMREX_SPACEDIM == 2
-PYBIND11_MODULE(amrex_2d_pybind, m) {
+PYBIND11_MODULE(amrex_2d_pybind, m, py::mod_gil_not_used()) {
 #elif AMREX_SPACEDIM == 3
-PYBIND11_MODULE(amrex_3d_pybind, m) {
+PYBIND11_MODULE(amrex_3d_pybind, m, py::mod_gil_not_used()) {
 #else
 #  error "AMREX_SPACEDIM must be 1, 2 or 3"
 #endif

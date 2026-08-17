@@ -11,10 +11,24 @@
 
 #include <functional>
 #include <iostream>
+#include <mutex>
 #include <string>
 #include <string_view>
 #include <vector>
 
+
+namespace
+{
+    /** Serializes pretty_print_table().
+     *
+     * py::scoped_ostream_redirect swaps std::cout's stream buffer for the
+     * duration of the call, which is process-wide state. Two threads printing
+     * at once would restore each other's buffer. Note that this only makes
+     * concurrent pretty_print_table() calls safe -- an amrex::Print() on a
+     * third thread still lands in the redirected buffer for the duration.
+     */
+    std::mutex pretty_print_mutex;
+}
 
 void init_ParmParse(py::module &m)
 {
@@ -111,6 +125,7 @@ void init_ParmParse(py::module &m)
         .def(
             "pretty_print_table",
             [](ParmParse &pp) {
+                std::scoped_lock lock(pretty_print_mutex);
                 py::scoped_ostream_redirect stream(
                     std::cout,                               // std::ostream&
                     py::module_::import("sys").attr("stdout") // Python output
