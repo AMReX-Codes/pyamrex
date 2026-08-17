@@ -56,6 +56,66 @@ jobs:
       run: |
         mpiexec -np 1 python3 -m pytest tests/
 
+  free_threading:
+    name: GNU@13 Free-Threaded Python
+    runs-on: ubuntu-24.04
+    env:
+      CC: gcc-13
+      CXX: g++-13
+    steps:
+    - uses: actions/checkout@v6
+    - uses: actions/setup-python@v5
+      name: Install free-threaded Python
+      with:
+        python-version: '3.14t'
+    - name: Dependencies
+      run: |
+        .github/workflows/dependencies/dependencies_gcc.sh 13
+        .github/workflows/dependencies/dependencies_ccache.sh
+    - name: Set Up Cache
+      uses: actions/cache@v6
+      with:
+        path: ~/.cache/ccache
+        key: ccache-${{ github.workflow }}-${{ github.job }}-git-${{ github.sha }}
+        restore-keys: |
+             ccache-${{ github.workflow }}-${{ github.job }}-git-
+    - name: Build & Install
+      run: |
+        export CCACHE_COMPRESS=1
+        export CCACHE_COMPRESSLEVEL=10
+        export CCACHE_MAXSIZE=800M
+        ccache -z
+
+        export CMAKE_BUILD_PARALLEL_LEVEL=4
+
+        python3 -c "import sys, sysconfig; assert sysconfig.get_config_var('Py_GIL_DISABLED'), 'not a free-threaded interpreter'; print(sys.version)"
+
+        python3 -m pip install -U pip
+        python3 -m pip install -U build packaging setuptools[core] wheel
+        # CMake >= 4.1 to find Development.Module for the free-threaded ABI:
+        # 3.31 and 4.0 locate the interpreter but not the 't' ABI's headers.
+        python3 -m pip install -U "cmake>=4.1" pytest pytest-repeat numpy
+        AMREX_MPI=OFF AMREX_SPACEDIM=3 python3 -m pip install -v .
+
+        ccache -s
+        du -hs ~/.cache/ccache
+
+    - name: The GIL stays off
+      run: |
+        python3 -X warn_default_gil -c "import sys, amrex.space3d as amr; assert sys._is_gil_enabled() is False, 'importing pyAMReX re-enabled the GIL'; print('GIL disabled:', not sys._is_gil_enabled())"
+
+    - name: Unit tests, GIL disabled
+      run: |
+        PYTHON_GIL=0 python3 -m pytest tests/
+
+    - name: Unit tests, GIL forced back on
+      run: |
+        PYTHON_GIL=1 python3 -m pytest tests/
+
+    - name: Concurrency tests, repeated
+      run: |
+        PYTHON_GIL=0 python3 -m pytest tests/test_free_threading.py --count=20
+
   gcc14:
     name: GNU@14 Debug
     runs-on: ubuntu-24.04

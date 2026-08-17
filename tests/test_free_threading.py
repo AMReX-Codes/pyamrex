@@ -209,7 +209,9 @@ def test_concurrent_mfiter_same_multifab(needs_amrex_free_threading, mfab):
         assert float(arr.max()) == expected, f"box {mfi.index}"
 
 
-def test_concurrent_fill_boundary(needs_amrex_free_threading, boxarr, distmap):
+def test_concurrent_fill_boundary(
+    needs_amrex_free_threading, single_rank_only, boxarr, distmap
+):
     """Concurrent ``fill_boundary`` on distinct MultiFabs with identical shape.
 
     ``FabArrayBase::getFB`` looks up and inserts into a process-global multimap
@@ -247,7 +249,9 @@ def test_concurrent_fill_boundary(needs_amrex_free_threading, boxarr, distmap):
     assert run_concurrently(work) == [reference] * NTHREADS
 
 
-def test_concurrent_sum_boundary(needs_amrex_free_threading, boxarr, distmap):
+def test_concurrent_sum_boundary(
+    needs_amrex_free_threading, single_rank_only, boxarr, distmap
+):
     """Concurrent ``sum_boundary`` -- exercises the global copy-plan cache
     (``FabArrayBase::getCPC``), which is likewise unlocked."""
 
@@ -317,7 +321,7 @@ def test_concurrent_parmparse_query(needs_amrex_free_threading):
 
 
 def test_concurrent_particle_containers(
-    needs_amrex_free_threading, std_geometry, distmap, boxarr
+    needs_amrex_free_threading, single_rank_only, std_geometry, distmap, boxarr
 ):
     """Each thread builds, fills and redistributes its own ParticleContainer.
 
@@ -371,7 +375,9 @@ def test_concurrent_soa_views(
 
 
 @pytest.mark.skipif(amr.Config.spacedim != 3, reason="requires AMREX_SPACEDIM = 3")
-def test_concurrent_plotfile_read(needs_amrex_free_threading, tmp_path):
+def test_concurrent_plotfile_read(
+    needs_amrex_free_threading, single_rank_only, tmp_path
+):
     """Several threads read the same plotfile at once.
 
     AMReX caches an open ``ifstream`` per file name. That cache used to be

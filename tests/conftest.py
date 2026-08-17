@@ -129,6 +129,27 @@ def needs_amrex_free_threading():
         )
 
 
+@pytest.fixture(scope="function")
+def single_rank_only(amrex_init):
+    """Skip a test that drives MPI-collective calls from several threads.
+
+    ``fill_boundary``, ``sum_boundary``, ``Redistribute`` and ``PlotFileData``
+    (via ``VisMF::Read``'s ``ReduceBoolAnd``) are collective on more than one
+    rank, and the threading contract puts collectives on one thread: two
+    threads can be admitted in different orders on different ranks and pair
+    the calls up wrongly, which hangs. On a single rank they are local and the
+    tests are meaningful, so gate rather than delete them -- that makes the
+    constraint enforced rather than accidentally satisfied by CI always running
+    ``mpiexec -np 1``.
+
+    A fixture, not a ``skipif``: ``ParallelDescriptor.NProcs()`` segfaults
+    before ``amrex.initialize()``, and mark conditions are evaluated at import
+    time. Depending on ``amrex_init`` makes the ordering explicit.
+    """
+    if amr.ParallelDescriptor.NProcs() > 1:
+        pytest.skip("drives MPI-collective calls from several threads; one rank only")
+
+
 def pytest_configure(config):
     config.addinivalue_line(
         "markers",
