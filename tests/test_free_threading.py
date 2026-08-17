@@ -14,9 +14,10 @@ as a crash. Run them repeatedly to shake out timing-dependent races::
 Most of these drive one ``MFIter`` per thread, which needs an AMReX whose
 ``MFIter::depth`` is per-thread (AMReX-Codes/amrex#5615). Older AMReX aborts
 the second concurrent iterator with "Nested or multiple active MFIters is not
-supported by default", so those tests are skipped there -- see
-``AMREX_IS_FREE_THREADING_SAFE``. This is about the AMReX underneath, not about whether
-the GIL is enabled: they are equally valid, if serialized, on a GIL build.
+supported by default", so those tests are skipped there -- see the
+``needs_amrex_free_threading`` fixture in ``conftest.py``. This is about the
+AMReX underneath, not about whether the GIL is enabled: they are equally valid,
+if serialized, on a GIL build.
 """
 
 import os

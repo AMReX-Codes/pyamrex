@@ -228,9 +228,10 @@ def compare(paths):
     for path in paths:
         with open(path) as f:
             runs.append(json.load(f))
-    labels = ["GIL on" if run["runtime"]["gil_enabled"] else "GIL off" for run in runs]
-
+    # Filter before building the labels, or an --overhead file passed alongside
+    # a scaling file contributes a column header with no column under it.
     runs = [r for r in runs if "results" in r]
+    labels = ["GIL on" if run["runtime"]["gil_enabled"] else "GIL off" for run in runs]
     if not runs:
         print("none of those files hold scaling results (--overhead runs do not)")
         return

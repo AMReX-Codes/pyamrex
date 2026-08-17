@@ -20,8 +20,11 @@ the GIL:
 .. code-block:: python
 
    import sys
-   import amrex.space3d as amr
 
+   # importing pyAMReX is what used to switch the GIL back on
+   import amrex.space3d as amr  # noqa: F401
+
+   # sys._is_gil_enabled() exists on CPython 3.13 and newer
    assert sys._is_gil_enabled() is False
 
 Free-threaded interpreters are named ``python3.13t`` / ``python3.14t``, and
@@ -82,8 +85,10 @@ Main thread only:
   *process-global* state -- and on a GPU build frees and reallocates the device
   RNG state array. Seed once before starting worker threads. (Drawing numbers
   is fine concurrently on the host: each thread has its own generator.)
-* :cpp:class:`amrex::TinyProfiler` (``tiny_profiler.enabled=1``). Its section
-  stack is global and asserts on nesting; use it single-threaded.
+* :cpp:class:`amrex::TinyProfiler`. Its section stack is global and asserts on
+  nesting, so use it single-threaded. Note this is opt-*out*: in an
+  ``AMReX_TINY_PROFILE=ON`` build it is on unless you pass
+  ``tiny_profiler.enabled=0``, which is what ``tests/conftest.py`` does.
 * Building embedded-boundary geometry (``EB2_Build``, ``makeEBFabFactory``):
   AMReX keeps the index spaces on an unguarded global stack.
 * ``AMReX.top()`` / ``size()`` / ``empty()``, the ``Geometry.ResetDefault*``

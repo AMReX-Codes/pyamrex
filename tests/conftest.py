@@ -67,6 +67,11 @@ def work(i):
             barrier.wait(timeout=60)
     except Exception as e:       # noqa: BLE001
         errors.append(e)
+        # Break the barrier so the other thread stops waiting immediately. On
+        # an AMReX without the fix this is the expected path, and without the
+        # abort the surviving thread sits out the full timeout -- 60 s added to
+        # every CI run, since dependencies.json still pins a pre-#5615 AMReX.
+        barrier.abort()
 
 
 threads = [threading.Thread(target=work, args=(i,)) for i in range(2)]
@@ -79,33 +84,46 @@ amr.finalize()
 if not errors:
     print('yes')
 """
+    # Drop the MPI launcher's environment. The suite itself is normally run
+    # under `mpiexec -n 1`, and a child that inherits those variables tries to
+    # join the parent's job instead of starting as a singleton -- which either
+    # hangs or takes the whole job down with it. Without them, the probe is an
+    # ordinary one-rank process.
+    env = {
+        k: v
+        for k, v in os.environ.items()
+        if not k.startswith(("OMPI_", "PMIX_", "PMI_", "HYDRA_", "MPIR_CVAR_"))
+        and k not in ("MPI_LOCALRANKID", "MPI_LOCALNRANKS")
+    }
     try:
         proc = subprocess.run(
             [sys.executable, "-c", probe],
             capture_output=True,
             text=True,
             timeout=300,
+            env=env,
         )
     except (subprocess.TimeoutExpired, OSError):
         return False
     return proc.returncode == 0 and proc.stdout.strip().endswith("yes")
 
 
-#: Whether AMReX has the host-thread-safety work (AMReX-Codes/amrex#5615).
-#: Probed via one-MFIter-per-thread, which is the cheapest observable symptom;
-#: the tests below depend on the whole of it, not only on that piece.
-AMREX_IS_FREE_THREADING_SAFE = _probe_concurrent_mfiter()
-
-
 @pytest.fixture(scope="session")
 def needs_amrex_free_threading():
     """Skip unless AMReX has the host-thread-safety work.
 
-    A fixture rather than a module-level ``skipif`` mark, so that the test
-    modules need not import conftest -- which only resolves under pytest's
-    default ``prepend`` import mode.
+    Probed via one-MFIter-per-thread, the cheapest observable symptom of
+    AMReX-Codes/amrex#5615; the tests that ask for this depend on the whole of
+    that work, not only on that piece.
+
+    A session fixture rather than a module-level constant on two counts. The
+    probe costs a subprocess ``amrex.initialize``, and running it at conftest
+    import charged that to every pytest session, including ones with no
+    concurrency test in them. And a fixture means the test modules need not
+    import conftest, which only resolves under pytest's default ``prepend``
+    import mode.
     """
-    if not AMREX_IS_FREE_THREADING_SAFE:
+    if not _probe_concurrent_mfiter():
         pytest.skip(
             "AMReX predates the host-thread-safety work (AMReX-Codes/amrex#5615)"
         )

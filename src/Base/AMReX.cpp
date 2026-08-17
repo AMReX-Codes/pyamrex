@@ -5,9 +5,11 @@
 #include <AMReX_Vector.H>
 #include <AMReX_ParmParse.H>
 
+#include <atomic>
 #include <mutex>
 #include <stdexcept>
 #include <string>
+#include <thread>
 
 namespace
 {
@@ -26,19 +28,41 @@ namespace
      */
     std::mutex init_finalize_mutex;
 
-    /** Non-blocking lock; throws if another thread is already in there. */
+    /** Thread currently inside initialize()/finalize(), if any.
+     *
+     * Tracked explicitly because try_lock() on a std::mutex the calling thread
+     * already owns is undefined behaviour, and re-entry is reachable: finalize()
+     * holds the lock across the garbage collector, which runs arbitrary Python
+     * finalizers, and a __del__ that calls amrex.finalize() defensively lands
+     * right back here on the same thread.
+     */
+    std::atomic<std::thread::id> init_finalize_owner{};
+
+    /** Non-blocking lock; throws instead of waiting or re-entering. */
     class ScopedInitFinalizeLock
     {
     public:
         ScopedInitFinalizeLock ()
         {
+            auto const self = std::this_thread::get_id();
+            if (init_finalize_owner.load(std::memory_order_acquire) == self) {
+                throw std::runtime_error(
+                    "amrex.initialize()/finalize() cannot be called from "
+                    "inside amrex.initialize()/finalize() -- most likely from "
+                    "a __del__ run by the garbage collector during finalize()");
+            }
             if (!init_finalize_mutex.try_lock()) {
                 throw std::runtime_error(
                     "amrex.initialize()/finalize() must be called from a "
                     "single thread; another thread is inside one of them");
             }
+            init_finalize_owner.store(self, std::memory_order_release);
         }
-        ~ScopedInitFinalizeLock () { init_finalize_mutex.unlock(); }
+        ~ScopedInitFinalizeLock ()
+        {
+            init_finalize_owner.store(std::thread::id{}, std::memory_order_release);
+            init_finalize_mutex.unlock();
+        }
         ScopedInitFinalizeLock (ScopedInitFinalizeLock const &) = delete;
         ScopedInitFinalizeLock & operator= (ScopedInitFinalizeLock const &) = delete;
         ScopedInitFinalizeLock (ScopedInitFinalizeLock &&) = delete;
