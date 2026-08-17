@@ -370,15 +370,18 @@ add_dependencies(pyAMReX_python_sources pyAMReX_${AMReX_SPACEDIM_LAST}d)
 # Tests #######################################################################
 #
 if(pyAMReX_BUILD_TESTING)
-    # test_free_threading.py is ignored here and gets its own test below: this
-    # one runs with OMP_NUM_THREADS=3, so on an AMReX_OMP=ON build its worker
-    # threads would each open a 3-thread OpenMP team -- the oversubscription
-    # docs/source/usage/threading.rst tells users to avoid, and the one
-    # configuration in which AMReX hands two host threads the same RNG.
+    # The free-threading tests are ignored here and get their own test below:
+    # this one runs with OMP_NUM_THREADS=3, so on an AMReX_OMP=ON build their
+    # worker threads would each open a 3-thread OpenMP team -- the
+    # oversubscription docs/source/usage/threading.rst tells users to avoid,
+    # and the one configuration in which AMReX hands two host threads the same
+    # RNG. The perf module is gated on PYAMREX_BENCH=1 as well, but that is a
+    # different mechanism and not the one this reasoning relies on.
     add_test(NAME pytest.AMReX
         COMMAND ${Python_EXECUTABLE} -m pytest -s -vvvv
             ${pyAMReX_SOURCE_DIR}/tests
             --ignore=${pyAMReX_SOURCE_DIR}/tests/test_free_threading.py
+            --ignore=${pyAMReX_SOURCE_DIR}/tests/test_free_threading_perf.py
         WORKING_DIRECTORY
             ${CMAKE_PYTHON_OUTPUT_DIRECTORY}
     )

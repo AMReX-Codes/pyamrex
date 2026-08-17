@@ -73,10 +73,16 @@ Main thread only:
   collector, and waiting on a lock inside a binding call would deadlock a
   free-threaded interpreter's stop-the-world collection.
 * **MPI-collective calls** (reductions such as ``min``/``max``/``norm0``/``sum``
-  with ``local=False``, plotfile writes, ``Redistribute`` across ranks) unless
-  AMReX was built with ``AMReX_MPI_THREAD_MULTIPLE=ON``. Without it, AMReX
-  calls ``MPI_Init`` rather than ``MPI_Init_thread``, and MPI is not safe to
-  enter from two threads.
+  with ``local=False``, plotfile writes, ``Redistribute`` across ranks, and
+  ``VisMF.Read``, which reduces across ranks to agree on a cached
+  ``DistributionMapping``). Two threads entering a collective can pair up the
+  calls differently on different ranks, which hangs. Whether MPI itself
+  tolerates concurrent entry depends on the thread level actually negotiated:
+  ``AMReX_MPI_THREAD_MULTIPLE=ON`` makes AMReX request it, but if something
+  else initialized MPI first -- ``import mpi4py.MPI`` does, and
+  ``tests/conftest.py`` relies on that -- then the level is whatever *that*
+  caller asked for and AMReX only duplicates the communicator. Either way the
+  ordering problem above remains, so keep collectives on one thread.
 * Process-wide policy switches: ``Config.verbose``, the AMReX error handler,
   ``amrex.throw_exception``.
 * **Reseeding the random number generator.**
@@ -91,9 +97,16 @@ Main thread only:
   ``tiny_profiler.enabled=0``, which is what ``tests/conftest.py`` does.
 * Building embedded-boundary geometry (``EB2_Build``, ``makeEBFabFactory``):
   AMReX keeps the index spaces on an unguarded global stack.
-* ``AMReX.top()`` / ``size()`` / ``empty()``, the ``Geometry.ResetDefault*``
-  functions and ``Arena.finalize()`` -- all read or write process-wide state
-  that ``initialize``/``finalize`` own.
+* ``AMReX.top()`` / ``size()`` / ``empty()`` / ``erase()`` and
+  ``Arena.finalize()`` -- all read or write process-wide state that
+  ``initialize``/``finalize`` own. ``AMReX.erase()`` in particular destroys an
+  AMReX instance and the default ``Geometry`` hanging off it, and unlike
+  ``initialize``/``finalize`` it is *not* guarded, so calling it while another
+  thread is in a binding is a use-after-free.
+* Mutating ``ParmParse`` (``add``/``addarr``) while another thread reads it.
+  Individual queries are safe, but ``ParmParse.to_dict()`` reads each value
+  after snapshotting the key set, so an entry whose type changes underneath it
+  aborts.
 * Externally supplied GPU streams (``Gpu::setExternalStream``).
 * ``MFItInfo().set_dynamic(True)``. Dynamic MFIter scheduling shares one
   counter across an OpenMP team; two threads each opening their own team would

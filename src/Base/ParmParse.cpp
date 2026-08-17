@@ -137,7 +137,16 @@ void init_ParmParse(py::module &m)
             [](ParmParse &pp) {
                 py::dict d;
 
-                auto g_table = pp.tableCopy();  // snapshot under AMReX's table lock
+                // Snapshot under AMReX's table lock. This stabilises the key
+                // set and the type hints we dispatch on; the values below are
+                // still read from the live table via pp.get()/pp.getarr(), so
+                // a concurrent add() of a different type could still make the
+                // hint and the entry disagree. Holding the table lock across
+                // the loop instead is not an option: it would build Python
+                // objects under a C++ mutex, and a stop-the-world GC waiting
+                // on a thread blocked on that mutex deadlocks. Mutating
+                // ParmParse while reading it stays the caller's business.
+                auto g_table = pp.tableCopy();
 
                 // sort all keys
                 std::vector<std::string> sorted_names;

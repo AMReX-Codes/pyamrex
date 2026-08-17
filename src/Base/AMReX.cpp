@@ -51,6 +51,11 @@ namespace
                     "inside amrex.initialize()/finalize() -- most likely from "
                     "a __del__ run by the garbage collector during finalize()");
             }
+            // try_lock() may fail spuriously per [thread.mutex.requirements.mutex],
+            // so this can in principle refuse a genuinely single-threaded call.
+            // Not retried on purpose: a retry loop is what the stop-the-world GC
+            // deadlock above rules out, and a spurious failure raises a clear
+            // error rather than corrupting the instance stack.
             if (!init_finalize_mutex.try_lock()) {
                 throw std::runtime_error(
                     "amrex.initialize()/finalize() must be called from a "
