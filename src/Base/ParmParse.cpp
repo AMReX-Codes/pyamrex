@@ -12,6 +12,7 @@
 #include <functional>
 #include <iostream>
 #include <mutex>
+#include <sstream>
 #include <string>
 #include <string_view>
 #include <vector>
@@ -19,13 +20,13 @@
 
 namespace
 {
-    /** Serializes pretty_print_table().
+    /** Serializes the std::cout redirection in pretty_print_table().
      *
-     * py::scoped_ostream_redirect swaps std::cout's stream buffer for the
-     * duration of the call, which is process-wide state. Two threads printing
-     * at once would restore each other's buffer. Note that this only makes
-     * concurrent pretty_print_table() calls safe -- an amrex::Print() on a
-     * third thread still lands in the redirected buffer for the duration.
+     * py::scoped_ostream_redirect swaps std::cout's stream buffer, which is
+     * process-wide state; two threads printing at once would restore each
+     * other's buffer. Note this only makes concurrent pretty_print_table()
+     * calls safe -- an amrex::Print() on a third thread still lands in the
+     * redirected buffer for the duration.
      */
     std::mutex pretty_print_mutex;
 }
@@ -125,12 +126,21 @@ void init_ParmParse(py::module &m)
         .def(
             "pretty_print_table",
             [](ParmParse &pp) {
+                // Render first, print second. prettyPrintTable() holds AMReX's
+                // ParmParse table mutex, and writing through
+                // scoped_ostream_redirect runs Python on flush -- which on a
+                // free-threaded interpreter can stop the world and wait for
+                // every attached thread, including one blocked on that same
+                // table mutex in another query. Never hold it across Python.
+                std::ostringstream oss;
+                pp.prettyPrintTable(oss);
+
                 std::scoped_lock lock(pretty_print_mutex);
                 py::scoped_ostream_redirect stream(
                     std::cout,                               // std::ostream&
                     py::module_::import("sys").attr("stdout") // Python output
                 );
-                pp.prettyPrintTable(std::cout);
+                std::cout << oss.str();
             },
             "Write the table in a pretty way to the ostream. If there are "
             "duplicates, only the last one is printed."

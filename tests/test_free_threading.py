@@ -15,7 +15,7 @@ Most of these drive one ``MFIter`` per thread, which needs an AMReX whose
 ``MFIter::depth`` is per-thread (AMReX-Codes/amrex#5615). Older AMReX aborts
 the second concurrent iterator with "Nested or multiple active MFIters is not
 supported by default", so those tests are skipped there -- see
-``CONCURRENT_MFITER``. This is about the AMReX underneath, not about whether
+``AMREX_IS_FREE_THREADING_SAFE``. This is about the AMReX underneath, not about whether
 the GIL is enabled: they are equally valid, if serialized, on a GIL build.
 """
 
@@ -62,16 +62,25 @@ errors = []
 barrier = threading.Barrier(2)
 
 
-def work():
+def work(i):
+    # Ordered, not simultaneous: thread 0's iterator is provably alive before
+    # thread 1 builds its own. Racing both constructions would let two
+    # non-atomic ++depth from 0 lose an update on an old AMReX, so both would
+    # read depth==1 and the probe would wrongly report success.
     try:
-        barrier.wait(timeout=60)
-        it = amr.MFIter(mf)      # noqa: F841  -- held alive across the barrier
-        barrier.wait(timeout=60)
+        if i == 0:
+            it = amr.MFIter(mf)  # noqa: F841  -- held alive across the barriers
+            barrier.wait(timeout=60)
+            barrier.wait(timeout=60)
+        else:
+            barrier.wait(timeout=60)
+            it = amr.MFIter(mf)  # noqa: F841  -- must succeed alongside 0's
+            barrier.wait(timeout=60)
     except Exception as e:       # noqa: BLE001
         errors.append(e)
 
 
-threads = [threading.Thread(target=work) for _ in range(2)]
+threads = [threading.Thread(target=work, args=(i,)) for i in range(2)]
 for t in threads:
     t.start()
 for t in threads:
@@ -88,12 +97,14 @@ if not errors:
     return proc.returncode == 0 and proc.stdout.strip().endswith("yes")
 
 
-#: Whether AMReX supports one MFIter per thread (AMReX-Codes/amrex#5615).
-CONCURRENT_MFITER = _probe_concurrent_mfiter()
+#: Whether AMReX has the host-thread-safety work (AMReX-Codes/amrex#5615).
+#: Probed via one-MFIter-per-thread, which is the cheapest observable symptom;
+#: the tests below depend on the whole of it, not only on that piece.
+AMREX_IS_FREE_THREADING_SAFE = _probe_concurrent_mfiter()
 
-needs_concurrent_mfiter = pytest.mark.skipif(
-    not CONCURRENT_MFITER,
-    reason="AMReX is too old for one MFIter per thread (AMReX-Codes/amrex#5615)",
+needs_amrex_free_threading = pytest.mark.skipif(
+    not AMREX_IS_FREE_THREADING_SAFE,
+    reason="AMReX predates the host-thread-safety work (AMReX-Codes/amrex#5615)",
 )
 
 
@@ -187,7 +198,7 @@ def test_module_does_not_reenable_the_gil():
 # ---------------------------------------------------------------------------
 
 
-@needs_concurrent_mfiter
+@needs_amrex_free_threading
 def test_concurrent_multifab_lifetime(boxarr, distmap):
     """Concurrent MultiFab construction and destruction.
 
@@ -213,7 +224,7 @@ def test_concurrent_multifab_lifetime(boxarr, distmap):
     assert run_concurrently(work) == list(range(NTHREADS))
 
 
-@needs_concurrent_mfiter
+@needs_amrex_free_threading
 def test_concurrent_mfiter_distinct_multifabs(boxarr, distmap):
     """Each thread iterates its own MultiFab -- the plainest data-parallel case."""
 
@@ -235,7 +246,7 @@ def test_concurrent_mfiter_distinct_multifabs(boxarr, distmap):
     assert len(set(counts)) == 1, counts
 
 
-@needs_concurrent_mfiter
+@needs_amrex_free_threading
 def test_concurrent_mfiter_same_multifab(mfab):
     """Each thread drives its *own* MFIter over one shared MultiFab.
 
@@ -267,7 +278,7 @@ def test_concurrent_mfiter_same_multifab(mfab):
         assert float(arr.max()) == expected, f"box {mfi.index}"
 
 
-@needs_concurrent_mfiter
+@needs_amrex_free_threading
 def test_concurrent_fill_boundary(boxarr, distmap):
     """Concurrent ``fill_boundary`` on distinct MultiFabs with identical shape.
 
@@ -306,7 +317,7 @@ def test_concurrent_fill_boundary(boxarr, distmap):
     assert run_concurrently(work) == [reference] * NTHREADS
 
 
-@needs_concurrent_mfiter
+@needs_amrex_free_threading
 def test_concurrent_sum_boundary(boxarr, distmap):
     """Concurrent ``sum_boundary`` -- exercises the global copy-plan cache
     (``FabArrayBase::getCPC``), which is likewise unlocked."""
@@ -339,6 +350,7 @@ def test_concurrent_sum_boundary(boxarr, distmap):
 # ---------------------------------------------------------------------------
 
 
+@needs_amrex_free_threading
 def test_concurrent_parmparse_query():
     """Concurrent queries against the process-global ParmParse table.
 
@@ -376,7 +388,7 @@ def test_concurrent_parmparse_query():
 # ---------------------------------------------------------------------------
 
 
-@needs_concurrent_mfiter
+@needs_amrex_free_threading
 def test_concurrent_particle_containers(std_geometry, distmap, boxarr):
     """Each thread builds, fills and redistributes its own ParticleContainer.
 
@@ -401,7 +413,7 @@ def test_concurrent_particle_containers(std_geometry, distmap, boxarr):
     assert run_concurrently(work) == [npart] * NTHREADS
 
 
-@needs_concurrent_mfiter
+@needs_amrex_free_threading
 def test_concurrent_soa_views(std_geometry, distmap, boxarr):
     """Concurrent zero-copy views onto particle SoA data."""
 
@@ -429,7 +441,7 @@ def test_concurrent_soa_views(std_geometry, distmap, boxarr):
 
 
 @pytest.mark.skipif(amr.Config.spacedim != 3, reason="requires AMREX_SPACEDIM = 3")
-@needs_concurrent_mfiter
+@needs_amrex_free_threading
 def test_concurrent_plotfile_read(tmp_path):
     """Several threads read the same plotfile at once.
 
@@ -496,7 +508,7 @@ def test_concurrent_pyobject_churn():
     assert run_concurrently(work) == [reference(t) for t in range(NTHREADS)]
 
 
-@needs_concurrent_mfiter
+@needs_amrex_free_threading
 def test_concurrent_array_views(boxarr, distmap):
     """Concurrent creation and release of zero-copy array views.
 

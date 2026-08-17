@@ -65,8 +65,10 @@ Main thread only:
 * :py:func:`~amrex.space3d.initialize` and :py:func:`~amrex.space3d.finalize`.
   They start and stop process-wide state -- the AMReX instance stack, the
   memory arenas, the parameter table, signal and floating-point-exception
-  handlers. pyAMReX serializes them so a mistake is not silent corruption, but
-  they are not meant to overlap with anything.
+  handlers. Calling either while another thread is inside one raises
+  ``RuntimeError`` rather than waiting -- ``finalize()`` runs the garbage
+  collector, and waiting on a lock inside a binding call would deadlock a
+  free-threaded interpreter's stop-the-world collection.
 * **MPI-collective calls** (reductions such as ``min``/``max``/``norm0``/``sum``
   with ``local=False``, plotfile writes, ``Redistribute`` across ranks) unless
   AMReX was built with ``AMReX_MPI_THREAD_MULTIPLE=ON``. Without it, AMReX

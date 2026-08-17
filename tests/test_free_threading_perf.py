@@ -22,6 +22,14 @@ import pytest
 
 import amrex.space3d as amr
 
+
+def _amrex_is_free_threading_safe():
+    """Same AMReX capability probe the functional suite uses."""
+    from test_free_threading import AMREX_IS_FREE_THREADING_SAFE
+
+    return AMREX_IS_FREE_THREADING_SAFE
+
+
 FREE_THREADED = bool(sysconfig.get_config_var("Py_GIL_DISABLED"))
 GIL_ENABLED = getattr(sys, "_is_gil_enabled", lambda: True)()
 BENCH_ENABLED = os.environ.get("PYAMREX_BENCH") == "1"
@@ -115,6 +123,10 @@ def test_python_kernel_scales_without_the_gil(bench_views):
 
 @pytest.mark.skipif(
     (os.cpu_count() or 1) < NTHREADS, reason=f"needs >= {NTHREADS} cores"
+)
+@pytest.mark.skipif(
+    not _amrex_is_free_threading_safe(),
+    reason="AMReX predates the host-thread-safety work (AMReX-Codes/amrex#5615)",
 )
 def test_per_thread_mfiter_scales(boxarr, distmap):
     """The same, but with each thread driving its own MFIter.
