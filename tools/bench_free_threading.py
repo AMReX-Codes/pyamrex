@@ -165,8 +165,12 @@ def bench(args):
 def overhead(args):
     """Single-threaded cost of an MFIter + fill_boundary loop.
 
-    This is the A/B for the mutexes added to AMReX: run it on an unmodified
-    checkout, then again on the patched one.
+    Run it on an unmodified AMReX and again on the patched one to check the
+    added locking did not cost anything visible. Read it as a ceiling, not a
+    measurement of the locks: the loop is driven from Python, so per-box
+    interpreter and pybind11 overhead dominate an uncontended lock/unlock by
+    orders of magnitude. It answers "does this show up at all?", which is the
+    question that matters here, not "what does a lock cost?".
     """
     domain = amr.Box(amr.IntVect(0, 0, 0), amr.IntVect(*([args.ncell - 1] * 3)))
     ba = amr.BoxArray(domain)
