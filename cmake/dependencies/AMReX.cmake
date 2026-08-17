@@ -83,7 +83,13 @@ set(pyAMReX_amrex_src ""
 
 # Git fetcher
 option(pyAMReX_amrex_internal "Download & build AMReX" ON)
-set(pyAMReX_amrex_repo "https://github.com/AMReX-Codes/amrex.git"
+# TEMPORARY, REVERT BEFORE MERGE (with commit_amrex in dependencies.json):
+#   points at the AMReX-Codes/amrex#5615 branch so this PR's CI can build at
+#   all -- it calls ParmParse::tableCopy(), which only exists there -- and so
+#   the concurrency tests actually run instead of being skipped. A plain clone
+#   of AMReX-Codes/amrex cannot check out a commit that only exists on the
+#   fork, hence the URI here and not just the SHA.
+set(pyAMReX_amrex_repo "https://github.com/ax3l/amrex.git"
     CACHE STRING
     "Repository URI to pull and build AMReX from if(pyAMReX_amrex_internal)")
 
