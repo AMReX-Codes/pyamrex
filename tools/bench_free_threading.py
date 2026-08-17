@@ -59,7 +59,11 @@ def kernel_numpy(view, work):
 
 def kernel_python(view, work):
     """Python-level loop over the same data; holds the GIL throughout."""
-    flat = view.reshape(-1)
+    # order="F" matters: to_xp() hands back an F-contiguous view, and a
+    # default C-order reshape of that cannot alias it -- it would copy the
+    # whole box inside NumPy, which releases the GIL and so would not be
+    # the GIL-bound kernel this is meant to be.
+    flat = view.reshape(-1, order="F")
     n = flat.size
     stride = max(1, n // 4096)
     for _ in range(work):
@@ -87,37 +91,49 @@ def make_multifab(ncell, max_grid_size, ncomp):
     return mf
 
 
-def run_snapshot(mf, kernel, work, nthreads):
-    """Serial MFIter pass to collect views, then run the kernels in a pool."""
-    views = [mf.array(mfi).to_xp(copy=False, order="F") for mfi in mf]
-    barrier = threading.Barrier(nthreads)
+def _timed(nthreads, body):
+    """Wall time for running ``body(t)`` on ``nthreads`` threads.
+
+    The pool is built and the workers are parked on a barrier before the clock
+    starts, so thread startup is not charged to the measurement -- otherwise
+    every added thread pays a spawn cost and the speedup is understated.
+    """
+    barrier = threading.Barrier(nthreads + 1)  # +1 for this thread
 
     def worker(t):
         barrier.wait(timeout=300)
+        body(t)
+
+    with ThreadPoolExecutor(max_workers=nthreads) as pool:
+        futures = [pool.submit(worker, t) for t in range(nthreads)]
+        barrier.wait(timeout=300)  # all workers are up; start the clock
+        t0 = time.perf_counter()
+        for f in futures:
+            f.result()
+        return time.perf_counter() - t0
+
+
+def run_snapshot(mf, kernel, work, nthreads):
+    """Serial MFIter pass to collect views, then run the kernels in a pool."""
+    views = [mf.array(mfi).to_xp(copy=False, order="F") for mfi in mf]
+
+    def body(t):
         for i in range(t, len(views), nthreads):
             kernel(views[i], work)
 
-    t0 = time.perf_counter()
-    with ThreadPoolExecutor(max_workers=nthreads) as pool:
-        list(pool.map(worker, range(nthreads)))
-    return time.perf_counter() - t0
+    return _timed(nthreads, body)
 
 
 def run_mfiter(mf, kernel, work, nthreads):
     """Each thread drives its own MFIter and claims boxes round-robin."""
-    barrier = threading.Barrier(nthreads)
 
-    def worker(t):
-        barrier.wait(timeout=300)
+    def body(t):
         for mfi in mf:
             if mfi.index % nthreads != t:
                 continue
             kernel(mf.array(mfi).to_xp(copy=False, order="F"), work)
 
-    t0 = time.perf_counter()
-    with ThreadPoolExecutor(max_workers=nthreads) as pool:
-        list(pool.map(worker, range(nthreads)))
-    return time.perf_counter() - t0
+    return _timed(nthreads, body)
 
 
 RUNNERS = {"snapshot": run_snapshot, "mfiter": run_mfiter}
@@ -193,14 +209,16 @@ def describe_runtime():
 
 def print_table(results):
     for kernel_name, per_threads in results.items():
-        base = per_threads[min(per_threads)]
-        print(f"\n{kernel_name} kernel")
+        base_threads = min(per_threads)
+        base = per_threads[base_threads]
+        print(f"\n{kernel_name} kernel  (baseline: {base_threads} thread(s))")
         print(f"  {'threads':>7}  {'time [s]':>9}  {'speedup':>8}  {'efficiency':>10}")
         for nthreads in sorted(per_threads):
             t = per_threads[nthreads]
+            speedup = base / t
             print(
-                f"  {nthreads:>7}  {t:>9.4f}  {base / t:>8.2f}x  "
-                f"{100 * base / t / nthreads:>9.0f}%"
+                f"  {nthreads:>7}  {t:>9.4f}  {speedup:>8.2f}x  "
+                f"{100 * speedup / (nthreads / base_threads):>9.0f}%"
             )
 
 
@@ -212,13 +230,20 @@ def compare(paths):
             runs.append(json.load(f))
     labels = ["GIL on" if run["runtime"]["gil_enabled"] else "GIL off" for run in runs]
 
-    for kernel_name in sorted(runs[0]["results"]):
+    runs = [r for r in runs if "results" in r]
+    if not runs:
+        print("none of those files hold scaling results (--overhead runs do not)")
+        return
+
+    for kernel_name in sorted(set.intersection(*(set(r["results"]) for r in runs))):
         print(f"\n{kernel_name} kernel -- time [s] and speedup vs. 1 thread")
         header = "  threads"
         for label in labels:
             header += f"  {label:>16}"
         print(header)
-        threads = sorted(int(k) for k in runs[0]["results"][kernel_name])
+        threads = sorted(
+            set.intersection(*(set(map(int, r["results"][kernel_name])) for r in runs))
+        )
         for nthreads in threads:
             row = f"  {nthreads:>7}"
             for run in runs:

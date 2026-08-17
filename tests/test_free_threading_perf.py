@@ -22,14 +22,6 @@ import pytest
 
 import amrex.space3d as amr
 
-
-def _amrex_is_free_threading_safe():
-    """Same AMReX capability probe the functional suite uses."""
-    from test_free_threading import AMREX_IS_FREE_THREADING_SAFE
-
-    return AMREX_IS_FREE_THREADING_SAFE
-
-
 FREE_THREADED = bool(sysconfig.get_config_var("Py_GIL_DISABLED"))
 GIL_ENABLED = getattr(sys, "_is_gil_enabled", lambda: True)()
 BENCH_ENABLED = os.environ.get("PYAMREX_BENCH") == "1"
@@ -50,7 +42,11 @@ pytestmark = [
 
 def python_kernel(view, work=2):
     """Python-level loop over the data: holds the GIL for its whole duration."""
-    flat = view.reshape(-1)
+    # order="F" matters: to_xp() hands back an F-contiguous view, and a
+    # default C-order reshape of that cannot alias it -- it would copy the
+    # whole box inside NumPy, which releases the GIL and so would not be
+    # the GIL-bound kernel this is meant to be.
+    flat = view.reshape(-1, order="F")
     n = flat.size
     stride = max(1, n // 4096)
     for _ in range(work):
@@ -60,23 +56,42 @@ def python_kernel(view, work=2):
         flat[0] = acc
 
 
-def time_threaded(views, nthreads):
-    """Best-of-3 wall time for running python_kernel over ``views``."""
-    barrier = threading.Barrier(nthreads)
+def timed(nthreads, body):
+    """Wall time for running ``body(t)`` on ``nthreads`` threads.
+
+    The workers are parked on a barrier before the clock starts, so spawning
+    them is not charged to the measurement -- otherwise every added thread pays
+    a startup cost and the speedup comes out too low.
+    """
+    barrier = threading.Barrier(nthreads + 1)  # +1 for this thread
 
     def worker(t):
         barrier.wait(timeout=300)
+        body(t)
+
+    with ThreadPoolExecutor(max_workers=nthreads) as pool:
+        futures = [pool.submit(worker, t) for t in range(nthreads)]
+        barrier.wait(timeout=300)  # all workers up; start the clock
+        t0 = time.perf_counter()
+        for f in futures:
+            f.result()
+        return time.perf_counter() - t0
+
+
+def best_of(nthreads, body, n=3):
+    """Best of ``n`` timed runs, after a warm-up."""
+    timed(nthreads, body)
+    return min(timed(nthreads, body) for _ in range(n))
+
+
+def time_threaded(views, nthreads):
+    """Best-of-3 wall time for running python_kernel over ``views``."""
+
+    def body(t):
         for i in range(t, len(views), nthreads):
             python_kernel(views[i])
 
-    def once():
-        t0 = time.perf_counter()
-        with ThreadPoolExecutor(max_workers=nthreads) as pool:
-            list(pool.map(worker, range(nthreads)))
-        return time.perf_counter() - t0
-
-    once()  # warm-up
-    return min(once() for _ in range(3))
+    return best_of(nthreads, body)
 
 
 @pytest.fixture(scope="function")
@@ -124,11 +139,7 @@ def test_python_kernel_scales_without_the_gil(bench_views):
 @pytest.mark.skipif(
     (os.cpu_count() or 1) < NTHREADS, reason=f"needs >= {NTHREADS} cores"
 )
-@pytest.mark.skipif(
-    not _amrex_is_free_threading_safe(),
-    reason="AMReX predates the host-thread-safety work (AMReX-Codes/amrex#5615)",
-)
-def test_per_thread_mfiter_scales(boxarr, distmap):
+def test_per_thread_mfiter_scales(needs_amrex_free_threading, boxarr, distmap):
     """The same, but with each thread driving its own MFIter.
 
     This is the pattern the AMReX free-threading fixes unlock; before them the
@@ -137,23 +148,19 @@ def test_per_thread_mfiter_scales(boxarr, distmap):
     mf = amr.MultiFab(boxarr, distmap, 1, 0)
     mf.set_val(1.0)
 
-    def run(nthreads):
-        barrier = threading.Barrier(nthreads)
+    # enough work per box that the measurement is signal rather than noise
+    work = 8
 
-        def worker(t):
-            barrier.wait(timeout=300)
+    def run(nthreads):
+        def body(t):
             for mfi in mf:
                 if mfi.index % nthreads == t:
-                    python_kernel(mf.array(mfi).to_xp(copy=False, order="F"))
+                    python_kernel(mf.array(mfi).to_xp(copy=False, order="F"), work)
 
-        t0 = time.perf_counter()
-        with ThreadPoolExecutor(max_workers=nthreads) as pool:
-            list(pool.map(worker, range(nthreads)))
-        return time.perf_counter() - t0
+        return best_of(nthreads, body)
 
-    run(1)  # warm-up
-    t1 = min(run(1) for _ in range(3))
-    tn = min(run(NTHREADS) for _ in range(3))
+    t1 = run(1)
+    tn = run(NTHREADS)
     print(f"\nper-thread MFIter: {t1:.4f} s -> {tn:.4f} s ({t1 / tn:.2f}x)")
 
     if FREE_THREADED and not GIL_ENABLED:

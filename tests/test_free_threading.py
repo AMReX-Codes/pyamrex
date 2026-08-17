@@ -39,75 +39,6 @@ NTHREADS = max(2, min(8, os.cpu_count() or 2))
 BARRIER_TIMEOUT = 120.0
 
 
-def _probe_concurrent_mfiter():
-    """Does the AMReX we are linked against allow one MFIter per thread?
-
-    Two iterators on *different* threads, both alive at once -- nesting them on
-    one thread is a different thing and is still rejected. Probed in a
-    subprocess because on an AMReX without AMReX-Codes/amrex#5615 the failure
-    leaves the global depth counter non-zero, which would poison every later
-    test in this process.
-    """
-    probe = """
-import threading
-import amrex.space3d as amr
-
-amr.initialize(['amrex.verbose=0', 'amrex.throw_exception=1',
-                'amrex.signal_handling=0', 'tiny_profiler.enabled=0'])
-bx = amr.Box(amr.IntVect(0, 0, 0), amr.IntVect(7, 7, 7))
-ba = amr.BoxArray(bx)
-mf = amr.MultiFab(ba, amr.DistributionMapping(ba), 1, 0)
-
-errors = []
-barrier = threading.Barrier(2)
-
-
-def work(i):
-    # Ordered, not simultaneous: thread 0's iterator is provably alive before
-    # thread 1 builds its own. Racing both constructions would let two
-    # non-atomic ++depth from 0 lose an update on an old AMReX, so both would
-    # read depth==1 and the probe would wrongly report success.
-    try:
-        if i == 0:
-            it = amr.MFIter(mf)  # noqa: F841  -- held alive across the barriers
-            barrier.wait(timeout=60)
-            barrier.wait(timeout=60)
-        else:
-            barrier.wait(timeout=60)
-            it = amr.MFIter(mf)  # noqa: F841  -- must succeed alongside 0's
-            barrier.wait(timeout=60)
-    except Exception as e:       # noqa: BLE001
-        errors.append(e)
-
-
-threads = [threading.Thread(target=work, args=(i,)) for i in range(2)]
-for t in threads:
-    t.start()
-for t in threads:
-    t.join()
-if not errors:
-    print('yes')
-"""
-    proc = subprocess.run(
-        [sys.executable, "-c", probe],
-        capture_output=True,
-        text=True,
-        timeout=300,
-    )
-    return proc.returncode == 0 and proc.stdout.strip().endswith("yes")
-
-
-#: Whether AMReX has the host-thread-safety work (AMReX-Codes/amrex#5615).
-#: Probed via one-MFIter-per-thread, which is the cheapest observable symptom;
-#: the tests below depend on the whole of it, not only on that piece.
-AMREX_IS_FREE_THREADING_SAFE = _probe_concurrent_mfiter()
-
-needs_amrex_free_threading = pytest.mark.skipif(
-    not AMREX_IS_FREE_THREADING_SAFE,
-    reason="AMReX predates the host-thread-safety work (AMReX-Codes/amrex#5615)",
-)
-
-
 def run_concurrently(fn, nthreads=NTHREADS):
     """Run ``fn(i)`` on ``nthreads`` threads, started as close to simultaneously
     as a barrier allows.
@@ -198,8 +129,7 @@ def test_module_does_not_reenable_the_gil():
 # ---------------------------------------------------------------------------
 
 
-@needs_amrex_free_threading
-def test_concurrent_multifab_lifetime(boxarr, distmap):
+def test_concurrent_multifab_lifetime(needs_amrex_free_threading, boxarr, distmap):
     """Concurrent MultiFab construction and destruction.
 
     Every FabArray ctor/dtor runs ``FabArrayBase::addThisBD``/``clearThisBD``,
@@ -224,8 +154,9 @@ def test_concurrent_multifab_lifetime(boxarr, distmap):
     assert run_concurrently(work) == list(range(NTHREADS))
 
 
-@needs_amrex_free_threading
-def test_concurrent_mfiter_distinct_multifabs(boxarr, distmap):
+def test_concurrent_mfiter_distinct_multifabs(
+    needs_amrex_free_threading, boxarr, distmap
+):
     """Each thread iterates its own MultiFab -- the plainest data-parallel case."""
 
     def work(t):
@@ -246,8 +177,7 @@ def test_concurrent_mfiter_distinct_multifabs(boxarr, distmap):
     assert len(set(counts)) == 1, counts
 
 
-@needs_amrex_free_threading
-def test_concurrent_mfiter_same_multifab(mfab):
+def test_concurrent_mfiter_same_multifab(needs_amrex_free_threading, mfab):
     """Each thread drives its *own* MFIter over one shared MultiFab.
 
     AMReX asserts only one live MFIter per process (``MFIter::depth``, a plain
@@ -278,8 +208,7 @@ def test_concurrent_mfiter_same_multifab(mfab):
         assert float(arr.max()) == expected, f"box {mfi.index}"
 
 
-@needs_amrex_free_threading
-def test_concurrent_fill_boundary(boxarr, distmap):
+def test_concurrent_fill_boundary(needs_amrex_free_threading, boxarr, distmap):
     """Concurrent ``fill_boundary`` on distinct MultiFabs with identical shape.
 
     ``FabArrayBase::getFB`` looks up and inserts into a process-global multimap
@@ -317,8 +246,7 @@ def test_concurrent_fill_boundary(boxarr, distmap):
     assert run_concurrently(work) == [reference] * NTHREADS
 
 
-@needs_amrex_free_threading
-def test_concurrent_sum_boundary(boxarr, distmap):
+def test_concurrent_sum_boundary(needs_amrex_free_threading, boxarr, distmap):
     """Concurrent ``sum_boundary`` -- exercises the global copy-plan cache
     (``FabArrayBase::getCPC``), which is likewise unlocked."""
 
@@ -350,8 +278,7 @@ def test_concurrent_sum_boundary(boxarr, distmap):
 # ---------------------------------------------------------------------------
 
 
-@needs_amrex_free_threading
-def test_concurrent_parmparse_query():
+def test_concurrent_parmparse_query(needs_amrex_free_threading):
     """Concurrent queries against the process-global ParmParse table.
 
     A ParmParse *query* is not read-only: it bumps the entry's use count and
@@ -388,8 +315,9 @@ def test_concurrent_parmparse_query():
 # ---------------------------------------------------------------------------
 
 
-@needs_amrex_free_threading
-def test_concurrent_particle_containers(std_geometry, distmap, boxarr):
+def test_concurrent_particle_containers(
+    needs_amrex_free_threading, std_geometry, distmap, boxarr
+):
     """Each thread builds, fills and redistributes its own ParticleContainer.
 
     Touches the global particle-id counter (a bare ``++`` without OpenMP), the
@@ -413,8 +341,9 @@ def test_concurrent_particle_containers(std_geometry, distmap, boxarr):
     assert run_concurrently(work) == [npart] * NTHREADS
 
 
-@needs_amrex_free_threading
-def test_concurrent_soa_views(std_geometry, distmap, boxarr):
+def test_concurrent_soa_views(
+    needs_amrex_free_threading, std_geometry, distmap, boxarr
+):
     """Concurrent zero-copy views onto particle SoA data."""
 
     def work(t):
@@ -441,8 +370,7 @@ def test_concurrent_soa_views(std_geometry, distmap, boxarr):
 
 
 @pytest.mark.skipif(amr.Config.spacedim != 3, reason="requires AMREX_SPACEDIM = 3")
-@needs_amrex_free_threading
-def test_concurrent_plotfile_read(tmp_path):
+def test_concurrent_plotfile_read(needs_amrex_free_threading, tmp_path):
     """Several threads read the same plotfile at once.
 
     AMReX caches an open ``ifstream`` per file name. That cache used to be
@@ -508,8 +436,7 @@ def test_concurrent_pyobject_churn():
     assert run_concurrently(work) == [reference(t) for t in range(NTHREADS)]
 
 
-@needs_amrex_free_threading
-def test_concurrent_array_views(boxarr, distmap):
+def test_concurrent_array_views(needs_amrex_free_threading, boxarr, distmap):
     """Concurrent creation and release of zero-copy array views.
 
     pyAMReX keeps a process-global count of outstanding DLPack exports, and each

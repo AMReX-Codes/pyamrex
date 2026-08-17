@@ -84,6 +84,11 @@ Main thread only:
   is fine concurrently on the host: each thread has its own generator.)
 * :cpp:class:`amrex::TinyProfiler` (``tiny_profiler.enabled=1``). Its section
   stack is global and asserts on nesting; use it single-threaded.
+* Building embedded-boundary geometry (``EB2_Build``, ``makeEBFabFactory``):
+  AMReX keeps the index spaces on an unguarded global stack.
+* ``AMReX.top()`` / ``size()`` / ``empty()``, the ``Geometry.ResetDefault*``
+  functions and ``Arena.finalize()`` -- all read or write process-wide state
+  that ``initialize``/``finalize`` own.
 * Externally supplied GPU streams (``Gpu::setExternalStream``).
 * ``MFItInfo().set_dynamic(True)``. Dynamic MFIter scheduling shares one
   counter across an OpenMP team; two threads each opening their own team would
@@ -162,17 +167,17 @@ boxes, on a 14-core / 20-thread CPU:
 threads    GIL enabled        GIL disabled
 =========  =================  ==================
 1          1.00x              1.00x
-2          1.03x              1.92x
-4          1.04x              3.31x
-8          1.01x              4.87x
-14         0.95x              6.16x
-20         0.90x              6.92x
+2          1.07x              1.93x
+4          1.06x              3.55x
+8          0.99x              4.92x
+14         0.97x              6.25x
+20         0.97x              7.29x
 =========  =================  ==================
 
-A NumPy-vectorised kernel over the same data is memory-bandwidth-bound and
-scales only weakly either way -- but note that *with* the GIL it actively
-degrades past four threads (0.31x at 20 threads), because the threads spend
-their time contending for the lock rather than computing.
+A NumPy-vectorised kernel over the same data is memory-bandwidth-bound and so
+scales only weakly either way (2.6x at 20 threads without the GIL) -- but note
+that *with* the GIL it actively degrades, to 0.39x at 20 threads, the threads
+spending their time contending for the lock rather than computing.
 
 Reproduce with ``tools/bench_free_threading.py``; the same binary, run twice::
 

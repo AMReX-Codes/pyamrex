@@ -383,9 +383,11 @@ if(pyAMReX_BUILD_TESTING)
     # set PYTHONPATH and PATH (for .dll files)
     pyamrex_test_set_pythonpath(pytest.AMReX)
 
-    # Free-threading (PEP 703) concurrency tests, with the GIL forced off.
-    #   On a GIL-enabled interpreter PYTHON_GIL is ignored and these still run,
-    #   just serialized, so the test is registered unconditionally.
+    # Free-threading (PEP 703) concurrency tests. They are meaningful on any
+    # build -- serialized under a GIL -- so the test is registered always, but
+    # PYTHON_GIL=0 is only set where it is accepted: CPython 3.13+ aborts at
+    # startup ("Disabling the GIL is not supported by this build") if it is set
+    # on a GIL-enabled interpreter.
     add_test(NAME pytest.AMReX.free_threading
         COMMAND ${Python_EXECUTABLE} -m pytest -s -vvvv
             ${pyAMReX_SOURCE_DIR}/tests/test_free_threading.py
@@ -393,7 +395,15 @@ if(pyAMReX_BUILD_TESTING)
             ${CMAKE_PYTHON_OUTPUT_DIRECTORY}
     )
     set_property(TEST pytest.AMReX.free_threading APPEND PROPERTY ENVIRONMENT
-        "OMP_NUM_THREADS=1" "PYTHON_GIL=0")
+        "OMP_NUM_THREADS=1")
+    execute_process(
+        COMMAND ${Python_EXECUTABLE} -c
+            "import sysconfig,sys; sys.exit(0 if sysconfig.get_config_var('Py_GIL_DISABLED') else 1)"
+        RESULT_VARIABLE pyAMReX_PY_FREE_THREADED)
+    if(pyAMReX_PY_FREE_THREADED EQUAL 0)
+        set_property(TEST pytest.AMReX.free_threading APPEND PROPERTY ENVIRONMENT
+            "PYTHON_GIL=0")
+    endif()
     pyamrex_test_set_pythonpath(pytest.AMReX.free_threading)
 endif()
 

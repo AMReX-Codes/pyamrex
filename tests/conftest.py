@@ -3,6 +3,7 @@
 import itertools
 import os
 import platform
+import subprocess
 import sys
 
 import numpy as np
@@ -25,6 +26,89 @@ if amr.Config.have_mpi:
 
 # base path for input files
 basepath = os.getcwd()
+
+
+def _probe_concurrent_mfiter():
+    """Does the AMReX we are linked against allow one MFIter per thread?
+
+    Two iterators on *different* threads, both alive at once -- nesting them on
+    one thread is a different thing and is still rejected. Probed in a
+    subprocess because on an AMReX without AMReX-Codes/amrex#5615 the failure
+    leaves the global depth counter non-zero, which would poison every later
+    test in this process.
+    """
+    probe = """
+import threading
+import amrex.space3d as amr
+
+amr.initialize(['amrex.verbose=0', 'amrex.throw_exception=1',
+                'amrex.signal_handling=0', 'tiny_profiler.enabled=0'])
+bx = amr.Box(amr.IntVect(0, 0, 0), amr.IntVect(7, 7, 7))
+ba = amr.BoxArray(bx)
+mf = amr.MultiFab(ba, amr.DistributionMapping(ba), 1, 0)
+
+errors = []
+barrier = threading.Barrier(2)
+
+
+def work(i):
+    # Ordered, not simultaneous: thread 0's iterator is provably alive before
+    # thread 1 builds its own. Racing both constructions would let two
+    # non-atomic ++depth from 0 lose an update on an old AMReX, so both would
+    # read depth==1 and the probe would wrongly report success.
+    try:
+        if i == 0:
+            it = amr.MFIter(mf)  # noqa: F841  -- held alive across the barriers
+            barrier.wait(timeout=60)
+            barrier.wait(timeout=60)
+        else:
+            barrier.wait(timeout=60)
+            it = amr.MFIter(mf)  # noqa: F841  -- must succeed alongside 0's
+            barrier.wait(timeout=60)
+    except Exception as e:       # noqa: BLE001
+        errors.append(e)
+
+
+threads = [threading.Thread(target=work, args=(i,)) for i in range(2)]
+for t in threads:
+    t.start()
+for t in threads:
+    t.join()
+del mf, ba
+amr.finalize()
+if not errors:
+    print('yes')
+"""
+    try:
+        proc = subprocess.run(
+            [sys.executable, "-c", probe],
+            capture_output=True,
+            text=True,
+            timeout=300,
+        )
+    except (subprocess.TimeoutExpired, OSError):
+        return False
+    return proc.returncode == 0 and proc.stdout.strip().endswith("yes")
+
+
+#: Whether AMReX has the host-thread-safety work (AMReX-Codes/amrex#5615).
+#: Probed via one-MFIter-per-thread, which is the cheapest observable symptom;
+#: the tests below depend on the whole of it, not only on that piece.
+AMREX_IS_FREE_THREADING_SAFE = _probe_concurrent_mfiter()
+
+
+@pytest.fixture(scope="session")
+def needs_amrex_free_threading():
+    """Skip unless AMReX has the host-thread-safety work.
+
+    A fixture rather than a module-level ``skipif`` mark, so that the test
+    modules need not import conftest -- which only resolves under pytest's
+    default ``prepend`` import mode.
+    """
+    if not AMREX_IS_FREE_THREADING_SAFE:
+        pytest.skip(
+            "AMReX predates the host-thread-safety work (AMReX-Codes/amrex#5615)"
+        )
 
 
 def pytest_configure(config):
