@@ -82,6 +82,7 @@ CMake Option                    Default & Values                             Des
 =============================== ============================================ ===========================================================
 ``BUILD_TESTING``               **ON**/OFF                                   Build tests
 ``CMAKE_BUILD_TYPE``            RelWithDebInfo/**Release**/Debug             Type of build, symbols & optimizations
+``CMAKE_CUDA_ARCHITECTURES``    **native**/all/all-major/``80``/...          Nvidia GPU architectures to compile for (``AMReX_GPU_BACKEND=CUDA``)
 ``CMAKE_INSTALL_PREFIX``        system-dependent path                        Install path prefix
 ``CMAKE_VERBOSE_MAKEFILE``      ON/**OFF**                                   Print all compiler commands to the terminal during build
 ``AMReX_OMP``                   ON/**OFF**                                   Enable OpenMP
@@ -158,6 +159,37 @@ If you also want to select a CUDA compiler:
 
    Please clean your build directory with ``rm -rf build/`` after changing the compiler.
    Now call ``cmake -S . -B build`` (+ further options) again to re-initialize the build configuration.
+
+
+.. _building-cmake-gpu-archs:
+
+Select GPU Architectures
+------------------------
+
+For Nvidia GPUs, pyAMReX uses the standard CMake interface to select the CUDA architectures to compile for.
+By default, we select ``native``, i.e., CMake detects the architecture of the GPU(s) visible on the machine that runs ``cmake`` and pyAMReX is built exactly for those.
+
+If no GPU is visible at configuration time (a typical situation on HPC login nodes, in containers and in CI) then configuration stops with an error and you need to select the architecture explicitly, either as a CMake option:
+
+.. code-block:: bash
+
+   cmake -S . -B build -DAMReX_GPU_BACKEND=CUDA -DCMAKE_CUDA_ARCHITECTURES=80
+
+or as an `environment variable <https://cmake.org/cmake/help/latest/envvar/CUDAARCHS.html>`__:
+
+.. code-block:: bash
+
+   export CUDAARCHS=80
+
+Architectures are written as integers, e.g., ``80`` for A100 (compute capability 8.0) and ``90`` for H100.
+`Multiple architectures <https://cmake.org/cmake/help/latest/prop_tgt/CUDA_ARCHITECTURES.html>`__ are separated by semicolons (``"80;90"``), and the special values ``native``, ``all`` and ``all-major`` are supported as well.
+
+.. note::
+
+   The older AMReX-specific spellings ``-DAMReX_CUDA_ARCH=8.0`` and ``export AMREX_CUDA_ARCH=8.0`` still work, but are deprecated and warn.
+   They are translated to the CMake variables above, including their historical value formats (``Auto``, ``Common``, ``Volta``, ``8.0``, ``7.0+PTX``, whitespace-separated lists).
+
+For AMD GPUs, select the architecture with ``-DAMReX_AMD_ARCH=gfx90a`` or ``export AMREX_AMD_ARCH=gfx90a``.
 
 
 Run
