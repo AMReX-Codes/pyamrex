@@ -2,6 +2,6 @@
     "version_pyamrex": "26.08",
     "version_amrex": "26.08",
     "version_pybind11_min": "v3.0.0",
-    "commit_amrex": "19e6fba747b65a37d08f3fecef3ff2935318f26b",
+    "commit_amrex": "06424932b7572c829ca9fe31a6e178c164bf232c",
     "commit_pybind11": "v3.1.0"
 }
