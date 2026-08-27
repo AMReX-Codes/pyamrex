@@ -4,7 +4,7 @@ string(JSON pyamrex_version GET "${dependencies_data}" version_pyamrex)
 
 # Preamble ####################################################################
 #
-cmake_minimum_required(VERSION 3.24.0)
+cmake_minimum_required(VERSION 3.25.0)
 project(pyAMReX VERSION ${pyamrex_version})
 
 include(${pyAMReX_SOURCE_DIR}/cmake/pyAMReXFunctions.cmake)
@@ -26,11 +26,6 @@ if(CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
     set(CMAKE_WARN_DEPRECATED OFF CACHE BOOL "" FORCE)
 endif()
 
-# CMake 3.18+: CMAKE_CUDA_ARCHITECTURES
-# https://cmake.org/cmake/help/latest/policy/CMP0104.html
-if(POLICY CMP0104)
-    cmake_policy(SET CMP0104 OLD)
-endif()
 # device link step not yet fully implemented in AMReX logic
 # https://cmake.org/cmake/help/latest/policy/CMP0105.html
 if(POLICY CMP0105)
