@@ -282,6 +282,14 @@ setup(
     python_requires=">=3.11",
     tests_require=["pytest"],
     install_requires=install_requires,
+    extras_require={
+        "openpmd": ["openpmd-api"],
+    },
+    entry_points={
+        "console_scripts": [
+            "pltfile-to-openpmd = amrex.tools.pltfile_to_openpmd:main",
+        ],
+    },
     # cmdclass={'test': PyTest},
     # platforms='any',
     classifiers=[
