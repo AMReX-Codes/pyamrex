@@ -17,6 +17,7 @@ from .extensions.ParticleContainer import (
 from .extensions.PODVector import register_PODVector_extension
 from .extensions.SmallMatrix import register_SmallMatrix_extension
 from .extensions.StructOfArrays import register_SoA_extension
+from .extensions.Tiling import TilingIfNotGPU, for_each_tile
 
 
 def setup_module(ns, amr):
@@ -79,6 +80,26 @@ def setup_module(ns, amr):
     read_particles_.__name__ = "read_particles"
     read_particles_.__qualname__ = "read_particles"
 
+    def TilingIfNotGPU_(tile=None):
+        """MFItInfo that tiles on CPU and never on GPU.
+
+        See :py:func:`amrex.extensions.Tiling.TilingIfNotGPU` for details.
+        """
+        return TilingIfNotGPU(amr, tile)
+
+    TilingIfNotGPU_.__name__ = "TilingIfNotGPU"
+    TilingIfNotGPU_.__qualname__ = "TilingIfNotGPU"
+
+    def for_each_tile_(mfab, *others, tile=None, threads=1):
+        """Run the decorated kernel over every box or tile of a field.
+
+        See :py:func:`amrex.extensions.Tiling.for_each_tile` for details.
+        """
+        return for_each_tile(amr, mfab, *others, tile=tile, threads=threads)
+
+    for_each_tile_.__name__ = "for_each_tile"
+    for_each_tile_.__qualname__ = "for_each_tile"
+
     def module_getattr(attr):
         """Resolve ``xp`` lazily (PEP 562).
 
@@ -123,7 +144,15 @@ def setup_module(ns, amr):
     ns["Print"] = Print
     ns["read_particles"] = read_particles_
     ns["list_particle_species"] = list_particle_species
+    ns["TilingIfNotGPU"] = TilingIfNotGPU_
+    ns["for_each_tile"] = for_each_tile_
     ns["__getattr__"] = module_getattr
 
-    for injected in (Print, read_particles_, module_getattr):
+    for injected in (
+        Print,
+        read_particles_,
+        TilingIfNotGPU_,
+        for_each_tile_,
+        module_getattr,
+    ):
         injected.__module__ = name

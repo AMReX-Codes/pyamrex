@@ -8,7 +8,8 @@ License: BSD-3-Clause-LBNL
 
 import numpy as np
 
-from .Iterator import next
+from .Iterator import iterate, next
+from .Tiling import ix_type, tiles
 
 
 def mf_to_numpy(self, copy=False, order="F"):
@@ -696,11 +697,25 @@ def register_MultiFab_extension(amr):
     # register member functions for the MFIter type
     amr.MFIter.__next__ = next
 
+    # Iterating an MFIter yields a generator rather than the MFIter itself, so
+    # that leaving the loop early (break/return/exception) still finalizes it.
+    # See amrex.extensions.Iterator.iterate for why the C++ destructor alone is
+    # not enough here.
+    #
+    # Note: __iter__ must return the generator, not something that would itself
+    # need another iter() call -- Python invokes __next__ directly on whatever
+    # __iter__ returns and does not re-iter() it. Registering iterate() on
+    # MFIter alone would therefore not cover `for mfi in mfab:`.
+    amr.MFIter.__iter__ = iterate
+
     # FabArrayBase: iterate as data access in Box index space
-    amr.FabArrayBase.__iter__ = lambda fab: amr.MFIter(fab)
+    amr.FabArrayBase.__iter__ = lambda fab: iterate(amr.MFIter(fab))
 
     # register member functions for the MultiFab type
-    amr.MultiFab.__iter__ = lambda mfab: amr.MFIter(mfab)
+    amr.MultiFab.__iter__ = lambda mfab: iterate(amr.MFIter(mfab))
+    amr.MultiFab.tiles = lambda self, tile=None: tiles(amr, self, tile)
+    amr.MultiFab.tiles.__doc__ = tiles.__doc__
+    amr.MultiFab.ix_type = property(ix_type)
 
     amr.MultiFab.to_numpy = mf_to_numpy
     amr.MultiFab.to_cupy = mf_to_cupy
@@ -717,7 +732,10 @@ def register_MultiFab_extension(amr):
     amr.MultiFab.__setitem__ = __setitem__
 
     # iMultiFab
-    amr.iMultiFab.__iter__ = lambda imfab: amr.MFIter(imfab)
+    amr.iMultiFab.__iter__ = lambda imfab: iterate(amr.MFIter(imfab))
+    amr.iMultiFab.tiles = lambda self, tile=None: tiles(amr, self, tile)
+    amr.iMultiFab.tiles.__doc__ = tiles.__doc__
+    amr.iMultiFab.ix_type = property(ix_type)
 
     amr.iMultiFab.to_numpy = mf_to_numpy
     amr.iMultiFab.to_cupy = mf_to_cupy

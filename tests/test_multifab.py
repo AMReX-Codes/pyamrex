@@ -265,14 +265,16 @@ def test_mfab_ops(boxarr, distmap, nghost):
 def test_mfab_mfiter(mfab):
     assert len(mfab) == 8
 
-    assert iter(mfab).is_valid
-    assert iter(mfab).length == 8
+    # iter(mfab) is a generator driving an MFIter, not the MFIter itself, so
+    # that leaving a loop early still finalizes it. Ask the MFIter directly.
+    assert amr.MFIter(mfab).is_valid
+    assert amr.MFIter(mfab).length == 8
 
     cnt = 0
     for _mfi in mfab:
         cnt += 1
 
-    assert iter(mfab).length == cnt
+    assert amr.MFIter(mfab).length == cnt
 
 
 def test_mfab_mfiter_keeps_mfab_alive(mfab, assert_keeps_python_alive):
@@ -515,3 +517,253 @@ def test_mfab_copy(mfab):
     # check new mfab is the original data
     for i in range(new_mfab.num_comp):
         np.testing.assert_allclose(new_mfab.max(i), 42.0)
+
+
+def test_mfab_mfiter_early_exit(mfab):
+    """Leaving an MFIter loop early must still finalize the iterator.
+
+    Otherwise MFIter::depth stays at 1 and the *next* iterator construction
+    trips AMREX_ALWAYS_ASSERT(depth == 1), aborting the process. On GPU the
+    Gpu::streamSynchronize() in MFIter::Finalize() would also be skipped.
+    """
+
+    def count():
+        return sum(1 for _mfi in mfab)
+
+    n = count()
+
+    for _mfi in mfab:
+        break
+    assert count() == n
+
+    for _mfi in mfab.tiles(tile=(16, 16, 16)):
+        break
+    assert count() == n
+
+    for _mfi in amr.MFIter(mfab, amr.TilingIfNotGPU((16, 16, 16))):
+        break
+    assert count() == n
+
+    def raises():
+        for _mfi in mfab:
+            raise ValueError("kernel error")
+
+    with pytest.raises(ValueError):
+        raises()
+    assert count() == n
+
+    # Finalize() is idempotent, so calling it by hand stays safe
+    for mfi in mfab:
+        mfi.finalize()
+        break
+    assert count() == n
+
+
+def test_mfab_tiles(mfab):
+    nboxes = sum(1 for _mfi in mfab)
+
+    # no tile size given -> whole boxes, same as plain iteration
+    assert sum(1 for _mfi in mfab.tiles()) == nboxes
+
+    tiled = [mfi.tilebox() for mfi in mfab.tiles(tile=(16, 16, 16))]
+    if amr.Config.have_gpu:
+        # TilingIfNotGPU: never tile on GPU, where whole boxes are wanted
+        assert len(tiled) == nboxes
+    else:
+        # a tile smaller than the 32^3 boxes subdivides them
+        assert len(tiled) == 8 * nboxes
+
+    # either way the tiles cover this rank's valid region exactly once
+    local_pts = sum(mfi.validbox().num_pts for mfi in mfab)
+    assert sum(bx.num_pts for bx in tiled) == local_pts
+
+    # ix_type mirrors C++ mf.ixType().toIntVect()
+    assert mfab.ix_type == mfab.box_array().ix_type().to_IntVect()
+
+
+def assert_xp_equal(actual, desired):
+    """Array equality that works on NumPy, CuPy and dpnp alike.
+
+    numpy.testing on a device array raises "Implicit conversion to a NumPy
+    array is not allowed", so compare on the device and coerce only the
+    resulting scalar.
+    """
+    assert actual.shape == desired.shape
+    assert bool((actual == desired).all())
+
+
+def test_mfab_array4_call(mfab):
+    """Array4.__call__ is a global-indexed, Box-shaped view."""
+    ng = mfab.n_grow_vect
+
+    for mfi in mfab:
+        bx = mfi.tilebox()
+        arr = mfab.array(mfi)
+
+        view = arr(bx)
+        # exactly AMREX_SPACEDIM dimensions: an Array4 is always 4D (i,j,k,n)
+        # with extent-1 padding, and the unused axes must be dropped rather
+        # than sliced, or `comp` would land on k in a 1D/2D build
+        assert view.ndim == amr.Config.spacedim
+        assert view.shape == tuple(bx.size)
+
+        # a view, not a copy: a write through it is visible in a fresh view.
+        # Checked behaviorally rather than via .base, which dpnp arrays do
+        # not have.
+        view[...] = 7.0
+        assert bool((arr(bx) == 7.0).all())
+
+        # matches a hand-sliced reference against the fab's global lower bound
+        ref = arr.to_xp(copy=False, order="F")
+        lo = amr.lbound(arr)
+        lo = (lo.x, lo.y, lo.z)
+        expected = ref[
+            tuple(
+                slice(bx.small_end[d] - lo[d], bx.big_end[d] - lo[d] + 1)
+                for d in range(amr.Config.spacedim)
+            )
+            + (0,)
+        ]
+        assert_xp_equal(view, expected)
+
+        # component selection
+        for comp in range(mfab.num_comp):
+            arr(bx, comp=comp)[...] = float(comp)
+        for comp in range(mfab.num_comp):
+            np.testing.assert_allclose(float(arr(bx, comp=comp).min()), float(comp))
+            np.testing.assert_allclose(float(arr(bx, comp=comp).max()), float(comp))
+
+        # shifted access reaches the guard cells
+        if ng.max > 0:
+            shifted = arr(bx, di=-1)
+            assert shifted.shape == view.shape
+            assert_xp_equal(
+                shifted,
+                ref[
+                    tuple(
+                        slice(
+                            bx.small_end[d] + (-1 if d == 0 else 0) - lo[d],
+                            bx.big_end[d] + (-1 if d == 0 else 0) - lo[d] + 1,
+                        )
+                        for d in range(amr.Config.spacedim)
+                    )
+                    + (0,)
+                ],
+            )
+            del shifted
+
+        # release the views: on a GPU build these are DLPack exports, and
+        # amrex.finalize() refuses to run while any are still alive
+        del view, ref, expected, arr
+        break
+
+
+def test_mfab_for_each_tile(mfab):
+    """Serial, tiled and threaded runs must all agree."""
+
+    def fill(tile, threads):
+        mfab.set_val(0.0)
+
+        @amr.for_each_tile(mfab, tile=tile, threads=threads)
+        def _(bx, a):
+            a(bx)[...] = 42.0
+
+        return [mfab.min(c) for c in range(mfab.num_comp)] + [
+            mfab.max(c) for c in range(mfab.num_comp)
+        ]
+
+    reference = fill(None, 1)
+    assert reference[0] == 42.0
+    assert fill((16, 16, 16), 1) == reference
+    assert fill((16, 16, 16), 4) == reference
+    assert fill(None, 4) == reference
+
+    # the decorator returns the kernel unchanged
+    @amr.for_each_tile(mfab)
+    def my_kernel(bx, a):
+        pass
+
+    assert callable(my_kernel)
+    assert my_kernel.__name__ == "my_kernel"
+
+
+def test_mfab_portable_kernel(boxarr, distmap):
+    """A ghost-cell stencil written once for CPU-serial, CPU-threaded and GPU.
+
+    Ported from the 3D branch of ImpactX ForceFromSelfFields.cpp. The input
+    fields are linear in the index coordinates, so the central differences are
+    exact and can be checked against the analytic gradient.
+    """
+    dr = (0.1, 0.2, 0.4)
+    coef = (1.0, 2.0, 3.0)
+
+    phi = [amr.MultiFab(boxarr, distmap, 1, 1) for _ in range(3)]
+    for mfi in phi[0]:
+        gb = mfi.fabbox()
+        idx = amr.xp.meshgrid(
+            *[
+                amr.xp.arange(gb.small_end[d], gb.big_end[d] + 1)
+                for d in range(amr.Config.spacedim)
+            ],
+            indexing="ij",
+        )
+        for c in range(3):
+            phi[c].array(mfi)(gb)[...] = coef[c] * idx[c]
+
+    field = amr.MultiFab(boxarr, distmap, 1, 0)
+    field.set_val(0.0)
+
+    # Manual: Portable Kernel START
+    # C++ equivalent, e.g. ImpactX ForceFromSelfFields.cpp:
+    #
+    #   #ifdef AMREX_USE_OMP
+    #   #pragma omp parallel if (amrex::Gpu::notInLaunchRegion())
+    #   #endif
+    #   for (MFIter mfi(field, TilingIfNotGPU()); mfi.isValid(); ++mfi)
+    #   {
+    #       Box const& bx = mfi.tilebox(field.ixType().toIntVect());
+    #       Array4<Real> const& f  = field.array(mfi);
+    #       Array4<Real> const& px = phi_x.array(mfi);
+    #
+    #       amrex::ParallelFor(bx, [=] AMREX_GPU_DEVICE (int i, int j, int k)
+    #       {
+    #           f(i,j,k) = inv2dr[0] * (px(i-1,j,k) - px(i+1,j,k)) + ...;
+    #       });
+    #   }
+    #
+    # In Python the decorator stands in for the pragma and the MFIter line, its
+    # parameter list for the tilebox and array(mfi) extractions, and its body
+    # for the ParallelFor lambda. Index the Array4s with the Box: f(bx) is the
+    # tile, px(bx, di=-1) is the same tile shifted by one cell in x.
+    #
+    # There is no OpenMP here: the Python loop is always serial, so on-node
+    # parallelism is either MPI ranks, `threads=` below, or the GPU.
+    inv2dr = [0.5 / d for d in dr]
+
+    @amr.for_each_tile(field, *phi, tile=(16, 16, 16), threads=4)
+    def _(bx, f, px, py, pz):
+        f(bx)[...] = (
+            inv2dr[0] * (px(bx, di=-1) - px(bx, di=+1))
+            + inv2dr[1] * (py(bx, dj=-1) - py(bx, dj=+1))
+            + inv2dr[2] * (pz(bx, dk=-1) - pz(bx, dk=+1))
+        )
+
+    # Manual: Portable Kernel END
+
+    expected = -sum(coef[c] / dr[c] for c in range(3))
+    np.testing.assert_allclose(field.min(0), expected)
+    np.testing.assert_allclose(field.max(0), expected)
+
+    # the untiled, unthreaded path must agree
+    field.set_val(0.0)
+    for mfi in field.tiles():
+        bx = mfi.tilebox(field.ix_type)
+        f = field.array(mfi)
+        px, py, pz = (p.array(mfi) for p in phi)
+        f(bx)[...] = (
+            inv2dr[0] * (px(bx, di=-1) - px(bx, di=+1))
+            + inv2dr[1] * (py(bx, dj=-1) - py(bx, dj=+1))
+            + inv2dr[2] * (pz(bx, dk=-1) - pz(bx, dk=+1))
+        )
+    np.testing.assert_allclose(field.min(0), expected)
+    np.testing.assert_allclose(field.max(0), expected)

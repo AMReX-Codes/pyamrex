@@ -9,7 +9,7 @@ License: BSD-3-Clause-LBNL
 import os
 import warnings
 
-from .Iterator import getitem, next
+from .Iterator import getitem, iterate, next
 
 
 def iterator(self, *args, level=None):
@@ -351,7 +351,10 @@ def register_ParticleContainer_extension(amr):
         ),
     ):
         ParIter_type.__next__ = next
-        ParIter_type.__iter__ = lambda self: self
+        # a generator, so that leaving the loop early still finalizes the
+        # iterator -- ParIterBase derives from MFIter and inherits its
+        # Finalize(); see amrex.extensions.Iterator.iterate
+        ParIter_type.__iter__ = iterate
         ParIter_type.__getitem__ = getitem
 
     # register member functions for every ParticleContainer_* type

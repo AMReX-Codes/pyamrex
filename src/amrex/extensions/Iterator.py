@@ -40,6 +40,34 @@ def next(self):
     return self
 
 
+def iterate(it):
+    """Drive an ``MFIter``/``ParIter`` as a generator.
+
+    This is what ``__iter__`` returns, so it is the object a ``for`` loop holds
+    on to. The ``finally`` clause runs on normal exhaustion *and* on ``break``,
+    ``return`` and exceptions -- the same coverage C++ gets from ``~MFIter()``
+    at scope exit.
+
+    That matters because the C++ destructor is not a reliable stand-in here:
+    ``__next__`` yields the iterator itself, so after ``break`` the loop
+    variable still references it and it is not destroyed. Its ``Finalize()``
+    would then be deferred, which (a) leaves ``MFIter::depth`` at 1 so the next
+    iterator construction trips ``AMREX_ALWAYS_ASSERT(depth == 1)`` and aborts,
+    and (b) skips the ``Gpu::streamSynchronize()`` that ``Finalize()`` performs.
+
+    ``MFIter::Finalize()`` is idempotent (guarded by its ``finalized`` flag), so
+    an explicit ``it.finalize()`` in user code stays safe.
+
+    it: the C++ iterator to drive; yielded unchanged on every step
+    """
+    try:
+        while it.is_valid:
+            yield it
+            it._incr()
+    finally:
+        it.finalize()
+
+
 def getitem(self, name):
     """Access (read/write) particle vectors."""
     if not self.is_soa_particle:
