@@ -54,6 +54,8 @@ amrex
 
 from __future__ import annotations
 
+import numpy as xp
+
 from amrex._dll import add_windows_dll_directories
 from amrex.extensions.ParticleContainer import list_particle_species
 from amrex.space1d.amrex_1d_pybind import (
@@ -722,33 +724,12 @@ __all__: list[str] = [
     "unpack_ids",
     "write_multi_level_plotfile",
     "write_single_level_plotfile",
+    "xp",
 ]
 
 def Print(*args, **kwargs):
     """
     Wrap amrex::Print() - only the IO processor writes
-    """
-
-def __getattr__(attr):
-    """
-    Resolve ``xp`` lazily (PEP 562).
-
-            ``amr.xp`` is the array namespace matching this build: NumPy on CPU,
-            CuPy for CUDA/HIP, dpnp for SYCL. It is the module counterpart of the
-            ``to_xp`` methods, for code that needs to call into the array library
-            itself, e.g. ``amr.xp.sin(...)``.
-
-            Like every other CuPy/dpnp use in pyAMReX, those are optional
-            dependencies: they are imported here on first access, never at import
-            time, so ``import amrex`` works on a GPU build without them. Only
-            touching ``amr.xp`` (or a ``to_cupy``/``to_dpnp``/``to_xp`` call)
-            requires one to be installed.
-
-            Raises
-            ------
-            ImportError
-                On a GPU build whose array library (CuPy or dpnp) is not installed.
-
     """
 
 def d_decl(x, y, z):
@@ -762,7 +743,7 @@ def read_particles(
     """
     Read AMReX particle data from a plotfile/checkpoint into a container.
 
-            See :py:func:`amrex.extensions.ParticleContainer.read_particles` for details.
+    See :py:func:`amrex.extensions.ParticleContainer.read_particles` for details.
 
     """
 

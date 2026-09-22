@@ -15355,18 +15355,18 @@ class MFIter:
         """
         This is a helper function for the C++ equivalent of void operator++()
 
-            In Python, iterators always are called with __next__, even for the
-            first access. This means we need to handle the first iterator element
-            explicitly, otherwise we will jump directly to the 2nd element. We do
-            this the same way as pybind11 does this, via a little state:
-              https://github.com/AMReX-Codes/pyamrex/pull/50
-              https://github.com/AMReX-Codes/pyamrex/pull/262
-              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+        In Python, iterators always are called with __next__, even for the
+        first access. This means we need to handle the first iterator element
+        explicitly, otherwise we will jump directly to the 2nd element. We do
+        this the same way as pybind11 does this, via a little state:
+          https://github.com/AMReX-Codes/pyamrex/pull/50
+          https://github.com/AMReX-Codes/pyamrex/pull/262
+          https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
 
-            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+        Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
 
-            self: the current iterator
-            returns: the updated iterator
+        self: the current iterator
+        returns: the updated iterator
 
         """
     def __repr__(self) -> str: ...
@@ -23705,18 +23705,18 @@ class ParIterBase_pureSoA_2_0_pinned(MFIter):
         """
         This is a helper function for the C++ equivalent of void operator++()
 
-            In Python, iterators always are called with __next__, even for the
-            first access. This means we need to handle the first iterator element
-            explicitly, otherwise we will jump directly to the 2nd element. We do
-            this the same way as pybind11 does this, via a little state:
-              https://github.com/AMReX-Codes/pyamrex/pull/50
-              https://github.com/AMReX-Codes/pyamrex/pull/262
-              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+        In Python, iterators always are called with __next__, even for the
+        first access. This means we need to handle the first iterator element
+        explicitly, otherwise we will jump directly to the 2nd element. We do
+        this the same way as pybind11 does this, via a little state:
+          https://github.com/AMReX-Codes/pyamrex/pull/50
+          https://github.com/AMReX-Codes/pyamrex/pull/262
+          https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
 
-            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+        Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
 
-            self: the current iterator
-            returns: the updated iterator
+        self: the current iterator
+        returns: the updated iterator
 
         """
     def _incr(self) -> None: ...
@@ -23758,18 +23758,18 @@ class ParIter_pureSoA_2_0_pinned(ParIterBase_pureSoA_2_0_pinned):
         """
         This is a helper function for the C++ equivalent of void operator++()
 
-            In Python, iterators always are called with __next__, even for the
-            first access. This means we need to handle the first iterator element
-            explicitly, otherwise we will jump directly to the 2nd element. We do
-            this the same way as pybind11 does this, via a little state:
-              https://github.com/AMReX-Codes/pyamrex/pull/50
-              https://github.com/AMReX-Codes/pyamrex/pull/262
-              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+        In Python, iterators always are called with __next__, even for the
+        first access. This means we need to handle the first iterator element
+        explicitly, otherwise we will jump directly to the 2nd element. We do
+        this the same way as pybind11 does this, via a little state:
+          https://github.com/AMReX-Codes/pyamrex/pull/50
+          https://github.com/AMReX-Codes/pyamrex/pull/262
+          https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
 
-            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+        Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
 
-            self: the current iterator
-            returns: the updated iterator
+        self: the current iterator
+        returns: the updated iterator
 
         """
     def __repr__(self) -> str: ...
@@ -23790,18 +23790,18 @@ class ParConstIterBase_pureSoA_2_0_pinned(MFIter):
         """
         This is a helper function for the C++ equivalent of void operator++()
 
-            In Python, iterators always are called with __next__, even for the
-            first access. This means we need to handle the first iterator element
-            explicitly, otherwise we will jump directly to the 2nd element. We do
-            this the same way as pybind11 does this, via a little state:
-              https://github.com/AMReX-Codes/pyamrex/pull/50
-              https://github.com/AMReX-Codes/pyamrex/pull/262
-              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+        In Python, iterators always are called with __next__, even for the
+        first access. This means we need to handle the first iterator element
+        explicitly, otherwise we will jump directly to the 2nd element. We do
+        this the same way as pybind11 does this, via a little state:
+          https://github.com/AMReX-Codes/pyamrex/pull/50
+          https://github.com/AMReX-Codes/pyamrex/pull/262
+          https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
 
-            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+        Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
 
-            self: the current iterator
-            returns: the updated iterator
+        self: the current iterator
+        returns: the updated iterator
 
         """
     def _incr(self) -> None: ...
@@ -23843,18 +23843,18 @@ class ParConstIter_pureSoA_2_0_pinned(ParConstIterBase_pureSoA_2_0_pinned):
         """
         This is a helper function for the C++ equivalent of void operator++()
 
-            In Python, iterators always are called with __next__, even for the
-            first access. This means we need to handle the first iterator element
-            explicitly, otherwise we will jump directly to the 2nd element. We do
-            this the same way as pybind11 does this, via a little state:
-              https://github.com/AMReX-Codes/pyamrex/pull/50
-              https://github.com/AMReX-Codes/pyamrex/pull/262
-              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+        In Python, iterators always are called with __next__, even for the
+        first access. This means we need to handle the first iterator element
+        explicitly, otherwise we will jump directly to the 2nd element. We do
+        this the same way as pybind11 does this, via a little state:
+          https://github.com/AMReX-Codes/pyamrex/pull/50
+          https://github.com/AMReX-Codes/pyamrex/pull/262
+          https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
 
-            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+        Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
 
-            self: the current iterator
-            returns: the updated iterator
+        self: the current iterator
+        returns: the updated iterator
 
         """
     def __repr__(self) -> str: ...
@@ -23963,23 +23963,24 @@ class ParticleContainer_pureSoA_2_0_pinned:
         """
         Create an iterator over all particle tiles
 
-            Parameters
-            ----------
-            self : amrex.ParticleContainer_*
-                A ParticleContainer class in pyAMReX
-            args : deprecated positional argument
-            level : int | str, optional
-                The MR level. Allowed values are [0:self.finest_level+1) and "all".
-                If there is more than one MR level, the argument is required.
+        Parameters
+        ----------
+        self : amrex.ParticleContainer_*
+            A ParticleContainer class in pyAMReX
+        args : deprecated positional argument
+        level : int | str, optional
+            The MR level. Allowed values are [0:self.finest_level+1) and "all".
+            If there is more than one MR level, the argument is required.
 
-            Returns
-            -------
+        Returns
+        -------
+        amrex.ParIter_*
             Iterator over all particle tiles at the specified level.
 
-            Examples
-            --------
-            >>> pc.iterator(level="all")
-            >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
+        Examples
+        --------
+        >>> pc.iterator(level="all")
+        >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
 
         """
     def define(self, gdb: ParGDBBase) -> None:
@@ -24032,23 +24033,24 @@ class ParticleContainer_pureSoA_2_0_pinned:
         """
         Create an iterator over all particle tiles
 
-            Parameters
-            ----------
-            self : amrex.ParticleContainer_*
-                A ParticleContainer class in pyAMReX
-            args : deprecated positional argument
-            level : int | str, optional
-                The MR level. Allowed values are [0:self.finest_level+1) and "all".
-                If there is more than one MR level, the argument is required.
+        Parameters
+        ----------
+        self : amrex.ParticleContainer_*
+            A ParticleContainer class in pyAMReX
+        args : deprecated positional argument
+        level : int | str, optional
+            The MR level. Allowed values are [0:self.finest_level+1) and "all".
+            If there is more than one MR level, the argument is required.
 
-            Returns
-            -------
+        Returns
+        -------
+        amrex.ParIter_*
             Iterator over all particle tiles at the specified level.
 
-            Examples
-            --------
-            >>> pc.iterator(level="all")
-            >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
+        Examples
+        --------
+        >>> pc.iterator(level="all")
+        >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
 
         """
     def make_alike(self) -> ParticleContainer_pureSoA_2_0_pinned: ...
@@ -24206,18 +24208,18 @@ class ParIterBase_pureSoA_2_0_default(MFIter):
         """
         This is a helper function for the C++ equivalent of void operator++()
 
-            In Python, iterators always are called with __next__, even for the
-            first access. This means we need to handle the first iterator element
-            explicitly, otherwise we will jump directly to the 2nd element. We do
-            this the same way as pybind11 does this, via a little state:
-              https://github.com/AMReX-Codes/pyamrex/pull/50
-              https://github.com/AMReX-Codes/pyamrex/pull/262
-              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+        In Python, iterators always are called with __next__, even for the
+        first access. This means we need to handle the first iterator element
+        explicitly, otherwise we will jump directly to the 2nd element. We do
+        this the same way as pybind11 does this, via a little state:
+          https://github.com/AMReX-Codes/pyamrex/pull/50
+          https://github.com/AMReX-Codes/pyamrex/pull/262
+          https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
 
-            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+        Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
 
-            self: the current iterator
-            returns: the updated iterator
+        self: the current iterator
+        returns: the updated iterator
 
         """
     def _incr(self) -> None: ...
@@ -24259,18 +24261,18 @@ class ParIter_pureSoA_2_0_default(ParIterBase_pureSoA_2_0_default):
         """
         This is a helper function for the C++ equivalent of void operator++()
 
-            In Python, iterators always are called with __next__, even for the
-            first access. This means we need to handle the first iterator element
-            explicitly, otherwise we will jump directly to the 2nd element. We do
-            this the same way as pybind11 does this, via a little state:
-              https://github.com/AMReX-Codes/pyamrex/pull/50
-              https://github.com/AMReX-Codes/pyamrex/pull/262
-              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+        In Python, iterators always are called with __next__, even for the
+        first access. This means we need to handle the first iterator element
+        explicitly, otherwise we will jump directly to the 2nd element. We do
+        this the same way as pybind11 does this, via a little state:
+          https://github.com/AMReX-Codes/pyamrex/pull/50
+          https://github.com/AMReX-Codes/pyamrex/pull/262
+          https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
 
-            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+        Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
 
-            self: the current iterator
-            returns: the updated iterator
+        self: the current iterator
+        returns: the updated iterator
 
         """
     def __repr__(self) -> str: ...
@@ -24291,18 +24293,18 @@ class ParConstIterBase_pureSoA_2_0_default(MFIter):
         """
         This is a helper function for the C++ equivalent of void operator++()
 
-            In Python, iterators always are called with __next__, even for the
-            first access. This means we need to handle the first iterator element
-            explicitly, otherwise we will jump directly to the 2nd element. We do
-            this the same way as pybind11 does this, via a little state:
-              https://github.com/AMReX-Codes/pyamrex/pull/50
-              https://github.com/AMReX-Codes/pyamrex/pull/262
-              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+        In Python, iterators always are called with __next__, even for the
+        first access. This means we need to handle the first iterator element
+        explicitly, otherwise we will jump directly to the 2nd element. We do
+        this the same way as pybind11 does this, via a little state:
+          https://github.com/AMReX-Codes/pyamrex/pull/50
+          https://github.com/AMReX-Codes/pyamrex/pull/262
+          https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
 
-            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+        Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
 
-            self: the current iterator
-            returns: the updated iterator
+        self: the current iterator
+        returns: the updated iterator
 
         """
     def _incr(self) -> None: ...
@@ -24344,18 +24346,18 @@ class ParConstIter_pureSoA_2_0_default(ParConstIterBase_pureSoA_2_0_default):
         """
         This is a helper function for the C++ equivalent of void operator++()
 
-            In Python, iterators always are called with __next__, even for the
-            first access. This means we need to handle the first iterator element
-            explicitly, otherwise we will jump directly to the 2nd element. We do
-            this the same way as pybind11 does this, via a little state:
-              https://github.com/AMReX-Codes/pyamrex/pull/50
-              https://github.com/AMReX-Codes/pyamrex/pull/262
-              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+        In Python, iterators always are called with __next__, even for the
+        first access. This means we need to handle the first iterator element
+        explicitly, otherwise we will jump directly to the 2nd element. We do
+        this the same way as pybind11 does this, via a little state:
+          https://github.com/AMReX-Codes/pyamrex/pull/50
+          https://github.com/AMReX-Codes/pyamrex/pull/262
+          https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
 
-            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+        Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
 
-            self: the current iterator
-            returns: the updated iterator
+        self: the current iterator
+        returns: the updated iterator
 
         """
     def __repr__(self) -> str: ...
@@ -24464,23 +24466,24 @@ class ParticleContainer_pureSoA_2_0_default:
         """
         Create an iterator over all particle tiles
 
-            Parameters
-            ----------
-            self : amrex.ParticleContainer_*
-                A ParticleContainer class in pyAMReX
-            args : deprecated positional argument
-            level : int | str, optional
-                The MR level. Allowed values are [0:self.finest_level+1) and "all".
-                If there is more than one MR level, the argument is required.
+        Parameters
+        ----------
+        self : amrex.ParticleContainer_*
+            A ParticleContainer class in pyAMReX
+        args : deprecated positional argument
+        level : int | str, optional
+            The MR level. Allowed values are [0:self.finest_level+1) and "all".
+            If there is more than one MR level, the argument is required.
 
-            Returns
-            -------
+        Returns
+        -------
+        amrex.ParIter_*
             Iterator over all particle tiles at the specified level.
 
-            Examples
-            --------
-            >>> pc.iterator(level="all")
-            >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
+        Examples
+        --------
+        >>> pc.iterator(level="all")
+        >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
 
         """
     def define(self, gdb: ParGDBBase) -> None:
@@ -24533,23 +24536,24 @@ class ParticleContainer_pureSoA_2_0_default:
         """
         Create an iterator over all particle tiles
 
-            Parameters
-            ----------
-            self : amrex.ParticleContainer_*
-                A ParticleContainer class in pyAMReX
-            args : deprecated positional argument
-            level : int | str, optional
-                The MR level. Allowed values are [0:self.finest_level+1) and "all".
-                If there is more than one MR level, the argument is required.
+        Parameters
+        ----------
+        self : amrex.ParticleContainer_*
+            A ParticleContainer class in pyAMReX
+        args : deprecated positional argument
+        level : int | str, optional
+            The MR level. Allowed values are [0:self.finest_level+1) and "all".
+            If there is more than one MR level, the argument is required.
 
-            Returns
-            -------
+        Returns
+        -------
+        amrex.ParIter_*
             Iterator over all particle tiles at the specified level.
 
-            Examples
-            --------
-            >>> pc.iterator(level="all")
-            >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
+        Examples
+        --------
+        >>> pc.iterator(level="all")
+        >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
 
         """
     def make_alike(self) -> ParticleContainer_pureSoA_2_0_default: ...
@@ -24707,18 +24711,18 @@ class ParIterBase_pureSoA_2_0_arena(MFIter):
         """
         This is a helper function for the C++ equivalent of void operator++()
 
-            In Python, iterators always are called with __next__, even for the
-            first access. This means we need to handle the first iterator element
-            explicitly, otherwise we will jump directly to the 2nd element. We do
-            this the same way as pybind11 does this, via a little state:
-              https://github.com/AMReX-Codes/pyamrex/pull/50
-              https://github.com/AMReX-Codes/pyamrex/pull/262
-              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+        In Python, iterators always are called with __next__, even for the
+        first access. This means we need to handle the first iterator element
+        explicitly, otherwise we will jump directly to the 2nd element. We do
+        this the same way as pybind11 does this, via a little state:
+          https://github.com/AMReX-Codes/pyamrex/pull/50
+          https://github.com/AMReX-Codes/pyamrex/pull/262
+          https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
 
-            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+        Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
 
-            self: the current iterator
-            returns: the updated iterator
+        self: the current iterator
+        returns: the updated iterator
 
         """
     def _incr(self) -> None: ...
@@ -24760,18 +24764,18 @@ class ParIter_pureSoA_2_0_arena(ParIterBase_pureSoA_2_0_arena):
         """
         This is a helper function for the C++ equivalent of void operator++()
 
-            In Python, iterators always are called with __next__, even for the
-            first access. This means we need to handle the first iterator element
-            explicitly, otherwise we will jump directly to the 2nd element. We do
-            this the same way as pybind11 does this, via a little state:
-              https://github.com/AMReX-Codes/pyamrex/pull/50
-              https://github.com/AMReX-Codes/pyamrex/pull/262
-              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+        In Python, iterators always are called with __next__, even for the
+        first access. This means we need to handle the first iterator element
+        explicitly, otherwise we will jump directly to the 2nd element. We do
+        this the same way as pybind11 does this, via a little state:
+          https://github.com/AMReX-Codes/pyamrex/pull/50
+          https://github.com/AMReX-Codes/pyamrex/pull/262
+          https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
 
-            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+        Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
 
-            self: the current iterator
-            returns: the updated iterator
+        self: the current iterator
+        returns: the updated iterator
 
         """
     def __repr__(self) -> str: ...
@@ -24792,18 +24796,18 @@ class ParConstIterBase_pureSoA_2_0_arena(MFIter):
         """
         This is a helper function for the C++ equivalent of void operator++()
 
-            In Python, iterators always are called with __next__, even for the
-            first access. This means we need to handle the first iterator element
-            explicitly, otherwise we will jump directly to the 2nd element. We do
-            this the same way as pybind11 does this, via a little state:
-              https://github.com/AMReX-Codes/pyamrex/pull/50
-              https://github.com/AMReX-Codes/pyamrex/pull/262
-              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+        In Python, iterators always are called with __next__, even for the
+        first access. This means we need to handle the first iterator element
+        explicitly, otherwise we will jump directly to the 2nd element. We do
+        this the same way as pybind11 does this, via a little state:
+          https://github.com/AMReX-Codes/pyamrex/pull/50
+          https://github.com/AMReX-Codes/pyamrex/pull/262
+          https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
 
-            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+        Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
 
-            self: the current iterator
-            returns: the updated iterator
+        self: the current iterator
+        returns: the updated iterator
 
         """
     def _incr(self) -> None: ...
@@ -24845,18 +24849,18 @@ class ParConstIter_pureSoA_2_0_arena(ParConstIterBase_pureSoA_2_0_arena):
         """
         This is a helper function for the C++ equivalent of void operator++()
 
-            In Python, iterators always are called with __next__, even for the
-            first access. This means we need to handle the first iterator element
-            explicitly, otherwise we will jump directly to the 2nd element. We do
-            this the same way as pybind11 does this, via a little state:
-              https://github.com/AMReX-Codes/pyamrex/pull/50
-              https://github.com/AMReX-Codes/pyamrex/pull/262
-              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+        In Python, iterators always are called with __next__, even for the
+        first access. This means we need to handle the first iterator element
+        explicitly, otherwise we will jump directly to the 2nd element. We do
+        this the same way as pybind11 does this, via a little state:
+          https://github.com/AMReX-Codes/pyamrex/pull/50
+          https://github.com/AMReX-Codes/pyamrex/pull/262
+          https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
 
-            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+        Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
 
-            self: the current iterator
-            returns: the updated iterator
+        self: the current iterator
+        returns: the updated iterator
 
         """
     def __repr__(self) -> str: ...
@@ -24965,23 +24969,24 @@ class ParticleContainer_pureSoA_2_0_arena:
         """
         Create an iterator over all particle tiles
 
-            Parameters
-            ----------
-            self : amrex.ParticleContainer_*
-                A ParticleContainer class in pyAMReX
-            args : deprecated positional argument
-            level : int | str, optional
-                The MR level. Allowed values are [0:self.finest_level+1) and "all".
-                If there is more than one MR level, the argument is required.
+        Parameters
+        ----------
+        self : amrex.ParticleContainer_*
+            A ParticleContainer class in pyAMReX
+        args : deprecated positional argument
+        level : int | str, optional
+            The MR level. Allowed values are [0:self.finest_level+1) and "all".
+            If there is more than one MR level, the argument is required.
 
-            Returns
-            -------
+        Returns
+        -------
+        amrex.ParIter_*
             Iterator over all particle tiles at the specified level.
 
-            Examples
-            --------
-            >>> pc.iterator(level="all")
-            >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
+        Examples
+        --------
+        >>> pc.iterator(level="all")
+        >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
 
         """
     def define(self, gdb: ParGDBBase) -> None:
@@ -25034,23 +25039,24 @@ class ParticleContainer_pureSoA_2_0_arena:
         """
         Create an iterator over all particle tiles
 
-            Parameters
-            ----------
-            self : amrex.ParticleContainer_*
-                A ParticleContainer class in pyAMReX
-            args : deprecated positional argument
-            level : int | str, optional
-                The MR level. Allowed values are [0:self.finest_level+1) and "all".
-                If there is more than one MR level, the argument is required.
+        Parameters
+        ----------
+        self : amrex.ParticleContainer_*
+            A ParticleContainer class in pyAMReX
+        args : deprecated positional argument
+        level : int | str, optional
+            The MR level. Allowed values are [0:self.finest_level+1) and "all".
+            If there is more than one MR level, the argument is required.
 
-            Returns
-            -------
+        Returns
+        -------
+        amrex.ParIter_*
             Iterator over all particle tiles at the specified level.
 
-            Examples
-            --------
-            >>> pc.iterator(level="all")
-            >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
+        Examples
+        --------
+        >>> pc.iterator(level="all")
+        >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
 
         """
     def make_alike(self) -> ParticleContainer_pureSoA_2_0_arena: ...
@@ -25208,18 +25214,18 @@ class ParIterBase_pureSoA_2_0_polymorphic(MFIter):
         """
         This is a helper function for the C++ equivalent of void operator++()
 
-            In Python, iterators always are called with __next__, even for the
-            first access. This means we need to handle the first iterator element
-            explicitly, otherwise we will jump directly to the 2nd element. We do
-            this the same way as pybind11 does this, via a little state:
-              https://github.com/AMReX-Codes/pyamrex/pull/50
-              https://github.com/AMReX-Codes/pyamrex/pull/262
-              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+        In Python, iterators always are called with __next__, even for the
+        first access. This means we need to handle the first iterator element
+        explicitly, otherwise we will jump directly to the 2nd element. We do
+        this the same way as pybind11 does this, via a little state:
+          https://github.com/AMReX-Codes/pyamrex/pull/50
+          https://github.com/AMReX-Codes/pyamrex/pull/262
+          https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
 
-            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+        Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
 
-            self: the current iterator
-            returns: the updated iterator
+        self: the current iterator
+        returns: the updated iterator
 
         """
     def _incr(self) -> None: ...
@@ -25261,18 +25267,18 @@ class ParIter_pureSoA_2_0_polymorphic(ParIterBase_pureSoA_2_0_polymorphic):
         """
         This is a helper function for the C++ equivalent of void operator++()
 
-            In Python, iterators always are called with __next__, even for the
-            first access. This means we need to handle the first iterator element
-            explicitly, otherwise we will jump directly to the 2nd element. We do
-            this the same way as pybind11 does this, via a little state:
-              https://github.com/AMReX-Codes/pyamrex/pull/50
-              https://github.com/AMReX-Codes/pyamrex/pull/262
-              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+        In Python, iterators always are called with __next__, even for the
+        first access. This means we need to handle the first iterator element
+        explicitly, otherwise we will jump directly to the 2nd element. We do
+        this the same way as pybind11 does this, via a little state:
+          https://github.com/AMReX-Codes/pyamrex/pull/50
+          https://github.com/AMReX-Codes/pyamrex/pull/262
+          https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
 
-            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+        Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
 
-            self: the current iterator
-            returns: the updated iterator
+        self: the current iterator
+        returns: the updated iterator
 
         """
     def __repr__(self) -> str: ...
@@ -25293,18 +25299,18 @@ class ParConstIterBase_pureSoA_2_0_polymorphic(MFIter):
         """
         This is a helper function for the C++ equivalent of void operator++()
 
-            In Python, iterators always are called with __next__, even for the
-            first access. This means we need to handle the first iterator element
-            explicitly, otherwise we will jump directly to the 2nd element. We do
-            this the same way as pybind11 does this, via a little state:
-              https://github.com/AMReX-Codes/pyamrex/pull/50
-              https://github.com/AMReX-Codes/pyamrex/pull/262
-              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+        In Python, iterators always are called with __next__, even for the
+        first access. This means we need to handle the first iterator element
+        explicitly, otherwise we will jump directly to the 2nd element. We do
+        this the same way as pybind11 does this, via a little state:
+          https://github.com/AMReX-Codes/pyamrex/pull/50
+          https://github.com/AMReX-Codes/pyamrex/pull/262
+          https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
 
-            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+        Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
 
-            self: the current iterator
-            returns: the updated iterator
+        self: the current iterator
+        returns: the updated iterator
 
         """
     def _incr(self) -> None: ...
@@ -25346,18 +25352,18 @@ class ParConstIter_pureSoA_2_0_polymorphic(ParConstIterBase_pureSoA_2_0_polymorp
         """
         This is a helper function for the C++ equivalent of void operator++()
 
-            In Python, iterators always are called with __next__, even for the
-            first access. This means we need to handle the first iterator element
-            explicitly, otherwise we will jump directly to the 2nd element. We do
-            this the same way as pybind11 does this, via a little state:
-              https://github.com/AMReX-Codes/pyamrex/pull/50
-              https://github.com/AMReX-Codes/pyamrex/pull/262
-              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+        In Python, iterators always are called with __next__, even for the
+        first access. This means we need to handle the first iterator element
+        explicitly, otherwise we will jump directly to the 2nd element. We do
+        this the same way as pybind11 does this, via a little state:
+          https://github.com/AMReX-Codes/pyamrex/pull/50
+          https://github.com/AMReX-Codes/pyamrex/pull/262
+          https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
 
-            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+        Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
 
-            self: the current iterator
-            returns: the updated iterator
+        self: the current iterator
+        returns: the updated iterator
 
         """
     def __repr__(self) -> str: ...
@@ -25466,23 +25472,24 @@ class ParticleContainer_pureSoA_2_0_polymorphic:
         """
         Create an iterator over all particle tiles
 
-            Parameters
-            ----------
-            self : amrex.ParticleContainer_*
-                A ParticleContainer class in pyAMReX
-            args : deprecated positional argument
-            level : int | str, optional
-                The MR level. Allowed values are [0:self.finest_level+1) and "all".
-                If there is more than one MR level, the argument is required.
+        Parameters
+        ----------
+        self : amrex.ParticleContainer_*
+            A ParticleContainer class in pyAMReX
+        args : deprecated positional argument
+        level : int | str, optional
+            The MR level. Allowed values are [0:self.finest_level+1) and "all".
+            If there is more than one MR level, the argument is required.
 
-            Returns
-            -------
+        Returns
+        -------
+        amrex.ParIter_*
             Iterator over all particle tiles at the specified level.
 
-            Examples
-            --------
-            >>> pc.iterator(level="all")
-            >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
+        Examples
+        --------
+        >>> pc.iterator(level="all")
+        >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
 
         """
     def define(self, gdb: ParGDBBase) -> None:
@@ -25535,23 +25542,24 @@ class ParticleContainer_pureSoA_2_0_polymorphic:
         """
         Create an iterator over all particle tiles
 
-            Parameters
-            ----------
-            self : amrex.ParticleContainer_*
-                A ParticleContainer class in pyAMReX
-            args : deprecated positional argument
-            level : int | str, optional
-                The MR level. Allowed values are [0:self.finest_level+1) and "all".
-                If there is more than one MR level, the argument is required.
+        Parameters
+        ----------
+        self : amrex.ParticleContainer_*
+            A ParticleContainer class in pyAMReX
+        args : deprecated positional argument
+        level : int | str, optional
+            The MR level. Allowed values are [0:self.finest_level+1) and "all".
+            If there is more than one MR level, the argument is required.
 
-            Returns
-            -------
+        Returns
+        -------
+        amrex.ParIter_*
             Iterator over all particle tiles at the specified level.
 
-            Examples
-            --------
-            >>> pc.iterator(level="all")
-            >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
+        Examples
+        --------
+        >>> pc.iterator(level="all")
+        >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
 
         """
     def make_alike(self) -> ParticleContainer_pureSoA_2_0_polymorphic: ...
@@ -27564,18 +27572,18 @@ class ParIterBase_2_1_3_1_pinned(MFIter):
         """
         This is a helper function for the C++ equivalent of void operator++()
 
-            In Python, iterators always are called with __next__, even for the
-            first access. This means we need to handle the first iterator element
-            explicitly, otherwise we will jump directly to the 2nd element. We do
-            this the same way as pybind11 does this, via a little state:
-              https://github.com/AMReX-Codes/pyamrex/pull/50
-              https://github.com/AMReX-Codes/pyamrex/pull/262
-              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+        In Python, iterators always are called with __next__, even for the
+        first access. This means we need to handle the first iterator element
+        explicitly, otherwise we will jump directly to the 2nd element. We do
+        this the same way as pybind11 does this, via a little state:
+          https://github.com/AMReX-Codes/pyamrex/pull/50
+          https://github.com/AMReX-Codes/pyamrex/pull/262
+          https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
 
-            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+        Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
 
-            self: the current iterator
-            returns: the updated iterator
+        self: the current iterator
+        returns: the updated iterator
 
         """
     def _incr(self) -> None: ...
@@ -27618,18 +27626,18 @@ class ParIter_2_1_3_1_pinned(ParIterBase_2_1_3_1_pinned):
         """
         This is a helper function for the C++ equivalent of void operator++()
 
-            In Python, iterators always are called with __next__, even for the
-            first access. This means we need to handle the first iterator element
-            explicitly, otherwise we will jump directly to the 2nd element. We do
-            this the same way as pybind11 does this, via a little state:
-              https://github.com/AMReX-Codes/pyamrex/pull/50
-              https://github.com/AMReX-Codes/pyamrex/pull/262
-              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+        In Python, iterators always are called with __next__, even for the
+        first access. This means we need to handle the first iterator element
+        explicitly, otherwise we will jump directly to the 2nd element. We do
+        this the same way as pybind11 does this, via a little state:
+          https://github.com/AMReX-Codes/pyamrex/pull/50
+          https://github.com/AMReX-Codes/pyamrex/pull/262
+          https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
 
-            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+        Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
 
-            self: the current iterator
-            returns: the updated iterator
+        self: the current iterator
+        returns: the updated iterator
 
         """
     def __repr__(self) -> str: ...
@@ -27650,18 +27658,18 @@ class ParConstIterBase_2_1_3_1_pinned(MFIter):
         """
         This is a helper function for the C++ equivalent of void operator++()
 
-            In Python, iterators always are called with __next__, even for the
-            first access. This means we need to handle the first iterator element
-            explicitly, otherwise we will jump directly to the 2nd element. We do
-            this the same way as pybind11 does this, via a little state:
-              https://github.com/AMReX-Codes/pyamrex/pull/50
-              https://github.com/AMReX-Codes/pyamrex/pull/262
-              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+        In Python, iterators always are called with __next__, even for the
+        first access. This means we need to handle the first iterator element
+        explicitly, otherwise we will jump directly to the 2nd element. We do
+        this the same way as pybind11 does this, via a little state:
+          https://github.com/AMReX-Codes/pyamrex/pull/50
+          https://github.com/AMReX-Codes/pyamrex/pull/262
+          https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
 
-            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+        Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
 
-            self: the current iterator
-            returns: the updated iterator
+        self: the current iterator
+        returns: the updated iterator
 
         """
     def _incr(self) -> None: ...
@@ -27704,18 +27712,18 @@ class ParConstIter_2_1_3_1_pinned(ParConstIterBase_2_1_3_1_pinned):
         """
         This is a helper function for the C++ equivalent of void operator++()
 
-            In Python, iterators always are called with __next__, even for the
-            first access. This means we need to handle the first iterator element
-            explicitly, otherwise we will jump directly to the 2nd element. We do
-            this the same way as pybind11 does this, via a little state:
-              https://github.com/AMReX-Codes/pyamrex/pull/50
-              https://github.com/AMReX-Codes/pyamrex/pull/262
-              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+        In Python, iterators always are called with __next__, even for the
+        first access. This means we need to handle the first iterator element
+        explicitly, otherwise we will jump directly to the 2nd element. We do
+        this the same way as pybind11 does this, via a little state:
+          https://github.com/AMReX-Codes/pyamrex/pull/50
+          https://github.com/AMReX-Codes/pyamrex/pull/262
+          https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
 
-            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+        Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
 
-            self: the current iterator
-            returns: the updated iterator
+        self: the current iterator
+        returns: the updated iterator
 
         """
     def __repr__(self) -> str: ...
@@ -27824,23 +27832,24 @@ class ParticleContainer_2_1_3_1_pinned:
         """
         Create an iterator over all particle tiles
 
-            Parameters
-            ----------
-            self : amrex.ParticleContainer_*
-                A ParticleContainer class in pyAMReX
-            args : deprecated positional argument
-            level : int | str, optional
-                The MR level. Allowed values are [0:self.finest_level+1) and "all".
-                If there is more than one MR level, the argument is required.
+        Parameters
+        ----------
+        self : amrex.ParticleContainer_*
+            A ParticleContainer class in pyAMReX
+        args : deprecated positional argument
+        level : int | str, optional
+            The MR level. Allowed values are [0:self.finest_level+1) and "all".
+            If there is more than one MR level, the argument is required.
 
-            Returns
-            -------
+        Returns
+        -------
+        amrex.ParIter_*
             Iterator over all particle tiles at the specified level.
 
-            Examples
-            --------
-            >>> pc.iterator(level="all")
-            >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
+        Examples
+        --------
+        >>> pc.iterator(level="all")
+        >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
 
         """
     def define(self, gdb: ParGDBBase) -> None:
@@ -27906,23 +27915,24 @@ class ParticleContainer_2_1_3_1_pinned:
         """
         Create an iterator over all particle tiles
 
-            Parameters
-            ----------
-            self : amrex.ParticleContainer_*
-                A ParticleContainer class in pyAMReX
-            args : deprecated positional argument
-            level : int | str, optional
-                The MR level. Allowed values are [0:self.finest_level+1) and "all".
-                If there is more than one MR level, the argument is required.
+        Parameters
+        ----------
+        self : amrex.ParticleContainer_*
+            A ParticleContainer class in pyAMReX
+        args : deprecated positional argument
+        level : int | str, optional
+            The MR level. Allowed values are [0:self.finest_level+1) and "all".
+            If there is more than one MR level, the argument is required.
 
-            Returns
-            -------
+        Returns
+        -------
+        amrex.ParIter_*
             Iterator over all particle tiles at the specified level.
 
-            Examples
-            --------
-            >>> pc.iterator(level="all")
-            >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
+        Examples
+        --------
+        >>> pc.iterator(level="all")
+        >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
 
         """
     def make_alike(self) -> ParticleContainer_2_1_3_1_pinned: ...
@@ -28080,18 +28090,18 @@ class ParIterBase_2_1_3_1_default(MFIter):
         """
         This is a helper function for the C++ equivalent of void operator++()
 
-            In Python, iterators always are called with __next__, even for the
-            first access. This means we need to handle the first iterator element
-            explicitly, otherwise we will jump directly to the 2nd element. We do
-            this the same way as pybind11 does this, via a little state:
-              https://github.com/AMReX-Codes/pyamrex/pull/50
-              https://github.com/AMReX-Codes/pyamrex/pull/262
-              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+        In Python, iterators always are called with __next__, even for the
+        first access. This means we need to handle the first iterator element
+        explicitly, otherwise we will jump directly to the 2nd element. We do
+        this the same way as pybind11 does this, via a little state:
+          https://github.com/AMReX-Codes/pyamrex/pull/50
+          https://github.com/AMReX-Codes/pyamrex/pull/262
+          https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
 
-            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+        Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
 
-            self: the current iterator
-            returns: the updated iterator
+        self: the current iterator
+        returns: the updated iterator
 
         """
     def _incr(self) -> None: ...
@@ -28134,18 +28144,18 @@ class ParIter_2_1_3_1_default(ParIterBase_2_1_3_1_default):
         """
         This is a helper function for the C++ equivalent of void operator++()
 
-            In Python, iterators always are called with __next__, even for the
-            first access. This means we need to handle the first iterator element
-            explicitly, otherwise we will jump directly to the 2nd element. We do
-            this the same way as pybind11 does this, via a little state:
-              https://github.com/AMReX-Codes/pyamrex/pull/50
-              https://github.com/AMReX-Codes/pyamrex/pull/262
-              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+        In Python, iterators always are called with __next__, even for the
+        first access. This means we need to handle the first iterator element
+        explicitly, otherwise we will jump directly to the 2nd element. We do
+        this the same way as pybind11 does this, via a little state:
+          https://github.com/AMReX-Codes/pyamrex/pull/50
+          https://github.com/AMReX-Codes/pyamrex/pull/262
+          https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
 
-            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+        Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
 
-            self: the current iterator
-            returns: the updated iterator
+        self: the current iterator
+        returns: the updated iterator
 
         """
     def __repr__(self) -> str: ...
@@ -28166,18 +28176,18 @@ class ParConstIterBase_2_1_3_1_default(MFIter):
         """
         This is a helper function for the C++ equivalent of void operator++()
 
-            In Python, iterators always are called with __next__, even for the
-            first access. This means we need to handle the first iterator element
-            explicitly, otherwise we will jump directly to the 2nd element. We do
-            this the same way as pybind11 does this, via a little state:
-              https://github.com/AMReX-Codes/pyamrex/pull/50
-              https://github.com/AMReX-Codes/pyamrex/pull/262
-              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+        In Python, iterators always are called with __next__, even for the
+        first access. This means we need to handle the first iterator element
+        explicitly, otherwise we will jump directly to the 2nd element. We do
+        this the same way as pybind11 does this, via a little state:
+          https://github.com/AMReX-Codes/pyamrex/pull/50
+          https://github.com/AMReX-Codes/pyamrex/pull/262
+          https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
 
-            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+        Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
 
-            self: the current iterator
-            returns: the updated iterator
+        self: the current iterator
+        returns: the updated iterator
 
         """
     def _incr(self) -> None: ...
@@ -28220,18 +28230,18 @@ class ParConstIter_2_1_3_1_default(ParConstIterBase_2_1_3_1_default):
         """
         This is a helper function for the C++ equivalent of void operator++()
 
-            In Python, iterators always are called with __next__, even for the
-            first access. This means we need to handle the first iterator element
-            explicitly, otherwise we will jump directly to the 2nd element. We do
-            this the same way as pybind11 does this, via a little state:
-              https://github.com/AMReX-Codes/pyamrex/pull/50
-              https://github.com/AMReX-Codes/pyamrex/pull/262
-              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+        In Python, iterators always are called with __next__, even for the
+        first access. This means we need to handle the first iterator element
+        explicitly, otherwise we will jump directly to the 2nd element. We do
+        this the same way as pybind11 does this, via a little state:
+          https://github.com/AMReX-Codes/pyamrex/pull/50
+          https://github.com/AMReX-Codes/pyamrex/pull/262
+          https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
 
-            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+        Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
 
-            self: the current iterator
-            returns: the updated iterator
+        self: the current iterator
+        returns: the updated iterator
 
         """
     def __repr__(self) -> str: ...
@@ -28340,23 +28350,24 @@ class ParticleContainer_2_1_3_1_default:
         """
         Create an iterator over all particle tiles
 
-            Parameters
-            ----------
-            self : amrex.ParticleContainer_*
-                A ParticleContainer class in pyAMReX
-            args : deprecated positional argument
-            level : int | str, optional
-                The MR level. Allowed values are [0:self.finest_level+1) and "all".
-                If there is more than one MR level, the argument is required.
+        Parameters
+        ----------
+        self : amrex.ParticleContainer_*
+            A ParticleContainer class in pyAMReX
+        args : deprecated positional argument
+        level : int | str, optional
+            The MR level. Allowed values are [0:self.finest_level+1) and "all".
+            If there is more than one MR level, the argument is required.
 
-            Returns
-            -------
+        Returns
+        -------
+        amrex.ParIter_*
             Iterator over all particle tiles at the specified level.
 
-            Examples
-            --------
-            >>> pc.iterator(level="all")
-            >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
+        Examples
+        --------
+        >>> pc.iterator(level="all")
+        >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
 
         """
     def define(self, gdb: ParGDBBase) -> None:
@@ -28422,23 +28433,24 @@ class ParticleContainer_2_1_3_1_default:
         """
         Create an iterator over all particle tiles
 
-            Parameters
-            ----------
-            self : amrex.ParticleContainer_*
-                A ParticleContainer class in pyAMReX
-            args : deprecated positional argument
-            level : int | str, optional
-                The MR level. Allowed values are [0:self.finest_level+1) and "all".
-                If there is more than one MR level, the argument is required.
+        Parameters
+        ----------
+        self : amrex.ParticleContainer_*
+            A ParticleContainer class in pyAMReX
+        args : deprecated positional argument
+        level : int | str, optional
+            The MR level. Allowed values are [0:self.finest_level+1) and "all".
+            If there is more than one MR level, the argument is required.
 
-            Returns
-            -------
+        Returns
+        -------
+        amrex.ParIter_*
             Iterator over all particle tiles at the specified level.
 
-            Examples
-            --------
-            >>> pc.iterator(level="all")
-            >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
+        Examples
+        --------
+        >>> pc.iterator(level="all")
+        >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
 
         """
     def make_alike(self) -> ParticleContainer_2_1_3_1_default: ...
@@ -28596,18 +28608,18 @@ class ParIterBase_2_1_3_1_arena(MFIter):
         """
         This is a helper function for the C++ equivalent of void operator++()
 
-            In Python, iterators always are called with __next__, even for the
-            first access. This means we need to handle the first iterator element
-            explicitly, otherwise we will jump directly to the 2nd element. We do
-            this the same way as pybind11 does this, via a little state:
-              https://github.com/AMReX-Codes/pyamrex/pull/50
-              https://github.com/AMReX-Codes/pyamrex/pull/262
-              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+        In Python, iterators always are called with __next__, even for the
+        first access. This means we need to handle the first iterator element
+        explicitly, otherwise we will jump directly to the 2nd element. We do
+        this the same way as pybind11 does this, via a little state:
+          https://github.com/AMReX-Codes/pyamrex/pull/50
+          https://github.com/AMReX-Codes/pyamrex/pull/262
+          https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
 
-            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+        Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
 
-            self: the current iterator
-            returns: the updated iterator
+        self: the current iterator
+        returns: the updated iterator
 
         """
     def _incr(self) -> None: ...
@@ -28650,18 +28662,18 @@ class ParIter_2_1_3_1_arena(ParIterBase_2_1_3_1_arena):
         """
         This is a helper function for the C++ equivalent of void operator++()
 
-            In Python, iterators always are called with __next__, even for the
-            first access. This means we need to handle the first iterator element
-            explicitly, otherwise we will jump directly to the 2nd element. We do
-            this the same way as pybind11 does this, via a little state:
-              https://github.com/AMReX-Codes/pyamrex/pull/50
-              https://github.com/AMReX-Codes/pyamrex/pull/262
-              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+        In Python, iterators always are called with __next__, even for the
+        first access. This means we need to handle the first iterator element
+        explicitly, otherwise we will jump directly to the 2nd element. We do
+        this the same way as pybind11 does this, via a little state:
+          https://github.com/AMReX-Codes/pyamrex/pull/50
+          https://github.com/AMReX-Codes/pyamrex/pull/262
+          https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
 
-            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+        Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
 
-            self: the current iterator
-            returns: the updated iterator
+        self: the current iterator
+        returns: the updated iterator
 
         """
     def __repr__(self) -> str: ...
@@ -28682,18 +28694,18 @@ class ParConstIterBase_2_1_3_1_arena(MFIter):
         """
         This is a helper function for the C++ equivalent of void operator++()
 
-            In Python, iterators always are called with __next__, even for the
-            first access. This means we need to handle the first iterator element
-            explicitly, otherwise we will jump directly to the 2nd element. We do
-            this the same way as pybind11 does this, via a little state:
-              https://github.com/AMReX-Codes/pyamrex/pull/50
-              https://github.com/AMReX-Codes/pyamrex/pull/262
-              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+        In Python, iterators always are called with __next__, even for the
+        first access. This means we need to handle the first iterator element
+        explicitly, otherwise we will jump directly to the 2nd element. We do
+        this the same way as pybind11 does this, via a little state:
+          https://github.com/AMReX-Codes/pyamrex/pull/50
+          https://github.com/AMReX-Codes/pyamrex/pull/262
+          https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
 
-            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+        Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
 
-            self: the current iterator
-            returns: the updated iterator
+        self: the current iterator
+        returns: the updated iterator
 
         """
     def _incr(self) -> None: ...
@@ -28736,18 +28748,18 @@ class ParConstIter_2_1_3_1_arena(ParConstIterBase_2_1_3_1_arena):
         """
         This is a helper function for the C++ equivalent of void operator++()
 
-            In Python, iterators always are called with __next__, even for the
-            first access. This means we need to handle the first iterator element
-            explicitly, otherwise we will jump directly to the 2nd element. We do
-            this the same way as pybind11 does this, via a little state:
-              https://github.com/AMReX-Codes/pyamrex/pull/50
-              https://github.com/AMReX-Codes/pyamrex/pull/262
-              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+        In Python, iterators always are called with __next__, even for the
+        first access. This means we need to handle the first iterator element
+        explicitly, otherwise we will jump directly to the 2nd element. We do
+        this the same way as pybind11 does this, via a little state:
+          https://github.com/AMReX-Codes/pyamrex/pull/50
+          https://github.com/AMReX-Codes/pyamrex/pull/262
+          https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
 
-            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+        Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
 
-            self: the current iterator
-            returns: the updated iterator
+        self: the current iterator
+        returns: the updated iterator
 
         """
     def __repr__(self) -> str: ...
@@ -28856,23 +28868,24 @@ class ParticleContainer_2_1_3_1_arena:
         """
         Create an iterator over all particle tiles
 
-            Parameters
-            ----------
-            self : amrex.ParticleContainer_*
-                A ParticleContainer class in pyAMReX
-            args : deprecated positional argument
-            level : int | str, optional
-                The MR level. Allowed values are [0:self.finest_level+1) and "all".
-                If there is more than one MR level, the argument is required.
+        Parameters
+        ----------
+        self : amrex.ParticleContainer_*
+            A ParticleContainer class in pyAMReX
+        args : deprecated positional argument
+        level : int | str, optional
+            The MR level. Allowed values are [0:self.finest_level+1) and "all".
+            If there is more than one MR level, the argument is required.
 
-            Returns
-            -------
+        Returns
+        -------
+        amrex.ParIter_*
             Iterator over all particle tiles at the specified level.
 
-            Examples
-            --------
-            >>> pc.iterator(level="all")
-            >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
+        Examples
+        --------
+        >>> pc.iterator(level="all")
+        >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
 
         """
     def define(self, gdb: ParGDBBase) -> None:
@@ -28938,23 +28951,24 @@ class ParticleContainer_2_1_3_1_arena:
         """
         Create an iterator over all particle tiles
 
-            Parameters
-            ----------
-            self : amrex.ParticleContainer_*
-                A ParticleContainer class in pyAMReX
-            args : deprecated positional argument
-            level : int | str, optional
-                The MR level. Allowed values are [0:self.finest_level+1) and "all".
-                If there is more than one MR level, the argument is required.
+        Parameters
+        ----------
+        self : amrex.ParticleContainer_*
+            A ParticleContainer class in pyAMReX
+        args : deprecated positional argument
+        level : int | str, optional
+            The MR level. Allowed values are [0:self.finest_level+1) and "all".
+            If there is more than one MR level, the argument is required.
 
-            Returns
-            -------
+        Returns
+        -------
+        amrex.ParIter_*
             Iterator over all particle tiles at the specified level.
 
-            Examples
-            --------
-            >>> pc.iterator(level="all")
-            >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
+        Examples
+        --------
+        >>> pc.iterator(level="all")
+        >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
 
         """
     def make_alike(self) -> ParticleContainer_2_1_3_1_arena: ...
@@ -29112,18 +29126,18 @@ class ParIterBase_2_1_3_1_polymorphic(MFIter):
         """
         This is a helper function for the C++ equivalent of void operator++()
 
-            In Python, iterators always are called with __next__, even for the
-            first access. This means we need to handle the first iterator element
-            explicitly, otherwise we will jump directly to the 2nd element. We do
-            this the same way as pybind11 does this, via a little state:
-              https://github.com/AMReX-Codes/pyamrex/pull/50
-              https://github.com/AMReX-Codes/pyamrex/pull/262
-              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+        In Python, iterators always are called with __next__, even for the
+        first access. This means we need to handle the first iterator element
+        explicitly, otherwise we will jump directly to the 2nd element. We do
+        this the same way as pybind11 does this, via a little state:
+          https://github.com/AMReX-Codes/pyamrex/pull/50
+          https://github.com/AMReX-Codes/pyamrex/pull/262
+          https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
 
-            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+        Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
 
-            self: the current iterator
-            returns: the updated iterator
+        self: the current iterator
+        returns: the updated iterator
 
         """
     def _incr(self) -> None: ...
@@ -29166,18 +29180,18 @@ class ParIter_2_1_3_1_polymorphic(ParIterBase_2_1_3_1_polymorphic):
         """
         This is a helper function for the C++ equivalent of void operator++()
 
-            In Python, iterators always are called with __next__, even for the
-            first access. This means we need to handle the first iterator element
-            explicitly, otherwise we will jump directly to the 2nd element. We do
-            this the same way as pybind11 does this, via a little state:
-              https://github.com/AMReX-Codes/pyamrex/pull/50
-              https://github.com/AMReX-Codes/pyamrex/pull/262
-              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+        In Python, iterators always are called with __next__, even for the
+        first access. This means we need to handle the first iterator element
+        explicitly, otherwise we will jump directly to the 2nd element. We do
+        this the same way as pybind11 does this, via a little state:
+          https://github.com/AMReX-Codes/pyamrex/pull/50
+          https://github.com/AMReX-Codes/pyamrex/pull/262
+          https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
 
-            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+        Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
 
-            self: the current iterator
-            returns: the updated iterator
+        self: the current iterator
+        returns: the updated iterator
 
         """
     def __repr__(self) -> str: ...
@@ -29198,18 +29212,18 @@ class ParConstIterBase_2_1_3_1_polymorphic(MFIter):
         """
         This is a helper function for the C++ equivalent of void operator++()
 
-            In Python, iterators always are called with __next__, even for the
-            first access. This means we need to handle the first iterator element
-            explicitly, otherwise we will jump directly to the 2nd element. We do
-            this the same way as pybind11 does this, via a little state:
-              https://github.com/AMReX-Codes/pyamrex/pull/50
-              https://github.com/AMReX-Codes/pyamrex/pull/262
-              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+        In Python, iterators always are called with __next__, even for the
+        first access. This means we need to handle the first iterator element
+        explicitly, otherwise we will jump directly to the 2nd element. We do
+        this the same way as pybind11 does this, via a little state:
+          https://github.com/AMReX-Codes/pyamrex/pull/50
+          https://github.com/AMReX-Codes/pyamrex/pull/262
+          https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
 
-            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+        Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
 
-            self: the current iterator
-            returns: the updated iterator
+        self: the current iterator
+        returns: the updated iterator
 
         """
     def _incr(self) -> None: ...
@@ -29252,18 +29266,18 @@ class ParConstIter_2_1_3_1_polymorphic(ParConstIterBase_2_1_3_1_polymorphic):
         """
         This is a helper function for the C++ equivalent of void operator++()
 
-            In Python, iterators always are called with __next__, even for the
-            first access. This means we need to handle the first iterator element
-            explicitly, otherwise we will jump directly to the 2nd element. We do
-            this the same way as pybind11 does this, via a little state:
-              https://github.com/AMReX-Codes/pyamrex/pull/50
-              https://github.com/AMReX-Codes/pyamrex/pull/262
-              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+        In Python, iterators always are called with __next__, even for the
+        first access. This means we need to handle the first iterator element
+        explicitly, otherwise we will jump directly to the 2nd element. We do
+        this the same way as pybind11 does this, via a little state:
+          https://github.com/AMReX-Codes/pyamrex/pull/50
+          https://github.com/AMReX-Codes/pyamrex/pull/262
+          https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
 
-            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+        Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
 
-            self: the current iterator
-            returns: the updated iterator
+        self: the current iterator
+        returns: the updated iterator
 
         """
     def __repr__(self) -> str: ...
@@ -29372,23 +29386,24 @@ class ParticleContainer_2_1_3_1_polymorphic:
         """
         Create an iterator over all particle tiles
 
-            Parameters
-            ----------
-            self : amrex.ParticleContainer_*
-                A ParticleContainer class in pyAMReX
-            args : deprecated positional argument
-            level : int | str, optional
-                The MR level. Allowed values are [0:self.finest_level+1) and "all".
-                If there is more than one MR level, the argument is required.
+        Parameters
+        ----------
+        self : amrex.ParticleContainer_*
+            A ParticleContainer class in pyAMReX
+        args : deprecated positional argument
+        level : int | str, optional
+            The MR level. Allowed values are [0:self.finest_level+1) and "all".
+            If there is more than one MR level, the argument is required.
 
-            Returns
-            -------
+        Returns
+        -------
+        amrex.ParIter_*
             Iterator over all particle tiles at the specified level.
 
-            Examples
-            --------
-            >>> pc.iterator(level="all")
-            >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
+        Examples
+        --------
+        >>> pc.iterator(level="all")
+        >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
 
         """
     def define(self, gdb: ParGDBBase) -> None:
@@ -29454,23 +29469,24 @@ class ParticleContainer_2_1_3_1_polymorphic:
         """
         Create an iterator over all particle tiles
 
-            Parameters
-            ----------
-            self : amrex.ParticleContainer_*
-                A ParticleContainer class in pyAMReX
-            args : deprecated positional argument
-            level : int | str, optional
-                The MR level. Allowed values are [0:self.finest_level+1) and "all".
-                If there is more than one MR level, the argument is required.
+        Parameters
+        ----------
+        self : amrex.ParticleContainer_*
+            A ParticleContainer class in pyAMReX
+        args : deprecated positional argument
+        level : int | str, optional
+            The MR level. Allowed values are [0:self.finest_level+1) and "all".
+            If there is more than one MR level, the argument is required.
 
-            Returns
-            -------
+        Returns
+        -------
+        amrex.ParIter_*
             Iterator over all particle tiles at the specified level.
 
-            Examples
-            --------
-            >>> pc.iterator(level="all")
-            >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
+        Examples
+        --------
+        >>> pc.iterator(level="all")
+        >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
 
         """
     def make_alike(self) -> ParticleContainer_2_1_3_1_polymorphic: ...
@@ -31383,18 +31399,18 @@ class ParIterBase_16_4_0_0_pinned(MFIter):
         """
         This is a helper function for the C++ equivalent of void operator++()
 
-            In Python, iterators always are called with __next__, even for the
-            first access. This means we need to handle the first iterator element
-            explicitly, otherwise we will jump directly to the 2nd element. We do
-            this the same way as pybind11 does this, via a little state:
-              https://github.com/AMReX-Codes/pyamrex/pull/50
-              https://github.com/AMReX-Codes/pyamrex/pull/262
-              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+        In Python, iterators always are called with __next__, even for the
+        first access. This means we need to handle the first iterator element
+        explicitly, otherwise we will jump directly to the 2nd element. We do
+        this the same way as pybind11 does this, via a little state:
+          https://github.com/AMReX-Codes/pyamrex/pull/50
+          https://github.com/AMReX-Codes/pyamrex/pull/262
+          https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
 
-            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+        Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
 
-            self: the current iterator
-            returns: the updated iterator
+        self: the current iterator
+        returns: the updated iterator
 
         """
     def _incr(self) -> None: ...
@@ -31437,18 +31453,18 @@ class ParIter_16_4_0_0_pinned(ParIterBase_16_4_0_0_pinned):
         """
         This is a helper function for the C++ equivalent of void operator++()
 
-            In Python, iterators always are called with __next__, even for the
-            first access. This means we need to handle the first iterator element
-            explicitly, otherwise we will jump directly to the 2nd element. We do
-            this the same way as pybind11 does this, via a little state:
-              https://github.com/AMReX-Codes/pyamrex/pull/50
-              https://github.com/AMReX-Codes/pyamrex/pull/262
-              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+        In Python, iterators always are called with __next__, even for the
+        first access. This means we need to handle the first iterator element
+        explicitly, otherwise we will jump directly to the 2nd element. We do
+        this the same way as pybind11 does this, via a little state:
+          https://github.com/AMReX-Codes/pyamrex/pull/50
+          https://github.com/AMReX-Codes/pyamrex/pull/262
+          https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
 
-            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+        Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
 
-            self: the current iterator
-            returns: the updated iterator
+        self: the current iterator
+        returns: the updated iterator
 
         """
     def __repr__(self) -> str: ...
@@ -31469,18 +31485,18 @@ class ParConstIterBase_16_4_0_0_pinned(MFIter):
         """
         This is a helper function for the C++ equivalent of void operator++()
 
-            In Python, iterators always are called with __next__, even for the
-            first access. This means we need to handle the first iterator element
-            explicitly, otherwise we will jump directly to the 2nd element. We do
-            this the same way as pybind11 does this, via a little state:
-              https://github.com/AMReX-Codes/pyamrex/pull/50
-              https://github.com/AMReX-Codes/pyamrex/pull/262
-              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+        In Python, iterators always are called with __next__, even for the
+        first access. This means we need to handle the first iterator element
+        explicitly, otherwise we will jump directly to the 2nd element. We do
+        this the same way as pybind11 does this, via a little state:
+          https://github.com/AMReX-Codes/pyamrex/pull/50
+          https://github.com/AMReX-Codes/pyamrex/pull/262
+          https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
 
-            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+        Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
 
-            self: the current iterator
-            returns: the updated iterator
+        self: the current iterator
+        returns: the updated iterator
 
         """
     def _incr(self) -> None: ...
@@ -31523,18 +31539,18 @@ class ParConstIter_16_4_0_0_pinned(ParConstIterBase_16_4_0_0_pinned):
         """
         This is a helper function for the C++ equivalent of void operator++()
 
-            In Python, iterators always are called with __next__, even for the
-            first access. This means we need to handle the first iterator element
-            explicitly, otherwise we will jump directly to the 2nd element. We do
-            this the same way as pybind11 does this, via a little state:
-              https://github.com/AMReX-Codes/pyamrex/pull/50
-              https://github.com/AMReX-Codes/pyamrex/pull/262
-              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+        In Python, iterators always are called with __next__, even for the
+        first access. This means we need to handle the first iterator element
+        explicitly, otherwise we will jump directly to the 2nd element. We do
+        this the same way as pybind11 does this, via a little state:
+          https://github.com/AMReX-Codes/pyamrex/pull/50
+          https://github.com/AMReX-Codes/pyamrex/pull/262
+          https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
 
-            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+        Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
 
-            self: the current iterator
-            returns: the updated iterator
+        self: the current iterator
+        returns: the updated iterator
 
         """
     def __repr__(self) -> str: ...
@@ -31643,23 +31659,24 @@ class ParticleContainer_16_4_0_0_pinned:
         """
         Create an iterator over all particle tiles
 
-            Parameters
-            ----------
-            self : amrex.ParticleContainer_*
-                A ParticleContainer class in pyAMReX
-            args : deprecated positional argument
-            level : int | str, optional
-                The MR level. Allowed values are [0:self.finest_level+1) and "all".
-                If there is more than one MR level, the argument is required.
+        Parameters
+        ----------
+        self : amrex.ParticleContainer_*
+            A ParticleContainer class in pyAMReX
+        args : deprecated positional argument
+        level : int | str, optional
+            The MR level. Allowed values are [0:self.finest_level+1) and "all".
+            If there is more than one MR level, the argument is required.
 
-            Returns
-            -------
+        Returns
+        -------
+        amrex.ParIter_*
             Iterator over all particle tiles at the specified level.
 
-            Examples
-            --------
-            >>> pc.iterator(level="all")
-            >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
+        Examples
+        --------
+        >>> pc.iterator(level="all")
+        >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
 
         """
     def define(self, gdb: ParGDBBase) -> None:
@@ -31725,23 +31742,24 @@ class ParticleContainer_16_4_0_0_pinned:
         """
         Create an iterator over all particle tiles
 
-            Parameters
-            ----------
-            self : amrex.ParticleContainer_*
-                A ParticleContainer class in pyAMReX
-            args : deprecated positional argument
-            level : int | str, optional
-                The MR level. Allowed values are [0:self.finest_level+1) and "all".
-                If there is more than one MR level, the argument is required.
+        Parameters
+        ----------
+        self : amrex.ParticleContainer_*
+            A ParticleContainer class in pyAMReX
+        args : deprecated positional argument
+        level : int | str, optional
+            The MR level. Allowed values are [0:self.finest_level+1) and "all".
+            If there is more than one MR level, the argument is required.
 
-            Returns
-            -------
+        Returns
+        -------
+        amrex.ParIter_*
             Iterator over all particle tiles at the specified level.
 
-            Examples
-            --------
-            >>> pc.iterator(level="all")
-            >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
+        Examples
+        --------
+        >>> pc.iterator(level="all")
+        >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
 
         """
     def make_alike(self) -> ParticleContainer_16_4_0_0_pinned: ...
@@ -31899,18 +31917,18 @@ class ParIterBase_16_4_0_0_default(MFIter):
         """
         This is a helper function for the C++ equivalent of void operator++()
 
-            In Python, iterators always are called with __next__, even for the
-            first access. This means we need to handle the first iterator element
-            explicitly, otherwise we will jump directly to the 2nd element. We do
-            this the same way as pybind11 does this, via a little state:
-              https://github.com/AMReX-Codes/pyamrex/pull/50
-              https://github.com/AMReX-Codes/pyamrex/pull/262
-              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+        In Python, iterators always are called with __next__, even for the
+        first access. This means we need to handle the first iterator element
+        explicitly, otherwise we will jump directly to the 2nd element. We do
+        this the same way as pybind11 does this, via a little state:
+          https://github.com/AMReX-Codes/pyamrex/pull/50
+          https://github.com/AMReX-Codes/pyamrex/pull/262
+          https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
 
-            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+        Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
 
-            self: the current iterator
-            returns: the updated iterator
+        self: the current iterator
+        returns: the updated iterator
 
         """
     def _incr(self) -> None: ...
@@ -31953,18 +31971,18 @@ class ParIter_16_4_0_0_default(ParIterBase_16_4_0_0_default):
         """
         This is a helper function for the C++ equivalent of void operator++()
 
-            In Python, iterators always are called with __next__, even for the
-            first access. This means we need to handle the first iterator element
-            explicitly, otherwise we will jump directly to the 2nd element. We do
-            this the same way as pybind11 does this, via a little state:
-              https://github.com/AMReX-Codes/pyamrex/pull/50
-              https://github.com/AMReX-Codes/pyamrex/pull/262
-              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+        In Python, iterators always are called with __next__, even for the
+        first access. This means we need to handle the first iterator element
+        explicitly, otherwise we will jump directly to the 2nd element. We do
+        this the same way as pybind11 does this, via a little state:
+          https://github.com/AMReX-Codes/pyamrex/pull/50
+          https://github.com/AMReX-Codes/pyamrex/pull/262
+          https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
 
-            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+        Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
 
-            self: the current iterator
-            returns: the updated iterator
+        self: the current iterator
+        returns: the updated iterator
 
         """
     def __repr__(self) -> str: ...
@@ -31985,18 +32003,18 @@ class ParConstIterBase_16_4_0_0_default(MFIter):
         """
         This is a helper function for the C++ equivalent of void operator++()
 
-            In Python, iterators always are called with __next__, even for the
-            first access. This means we need to handle the first iterator element
-            explicitly, otherwise we will jump directly to the 2nd element. We do
-            this the same way as pybind11 does this, via a little state:
-              https://github.com/AMReX-Codes/pyamrex/pull/50
-              https://github.com/AMReX-Codes/pyamrex/pull/262
-              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+        In Python, iterators always are called with __next__, even for the
+        first access. This means we need to handle the first iterator element
+        explicitly, otherwise we will jump directly to the 2nd element. We do
+        this the same way as pybind11 does this, via a little state:
+          https://github.com/AMReX-Codes/pyamrex/pull/50
+          https://github.com/AMReX-Codes/pyamrex/pull/262
+          https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
 
-            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+        Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
 
-            self: the current iterator
-            returns: the updated iterator
+        self: the current iterator
+        returns: the updated iterator
 
         """
     def _incr(self) -> None: ...
@@ -32039,18 +32057,18 @@ class ParConstIter_16_4_0_0_default(ParConstIterBase_16_4_0_0_default):
         """
         This is a helper function for the C++ equivalent of void operator++()
 
-            In Python, iterators always are called with __next__, even for the
-            first access. This means we need to handle the first iterator element
-            explicitly, otherwise we will jump directly to the 2nd element. We do
-            this the same way as pybind11 does this, via a little state:
-              https://github.com/AMReX-Codes/pyamrex/pull/50
-              https://github.com/AMReX-Codes/pyamrex/pull/262
-              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+        In Python, iterators always are called with __next__, even for the
+        first access. This means we need to handle the first iterator element
+        explicitly, otherwise we will jump directly to the 2nd element. We do
+        this the same way as pybind11 does this, via a little state:
+          https://github.com/AMReX-Codes/pyamrex/pull/50
+          https://github.com/AMReX-Codes/pyamrex/pull/262
+          https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
 
-            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+        Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
 
-            self: the current iterator
-            returns: the updated iterator
+        self: the current iterator
+        returns: the updated iterator
 
         """
     def __repr__(self) -> str: ...
@@ -32159,23 +32177,24 @@ class ParticleContainer_16_4_0_0_default:
         """
         Create an iterator over all particle tiles
 
-            Parameters
-            ----------
-            self : amrex.ParticleContainer_*
-                A ParticleContainer class in pyAMReX
-            args : deprecated positional argument
-            level : int | str, optional
-                The MR level. Allowed values are [0:self.finest_level+1) and "all".
-                If there is more than one MR level, the argument is required.
+        Parameters
+        ----------
+        self : amrex.ParticleContainer_*
+            A ParticleContainer class in pyAMReX
+        args : deprecated positional argument
+        level : int | str, optional
+            The MR level. Allowed values are [0:self.finest_level+1) and "all".
+            If there is more than one MR level, the argument is required.
 
-            Returns
-            -------
+        Returns
+        -------
+        amrex.ParIter_*
             Iterator over all particle tiles at the specified level.
 
-            Examples
-            --------
-            >>> pc.iterator(level="all")
-            >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
+        Examples
+        --------
+        >>> pc.iterator(level="all")
+        >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
 
         """
     def define(self, gdb: ParGDBBase) -> None:
@@ -32241,23 +32260,24 @@ class ParticleContainer_16_4_0_0_default:
         """
         Create an iterator over all particle tiles
 
-            Parameters
-            ----------
-            self : amrex.ParticleContainer_*
-                A ParticleContainer class in pyAMReX
-            args : deprecated positional argument
-            level : int | str, optional
-                The MR level. Allowed values are [0:self.finest_level+1) and "all".
-                If there is more than one MR level, the argument is required.
+        Parameters
+        ----------
+        self : amrex.ParticleContainer_*
+            A ParticleContainer class in pyAMReX
+        args : deprecated positional argument
+        level : int | str, optional
+            The MR level. Allowed values are [0:self.finest_level+1) and "all".
+            If there is more than one MR level, the argument is required.
 
-            Returns
-            -------
+        Returns
+        -------
+        amrex.ParIter_*
             Iterator over all particle tiles at the specified level.
 
-            Examples
-            --------
-            >>> pc.iterator(level="all")
-            >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
+        Examples
+        --------
+        >>> pc.iterator(level="all")
+        >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
 
         """
     def make_alike(self) -> ParticleContainer_16_4_0_0_default: ...
@@ -32415,18 +32435,18 @@ class ParIterBase_16_4_0_0_arena(MFIter):
         """
         This is a helper function for the C++ equivalent of void operator++()
 
-            In Python, iterators always are called with __next__, even for the
-            first access. This means we need to handle the first iterator element
-            explicitly, otherwise we will jump directly to the 2nd element. We do
-            this the same way as pybind11 does this, via a little state:
-              https://github.com/AMReX-Codes/pyamrex/pull/50
-              https://github.com/AMReX-Codes/pyamrex/pull/262
-              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+        In Python, iterators always are called with __next__, even for the
+        first access. This means we need to handle the first iterator element
+        explicitly, otherwise we will jump directly to the 2nd element. We do
+        this the same way as pybind11 does this, via a little state:
+          https://github.com/AMReX-Codes/pyamrex/pull/50
+          https://github.com/AMReX-Codes/pyamrex/pull/262
+          https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
 
-            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+        Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
 
-            self: the current iterator
-            returns: the updated iterator
+        self: the current iterator
+        returns: the updated iterator
 
         """
     def _incr(self) -> None: ...
@@ -32469,18 +32489,18 @@ class ParIter_16_4_0_0_arena(ParIterBase_16_4_0_0_arena):
         """
         This is a helper function for the C++ equivalent of void operator++()
 
-            In Python, iterators always are called with __next__, even for the
-            first access. This means we need to handle the first iterator element
-            explicitly, otherwise we will jump directly to the 2nd element. We do
-            this the same way as pybind11 does this, via a little state:
-              https://github.com/AMReX-Codes/pyamrex/pull/50
-              https://github.com/AMReX-Codes/pyamrex/pull/262
-              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+        In Python, iterators always are called with __next__, even for the
+        first access. This means we need to handle the first iterator element
+        explicitly, otherwise we will jump directly to the 2nd element. We do
+        this the same way as pybind11 does this, via a little state:
+          https://github.com/AMReX-Codes/pyamrex/pull/50
+          https://github.com/AMReX-Codes/pyamrex/pull/262
+          https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
 
-            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+        Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
 
-            self: the current iterator
-            returns: the updated iterator
+        self: the current iterator
+        returns: the updated iterator
 
         """
     def __repr__(self) -> str: ...
@@ -32501,18 +32521,18 @@ class ParConstIterBase_16_4_0_0_arena(MFIter):
         """
         This is a helper function for the C++ equivalent of void operator++()
 
-            In Python, iterators always are called with __next__, even for the
-            first access. This means we need to handle the first iterator element
-            explicitly, otherwise we will jump directly to the 2nd element. We do
-            this the same way as pybind11 does this, via a little state:
-              https://github.com/AMReX-Codes/pyamrex/pull/50
-              https://github.com/AMReX-Codes/pyamrex/pull/262
-              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+        In Python, iterators always are called with __next__, even for the
+        first access. This means we need to handle the first iterator element
+        explicitly, otherwise we will jump directly to the 2nd element. We do
+        this the same way as pybind11 does this, via a little state:
+          https://github.com/AMReX-Codes/pyamrex/pull/50
+          https://github.com/AMReX-Codes/pyamrex/pull/262
+          https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
 
-            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+        Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
 
-            self: the current iterator
-            returns: the updated iterator
+        self: the current iterator
+        returns: the updated iterator
 
         """
     def _incr(self) -> None: ...
@@ -32555,18 +32575,18 @@ class ParConstIter_16_4_0_0_arena(ParConstIterBase_16_4_0_0_arena):
         """
         This is a helper function for the C++ equivalent of void operator++()
 
-            In Python, iterators always are called with __next__, even for the
-            first access. This means we need to handle the first iterator element
-            explicitly, otherwise we will jump directly to the 2nd element. We do
-            this the same way as pybind11 does this, via a little state:
-              https://github.com/AMReX-Codes/pyamrex/pull/50
-              https://github.com/AMReX-Codes/pyamrex/pull/262
-              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+        In Python, iterators always are called with __next__, even for the
+        first access. This means we need to handle the first iterator element
+        explicitly, otherwise we will jump directly to the 2nd element. We do
+        this the same way as pybind11 does this, via a little state:
+          https://github.com/AMReX-Codes/pyamrex/pull/50
+          https://github.com/AMReX-Codes/pyamrex/pull/262
+          https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
 
-            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+        Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
 
-            self: the current iterator
-            returns: the updated iterator
+        self: the current iterator
+        returns: the updated iterator
 
         """
     def __repr__(self) -> str: ...
@@ -32675,23 +32695,24 @@ class ParticleContainer_16_4_0_0_arena:
         """
         Create an iterator over all particle tiles
 
-            Parameters
-            ----------
-            self : amrex.ParticleContainer_*
-                A ParticleContainer class in pyAMReX
-            args : deprecated positional argument
-            level : int | str, optional
-                The MR level. Allowed values are [0:self.finest_level+1) and "all".
-                If there is more than one MR level, the argument is required.
+        Parameters
+        ----------
+        self : amrex.ParticleContainer_*
+            A ParticleContainer class in pyAMReX
+        args : deprecated positional argument
+        level : int | str, optional
+            The MR level. Allowed values are [0:self.finest_level+1) and "all".
+            If there is more than one MR level, the argument is required.
 
-            Returns
-            -------
+        Returns
+        -------
+        amrex.ParIter_*
             Iterator over all particle tiles at the specified level.
 
-            Examples
-            --------
-            >>> pc.iterator(level="all")
-            >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
+        Examples
+        --------
+        >>> pc.iterator(level="all")
+        >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
 
         """
     def define(self, gdb: ParGDBBase) -> None:
@@ -32757,23 +32778,24 @@ class ParticleContainer_16_4_0_0_arena:
         """
         Create an iterator over all particle tiles
 
-            Parameters
-            ----------
-            self : amrex.ParticleContainer_*
-                A ParticleContainer class in pyAMReX
-            args : deprecated positional argument
-            level : int | str, optional
-                The MR level. Allowed values are [0:self.finest_level+1) and "all".
-                If there is more than one MR level, the argument is required.
+        Parameters
+        ----------
+        self : amrex.ParticleContainer_*
+            A ParticleContainer class in pyAMReX
+        args : deprecated positional argument
+        level : int | str, optional
+            The MR level. Allowed values are [0:self.finest_level+1) and "all".
+            If there is more than one MR level, the argument is required.
 
-            Returns
-            -------
+        Returns
+        -------
+        amrex.ParIter_*
             Iterator over all particle tiles at the specified level.
 
-            Examples
-            --------
-            >>> pc.iterator(level="all")
-            >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
+        Examples
+        --------
+        >>> pc.iterator(level="all")
+        >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
 
         """
     def make_alike(self) -> ParticleContainer_16_4_0_0_arena: ...
@@ -32931,18 +32953,18 @@ class ParIterBase_16_4_0_0_polymorphic(MFIter):
         """
         This is a helper function for the C++ equivalent of void operator++()
 
-            In Python, iterators always are called with __next__, even for the
-            first access. This means we need to handle the first iterator element
-            explicitly, otherwise we will jump directly to the 2nd element. We do
-            this the same way as pybind11 does this, via a little state:
-              https://github.com/AMReX-Codes/pyamrex/pull/50
-              https://github.com/AMReX-Codes/pyamrex/pull/262
-              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+        In Python, iterators always are called with __next__, even for the
+        first access. This means we need to handle the first iterator element
+        explicitly, otherwise we will jump directly to the 2nd element. We do
+        this the same way as pybind11 does this, via a little state:
+          https://github.com/AMReX-Codes/pyamrex/pull/50
+          https://github.com/AMReX-Codes/pyamrex/pull/262
+          https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
 
-            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+        Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
 
-            self: the current iterator
-            returns: the updated iterator
+        self: the current iterator
+        returns: the updated iterator
 
         """
     def _incr(self) -> None: ...
@@ -32985,18 +33007,18 @@ class ParIter_16_4_0_0_polymorphic(ParIterBase_16_4_0_0_polymorphic):
         """
         This is a helper function for the C++ equivalent of void operator++()
 
-            In Python, iterators always are called with __next__, even for the
-            first access. This means we need to handle the first iterator element
-            explicitly, otherwise we will jump directly to the 2nd element. We do
-            this the same way as pybind11 does this, via a little state:
-              https://github.com/AMReX-Codes/pyamrex/pull/50
-              https://github.com/AMReX-Codes/pyamrex/pull/262
-              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+        In Python, iterators always are called with __next__, even for the
+        first access. This means we need to handle the first iterator element
+        explicitly, otherwise we will jump directly to the 2nd element. We do
+        this the same way as pybind11 does this, via a little state:
+          https://github.com/AMReX-Codes/pyamrex/pull/50
+          https://github.com/AMReX-Codes/pyamrex/pull/262
+          https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
 
-            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+        Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
 
-            self: the current iterator
-            returns: the updated iterator
+        self: the current iterator
+        returns: the updated iterator
 
         """
     def __repr__(self) -> str: ...
@@ -33017,18 +33039,18 @@ class ParConstIterBase_16_4_0_0_polymorphic(MFIter):
         """
         This is a helper function for the C++ equivalent of void operator++()
 
-            In Python, iterators always are called with __next__, even for the
-            first access. This means we need to handle the first iterator element
-            explicitly, otherwise we will jump directly to the 2nd element. We do
-            this the same way as pybind11 does this, via a little state:
-              https://github.com/AMReX-Codes/pyamrex/pull/50
-              https://github.com/AMReX-Codes/pyamrex/pull/262
-              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+        In Python, iterators always are called with __next__, even for the
+        first access. This means we need to handle the first iterator element
+        explicitly, otherwise we will jump directly to the 2nd element. We do
+        this the same way as pybind11 does this, via a little state:
+          https://github.com/AMReX-Codes/pyamrex/pull/50
+          https://github.com/AMReX-Codes/pyamrex/pull/262
+          https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
 
-            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+        Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
 
-            self: the current iterator
-            returns: the updated iterator
+        self: the current iterator
+        returns: the updated iterator
 
         """
     def _incr(self) -> None: ...
@@ -33071,18 +33093,18 @@ class ParConstIter_16_4_0_0_polymorphic(ParConstIterBase_16_4_0_0_polymorphic):
         """
         This is a helper function for the C++ equivalent of void operator++()
 
-            In Python, iterators always are called with __next__, even for the
-            first access. This means we need to handle the first iterator element
-            explicitly, otherwise we will jump directly to the 2nd element. We do
-            this the same way as pybind11 does this, via a little state:
-              https://github.com/AMReX-Codes/pyamrex/pull/50
-              https://github.com/AMReX-Codes/pyamrex/pull/262
-              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+        In Python, iterators always are called with __next__, even for the
+        first access. This means we need to handle the first iterator element
+        explicitly, otherwise we will jump directly to the 2nd element. We do
+        this the same way as pybind11 does this, via a little state:
+          https://github.com/AMReX-Codes/pyamrex/pull/50
+          https://github.com/AMReX-Codes/pyamrex/pull/262
+          https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
 
-            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+        Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
 
-            self: the current iterator
-            returns: the updated iterator
+        self: the current iterator
+        returns: the updated iterator
 
         """
     def __repr__(self) -> str: ...
@@ -33191,23 +33213,24 @@ class ParticleContainer_16_4_0_0_polymorphic:
         """
         Create an iterator over all particle tiles
 
-            Parameters
-            ----------
-            self : amrex.ParticleContainer_*
-                A ParticleContainer class in pyAMReX
-            args : deprecated positional argument
-            level : int | str, optional
-                The MR level. Allowed values are [0:self.finest_level+1) and "all".
-                If there is more than one MR level, the argument is required.
+        Parameters
+        ----------
+        self : amrex.ParticleContainer_*
+            A ParticleContainer class in pyAMReX
+        args : deprecated positional argument
+        level : int | str, optional
+            The MR level. Allowed values are [0:self.finest_level+1) and "all".
+            If there is more than one MR level, the argument is required.
 
-            Returns
-            -------
+        Returns
+        -------
+        amrex.ParIter_*
             Iterator over all particle tiles at the specified level.
 
-            Examples
-            --------
-            >>> pc.iterator(level="all")
-            >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
+        Examples
+        --------
+        >>> pc.iterator(level="all")
+        >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
 
         """
     def define(self, gdb: ParGDBBase) -> None:
@@ -33273,23 +33296,24 @@ class ParticleContainer_16_4_0_0_polymorphic:
         """
         Create an iterator over all particle tiles
 
-            Parameters
-            ----------
-            self : amrex.ParticleContainer_*
-                A ParticleContainer class in pyAMReX
-            args : deprecated positional argument
-            level : int | str, optional
-                The MR level. Allowed values are [0:self.finest_level+1) and "all".
-                If there is more than one MR level, the argument is required.
+        Parameters
+        ----------
+        self : amrex.ParticleContainer_*
+            A ParticleContainer class in pyAMReX
+        args : deprecated positional argument
+        level : int | str, optional
+            The MR level. Allowed values are [0:self.finest_level+1) and "all".
+            If there is more than one MR level, the argument is required.
 
-            Returns
-            -------
+        Returns
+        -------
+        amrex.ParIter_*
             Iterator over all particle tiles at the specified level.
 
-            Examples
-            --------
-            >>> pc.iterator(level="all")
-            >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
+        Examples
+        --------
+        >>> pc.iterator(level="all")
+        >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
 
         """
     def make_alike(self) -> ParticleContainer_16_4_0_0_polymorphic: ...
@@ -33890,18 +33914,18 @@ class ParIterBase_pureSoA_11_0_polymorphic(MFIter):
         """
         This is a helper function for the C++ equivalent of void operator++()
 
-            In Python, iterators always are called with __next__, even for the
-            first access. This means we need to handle the first iterator element
-            explicitly, otherwise we will jump directly to the 2nd element. We do
-            this the same way as pybind11 does this, via a little state:
-              https://github.com/AMReX-Codes/pyamrex/pull/50
-              https://github.com/AMReX-Codes/pyamrex/pull/262
-              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+        In Python, iterators always are called with __next__, even for the
+        first access. This means we need to handle the first iterator element
+        explicitly, otherwise we will jump directly to the 2nd element. We do
+        this the same way as pybind11 does this, via a little state:
+          https://github.com/AMReX-Codes/pyamrex/pull/50
+          https://github.com/AMReX-Codes/pyamrex/pull/262
+          https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
 
-            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+        Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
 
-            self: the current iterator
-            returns: the updated iterator
+        self: the current iterator
+        returns: the updated iterator
 
         """
     def _incr(self) -> None: ...
@@ -33943,18 +33967,18 @@ class ParIter_pureSoA_11_0_polymorphic(ParIterBase_pureSoA_11_0_polymorphic):
         """
         This is a helper function for the C++ equivalent of void operator++()
 
-            In Python, iterators always are called with __next__, even for the
-            first access. This means we need to handle the first iterator element
-            explicitly, otherwise we will jump directly to the 2nd element. We do
-            this the same way as pybind11 does this, via a little state:
-              https://github.com/AMReX-Codes/pyamrex/pull/50
-              https://github.com/AMReX-Codes/pyamrex/pull/262
-              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+        In Python, iterators always are called with __next__, even for the
+        first access. This means we need to handle the first iterator element
+        explicitly, otherwise we will jump directly to the 2nd element. We do
+        this the same way as pybind11 does this, via a little state:
+          https://github.com/AMReX-Codes/pyamrex/pull/50
+          https://github.com/AMReX-Codes/pyamrex/pull/262
+          https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
 
-            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+        Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
 
-            self: the current iterator
-            returns: the updated iterator
+        self: the current iterator
+        returns: the updated iterator
 
         """
     def __repr__(self) -> str: ...
@@ -33975,18 +33999,18 @@ class ParConstIterBase_pureSoA_11_0_polymorphic(MFIter):
         """
         This is a helper function for the C++ equivalent of void operator++()
 
-            In Python, iterators always are called with __next__, even for the
-            first access. This means we need to handle the first iterator element
-            explicitly, otherwise we will jump directly to the 2nd element. We do
-            this the same way as pybind11 does this, via a little state:
-              https://github.com/AMReX-Codes/pyamrex/pull/50
-              https://github.com/AMReX-Codes/pyamrex/pull/262
-              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+        In Python, iterators always are called with __next__, even for the
+        first access. This means we need to handle the first iterator element
+        explicitly, otherwise we will jump directly to the 2nd element. We do
+        this the same way as pybind11 does this, via a little state:
+          https://github.com/AMReX-Codes/pyamrex/pull/50
+          https://github.com/AMReX-Codes/pyamrex/pull/262
+          https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
 
-            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+        Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
 
-            self: the current iterator
-            returns: the updated iterator
+        self: the current iterator
+        returns: the updated iterator
 
         """
     def _incr(self) -> None: ...
@@ -34028,18 +34052,18 @@ class ParConstIter_pureSoA_11_0_polymorphic(ParConstIterBase_pureSoA_11_0_polymo
         """
         This is a helper function for the C++ equivalent of void operator++()
 
-            In Python, iterators always are called with __next__, even for the
-            first access. This means we need to handle the first iterator element
-            explicitly, otherwise we will jump directly to the 2nd element. We do
-            this the same way as pybind11 does this, via a little state:
-              https://github.com/AMReX-Codes/pyamrex/pull/50
-              https://github.com/AMReX-Codes/pyamrex/pull/262
-              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+        In Python, iterators always are called with __next__, even for the
+        first access. This means we need to handle the first iterator element
+        explicitly, otherwise we will jump directly to the 2nd element. We do
+        this the same way as pybind11 does this, via a little state:
+          https://github.com/AMReX-Codes/pyamrex/pull/50
+          https://github.com/AMReX-Codes/pyamrex/pull/262
+          https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
 
-            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+        Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
 
-            self: the current iterator
-            returns: the updated iterator
+        self: the current iterator
+        returns: the updated iterator
 
         """
     def __repr__(self) -> str: ...
@@ -34148,23 +34172,24 @@ class ParticleContainer_pureSoA_11_0_polymorphic:
         """
         Create an iterator over all particle tiles
 
-            Parameters
-            ----------
-            self : amrex.ParticleContainer_*
-                A ParticleContainer class in pyAMReX
-            args : deprecated positional argument
-            level : int | str, optional
-                The MR level. Allowed values are [0:self.finest_level+1) and "all".
-                If there is more than one MR level, the argument is required.
+        Parameters
+        ----------
+        self : amrex.ParticleContainer_*
+            A ParticleContainer class in pyAMReX
+        args : deprecated positional argument
+        level : int | str, optional
+            The MR level. Allowed values are [0:self.finest_level+1) and "all".
+            If there is more than one MR level, the argument is required.
 
-            Returns
-            -------
+        Returns
+        -------
+        amrex.ParIter_*
             Iterator over all particle tiles at the specified level.
 
-            Examples
-            --------
-            >>> pc.iterator(level="all")
-            >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
+        Examples
+        --------
+        >>> pc.iterator(level="all")
+        >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
 
         """
     def define(self, gdb: ParGDBBase) -> None:
@@ -34217,23 +34242,24 @@ class ParticleContainer_pureSoA_11_0_polymorphic:
         """
         Create an iterator over all particle tiles
 
-            Parameters
-            ----------
-            self : amrex.ParticleContainer_*
-                A ParticleContainer class in pyAMReX
-            args : deprecated positional argument
-            level : int | str, optional
-                The MR level. Allowed values are [0:self.finest_level+1) and "all".
-                If there is more than one MR level, the argument is required.
+        Parameters
+        ----------
+        self : amrex.ParticleContainer_*
+            A ParticleContainer class in pyAMReX
+        args : deprecated positional argument
+        level : int | str, optional
+            The MR level. Allowed values are [0:self.finest_level+1) and "all".
+            If there is more than one MR level, the argument is required.
 
-            Returns
-            -------
+        Returns
+        -------
+        amrex.ParIter_*
             Iterator over all particle tiles at the specified level.
 
-            Examples
-            --------
-            >>> pc.iterator(level="all")
-            >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
+        Examples
+        --------
+        >>> pc.iterator(level="all")
+        >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
 
         """
     def make_alike(self) -> ParticleContainer_pureSoA_11_0_polymorphic: ...
@@ -34834,18 +34860,18 @@ class ParIterBase_pureSoA_6_0_polymorphic(MFIter):
         """
         This is a helper function for the C++ equivalent of void operator++()
 
-            In Python, iterators always are called with __next__, even for the
-            first access. This means we need to handle the first iterator element
-            explicitly, otherwise we will jump directly to the 2nd element. We do
-            this the same way as pybind11 does this, via a little state:
-              https://github.com/AMReX-Codes/pyamrex/pull/50
-              https://github.com/AMReX-Codes/pyamrex/pull/262
-              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+        In Python, iterators always are called with __next__, even for the
+        first access. This means we need to handle the first iterator element
+        explicitly, otherwise we will jump directly to the 2nd element. We do
+        this the same way as pybind11 does this, via a little state:
+          https://github.com/AMReX-Codes/pyamrex/pull/50
+          https://github.com/AMReX-Codes/pyamrex/pull/262
+          https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
 
-            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+        Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
 
-            self: the current iterator
-            returns: the updated iterator
+        self: the current iterator
+        returns: the updated iterator
 
         """
     def _incr(self) -> None: ...
@@ -34887,18 +34913,18 @@ class ParIter_pureSoA_6_0_polymorphic(ParIterBase_pureSoA_6_0_polymorphic):
         """
         This is a helper function for the C++ equivalent of void operator++()
 
-            In Python, iterators always are called with __next__, even for the
-            first access. This means we need to handle the first iterator element
-            explicitly, otherwise we will jump directly to the 2nd element. We do
-            this the same way as pybind11 does this, via a little state:
-              https://github.com/AMReX-Codes/pyamrex/pull/50
-              https://github.com/AMReX-Codes/pyamrex/pull/262
-              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+        In Python, iterators always are called with __next__, even for the
+        first access. This means we need to handle the first iterator element
+        explicitly, otherwise we will jump directly to the 2nd element. We do
+        this the same way as pybind11 does this, via a little state:
+          https://github.com/AMReX-Codes/pyamrex/pull/50
+          https://github.com/AMReX-Codes/pyamrex/pull/262
+          https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
 
-            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+        Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
 
-            self: the current iterator
-            returns: the updated iterator
+        self: the current iterator
+        returns: the updated iterator
 
         """
     def __repr__(self) -> str: ...
@@ -34919,18 +34945,18 @@ class ParConstIterBase_pureSoA_6_0_polymorphic(MFIter):
         """
         This is a helper function for the C++ equivalent of void operator++()
 
-            In Python, iterators always are called with __next__, even for the
-            first access. This means we need to handle the first iterator element
-            explicitly, otherwise we will jump directly to the 2nd element. We do
-            this the same way as pybind11 does this, via a little state:
-              https://github.com/AMReX-Codes/pyamrex/pull/50
-              https://github.com/AMReX-Codes/pyamrex/pull/262
-              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+        In Python, iterators always are called with __next__, even for the
+        first access. This means we need to handle the first iterator element
+        explicitly, otherwise we will jump directly to the 2nd element. We do
+        this the same way as pybind11 does this, via a little state:
+          https://github.com/AMReX-Codes/pyamrex/pull/50
+          https://github.com/AMReX-Codes/pyamrex/pull/262
+          https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
 
-            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+        Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
 
-            self: the current iterator
-            returns: the updated iterator
+        self: the current iterator
+        returns: the updated iterator
 
         """
     def _incr(self) -> None: ...
@@ -34972,18 +34998,18 @@ class ParConstIter_pureSoA_6_0_polymorphic(ParConstIterBase_pureSoA_6_0_polymorp
         """
         This is a helper function for the C++ equivalent of void operator++()
 
-            In Python, iterators always are called with __next__, even for the
-            first access. This means we need to handle the first iterator element
-            explicitly, otherwise we will jump directly to the 2nd element. We do
-            this the same way as pybind11 does this, via a little state:
-              https://github.com/AMReX-Codes/pyamrex/pull/50
-              https://github.com/AMReX-Codes/pyamrex/pull/262
-              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+        In Python, iterators always are called with __next__, even for the
+        first access. This means we need to handle the first iterator element
+        explicitly, otherwise we will jump directly to the 2nd element. We do
+        this the same way as pybind11 does this, via a little state:
+          https://github.com/AMReX-Codes/pyamrex/pull/50
+          https://github.com/AMReX-Codes/pyamrex/pull/262
+          https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
 
-            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+        Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
 
-            self: the current iterator
-            returns: the updated iterator
+        self: the current iterator
+        returns: the updated iterator
 
         """
     def __repr__(self) -> str: ...
@@ -35092,23 +35118,24 @@ class ParticleContainer_pureSoA_6_0_polymorphic:
         """
         Create an iterator over all particle tiles
 
-            Parameters
-            ----------
-            self : amrex.ParticleContainer_*
-                A ParticleContainer class in pyAMReX
-            args : deprecated positional argument
-            level : int | str, optional
-                The MR level. Allowed values are [0:self.finest_level+1) and "all".
-                If there is more than one MR level, the argument is required.
+        Parameters
+        ----------
+        self : amrex.ParticleContainer_*
+            A ParticleContainer class in pyAMReX
+        args : deprecated positional argument
+        level : int | str, optional
+            The MR level. Allowed values are [0:self.finest_level+1) and "all".
+            If there is more than one MR level, the argument is required.
 
-            Returns
-            -------
+        Returns
+        -------
+        amrex.ParIter_*
             Iterator over all particle tiles at the specified level.
 
-            Examples
-            --------
-            >>> pc.iterator(level="all")
-            >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
+        Examples
+        --------
+        >>> pc.iterator(level="all")
+        >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
 
         """
     def define(self, gdb: ParGDBBase) -> None:
@@ -35161,23 +35188,24 @@ class ParticleContainer_pureSoA_6_0_polymorphic:
         """
         Create an iterator over all particle tiles
 
-            Parameters
-            ----------
-            self : amrex.ParticleContainer_*
-                A ParticleContainer class in pyAMReX
-            args : deprecated positional argument
-            level : int | str, optional
-                The MR level. Allowed values are [0:self.finest_level+1) and "all".
-                If there is more than one MR level, the argument is required.
+        Parameters
+        ----------
+        self : amrex.ParticleContainer_*
+            A ParticleContainer class in pyAMReX
+        args : deprecated positional argument
+        level : int | str, optional
+            The MR level. Allowed values are [0:self.finest_level+1) and "all".
+            If there is more than one MR level, the argument is required.
 
-            Returns
-            -------
+        Returns
+        -------
+        amrex.ParIter_*
             Iterator over all particle tiles at the specified level.
 
-            Examples
-            --------
-            >>> pc.iterator(level="all")
-            >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
+        Examples
+        --------
+        >>> pc.iterator(level="all")
+        >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
 
         """
     def make_alike(self) -> ParticleContainer_pureSoA_6_0_polymorphic: ...
@@ -35778,18 +35806,18 @@ class ParIterBase_pureSoA_7_0_polymorphic(MFIter):
         """
         This is a helper function for the C++ equivalent of void operator++()
 
-            In Python, iterators always are called with __next__, even for the
-            first access. This means we need to handle the first iterator element
-            explicitly, otherwise we will jump directly to the 2nd element. We do
-            this the same way as pybind11 does this, via a little state:
-              https://github.com/AMReX-Codes/pyamrex/pull/50
-              https://github.com/AMReX-Codes/pyamrex/pull/262
-              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+        In Python, iterators always are called with __next__, even for the
+        first access. This means we need to handle the first iterator element
+        explicitly, otherwise we will jump directly to the 2nd element. We do
+        this the same way as pybind11 does this, via a little state:
+          https://github.com/AMReX-Codes/pyamrex/pull/50
+          https://github.com/AMReX-Codes/pyamrex/pull/262
+          https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
 
-            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+        Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
 
-            self: the current iterator
-            returns: the updated iterator
+        self: the current iterator
+        returns: the updated iterator
 
         """
     def _incr(self) -> None: ...
@@ -35831,18 +35859,18 @@ class ParIter_pureSoA_7_0_polymorphic(ParIterBase_pureSoA_7_0_polymorphic):
         """
         This is a helper function for the C++ equivalent of void operator++()
 
-            In Python, iterators always are called with __next__, even for the
-            first access. This means we need to handle the first iterator element
-            explicitly, otherwise we will jump directly to the 2nd element. We do
-            this the same way as pybind11 does this, via a little state:
-              https://github.com/AMReX-Codes/pyamrex/pull/50
-              https://github.com/AMReX-Codes/pyamrex/pull/262
-              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+        In Python, iterators always are called with __next__, even for the
+        first access. This means we need to handle the first iterator element
+        explicitly, otherwise we will jump directly to the 2nd element. We do
+        this the same way as pybind11 does this, via a little state:
+          https://github.com/AMReX-Codes/pyamrex/pull/50
+          https://github.com/AMReX-Codes/pyamrex/pull/262
+          https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
 
-            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+        Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
 
-            self: the current iterator
-            returns: the updated iterator
+        self: the current iterator
+        returns: the updated iterator
 
         """
     def __repr__(self) -> str: ...
@@ -35863,18 +35891,18 @@ class ParConstIterBase_pureSoA_7_0_polymorphic(MFIter):
         """
         This is a helper function for the C++ equivalent of void operator++()
 
-            In Python, iterators always are called with __next__, even for the
-            first access. This means we need to handle the first iterator element
-            explicitly, otherwise we will jump directly to the 2nd element. We do
-            this the same way as pybind11 does this, via a little state:
-              https://github.com/AMReX-Codes/pyamrex/pull/50
-              https://github.com/AMReX-Codes/pyamrex/pull/262
-              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+        In Python, iterators always are called with __next__, even for the
+        first access. This means we need to handle the first iterator element
+        explicitly, otherwise we will jump directly to the 2nd element. We do
+        this the same way as pybind11 does this, via a little state:
+          https://github.com/AMReX-Codes/pyamrex/pull/50
+          https://github.com/AMReX-Codes/pyamrex/pull/262
+          https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
 
-            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+        Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
 
-            self: the current iterator
-            returns: the updated iterator
+        self: the current iterator
+        returns: the updated iterator
 
         """
     def _incr(self) -> None: ...
@@ -35916,18 +35944,18 @@ class ParConstIter_pureSoA_7_0_polymorphic(ParConstIterBase_pureSoA_7_0_polymorp
         """
         This is a helper function for the C++ equivalent of void operator++()
 
-            In Python, iterators always are called with __next__, even for the
-            first access. This means we need to handle the first iterator element
-            explicitly, otherwise we will jump directly to the 2nd element. We do
-            this the same way as pybind11 does this, via a little state:
-              https://github.com/AMReX-Codes/pyamrex/pull/50
-              https://github.com/AMReX-Codes/pyamrex/pull/262
-              https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
+        In Python, iterators always are called with __next__, even for the
+        first access. This means we need to handle the first iterator element
+        explicitly, otherwise we will jump directly to the 2nd element. We do
+        this the same way as pybind11 does this, via a little state:
+          https://github.com/AMReX-Codes/pyamrex/pull/50
+          https://github.com/AMReX-Codes/pyamrex/pull/262
+          https://github.com/pybind/pybind11/blob/v2.10.0/include/pybind11/pybind11.h#L2269-L2282
 
-            Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
+        Important: we must NOT copy the AMReX iterator (unnecessary and expensive).
 
-            self: the current iterator
-            returns: the updated iterator
+        self: the current iterator
+        returns: the updated iterator
 
         """
     def __repr__(self) -> str: ...
@@ -36036,23 +36064,24 @@ class ParticleContainer_pureSoA_7_0_polymorphic:
         """
         Create an iterator over all particle tiles
 
-            Parameters
-            ----------
-            self : amrex.ParticleContainer_*
-                A ParticleContainer class in pyAMReX
-            args : deprecated positional argument
-            level : int | str, optional
-                The MR level. Allowed values are [0:self.finest_level+1) and "all".
-                If there is more than one MR level, the argument is required.
+        Parameters
+        ----------
+        self : amrex.ParticleContainer_*
+            A ParticleContainer class in pyAMReX
+        args : deprecated positional argument
+        level : int | str, optional
+            The MR level. Allowed values are [0:self.finest_level+1) and "all".
+            If there is more than one MR level, the argument is required.
 
-            Returns
-            -------
+        Returns
+        -------
+        amrex.ParIter_*
             Iterator over all particle tiles at the specified level.
 
-            Examples
-            --------
-            >>> pc.iterator(level="all")
-            >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
+        Examples
+        --------
+        >>> pc.iterator(level="all")
+        >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
 
         """
     def define(self, gdb: ParGDBBase) -> None:
@@ -36105,23 +36134,24 @@ class ParticleContainer_pureSoA_7_0_polymorphic:
         """
         Create an iterator over all particle tiles
 
-            Parameters
-            ----------
-            self : amrex.ParticleContainer_*
-                A ParticleContainer class in pyAMReX
-            args : deprecated positional argument
-            level : int | str, optional
-                The MR level. Allowed values are [0:self.finest_level+1) and "all".
-                If there is more than one MR level, the argument is required.
+        Parameters
+        ----------
+        self : amrex.ParticleContainer_*
+            A ParticleContainer class in pyAMReX
+        args : deprecated positional argument
+        level : int | str, optional
+            The MR level. Allowed values are [0:self.finest_level+1) and "all".
+            If there is more than one MR level, the argument is required.
 
-            Returns
-            -------
+        Returns
+        -------
+        amrex.ParIter_*
             Iterator over all particle tiles at the specified level.
 
-            Examples
-            --------
-            >>> pc.iterator(level="all")
-            >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
+        Examples
+        --------
+        >>> pc.iterator(level="all")
+        >>> pc.iterator(level=0)  # only particles on the the coarsest MR level
 
         """
     def make_alike(self) -> ParticleContainer_pureSoA_7_0_polymorphic: ...
