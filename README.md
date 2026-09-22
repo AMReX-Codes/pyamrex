@@ -195,6 +195,7 @@ Furthermore, pyAMReX adds a few selected CMake build options:
 | `pyAMReX_CCACHE`             | **ON**/OFF                                 | Search and use CCache to speed up rebuilds                    |
 | `pyAMReX_IPO`                | **ON**/OFF                                 | Compile with interprocedural/link optimization (IPO/LTO)      |
 | `pyAMReX_INSTALL`            | **ON**/OFF                                 | Enable install targets for pyAMReX                            |
+| `pip-build-isolation`        | ON/**OFF**                                 | Build the Python wheel in an isolated build environment       |
 | `pyAMReX_amrex_src`          | *None*                                     | Absolute path to AMReX source directory (preferred if set)    |
 | `pyAMReX_amrex_internal`     | **ON**/OFF                                 | Needs a pre-installed AMReX library if set to `OFF`           |
 | `pyAMReX_amrex_repo`         | `https://github.com/AMReX-Codes/amrex.git` | Repository URI to pull and build AMReX from                   |
