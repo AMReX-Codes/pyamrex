@@ -28,13 +28,42 @@ def test_xp_matches_build():
 
 
 def test_xp_is_cached():
-    """PEP 562 __getattr__ resolves once, then the global shadows it."""
+    """xp resolves once, then is a plain module global."""
     pytest.importorskip(XP_NAME, reason=f"optional dependency {XP_NAME} not installed")
     assert amr.xp is amr.xp
+    assert vars(amr)["xp"] is amr.xp
 
 
-def test_xp_getattr_still_raises():
-    """The module __getattr__ must not swallow genuine attribute errors."""
+def test_xp_listed_in_dir():
+    """xp is discoverable (tab completion, stub generation) before first use.
+
+    Run in a subprocess, so xp is not yet resolved by other tests.
+    """
+    code = (
+        "import amrex.space3d as amr; "
+        "assert 'xp' not in vars(amr), 'xp resolved at import'; "
+        "assert 'xp' in dir(amr), 'xp not in dir()'; "
+        "print('listed')"
+    )
+    out = subprocess.run(
+        [sys.executable, "-c", code], capture_output=True, text=True, check=False
+    )
+    assert out.returncode == 0, out.stderr
+    assert "listed" in out.stdout
+
+
+def test_no_module_getattr():
+    """No module-level PEP 562 __getattr__.
+
+    In the generated .pyi stubs it would tell type checkers that any
+    attribute exists, hiding typos, and break the Sphinx docs build, which
+    executes the stubs.
+    """
+    assert "__getattr__" not in vars(amr)
+
+
+def test_missing_attribute_raises():
+    """Lazy xp must not swallow genuine attribute errors."""
     with pytest.raises(AttributeError, match="no attribute"):
         amr.this_does_not_exist
 

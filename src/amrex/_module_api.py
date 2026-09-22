@@ -6,6 +6,10 @@ Authors: Axel Huebl
 License: BSD-3-Clause-LBNL
 """
 
+import functools
+import sys
+import types
+
 from .extensions.Array4 import register_Array4_extension
 from .extensions.ArrayOfStructs import register_AoS_extension
 from .extensions.MultiFab import register_MultiFab_extension
@@ -80,33 +84,44 @@ def setup_module(ns, amr):
     read_particles_.__name__ = "read_particles"
     read_particles_.__qualname__ = "read_particles"
 
-    def module_getattr(attr):
-        """Resolve ``xp`` lazily (PEP 562).
+    class Module(types.ModuleType):
+        """Module type of ``amrex.space{1,2,3}d``, adds the lazy ``xp``.
 
-        ``amr.xp`` is the array namespace matching this build: NumPy on CPU,
-        CuPy for CUDA/HIP, dpnp for SYCL. It is the module counterpart of the
-        ``to_xp`` methods, for code that needs to call into the array library
-        itself, e.g. ``amr.xp.sin(...)``.
-
-        Like every other CuPy/dpnp use in pyAMReX, those are optional
-        dependencies: they are imported here on first access, never at import
-        time, so ``import amrex`` works on a GPU build without them. Only
-        touching ``amr.xp`` (or a ``to_cupy``/``to_dpnp``/``to_xp`` call)
-        requires one to be installed.
-
-        Raises
-        ------
-        ImportError
-            On a GPU build whose array library (CuPy or dpnp) is not installed.
+        This is used instead of a module-level PEP 562 ``__getattr__``: in the
+        generated ``.pyi`` stubs, the latter tells type checkers that *any*
+        attribute exists (so typos go unnoticed) and, being body-less, it
+        returns ``None`` when the stubs are executed for the Sphinx docs.
         """
-        if attr == "xp":
+
+        @functools.cached_property
+        def xp(self):
+            """The array namespace matching this build.
+
+            NumPy on CPU, CuPy for CUDA/HIP, dpnp for SYCL. It is the module
+            counterpart of the ``to_xp`` methods, for code that needs to call
+            into the array library itself, e.g. ``amr.xp.sin(...)``.
+
+            Like every other CuPy/dpnp use in pyAMReX, those are optional
+            dependencies: they are imported here on first access, never at
+            import time, so ``import amrex`` works on a GPU build without them.
+            Only touching ``amr.xp`` (or a ``to_cupy``/``to_dpnp``/``to_xp``
+            call) requires one to be installed. The result is cached in the
+            module ``__dict__``, so subsequent lookups are plain attribute
+            lookups.
+
+            Raises
+            ------
+            ImportError
+                On a GPU build whose array library (CuPy or dpnp) is not
+                installed.
+            """
             import importlib
 
             from .extensions.dlpack_helpers import xp_module_name
 
             module_name = xp_module_name(amr)
             try:
-                xp = importlib.import_module(module_name)
+                return importlib.import_module(module_name)
             except ImportError as e:
                 raise ImportError(
                     f"amrex.xp needs {module_name!r}, which is an optional "
@@ -114,17 +129,18 @@ def setup_module(ns, amr):
                     f"or use the to_numpy()/to_cupy()/to_dpnp() methods "
                     f"directly."
                 ) from e
-            ns["xp"] = xp  # subsequent lookups skip __getattr__
-            return xp
-        raise AttributeError(f"module {name!r} has no attribute {attr!r}")
 
-    module_getattr.__name__ = "__getattr__"
-    module_getattr.__qualname__ = "__getattr__"
+        def __dir__(self):
+            # list xp before its first access, e.g., for tab completion
+            return sorted({*super().__dir__(), "xp"})
 
     ns["Print"] = Print
     ns["read_particles"] = read_particles_
     ns["list_particle_species"] = list_particle_species
-    ns["__getattr__"] = module_getattr
 
-    for injected in (Print, read_particles_, module_getattr):
+    for injected in (Print, read_particles_):
         injected.__module__ = name
+
+    # a module's __class__ may be set to a ModuleType subclass, see
+    # https://docs.python.org/3/reference/datamodel.html#customizing-module-attribute-access
+    sys.modules[name].__class__ = Module
