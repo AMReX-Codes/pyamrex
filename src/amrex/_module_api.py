@@ -70,7 +70,8 @@ def setup_module(ns, amr):
     def read_particles_(
         plotfile, particle_dir="particles", communicate=True, container=None
     ):
-        """Read AMReX particle data from a plotfile/checkpoint into a container.
+        """
+        Read AMReX particle data from a plotfile/checkpoint into a container.
 
         See :py:func:`amrex.extensions.ParticleContainer.read_particles` for details.
         """

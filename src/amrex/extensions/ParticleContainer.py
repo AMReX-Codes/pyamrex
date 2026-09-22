@@ -13,7 +13,8 @@ from .Iterator import getitem, next
 
 
 def iterator(self, *args, level=None):
-    """Create an iterator over all particle tiles
+    """
+    Create an iterator over all particle tiles
 
     Parameters
     ----------
@@ -26,7 +27,8 @@ def iterator(self, *args, level=None):
 
     Returns
     -------
-    Iterator over all particle tiles at the specified level.
+    amrex.ParIter_*
+        Iterator over all particle tiles at the specified level.
 
     Examples
     --------
