@@ -356,19 +356,19 @@ Additional runtime attributes (Real or Int) are always in SoA memory layout.
 
 ``amrex::StructOfArrays<NReal, NInt, Allocator>`` is implemented for many numbers of Real and Int arguments, and allocators, e.g.,
 
-.. autoclass:: amrex.space3d.StructOfArrays_8_0_idcpu_default
+.. autoclass:: amrex.space3d.StructOfArrays_3_0_idcpu_default
    :members:
    :undoc-members:
 
 ``amrex::ParticleTile<T_ParticleType, NArrayReal, NArrayInt, Allocator>`` is implemented for both legacy (AoS+SoA) and pure SoA particle types, many number of Real and Int arguments, and allocators, e.g.,
 
-.. autoclass:: amrex.space3d.ParticleTile_pureSoA_8_0_default
+.. autoclass:: amrex.space3d.ParticleTile_pureSoA_3_0_default
    :members:
    :undoc-members:
 
 ``amrex::ParticleTileData<T_ParticleType, NArrayReal>`` is implemented for both legacy (AoS+SoA) and pure SoA particle types, many number of Real and Int arguments, e.g.,
 
-.. autoclass:: amrex.space3d.ParticleTileData_pureSoA_8_0
+.. autoclass:: amrex.space3d.ParticleTileData_pureSoA_3_0
    :members:
    :undoc-members:
 
@@ -378,26 +378,25 @@ Additional runtime attributes (Real or Int) are always in SoA memory layout.
    :members:
    :undoc-members:
 
-.. autoclass:: amrex.space3d.ParticleContainer_pureSoA_8_0_default
+.. autoclass:: amrex.space3d.ParticleContainer_pureSoA_3_0_default
    :members:
    :undoc-members:
 
 Likewise for other classes accessible and usable on particle containers:
 
-.. autoclass:: amrex.space3d.ParIter_pureSoA_8_0_default
+.. autoclass:: amrex.space3d.ParIter_pureSoA_3_0_default
    :members:
    :undoc-members:
 
-.. autoclass:: amrex.space3d.ParConstIter_pureSoA_8_0_default
+.. autoclass:: amrex.space3d.ParConstIter_pureSoA_3_0_default
 
 .. autoclass:: amrex.space3d.ParticleInitType_2_1_3_1
    :members:
    :undoc-members:
 
-.. TODO for pure SoA
-.. .. autoclass:: amrex.space3d.ParticleInitType_pureSoA_8_0
-..    :members:
-..    :undoc-members:
+.. autoclass:: amrex.space3d.ParticleInitType_pureSoA_3_0
+   :members:
+   :undoc-members:
 
 AoS
 """

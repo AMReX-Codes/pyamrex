@@ -8,7 +8,8 @@ License: BSD-3-Clause-LBNL
 
 
 def next(self):
-    """This is a helper function for the C++ equivalent of void operator++()
+    """
+    This is a helper function for the C++ equivalent of void operator++()
 
     In Python, iterators always are called with __next__, even for the
     first access. This means we need to handle the first iterator element
