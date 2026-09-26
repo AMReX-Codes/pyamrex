@@ -10,6 +10,7 @@ This section collects typical user workflows and best practices for pyAMReX.
    :maxdepth: 2
 
    workflows/read_plotfiles
+   workflows/pltfile_to_openpmd
 ..   workflows/parallelization
 ..   workflows/profiling
 ..   workflows/debugging
