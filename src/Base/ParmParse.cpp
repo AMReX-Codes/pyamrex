@@ -9,11 +9,55 @@
 #include <AMReX_IntVect.H>
 #include <AMReX_ParmParse.H>
 
+#include <algorithm>
+#include <cstddef>
 #include <functional>
 #include <iostream>
 #include <string>
 #include <string_view>
 #include <vector>
+
+
+namespace
+{
+    /** Read an array-valued ParmParse entry.
+     *
+     * amrex::ParmParse::getarr indexes its output by the absolute value
+     * index: it writes into ref[start_ix, start_ix+num_val) and leaves the
+     * leading entries default-constructed. Return only the requested slice.
+     *
+     * num_val == -1 requests all values after start_ix. Passing AMReX's
+     * "all values" sentinel straight through would ask for num_val values
+     * starting at start_ix, i.e. run past the end and abort.
+     */
+    template< typename T >
+    std::vector<T>
+    get_arr (amrex::ParmParse & pp, std::string const & name,
+             int start_ix, int num_val)
+    {
+        if (start_ix < 0) {
+            throw py::value_error("start_ix must be non-negative, got " +
+                                  std::to_string(start_ix));
+        }
+        if (num_val < -1) {
+            throw py::value_error("num_val must be -1 (all values after "
+                                  "start_ix) or non-negative, got " +
+                                  std::to_string(num_val));
+        }
+        if (num_val == -1) {
+            num_val = std::max(pp.countval(name.c_str()) - start_ix, 0);
+        }
+
+        std::vector<T> ref;
+        pp.getarr(name, ref, start_ix, num_val);
+
+        // drop the default-constructed [0, start_ix) entries
+        auto const skip = std::min(static_cast<std::size_t>(start_ix),
+                                   ref.size());
+        ref.erase(ref.begin(), ref.begin() + static_cast<std::ptrdiff_t>(skip));
+        return ref;
+    }
+}
 
 
 void init_ParmParse(py::module &m)
@@ -90,9 +134,27 @@ void init_ParmParse(py::module &m)
             "parses input values", py::arg("name"), py::arg("ival")=0
         )
 
+        .def("query_bool",
+            [](ParmParse &pp, std::string name, int ival) {
+                bool ref = false;
+                bool exist = pp.query(name, ref, ival);
+                return std::make_tuple(exist,ref);
+            },
+            "queries input values", py::arg("name"), py::arg("ival")=0
+        )
+
         .def("query_int",
             [](ParmParse &pp, std::string name, int ival) {
-                int ref;
+                int ref = 0;
+                bool exist = pp.query(name, ref, ival);
+                return std::make_tuple(exist,ref);
+            },
+            "queries input values", py::arg("name"), py::arg("ival")=0
+        )
+
+        .def("query_real",
+            [](ParmParse &pp, std::string name, int ival) {
+                amrex::Real ref = 0.;
                 bool exist = pp.query(name, ref, ival);
                 return std::make_tuple(exist,ref);
             },
@@ -106,6 +168,68 @@ void init_ParmParse(py::module &m)
                 return std::make_tuple(exist,ref);
             },
             "queries input values", py::arg("name"), py::arg("ival")=0
+        )
+
+        .def("get_int_arr",
+            [](ParmParse &pp, std::string name, int start_ix, int num_val) {
+                return get_arr<int>(pp, name, start_ix, num_val);
+            },
+            "parses an array of input values, starting at index start_ix; "
+            "num_val=-1 returns all values after start_ix",
+            py::arg("name"), py::arg("start_ix")=0, py::arg("num_val")=-1
+        )
+
+        .def("get_real_arr",
+            [](ParmParse &pp, std::string name, int start_ix, int num_val) {
+                return get_arr<amrex::Real>(pp, name, start_ix, num_val);
+            },
+            "parses an array of input values, starting at index start_ix; "
+            "num_val=-1 returns all values after start_ix",
+            py::arg("name"), py::arg("start_ix")=0, py::arg("num_val")=-1
+        )
+
+        .def("get_str_arr",
+            [](ParmParse &pp, std::string name, int start_ix, int num_val) {
+                return get_arr<std::string>(pp, name, start_ix, num_val);
+            },
+            "parses an array of input values, starting at index start_ix; "
+            "num_val=-1 returns all values after start_ix",
+            py::arg("name"), py::arg("start_ix")=0, py::arg("num_val")=-1
+        )
+
+        .def("query_int_arr",
+            [](ParmParse &pp, std::string name) {
+                std::vector<int> ref;
+                bool exist = pp.queryarr(name, ref);
+                return std::make_tuple(exist,ref);
+            },
+            "queries an array of input values", py::arg("name")
+        )
+
+        .def("query_real_arr",
+            [](ParmParse &pp, std::string name) {
+                std::vector<amrex::Real> ref;
+                bool exist = pp.queryarr(name, ref);
+                return std::make_tuple(exist,ref);
+            },
+            "queries an array of input values", py::arg("name")
+        )
+
+        .def("query_str_arr",
+            [](ParmParse &pp, std::string name) {
+                std::vector<std::string> ref;
+                bool exist = pp.queryarr(name, ref);
+                return std::make_tuple(exist,ref);
+            },
+            "queries an array of input values", py::arg("name")
+        )
+
+        .def("countval",
+            [](ParmParse &pp, std::string name) {
+                return pp.countval(name.c_str());
+            },
+            "Returns the number of values associated with a parameter",
+            py::arg("name")
         )
 
         .def(
@@ -127,6 +251,11 @@ void init_ParmParse(py::module &m)
             "to_dict",
             [](ParmParse &pp) {
                 py::dict d;
+
+                // note: the table names below are fully qualified; use an
+                // unprefixed ParmParse for the value lookups, independent
+                // of the prefix of pp
+                ParmParse pp_root;
 
                 auto g_table = pp.table();
 
@@ -172,7 +301,7 @@ void init_ParmParse(py::module &m)
                                 [&](auto&& arg) {
                                     using T = std::remove_pointer_t<std::decay_t<decltype(arg)>>;
                                     T v;
-                                    pp.get(name, v);
+                                    pp_root.get(name, v);
                                     add_nested(v, name);
                                 },
                                 entry.m_typehint
@@ -183,7 +312,7 @@ void init_ParmParse(py::module &m)
                                     using T = std::remove_pointer_t<std::decay_t<decltype(arg)>>;
                                     if constexpr (!std::is_same_v<T, bool>) {
                                         std::vector<T> valarr;
-                                        pp.getarr(name, valarr);
+                                        pp_root.getarr(name, valarr);
                                         add_nested(valarr, name);
                                     }
                                 },
