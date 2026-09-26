@@ -58,6 +58,7 @@ void init_Utility(py::module &);
 void init_Vector(py::module &);
 void init_Version(py::module &);
 void init_VisMF(py::module &);
+void init_VectorPoisson3D(py::module&);
 #ifdef AMREX_USE_EB
 void init_EB(py::module &);
 #endif
@@ -180,6 +181,7 @@ PYBIND11_MODULE(amrex_3d_pybind, m) {
     init_Utility(m);
     init_Version(m);
     init_VisMF(m);
+    init_VectorPoisson3D(m);
 
 #ifdef AMREX_USE_EB
     init_EB(m);
