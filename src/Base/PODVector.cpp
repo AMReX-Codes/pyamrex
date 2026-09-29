@@ -13,6 +13,8 @@
 #include <algorithm>
 #include <cstdint>
 #include <sstream>
+#include <string>
+#include <type_traits>
 
 
 namespace
@@ -120,30 +122,50 @@ namespace
         podvector[index] = value;
     }
 
-    /** Create a new PODVector with a copy of a host (NumPy) array.
+    /** Throw unless ``n`` elements starting at ``offset`` fit into ``size``.
      *
-     * Always copies: a ``PODVector`` owns its memory through its allocator,
-     * so a zero-copy view is not possible.  The source array is normalized on
-     * the host by pybind11 (``c_style | forcecast``): a non-contiguous or
-     * differently-typed input is staged into a contiguous, ``T``-typed
-     * temporary before the copy.  The destination is filled with a single
-     * contiguous transfer: a host copy for host-accessible allocators, or
+     * ``offset`` is signed so that a negative Python int reaches this check
+     * (and raises IndexError) instead of failing the argument conversion.
+     */
+    inline std::size_t
+    check_copy_range(py::ssize_t const offset, std::size_t const n, std::size_t const size)
+    {
+        if (offset < 0 || static_cast<std::size_t>(offset) > size ||
+            n > size - static_cast<std::size_t>(offset)) {
+            throw py::index_error(
+                "copy_from: cannot copy " + std::to_string(n) +
+                " elements at offset " + std::to_string(offset) +
+                " into a PODVector of size " + std::to_string(size) +
+                "; resize it first");
+        }
+        return static_cast<std::size_t>(offset);
+    }
+
+    /** Copy a host (NumPy) array into ``podvector[offset:offset+len(arr)]``.
+     *
+     * The source array is normalized on the host by pybind11
+     * (``c_style | forcecast``): a non-contiguous or differently-typed input
+     * is staged into a contiguous, ``T``-typed temporary before the copy.
+     * The destination is filled with a single contiguous transfer: a host
+     * copy for host-accessible allocators, or
      * ``Gpu::copyAsync(hostToDevice, ...)`` for device memory.  This keeps
-     * the host-to-device path free of any CuPy dependency.
+     * the host-to-device path free of any CuPy/dpnp dependency.
      */
     template <class T, class Allocator>
-    PODVector<T, Allocator>
-    from_numpy(py::array_t<T, py::array::c_style | py::array::forcecast> const & arr)
+    void
+    copy_from_numpy(
+        PODVector<T, Allocator> & podvector,
+        py::array_t<T, py::array::c_style | py::array::forcecast> const & arr,
+        py::ssize_t const signed_offset)
     {
         auto const buf = arr.request();
         if (buf.ndim != 1) {
-            throw py::value_error("from_numpy: expected a 1-D array");
+            throw py::value_error("copy_from: expected a 1-D array");
         }
         auto const n = static_cast<std::size_t>(buf.shape[0]);
-
-        PODVector<T, Allocator> podvector(n);
+        auto const offset = check_copy_range(signed_offset, n, podvector.size());
         if (n == 0) {
-            return podvector;
+            return;
         }
 
         auto const * src = static_cast<T const *>(buf.ptr);
@@ -153,14 +175,83 @@ namespace
                 Gpu::hostToDevice,
                 src,
                 src + n,
-                podvector.begin()
+                podvector.begin() + offset
             );
             Gpu::streamSynchronize();
-            return podvector;
+            return;
         }
+        // host-accessible device memory (managed, pinned): finish pending
+        // device writers before the host touches it
+        Gpu::streamSynchronize();
 #endif
-        std::copy(src, src + n, podvector.begin());
+        std::copy(src, src + n, podvector.begin() + offset);
+    }
+
+    /** Create a new PODVector with a copy of a host (NumPy) array.
+     *
+     * Always copies: a ``PODVector`` owns its memory through its allocator,
+     * so a zero-copy view is not possible.  See copy_from_numpy.
+     */
+    template <class T, class Allocator>
+    PODVector<T, Allocator>
+    from_numpy(py::array_t<T, py::array::c_style | py::array::forcecast> const & arr)
+    {
+        auto const buf = arr.request();
+        if (buf.ndim != 1) {
+            throw py::value_error("from_numpy: expected a 1-D array");
+        }
+        PODVector<T, Allocator> podvector(static_cast<std::size_t>(buf.shape[0]));
+        copy_from_numpy(podvector, arr, 0);
         return podvector;
+    }
+
+    /** Copy all of ``src`` into ``dst[offset:offset+len(src)]``.
+     *
+     * Both vectors hold the same element type but may use any allocator.  The
+     * copy direction is picked from the runtime host-accessibility of both
+     * arenas, so this is one direct transfer (host-to-host, host-to-device,
+     * device-to-host or device-to-device) without staging and without any
+     * CuPy/dpnp dependency.
+     */
+    template <class T, class DstAllocator, class SrcAllocator>
+    void
+    copy_from_podvector(
+        PODVector<T, DstAllocator> & dst,
+        PODVector<T, SrcAllocator> const & src,
+        py::ssize_t const signed_offset)
+    {
+        auto const n = src.size();
+        auto const offset = check_copy_range(signed_offset, n, dst.size());
+        if (n == 0) {
+            return;
+        }
+
+        // the whole source is copied, so source and destination can only
+        // overlap if a vector is copied onto itself: nothing to do
+        if (static_cast<void const *>(src.dataPtr()) ==
+            static_cast<void const *>(dst.dataPtr() + offset)) {
+            return;
+        }
+
+#ifdef AMREX_USE_GPU
+        bool const src_host = is_host_accessible(src);
+        bool const dst_host = is_host_accessible(dst);
+        if (!src_host || !dst_host) {
+            if (src_host) {
+                Gpu::copyAsync(Gpu::hostToDevice, src.begin(), src.end(), dst.begin() + offset);
+            } else if (dst_host) {
+                Gpu::copyAsync(Gpu::deviceToHost, src.begin(), src.end(), dst.begin() + offset);
+            } else {
+                Gpu::copyAsync(Gpu::deviceToDevice, src.begin(), src.end(), dst.begin() + offset);
+            }
+            Gpu::streamSynchronize();
+            return;
+        }
+        // host-accessible device memory (managed, pinned): finish pending
+        // device writers before the host touches it
+        Gpu::streamSynchronize();
+#endif
+        std::copy(src.begin(), src.end(), dst.begin() + offset);
     }
 }
 
@@ -272,20 +363,93 @@ make_PODVector(py::module &m, std::string typestr, std::string allocstr) {
 Always copies the data into a newly allocated PODVector. The input is cast to
 the vector's element type and made contiguous as needed. The copy into
 device-only memory uses an AMReX host-to-device copy and does not require CuPy.
+For data of any kind, including device arrays, use ``from_array``.
 
 Parameters
 ----------
 arr : array_like
-    Input data, convertible to a NumPy array.
+    Input data in host memory, convertible to a NumPy array.
 
 Returns
 -------
 PODVector
     A new PODVector with a copy of the data.
 )")
+
+        // copy a host (NumPy) array into a slice of this vector
+        .def("copy_from_numpy", &copy_from_numpy<T, Allocator>,
+             py::arg("arr"), py::arg("offset") = 0,
+             R"(Copy a NumPy array (or array-like) into this PODVector at an offset.
+
+Writes ``self[offset:offset + len(arr)]``; the vector is not resized. The input
+is cast to the vector's element type and made contiguous as needed. The copy
+into device-only memory uses an AMReX host-to-device copy and does not require
+CuPy or dpnp. For data of any kind, including device arrays, use ``copy_from``.
+
+Parameters
+----------
+arr : array_like
+    1-D input data in host memory, convertible to a NumPy array.
+offset : int, optional
+    First element of this vector to write (default: 0).
+
+Raises
+------
+IndexError
+    If the data does not fit into this vector at the offset.
+)")
     ;
 
     return cl;
+}
+
+/** Bind ``copy_from_podvector`` on ``dst_cl`` for every source class.
+ *
+ * One overload per source allocator; only the first carries the docstring,
+ * since pybind11 concatenates the docstrings of all overloads.
+ */
+template <class DstClass, class... SrcClass>
+void bind_copy_from_podvector(DstClass & dst_cl, SrcClass &... src_cls)
+{
+    using Dst = typename DstClass::type;
+    char const * const doc = R"(Copy another PODVector of the same element type into this one at an offset.
+
+Writes ``self[offset:offset + len(src)]``; the vector is not resized. The source
+may use any allocator: the data is transferred directly between the memory
+spaces (host or device) by AMReX, without staging and without CuPy or dpnp.
+
+Parameters
+----------
+src : PODVector
+    Source vector with the same element type as this vector.
+offset : int, optional
+    First element of this vector to write (default: 0).
+
+Raises
+------
+IndexError
+    If the data does not fit into this vector at the offset.
+)";
+
+    bool first = true;
+    auto const def_one = [&](auto & src_cl) {
+        using Src = typename std::decay_t<decltype(src_cl)>::type;
+        dst_cl.def("copy_from_podvector",
+            [](Dst & dst, Src const & src, py::ssize_t const offset) {
+                copy_from_podvector(dst, src, offset);
+            },
+            py::arg("src"), py::arg("offset") = 0,
+            first ? doc : "");
+        first = false;
+    };
+    (def_one(src_cls), ...);
+}
+
+/** Bind ``copy_from_podvector`` between every pair of the given classes. */
+template <class... PODVectorClass>
+void add_copy_from_podvector(PODVectorClass &... cls)
+{
+    (bind_copy_from_podvector(cls, cls...), ...);
 }
 
 /** Bind the host/device copy helpers ``to_host`` and ``to_device`` on a
@@ -421,6 +585,19 @@ void make_PODVector(py::module &m, std::string typestr)
     // bind to_host/to_device now that every PODVector allocator class is
     // registered, so their PODVector return types resolve to known Python types
     add_host_device(
+        pv_pinned,
+        pv_arena,
+        pv_std,
+#ifdef AMREX_USE_GPU
+        pv_device,
+        pv_managed,
+        pv_async,
+#endif
+        pv_polymorphic
+    );
+
+    // bind the copies between every pair of PODVector allocator classes
+    add_copy_from_podvector(
         pv_pinned,
         pv_arena,
         pv_std,

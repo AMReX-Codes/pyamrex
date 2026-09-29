@@ -304,14 +304,34 @@ namespace
                        reinterpret_cast<cudaStream_t>(s);  // NOLINT(performance-no-int-to-ptr)
         cudaStream_t const producer = amrex::Gpu::gpuStream();
         if (consumer == producer) { return; }
+        // The consumer may have another device current than AMReX, e.g.,
+        // CuPy activates device 0 for managed memory, which DLPack reports as
+        // (kDLCUDAManaged, 0), while AMReX runs on another GPU. The event is
+        // created, recorded and destroyed on the producer device; the wait
+        // is enqueued on the consumer device, because the special stream
+        // handles (legacy/per-thread default stream) resolve to the default
+        // stream of the current device. The event may be from another device
+        // than the waiting stream.
+        int consumer_device = 0;
+        AMREX_CUDA_SAFE_CALL(cudaGetDevice(&consumer_device));
+        int const producer_device = amrex::Gpu::Device::deviceId();
+        auto const set_device = [consumer_device, producer_device] (int const device_id) {
+            if (consumer_device != producer_device) {
+                AMREX_CUDA_SAFE_CALL(cudaSetDevice(device_id));
+            }
+        };
         // make the consumer stream wait for pending producer work without
         // blocking the host
+        set_device(producer_device);
         cudaEvent_t event;
         AMREX_CUDA_SAFE_CALL(cudaEventCreateWithFlags(&event, cudaEventDisableTiming));
         AMREX_CUDA_SAFE_CALL(cudaEventRecord(event, producer));
+        set_device(consumer_device);
         AMREX_CUDA_SAFE_CALL(cudaStreamWaitEvent(consumer, event, 0));
         // CUDA defers the destruction until the event completed
+        set_device(producer_device);
         AMREX_CUDA_SAFE_CALL(cudaEventDestroy(event));
+        set_device(consumer_device);
 #elif defined(AMREX_USE_HIP)
         auto const s = py::cast<std::intptr_t>(stream);
         if (s == -1) { return; }  // consumer requests no synchronization
@@ -320,11 +340,26 @@ namespace
                        reinterpret_cast<hipStream_t>(s);  // NOLINT(performance-no-int-to-ptr)
         hipStream_t const producer = amrex::Gpu::gpuStream();
         if (consumer == producer) { return; }
+        // event on the producer device, wait on the consumer device (the null
+        // stream is the default stream of the current device), see the CUDA
+        // branch
+        int consumer_device = 0;
+        AMREX_HIP_SAFE_CALL(hipGetDevice(&consumer_device));
+        int const producer_device = amrex::Gpu::Device::deviceId();
+        auto const set_device = [consumer_device, producer_device] (int const device_id) {
+            if (consumer_device != producer_device) {
+                AMREX_HIP_SAFE_CALL(hipSetDevice(device_id));
+            }
+        };
+        set_device(producer_device);
         hipEvent_t event;
         AMREX_HIP_SAFE_CALL(hipEventCreateWithFlags(&event, hipEventDisableTiming));
         AMREX_HIP_SAFE_CALL(hipEventRecord(event, producer));
+        set_device(consumer_device);
         AMREX_HIP_SAFE_CALL(hipStreamWaitEvent(consumer, event, 0));
+        set_device(producer_device);
         AMREX_HIP_SAFE_CALL(hipEventDestroy(event));
+        set_device(consumer_device);
 #endif
     }
 
