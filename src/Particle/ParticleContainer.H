@@ -26,6 +26,7 @@
 
 #include <string>
 #include <sstream>
+#include <stdexcept>
 
 
 template <typename T_ParticleType, int T_NArrayReal=0, int T_NArrayInt=0>
@@ -325,6 +326,70 @@ void make_ParticleContainer_and_Iterators (py::module &m, std::string allocstr)
         .def("num_local_tiles_at_level",
             &ParticleContainerType::numLocalTilesAtLevel,
             py::arg("level")
+        )
+
+        .def("particle_box_array",
+            [](ParticleContainerType const & pc, int const level) {
+                if (pc.GetParGDB() == nullptr) {
+                    throw std::runtime_error("particle_box_array: the particle container is not defined");
+                }
+                if (level < 0 || level >= pc.numLevels()) {
+                    throw py::index_error("particle_box_array: level " + std::to_string(level) +
+                                          " out of range [0, " + std::to_string(pc.numLevels()) + ")");
+                }
+                // a copy (cheap, reference counted): a regrid may replace the original
+                return BoxArray(pc.ParticleBoxArray(level));
+            },
+            py::arg("level"),
+            "A copy of the BoxArray the particles are distributed on at an MR level."
+        )
+        .def("particle_distribution_map",
+            [](ParticleContainerType const & pc, int const level) {
+                if (pc.GetParGDB() == nullptr) {
+                    throw std::runtime_error("particle_distribution_map: the particle container is not defined");
+                }
+                if (level < 0 || level >= pc.numLevels()) {
+                    throw py::index_error("particle_distribution_map: level " + std::to_string(level) +
+                                          " out of range [0, " + std::to_string(pc.numLevels()) + ")");
+                }
+                // a copy (cheap, reference counted): a regrid may replace the original
+                return DistributionMapping(pc.ParticleDistributionMap(level));
+            },
+            py::arg("level"),
+            "A copy of the DistributionMapping of the particle boxes at an MR level."
+        )
+
+        .def_static("reserve_particle_ids",
+            [](Long n) {
+                if (n < 0) {
+                    throw py::value_error("reserve_particle_ids: n must be non-negative");
+                }
+                // NextID() returns the current counter and increments it by one
+                Long const first = ParticleType::NextID();
+                // ids [first, first + n) must not exceed LastParticleID; written
+                // so that it cannot overflow (first >= 1)
+                if (n > LongParticleIds::LastParticleID - (first - 1)) {
+                    ParticleType::NextID(first);
+                    throw py::value_error("reserve_particle_ids: too many particles, "
+                                          "the particle id range is exhausted");
+                }
+                ParticleType::NextID(first + n);
+                return first;
+            },
+            py::arg("n"),
+            R"pbdoc(
+Reserve ``n`` consecutive particle ids on this MPI rank.
+
+Returns the first id of the reserved range ``[first, first + n)`` and advances
+the particle id counter past it. The counter is shared by all containers of
+the same particle type on this MPI rank, so ids are unique per MPI rank and
+particle type; use the rank number as the ``cpu`` part of ``idcpu`` to make
+them globally unique.
+
+The reservation is not atomic with respect to C++ code that creates particles
+concurrently on other threads. Once all ids up to the AMReX limit
+(``2**39 - 3``) are used, AMReX aborts the program.
+)pbdoc"
         )
 
         .def("reserve_data", &ParticleContainerType::reserveData)

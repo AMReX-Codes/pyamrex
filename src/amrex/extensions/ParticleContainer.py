@@ -70,7 +70,7 @@ def iterator(self, *args, level=None):
         )
 
 
-def pc_to_df(self, local=True, comm=None, root_rank=0):
+def pc_to_df(self, local=True, comm=None, root_rank=None):
     """
     Copy all particles into a pandas.DataFrame
 
@@ -81,26 +81,35 @@ def pc_to_df(self, local=True, comm=None, root_rank=0):
     local : bool
         MPI rank-local particles only
     comm : MPI Communicator
-        if local is False, this defaults to mpi4py.MPI.COMM_WORLD
-    root_rank : MPI root rank to gather to
-        if local is False, this defaults to 0
+        if local is False, the mpi4py communicator to gather with.
+        Defaults to the communicator of AMReX.
+    root_rank : int
+        if local is False, the MPI rank to gather to.
+        Defaults to the I/O rank of AMReX (``ParallelDescriptor.IOProcessorNumber()``).
 
     Returns
     -------
-    A concatenated pandas.DataFrame with particles from all levels.
+    A concatenated pandas.DataFrame with particles from all levels, one
+    column per component (including ``idcpu``) and a row number index.
 
     Returns None if no particles were found.
     If local=False, then all ranks but the root_rank will return None.
+
+    Notes
+    -----
+    The particle ids are in the ``idcpu`` column, not in the DataFrame
+    index: the index only numbers the rows. ``idcpu`` is unique within one
+    snapshot, but not when DataFrames of several steps are combined, e.g.,
+    to track particles. Use ``amrex.unpack_ids`` and ``amrex.unpack_cpus``
+    to split ``idcpu`` into the id and the cpu number of each particle.
     """
     import pandas as pd
 
-    # silently ignore local=False for non-MPI runs
-    if local is False:
-        from inspect import getmodule
+    amr = _amrex_module(self)
 
-        amr = getmodule(self)
-        if not amr.Config.have_mpi:
-            local = True
+    # silently ignore local=False for non-MPI runs
+    if not local and not amr.Config.have_mpi:
+        local = True
 
     # create a DataFrame per particle box and append it to the list of
     # local DataFrame(s)
@@ -140,9 +149,6 @@ def pc_to_df(self, local=True, comm=None, root_rank=0):
                 for name, array in soa_np_int.items():
                     next_df[f"SoA_{name}"] = array
 
-            next_df.set_index("idcpu")
-            next_df.index.name = "idcpu"
-
             dfs_local.append(next_df)
 
     # MPI Gather to root rank if requested
@@ -150,12 +156,12 @@ def pc_to_df(self, local=True, comm=None, root_rank=0):
         if len(dfs_local) == 0:
             df = None
         else:
-            df = pd.concat(dfs_local)
+            df = pd.concat(dfs_local, ignore_index=True)
     else:
-        from mpi4py import MPI
-
         if comm is None:
-            comm = MPI.COMM_WORLD
+            comm = _amrex_comm(amr)
+        if root_rank is None:
+            root_rank = amr.ParallelDescriptor.IOProcessorNumber()
         rank = comm.Get_rank()
 
         # a list for each rank's list of DataFrame(s)
@@ -172,6 +178,747 @@ def pc_to_df(self, local=True, comm=None, root_rank=0):
             df = None
 
     return df
+
+
+def _amrex_module(obj):
+    """The pyAMReX module (e.g., amrex.space3d) of a pyAMReX object."""
+    from .dlpack_helpers import _pyamrex_module
+
+    amr = _pyamrex_module(obj)
+    if amr is None:
+        raise TypeError(f"{type(obj).__name__} is not a pyAMReX type")
+    return amr
+
+
+def _amrex_comm(amr):
+    """The MPI communicator of AMReX, as an mpi4py communicator."""
+    from mpi4py import MPI
+
+    return MPI.Comm.f2py(amr.ParallelDescriptor.Communicator())
+
+
+def _component_dtypes(pc):
+    """The NumPy dtype of every component of a pure SoA container, by name."""
+    import numpy as np
+
+    amr = _amrex_module(pc)
+    real = np.float64 if amr.Config.precision_particles == "DOUBLE" else np.float32
+    dtypes = {"idcpu": np.dtype(np.uint64)}
+    dtypes.update({name: np.dtype(real) for name in pc.real_soa_names})
+    dtypes.update({name: np.dtype(np.int32) for name in pc.int_soa_names})
+    return dtypes
+
+
+def _is_scalar(value):
+    """Python and NumPy numbers, and 0-d NumPy, CuPy or dpnp arrays."""
+    import numbers
+
+    import numpy as np
+
+    return isinstance(value, (numbers.Number, np.generic)) or (
+        getattr(value, "ndim", None) == 0 and hasattr(value, "item")
+    )
+
+
+def _scalar_value(value):
+    """A scalar as a Python number (copied to the host for device arrays)."""
+    return value.item() if hasattr(value, "item") else value
+
+
+def _array_module(kind):
+    """The array module of a prepared column: numpy, cupy or dpnp."""
+    if kind == "cupy":
+        import cupy
+
+        return cupy
+    if kind == "dpnp":
+        import dpnp
+
+        return dpnp
+    import numpy
+
+    return numpy
+
+
+def _to_host(kind, src):
+    """Copy a column prepared by PODVector's _prepare_source to a NumPy array."""
+    import numpy as np
+
+    if kind == "podvector":
+        # AMReX copy through pinned memory (a view for host memory)
+        return src.to_numpy(copy=True) if src.size() > 0 else np.empty(0)
+    if kind == "cupy":
+        import cupy as cp
+
+        return cp.asnumpy(src)
+    if kind == "dpnp":
+        import dpnp as dp
+
+        return dp.asnumpy(src)
+    return src
+
+
+def _collect_columns(data, columns):
+    """Merge a mapping or DataFrame and keyword columns into one dict."""
+    import numpy as np
+
+    merged = {}
+    if data is not None:
+        if hasattr(data, "keys"):
+            names = list(data.keys())
+        elif hasattr(data, "columns"):
+            names = list(data.columns)
+        else:
+            raise TypeError(
+                "data must be a mapping or a DataFrame of particle columns, "
+                f"not {type(data).__name__}"
+            )
+        if len(set(names)) != len(names):
+            raise ValueError(f"Particle column names must be unique: {names}")
+        merged = {name: data[name] for name in names}
+
+        # a DataFrame with the ids as its index, e.g., after df.set_index("idcpu")
+        index = getattr(data, "index", None)
+        if "idcpu" not in merged and getattr(index, "name", None) == "idcpu":
+            merged["idcpu"] = np.asarray(index)
+
+    twice = [name for name in columns if name in merged]
+    if twice:
+        raise ValueError(
+            f"Particle columns given both in data and as keyword arguments: {twice}"
+        )
+    merged.update(columns)
+    return merged
+
+
+def _check_integer_range(name, xp, src, dst_dtype):
+    """Raise if the values of src do not fit into the integer dst_dtype."""
+    import numpy as np
+
+    if src.dtype.kind == "f":
+        if not bool(xp.isfinite(src).all()) or not bool((xp.floor(src) == src).all()):
+            raise ValueError(
+                f"Particle column '{name}': values must be finite integers "
+                f"to be stored as {dst_dtype}"
+            )
+    elif np.can_cast(src.dtype, dst_dtype, "safe"):
+        return
+    info = np.iinfo(dst_dtype)
+    # compare Python numbers: dpnp cannot compare uint64 arrays with
+    # negative Python integers
+    lo, hi = src.min().item(), src.max().item()
+    if lo < info.min or hi > info.max:
+        raise ValueError(
+            f"Particle column '{name}': values in [{lo}, {hi}] do not fit "
+            f"into {dst_dtype}"
+        )
+
+
+def _check_float_range(name, xp, src, dst_dtype):
+    """Raise if finite values overflow to infinity in the float dst_dtype."""
+    import numpy as np
+
+    if src.dtype.kind != "f" or src.dtype.itemsize <= dst_dtype.itemsize:
+        return
+    # cheap check first: no copy of the data
+    limit = float(np.finfo(dst_dtype).max)
+    lo, hi = src.min().item(), src.max().item()
+    if -limit <= lo and hi <= limit:
+        return
+    # infinite or NaN values, or values out of range: check element-wise
+    with np.errstate(over="ignore"):
+        overflow = xp.isfinite(src) & ~xp.isfinite(src.astype(dst_dtype))
+    if bool(overflow.any()):
+        raise ValueError(
+            f"Particle column '{name}': values overflow the range of {dst_dtype}"
+        )
+
+
+def _check_column(name, kind, src, dst_dtype):
+    """Raise if a prepared column cannot be stored without silent data loss.
+
+    Floating point values may be rounded (e.g., to single precision), but not
+    overflow; integer values must fit; particle ids are cast to uint64 and
+    must be valid. Returns the (possibly converted) ``(kind, src)``.
+    """
+    from .dlpack_helpers import array_kind
+    from .PODVector import _element_type, _have_module, _prepare_array
+
+    if kind == "podvector":
+        element = _element_type(type(src))
+        if (dst_dtype.kind == "f" and element in ("int", "uint64")) or (
+            element == {"f": "real", "i": "int", "u": "uint64"}[dst_dtype.kind]
+            and name != "idcpu"
+        ):
+            # always representable
+            return kind, src
+        # check the values (e.g., the idcpu valid bits) through a view of
+        # the PODVector, or a host copy if CuPy/dpnp is missing
+        memory = array_kind(src)
+        if memory == "numpy" or _have_module(memory):
+            kind, src = _prepare_array(src)
+        else:
+            kind, src = "numpy", _to_host(kind, src)
+
+    if src.dtype.kind not in "biuf":
+        raise TypeError(
+            f"Particle column '{name}': cannot store {src.dtype} values as {dst_dtype}"
+        )
+    if src.shape[0] == 0:
+        return kind, src
+
+    xp = _array_module(kind)
+    if name == "idcpu":
+        if src.dtype.kind not in "iu":
+            raise TypeError(
+                f"Particle column 'idcpu': expected integers, not {src.dtype}; "
+                "floating point numbers cannot hold particle ids exactly"
+            )
+        # particle ids are 64 bit unsigned integers; signed 64 bit integers
+        # are reinterpreted, narrower ones must not be negative (the cast
+        # would extend the sign bit into the valid bit)
+        if src.dtype.kind == "i" and src.dtype.itemsize < 8 and src.min().item() < 0:
+            raise ValueError("Particle column 'idcpu': contains negative values")
+        src = src.astype(xp.uint64, copy=False)
+        # the leftmost bit marks valid particles; invalid ones are removed
+        if not bool(((src >> 63) == 1).all()):
+            raise ValueError(
+                "Particle column 'idcpu': contains invalid particle ids "
+                "(see amrex.make_valid and amrex.pack_ids)"
+            )
+        return kind, src
+
+    if dst_dtype.kind == "f":
+        _check_float_range(name, xp, src, dst_dtype)
+    else:
+        _check_integer_range(name, xp, src, dst_dtype)
+    return kind, src
+
+
+def _check_scalar(name, value, dst_dtype):
+    """Raise if a scalar cannot be stored without silent data loss."""
+    import math
+    import numbers
+
+    import numpy as np
+
+    if name == "idcpu":
+        raise ValueError("Particle column 'idcpu' cannot be a scalar")
+    if not isinstance(value, numbers.Real):
+        raise TypeError(
+            f"Particle column '{name}': cannot store {value!r} as {dst_dtype}"
+        )
+    # Python ints can exceed the float range: they are always finite
+    finite = isinstance(value, numbers.Integral) or math.isfinite(value)
+    if dst_dtype.kind == "f":
+        # a Python float: compares exactly with Python ints of any size
+        if finite and abs(value) > float(np.finfo(dst_dtype).max):
+            raise ValueError(
+                f"Particle column '{name}': {value!r} overflows the range of {dst_dtype}"
+            )
+        return
+    info = np.iinfo(dst_dtype)
+    if not finite or value != int(value) or not info.min <= value <= info.max:
+        raise ValueError(
+            f"Particle column '{name}': {value!r} is not an integer that fits "
+            f"into {dst_dtype}"
+        )
+
+
+def _normalize_columns(pc, merged, fill_missing):
+    """Validate columns against the pure SoA layout of a particle container.
+
+    Array columns are prepared for PODVector.copy_from and checked, so that
+    invalid data raises here, before any particle container is changed.
+    Returns the prepared ``name: (kind, src)`` array columns, the number of
+    particles, and the scalar columns as ``name: Python number``. No columns
+    means no particles.
+    """
+    from .PODVector import _prepare_source, _source_size
+
+    if fill_missing is not None and not _is_scalar(fill_missing):
+        raise TypeError(f"fill_missing must be a scalar, not {fill_missing!r}")
+    if not merged:
+        return {}, 0, {}
+
+    dtypes = _component_dtypes(pc)
+    required = list(pc.real_soa_names) + list(pc.int_soa_names)
+
+    unknown = [name for name in merged if name not in dtypes]
+    if unknown:
+        hint = ""
+        if set(unknown) & {"data", "df"}:
+            hint = " Pass a mapping or DataFrame as the first positional argument."
+        raise ValueError(
+            f"Unknown particle columns {unknown}; expected {required} "
+            f"and optionally 'idcpu'.{hint}"
+        )
+    missing = [name for name in required if name not in merged]
+    if missing and fill_missing is None:
+        raise KeyError(
+            f"Missing particle columns {missing}; pass them, or set "
+            "fill_missing to a value for all missing columns."
+        )
+
+    scalars = {
+        name: _scalar_value(value)
+        for name, value in merged.items()
+        if _is_scalar(value)
+    }
+    scalars.update({name: _scalar_value(fill_missing) for name in missing})
+    for name, value in scalars.items():
+        _check_scalar(name, value, dtypes[name])
+
+    columns = {}
+    for name, value in merged.items():
+        if name in scalars:
+            continue
+        try:
+            kind, src = _prepare_source(value)
+        except (TypeError, ValueError) as e:
+            raise type(e)(f"Particle column '{name}': {e}") from e
+        columns[name] = _check_column(name, kind, src, dtypes[name])
+
+    if not columns:
+        raise ValueError(
+            "At least one particle column must be an array, to define the "
+            "number of particles; the others can be scalars."
+        )
+    lengths = {name: _source_size(*column) for name, column in columns.items()}
+    if len(set(lengths.values())) > 1:
+        raise ValueError(f"Particle columns have unequal lengths: {lengths}")
+
+    return columns, list(lengths.values())[0], scalars
+
+
+def _split_counts(npart, owners, nranks):
+    """Number of particles per rank when splitting npart over the owner ranks.
+
+    Every owner rank gets ``npart // len(owners)`` particles and the first
+    ``npart % len(owners)`` owners get one extra, like ImpactX' split_equally.
+    Ranks that are not owners get zero particles.
+    """
+    navg, nleft = divmod(npart, len(owners))
+    counts = [0] * nranks
+    for k, owner in enumerate(owners):
+        counts[owner] = navg + (1 if k < nleft else 0)
+    return counts
+
+
+# the largest count/displacement of an MPI call without MPI-4 large counts
+_MAX_MPI_COUNT = 2**31 - 1
+
+
+def _mpi_large_count():
+    """Whether mpi4py and the MPI library support MPI-4 large counts."""
+    import mpi4py
+    from mpi4py import MPI
+
+    return int(mpi4py.__version__.split(".")[0]) >= 4 and MPI.Get_version() >= (4, 0)
+
+
+def _scatter_columns(pc, data, columns, fill_missing, comm, root_rank):
+    """Scatter the particle columns of root_rank to the ranks that own boxes.
+
+    Collective. The columns are validated and cast to the component types on
+    the root; scalar columns are sent as values. Returns this rank's
+    ``name: (kind, src)`` array columns, its number of particles, and the
+    scalar columns.
+    """
+    import numpy as np
+
+    rank = comm.Get_rank()
+    nranks = comm.Get_size()
+    if not 0 <= root_rank < nranks:
+        raise ValueError(
+            f"root_rank={root_rank} is not a rank of comm (0..{nranks - 1})"
+        )
+
+    root_error = None
+    host_columns = None
+    if rank == root_rank:
+        try:
+            merged = _collect_columns(data, columns)
+            prepared, npart, scalars = _normalize_columns(pc, merged, fill_missing)
+            dtypes = _component_dtypes(pc)
+            # MPI sends host buffers, so device arrays are staged to the host once
+            host_columns = {
+                name: np.ascontiguousarray(_to_host(kind, src), dtype=dtypes[name])
+                for name, (kind, src) in prepared.items()
+            }
+            if npart > _MAX_MPI_COUNT and not _mpi_large_count():
+                raise ValueError(
+                    f"Scattering {npart} particles requires MPI-4 large count "
+                    "support (mpi4py >= 4 and an MPI-4 library); add the "
+                    "particles in batches, or with local=True."
+                )
+            owners = sorted(set(pc.particle_distribution_map(0).ProcessorMap()))
+            meta = {
+                "error": None,
+                "names": list(host_columns.keys()),
+                "dtypes": [col.dtype.str for col in host_columns.values()],
+                "counts": _split_counts(npart, owners, nranks),
+                "scalars": scalars,
+            }
+        except Exception as e:
+            root_error = e
+            meta = {"error": repr(e)}
+    else:
+        meta = None
+
+    meta = comm.bcast(meta, root=root_rank)
+    if meta["error"] is not None:
+        if root_error is not None:
+            raise root_error
+        raise RuntimeError(
+            f"add_arrays(local=False) failed on the root rank {root_rank}: {meta['error']}"
+        )
+
+    counts = meta["counts"]
+    displs = [0] * nranks
+    for r in range(1, nranks):
+        displs[r] = displs[r - 1] + counts[r - 1]
+    npart_local = counts[rank]
+
+    # allocate all receive buffers first and agree on errors (e.g., out of
+    # memory), so that no rank is left behind in a Scatterv
+    error = None
+    local_columns = {}
+    try:
+        for name, dtype_str in zip(meta["names"], meta["dtypes"]):
+            recv = np.empty(npart_local, dtype=np.dtype(dtype_str))
+            local_columns[name] = ("numpy", recv)
+    except Exception as e:
+        error = e
+    _raise_on_any_error(comm, error)
+
+    for name, (_, recv) in local_columns.items():
+        send = None
+        if rank == root_rank:
+            send = [host_columns[name], (counts, displs)]
+        comm.Scatterv(send, recv, root=root_rank)
+
+    return local_columns, npart_local, meta["scalars"]
+
+
+def _prepare_insert(pc, columns, npart, scalars):
+    """Prepare appending particles to a tile of this rank on level 0.
+
+    The particles go to the first tile of the first box that this MPI rank
+    owns on level 0. Everything that can fail on user input happens here or
+    before, so that _commit_insert does not. Returns None if there is
+    nothing to add.
+    """
+    import numpy as np
+
+    if npart == 0:
+        return None
+
+    amr = _amrex_module(pc)
+    rank = amr.ParallelDescriptor.MyProc()
+
+    proc_map = list(pc.particle_distribution_map(0).ProcessorMap())
+    if rank not in proc_map:
+        raise RuntimeError(
+            f"MPI rank {rank} owns no box on level 0 and cannot receive particles. "
+            "Pass the particles on a rank that owns a box, or use local=False."
+        )
+    grid = proc_map.index(rank)
+    tile = pc.define_and_return_particle_tile(0, grid, 0)
+    soa = tile.get_struct_of_arrays()
+
+    real_names = list(pc.real_soa_names)
+    int_names = list(pc.int_soa_names)
+    if len(real_names) != soa.num_real_comps or len(int_names) != soa.num_int_comps:
+        raise RuntimeError("Particle component names do not match the tile layout.")
+
+    # (component PODVector, name) pairs in the tile layout order; resizing
+    # the tile reallocates the data of the PODVectors, not the PODVectors
+    destinations = [(soa.get_idcpu_data(), "idcpu")]
+    destinations += [(soa.get_real_data(i), name) for i, name in enumerate(real_names)]
+    destinations += [(soa.get_int_data(i), name) for i, name in enumerate(int_names)]
+
+    columns = dict(columns)
+    dtypes = _component_dtypes(pc)
+    for name, value in scalars.items():
+        columns[name] = ("numpy", np.full(npart, value, dtype=dtypes[name]))
+
+    if "idcpu" not in columns:
+        # new ids, unique per rank; the rank as cpu makes them globally unique
+        first = type(pc).reserve_particle_ids(npart)
+        idcpu = np.zeros(npart, dtype=np.uint64)
+        amr.pack_ids(idcpu, np.arange(first, first + npart, dtype=np.int64))
+        amr.pack_cpus(idcpu, np.full(npart, rank, dtype=np.int32))
+        columns["idcpu"] = ("numpy", idcpu)
+
+    return {
+        "tile": tile,
+        "destinations": destinations,
+        "columns": columns,
+        "npart": npart,
+        "old_size": tile.size,
+    }
+
+
+def _commit_insert(plan):
+    """Append the particles prepared by _prepare_insert to their tile.
+
+    Each component is written like PODVector.copy_from: device-to-device
+    for device data into device memory, otherwise through the host with an
+    AMReX copy, so CuPy and dpnp are never required. On failure, the tile is
+    restored.
+    """
+    from .PODVector import _copy_prepared
+
+    if plan is None:
+        return
+
+    tile = plan["tile"]
+    old_size = plan["old_size"]
+    tile.resize(old_size + plan["npart"])
+    try:
+        for dst, name in plan["destinations"]:
+            kind, src = plan["columns"][name]
+            _copy_prepared(dst, kind, src, old_size)
+    except Exception:
+        _rollback_insert(plan)
+        raise
+
+
+def _rollback_insert(plan):
+    """Remove the particles added by _commit_insert again."""
+    if plan is not None:
+        plan["tile"].resize(plan["old_size"])
+
+
+def _raise_on_any_error(comm, error):
+    """Collectively raise if any MPI rank had an error.
+
+    The rank(s) with an error re-raise it, all other ranks raise a
+    RuntimeError, so no rank continues into later collective calls alone.
+    """
+    errors = comm.allgather(None if error is None else repr(error))
+    if error is not None:
+        raise error
+    failed = [r for r, e in enumerate(errors) if e is not None]
+    if failed:
+        raise RuntimeError(
+            f"Adding particles failed on MPI rank(s) {failed}: {errors[failed[0]]}"
+        )
+
+
+def pc_add_arrays(
+    self,
+    data=None,
+    /,
+    *,
+    local=True,
+    comm=None,
+    root_rank=None,
+    redistribute=True,
+    fill_missing=None,
+    **columns,
+):
+    """
+    Add particles from arrays, one per particle component
+
+    This is the counterpart of :py:meth:`to_df`: the column names are the
+    same as the ones returned by ``to_df()`` for pure SoA particles.
+
+    Examples
+    --------
+    >>> pc.add_arrays(x=x, y=y, z=z, w=w)  # one array per component
+    >>> pc.add_arrays(x=x, y=y, z=z, w=1.0)  # scalars are broadcast
+    >>> pc.add_arrays(df)  # a DataFrame, e.g., from to_df()
+    >>> pc.add_arrays({"x": x, ...}, w=1.0)  # a mapping, plus keywords
+    >>> pc.add_arrays(x=x, y=y, z=z, fill_missing=0.0)  # others are 0
+    >>> pc.add_arrays(df, local=False)  # scatter df of the I/O rank to all ranks
+    >>> pc.add_arrays(local=False)  # ... on the other ranks
+
+    Parameters
+    ----------
+    self : amrex.ParticleContainer_*
+        A pure SoA ParticleContainer class in pyAMReX
+    data : mapping or DataFrame, optional
+        Particle columns by component name, e.g., a dict of arrays or a
+        pandas DataFrame. Needed for components whose names are no valid
+        Python identifiers or that are also option names of this function.
+        A DataFrame index named ``idcpu`` (e.g., after
+        ``df.set_index("idcpu")``) provides the ``idcpu`` column.
+    local : bool
+        If True, every MPI rank adds its own particles.
+        If False, the particles of ``root_rank`` are scattered to all MPI
+        ranks that own a box on level 0 (the columns of the other ranks are
+        ignored): each gets 1/N of the particles and the first ranks get one
+        remaining particle more. This is the counterpart of
+        ``to_df(local=False)``.
+    comm : MPI Communicator
+        The mpi4py communicator used for collective error handling and, if
+        local is False, for the scatter. Defaults to the communicator of
+        AMReX; its ranks must match the AMReX MPI ranks.
+    root_rank : int
+        if local is False, the MPI rank that holds the data. Defaults to the
+        I/O rank of AMReX (``ParallelDescriptor.IOProcessorNumber()``).
+    redistribute : bool
+        Call :py:meth:`redistribute` after adding the particles (default).
+        This is a collective call that moves the particles to the correct
+        MR level, box and tile. If False, the particles stay in the tile
+        of the first box on level 0 that the adding rank owns.
+    fill_missing : scalar, optional
+        Value for all components that are not given, except ``idcpu``
+        (without an ``idcpu`` column, new ids are always reserved). By
+        default, missing components raise a KeyError.
+    **columns : array or scalar
+        Particle columns by component name, in addition to ``data``.
+
+    Notes
+    -----
+    All Real and int components of the container (``self.real_soa_names``
+    and ``self.int_soa_names``) are required; ``idcpu`` is optional: if
+    given, its values are used as-is, otherwise new ids are reserved on the
+    adding rank. Unknown columns, and columns given both in ``data`` and as
+    keywords, raise a ValueError.
+
+    Columns can be NumPy, CuPy or dpnp arrays, pyAMReX PODVectors,
+    array-likes or scalars (broadcast to all particles); at least one must
+    be an array. They are copied like :py:meth:`PODVector.copy_from`:
+    device-to-device if possible, and never requiring CuPy or dpnp.
+    Values are cast to the component types: floating point values may be
+    rounded but not overflow; integer values that do not fit, non-integer
+    values for int components, and ``idcpu`` values that are not valid
+    particle ids raise an error. Integer ``idcpu`` values are cast to
+    ``uint64`` (the bits of signed 64 bit integers are kept).
+
+    If local is False or redistribute is True, this function is collective
+    and must be called on all MPI ranks, with the same ``local``,
+    ``redistribute``, ``comm`` and ``root_rank`` (otherwise it hangs);
+    invalid data on any rank then raises on all ranks. Reusing an ``idcpu`` column, e.g., when adding the
+    output of ``to_df()`` back to the same container, creates duplicate
+    particle ids. With local=False, the data is scattered through host
+    memory, also for device arrays. Legacy AoS particle containers are not
+    supported.
+    """
+    amr = _amrex_module(self)
+
+    if not self.is_soa_particle:
+        raise NotImplementedError(
+            "add_arrays/add_df only support pure SoA particle containers."
+        )
+
+    # silently ignore local=False for non-MPI runs
+    if not local and not amr.Config.have_mpi:
+        local = True
+
+    parallel = amr.Config.have_mpi and amr.ParallelDescriptor.NProcs() > 1
+    collective = parallel and (redistribute or not local)
+    if comm is None and (collective or not local):
+        comm = _amrex_comm(amr)
+    if root_rank is None:
+        root_rank = amr.ParallelDescriptor.IOProcessorNumber()
+
+    error = None
+    plan = None
+    if local:
+        try:
+            merged = _collect_columns(data, columns)
+            prepared, npart, scalars = _normalize_columns(self, merged, fill_missing)
+            plan = _prepare_insert(self, prepared, npart, scalars)
+        except Exception as e:
+            error = e
+    else:
+        from mpi4py import MPI
+
+        mismatch = (
+            comm.Get_size() != amr.ParallelDescriptor.NProcs()
+            or comm.Get_rank() != amr.ParallelDescriptor.MyProc()
+        )
+        if comm.allreduce(mismatch, op=MPI.LOR):
+            raise ValueError(
+                "The ranks of comm must match the AMReX MPI ranks for local=False."
+            )
+        prepared, npart, scalars = _scatter_columns(
+            self, data, columns, fill_missing, comm, root_rank
+        )
+        try:
+            plan = _prepare_insert(self, prepared, npart, scalars)
+        except Exception as e:
+            error = e
+
+    # agree on errors before changing the container and before the
+    # collective redistribute, so that no rank is left behind
+    if collective:
+        _raise_on_any_error(comm, error)
+    elif error is not None:
+        raise error
+
+    # the data is validated, but agree again in case of, e.g., out of memory
+    error = None
+    try:
+        _commit_insert(plan)
+    except Exception as e:
+        error = e
+    if collective:
+        try:
+            _raise_on_any_error(comm, error)
+        except Exception:
+            if error is None:
+                _rollback_insert(plan)
+            raise
+    elif error is not None:
+        raise error
+
+    if redistribute:
+        self.redistribute()
+
+
+def pc_add_df(
+    self,
+    df=None,
+    /,
+    *,
+    local=True,
+    comm=None,
+    root_rank=None,
+    redistribute=True,
+    fill_missing=None,
+    **columns,
+):
+    """
+    Add particles from a DataFrame
+
+    This is the counterpart of :py:meth:`to_df` and the same as
+    :py:meth:`add_arrays` with a DataFrame, e.g., a pandas.DataFrame whose
+    columns are the particle components, as returned by ``to_df()``.
+
+    Examples
+    --------
+    >>> df = pc.to_df(local=False)  # gather all particles to the I/O rank
+    >>> pc2.add_df(df, local=False)  # scatter them again, on all ranks
+
+    Parameters
+    ----------
+    self : amrex.ParticleContainer_*
+        A pure SoA ParticleContainer class in pyAMReX
+    df : DataFrame, optional
+        Particles to add, one column per component. The index is ignored,
+        unless it is named ``idcpu`` and there is no ``idcpu`` column.
+    local, comm, root_rank, redistribute, fill_missing, **columns :
+        See :py:meth:`add_arrays`.
+
+    See Also
+    --------
+    add_arrays : details, including collective behavior and particle ids.
+    """
+    return pc_add_arrays(
+        self,
+        df,
+        local=local,
+        comm=comm,
+        root_rank=root_rank,
+        redistribute=redistribute,
+        fill_missing=fill_missing,
+        **columns,
+    )
 
 
 def list_particle_species(plotfile):
@@ -370,3 +1117,5 @@ def register_ParticleContainer_extension(amr):
             iterator  # TODO: simplified, code duplication
         )
         ParticleContainer_type.to_df = pc_to_df
+        ParticleContainer_type.add_arrays = pc_add_arrays
+        ParticleContainer_type.add_df = pc_add_df
