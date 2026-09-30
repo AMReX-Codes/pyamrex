@@ -18416,11 +18416,12 @@ class PODVector_real_pinned:
         Always copies the data into a newly allocated PODVector. The input is cast to
         the vector's element type and made contiguous as needed. The copy into
         device-only memory uses an AMReX host-to-device copy and does not require CuPy.
+        For data of any kind, including device arrays, use ``from_array``.
 
         Parameters
         ----------
         arr : array_like
-            Input data, convertible to a NumPy array.
+            Input data in host memory, convertible to a NumPy array.
 
         Returns
         -------
@@ -18428,13 +18429,50 @@ class PODVector_real_pinned:
             A new PODVector with a copy of the data.
         """
     @classmethod
+    def from_array(cls, arr, copy=True):
+        """
+        Create a PODVector from array data.
+
+        The element type and allocator are those of ``cls`` (e.g.,
+        ``DeviceVector_real``, ``PODVector_int_std``); values are cast to the
+        element type. See :meth:`copy_from` for the supported inputs and how
+        the data is copied: CuPy and dpnp are never required.
+
+        Parameters
+        ----------
+        cls : type
+            The PODVector type to construct.
+        arr : array_like or PODVector
+            1-D data: a PODVector, a NumPy, CuPy or dpnp array, any DLPack
+            producer, or an array-like such as a list.
+        copy : bool or None, optional
+            Like ``numpy.asarray``: if True (default), always copy. If None,
+            return ``arr`` itself if it already is a ``cls`` instance, otherwise
+            copy. If False, return ``arr`` itself and raise ValueError if a copy
+            would be needed.
+
+        Returns
+        -------
+        PODVector
+            A ``cls`` instance.
+
+        Raises
+        ------
+        ValueError
+            If the data is not 1-D, or if ``copy=False`` and a copy is needed.
+        TypeError
+            If the data is None or on an unsupported device.
+
+        """
+    @classmethod
     def from_cupy(cls, arr):
         """
         Create a new PODVector from a CuPy array (or array-like).
 
         Always copies the data into a newly allocated PODVector.
-        Works for every allocator type: for host-only allocators the
-        data is staged to the host through NumPy automatically.
+        Works for every allocator type. Equivalent to :meth:`from_array`,
+        but requires CuPy. Array-likes on the host are copied without a detour
+        through the device.
 
         Parameters
         ----------
@@ -18455,8 +18493,9 @@ class PODVector_real_pinned:
         Create a new PODVector from a dpnp array (or array-like).
 
         Always copies the data into a newly allocated PODVector.
-        Works for every allocator type: for host-only allocators the
-        data is staged to the host through NumPy automatically.
+        Works for every allocator type. Equivalent to :meth:`from_array`,
+        but requires dpnp. Array-likes on the host are copied without a detour
+        through the device.
 
         Parameters
         ----------
@@ -18474,12 +18513,12 @@ class PODVector_real_pinned:
     @classmethod
     def from_xp(cls, arr):
         """
-        Create a new PODVector from a NumPy, CuPy or dpnp array,
-        depending on amr.Config.have_gpu and amr.Config.gpu_backend .
+        Create a new PODVector from a NumPy, CuPy or dpnp array.
 
-        Always copies the data into a newly allocated PODVector.
-        Unlike :meth:`to_xp`, a zero-copy view is not possible here because
-        PODVector always owns its memory through its allocator.
+        Always copies the data into a newly allocated PODVector, like
+        :meth:`from_array`, which supports any of these inputs regardless of
+        the build. Unlike :meth:`to_xp`, a zero-copy view is not possible here
+        because PODVector always owns its memory through its allocator.
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
         https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
@@ -18578,6 +18617,112 @@ class PODVector_real_pinned:
         """
     def capacity(self) -> int: ...
     def clear(self) -> None: ...
+    def copy_from(self, arr, offset=0):
+        """
+        Copy array data into this PODVector at an offset.
+
+        Writes ``self[offset:offset + len(arr)]``; the vector is not resized.
+        Values are cast to the vector's element type.
+
+        The fastest available copy is used: a direct AMReX copy for PODVector
+        input, and a device-to-device copy for CuPy or dpnp input into device
+        memory. Otherwise, the data is copied through the host with AMReX, so
+        CuPy and dpnp are never required: they are only imported if the data
+        is on such a device.
+
+        Parameters
+        ----------
+        self : amrex.PODVector_*
+            A PODVector class in pyAMReX
+        arr : array_like or PODVector
+            1-D data: a PODVector, a NumPy, CuPy or dpnp array, any DLPack
+            producer, or an array-like such as a list.
+        offset : int, optional
+            First element of this vector to write (default: 0).
+
+        Raises
+        ------
+        IndexError
+            If the data does not fit into this vector at the offset.
+        ValueError
+            If the data is not 1-D.
+        TypeError
+            If the data is None or on an unsupported device.
+
+        Notes
+        -----
+        The source must not overlap with the written part of this vector, e.g.,
+        it must not be a view into it.
+
+        """
+    def copy_from_numpy(
+        self,
+        arr: typing.Annotated[numpy.typing.ArrayLike, numpy.float64],
+        offset: typing.SupportsInt | typing.SupportsIndex = 0,
+    ) -> None:
+        """
+        Copy a NumPy array (or array-like) into this PODVector at an offset.
+
+        Writes ``self[offset:offset + len(arr)]``; the vector is not resized. The input
+        is cast to the vector's element type and made contiguous as needed. The copy
+        into device-only memory uses an AMReX host-to-device copy and does not require
+        CuPy or dpnp. For data of any kind, including device arrays, use ``copy_from``.
+
+        Parameters
+        ----------
+        arr : array_like
+            1-D input data in host memory, convertible to a NumPy array.
+        offset : int, optional
+            First element of this vector to write (default: 0).
+
+        Raises
+        ------
+        IndexError
+            If the data does not fit into this vector at the offset.
+        """
+    @typing.overload
+    def copy_from_podvector(
+        self,
+        src: PODVector_real_pinned,
+        offset: typing.SupportsInt | typing.SupportsIndex = 0,
+    ) -> None:
+        """
+        Copy another PODVector of the same element type into this one at an offset.
+
+        Writes ``self[offset:offset + len(src)]``; the vector is not resized. The source
+        may use any allocator: the data is transferred directly between the memory
+        spaces (host or device) by AMReX, without staging and without CuPy or dpnp.
+
+        Parameters
+        ----------
+        src : PODVector
+            Source vector with the same element type as this vector.
+        offset : int, optional
+            First element of this vector to write (default: 0).
+
+        Raises
+        ------
+        IndexError
+            If the data does not fit into this vector at the offset.
+        """
+    @typing.overload
+    def copy_from_podvector(
+        self,
+        src: PODVector_real_arena,
+        offset: typing.SupportsInt | typing.SupportsIndex = 0,
+    ) -> None: ...
+    @typing.overload
+    def copy_from_podvector(
+        self,
+        src: PODVector_real_std,
+        offset: typing.SupportsInt | typing.SupportsIndex = 0,
+    ) -> None: ...
+    @typing.overload
+    def copy_from_podvector(
+        self,
+        src: PODVector_real_polymorphic,
+        offset: typing.SupportsInt | typing.SupportsIndex = 0,
+    ) -> None: ...
     def empty(self) -> bool: ...
     def pop_back(self) -> None: ...
     def push_back(self, arg0: typing.SupportsFloat | typing.SupportsIndex) -> None: ...
@@ -18710,11 +18855,12 @@ class PODVector_real_arena:
         Always copies the data into a newly allocated PODVector. The input is cast to
         the vector's element type and made contiguous as needed. The copy into
         device-only memory uses an AMReX host-to-device copy and does not require CuPy.
+        For data of any kind, including device arrays, use ``from_array``.
 
         Parameters
         ----------
         arr : array_like
-            Input data, convertible to a NumPy array.
+            Input data in host memory, convertible to a NumPy array.
 
         Returns
         -------
@@ -18722,13 +18868,50 @@ class PODVector_real_arena:
             A new PODVector with a copy of the data.
         """
     @classmethod
+    def from_array(cls, arr, copy=True):
+        """
+        Create a PODVector from array data.
+
+        The element type and allocator are those of ``cls`` (e.g.,
+        ``DeviceVector_real``, ``PODVector_int_std``); values are cast to the
+        element type. See :meth:`copy_from` for the supported inputs and how
+        the data is copied: CuPy and dpnp are never required.
+
+        Parameters
+        ----------
+        cls : type
+            The PODVector type to construct.
+        arr : array_like or PODVector
+            1-D data: a PODVector, a NumPy, CuPy or dpnp array, any DLPack
+            producer, or an array-like such as a list.
+        copy : bool or None, optional
+            Like ``numpy.asarray``: if True (default), always copy. If None,
+            return ``arr`` itself if it already is a ``cls`` instance, otherwise
+            copy. If False, return ``arr`` itself and raise ValueError if a copy
+            would be needed.
+
+        Returns
+        -------
+        PODVector
+            A ``cls`` instance.
+
+        Raises
+        ------
+        ValueError
+            If the data is not 1-D, or if ``copy=False`` and a copy is needed.
+        TypeError
+            If the data is None or on an unsupported device.
+
+        """
+    @classmethod
     def from_cupy(cls, arr):
         """
         Create a new PODVector from a CuPy array (or array-like).
 
         Always copies the data into a newly allocated PODVector.
-        Works for every allocator type: for host-only allocators the
-        data is staged to the host through NumPy automatically.
+        Works for every allocator type. Equivalent to :meth:`from_array`,
+        but requires CuPy. Array-likes on the host are copied without a detour
+        through the device.
 
         Parameters
         ----------
@@ -18749,8 +18932,9 @@ class PODVector_real_arena:
         Create a new PODVector from a dpnp array (or array-like).
 
         Always copies the data into a newly allocated PODVector.
-        Works for every allocator type: for host-only allocators the
-        data is staged to the host through NumPy automatically.
+        Works for every allocator type. Equivalent to :meth:`from_array`,
+        but requires dpnp. Array-likes on the host are copied without a detour
+        through the device.
 
         Parameters
         ----------
@@ -18768,12 +18952,12 @@ class PODVector_real_arena:
     @classmethod
     def from_xp(cls, arr):
         """
-        Create a new PODVector from a NumPy, CuPy or dpnp array,
-        depending on amr.Config.have_gpu and amr.Config.gpu_backend .
+        Create a new PODVector from a NumPy, CuPy or dpnp array.
 
-        Always copies the data into a newly allocated PODVector.
-        Unlike :meth:`to_xp`, a zero-copy view is not possible here because
-        PODVector always owns its memory through its allocator.
+        Always copies the data into a newly allocated PODVector, like
+        :meth:`from_array`, which supports any of these inputs regardless of
+        the build. Unlike :meth:`to_xp`, a zero-copy view is not possible here
+        because PODVector always owns its memory through its allocator.
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
         https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
@@ -18872,6 +19056,112 @@ class PODVector_real_arena:
         """
     def capacity(self) -> int: ...
     def clear(self) -> None: ...
+    def copy_from(self, arr, offset=0):
+        """
+        Copy array data into this PODVector at an offset.
+
+        Writes ``self[offset:offset + len(arr)]``; the vector is not resized.
+        Values are cast to the vector's element type.
+
+        The fastest available copy is used: a direct AMReX copy for PODVector
+        input, and a device-to-device copy for CuPy or dpnp input into device
+        memory. Otherwise, the data is copied through the host with AMReX, so
+        CuPy and dpnp are never required: they are only imported if the data
+        is on such a device.
+
+        Parameters
+        ----------
+        self : amrex.PODVector_*
+            A PODVector class in pyAMReX
+        arr : array_like or PODVector
+            1-D data: a PODVector, a NumPy, CuPy or dpnp array, any DLPack
+            producer, or an array-like such as a list.
+        offset : int, optional
+            First element of this vector to write (default: 0).
+
+        Raises
+        ------
+        IndexError
+            If the data does not fit into this vector at the offset.
+        ValueError
+            If the data is not 1-D.
+        TypeError
+            If the data is None or on an unsupported device.
+
+        Notes
+        -----
+        The source must not overlap with the written part of this vector, e.g.,
+        it must not be a view into it.
+
+        """
+    def copy_from_numpy(
+        self,
+        arr: typing.Annotated[numpy.typing.ArrayLike, numpy.float64],
+        offset: typing.SupportsInt | typing.SupportsIndex = 0,
+    ) -> None:
+        """
+        Copy a NumPy array (or array-like) into this PODVector at an offset.
+
+        Writes ``self[offset:offset + len(arr)]``; the vector is not resized. The input
+        is cast to the vector's element type and made contiguous as needed. The copy
+        into device-only memory uses an AMReX host-to-device copy and does not require
+        CuPy or dpnp. For data of any kind, including device arrays, use ``copy_from``.
+
+        Parameters
+        ----------
+        arr : array_like
+            1-D input data in host memory, convertible to a NumPy array.
+        offset : int, optional
+            First element of this vector to write (default: 0).
+
+        Raises
+        ------
+        IndexError
+            If the data does not fit into this vector at the offset.
+        """
+    @typing.overload
+    def copy_from_podvector(
+        self,
+        src: PODVector_real_pinned,
+        offset: typing.SupportsInt | typing.SupportsIndex = 0,
+    ) -> None:
+        """
+        Copy another PODVector of the same element type into this one at an offset.
+
+        Writes ``self[offset:offset + len(src)]``; the vector is not resized. The source
+        may use any allocator: the data is transferred directly between the memory
+        spaces (host or device) by AMReX, without staging and without CuPy or dpnp.
+
+        Parameters
+        ----------
+        src : PODVector
+            Source vector with the same element type as this vector.
+        offset : int, optional
+            First element of this vector to write (default: 0).
+
+        Raises
+        ------
+        IndexError
+            If the data does not fit into this vector at the offset.
+        """
+    @typing.overload
+    def copy_from_podvector(
+        self,
+        src: PODVector_real_arena,
+        offset: typing.SupportsInt | typing.SupportsIndex = 0,
+    ) -> None: ...
+    @typing.overload
+    def copy_from_podvector(
+        self,
+        src: PODVector_real_std,
+        offset: typing.SupportsInt | typing.SupportsIndex = 0,
+    ) -> None: ...
+    @typing.overload
+    def copy_from_podvector(
+        self,
+        src: PODVector_real_polymorphic,
+        offset: typing.SupportsInt | typing.SupportsIndex = 0,
+    ) -> None: ...
     def empty(self) -> bool: ...
     def pop_back(self) -> None: ...
     def push_back(self, arg0: typing.SupportsFloat | typing.SupportsIndex) -> None: ...
@@ -19004,11 +19294,12 @@ class PODVector_real_std:
         Always copies the data into a newly allocated PODVector. The input is cast to
         the vector's element type and made contiguous as needed. The copy into
         device-only memory uses an AMReX host-to-device copy and does not require CuPy.
+        For data of any kind, including device arrays, use ``from_array``.
 
         Parameters
         ----------
         arr : array_like
-            Input data, convertible to a NumPy array.
+            Input data in host memory, convertible to a NumPy array.
 
         Returns
         -------
@@ -19016,13 +19307,50 @@ class PODVector_real_std:
             A new PODVector with a copy of the data.
         """
     @classmethod
+    def from_array(cls, arr, copy=True):
+        """
+        Create a PODVector from array data.
+
+        The element type and allocator are those of ``cls`` (e.g.,
+        ``DeviceVector_real``, ``PODVector_int_std``); values are cast to the
+        element type. See :meth:`copy_from` for the supported inputs and how
+        the data is copied: CuPy and dpnp are never required.
+
+        Parameters
+        ----------
+        cls : type
+            The PODVector type to construct.
+        arr : array_like or PODVector
+            1-D data: a PODVector, a NumPy, CuPy or dpnp array, any DLPack
+            producer, or an array-like such as a list.
+        copy : bool or None, optional
+            Like ``numpy.asarray``: if True (default), always copy. If None,
+            return ``arr`` itself if it already is a ``cls`` instance, otherwise
+            copy. If False, return ``arr`` itself and raise ValueError if a copy
+            would be needed.
+
+        Returns
+        -------
+        PODVector
+            A ``cls`` instance.
+
+        Raises
+        ------
+        ValueError
+            If the data is not 1-D, or if ``copy=False`` and a copy is needed.
+        TypeError
+            If the data is None or on an unsupported device.
+
+        """
+    @classmethod
     def from_cupy(cls, arr):
         """
         Create a new PODVector from a CuPy array (or array-like).
 
         Always copies the data into a newly allocated PODVector.
-        Works for every allocator type: for host-only allocators the
-        data is staged to the host through NumPy automatically.
+        Works for every allocator type. Equivalent to :meth:`from_array`,
+        but requires CuPy. Array-likes on the host are copied without a detour
+        through the device.
 
         Parameters
         ----------
@@ -19043,8 +19371,9 @@ class PODVector_real_std:
         Create a new PODVector from a dpnp array (or array-like).
 
         Always copies the data into a newly allocated PODVector.
-        Works for every allocator type: for host-only allocators the
-        data is staged to the host through NumPy automatically.
+        Works for every allocator type. Equivalent to :meth:`from_array`,
+        but requires dpnp. Array-likes on the host are copied without a detour
+        through the device.
 
         Parameters
         ----------
@@ -19062,12 +19391,12 @@ class PODVector_real_std:
     @classmethod
     def from_xp(cls, arr):
         """
-        Create a new PODVector from a NumPy, CuPy or dpnp array,
-        depending on amr.Config.have_gpu and amr.Config.gpu_backend .
+        Create a new PODVector from a NumPy, CuPy or dpnp array.
 
-        Always copies the data into a newly allocated PODVector.
-        Unlike :meth:`to_xp`, a zero-copy view is not possible here because
-        PODVector always owns its memory through its allocator.
+        Always copies the data into a newly allocated PODVector, like
+        :meth:`from_array`, which supports any of these inputs regardless of
+        the build. Unlike :meth:`to_xp`, a zero-copy view is not possible here
+        because PODVector always owns its memory through its allocator.
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
         https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
@@ -19166,6 +19495,112 @@ class PODVector_real_std:
         """
     def capacity(self) -> int: ...
     def clear(self) -> None: ...
+    def copy_from(self, arr, offset=0):
+        """
+        Copy array data into this PODVector at an offset.
+
+        Writes ``self[offset:offset + len(arr)]``; the vector is not resized.
+        Values are cast to the vector's element type.
+
+        The fastest available copy is used: a direct AMReX copy for PODVector
+        input, and a device-to-device copy for CuPy or dpnp input into device
+        memory. Otherwise, the data is copied through the host with AMReX, so
+        CuPy and dpnp are never required: they are only imported if the data
+        is on such a device.
+
+        Parameters
+        ----------
+        self : amrex.PODVector_*
+            A PODVector class in pyAMReX
+        arr : array_like or PODVector
+            1-D data: a PODVector, a NumPy, CuPy or dpnp array, any DLPack
+            producer, or an array-like such as a list.
+        offset : int, optional
+            First element of this vector to write (default: 0).
+
+        Raises
+        ------
+        IndexError
+            If the data does not fit into this vector at the offset.
+        ValueError
+            If the data is not 1-D.
+        TypeError
+            If the data is None or on an unsupported device.
+
+        Notes
+        -----
+        The source must not overlap with the written part of this vector, e.g.,
+        it must not be a view into it.
+
+        """
+    def copy_from_numpy(
+        self,
+        arr: typing.Annotated[numpy.typing.ArrayLike, numpy.float64],
+        offset: typing.SupportsInt | typing.SupportsIndex = 0,
+    ) -> None:
+        """
+        Copy a NumPy array (or array-like) into this PODVector at an offset.
+
+        Writes ``self[offset:offset + len(arr)]``; the vector is not resized. The input
+        is cast to the vector's element type and made contiguous as needed. The copy
+        into device-only memory uses an AMReX host-to-device copy and does not require
+        CuPy or dpnp. For data of any kind, including device arrays, use ``copy_from``.
+
+        Parameters
+        ----------
+        arr : array_like
+            1-D input data in host memory, convertible to a NumPy array.
+        offset : int, optional
+            First element of this vector to write (default: 0).
+
+        Raises
+        ------
+        IndexError
+            If the data does not fit into this vector at the offset.
+        """
+    @typing.overload
+    def copy_from_podvector(
+        self,
+        src: PODVector_real_pinned,
+        offset: typing.SupportsInt | typing.SupportsIndex = 0,
+    ) -> None:
+        """
+        Copy another PODVector of the same element type into this one at an offset.
+
+        Writes ``self[offset:offset + len(src)]``; the vector is not resized. The source
+        may use any allocator: the data is transferred directly between the memory
+        spaces (host or device) by AMReX, without staging and without CuPy or dpnp.
+
+        Parameters
+        ----------
+        src : PODVector
+            Source vector with the same element type as this vector.
+        offset : int, optional
+            First element of this vector to write (default: 0).
+
+        Raises
+        ------
+        IndexError
+            If the data does not fit into this vector at the offset.
+        """
+    @typing.overload
+    def copy_from_podvector(
+        self,
+        src: PODVector_real_arena,
+        offset: typing.SupportsInt | typing.SupportsIndex = 0,
+    ) -> None: ...
+    @typing.overload
+    def copy_from_podvector(
+        self,
+        src: PODVector_real_std,
+        offset: typing.SupportsInt | typing.SupportsIndex = 0,
+    ) -> None: ...
+    @typing.overload
+    def copy_from_podvector(
+        self,
+        src: PODVector_real_polymorphic,
+        offset: typing.SupportsInt | typing.SupportsIndex = 0,
+    ) -> None: ...
     def empty(self) -> bool: ...
     def pop_back(self) -> None: ...
     def push_back(self, arg0: typing.SupportsFloat | typing.SupportsIndex) -> None: ...
@@ -19298,11 +19733,12 @@ class PODVector_real_polymorphic:
         Always copies the data into a newly allocated PODVector. The input is cast to
         the vector's element type and made contiguous as needed. The copy into
         device-only memory uses an AMReX host-to-device copy and does not require CuPy.
+        For data of any kind, including device arrays, use ``from_array``.
 
         Parameters
         ----------
         arr : array_like
-            Input data, convertible to a NumPy array.
+            Input data in host memory, convertible to a NumPy array.
 
         Returns
         -------
@@ -19310,13 +19746,50 @@ class PODVector_real_polymorphic:
             A new PODVector with a copy of the data.
         """
     @classmethod
+    def from_array(cls, arr, copy=True):
+        """
+        Create a PODVector from array data.
+
+        The element type and allocator are those of ``cls`` (e.g.,
+        ``DeviceVector_real``, ``PODVector_int_std``); values are cast to the
+        element type. See :meth:`copy_from` for the supported inputs and how
+        the data is copied: CuPy and dpnp are never required.
+
+        Parameters
+        ----------
+        cls : type
+            The PODVector type to construct.
+        arr : array_like or PODVector
+            1-D data: a PODVector, a NumPy, CuPy or dpnp array, any DLPack
+            producer, or an array-like such as a list.
+        copy : bool or None, optional
+            Like ``numpy.asarray``: if True (default), always copy. If None,
+            return ``arr`` itself if it already is a ``cls`` instance, otherwise
+            copy. If False, return ``arr`` itself and raise ValueError if a copy
+            would be needed.
+
+        Returns
+        -------
+        PODVector
+            A ``cls`` instance.
+
+        Raises
+        ------
+        ValueError
+            If the data is not 1-D, or if ``copy=False`` and a copy is needed.
+        TypeError
+            If the data is None or on an unsupported device.
+
+        """
+    @classmethod
     def from_cupy(cls, arr):
         """
         Create a new PODVector from a CuPy array (or array-like).
 
         Always copies the data into a newly allocated PODVector.
-        Works for every allocator type: for host-only allocators the
-        data is staged to the host through NumPy automatically.
+        Works for every allocator type. Equivalent to :meth:`from_array`,
+        but requires CuPy. Array-likes on the host are copied without a detour
+        through the device.
 
         Parameters
         ----------
@@ -19337,8 +19810,9 @@ class PODVector_real_polymorphic:
         Create a new PODVector from a dpnp array (or array-like).
 
         Always copies the data into a newly allocated PODVector.
-        Works for every allocator type: for host-only allocators the
-        data is staged to the host through NumPy automatically.
+        Works for every allocator type. Equivalent to :meth:`from_array`,
+        but requires dpnp. Array-likes on the host are copied without a detour
+        through the device.
 
         Parameters
         ----------
@@ -19356,12 +19830,12 @@ class PODVector_real_polymorphic:
     @classmethod
     def from_xp(cls, arr):
         """
-        Create a new PODVector from a NumPy, CuPy or dpnp array,
-        depending on amr.Config.have_gpu and amr.Config.gpu_backend .
+        Create a new PODVector from a NumPy, CuPy or dpnp array.
 
-        Always copies the data into a newly allocated PODVector.
-        Unlike :meth:`to_xp`, a zero-copy view is not possible here because
-        PODVector always owns its memory through its allocator.
+        Always copies the data into a newly allocated PODVector, like
+        :meth:`from_array`, which supports any of these inputs regardless of
+        the build. Unlike :meth:`to_xp`, a zero-copy view is not possible here
+        because PODVector always owns its memory through its allocator.
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
         https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
@@ -19460,6 +19934,112 @@ class PODVector_real_polymorphic:
         """
     def capacity(self) -> int: ...
     def clear(self) -> None: ...
+    def copy_from(self, arr, offset=0):
+        """
+        Copy array data into this PODVector at an offset.
+
+        Writes ``self[offset:offset + len(arr)]``; the vector is not resized.
+        Values are cast to the vector's element type.
+
+        The fastest available copy is used: a direct AMReX copy for PODVector
+        input, and a device-to-device copy for CuPy or dpnp input into device
+        memory. Otherwise, the data is copied through the host with AMReX, so
+        CuPy and dpnp are never required: they are only imported if the data
+        is on such a device.
+
+        Parameters
+        ----------
+        self : amrex.PODVector_*
+            A PODVector class in pyAMReX
+        arr : array_like or PODVector
+            1-D data: a PODVector, a NumPy, CuPy or dpnp array, any DLPack
+            producer, or an array-like such as a list.
+        offset : int, optional
+            First element of this vector to write (default: 0).
+
+        Raises
+        ------
+        IndexError
+            If the data does not fit into this vector at the offset.
+        ValueError
+            If the data is not 1-D.
+        TypeError
+            If the data is None or on an unsupported device.
+
+        Notes
+        -----
+        The source must not overlap with the written part of this vector, e.g.,
+        it must not be a view into it.
+
+        """
+    def copy_from_numpy(
+        self,
+        arr: typing.Annotated[numpy.typing.ArrayLike, numpy.float64],
+        offset: typing.SupportsInt | typing.SupportsIndex = 0,
+    ) -> None:
+        """
+        Copy a NumPy array (or array-like) into this PODVector at an offset.
+
+        Writes ``self[offset:offset + len(arr)]``; the vector is not resized. The input
+        is cast to the vector's element type and made contiguous as needed. The copy
+        into device-only memory uses an AMReX host-to-device copy and does not require
+        CuPy or dpnp. For data of any kind, including device arrays, use ``copy_from``.
+
+        Parameters
+        ----------
+        arr : array_like
+            1-D input data in host memory, convertible to a NumPy array.
+        offset : int, optional
+            First element of this vector to write (default: 0).
+
+        Raises
+        ------
+        IndexError
+            If the data does not fit into this vector at the offset.
+        """
+    @typing.overload
+    def copy_from_podvector(
+        self,
+        src: PODVector_real_pinned,
+        offset: typing.SupportsInt | typing.SupportsIndex = 0,
+    ) -> None:
+        """
+        Copy another PODVector of the same element type into this one at an offset.
+
+        Writes ``self[offset:offset + len(src)]``; the vector is not resized. The source
+        may use any allocator: the data is transferred directly between the memory
+        spaces (host or device) by AMReX, without staging and without CuPy or dpnp.
+
+        Parameters
+        ----------
+        src : PODVector
+            Source vector with the same element type as this vector.
+        offset : int, optional
+            First element of this vector to write (default: 0).
+
+        Raises
+        ------
+        IndexError
+            If the data does not fit into this vector at the offset.
+        """
+    @typing.overload
+    def copy_from_podvector(
+        self,
+        src: PODVector_real_arena,
+        offset: typing.SupportsInt | typing.SupportsIndex = 0,
+    ) -> None: ...
+    @typing.overload
+    def copy_from_podvector(
+        self,
+        src: PODVector_real_std,
+        offset: typing.SupportsInt | typing.SupportsIndex = 0,
+    ) -> None: ...
+    @typing.overload
+    def copy_from_podvector(
+        self,
+        src: PODVector_real_polymorphic,
+        offset: typing.SupportsInt | typing.SupportsIndex = 0,
+    ) -> None: ...
     def empty(self) -> bool: ...
     def pop_back(self) -> None: ...
     def push_back(self, arg0: typing.SupportsFloat | typing.SupportsIndex) -> None: ...
@@ -19592,11 +20172,12 @@ class PODVector_int_pinned:
         Always copies the data into a newly allocated PODVector. The input is cast to
         the vector's element type and made contiguous as needed. The copy into
         device-only memory uses an AMReX host-to-device copy and does not require CuPy.
+        For data of any kind, including device arrays, use ``from_array``.
 
         Parameters
         ----------
         arr : array_like
-            Input data, convertible to a NumPy array.
+            Input data in host memory, convertible to a NumPy array.
 
         Returns
         -------
@@ -19604,13 +20185,50 @@ class PODVector_int_pinned:
             A new PODVector with a copy of the data.
         """
     @classmethod
+    def from_array(cls, arr, copy=True):
+        """
+        Create a PODVector from array data.
+
+        The element type and allocator are those of ``cls`` (e.g.,
+        ``DeviceVector_real``, ``PODVector_int_std``); values are cast to the
+        element type. See :meth:`copy_from` for the supported inputs and how
+        the data is copied: CuPy and dpnp are never required.
+
+        Parameters
+        ----------
+        cls : type
+            The PODVector type to construct.
+        arr : array_like or PODVector
+            1-D data: a PODVector, a NumPy, CuPy or dpnp array, any DLPack
+            producer, or an array-like such as a list.
+        copy : bool or None, optional
+            Like ``numpy.asarray``: if True (default), always copy. If None,
+            return ``arr`` itself if it already is a ``cls`` instance, otherwise
+            copy. If False, return ``arr`` itself and raise ValueError if a copy
+            would be needed.
+
+        Returns
+        -------
+        PODVector
+            A ``cls`` instance.
+
+        Raises
+        ------
+        ValueError
+            If the data is not 1-D, or if ``copy=False`` and a copy is needed.
+        TypeError
+            If the data is None or on an unsupported device.
+
+        """
+    @classmethod
     def from_cupy(cls, arr):
         """
         Create a new PODVector from a CuPy array (or array-like).
 
         Always copies the data into a newly allocated PODVector.
-        Works for every allocator type: for host-only allocators the
-        data is staged to the host through NumPy automatically.
+        Works for every allocator type. Equivalent to :meth:`from_array`,
+        but requires CuPy. Array-likes on the host are copied without a detour
+        through the device.
 
         Parameters
         ----------
@@ -19631,8 +20249,9 @@ class PODVector_int_pinned:
         Create a new PODVector from a dpnp array (or array-like).
 
         Always copies the data into a newly allocated PODVector.
-        Works for every allocator type: for host-only allocators the
-        data is staged to the host through NumPy automatically.
+        Works for every allocator type. Equivalent to :meth:`from_array`,
+        but requires dpnp. Array-likes on the host are copied without a detour
+        through the device.
 
         Parameters
         ----------
@@ -19650,12 +20269,12 @@ class PODVector_int_pinned:
     @classmethod
     def from_xp(cls, arr):
         """
-        Create a new PODVector from a NumPy, CuPy or dpnp array,
-        depending on amr.Config.have_gpu and amr.Config.gpu_backend .
+        Create a new PODVector from a NumPy, CuPy or dpnp array.
 
-        Always copies the data into a newly allocated PODVector.
-        Unlike :meth:`to_xp`, a zero-copy view is not possible here because
-        PODVector always owns its memory through its allocator.
+        Always copies the data into a newly allocated PODVector, like
+        :meth:`from_array`, which supports any of these inputs regardless of
+        the build. Unlike :meth:`to_xp`, a zero-copy view is not possible here
+        because PODVector always owns its memory through its allocator.
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
         https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
@@ -19754,6 +20373,112 @@ class PODVector_int_pinned:
         """
     def capacity(self) -> int: ...
     def clear(self) -> None: ...
+    def copy_from(self, arr, offset=0):
+        """
+        Copy array data into this PODVector at an offset.
+
+        Writes ``self[offset:offset + len(arr)]``; the vector is not resized.
+        Values are cast to the vector's element type.
+
+        The fastest available copy is used: a direct AMReX copy for PODVector
+        input, and a device-to-device copy for CuPy or dpnp input into device
+        memory. Otherwise, the data is copied through the host with AMReX, so
+        CuPy and dpnp are never required: they are only imported if the data
+        is on such a device.
+
+        Parameters
+        ----------
+        self : amrex.PODVector_*
+            A PODVector class in pyAMReX
+        arr : array_like or PODVector
+            1-D data: a PODVector, a NumPy, CuPy or dpnp array, any DLPack
+            producer, or an array-like such as a list.
+        offset : int, optional
+            First element of this vector to write (default: 0).
+
+        Raises
+        ------
+        IndexError
+            If the data does not fit into this vector at the offset.
+        ValueError
+            If the data is not 1-D.
+        TypeError
+            If the data is None or on an unsupported device.
+
+        Notes
+        -----
+        The source must not overlap with the written part of this vector, e.g.,
+        it must not be a view into it.
+
+        """
+    def copy_from_numpy(
+        self,
+        arr: typing.Annotated[numpy.typing.ArrayLike, numpy.int32],
+        offset: typing.SupportsInt | typing.SupportsIndex = 0,
+    ) -> None:
+        """
+        Copy a NumPy array (or array-like) into this PODVector at an offset.
+
+        Writes ``self[offset:offset + len(arr)]``; the vector is not resized. The input
+        is cast to the vector's element type and made contiguous as needed. The copy
+        into device-only memory uses an AMReX host-to-device copy and does not require
+        CuPy or dpnp. For data of any kind, including device arrays, use ``copy_from``.
+
+        Parameters
+        ----------
+        arr : array_like
+            1-D input data in host memory, convertible to a NumPy array.
+        offset : int, optional
+            First element of this vector to write (default: 0).
+
+        Raises
+        ------
+        IndexError
+            If the data does not fit into this vector at the offset.
+        """
+    @typing.overload
+    def copy_from_podvector(
+        self,
+        src: PODVector_int_pinned,
+        offset: typing.SupportsInt | typing.SupportsIndex = 0,
+    ) -> None:
+        """
+        Copy another PODVector of the same element type into this one at an offset.
+
+        Writes ``self[offset:offset + len(src)]``; the vector is not resized. The source
+        may use any allocator: the data is transferred directly between the memory
+        spaces (host or device) by AMReX, without staging and without CuPy or dpnp.
+
+        Parameters
+        ----------
+        src : PODVector
+            Source vector with the same element type as this vector.
+        offset : int, optional
+            First element of this vector to write (default: 0).
+
+        Raises
+        ------
+        IndexError
+            If the data does not fit into this vector at the offset.
+        """
+    @typing.overload
+    def copy_from_podvector(
+        self,
+        src: PODVector_int_arena,
+        offset: typing.SupportsInt | typing.SupportsIndex = 0,
+    ) -> None: ...
+    @typing.overload
+    def copy_from_podvector(
+        self,
+        src: PODVector_int_std,
+        offset: typing.SupportsInt | typing.SupportsIndex = 0,
+    ) -> None: ...
+    @typing.overload
+    def copy_from_podvector(
+        self,
+        src: PODVector_int_polymorphic,
+        offset: typing.SupportsInt | typing.SupportsIndex = 0,
+    ) -> None: ...
     def empty(self) -> bool: ...
     def pop_back(self) -> None: ...
     def push_back(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> None: ...
@@ -19886,11 +20611,12 @@ class PODVector_int_arena:
         Always copies the data into a newly allocated PODVector. The input is cast to
         the vector's element type and made contiguous as needed. The copy into
         device-only memory uses an AMReX host-to-device copy and does not require CuPy.
+        For data of any kind, including device arrays, use ``from_array``.
 
         Parameters
         ----------
         arr : array_like
-            Input data, convertible to a NumPy array.
+            Input data in host memory, convertible to a NumPy array.
 
         Returns
         -------
@@ -19898,13 +20624,50 @@ class PODVector_int_arena:
             A new PODVector with a copy of the data.
         """
     @classmethod
+    def from_array(cls, arr, copy=True):
+        """
+        Create a PODVector from array data.
+
+        The element type and allocator are those of ``cls`` (e.g.,
+        ``DeviceVector_real``, ``PODVector_int_std``); values are cast to the
+        element type. See :meth:`copy_from` for the supported inputs and how
+        the data is copied: CuPy and dpnp are never required.
+
+        Parameters
+        ----------
+        cls : type
+            The PODVector type to construct.
+        arr : array_like or PODVector
+            1-D data: a PODVector, a NumPy, CuPy or dpnp array, any DLPack
+            producer, or an array-like such as a list.
+        copy : bool or None, optional
+            Like ``numpy.asarray``: if True (default), always copy. If None,
+            return ``arr`` itself if it already is a ``cls`` instance, otherwise
+            copy. If False, return ``arr`` itself and raise ValueError if a copy
+            would be needed.
+
+        Returns
+        -------
+        PODVector
+            A ``cls`` instance.
+
+        Raises
+        ------
+        ValueError
+            If the data is not 1-D, or if ``copy=False`` and a copy is needed.
+        TypeError
+            If the data is None or on an unsupported device.
+
+        """
+    @classmethod
     def from_cupy(cls, arr):
         """
         Create a new PODVector from a CuPy array (or array-like).
 
         Always copies the data into a newly allocated PODVector.
-        Works for every allocator type: for host-only allocators the
-        data is staged to the host through NumPy automatically.
+        Works for every allocator type. Equivalent to :meth:`from_array`,
+        but requires CuPy. Array-likes on the host are copied without a detour
+        through the device.
 
         Parameters
         ----------
@@ -19925,8 +20688,9 @@ class PODVector_int_arena:
         Create a new PODVector from a dpnp array (or array-like).
 
         Always copies the data into a newly allocated PODVector.
-        Works for every allocator type: for host-only allocators the
-        data is staged to the host through NumPy automatically.
+        Works for every allocator type. Equivalent to :meth:`from_array`,
+        but requires dpnp. Array-likes on the host are copied without a detour
+        through the device.
 
         Parameters
         ----------
@@ -19944,12 +20708,12 @@ class PODVector_int_arena:
     @classmethod
     def from_xp(cls, arr):
         """
-        Create a new PODVector from a NumPy, CuPy or dpnp array,
-        depending on amr.Config.have_gpu and amr.Config.gpu_backend .
+        Create a new PODVector from a NumPy, CuPy or dpnp array.
 
-        Always copies the data into a newly allocated PODVector.
-        Unlike :meth:`to_xp`, a zero-copy view is not possible here because
-        PODVector always owns its memory through its allocator.
+        Always copies the data into a newly allocated PODVector, like
+        :meth:`from_array`, which supports any of these inputs regardless of
+        the build. Unlike :meth:`to_xp`, a zero-copy view is not possible here
+        because PODVector always owns its memory through its allocator.
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
         https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
@@ -20048,6 +20812,112 @@ class PODVector_int_arena:
         """
     def capacity(self) -> int: ...
     def clear(self) -> None: ...
+    def copy_from(self, arr, offset=0):
+        """
+        Copy array data into this PODVector at an offset.
+
+        Writes ``self[offset:offset + len(arr)]``; the vector is not resized.
+        Values are cast to the vector's element type.
+
+        The fastest available copy is used: a direct AMReX copy for PODVector
+        input, and a device-to-device copy for CuPy or dpnp input into device
+        memory. Otherwise, the data is copied through the host with AMReX, so
+        CuPy and dpnp are never required: they are only imported if the data
+        is on such a device.
+
+        Parameters
+        ----------
+        self : amrex.PODVector_*
+            A PODVector class in pyAMReX
+        arr : array_like or PODVector
+            1-D data: a PODVector, a NumPy, CuPy or dpnp array, any DLPack
+            producer, or an array-like such as a list.
+        offset : int, optional
+            First element of this vector to write (default: 0).
+
+        Raises
+        ------
+        IndexError
+            If the data does not fit into this vector at the offset.
+        ValueError
+            If the data is not 1-D.
+        TypeError
+            If the data is None or on an unsupported device.
+
+        Notes
+        -----
+        The source must not overlap with the written part of this vector, e.g.,
+        it must not be a view into it.
+
+        """
+    def copy_from_numpy(
+        self,
+        arr: typing.Annotated[numpy.typing.ArrayLike, numpy.int32],
+        offset: typing.SupportsInt | typing.SupportsIndex = 0,
+    ) -> None:
+        """
+        Copy a NumPy array (or array-like) into this PODVector at an offset.
+
+        Writes ``self[offset:offset + len(arr)]``; the vector is not resized. The input
+        is cast to the vector's element type and made contiguous as needed. The copy
+        into device-only memory uses an AMReX host-to-device copy and does not require
+        CuPy or dpnp. For data of any kind, including device arrays, use ``copy_from``.
+
+        Parameters
+        ----------
+        arr : array_like
+            1-D input data in host memory, convertible to a NumPy array.
+        offset : int, optional
+            First element of this vector to write (default: 0).
+
+        Raises
+        ------
+        IndexError
+            If the data does not fit into this vector at the offset.
+        """
+    @typing.overload
+    def copy_from_podvector(
+        self,
+        src: PODVector_int_pinned,
+        offset: typing.SupportsInt | typing.SupportsIndex = 0,
+    ) -> None:
+        """
+        Copy another PODVector of the same element type into this one at an offset.
+
+        Writes ``self[offset:offset + len(src)]``; the vector is not resized. The source
+        may use any allocator: the data is transferred directly between the memory
+        spaces (host or device) by AMReX, without staging and without CuPy or dpnp.
+
+        Parameters
+        ----------
+        src : PODVector
+            Source vector with the same element type as this vector.
+        offset : int, optional
+            First element of this vector to write (default: 0).
+
+        Raises
+        ------
+        IndexError
+            If the data does not fit into this vector at the offset.
+        """
+    @typing.overload
+    def copy_from_podvector(
+        self,
+        src: PODVector_int_arena,
+        offset: typing.SupportsInt | typing.SupportsIndex = 0,
+    ) -> None: ...
+    @typing.overload
+    def copy_from_podvector(
+        self,
+        src: PODVector_int_std,
+        offset: typing.SupportsInt | typing.SupportsIndex = 0,
+    ) -> None: ...
+    @typing.overload
+    def copy_from_podvector(
+        self,
+        src: PODVector_int_polymorphic,
+        offset: typing.SupportsInt | typing.SupportsIndex = 0,
+    ) -> None: ...
     def empty(self) -> bool: ...
     def pop_back(self) -> None: ...
     def push_back(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> None: ...
@@ -20180,11 +21050,12 @@ class PODVector_int_std:
         Always copies the data into a newly allocated PODVector. The input is cast to
         the vector's element type and made contiguous as needed. The copy into
         device-only memory uses an AMReX host-to-device copy and does not require CuPy.
+        For data of any kind, including device arrays, use ``from_array``.
 
         Parameters
         ----------
         arr : array_like
-            Input data, convertible to a NumPy array.
+            Input data in host memory, convertible to a NumPy array.
 
         Returns
         -------
@@ -20192,13 +21063,50 @@ class PODVector_int_std:
             A new PODVector with a copy of the data.
         """
     @classmethod
+    def from_array(cls, arr, copy=True):
+        """
+        Create a PODVector from array data.
+
+        The element type and allocator are those of ``cls`` (e.g.,
+        ``DeviceVector_real``, ``PODVector_int_std``); values are cast to the
+        element type. See :meth:`copy_from` for the supported inputs and how
+        the data is copied: CuPy and dpnp are never required.
+
+        Parameters
+        ----------
+        cls : type
+            The PODVector type to construct.
+        arr : array_like or PODVector
+            1-D data: a PODVector, a NumPy, CuPy or dpnp array, any DLPack
+            producer, or an array-like such as a list.
+        copy : bool or None, optional
+            Like ``numpy.asarray``: if True (default), always copy. If None,
+            return ``arr`` itself if it already is a ``cls`` instance, otherwise
+            copy. If False, return ``arr`` itself and raise ValueError if a copy
+            would be needed.
+
+        Returns
+        -------
+        PODVector
+            A ``cls`` instance.
+
+        Raises
+        ------
+        ValueError
+            If the data is not 1-D, or if ``copy=False`` and a copy is needed.
+        TypeError
+            If the data is None or on an unsupported device.
+
+        """
+    @classmethod
     def from_cupy(cls, arr):
         """
         Create a new PODVector from a CuPy array (or array-like).
 
         Always copies the data into a newly allocated PODVector.
-        Works for every allocator type: for host-only allocators the
-        data is staged to the host through NumPy automatically.
+        Works for every allocator type. Equivalent to :meth:`from_array`,
+        but requires CuPy. Array-likes on the host are copied without a detour
+        through the device.
 
         Parameters
         ----------
@@ -20219,8 +21127,9 @@ class PODVector_int_std:
         Create a new PODVector from a dpnp array (or array-like).
 
         Always copies the data into a newly allocated PODVector.
-        Works for every allocator type: for host-only allocators the
-        data is staged to the host through NumPy automatically.
+        Works for every allocator type. Equivalent to :meth:`from_array`,
+        but requires dpnp. Array-likes on the host are copied without a detour
+        through the device.
 
         Parameters
         ----------
@@ -20238,12 +21147,12 @@ class PODVector_int_std:
     @classmethod
     def from_xp(cls, arr):
         """
-        Create a new PODVector from a NumPy, CuPy or dpnp array,
-        depending on amr.Config.have_gpu and amr.Config.gpu_backend .
+        Create a new PODVector from a NumPy, CuPy or dpnp array.
 
-        Always copies the data into a newly allocated PODVector.
-        Unlike :meth:`to_xp`, a zero-copy view is not possible here because
-        PODVector always owns its memory through its allocator.
+        Always copies the data into a newly allocated PODVector, like
+        :meth:`from_array`, which supports any of these inputs regardless of
+        the build. Unlike :meth:`to_xp`, a zero-copy view is not possible here
+        because PODVector always owns its memory through its allocator.
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
         https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
@@ -20342,6 +21251,112 @@ class PODVector_int_std:
         """
     def capacity(self) -> int: ...
     def clear(self) -> None: ...
+    def copy_from(self, arr, offset=0):
+        """
+        Copy array data into this PODVector at an offset.
+
+        Writes ``self[offset:offset + len(arr)]``; the vector is not resized.
+        Values are cast to the vector's element type.
+
+        The fastest available copy is used: a direct AMReX copy for PODVector
+        input, and a device-to-device copy for CuPy or dpnp input into device
+        memory. Otherwise, the data is copied through the host with AMReX, so
+        CuPy and dpnp are never required: they are only imported if the data
+        is on such a device.
+
+        Parameters
+        ----------
+        self : amrex.PODVector_*
+            A PODVector class in pyAMReX
+        arr : array_like or PODVector
+            1-D data: a PODVector, a NumPy, CuPy or dpnp array, any DLPack
+            producer, or an array-like such as a list.
+        offset : int, optional
+            First element of this vector to write (default: 0).
+
+        Raises
+        ------
+        IndexError
+            If the data does not fit into this vector at the offset.
+        ValueError
+            If the data is not 1-D.
+        TypeError
+            If the data is None or on an unsupported device.
+
+        Notes
+        -----
+        The source must not overlap with the written part of this vector, e.g.,
+        it must not be a view into it.
+
+        """
+    def copy_from_numpy(
+        self,
+        arr: typing.Annotated[numpy.typing.ArrayLike, numpy.int32],
+        offset: typing.SupportsInt | typing.SupportsIndex = 0,
+    ) -> None:
+        """
+        Copy a NumPy array (or array-like) into this PODVector at an offset.
+
+        Writes ``self[offset:offset + len(arr)]``; the vector is not resized. The input
+        is cast to the vector's element type and made contiguous as needed. The copy
+        into device-only memory uses an AMReX host-to-device copy and does not require
+        CuPy or dpnp. For data of any kind, including device arrays, use ``copy_from``.
+
+        Parameters
+        ----------
+        arr : array_like
+            1-D input data in host memory, convertible to a NumPy array.
+        offset : int, optional
+            First element of this vector to write (default: 0).
+
+        Raises
+        ------
+        IndexError
+            If the data does not fit into this vector at the offset.
+        """
+    @typing.overload
+    def copy_from_podvector(
+        self,
+        src: PODVector_int_pinned,
+        offset: typing.SupportsInt | typing.SupportsIndex = 0,
+    ) -> None:
+        """
+        Copy another PODVector of the same element type into this one at an offset.
+
+        Writes ``self[offset:offset + len(src)]``; the vector is not resized. The source
+        may use any allocator: the data is transferred directly between the memory
+        spaces (host or device) by AMReX, without staging and without CuPy or dpnp.
+
+        Parameters
+        ----------
+        src : PODVector
+            Source vector with the same element type as this vector.
+        offset : int, optional
+            First element of this vector to write (default: 0).
+
+        Raises
+        ------
+        IndexError
+            If the data does not fit into this vector at the offset.
+        """
+    @typing.overload
+    def copy_from_podvector(
+        self,
+        src: PODVector_int_arena,
+        offset: typing.SupportsInt | typing.SupportsIndex = 0,
+    ) -> None: ...
+    @typing.overload
+    def copy_from_podvector(
+        self,
+        src: PODVector_int_std,
+        offset: typing.SupportsInt | typing.SupportsIndex = 0,
+    ) -> None: ...
+    @typing.overload
+    def copy_from_podvector(
+        self,
+        src: PODVector_int_polymorphic,
+        offset: typing.SupportsInt | typing.SupportsIndex = 0,
+    ) -> None: ...
     def empty(self) -> bool: ...
     def pop_back(self) -> None: ...
     def push_back(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> None: ...
@@ -20474,11 +21489,12 @@ class PODVector_int_polymorphic:
         Always copies the data into a newly allocated PODVector. The input is cast to
         the vector's element type and made contiguous as needed. The copy into
         device-only memory uses an AMReX host-to-device copy and does not require CuPy.
+        For data of any kind, including device arrays, use ``from_array``.
 
         Parameters
         ----------
         arr : array_like
-            Input data, convertible to a NumPy array.
+            Input data in host memory, convertible to a NumPy array.
 
         Returns
         -------
@@ -20486,13 +21502,50 @@ class PODVector_int_polymorphic:
             A new PODVector with a copy of the data.
         """
     @classmethod
+    def from_array(cls, arr, copy=True):
+        """
+        Create a PODVector from array data.
+
+        The element type and allocator are those of ``cls`` (e.g.,
+        ``DeviceVector_real``, ``PODVector_int_std``); values are cast to the
+        element type. See :meth:`copy_from` for the supported inputs and how
+        the data is copied: CuPy and dpnp are never required.
+
+        Parameters
+        ----------
+        cls : type
+            The PODVector type to construct.
+        arr : array_like or PODVector
+            1-D data: a PODVector, a NumPy, CuPy or dpnp array, any DLPack
+            producer, or an array-like such as a list.
+        copy : bool or None, optional
+            Like ``numpy.asarray``: if True (default), always copy. If None,
+            return ``arr`` itself if it already is a ``cls`` instance, otherwise
+            copy. If False, return ``arr`` itself and raise ValueError if a copy
+            would be needed.
+
+        Returns
+        -------
+        PODVector
+            A ``cls`` instance.
+
+        Raises
+        ------
+        ValueError
+            If the data is not 1-D, or if ``copy=False`` and a copy is needed.
+        TypeError
+            If the data is None or on an unsupported device.
+
+        """
+    @classmethod
     def from_cupy(cls, arr):
         """
         Create a new PODVector from a CuPy array (or array-like).
 
         Always copies the data into a newly allocated PODVector.
-        Works for every allocator type: for host-only allocators the
-        data is staged to the host through NumPy automatically.
+        Works for every allocator type. Equivalent to :meth:`from_array`,
+        but requires CuPy. Array-likes on the host are copied without a detour
+        through the device.
 
         Parameters
         ----------
@@ -20513,8 +21566,9 @@ class PODVector_int_polymorphic:
         Create a new PODVector from a dpnp array (or array-like).
 
         Always copies the data into a newly allocated PODVector.
-        Works for every allocator type: for host-only allocators the
-        data is staged to the host through NumPy automatically.
+        Works for every allocator type. Equivalent to :meth:`from_array`,
+        but requires dpnp. Array-likes on the host are copied without a detour
+        through the device.
 
         Parameters
         ----------
@@ -20532,12 +21586,12 @@ class PODVector_int_polymorphic:
     @classmethod
     def from_xp(cls, arr):
         """
-        Create a new PODVector from a NumPy, CuPy or dpnp array,
-        depending on amr.Config.have_gpu and amr.Config.gpu_backend .
+        Create a new PODVector from a NumPy, CuPy or dpnp array.
 
-        Always copies the data into a newly allocated PODVector.
-        Unlike :meth:`to_xp`, a zero-copy view is not possible here because
-        PODVector always owns its memory through its allocator.
+        Always copies the data into a newly allocated PODVector, like
+        :meth:`from_array`, which supports any of these inputs regardless of
+        the build. Unlike :meth:`to_xp`, a zero-copy view is not possible here
+        because PODVector always owns its memory through its allocator.
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
         https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
@@ -20636,6 +21690,112 @@ class PODVector_int_polymorphic:
         """
     def capacity(self) -> int: ...
     def clear(self) -> None: ...
+    def copy_from(self, arr, offset=0):
+        """
+        Copy array data into this PODVector at an offset.
+
+        Writes ``self[offset:offset + len(arr)]``; the vector is not resized.
+        Values are cast to the vector's element type.
+
+        The fastest available copy is used: a direct AMReX copy for PODVector
+        input, and a device-to-device copy for CuPy or dpnp input into device
+        memory. Otherwise, the data is copied through the host with AMReX, so
+        CuPy and dpnp are never required: they are only imported if the data
+        is on such a device.
+
+        Parameters
+        ----------
+        self : amrex.PODVector_*
+            A PODVector class in pyAMReX
+        arr : array_like or PODVector
+            1-D data: a PODVector, a NumPy, CuPy or dpnp array, any DLPack
+            producer, or an array-like such as a list.
+        offset : int, optional
+            First element of this vector to write (default: 0).
+
+        Raises
+        ------
+        IndexError
+            If the data does not fit into this vector at the offset.
+        ValueError
+            If the data is not 1-D.
+        TypeError
+            If the data is None or on an unsupported device.
+
+        Notes
+        -----
+        The source must not overlap with the written part of this vector, e.g.,
+        it must not be a view into it.
+
+        """
+    def copy_from_numpy(
+        self,
+        arr: typing.Annotated[numpy.typing.ArrayLike, numpy.int32],
+        offset: typing.SupportsInt | typing.SupportsIndex = 0,
+    ) -> None:
+        """
+        Copy a NumPy array (or array-like) into this PODVector at an offset.
+
+        Writes ``self[offset:offset + len(arr)]``; the vector is not resized. The input
+        is cast to the vector's element type and made contiguous as needed. The copy
+        into device-only memory uses an AMReX host-to-device copy and does not require
+        CuPy or dpnp. For data of any kind, including device arrays, use ``copy_from``.
+
+        Parameters
+        ----------
+        arr : array_like
+            1-D input data in host memory, convertible to a NumPy array.
+        offset : int, optional
+            First element of this vector to write (default: 0).
+
+        Raises
+        ------
+        IndexError
+            If the data does not fit into this vector at the offset.
+        """
+    @typing.overload
+    def copy_from_podvector(
+        self,
+        src: PODVector_int_pinned,
+        offset: typing.SupportsInt | typing.SupportsIndex = 0,
+    ) -> None:
+        """
+        Copy another PODVector of the same element type into this one at an offset.
+
+        Writes ``self[offset:offset + len(src)]``; the vector is not resized. The source
+        may use any allocator: the data is transferred directly between the memory
+        spaces (host or device) by AMReX, without staging and without CuPy or dpnp.
+
+        Parameters
+        ----------
+        src : PODVector
+            Source vector with the same element type as this vector.
+        offset : int, optional
+            First element of this vector to write (default: 0).
+
+        Raises
+        ------
+        IndexError
+            If the data does not fit into this vector at the offset.
+        """
+    @typing.overload
+    def copy_from_podvector(
+        self,
+        src: PODVector_int_arena,
+        offset: typing.SupportsInt | typing.SupportsIndex = 0,
+    ) -> None: ...
+    @typing.overload
+    def copy_from_podvector(
+        self,
+        src: PODVector_int_std,
+        offset: typing.SupportsInt | typing.SupportsIndex = 0,
+    ) -> None: ...
+    @typing.overload
+    def copy_from_podvector(
+        self,
+        src: PODVector_int_polymorphic,
+        offset: typing.SupportsInt | typing.SupportsIndex = 0,
+    ) -> None: ...
     def empty(self) -> bool: ...
     def pop_back(self) -> None: ...
     def push_back(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> None: ...
@@ -20768,11 +21928,12 @@ class PODVector_uint64_pinned:
         Always copies the data into a newly allocated PODVector. The input is cast to
         the vector's element type and made contiguous as needed. The copy into
         device-only memory uses an AMReX host-to-device copy and does not require CuPy.
+        For data of any kind, including device arrays, use ``from_array``.
 
         Parameters
         ----------
         arr : array_like
-            Input data, convertible to a NumPy array.
+            Input data in host memory, convertible to a NumPy array.
 
         Returns
         -------
@@ -20780,13 +21941,50 @@ class PODVector_uint64_pinned:
             A new PODVector with a copy of the data.
         """
     @classmethod
+    def from_array(cls, arr, copy=True):
+        """
+        Create a PODVector from array data.
+
+        The element type and allocator are those of ``cls`` (e.g.,
+        ``DeviceVector_real``, ``PODVector_int_std``); values are cast to the
+        element type. See :meth:`copy_from` for the supported inputs and how
+        the data is copied: CuPy and dpnp are never required.
+
+        Parameters
+        ----------
+        cls : type
+            The PODVector type to construct.
+        arr : array_like or PODVector
+            1-D data: a PODVector, a NumPy, CuPy or dpnp array, any DLPack
+            producer, or an array-like such as a list.
+        copy : bool or None, optional
+            Like ``numpy.asarray``: if True (default), always copy. If None,
+            return ``arr`` itself if it already is a ``cls`` instance, otherwise
+            copy. If False, return ``arr`` itself and raise ValueError if a copy
+            would be needed.
+
+        Returns
+        -------
+        PODVector
+            A ``cls`` instance.
+
+        Raises
+        ------
+        ValueError
+            If the data is not 1-D, or if ``copy=False`` and a copy is needed.
+        TypeError
+            If the data is None or on an unsupported device.
+
+        """
+    @classmethod
     def from_cupy(cls, arr):
         """
         Create a new PODVector from a CuPy array (or array-like).
 
         Always copies the data into a newly allocated PODVector.
-        Works for every allocator type: for host-only allocators the
-        data is staged to the host through NumPy automatically.
+        Works for every allocator type. Equivalent to :meth:`from_array`,
+        but requires CuPy. Array-likes on the host are copied without a detour
+        through the device.
 
         Parameters
         ----------
@@ -20807,8 +22005,9 @@ class PODVector_uint64_pinned:
         Create a new PODVector from a dpnp array (or array-like).
 
         Always copies the data into a newly allocated PODVector.
-        Works for every allocator type: for host-only allocators the
-        data is staged to the host through NumPy automatically.
+        Works for every allocator type. Equivalent to :meth:`from_array`,
+        but requires dpnp. Array-likes on the host are copied without a detour
+        through the device.
 
         Parameters
         ----------
@@ -20826,12 +22025,12 @@ class PODVector_uint64_pinned:
     @classmethod
     def from_xp(cls, arr):
         """
-        Create a new PODVector from a NumPy, CuPy or dpnp array,
-        depending on amr.Config.have_gpu and amr.Config.gpu_backend .
+        Create a new PODVector from a NumPy, CuPy or dpnp array.
 
-        Always copies the data into a newly allocated PODVector.
-        Unlike :meth:`to_xp`, a zero-copy view is not possible here because
-        PODVector always owns its memory through its allocator.
+        Always copies the data into a newly allocated PODVector, like
+        :meth:`from_array`, which supports any of these inputs regardless of
+        the build. Unlike :meth:`to_xp`, a zero-copy view is not possible here
+        because PODVector always owns its memory through its allocator.
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
         https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
@@ -20930,6 +22129,112 @@ class PODVector_uint64_pinned:
         """
     def capacity(self) -> int: ...
     def clear(self) -> None: ...
+    def copy_from(self, arr, offset=0):
+        """
+        Copy array data into this PODVector at an offset.
+
+        Writes ``self[offset:offset + len(arr)]``; the vector is not resized.
+        Values are cast to the vector's element type.
+
+        The fastest available copy is used: a direct AMReX copy for PODVector
+        input, and a device-to-device copy for CuPy or dpnp input into device
+        memory. Otherwise, the data is copied through the host with AMReX, so
+        CuPy and dpnp are never required: they are only imported if the data
+        is on such a device.
+
+        Parameters
+        ----------
+        self : amrex.PODVector_*
+            A PODVector class in pyAMReX
+        arr : array_like or PODVector
+            1-D data: a PODVector, a NumPy, CuPy or dpnp array, any DLPack
+            producer, or an array-like such as a list.
+        offset : int, optional
+            First element of this vector to write (default: 0).
+
+        Raises
+        ------
+        IndexError
+            If the data does not fit into this vector at the offset.
+        ValueError
+            If the data is not 1-D.
+        TypeError
+            If the data is None or on an unsupported device.
+
+        Notes
+        -----
+        The source must not overlap with the written part of this vector, e.g.,
+        it must not be a view into it.
+
+        """
+    def copy_from_numpy(
+        self,
+        arr: typing.Annotated[numpy.typing.ArrayLike, numpy.uint64],
+        offset: typing.SupportsInt | typing.SupportsIndex = 0,
+    ) -> None:
+        """
+        Copy a NumPy array (or array-like) into this PODVector at an offset.
+
+        Writes ``self[offset:offset + len(arr)]``; the vector is not resized. The input
+        is cast to the vector's element type and made contiguous as needed. The copy
+        into device-only memory uses an AMReX host-to-device copy and does not require
+        CuPy or dpnp. For data of any kind, including device arrays, use ``copy_from``.
+
+        Parameters
+        ----------
+        arr : array_like
+            1-D input data in host memory, convertible to a NumPy array.
+        offset : int, optional
+            First element of this vector to write (default: 0).
+
+        Raises
+        ------
+        IndexError
+            If the data does not fit into this vector at the offset.
+        """
+    @typing.overload
+    def copy_from_podvector(
+        self,
+        src: PODVector_uint64_pinned,
+        offset: typing.SupportsInt | typing.SupportsIndex = 0,
+    ) -> None:
+        """
+        Copy another PODVector of the same element type into this one at an offset.
+
+        Writes ``self[offset:offset + len(src)]``; the vector is not resized. The source
+        may use any allocator: the data is transferred directly between the memory
+        spaces (host or device) by AMReX, without staging and without CuPy or dpnp.
+
+        Parameters
+        ----------
+        src : PODVector
+            Source vector with the same element type as this vector.
+        offset : int, optional
+            First element of this vector to write (default: 0).
+
+        Raises
+        ------
+        IndexError
+            If the data does not fit into this vector at the offset.
+        """
+    @typing.overload
+    def copy_from_podvector(
+        self,
+        src: PODVector_uint64_arena,
+        offset: typing.SupportsInt | typing.SupportsIndex = 0,
+    ) -> None: ...
+    @typing.overload
+    def copy_from_podvector(
+        self,
+        src: PODVector_uint64_std,
+        offset: typing.SupportsInt | typing.SupportsIndex = 0,
+    ) -> None: ...
+    @typing.overload
+    def copy_from_podvector(
+        self,
+        src: PODVector_uint64_polymorphic,
+        offset: typing.SupportsInt | typing.SupportsIndex = 0,
+    ) -> None: ...
     def empty(self) -> bool: ...
     def pop_back(self) -> None: ...
     def push_back(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> None: ...
@@ -21062,11 +22367,12 @@ class PODVector_uint64_arena:
         Always copies the data into a newly allocated PODVector. The input is cast to
         the vector's element type and made contiguous as needed. The copy into
         device-only memory uses an AMReX host-to-device copy and does not require CuPy.
+        For data of any kind, including device arrays, use ``from_array``.
 
         Parameters
         ----------
         arr : array_like
-            Input data, convertible to a NumPy array.
+            Input data in host memory, convertible to a NumPy array.
 
         Returns
         -------
@@ -21074,13 +22380,50 @@ class PODVector_uint64_arena:
             A new PODVector with a copy of the data.
         """
     @classmethod
+    def from_array(cls, arr, copy=True):
+        """
+        Create a PODVector from array data.
+
+        The element type and allocator are those of ``cls`` (e.g.,
+        ``DeviceVector_real``, ``PODVector_int_std``); values are cast to the
+        element type. See :meth:`copy_from` for the supported inputs and how
+        the data is copied: CuPy and dpnp are never required.
+
+        Parameters
+        ----------
+        cls : type
+            The PODVector type to construct.
+        arr : array_like or PODVector
+            1-D data: a PODVector, a NumPy, CuPy or dpnp array, any DLPack
+            producer, or an array-like such as a list.
+        copy : bool or None, optional
+            Like ``numpy.asarray``: if True (default), always copy. If None,
+            return ``arr`` itself if it already is a ``cls`` instance, otherwise
+            copy. If False, return ``arr`` itself and raise ValueError if a copy
+            would be needed.
+
+        Returns
+        -------
+        PODVector
+            A ``cls`` instance.
+
+        Raises
+        ------
+        ValueError
+            If the data is not 1-D, or if ``copy=False`` and a copy is needed.
+        TypeError
+            If the data is None or on an unsupported device.
+
+        """
+    @classmethod
     def from_cupy(cls, arr):
         """
         Create a new PODVector from a CuPy array (or array-like).
 
         Always copies the data into a newly allocated PODVector.
-        Works for every allocator type: for host-only allocators the
-        data is staged to the host through NumPy automatically.
+        Works for every allocator type. Equivalent to :meth:`from_array`,
+        but requires CuPy. Array-likes on the host are copied without a detour
+        through the device.
 
         Parameters
         ----------
@@ -21101,8 +22444,9 @@ class PODVector_uint64_arena:
         Create a new PODVector from a dpnp array (or array-like).
 
         Always copies the data into a newly allocated PODVector.
-        Works for every allocator type: for host-only allocators the
-        data is staged to the host through NumPy automatically.
+        Works for every allocator type. Equivalent to :meth:`from_array`,
+        but requires dpnp. Array-likes on the host are copied without a detour
+        through the device.
 
         Parameters
         ----------
@@ -21120,12 +22464,12 @@ class PODVector_uint64_arena:
     @classmethod
     def from_xp(cls, arr):
         """
-        Create a new PODVector from a NumPy, CuPy or dpnp array,
-        depending on amr.Config.have_gpu and amr.Config.gpu_backend .
+        Create a new PODVector from a NumPy, CuPy or dpnp array.
 
-        Always copies the data into a newly allocated PODVector.
-        Unlike :meth:`to_xp`, a zero-copy view is not possible here because
-        PODVector always owns its memory through its allocator.
+        Always copies the data into a newly allocated PODVector, like
+        :meth:`from_array`, which supports any of these inputs regardless of
+        the build. Unlike :meth:`to_xp`, a zero-copy view is not possible here
+        because PODVector always owns its memory through its allocator.
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
         https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
@@ -21224,6 +22568,112 @@ class PODVector_uint64_arena:
         """
     def capacity(self) -> int: ...
     def clear(self) -> None: ...
+    def copy_from(self, arr, offset=0):
+        """
+        Copy array data into this PODVector at an offset.
+
+        Writes ``self[offset:offset + len(arr)]``; the vector is not resized.
+        Values are cast to the vector's element type.
+
+        The fastest available copy is used: a direct AMReX copy for PODVector
+        input, and a device-to-device copy for CuPy or dpnp input into device
+        memory. Otherwise, the data is copied through the host with AMReX, so
+        CuPy and dpnp are never required: they are only imported if the data
+        is on such a device.
+
+        Parameters
+        ----------
+        self : amrex.PODVector_*
+            A PODVector class in pyAMReX
+        arr : array_like or PODVector
+            1-D data: a PODVector, a NumPy, CuPy or dpnp array, any DLPack
+            producer, or an array-like such as a list.
+        offset : int, optional
+            First element of this vector to write (default: 0).
+
+        Raises
+        ------
+        IndexError
+            If the data does not fit into this vector at the offset.
+        ValueError
+            If the data is not 1-D.
+        TypeError
+            If the data is None or on an unsupported device.
+
+        Notes
+        -----
+        The source must not overlap with the written part of this vector, e.g.,
+        it must not be a view into it.
+
+        """
+    def copy_from_numpy(
+        self,
+        arr: typing.Annotated[numpy.typing.ArrayLike, numpy.uint64],
+        offset: typing.SupportsInt | typing.SupportsIndex = 0,
+    ) -> None:
+        """
+        Copy a NumPy array (or array-like) into this PODVector at an offset.
+
+        Writes ``self[offset:offset + len(arr)]``; the vector is not resized. The input
+        is cast to the vector's element type and made contiguous as needed. The copy
+        into device-only memory uses an AMReX host-to-device copy and does not require
+        CuPy or dpnp. For data of any kind, including device arrays, use ``copy_from``.
+
+        Parameters
+        ----------
+        arr : array_like
+            1-D input data in host memory, convertible to a NumPy array.
+        offset : int, optional
+            First element of this vector to write (default: 0).
+
+        Raises
+        ------
+        IndexError
+            If the data does not fit into this vector at the offset.
+        """
+    @typing.overload
+    def copy_from_podvector(
+        self,
+        src: PODVector_uint64_pinned,
+        offset: typing.SupportsInt | typing.SupportsIndex = 0,
+    ) -> None:
+        """
+        Copy another PODVector of the same element type into this one at an offset.
+
+        Writes ``self[offset:offset + len(src)]``; the vector is not resized. The source
+        may use any allocator: the data is transferred directly between the memory
+        spaces (host or device) by AMReX, without staging and without CuPy or dpnp.
+
+        Parameters
+        ----------
+        src : PODVector
+            Source vector with the same element type as this vector.
+        offset : int, optional
+            First element of this vector to write (default: 0).
+
+        Raises
+        ------
+        IndexError
+            If the data does not fit into this vector at the offset.
+        """
+    @typing.overload
+    def copy_from_podvector(
+        self,
+        src: PODVector_uint64_arena,
+        offset: typing.SupportsInt | typing.SupportsIndex = 0,
+    ) -> None: ...
+    @typing.overload
+    def copy_from_podvector(
+        self,
+        src: PODVector_uint64_std,
+        offset: typing.SupportsInt | typing.SupportsIndex = 0,
+    ) -> None: ...
+    @typing.overload
+    def copy_from_podvector(
+        self,
+        src: PODVector_uint64_polymorphic,
+        offset: typing.SupportsInt | typing.SupportsIndex = 0,
+    ) -> None: ...
     def empty(self) -> bool: ...
     def pop_back(self) -> None: ...
     def push_back(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> None: ...
@@ -21356,11 +22806,12 @@ class PODVector_uint64_std:
         Always copies the data into a newly allocated PODVector. The input is cast to
         the vector's element type and made contiguous as needed. The copy into
         device-only memory uses an AMReX host-to-device copy and does not require CuPy.
+        For data of any kind, including device arrays, use ``from_array``.
 
         Parameters
         ----------
         arr : array_like
-            Input data, convertible to a NumPy array.
+            Input data in host memory, convertible to a NumPy array.
 
         Returns
         -------
@@ -21368,13 +22819,50 @@ class PODVector_uint64_std:
             A new PODVector with a copy of the data.
         """
     @classmethod
+    def from_array(cls, arr, copy=True):
+        """
+        Create a PODVector from array data.
+
+        The element type and allocator are those of ``cls`` (e.g.,
+        ``DeviceVector_real``, ``PODVector_int_std``); values are cast to the
+        element type. See :meth:`copy_from` for the supported inputs and how
+        the data is copied: CuPy and dpnp are never required.
+
+        Parameters
+        ----------
+        cls : type
+            The PODVector type to construct.
+        arr : array_like or PODVector
+            1-D data: a PODVector, a NumPy, CuPy or dpnp array, any DLPack
+            producer, or an array-like such as a list.
+        copy : bool or None, optional
+            Like ``numpy.asarray``: if True (default), always copy. If None,
+            return ``arr`` itself if it already is a ``cls`` instance, otherwise
+            copy. If False, return ``arr`` itself and raise ValueError if a copy
+            would be needed.
+
+        Returns
+        -------
+        PODVector
+            A ``cls`` instance.
+
+        Raises
+        ------
+        ValueError
+            If the data is not 1-D, or if ``copy=False`` and a copy is needed.
+        TypeError
+            If the data is None or on an unsupported device.
+
+        """
+    @classmethod
     def from_cupy(cls, arr):
         """
         Create a new PODVector from a CuPy array (or array-like).
 
         Always copies the data into a newly allocated PODVector.
-        Works for every allocator type: for host-only allocators the
-        data is staged to the host through NumPy automatically.
+        Works for every allocator type. Equivalent to :meth:`from_array`,
+        but requires CuPy. Array-likes on the host are copied without a detour
+        through the device.
 
         Parameters
         ----------
@@ -21395,8 +22883,9 @@ class PODVector_uint64_std:
         Create a new PODVector from a dpnp array (or array-like).
 
         Always copies the data into a newly allocated PODVector.
-        Works for every allocator type: for host-only allocators the
-        data is staged to the host through NumPy automatically.
+        Works for every allocator type. Equivalent to :meth:`from_array`,
+        but requires dpnp. Array-likes on the host are copied without a detour
+        through the device.
 
         Parameters
         ----------
@@ -21414,12 +22903,12 @@ class PODVector_uint64_std:
     @classmethod
     def from_xp(cls, arr):
         """
-        Create a new PODVector from a NumPy, CuPy or dpnp array,
-        depending on amr.Config.have_gpu and amr.Config.gpu_backend .
+        Create a new PODVector from a NumPy, CuPy or dpnp array.
 
-        Always copies the data into a newly allocated PODVector.
-        Unlike :meth:`to_xp`, a zero-copy view is not possible here because
-        PODVector always owns its memory through its allocator.
+        Always copies the data into a newly allocated PODVector, like
+        :meth:`from_array`, which supports any of these inputs regardless of
+        the build. Unlike :meth:`to_xp`, a zero-copy view is not possible here
+        because PODVector always owns its memory through its allocator.
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
         https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
@@ -21518,6 +23007,112 @@ class PODVector_uint64_std:
         """
     def capacity(self) -> int: ...
     def clear(self) -> None: ...
+    def copy_from(self, arr, offset=0):
+        """
+        Copy array data into this PODVector at an offset.
+
+        Writes ``self[offset:offset + len(arr)]``; the vector is not resized.
+        Values are cast to the vector's element type.
+
+        The fastest available copy is used: a direct AMReX copy for PODVector
+        input, and a device-to-device copy for CuPy or dpnp input into device
+        memory. Otherwise, the data is copied through the host with AMReX, so
+        CuPy and dpnp are never required: they are only imported if the data
+        is on such a device.
+
+        Parameters
+        ----------
+        self : amrex.PODVector_*
+            A PODVector class in pyAMReX
+        arr : array_like or PODVector
+            1-D data: a PODVector, a NumPy, CuPy or dpnp array, any DLPack
+            producer, or an array-like such as a list.
+        offset : int, optional
+            First element of this vector to write (default: 0).
+
+        Raises
+        ------
+        IndexError
+            If the data does not fit into this vector at the offset.
+        ValueError
+            If the data is not 1-D.
+        TypeError
+            If the data is None or on an unsupported device.
+
+        Notes
+        -----
+        The source must not overlap with the written part of this vector, e.g.,
+        it must not be a view into it.
+
+        """
+    def copy_from_numpy(
+        self,
+        arr: typing.Annotated[numpy.typing.ArrayLike, numpy.uint64],
+        offset: typing.SupportsInt | typing.SupportsIndex = 0,
+    ) -> None:
+        """
+        Copy a NumPy array (or array-like) into this PODVector at an offset.
+
+        Writes ``self[offset:offset + len(arr)]``; the vector is not resized. The input
+        is cast to the vector's element type and made contiguous as needed. The copy
+        into device-only memory uses an AMReX host-to-device copy and does not require
+        CuPy or dpnp. For data of any kind, including device arrays, use ``copy_from``.
+
+        Parameters
+        ----------
+        arr : array_like
+            1-D input data in host memory, convertible to a NumPy array.
+        offset : int, optional
+            First element of this vector to write (default: 0).
+
+        Raises
+        ------
+        IndexError
+            If the data does not fit into this vector at the offset.
+        """
+    @typing.overload
+    def copy_from_podvector(
+        self,
+        src: PODVector_uint64_pinned,
+        offset: typing.SupportsInt | typing.SupportsIndex = 0,
+    ) -> None:
+        """
+        Copy another PODVector of the same element type into this one at an offset.
+
+        Writes ``self[offset:offset + len(src)]``; the vector is not resized. The source
+        may use any allocator: the data is transferred directly between the memory
+        spaces (host or device) by AMReX, without staging and without CuPy or dpnp.
+
+        Parameters
+        ----------
+        src : PODVector
+            Source vector with the same element type as this vector.
+        offset : int, optional
+            First element of this vector to write (default: 0).
+
+        Raises
+        ------
+        IndexError
+            If the data does not fit into this vector at the offset.
+        """
+    @typing.overload
+    def copy_from_podvector(
+        self,
+        src: PODVector_uint64_arena,
+        offset: typing.SupportsInt | typing.SupportsIndex = 0,
+    ) -> None: ...
+    @typing.overload
+    def copy_from_podvector(
+        self,
+        src: PODVector_uint64_std,
+        offset: typing.SupportsInt | typing.SupportsIndex = 0,
+    ) -> None: ...
+    @typing.overload
+    def copy_from_podvector(
+        self,
+        src: PODVector_uint64_polymorphic,
+        offset: typing.SupportsInt | typing.SupportsIndex = 0,
+    ) -> None: ...
     def empty(self) -> bool: ...
     def pop_back(self) -> None: ...
     def push_back(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> None: ...
@@ -21650,11 +23245,12 @@ class PODVector_uint64_polymorphic:
         Always copies the data into a newly allocated PODVector. The input is cast to
         the vector's element type and made contiguous as needed. The copy into
         device-only memory uses an AMReX host-to-device copy and does not require CuPy.
+        For data of any kind, including device arrays, use ``from_array``.
 
         Parameters
         ----------
         arr : array_like
-            Input data, convertible to a NumPy array.
+            Input data in host memory, convertible to a NumPy array.
 
         Returns
         -------
@@ -21662,13 +23258,50 @@ class PODVector_uint64_polymorphic:
             A new PODVector with a copy of the data.
         """
     @classmethod
+    def from_array(cls, arr, copy=True):
+        """
+        Create a PODVector from array data.
+
+        The element type and allocator are those of ``cls`` (e.g.,
+        ``DeviceVector_real``, ``PODVector_int_std``); values are cast to the
+        element type. See :meth:`copy_from` for the supported inputs and how
+        the data is copied: CuPy and dpnp are never required.
+
+        Parameters
+        ----------
+        cls : type
+            The PODVector type to construct.
+        arr : array_like or PODVector
+            1-D data: a PODVector, a NumPy, CuPy or dpnp array, any DLPack
+            producer, or an array-like such as a list.
+        copy : bool or None, optional
+            Like ``numpy.asarray``: if True (default), always copy. If None,
+            return ``arr`` itself if it already is a ``cls`` instance, otherwise
+            copy. If False, return ``arr`` itself and raise ValueError if a copy
+            would be needed.
+
+        Returns
+        -------
+        PODVector
+            A ``cls`` instance.
+
+        Raises
+        ------
+        ValueError
+            If the data is not 1-D, or if ``copy=False`` and a copy is needed.
+        TypeError
+            If the data is None or on an unsupported device.
+
+        """
+    @classmethod
     def from_cupy(cls, arr):
         """
         Create a new PODVector from a CuPy array (or array-like).
 
         Always copies the data into a newly allocated PODVector.
-        Works for every allocator type: for host-only allocators the
-        data is staged to the host through NumPy automatically.
+        Works for every allocator type. Equivalent to :meth:`from_array`,
+        but requires CuPy. Array-likes on the host are copied without a detour
+        through the device.
 
         Parameters
         ----------
@@ -21689,8 +23322,9 @@ class PODVector_uint64_polymorphic:
         Create a new PODVector from a dpnp array (or array-like).
 
         Always copies the data into a newly allocated PODVector.
-        Works for every allocator type: for host-only allocators the
-        data is staged to the host through NumPy automatically.
+        Works for every allocator type. Equivalent to :meth:`from_array`,
+        but requires dpnp. Array-likes on the host are copied without a detour
+        through the device.
 
         Parameters
         ----------
@@ -21708,12 +23342,12 @@ class PODVector_uint64_polymorphic:
     @classmethod
     def from_xp(cls, arr):
         """
-        Create a new PODVector from a NumPy, CuPy or dpnp array,
-        depending on amr.Config.have_gpu and amr.Config.gpu_backend .
+        Create a new PODVector from a NumPy, CuPy or dpnp array.
 
-        Always copies the data into a newly allocated PODVector.
-        Unlike :meth:`to_xp`, a zero-copy view is not possible here because
-        PODVector always owns its memory through its allocator.
+        Always copies the data into a newly allocated PODVector, like
+        :meth:`from_array`, which supports any of these inputs regardless of
+        the build. Unlike :meth:`to_xp`, a zero-copy view is not possible here
+        because PODVector always owns its memory through its allocator.
 
         This function is similar to CuPy's xp naming suggestion for CPU/GPU agnostic code:
         https://docs.cupy.dev/en/stable/user_guide/basic.html#how-to-write-cpu-gpu-agnostic-code
@@ -21812,6 +23446,112 @@ class PODVector_uint64_polymorphic:
         """
     def capacity(self) -> int: ...
     def clear(self) -> None: ...
+    def copy_from(self, arr, offset=0):
+        """
+        Copy array data into this PODVector at an offset.
+
+        Writes ``self[offset:offset + len(arr)]``; the vector is not resized.
+        Values are cast to the vector's element type.
+
+        The fastest available copy is used: a direct AMReX copy for PODVector
+        input, and a device-to-device copy for CuPy or dpnp input into device
+        memory. Otherwise, the data is copied through the host with AMReX, so
+        CuPy and dpnp are never required: they are only imported if the data
+        is on such a device.
+
+        Parameters
+        ----------
+        self : amrex.PODVector_*
+            A PODVector class in pyAMReX
+        arr : array_like or PODVector
+            1-D data: a PODVector, a NumPy, CuPy or dpnp array, any DLPack
+            producer, or an array-like such as a list.
+        offset : int, optional
+            First element of this vector to write (default: 0).
+
+        Raises
+        ------
+        IndexError
+            If the data does not fit into this vector at the offset.
+        ValueError
+            If the data is not 1-D.
+        TypeError
+            If the data is None or on an unsupported device.
+
+        Notes
+        -----
+        The source must not overlap with the written part of this vector, e.g.,
+        it must not be a view into it.
+
+        """
+    def copy_from_numpy(
+        self,
+        arr: typing.Annotated[numpy.typing.ArrayLike, numpy.uint64],
+        offset: typing.SupportsInt | typing.SupportsIndex = 0,
+    ) -> None:
+        """
+        Copy a NumPy array (or array-like) into this PODVector at an offset.
+
+        Writes ``self[offset:offset + len(arr)]``; the vector is not resized. The input
+        is cast to the vector's element type and made contiguous as needed. The copy
+        into device-only memory uses an AMReX host-to-device copy and does not require
+        CuPy or dpnp. For data of any kind, including device arrays, use ``copy_from``.
+
+        Parameters
+        ----------
+        arr : array_like
+            1-D input data in host memory, convertible to a NumPy array.
+        offset : int, optional
+            First element of this vector to write (default: 0).
+
+        Raises
+        ------
+        IndexError
+            If the data does not fit into this vector at the offset.
+        """
+    @typing.overload
+    def copy_from_podvector(
+        self,
+        src: PODVector_uint64_pinned,
+        offset: typing.SupportsInt | typing.SupportsIndex = 0,
+    ) -> None:
+        """
+        Copy another PODVector of the same element type into this one at an offset.
+
+        Writes ``self[offset:offset + len(src)]``; the vector is not resized. The source
+        may use any allocator: the data is transferred directly between the memory
+        spaces (host or device) by AMReX, without staging and without CuPy or dpnp.
+
+        Parameters
+        ----------
+        src : PODVector
+            Source vector with the same element type as this vector.
+        offset : int, optional
+            First element of this vector to write (default: 0).
+
+        Raises
+        ------
+        IndexError
+            If the data does not fit into this vector at the offset.
+        """
+    @typing.overload
+    def copy_from_podvector(
+        self,
+        src: PODVector_uint64_arena,
+        offset: typing.SupportsInt | typing.SupportsIndex = 0,
+    ) -> None: ...
+    @typing.overload
+    def copy_from_podvector(
+        self,
+        src: PODVector_uint64_std,
+        offset: typing.SupportsInt | typing.SupportsIndex = 0,
+    ) -> None: ...
+    @typing.overload
+    def copy_from_podvector(
+        self,
+        src: PODVector_uint64_polymorphic,
+        offset: typing.SupportsInt | typing.SupportsIndex = 0,
+    ) -> None: ...
     def empty(self) -> bool: ...
     def pop_back(self) -> None: ...
     def push_back(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> None: ...
