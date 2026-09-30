@@ -19,6 +19,11 @@ License: BSD-3-Clause-LBNL
 kDLCPU = 1
 kDLCUDAHost = 3
 kDLROCMHost = 11
+# DLPack device types (DLDeviceType values) with device-side memory
+kDLCUDA = 2
+kDLROCM = 10
+kDLCUDAManaged = 13
+kDLOneAPI = 14
 
 
 def reorder(data, order):
@@ -57,6 +62,44 @@ def dlpack_to_numpy(self, copy=False):
     return np.from_dlpack(self)
 
 
+def _is_pyamrex(obj):
+    """Whether obj is a pyAMReX object (or a Python subclass of one)."""
+    return any(c.__module__.startswith("amrex.") for c in type(obj).__mro__)
+
+
+class _SynchronizedExport:
+    """Export a pyAMReX object via DLPack with ``stream=None``.
+
+    pyAMReX's exporter fully synchronizes its stream for ``stream=None``, so
+    the data is ready on any consumer stream. This is needed for CUDA managed
+    memory: DLPack reports it as ``(kDLCUDAManaged, 0)``, so CuPy requests the
+    synchronization for a stream of device 0, but then uses the data on the
+    current stream of its current device, which is another one if AMReX runs
+    on another GPU.
+    """
+
+    def __init__(self, obj):
+        self._obj = obj
+
+    def __dlpack_device__(self):
+        return self._obj.__dlpack_device__()
+
+    def __dlpack__(self, stream=None, **kwargs):
+        return self._obj.__dlpack__(stream=None, **kwargs)
+
+
+def cupy_from_dlpack(obj):
+    """``cupy.from_dlpack``, synchronized for pyAMReX managed memory.
+
+    See _SynchronizedExport.
+    """
+    import cupy as cp
+
+    if _is_pyamrex(obj) and int(obj.__dlpack_device__()[0]) == kDLCUDAManaged:
+        obj = _SynchronizedExport(obj)
+    return cp.from_dlpack(obj)
+
+
 def dlpack_to_cupy(self, copy=False):
     """Import a pyAMReX object into CuPy via DLPack.
 
@@ -84,7 +127,7 @@ def dlpack_to_cupy(self, copy=False):
     # We do not pass copy= to cp.from_dlpack: CuPy >= 14 forwards its current
     # stream to __dlpack__, which the exporter rejects together with copy=True
     # (a producer-made copy requires stream=None).
-    arr = cp.from_dlpack(self)
+    arr = cupy_from_dlpack(self)
     if not copy:
         return arr
     result = arr.copy()
@@ -148,4 +191,44 @@ def xp_module_name(amr):
             return "dpnp"
         else:  # CUDA, HIP
             return "cupy"
+    return "numpy"
+
+
+def array_kind(arr):
+    """Classify array data by the array module that can read it.
+
+    The classification is duck-typed, so neither CuPy nor dpnp is imported.
+    The DLPack device (``__dlpack_device__``) is checked first because it is
+    the most reliable way to tell host from device memory: e.g., pyAMReX host
+    containers also expose ``__cuda_array_interface__``. Without DLPack, an
+    ``__array_interface__`` means host memory, and the CUDA array interface
+    alone means device memory.
+
+    Parameters
+    ----------
+    arr :
+        Array data, e.g., a NumPy, CuPy or dpnp array, a DLPack producer
+        or an array-like such as a list.
+
+    Returns
+    -------
+    str
+        "numpy" for host memory and array-likes, "cupy" for CUDA and ROCm
+        device memory, "dpnp" for SYCL (oneAPI) device memory, and "dlpack"
+        for other DLPack devices.
+    """
+    dlpack_device = getattr(arr, "__dlpack_device__", None)
+    if dlpack_device is not None:
+        device_type = int(dlpack_device()[0])
+        if device_type in (kDLCPU, kDLCUDAHost, kDLROCMHost):
+            return "numpy"
+        if device_type in (kDLCUDA, kDLROCM, kDLCUDAManaged):
+            return "cupy"
+        if device_type == kDLOneAPI:
+            return "dpnp"
+        return "dlpack"
+    if hasattr(arr, "__array_interface__"):
+        return "numpy"
+    if hasattr(arr, "__cuda_array_interface__"):
+        return "cupy"
     return "numpy"
