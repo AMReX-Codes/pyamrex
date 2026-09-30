@@ -18,7 +18,7 @@ def test_periodicity():
     assert obj == non_periodic
 
 
-@pytest.mark.skipif(amr.Config.spacedim == 3, reason="Requires AMREX_SPACEDIM = 3")
+@pytest.mark.skipif(amr.Config.spacedim != 3, reason="Requires AMREX_SPACEDIM = 3")
 def test_periodicity_3d():
     iv = amr.IntVect(1, 0, 1)
     obj = amr.Periodicity(iv)
