@@ -39,6 +39,14 @@ WarpX
 * Detailed workflow: `Extend a WarpX Simulation with Python <https://warpx.readthedocs.io/en/latest/usage/workflows/python_extend.html>`__
 
 
+FHDeX
+"""""
+
+`FHDeX <https://github.com/AMReX-FHD/FHDeX>`__ is a staggered-grid velocity fluctuating hydrodynamics code libraries for particle-laden flow.
+
+pyAMReX is used for ...
+
+
 Standalone
 ----------
 
