@@ -157,3 +157,4 @@ docs/doxyxml/
 **/plt*
 ## Checkpoints
 **/chk*
+tests/fep_coils/
