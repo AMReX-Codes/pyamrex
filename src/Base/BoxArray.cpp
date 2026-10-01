@@ -47,6 +47,9 @@ void init_BoxArray(py::module &m) {
         //BoxArray (const BoxArray& rhs, const BATransformer& trans);
         //BoxArray (BoxList&& bl, IntVect const& max_grid_size);
 
+        .def(py::self == py::self)
+        .def(py::self != py::self)
+
         .def_property_readonly("size", &BoxArray::size)
         .def_property_readonly("capacity", &BoxArray::capacity)
         .def_property_readonly("empty", &BoxArray::empty)

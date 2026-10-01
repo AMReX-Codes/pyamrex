@@ -3,6 +3,9 @@ foreach(D IN LISTS AMReX_SPACEDIM)
       PRIVATE
         AmrCore.cpp
         AmrMesh.cpp
+        FillPatchUtil.cpp
+        FluxRegister.cpp
+        Interpolater.cpp
         TagBox.cpp
     )
 endforeach()
