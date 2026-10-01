@@ -258,6 +258,56 @@ def _to_host(kind, src):
     return src
 
 
+def _byte_bounds(kind, src):
+    """Byte address range ``(lo, hi)`` of a prepared 1-D column or PODVector.
+
+    Returns None for empty data. The addresses come from the array
+    interfaces, so they are host or device addresses; they are only compared
+    to detect overlapping memory.
+    """
+    import numpy as np
+
+    if kind == "dpnp":
+        iface = src.__sycl_usm_array_interface__
+    elif kind == "cupy":
+        iface = src.__cuda_array_interface__
+    else:
+        # NumPy arrays and PODVectors (also with device memory)
+        iface = src.__array_interface__
+    n = iface["shape"][0]
+    if n == 0:
+        return None
+    itemsize = np.dtype(iface["typestr"]).itemsize
+    # as unsigned 64 bit: PODVectors export a signed intptr_t, which is
+    # negative for high (e.g., SYCL USM) addresses that dpnp reports unsigned
+    start = iface["data"][0] % 2**64
+    strides = iface.get("strides")
+    stride = strides[0] if strides else itemsize
+    if kind == "dpnp":
+        # the SYCL USM interface counts the offset and strides in elements
+        start += iface.get("offset", 0) * itemsize
+        stride = strides[0] * itemsize if strides else itemsize
+    last = (n - 1) * stride
+    return start + min(0, last), start + max(0, last) + itemsize
+
+
+def _overlaps(bounds, other_bounds):
+    """Whether the byte range bounds overlaps any of other_bounds."""
+    if bounds is None:
+        return False
+    lo, hi = bounds
+    return any(b is not None and lo < b[1] and b[0] < hi for b in other_bounds)
+
+
+def _copy_column(kind, src):
+    """A copy of a prepared column, in the same memory."""
+    if kind == "podvector":
+        from .PODVector import _podvector_base
+
+        return _podvector_base(type(src))(src)
+    return src.copy()
+
+
 def _collect_columns(data, columns):
     """Merge a mapping or DataFrame and keyword columns into one dict."""
     import numpy as np
@@ -289,6 +339,32 @@ def _collect_columns(data, columns):
         )
     merged.update(columns)
     return merged
+
+
+def _has_particle_data(data, columns):
+    """Whether data or columns contain particles, i.e., a non-empty array.
+
+    None, scalars and empty mappings, DataFrames or arrays are no particles.
+    """
+    from .PODVector import _is_podvector
+
+    for value in _collect_columns(data, columns).values():
+        if value is None or _is_scalar(value):
+            continue
+        shape = getattr(value, "shape", None)
+        if shape:
+            n = shape[0]
+        elif _is_podvector(value):
+            n = value.size()
+        else:
+            try:
+                n = len(value)
+            except TypeError:
+                # e.g., a DLPack-only producer: assume it holds particles
+                return True
+        if n > 0:
+            return True
+    return False
 
 
 def _check_integer_range(name, xp, src, dst_dtype):
@@ -449,6 +525,11 @@ def _normalize_columns(pc, merged, fill_missing):
         hint = ""
         if set(unknown) & {"data", "df"}:
             hint = " Pass a mapping or DataFrame as the first positional argument."
+        if "redistribute" in unknown:
+            hint += (
+                " To add particles without redistributing them, use "
+                "distribute='none' (or 'equally' with local=False)."
+            )
         raise ValueError(
             f"Unknown particle columns {unknown}; expected {required} "
             f"and optionally 'idcpu'.{hint}"
@@ -529,10 +610,6 @@ def _scatter_columns(pc, data, columns, fill_missing, comm, root_rank):
 
     rank = comm.Get_rank()
     nranks = comm.Get_size()
-    if not 0 <= root_rank < nranks:
-        raise ValueError(
-            f"root_rank={root_rank} is not a rank of comm (0..{nranks - 1})"
-        )
 
     root_error = None
     host_columns = None
@@ -638,7 +715,20 @@ def _prepare_insert(pc, columns, npart, scalars):
     destinations += [(soa.get_real_data(i), name) for i, name in enumerate(real_names)]
     destinations += [(soa.get_int_data(i), name) for i, name in enumerate(int_names)]
 
-    columns = dict(columns)
+    # a column can be a view into this tile, e.g., from pti.soa().to_numpy()
+    # or soa.get_real_data(i): resizing the tile in _commit_insert frees its
+    # memory before the copy, so copy such columns first. Comparing
+    # addresses of different memory spaces can only cause an extra copy.
+    destination_bounds = [_byte_bounds("podvector", dst) for dst, _ in destinations]
+    columns = {
+        name: (
+            (kind, _copy_column(kind, src))
+            if _overlaps(_byte_bounds(kind, src), destination_bounds)
+            else (kind, src)
+        )
+        for name, (kind, src) in columns.items()
+    }
+
     dtypes = _component_dtypes(pc)
     for name, value in scalars.items():
         columns[name] = ("numpy", np.full(npart, value, dtype=dtypes[name]))
@@ -691,6 +781,22 @@ def _rollback_insert(plan):
         plan["tile"].resize(plan["old_size"])
 
 
+def _check_comm(amr, comm):
+    """Raise on all ranks if the ranks of comm do not match the AMReX ranks.
+
+    Collective on comm. AMReX collectives, e.g., redistribute(), use the
+    AMReX communicator, so comm must agree on errors for the same ranks.
+    """
+    from mpi4py import MPI
+
+    mismatch = (
+        comm.Get_size() != amr.ParallelDescriptor.NProcs()
+        or comm.Get_rank() != amr.ParallelDescriptor.MyProc()
+    )
+    if comm.allreduce(mismatch, op=MPI.LOR):
+        raise ValueError("The ranks of comm must match the AMReX MPI ranks.")
+
+
 def _raise_on_any_error(comm, error):
     """Collectively raise if any MPI rank had an error.
 
@@ -715,7 +821,7 @@ def pc_add_arrays(
     local=True,
     comm=None,
     root_rank=None,
-    redistribute=True,
+    distribute="redistribute",
     fill_missing=None,
     **columns,
 ):
@@ -732,8 +838,11 @@ def pc_add_arrays(
     >>> pc.add_arrays(df)  # a DataFrame, e.g., from to_df()
     >>> pc.add_arrays({"x": x, ...}, w=1.0)  # a mapping, plus keywords
     >>> pc.add_arrays(x=x, y=y, z=z, fill_missing=0.0)  # others are 0
-    >>> pc.add_arrays(df, local=False)  # scatter df of the I/O rank to all ranks
+    >>> pc.add_arrays(df, local=False)  # add df of the I/O rank on all ranks
     >>> pc.add_arrays(local=False)  # ... on the other ranks
+    >>> pc.add_arrays(df, local=False, distribute="equally")  # 1/N per rank
+    >>> pc.add_arrays(df, distribute="none")  # not collective
+    >>> pc.redistribute()  # ... e.g., after adding several batches
 
     Parameters
     ----------
@@ -746,12 +855,12 @@ def pc_add_arrays(
         A DataFrame index named ``idcpu`` (e.g., after
         ``df.set_index("idcpu")``) provides the ``idcpu`` column.
     local : bool
-        If True, every MPI rank adds its own particles.
-        If False, the particles of ``root_rank`` are scattered to all MPI
-        ranks that own a box on level 0 (the columns of the other ranks are
-        ignored): each gets 1/N of the particles and the first ranks get one
-        remaining particle more. This is the counterpart of
-        ``to_df(local=False)``.
+        If True, every MPI rank adds its own particles, e.g., the chunk of
+        a file it read.
+        If False, the particles of ``root_rank`` are added; the other ranks
+        must pass no particles (None, an empty mapping or DataFrame, or only
+        scalars), otherwise all ranks raise a ValueError. This is the
+        counterpart of ``to_df(local=False)``.
     comm : MPI Communicator
         The mpi4py communicator used for collective error handling and, if
         local is False, for the scatter. Defaults to the communicator of
@@ -759,11 +868,27 @@ def pc_add_arrays(
     root_rank : int
         if local is False, the MPI rank that holds the data. Defaults to the
         I/O rank of AMReX (``ParallelDescriptor.IOProcessorNumber()``).
-    redistribute : bool
-        Call :py:meth:`redistribute` after adding the particles (default).
-        This is a collective call that moves the particles to the correct
-        MR level, box and tile. If False, the particles stay in the tile
-        of the first box on level 0 that the adding rank owns.
+    distribute : str
+        Where the new particles go:
+
+        - ``"redistribute"`` (default): call :py:meth:`redistribute`
+          afterwards, which moves every particle to the rank, MR level, box
+          and tile that owns its position. This is collective. With
+          local=False, the root adds all particles and the redistribute
+          sends each of them once (if the root owns no box on level 0, they
+          are split 1/N over the ranks first).
+        - ``"equally"``: only with local=False. Split the particles of the
+          root over all MPI ranks that own a box on level 0, without
+          :py:meth:`redistribute`: each gets 1/N of them, the first ranks
+          one remaining particle more. For particles whose position does
+          not decide their rank, e.g., beam particles without space charge.
+        - ``"none"``: no :py:meth:`redistribute`; with local=True, this is
+          not collective. The particles stay on the adding rank (with
+          local=False, the root), until :py:meth:`redistribute` is called,
+          e.g., after adding several batches.
+
+        Without redistribute, the particles are in the tile of the first
+        box on level 0 that their rank owns.
     fill_missing : scalar, optional
         Value for all components that are not given, except ``idcpu``
         (without an ``idcpu`` column, new ids are always reserved). By
@@ -789,14 +914,19 @@ def pc_add_arrays(
     particle ids raise an error. Integer ``idcpu`` values are cast to
     ``uint64`` (the bits of signed 64 bit integers are kept).
 
-    If local is False or redistribute is True, this function is collective
-    and must be called on all MPI ranks, with the same ``local``,
-    ``redistribute``, ``comm`` and ``root_rank`` (otherwise it hangs);
-    invalid data on any rank then raises on all ranks. Reusing an ``idcpu`` column, e.g., when adding the
-    output of ``to_df()`` back to the same container, creates duplicate
-    particle ids. With local=False, the data is scattered through host
-    memory, also for device arrays. Legacy AoS particle containers are not
-    supported.
+    All MPI ranks must pass the same ``local``, ``distribute``, ``comm``
+    and ``root_rank``. Unless local is True and distribute is "none", the
+    call is collective; invalid data on any rank then raises on all ranks.
+    Reusing an ``idcpu`` column, e.g., when adding the output of
+    ``to_df()`` back to the same container, creates duplicate particle ids.
+
+    With local=False and distribute="redistribute" (or "none"), the root
+    rank holds all new particles in its (device) memory. If they do not
+    fit, add them with ``distribute="equally"`` and call
+    :py:meth:`redistribute` afterwards: this splits them over all ranks
+    first, at the cost of sending most of them twice. The 1/N split goes
+    through host memory, also for device arrays. Legacy AoS particle
+    containers are not supported.
     """
     amr = _amrex_module(self)
 
@@ -805,37 +935,86 @@ def pc_add_arrays(
             "add_arrays/add_df only support pure SoA particle containers."
         )
 
-    # silently ignore local=False for non-MPI runs
+    choices = ("redistribute", "equally", "none")
+    if distribute not in choices:
+        raise ValueError(f"distribute must be one of {choices}, not {distribute!r}")
+
+    # silently ignore local=False for non-MPI runs: the only rank keeps all
     if not local and not amr.Config.have_mpi:
         local = True
+        if distribute == "equally":
+            distribute = "none"
+    if local and distribute == "equally":
+        raise ValueError(
+            "distribute='equally' splits the particles of root_rank and needs "
+            "local=False; with local=True, every rank keeps its own particles "
+            "with distribute='none'."
+        )
 
+    redistribute = distribute == "redistribute"
     parallel = amr.Config.have_mpi and amr.ParallelDescriptor.NProcs() > 1
     collective = parallel and (redistribute or not local)
-    if comm is None and (collective or not local):
-        comm = _amrex_comm(amr)
+    uses_comm = collective or not local
+    if comm is None:
+        if uses_comm:
+            comm = _amrex_comm(amr)
+    elif uses_comm:
+        _check_comm(amr, comm)
     if root_rank is None:
         root_rank = amr.ParallelDescriptor.IOProcessorNumber()
 
+    # local=False: the root adds all particles, unless they are split 1/N
+    # ("equally"). With redistribute, they are then sent only once; if the
+    # root owns no box, they are split 1/N before the redistribute instead.
+    root_adds = False
+    if not local:
+        nranks = comm.Get_size()
+        if not 0 <= root_rank < nranks:
+            raise ValueError(
+                f"root_rank={root_rank} is not a rank of comm (0..{nranks - 1})"
+            )
+        root_owns_box = root_rank in set(
+            self.particle_distribution_map(0).ProcessorMap()
+        )
+        if distribute == "none" and not root_owns_box:
+            raise ValueError(
+                f"root_rank={root_rank} owns no box on level 0 and cannot keep "
+                "the particles with distribute='none'; use another root_rank, "
+                "or distribute='equally' or 'redistribute'."
+            )
+        root_adds = distribute != "equally" and root_owns_box
+
     error = None
     plan = None
-    if local:
+    if not local and comm.Get_rank() != root_rank:
+        # only the particles of the root are added: data on other ranks
+        # would be lost silently, e.g., if local=True was meant
         try:
-            merged = _collect_columns(data, columns)
-            prepared, npart, scalars = _normalize_columns(self, merged, fill_missing)
-            plan = _prepare_insert(self, prepared, npart, scalars)
+            if _has_particle_data(data, columns):
+                raise ValueError(
+                    f"add_arrays(local=False) adds the particles of root_rank="
+                    f"{root_rank} only, but MPI rank {comm.Get_rank()} passed "
+                    "particles, too. To add the particles of every rank, use "
+                    "local=True (it redistributes them, unless "
+                    "distribute='none'). With local=False, pass no particles "
+                    "on the other ranks."
+                )
         except Exception as e:
             error = e
-    else:
-        from mpi4py import MPI
 
-        mismatch = (
-            comm.Get_size() != amr.ParallelDescriptor.NProcs()
-            or comm.Get_rank() != amr.ParallelDescriptor.MyProc()
-        )
-        if comm.allreduce(mismatch, op=MPI.LOR):
-            raise ValueError(
-                "The ranks of comm must match the AMReX MPI ranks for local=False."
-            )
+    if local or root_adds:
+        if local or comm.Get_rank() == root_rank:
+            try:
+                merged = _collect_columns(data, columns)
+                prepared, npart, scalars = _normalize_columns(
+                    self, merged, fill_missing
+                )
+                plan = _prepare_insert(self, prepared, npart, scalars)
+            except Exception as e:
+                error = e
+    else:
+        # agree on errors of the other ranks before the scatter
+        _raise_on_any_error(comm, error)
         prepared, npart, scalars = _scatter_columns(
             self, data, columns, fill_missing, comm, root_rank
         )
@@ -879,7 +1058,7 @@ def pc_add_df(
     local=True,
     comm=None,
     root_rank=None,
-    redistribute=True,
+    distribute="redistribute",
     fill_missing=None,
     **columns,
 ):
@@ -893,7 +1072,7 @@ def pc_add_df(
     Examples
     --------
     >>> df = pc.to_df(local=False)  # gather all particles to the I/O rank
-    >>> pc2.add_df(df, local=False)  # scatter them again, on all ranks
+    >>> pc2.add_df(df, local=False)  # add and redistribute them again
 
     Parameters
     ----------
@@ -902,7 +1081,7 @@ def pc_add_df(
     df : DataFrame, optional
         Particles to add, one column per component. The index is ignored,
         unless it is named ``idcpu`` and there is no ``idcpu`` column.
-    local, comm, root_rank, redistribute, fill_missing, **columns :
+    local, comm, root_rank, distribute, fill_missing, **columns :
         See :py:meth:`add_arrays`.
 
     See Also
@@ -915,7 +1094,7 @@ def pc_add_df(
         local=local,
         comm=comm,
         root_rank=root_rank,
-        redistribute=redistribute,
+        distribute=distribute,
         fill_missing=fill_missing,
         **columns,
     )

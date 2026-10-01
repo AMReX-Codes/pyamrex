@@ -702,7 +702,7 @@ def test_soa_pc_add_df_roundtrip(
     # df: a pandas.DataFrame with one column per particle component, as in
     #     pc.to_df(); only needed on the root rank (None on other ranks).
     #     Without an "idcpu" column, new particle ids are created.
-    pc.add_df(df, local=False)  # scatter 1/N of the particles to each MPI rank
+    pc.add_df(df, local=False)  # add df of the root rank, then redistribute
     # Manual: Pure SoA Add DF END
 
     assert pc.total_number_of_particles() == Npart
@@ -717,19 +717,19 @@ def test_soa_pc_add_df_roundtrip(
         assert df2.equals(df)
 
 
-@pytest.mark.parametrize("redistribute", [True, False])
-def test_soa_pc_add_arrays_new_ids(std_geometry, distmap, boxarr, redistribute):
+@pytest.mark.parametrize("distribute", ["redistribute", "equally", "none"])
+def test_soa_pc_add_arrays_new_ids(std_geometry, distmap, boxarr, distribute):
     """Particles without idcpu get new, unique and valid ids"""
     pc = _make_empty_soa_like(std_geometry, distmap, boxarr)
     npart = 17
     root = amr.ParallelDescriptor.IOProcessor()
 
     data = _random_columns(pc, npart) if root else None
-    pc.add_arrays(data, local=not amr.Config.have_mpi, redistribute=redistribute)
+    pc.add_arrays(data, local=False, distribute=distribute)
     assert pc.total_number_of_particles() == npart
 
     # a second batch continues the ids of this rank
-    pc.add_arrays(data, local=not amr.Config.have_mpi, redistribute=redistribute)
+    pc.add_arrays(data, local=False, distribute=distribute)
     assert pc.total_number_of_particles() == 2 * npart
 
     columns = _particle_columns(pc, gather=True)
@@ -768,9 +768,59 @@ def test_soa_pc_add_arrays_podvector(std_geometry, distmap, boxarr):
     data = _random_columns(pc, npart)
     data["x"] = amr.PODVector_real_std.from_numpy(data["x"])
 
-    pc.add_arrays(data, local=True, redistribute=False)
+    pc.add_arrays(data, local=True, distribute="none")
     assert pc.total_number_of_particles(True, True) == npart
     _assert_same_values(_particle_columns(pc)["x"], data["x"].to_numpy())
+
+
+@pytest.mark.parametrize("source", ["xp", "podvector"])
+def test_soa_pc_add_arrays_self_view(std_geometry, distmap, boxarr, source):
+    """Columns that view the tile that receives the particles are copied first"""
+    if not _owns_box(distmap):
+        pytest.skip("This MPI rank owns no box")
+    pc = _make_empty_soa_like(std_geometry, distmap, boxarr)
+    npart = 1000
+    add = dict(local=True, distribute="none")
+    pc.add_arrays(_random_columns(pc, npart), **add)
+    before = _particle_columns(pc)
+
+    # the first tile of the first box of this rank, which add_arrays appends to
+    grid = list(distmap.ProcessorMap()).index(amr.ParallelDescriptor.MyProc())
+    soa = pc.define_and_return_particle_tile(0, grid, 0).get_struct_of_arrays()
+    assert soa.size == npart
+    if source == "xp":
+        soa = soa.to_xp()  # NumPy, CuPy or dpnp views, no copies
+        columns = {"idcpu": soa.idcpu, **soa.real, **soa.int}
+    else:
+        columns = {"idcpu": soa.get_idcpu_data()}
+        columns.update(
+            (name, soa.get_real_data(i)) for i, name in enumerate(pc.real_soa_names)
+        )
+        columns.update(
+            (name, soa.get_int_data(i)) for i, name in enumerate(pc.int_soa_names)
+        )
+    del soa
+
+    pc.add_arrays(columns, **add)
+    assert pc.total_number_of_particles(True, True) == 2 * npart
+    after = _particle_columns(pc)
+    for name, values in before.items():
+        np.testing.assert_array_equal(after[name], np.concatenate([values, values]))
+
+
+def test_pack_ids_views():
+    """pack_ids/pack_cpus write strided views element by element"""
+    ids = np.arange(1, 6, dtype=np.int64)
+    cpus = np.arange(10, 15, dtype=np.int32)
+    expected = np.zeros(5, dtype=np.uint64)
+    amr.pack_ids(expected, ids)
+    amr.pack_cpus(expected, cpus)
+
+    idcpu = np.zeros(10, dtype=np.uint64)
+    amr.pack_ids(idcpu[::2], np.repeat(ids, 2)[::2])
+    amr.pack_cpus(idcpu[::2], np.repeat(cpus, 2)[::2])
+    np.testing.assert_array_equal(idcpu[::2], expected)
+    np.testing.assert_array_equal(idcpu[1::2], 0)
 
 
 def test_soa_pc_add_arrays_errors(std_geometry, distmap, boxarr):
@@ -799,7 +849,8 @@ def test_soa_pc_add_arrays_errors(std_geometry, distmap, boxarr):
     if amr.Config.have_mpi:
         # errors on the root rank are raised on all ranks
         with pytest.raises((KeyError, RuntimeError)):
-            pc.add_arrays(missing, local=False)
+            root = amr.ParallelDescriptor.IOProcessor()
+            pc.add_arrays(missing if root else None, local=False)
 
     assert pc.total_number_of_particles() == 0
 
@@ -874,7 +925,7 @@ def test_soa_pc_add_arrays_without_cupy_dpnp(
     data["y"] = amr.PODVector_real_std.from_array(data["y"])
     data["i1"] = data["i1"].astype(np.int64)  # cast to the int component type
 
-    pc.add_arrays(data, local=True, redistribute=False)
+    pc.add_arrays(data, local=True, distribute="none")
     assert pc.total_number_of_particles(True, True) == npart
     columns = _particle_columns(pc)
     for name in ("x", "i1"):
@@ -926,7 +977,7 @@ def test_soa_pc_add_arrays_hybrid(std_geometry, distmap, boxarr):
     pc = _make_empty_soa_like(std_geometry, distmap, boxarr)
     npart = 6
     data = _random_columns(pc, npart)
-    add = dict(local=True, redistribute=False)
+    add = dict(local=True, distribute="none")
 
     # keyword arguments
     pc.add_arrays(**data, **add)
@@ -977,7 +1028,7 @@ def test_soa_pc_add_arrays_option_named_component(std_geometry, distmap, boxarr)
     data = _random_columns(pc, npart)
     local_values = data.pop("local")
 
-    pc.add_arrays({"local": local_values}, **data, local=True, redistribute=False)
+    pc.add_arrays({"local": local_values}, **data, local=True, distribute="none")
     _assert_same_values(_particle_columns(pc)["local"], local_values)
 
 
@@ -988,7 +1039,7 @@ def test_soa_pc_add_arrays_casts(std_geometry, distmap, boxarr):
     pc = _make_empty_soa_like(std_geometry, distmap, boxarr)
     npart = 4
     data = _random_columns(pc, npart)
-    add = dict(local=True, redistribute=False)
+    add = dict(local=True, distribute="none")
 
     bad = {
         TypeError: [
@@ -1039,7 +1090,7 @@ def test_soa_pc_add_arrays_error_on_one_rank(std_geometry, distmap, boxarr):
     data = _random_columns(pc, npart) if _owns_box(distmap) else {}
     bad = dict(data, i1=np.array(["a"] * npart)) if data else {}
 
-    # local=True, collective because of redistribute
+    # local=True, collective because of distribute="redistribute"
     with pytest.raises(TypeError if rank == 1 and bad else RuntimeError):
         pc.add_arrays(bad if rank == 1 else data, local=True)
     # local=False: invalid data on the root rank
@@ -1065,7 +1116,7 @@ def test_soa_pc_add_arrays_split(std_geometry, distmap, boxarr, root):
     npart = 17
 
     data = _random_columns(pc, npart) if comm.Get_rank() == root_rank else None
-    pc.add_arrays(data, local=False, root_rank=root_rank, redistribute=False)
+    pc.add_arrays(data, local=False, root_rank=root_rank, distribute="equally")
 
     owners = sorted(set(distmap.ProcessorMap()))
     navg, nleft = divmod(npart, len(owners))
@@ -1078,6 +1129,121 @@ def test_soa_pc_add_arrays_split(std_geometry, distmap, boxarr, root):
     columns = _particle_columns(pc, gather=True)
     if comm.Get_rank() == root_rank:
         _assert_same_values(columns["x"], data["x"])
+
+
+@pytest.mark.skipif(not amr.Config.have_mpi, reason="Requires AMReX_MPI=ON")
+def test_soa_pc_add_arrays_root_redistribute(
+    std_geometry, distmap, boxarr, monkeypatch
+):
+    """local=False, distribute="redistribute" sends the particles only once"""
+    import amrex.extensions.ParticleContainer as ext
+
+    def no_scatter(*args, **kwargs):
+        raise AssertionError("the 1/N scatter is not needed with redistribute")
+
+    pc = _make_empty_soa_like(std_geometry, distmap, boxarr)
+    npart = 17
+    io = amr.ParallelDescriptor.IOProcessor()
+    data = _random_columns(pc, npart) if io else None
+    with monkeypatch.context() as m:
+        m.setattr(ext, "_scatter_columns", no_scatter)
+        pc.add_arrays(data, local=False)
+    assert pc.total_number_of_particles() == npart
+    columns = _particle_columns(pc, gather=True)
+    if io:
+        _assert_same_values(columns["x"], data["x"])
+
+    # a root that owns no box splits the particles 1/N first
+    nranks = amr.ParallelDescriptor.NProcs()
+    if nranks < 2:
+        return
+    root_rank = nranks - 1
+    no_root = amr.DistributionMapping(amr.Vector_int([0] * boxarr.size))
+    pc = _make_empty_soa_like(std_geometry, no_root, boxarr)
+    data = (
+        _random_columns(pc, npart)
+        if root_rank == amr.ParallelDescriptor.MyProc()
+        else None
+    )
+    pc.add_arrays(data, local=False, root_rank=root_rank)
+    assert pc.total_number_of_particles() == npart
+
+
+@pytest.mark.parametrize("distribute", ["redistribute", "equally", "none"])
+def test_soa_pc_add_arrays_not_local_on_all_ranks(
+    std_geometry, distmap, boxarr, distribute
+):
+    """local=False with particles on several ranks raises on all ranks"""
+    nranks = amr.ParallelDescriptor.NProcs()
+    if nranks < 2:
+        pytest.skip("Requires at least 2 MPI ranks")
+    pc = _make_empty_soa_like(std_geometry, distmap, boxarr)
+    data = _random_columns(pc, 5)
+    root = amr.ParallelDescriptor.IOProcessor()
+
+    with pytest.raises(RuntimeError if root else ValueError, match="local=True|failed"):
+        pc.add_arrays(data, local=False, distribute=distribute)
+    assert pc.total_number_of_particles() == 0
+
+    # no particles on the other ranks: None, empty columns or only scalars
+    for other in (None, {}, {"x": np.empty(0)}, {"w": 1.0}):
+        pc.add_arrays(data if root else other, local=False, distribute=distribute)
+    assert pc.total_number_of_particles() == 4 * 5
+
+    # local=True adds the particles of every rank
+    pc = _make_empty_soa_like(std_geometry, distmap, boxarr)
+    pc.add_arrays(data if _owns_box(distmap) else None, local=True)
+    assert pc.total_number_of_particles() == 5 * len(set(distmap.ProcessorMap()))
+
+
+def test_soa_pc_add_arrays_distribute_errors(std_geometry, distmap, boxarr):
+    """Invalid distribute values and combinations raise on all ranks"""
+    pc = _make_empty_soa_like(std_geometry, distmap, boxarr)
+    data = _random_columns(pc, 3) if _owns_box(distmap) else None
+    with pytest.raises(ValueError, match="distribute must be one of"):
+        pc.add_arrays(data, distribute="scatter")
+    with pytest.raises(ValueError, match="needs local=False"):
+        pc.add_arrays(data, local=True, distribute="equally")
+    # the bool flag of earlier drafts is no option
+    with pytest.raises(ValueError, match="distribute='none'"):
+        pc.add_arrays(data, local=True, redistribute=False)
+    assert pc.total_number_of_particles() == 0
+
+
+@pytest.mark.skipif(not amr.Config.have_mpi, reason="Requires AMReX_MPI=ON")
+def test_soa_pc_add_arrays_root_keeps(std_geometry, distmap, boxarr):
+    """local=False, distribute="none": the root keeps all particles"""
+    from mpi4py import MPI
+
+    comm = MPI.COMM_WORLD
+    pc = _make_empty_soa_like(std_geometry, distmap, boxarr)
+    npart = 17
+    io = amr.ParallelDescriptor.IOProcessor()
+    data = _random_columns(pc, npart) if io else None
+
+    # two batches, one redistribute
+    pc.add_arrays(data, local=False, distribute="none")
+    pc.add_arrays(data, local=False, distribute="none")
+    counts = comm.allgather(pc.total_number_of_particles(True, True))
+    io_rank = amr.ParallelDescriptor.IOProcessorNumber()
+    assert counts == [2 * npart if r == io_rank else 0 for r in range(len(counts))]
+    pc.redistribute()
+    assert pc.total_number_of_particles() == 2 * npart
+    columns = _particle_columns(pc, gather=True)
+    if io:
+        _assert_same_values(columns["x"], np.concatenate([data["x"], data["x"]]))
+
+    # a root without a box cannot keep them
+    nranks = comm.Get_size()
+    if nranks < 2:
+        return
+    root_rank = nranks - 1
+    no_root = amr.DistributionMapping(amr.Vector_int([0] * boxarr.size))
+    pc = _make_empty_soa_like(std_geometry, no_root, boxarr)
+    data = _random_columns(pc, npart) if comm.Get_rank() == root_rank else None
+    with pytest.raises(ValueError, match="owns no box"):
+        pc.add_arrays(data, local=False, root_rank=root_rank, distribute="none")
+    assert pc.total_number_of_particles() == 0
 
 
 @pytest.mark.skipif(not amr.Config.have_mpi, reason="Requires AMReX_MPI=ON")
@@ -1098,6 +1264,14 @@ def test_soa_pc_add_arrays_comm(std_geometry, distmap, boxarr):
     reversed_comm = comm.Split(0, comm.Get_size() - comm.Get_rank())
     with pytest.raises(ValueError):
         pc.add_arrays(data, local=False, comm=reversed_comm)
+    assert pc.total_number_of_particles() == 5
+
+    # local=True with redistribute is collective, too: a rank-local
+    # communicator would let ranks without errors enter redistribute alone
+    local_data = _random_columns(pc, 3) if _owns_box(distmap) else None
+    for bad_comm in (MPI.COMM_SELF, reversed_comm):
+        with pytest.raises(ValueError, match="AMReX MPI ranks"):
+            pc.add_arrays(local_data, local=True, comm=bad_comm)
     assert pc.total_number_of_particles() == 5
 
 
@@ -1140,7 +1314,7 @@ def test_soa_pc_add_arrays_manual(std_geometry, distmap, boxarr):
 
     # Manual: Pure SoA Add Arrays START
     # one array (NumPy, CuPy, dpnp, PODVector, ...) or scalar per component;
-    # with local=False, the particles of the I/O rank are scattered to all ranks
+    # with local=False, the particles of the I/O rank are added and redistributed
     if amr.ParallelDescriptor.IOProcessor():
         pc.add_arrays(x=x, y=y, z=z, w=1.0, fill_missing=0.0, local=False)
     else:
@@ -1162,7 +1336,7 @@ def test_soa_pc_add_df_idcpu(soa_particle_container, std_geometry, distmap, boxa
     assert "idcpu" in df.columns and df["idcpu"].dtype == np.uint64
     assert df.index.name is None and list(df.index) == list(range(len(df)))
     ids = df["idcpu"].to_numpy()
-    add = dict(local=True, redistribute=False)
+    add = dict(local=True, distribute="none")
 
     pc = _make_empty_soa_like(std_geometry, distmap, boxarr)
     pc.add_df(df.set_index("idcpu"), **add)  # uint64 index
@@ -1183,7 +1357,7 @@ def test_soa_pc_add_arrays_more_errors(std_geometry, distmap, boxarr):
         pytest.skip("This MPI rank owns no box")
     pc = _make_empty_soa_like(std_geometry, distmap, boxarr)
     data = _random_columns(pc, 4)
-    add = dict(local=True, redistribute=False)
+    add = dict(local=True, distribute="none")
 
     with pytest.raises(ValueError, match="positional"):
         pc.add_arrays(data=data, **add)
@@ -1248,7 +1422,7 @@ def test_soa_pc_add_arrays_dpnp(std_geometry, distmap, boxarr):
     data_dp["i1"] = dp.asarray(data["i1"].astype(np.uint64))  # small values
     data_dp["i2"] = data["i2"]
 
-    pc.add_arrays(data_dp, local=True, redistribute=False)
+    pc.add_arrays(data_dp, local=True, distribute="none")
     columns = _particle_columns(pc)
     for name, col in data.items():
         expected = col.astype(np.float32) if col.dtype.kind == "f" else col
@@ -1263,7 +1437,7 @@ def test_soa_pc_undefined():
     with pytest.raises(RuntimeError, match="not defined"):
         pc.particle_distribution_map(0)
     with pytest.raises(RuntimeError, match="not defined"):
-        pc.add_arrays(x=[0.5], y=[0.5], z=[0.5], local=True, redistribute=False)
+        pc.add_arrays(x=[0.5], y=[0.5], z=[0.5], local=True, distribute="none")
 
 
 @pytest.mark.skipif(not amr.Config.have_mpi, reason="Requires AMReX_MPI=ON")
@@ -1279,9 +1453,9 @@ def test_soa_pc_add_arrays_large_count(std_geometry, distmap, boxarr, monkeypatc
     monkeypatch.setattr(ext, "_MAX_MPI_COUNT", 10)
     monkeypatch.setattr(ext, "_mpi_large_count", lambda: False)
     with pytest.raises(ValueError if io else RuntimeError, match="large count|failed"):
-        pc.add_arrays(data, local=False)
+        pc.add_arrays(data, local=False, distribute="equally")
     assert pc.total_number_of_particles() == 0
 
     monkeypatch.setattr(ext, "_mpi_large_count", lambda: True)
-    pc.add_arrays(data, local=False)
+    pc.add_arrays(data, local=False, distribute="equally")
     assert pc.total_number_of_particles() == 17
