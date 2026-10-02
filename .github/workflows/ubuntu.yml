@@ -295,10 +295,11 @@ jobs:
         python3 -m pip install -U build packaging setuptools[core] wheel
         python3 -m pip install -U cmake
 
+        # TODO: re-add 1D after AMReX-Codes/amrex#6009 (nvcc 12.2-12.6 hangs in 1D)
         cmake -S . -B build             \
             -DCMAKE_VERBOSE_MAKEFILE=ON \
             -DAMReX_GPU_BACKEND=CUDA    \
-            -DAMReX_SPACEDIM="1;2;3"    \
+            -DAMReX_SPACEDIM="2;3"      \
             -DCMAKE_CUDA_STANDARD=17    \
             -DCMAKE_CXX_STANDARD=17     \
             -DCMAKE_CUDA_ARCHITECTURES=80 \
