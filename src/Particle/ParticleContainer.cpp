@@ -21,17 +21,15 @@ namespace
             throw std::runtime_error("Input should be 1-D NumPy array");
         }
 
-        auto buf = idcpus.request();
-        auto buf2 = ids.request();
-        if (buf.size != buf2.size) {
+        if (idcpus.size() != ids.size()) {
             throw std::runtime_error("sizes do not match!");
         }
 
-        int N = idcpus.shape()[0];
-        for (int i = 0; i < N; i++) {
-            uint64_t* idcpus_ptr = (uint64_t*) buf.ptr;
-            amrex::Long* ids_ptr = (amrex::Long*) buf2.ptr;
-            particle_impl::pack_id(idcpus_ptr[i], ids_ptr[i]);
+        // 64 bit sizes and strided access: more than 2^31 particles and views
+        auto idcpus_out = idcpus.mutable_unchecked<1>();
+        auto const ids_in = ids.unchecked<1>();
+        for (py::ssize_t i = 0; i < idcpus_out.shape(0); ++i) {
+            particle_impl::pack_id(idcpus_out(i), ids_in(i));
         }
         return py::cast<py::none>(Py_None);
     }
@@ -43,17 +41,15 @@ namespace
             throw std::runtime_error("Input should be 1-D NumPy array");
         }
 
-        auto buf = idcpus.request();
-        auto buf2 = cpus.request();
-        if (buf.size != buf2.size) {
+        if (idcpus.size() != cpus.size()) {
             throw std::runtime_error("sizes do not match!");
         }
 
-        int N = idcpus.shape()[0];
-        for (int i = 0; i < N; i++) {
-            uint64_t* idcpus_ptr = (uint64_t*) buf.ptr;
-            int* cpus_ptr = (int*) buf2.ptr;
-            particle_impl::pack_cpu(idcpus_ptr[i], cpus_ptr[i]);
+        // 64 bit sizes and strided access: more than 2^31 particles and views
+        auto idcpus_out = idcpus.mutable_unchecked<1>();
+        auto const cpus_in = cpus.unchecked<1>();
+        for (py::ssize_t i = 0; i < idcpus_out.shape(0); ++i) {
+            particle_impl::pack_cpu(idcpus_out(i), cpus_in(i));
         }
         return py::cast<py::none>(Py_None);
     }
