@@ -15,7 +15,7 @@ In order to retrieve those, one usually would need to build pyAMReX and have it 
 This build step can be complicated for building documentation and it does not work well with autocompletion in IPython.
 
 Thus, on every merge to the mainline ``development`` branch, we build pyAMReX and create "stub" (interface/facade) files that carry all type information and doc strings.
-We do this by building pyAMReX and running the script ``.github/update_stub.sh``, which uses `pybind11-stubgen <https://github.com/sizmailov/pybind11-stubgen>`__ to extract these information.
+We do this by building pyAMReX and running the script ``.github/update_stub.sh``, which uses `pybind11-stubgen <https://github.com/pybind/pybind11-stubgen>`__ to extract these information.
 A GitHub action then commits the updated stub files (``.pyi``) to the repository.
 
 When we build our Sphinx documentation, we copy the ``.pyi`` files and generate documentation of classes and functions via `autodoc <https://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html>`__.
