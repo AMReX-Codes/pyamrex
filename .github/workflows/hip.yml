@@ -14,14 +14,14 @@ jobs:
       CXXFLAGS: "-Werror -Wno-deprecated-declarations -Wno-error=pass-failed"
       CMAKE_GENERATOR: Ninja
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
     - name: install dependencies
       shell: bash
       run: |
         .github/workflows/dependencies/hip.sh 6.3.2
         .github/workflows/dependencies/dependencies_ccache.sh
     - name: Set Up Cache
-      uses: actions/cache@v6
+      uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
       with:
         path: ~/.cache/ccache
         key: ccache-${{ github.workflow }}-${{ github.job }}-git-${{ github.sha }}

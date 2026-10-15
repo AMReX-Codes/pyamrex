@@ -11,8 +11,8 @@ jobs:
     name: MSVC w/o MPI Static Release
     runs-on: windows-latest
     steps:
-    - uses: actions/checkout@v6
-    - uses: actions/setup-python@v5
+    - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+    - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
       with:
         python-version: '3.x'
     - name: Build & Install
@@ -39,8 +39,8 @@ jobs:
     name: Clang w/o MPI Shared Debug
     runs-on: windows-latest
     steps:
-    - uses: actions/checkout@v6
-    - uses: actions/setup-python@v5
+    - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+    - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
       with:
         python-version: '3.x'
     - name: Build
@@ -84,9 +84,9 @@ jobs:
       run:
         shell: wsl-bash {0}
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
     - name: Set Up WSL
-      uses: Vampire/setup-wsl@v7
+      uses: Vampire/setup-wsl@4c48163d9f981914dd8caa0fc335fe19cca5bff4 # v7.2.0
       with:
         distribution: Ubuntu-24.04
     - name: Set Up Cache
@@ -94,7 +94,7 @@ jobs:
       # live on the Windows-side workspace. The build below copies it into a
       # native ext4 directory inside WSL (fast) for the actual ccache I/O and
       # writes it back here at the end, avoiding slow 9p-mounted ccache access.
-      uses: actions/cache@v6
+      uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
       with:
         path: ${{ github.workspace }}/.ccache
         key: ccache-${{ github.workflow }}-${{ github.job }}-git-${{ github.sha }}
