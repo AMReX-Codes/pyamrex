@@ -94,7 +94,7 @@ jobs:
       run: |
         mpiexec -np 1 python3 -m pytest tests/
 
-    - uses: stefanzweifel/git-auto-commit-action@b863ae1933cb653a53c021fe36dbb774e1fb9403 # v5.2.0
+    - uses: stefanzweifel/git-auto-commit-action@4a55954c782fc1ea30b9056cd3e7a2b40ca8887d # v7.2.0
       name: Commit Updated Stub Files
       if: github.event_name == 'push' && github.repository == 'AMReX-Codes/pyamrex' && github.ref == 'refs/heads/development'
       with:
