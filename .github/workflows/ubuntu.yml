@@ -16,7 +16,7 @@ jobs:
       CXX: g++-11
       CXXFLAGS: "-Werror -Wshadow -Woverloaded-virtual -Wunreachable-code -fno-operator-names -Wno-array-bounds"
     steps:
-    - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
     - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
       name: Install Python
       with:
@@ -61,7 +61,7 @@ jobs:
     runs-on: ubuntu-24.04
     env: {CXXFLAGS: "-Werror -Wno-error=deprecated-declarations -Wshadow -Woverloaded-virtual -Wunreachable-code -fno-operator-names"}
     steps:
-    - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
     - name: Dependencies
       run: |
         .github/workflows/dependencies/dependencies_gcc.sh 14
@@ -113,7 +113,7 @@ jobs:
     runs-on: ubuntu-24.04
     env: {CXXFLAGS: "-Werror -Wshadow -Woverloaded-virtual -Wextra-semi -Wunreachable-code -fno-operator-names -Wno-pass-failed"}
     steps:
-    - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
     - name: Dependencies
       run: |
         .github/workflows/dependencies/dependencies_clang14_libcpp.sh
@@ -160,7 +160,7 @@ jobs:
       CXX: "clang++"
       CC: "clang"
     steps:
-    - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
     - name: Dependencies
       run: |
         .github/workflows/dependencies/dependencies_clang18.sh
@@ -210,7 +210,7 @@ jobs:
       AMREX_PRECISION: "SINGLE"
       AMREX_PARTICLES_PRECISION: "SINGLE"
     steps:
-      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Dependencies
         run: |
           .github/workflows/dependencies/dependencies_clang18.sh
@@ -264,7 +264,7 @@ jobs:
         large-packages: false  # apt takes ~1:30min
         docker-images: true
         swap-storage: false
-    - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
     - name: Dependencies
       run: |
         .github/workflows/dependencies/dependencies_nvcc.sh 12.2
