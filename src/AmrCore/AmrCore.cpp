@@ -20,6 +20,7 @@
 #   include <AMReX_AmrParGDB.H>
 #endif
 
+#include <functional>
 #include <memory>
 #include <sstream>
 
@@ -50,6 +51,8 @@ namespace
             int lev, amrex::TagBoxArray& tags, amrex::Real time, int ngrow
         ) override
         {
+            // pass the (non-copyable) TagBoxArray by reference, so that
+            // tags set in Python propagate back to AMReX
             PYBIND11_OVERRIDE_PURE_NAME(
                 void, amrex::AmrCore, "error_est", ErrorEst,
                 lev, py::cast(&tags, py::return_value_policy::reference),

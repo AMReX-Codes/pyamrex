@@ -14,6 +14,7 @@ void init_Array4_int(py::module &m)
 {
     using namespace pyAMReX;
 
+    make_Array4< char >(m, "char");
     make_Array4< short >(m, "short");
     make_Array4< int >(m, "int");
     make_Array4< long >(m, "long");

@@ -71,6 +71,10 @@ void init_AmrMesh(py::module &m)
         .def_property_readonly("verbose", &AmrMesh::Verbose)
         .def_property_readonly("max_level", &AmrMesh::maxLevel)
         .def_property_readonly("finest_level", &AmrMesh::finestLevel)
+        .def("set_finest_level", &AmrMesh::SetFinestLevel,
+             py::arg("new_finest_level"),
+             "Update the recorded finest level index (without "
+             "reallocating), e.g., when restarting from a checkpoint.")
         .def("ref_ratio", py::overload_cast< >(&AmrMesh::refRatio, py::const_))
         .def("ref_ratio", py::overload_cast< int >(&AmrMesh::refRatio, py::const_))
 
@@ -81,5 +85,49 @@ void init_AmrMesh(py::module &m)
         .def("set_geometry", &AmrMesh::SetGeometry,
              py::arg("lev"), py::arg("geom_in"),
              "Replace the Geometry stored for AMR level lev.")
+
+        .def("box_array",
+             py::overload_cast< int >(&AmrMesh::boxArray, py::const_),
+             py::return_value_policy::reference_internal, py::arg("lev"),
+             "Return the BoxArray of level lev.")
+        .def("dist_map",
+             py::overload_cast< int >(&AmrMesh::DistributionMap, py::const_),
+             py::return_value_policy::reference_internal, py::arg("lev"),
+             "Return the DistributionMapping of level lev.")
+        .def("set_box_array", &AmrMesh::SetBoxArray,
+             py::arg("lev"), py::arg("ba_in"))
+        .def("set_dist_map", &AmrMesh::SetDistributionMap,
+             py::arg("lev"), py::arg("dm_in"))
+        .def("clear_box_array", &AmrMesh::ClearBoxArray, py::arg("lev"))
+        .def("clear_dist_map", &AmrMesh::ClearDistributionMap,
+             py::arg("lev"))
+
+        .def("blocking_factor",
+             [](AmrMesh const & amr_mesh, int lev)
+             { return amr_mesh.blockingFactor(lev); },
+             py::arg("lev"),
+             "Return the blocking factor at level lev.")
+        .def("max_grid_size",
+             [](AmrMesh const & amr_mesh, int lev)
+             { return amr_mesh.maxGridSize(lev); },
+             py::arg("lev"),
+             "Return the largest allowed grid size at level lev.")
+        .def("n_error_buf",
+             [](AmrMesh const & amr_mesh, int lev)
+             { return amr_mesh.nErrorBuf(lev); },
+             py::arg("lev"),
+             "Return the number of cells by which the tagged region is "
+             "buffered at level lev.")
+        .def("max_ref_ratio",
+             [](AmrMesh const & amr_mesh, int lev)
+             { return amr_mesh.MaxRefRatio(lev); },
+             py::arg("lev"),
+             "Return the maximum over the components of ref_ratio(lev).")
+
+        .def("count_cells", &AmrMesh::CountCells, py::arg("lev"),
+             "Return the number of cells at level lev.")
+        .def("level_defined", &AmrMesh::LevelDefined, py::arg("lev"),
+             "Return whether BoxArray and DistributionMapping are defined "
+             "at level lev.")
     ;
 }
