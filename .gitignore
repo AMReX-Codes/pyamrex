@@ -153,7 +153,9 @@ docs/doxyhtml/
 docs/doxyxml/
 
 ### Output ####
-## Plot files
-**/plt*
+## Plot files (e.g., plt00000 and test outputs like plt_read_hdr,
+## but not source files such as pltfile_to_openpmd.py)
+**/plt[0-9]*
+**/plt_*
 ## Checkpoints
 **/chk*
