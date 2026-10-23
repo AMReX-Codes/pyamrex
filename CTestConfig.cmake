@@ -8,7 +8,7 @@
 #   cmake -S . -B build -DSITE=GitHub -DBUILDNAME=Linux-GCC-DP-MPI-Debug
 
 set(CTEST_PROJECT_NAME pyAMReX)
-set(CTEST_NIGHTLY_START_TIME 08:00:00 UTC)
+set(CTEST_NIGHTLY_START_TIME "08:00:00 UTC")
 
 set(CTEST_SUBMIT_URL https://my.cdash.org/submit.php?project=pyAMReX)
 
