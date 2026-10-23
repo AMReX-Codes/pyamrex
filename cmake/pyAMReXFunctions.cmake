@@ -175,7 +175,7 @@ endmacro()
 # Testing logic with possibility to overwrite on a project basis in superbuilds
 #
 macro(set_testing_option project_build_var)
-    include(CTest)
+    include(CTest)  # CDash dashboard settings: CTestConfig.cmake
     mark_as_advanced(BUILD_TESTING) # automatically defined, default: ON
     if(DEFINED BUILD_TESTING)
         set(${project_build_var}_DEFAULT ${BUILD_TESTING})

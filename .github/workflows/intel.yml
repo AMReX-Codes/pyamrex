@@ -6,10 +6,16 @@ concurrency:
   group: ${{ github.ref }}-${{ github.head_ref }}-intel
   cancel-in-progress: true
 
+env:
+  # submit build and test results to CDash only for pushes to the mainline development branch
+  CDASH_SUBMIT: ${{ github.repository == 'AMReX-Codes/pyamrex' && github.event_name == 'push' && github.ref == 'refs/heads/development' }}
+
 jobs:
   tests-oneapi-sycl:
     name: oneAPI SYCL 3D
     runs-on: ubuntu-24.04
+    env:
+      CMAKE_BUILD_PARALLEL_LEVEL: 4
     steps:
     - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
     - name: Dependencies
@@ -45,20 +51,32 @@ jobs:
         python3 -m pip install -U pytest mpi4py
 
         cmake -S . -B build               \
+              -DBUILDNAME=Linux-ICPX-SYCL-DP-MPI \
+              -DSITE=GitHub               \
               -DCMAKE_BUILD_TYPE=Release  \
               -DCMAKE_VERBOSE_MAKEFILE=ON \
               -DBUILD_SHARED_LIBS=ON      \
               -DAMReX_GPU_BACKEND=SYCL    \
               -DAMReX_MPI=ON              \
               -DAMReX_SPACEDIM="3"
-        cmake --build build --target pip_install -j 4
+        # records build time and warnings for CDash; exits 0 even if the build fails
+        ctest --test-dir build -D ExperimentalBuild -V
+        # authoritative pass/fail; compiles nothing new if the build above succeeded
+        cmake --build build --target pip_install
 
         ccache -s
         du -hs ~/.cache/ccache
 
+    - name: Submit to CDash
+      if: ${{ !cancelled() && env.CDASH_SUBMIT == 'true' && hashFiles('build/DartConfiguration.tcl') != '' }}
+      continue-on-error: true
+      run: ctest --test-dir build -D ExperimentalSubmit
+
   tests-icpx:
     name: ICPX
     runs-on: ubuntu-24.04
+    env:
+      CMAKE_BUILD_PARALLEL_LEVEL: 4
     steps:
     - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
     - name: Dependencies
@@ -92,11 +110,16 @@ jobs:
         python3 -m pip install -U pytest mpi4py
 
         cmake -S . -B build               \
+              -DBUILDNAME=Linux-ICPX-DP-MPI \
+              -DSITE=GitHub               \
               -DCMAKE_BUILD_TYPE=Release  \
               -DCMAKE_VERBOSE_MAKEFILE=ON \
               -DAMReX_MPI=ON              \
               -DAMReX_SPACEDIM="1;2;3"
-        cmake --build build --target pip_install -j 4
+        # records build time and warnings for CDash; exits 0 even if the build fails
+        ctest --test-dir build -D ExperimentalBuild -V
+        # authoritative pass/fail; compiles nothing new if the build above succeeded
+        cmake --build build --target pip_install
 
         ccache -s
         du -hs ~/.cache/ccache
@@ -107,4 +130,9 @@ jobs:
         source /opt/intel/oneapi/setvars.sh
         set -e
         cd build
-        ctest --output-on-failure
+        ctest -D ExperimentalTest --output-on-failure
+
+    - name: Submit to CDash
+      if: ${{ !cancelled() && env.CDASH_SUBMIT == 'true' && hashFiles('build/DartConfiguration.tcl') != '' }}
+      continue-on-error: true
+      run: ctest --test-dir build -D ExperimentalSubmit
