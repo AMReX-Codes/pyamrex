@@ -34,16 +34,16 @@ For faster compile-and-test iterations, build with ``-DpyAMReX_IPO=OFF``:
 
 .. code-block:: sh
 
-   ctest -S . -B build -DpyAMReX_IPO=OFF
+   cmake -S . -B build -DpyAMReX_IPO=OFF
 
 After successful installation, with
 
 .. code-block:: sh
 
-   ctest --test-dir build --target pip_install
+   cmake --build build --target pip_install
 
 you can also run the unit tests individually.
-For ``AMReX_MPI=ON``, please prepend the following commands with ``mpiexec -np <NUM_PROCS>``
+For ``AMReX_MPI=ON``, please prepend the following commands with ``mpiexec -np <NUM_PROCS>``:
 
 .. code-block:: sh
 
@@ -58,3 +58,22 @@ For ``AMReX_MPI=ON``, please prepend the following commands with ``mpiexec -np <
 
    # Run all tests, do not capture "print" output and be verbose
    python3 -m pytest -s -vvvv tests/
+
+
+Dashboard
+---------
+
+For every push to the ``development`` branch, the CI jobs that build pyAMReX with CMake submit build times, compiler warnings and errors, and test results to the `pyAMReX CDash dashboard <https://my.cdash.org/index.php?project=pyAMReX>`__.
+Each CI job shows up under its own build name, at site ``GitHub``.
+
+Results from other machines, e.g., an HPC system, can be added to the dashboard as well:
+
+.. code-block:: sh
+
+   cmake -S . -B build -DSITE=<machine> -DBUILDNAME=<build-name>
+   ctest --test-dir build -D ExperimentalBuild
+   ctest --test-dir build -D ExperimentalTest --output-on-failure
+   ctest --test-dir build -D ExperimentalSubmit
+
+``ctest -D ExperimentalBuild`` exits with ``0`` even if the build fails; check its error summary, or run ``cmake --build build`` afterwards.
+For multi-config generators, e.g., Visual Studio, add the configuration to each ``ctest`` call, e.g., ``-C Release``.

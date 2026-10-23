@@ -4,6 +4,7 @@
 [![Documentation Status](https://readthedocs.org/projects/pyamrex/badge/?version=latest)](https://pyamrex.readthedocs.io)
 [![Discussions](https://img.shields.io/badge/chat-discussions-turquoise.svg)](https://github.com/AMReX-Codes/pyamrex/discussions)
 [![CI Status](https://github.com/AMReX-Codes/pyamrex/actions/workflows/ci.yml/badge.svg?branch=development)](https://github.com/AMReX-Codes/pyamrex/actions/workflows/ci.yml)
+[![CDash](https://img.shields.io/badge/CDash-pyAMReX-blue)](https://my.cdash.org/index.php?project=pyAMReX)
 ![Platforms](https://img.shields.io/badge/platforms-Linux%20%7C%20macOS%20%7C%20Windows-blue.svg)  
 [![License pyAMReX](https://img.shields.io/badge/license-BSD--3--Clause--LBNL-blue.svg)](https://spdx.org/licenses/BSD-3-Clause-LBNL.html)
 [![DOI (source)](https://img.shields.io/badge/DOI%20(source)-10.5281/zenodo.8408733-blue.svg)](https://doi.org/10.5281/zenodo.8408733)

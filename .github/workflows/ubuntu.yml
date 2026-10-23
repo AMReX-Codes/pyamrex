@@ -6,6 +6,10 @@ concurrency:
   group: ${{ github.ref }}-${{ github.head_ref }}-linux
   cancel-in-progress: true
 
+env:
+  # submit build and test results to CDash only for pushes to the mainline development branch
+  CDASH_SUBMIT: ${{ github.repository == 'AMReX-Codes/pyamrex' && github.event_name == 'push' && github.ref == 'refs/heads/development' }}
+
 jobs:
   # Build and install libamrex as AMReX CMake project
   gcc10:
@@ -59,7 +63,9 @@ jobs:
   gcc14:
     name: GNU@14 Debug
     runs-on: ubuntu-24.04
-    env: {CXXFLAGS: "-Werror -Wno-error=deprecated-declarations -Wshadow -Woverloaded-virtual -Wunreachable-code -fno-operator-names"}
+    env:
+      CMAKE_BUILD_PARALLEL_LEVEL: 4
+      CXXFLAGS: "-Werror -Wno-error=deprecated-declarations -Wshadow -Woverloaded-virtual -Wunreachable-code -fno-operator-names"
     steps:
     - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
     - name: Dependencies
@@ -88,19 +94,29 @@ jobs:
         python3 -m pip install -U pandas pytest mpi4py
 
         cmake -S . -B build               \
+              -DBUILDNAME=Linux-GCC-DP-MPI-Debug \
+              -DSITE=GitHub               \
               -DCMAKE_BUILD_TYPE=Debug    \
               -DCMAKE_VERBOSE_MAKEFILE=ON \
               -DBUILD_SHARED_LIBS=ON      \
               -DAMReX_MPI=ON              \
               -DAMReX_SPACEDIM="1;2;3"
-        cmake --build build --target pip_install -j 4
+        # records build time and warnings for CDash; exits 0 even if the build fails
+        ctest --test-dir build -D ExperimentalBuild -V
+        # authoritative pass/fail; compiles nothing new if the build above succeeded
+        cmake --build build --target pip_install
 
         ccache -s
         du -hs ~/.cache/ccache
 
     - name: Unit tests
       run: |
-        ctest --test-dir build --output-on-failure
+        ctest --test-dir build -D ExperimentalTest --output-on-failure
+
+    - name: Submit to CDash
+      if: ${{ !cancelled() && env.CDASH_SUBMIT == 'true' && hashFiles('build/DartConfiguration.tcl') != '' }}
+      continue-on-error: true
+      run: ctest --test-dir build -D ExperimentalSubmit
 
     - name: Unit tests as installed
       run: |
@@ -252,7 +268,9 @@ jobs:
   nvcc:
     name: CUDA@12.2 GNU@11
     runs-on: ubuntu-24.04
-    env: {CXXFLAGS: "-fno-operator-names"}
+    env:
+      CMAKE_BUILD_PARALLEL_LEVEL: 2
+      CXXFLAGS: "-fno-operator-names"
     steps:
     - name: Free More Disk Space
       uses: ax3l/free-disk-space@44eeae95a80954c3eb6161397b5b201b22e178cc # main
@@ -296,6 +314,8 @@ jobs:
         python3 -m pip install -U cmake
 
         cmake -S . -B build             \
+            -DBUILDNAME=Linux-NVCC-CUDA-DP \
+            -DSITE=GitHub               \
             -DCMAKE_VERBOSE_MAKEFILE=ON \
             -DAMReX_GPU_BACKEND=CUDA    \
             -DAMReX_SPACEDIM="1;2;3"    \
@@ -304,7 +324,15 @@ jobs:
             -DCMAKE_CUDA_ARCHITECTURES=80 \
             -DAMReX_CUDA_ERROR_CROSS_EXECUTION_SPACE_CALL=ON \
             -DAMReX_CUDA_ERROR_CAPTURE_THIS=ON
-        cmake --build build --target pip_install -j 2
+        # records build time and warnings for CDash; exits 0 even if the build fails
+        ctest --test-dir build -D ExperimentalBuild -V
+        # authoritative pass/fail; compiles nothing new if the build above succeeded
+        cmake --build build --target pip_install
 
         ccache -s
         du -hs ~/.cache/ccache
+
+    - name: Submit to CDash
+      if: ${{ !cancelled() && env.CDASH_SUBMIT == 'true' && hashFiles('build/DartConfiguration.tcl') != '' }}
+      continue-on-error: true
+      run: ctest --test-dir build -D ExperimentalSubmit
