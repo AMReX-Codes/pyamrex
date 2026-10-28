@@ -6,10 +6,16 @@ concurrency:
   group: ${{ github.ref }}-${{ github.head_ref }}-windows
   cancel-in-progress: true
 
+env:
+  # submit build and test results to CDash only for pushes to the mainline development branch
+  CDASH_SUBMIT: ${{ github.repository == 'AMReX-Codes/pyamrex' && github.event_name == 'push' && github.ref == 'refs/heads/development' }}
+
 jobs:
   msvc:
     name: MSVC w/o MPI Static Release
     runs-on: windows-latest
+    env:
+      CMAKE_BUILD_PARALLEL_LEVEL: 4
     steps:
     - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
     - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
@@ -21,8 +27,6 @@ jobs:
         # https://github.com/actions/runner-images/issues/10004
         CXXFLAGS: "/D_DISABLE_CONSTEXPR_MUTEX_CONSTRUCTOR"
       run: |
-        set "CMAKE_BUILD_PARALLEL_LEVEL=4"
-
         python3 -m pip install -U pip
         python3 -m pip install -U pandas pytest
         python3 -m pip install -v .
@@ -38,6 +42,8 @@ jobs:
   clang:
     name: Clang w/o MPI Shared Debug
     runs-on: windows-latest
+    env:
+      CMAKE_BUILD_PARALLEL_LEVEL: 4
     steps:
     - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
     - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
@@ -51,17 +57,29 @@ jobs:
 
         cmake -S . -B build               `
               -T "ClangCl"                `
+              -DBUILDNAME=Windows-ClangCl-DP-Debug `
+              -DSITE=GitHub               `
               -DCMAKE_VERBOSE_MAKEFILE=ON `
               -DBUILD_SHARED_LIBS=ON      `
               -DAMReX_MPI=OFF             `
               -DAMReX_SPACEDIM="1;2;3"
         if(!$?) { Exit $LASTEXITCODE }
 
-        cmake --build build --config Debug -j 4
+        # records build time and warnings for CDash; exits 0 even if the build fails
+        ctest --test-dir build -C Debug -D ExperimentalBuild -V
+        if(!$?) { Exit $LASTEXITCODE }
+        # authoritative pass/fail; if the build above succeeded, this only recompiles AMReX buildInfo and relinks
+        cmake --build build --config Debug
         if(!$?) { Exit $LASTEXITCODE }
     - name: Unit tests
       run: |
-        ctest --test-dir build -C Debug --output-on-failure
+        ctest --test-dir build -C Debug -D ExperimentalTest --output-on-failure
+    - name: Submit to CDash
+      if: ${{ !cancelled() && env.CDASH_SUBMIT == 'true' && hashFiles('build/DartConfiguration.tcl') != '' }}
+      continue-on-error: true
+      run: |
+        ctest --test-dir build -C Debug -D ExperimentalSubmit
+        if(!$?) { Exit $LASTEXITCODE }
     - name: Install
       run: |
         cmake --build build --config Debug --target install
@@ -108,23 +126,13 @@ jobs:
             build-essential ca-certificates ccache curl git \
             python3 python3-dev
         # uv manages the virtual environment and dependencies; it is installed
-        # into ~/.local/bin (added to PATH in the build & test steps below).
+        # into ~/.local/bin (added to PATH in the configure step below).
         curl -LsSf https://astral.sh/uv/install.sh | sh
-    - name: Build & Install
+    - name: Configure
+      # separate step: "Submit to CDash" below checks its outcome
+      id: configure
       run: |
         export PATH="$HOME/.local/bin:$PATH"
-
-        # Keep ccache on native ext4 (fast); the host-side cache lives on the
-        # 9p-mounted Windows workspace and is only synced in/out once.
-        export CCACHE_DIR="$HOME/.cache/ccache"
-        WS_CCACHE="$(wslpath '${{ github.workspace }}')/.ccache"
-        mkdir -p "$CCACHE_DIR"
-        [ -d "$WS_CCACHE" ] && cp -a "$WS_CCACHE/." "$CCACHE_DIR/"
-
-        export CCACHE_COMPRESS=1
-        export CCACHE_COMPRESSLEVEL=10
-        export CCACHE_MAXSIZE=600M
-        ccache -z
 
         # Build on native ext4, not the 9p-mounted Windows workspace, where
         # AMReX's many small header/object I/Os are far too slow.
@@ -140,14 +148,36 @@ jobs:
         uv pip install -U -r requirements.txt
 
         # -O1 for faster compiles
-        # -j 2 to bound peak memory under WSL2's default ~50% RAM cap
         export CXXFLAGS="-O1"
-        export CMAKE_BUILD_PARALLEL_LEVEL=2
         cmake -S . -B build               \
+              -DBUILDNAME=Windows-WSL-GCC-DP \
+              -DSITE=GitHub               \
               -DCMAKE_VERBOSE_MAKEFILE=ON \
               -DAMReX_MPI=OFF             \
               -DAMReX_SPACEDIM="3"
-        cmake --build build --target pip_install -j 2
+    - name: Build & Install
+      run: |
+        # Keep ccache on native ext4 (fast); the host-side cache lives on the
+        # 9p-mounted Windows workspace and is only synced in/out once.
+        export CCACHE_DIR="$HOME/.cache/ccache"
+        WS_CCACHE="$(wslpath '${{ github.workspace }}')/.ccache"
+        mkdir -p "$CCACHE_DIR"
+        [ -d "$WS_CCACHE" ] && cp -a "$WS_CCACHE/." "$CCACHE_DIR/"
+
+        export CCACHE_COMPRESS=1
+        export CCACHE_COMPRESSLEVEL=10
+        export CCACHE_MAXSIZE=600M
+        ccache -z
+
+        cd ~/pyamrex
+        source .venv/bin/activate
+
+        # -j 2 to bound peak memory under WSL2's default ~50% RAM cap
+        export CMAKE_BUILD_PARALLEL_LEVEL=2
+        # records build time and warnings for CDash; exits 0 even if the build fails
+        ctest --test-dir build -D ExperimentalBuild -V
+        # authoritative pass/fail; if the build above succeeded, this only recompiles AMReX buildInfo, relinks and runs pip
+        cmake --build build --target pip_install
 
         python3 -c "import amrex.space3d as amr; print(amr.__version__)"
 
@@ -164,3 +194,11 @@ jobs:
         cd ~/pyamrex
         source .venv/bin/activate
         python3 -m pytest tests/
+    - name: Submit to CDash
+      # hashFiles() cannot see the build directory inside WSL, so check that the configure step created it
+      if: ${{ !cancelled() && env.CDASH_SUBMIT == 'true' && steps.configure.outcome == 'success' }}
+      continue-on-error: true
+      run: |
+        cd ~/pyamrex
+        source .venv/bin/activate
+        ctest --test-dir build -D ExperimentalSubmit

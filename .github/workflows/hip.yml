@@ -6,12 +6,17 @@ concurrency:
   group: ${{ github.ref }}-${{ github.head_ref }}-hip
   cancel-in-progress: true
 
+env:
+  # submit build results to CDash only for pushes to the mainline development branch
+  CDASH_SUBMIT: ${{ github.repository == 'AMReX-Codes/pyamrex' && github.event_name == 'push' && github.ref == 'refs/heads/development' }}
+
 jobs:
   build_hip:
     name: ROCm HIP 6.3.2
     runs-on: ubuntu-24.04
     env:
       CXXFLAGS: "-Werror -Wno-deprecated-declarations -Wno-error=pass-failed"
+      CMAKE_BUILD_PARALLEL_LEVEL: 4
       CMAKE_GENERATOR: Ninja
     steps:
     - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -47,12 +52,22 @@ jobs:
         python3 -m pip install -U cmake
 
         cmake -S . -B build              \
+            -DBUILDNAME=Linux-ROCm-HIP-DP \
+            -DSITE=GitHub                \
             -DCMAKE_VERBOSE_MAKEFILE=ON  \
             -DpyAMReX_IPO=OFF            \
             -DAMReX_GPU_BACKEND=HIP      \
             -DAMReX_AMD_ARCH=gfx90a      \
             -DAMReX_SPACEDIM="1;2;3"
-        cmake --build build --target pip_install -j 4
+        # records build time and warnings for CDash; exits 0 even if the build fails
+        ctest --test-dir build -D ExperimentalBuild -V
+        # authoritative pass/fail; if the build above succeeded, this only recompiles AMReX buildInfo, relinks and runs pip
+        cmake --build build --target pip_install
 
         ccache -s
         du -hs ~/.cache/ccache
+
+    - name: Submit to CDash
+      if: ${{ !cancelled() && env.CDASH_SUBMIT == 'true' && hashFiles('build/DartConfiguration.tcl') != '' }}
+      continue-on-error: true
+      run: ctest --test-dir build -D ExperimentalSubmit
