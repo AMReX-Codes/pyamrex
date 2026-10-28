@@ -61,7 +61,7 @@ jobs:
             -DAMReX_SPACEDIM="1;2;3"
         # records build time and warnings for CDash; exits 0 even if the build fails
         ctest --test-dir build -D ExperimentalBuild -V
-        # authoritative pass/fail; compiles nothing new if the build above succeeded
+        # authoritative pass/fail; if the build above succeeded, this only recompiles AMReX buildInfo, relinks and runs pip
         cmake --build build --target pip_install
 
         ccache -s

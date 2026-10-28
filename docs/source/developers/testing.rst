@@ -72,8 +72,9 @@ Results from other machines, e.g., an HPC system, can be added to the dashboard 
 
    cmake -S . -B build -DSITE=<machine> -DBUILDNAME=<build-name>
    ctest --test-dir build -D ExperimentalBuild
-   ctest --test-dir build -D ExperimentalTest --output-on-failure
+   cmake --build build && ctest --test-dir build -D ExperimentalTest --output-on-failure
    ctest --test-dir build -D ExperimentalSubmit
 
-``ctest -D ExperimentalBuild`` exits with ``0`` even if the build fails; check its error summary, or run ``cmake --build build`` afterwards.
-For multi-config generators, e.g., Visual Studio, add the configuration to each ``ctest`` call, e.g., ``-C Release``.
+``ctest -D ExperimentalBuild`` exits with ``0`` even if the build fails.
+In that case, ``cmake --build build`` stops with the build error, the tests are skipped instead of failing to import pyAMReX, and the last line still submits the failed build.
+For multi-config generators, e.g., Visual Studio, add the configuration to each call, e.g., ``-C Release`` for ``ctest`` and ``--config Release`` for ``cmake --build``.
