@@ -783,7 +783,7 @@ Geometric: amrex_2d_pybind.GrowthStrategy
 Poisson: amrex_2d_pybind.GrowthStrategy
 __author__: str = "Axel Huebl, Ryan T. Sandberg, Shreyas Ananthan, David P. Grote, Revathi Jambunathan, Edoardo Zoni, Remi Lehe, Andrew Myers, Weiqun Zhang"
 __license__: str = "BSD-3-Clause-LBNL"
-__version__: str = "26.10-76-g347a3a2d2675"
+__version__: str = "26.10-121-g62e6c46eb901"
 basic: amrex_2d_pybind.EBSupport
 full: amrex_2d_pybind.EBSupport
 kDLCPU: amrex_2d_pybind.DLDeviceType
