@@ -88,6 +88,7 @@ def pc_to_df(self, local=True, comm=None, root_rank=0):
     Returns
     -------
     A concatenated pandas.DataFrame with particles from all levels.
+    ``idcpu`` is a regular column, the index is a running row number.
 
     Returns None if no particles were found.
     If local=False, then all ranks but the root_rank will return None.
@@ -140,9 +141,6 @@ def pc_to_df(self, local=True, comm=None, root_rank=0):
                 for name, array in soa_np_int.items():
                     next_df[f"SoA_{name}"] = array
 
-            next_df.set_index("idcpu")
-            next_df.index.name = "idcpu"
-
             dfs_local.append(next_df)
 
     # MPI Gather to root rank if requested
@@ -150,7 +148,7 @@ def pc_to_df(self, local=True, comm=None, root_rank=0):
         if len(dfs_local) == 0:
             df = None
         else:
-            df = pd.concat(dfs_local)
+            df = pd.concat(dfs_local, ignore_index=True)
     else:
         from mpi4py import MPI
 
