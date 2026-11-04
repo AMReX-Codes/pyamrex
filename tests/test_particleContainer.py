@@ -587,6 +587,38 @@ def test_soa_pc_df(soa_particle_container, Npart):
     # Manual: Pure SoA Compute PC Pandas END
 
 
+def _check_df_index(df):
+    # no local particles or not the MPI root rank
+    if df is None:
+        return
+
+    assert "idcpu" in df.columns
+    assert df.index.name is None
+    assert df.index.is_unique
+    # raises if "idcpu" is ambiguous, i.e., both an index level and a column
+    assert len(df.sort_values("idcpu")) == len(df)
+
+
+@pytest.mark.skipif(
+    importlib.util.find_spec("pandas") is None, reason="pandas is not available"
+)
+@pytest.mark.parametrize("local", [True, False])
+def test_soa_pc_df_index(soa_particle_container, local):
+    _check_df_index(soa_particle_container.to_df(local=local))
+
+
+@pytest.mark.skipif(
+    importlib.util.find_spec("pandas") is None, reason="pandas is not available"
+)
+@pytest.mark.skipif(
+    amr.Config.precision_particles == "SINGLE",
+    reason="Requires DOUBLE precision particles",
+)
+@pytest.mark.parametrize("local", [True, False])
+def test_pc_df_index(particle_container, local):
+    _check_df_index(particle_container.to_df(local=local))
+
+
 @pytest.mark.skipif(
     importlib.util.find_spec("pandas") is None, reason="pandas is not available"
 )
