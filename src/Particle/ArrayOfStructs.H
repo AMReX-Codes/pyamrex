@@ -36,12 +36,12 @@ namespace
         d["strides"] = py::make_tuple(sizeof(ParticleType));
         d["typestr"] = "|V" + std::to_string(sizeof(ParticleType));
         py::list descr;
-        descr.append(py::make_tuple("x", py::format_descriptor<RealType>::format()));
+        descr.append(py::make_tuple("x", pyAMReX::array_typestr<RealType>()));
 #if (AMREX_SPACEDIM >= 2)
-        descr.append(py::make_tuple("y", py::format_descriptor<RealType>::format()));
+        descr.append(py::make_tuple("y", pyAMReX::array_typestr<RealType>()));
 #endif
 #if (AMREX_SPACEDIM >= 3)
-        descr.append(py::make_tuple("z", py::format_descriptor<RealType>::format()));
+        descr.append(py::make_tuple("z", pyAMReX::array_typestr<RealType>()));
 #endif
 
         /* Note AMReX_Particle.H:
@@ -58,7 +58,7 @@ namespace
          */
         if constexpr (ParticleType::NReal > 0) {
             for(int ii=0; ii < ParticleType::NReal; ii++) {
-                descr.append(py::make_tuple("rdata_"+std::to_string(ii),py::format_descriptor<RealType>::format()));
+                descr.append(py::make_tuple("rdata_"+std::to_string(ii),pyAMReX::array_typestr<RealType>()));
             }
         }
 #ifdef AMREX_SINGLE_PRECISION_PARTICLES
@@ -66,10 +66,10 @@ namespace
             descr.append(py::make_tuple("", "|V4"));  // empty space due to alignment
         }
 #endif
-        descr.append(py::make_tuple("idcpu", py::format_descriptor<uint64_t>::format()) );
+        descr.append(py::make_tuple("idcpu", pyAMReX::array_typestr<uint64_t>()) );
         if constexpr (ParticleType::NInt > 0) {
             for(int ii=0; ii < ParticleType::NInt; ++ii) {
-                descr.append(py::make_tuple("idata_"+std::to_string(ii),py::format_descriptor<int>::format()));
+                descr.append(py::make_tuple("idata_"+std::to_string(ii),pyAMReX::array_typestr<int>()));
             }
         }/*
         if constexpr (ParticleType::NInt % 2 != 0) {  // alignas

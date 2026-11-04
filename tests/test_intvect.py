@@ -124,6 +124,7 @@ def test_iv_conversions():
     obj = amr.IntVect.max_vector().numpy()
     assert isinstance(obj, np.ndarray)
     assert obj.dtype == np.int32
+    assert obj.dtype.type is np.dtype(obj.dtype.str).type
 
     # check that memory is not collected too early
     iv = amr.IntVect(2)

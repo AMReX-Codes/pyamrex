@@ -87,6 +87,9 @@ def test_array_interface():
     # print('particle 2 from aos:\n',aos[1])
     # print('array interface\n', aos.__array_interface__)
     arr = aos.to_numpy()
+    # NumPy's one scalar type per kind and size, on any C data model
+    for field in arr.dtype.names:
+        assert arr.dtype[field].type is np.dtype(arr.dtype[field].str).type
     int_arg = 7 if arr[0][0].dtype == "float32" else 6  # padding
     assert (
         np.isclose(arr[0][0], 1.0)

@@ -76,7 +76,7 @@ namespace
         //d["descr"] = ...;
         // we currently only need this
         using T_no_cv = std::remove_cv_t<T>;
-        d["typestr"] = py::format_descriptor<T_no_cv>::format();
+        d["typestr"] = pyAMReX::array_typestr<T_no_cv>();
 
         d["version"] = 3;
         return d;
@@ -243,10 +243,7 @@ namespace
                     throw std::runtime_error("Array size mismatch: Expected " + std::to_string(SM::column_size * SM::row_size) +
                                              " elements, but passed " + std::to_string(buf.size) + " elements.");
 
-                if (buf.format != py::format_descriptor<T_no_cv>::format())
-                    throw std::runtime_error("Incompatible format: expected '" +
-                        py::format_descriptor<T_no_cv>::format() +
-                        "' and received '" + buf.format + "'!");
+                // note: py::array_t<T> already ensures the item type
 
                 // TODO: check that strides are either exact or None in buf (e.g., F or C contiguous)
                 // TODO: transpose if SM order is not C?

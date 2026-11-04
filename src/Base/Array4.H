@@ -74,7 +74,7 @@ namespace pyAMReX
         //d["descr"] = ...;
         // we currently only need this
         using T_no_cv = std::remove_cv_t<T>;
-        d["typestr"] = py::format_descriptor<T_no_cv>::format();
+        d["typestr"] = pyAMReX::array_typestr<T_no_cv>();
 
         d["version"] = 3;
         return d;
@@ -115,6 +115,21 @@ namespace pyAMReX
         return info;
     }
 
+    /** Does an array that NumPy made from a source view memory of that source?
+     *
+     * Conversions of type or byte order are temporary copies. An __array__ method
+     * can return anything, e.g., a view of a temporary, but NumPy only calls it if
+     * the source has none of the protocols that describe its own memory.
+     */
+    inline bool
+    is_view_of_source (py::array const & arr, py::object const & src)
+    {
+        if (arr.is(src)) { return true; }
+        if (arr.owndata()) { return false; }
+        return py::isinstance<py::array>(src) || PyObject_CheckBuffer(src.ptr()) ||
+               py::hasattr(src, "__array_struct__") || py::hasattr(src, "__array_interface__");
+    }
+
     template< typename T >
     void make_Array4(py::module &m, std::string typestr)
     {
@@ -153,7 +168,14 @@ namespace pyAMReX
 
             /* init from a numpy or other buffer protocol array: non-owning view
              */
-            .def(py::init([](py::array_t<T> & arr) {
+            .def(py::init([](py::object const & src) {
+                auto arr = py::array_t<T>::ensure(src);
+                if (!arr || !is_view_of_source(arr, src))
+                    throw py::type_error("Array4 is a non-owning view, but this source cannot be "
+                        "viewed as '" + pyAMReX::array_typestr<T_no_cv>() + "' without a temporary. "
+                        "Convert it first, e.g., with numpy.asarray(source, dtype=...), and keep "
+                        "the result alive.");
+
                 py::buffer_info buf = arr.request();
 
                 AMREX_ALWAYS_ASSERT_WITH_MESSAGE(buf.ndim == 3,
@@ -163,11 +185,6 @@ namespace pyAMReX
                 //   Likewise in 1D.
                 //   We could also add support for 4D numpy arrays, treating the slowest
                 //   varying index as component "n".
-
-                if (buf.format != py::format_descriptor<T_no_cv>::format())
-                    throw std::runtime_error("Incompatible format: expected '" +
-                        py::format_descriptor<T_no_cv>::format() +
-                        "' and received '" + buf.format + "'!");
 
                 auto a4 = std::make_unique< Array4<T> >();
                 a4.get()->p = static_cast<T*>(buf.ptr);

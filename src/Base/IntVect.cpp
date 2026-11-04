@@ -144,15 +144,7 @@ namespace
 
             .def("numpy",
                  [](const iv_type& iv) {
-                     auto result = py::array(
-                             py::buffer_info(
-                                     nullptr,
-                                     sizeof(int),
-                                     py::format_descriptor<int>::value,
-                                     1,
-                                     { dim },
-                                     { sizeof(int) }
-                             ));
+                     auto result = py::array(py::dtype(pyAMReX::array_typestr<int>()), dim);
                      auto buf = result.request();
                      int* ptr = static_cast<int*>(buf.ptr);
                      for (int i=0; i < dim; ++i)

@@ -34,7 +34,7 @@ namespace
         d["data"] = py::make_tuple(std::intptr_t(podvector.dataPtr()), read_only);
         d["shape"] = py::make_tuple(podvector.size());
         d["strides"] = py::none();
-        d["typestr"] = py::format_descriptor<T>::format();
+        d["typestr"] = pyAMReX::array_typestr<T>();
         d["version"] = 3;
         return d;
     }

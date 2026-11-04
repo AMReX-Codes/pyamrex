@@ -89,6 +89,72 @@ def test_array4():
     assert v_carr2np[0, 1, 1, 1] == 44
 
 
+@pytest.mark.parametrize(
+    "name, char",
+    [
+        ("short", "h"),
+        ("int", "i"),
+        ("long", "l"),
+        ("longlong", "q"),
+        ("ushort", "H"),
+        ("uint", "I"),
+        ("ulong", "L"),
+        ("ulonglong", "Q"),
+        ("float", "f"),
+        ("double", "d"),
+        ("longdouble", "g"),
+        ("cfloat", "F"),
+        ("cdouble", "D"),
+    ],
+)
+def test_array4_numpy_types(name, char):
+    """Non-owning views from and to NumPy, on any C data model"""
+    dtype = np.dtype(char)
+    # integers: the C type and NumPy's alias of equal kind and size, e.g., np.int64
+    for src_dtype in (dtype, np.dtype(dtype.str)) if dtype.kind in "iu" else (dtype,):
+        src = np.ones((2, 3, 4), dtype=src_dtype)
+        dst = np.array(getattr(amr, f"Array4_{name}")(src), copy=False)
+        assert np.shares_memory(src, dst)
+        assert dst.dtype.str == src.dtype.str
+        assert dst.dtype.type is np.dtype(dst.dtype.str).type
+
+
+def test_array4_view_sources():
+    """Non-owning views of memory that the source describes itself"""
+
+    class Interface:
+        def __init__(self, x):
+            self.x = x
+            self.__array_interface__ = x.__array_interface__
+
+    class Subclass(np.ndarray):
+        pass
+
+    x = np.ones((2, 3, 4))
+    for src in (x, x[:, ::2, :], x.view(Subclass), memoryview(x), Interface(x)):
+        assert np.shares_memory(x, np.array(amr.Array4_double(src), copy=False))
+
+
+def test_array4_rejects_temporaries():
+    """A view of a temporary would dangle after init"""
+
+    class ViewOfTemporary:
+        def __array__(self, dtype=None, copy=None):
+            return np.ones((2, 3, 4), dtype=dtype)[:]
+
+    swapped = np.dtype("d").newbyteorder("S")
+    for src in (
+        np.ones((2, 3, 4), dtype=np.float32),
+        np.ones((2, 3, 4), dtype=np.int64),
+        np.ones((2, 3, 4), dtype=swapped),
+        memoryview(np.ones((2, 3, 4), dtype=np.float32)),
+        [[[1.0]]],
+        ViewOfTemporary(),
+    ):
+        with pytest.raises(TypeError, match="non-owning view"):
+            amr.Array4_double(src)
+
+
 def test_array4_dlpack_capsules():
     x = np.ones((2, 3, 4))
     arr = amr.Array4_double(x)
