@@ -156,7 +156,7 @@ namespace
                      auto buf = result.request();
                      int* ptr = static_cast<int*>(buf.ptr);
                      for (int i=0; i < dim; ++i)
-                         ptr[i] = iv[0];
+                         ptr[i] = iv[i];
 
                      return result;
                  })

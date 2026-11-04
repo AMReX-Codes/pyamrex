@@ -132,6 +132,19 @@ def test_iv_conversions():
     assert obj[0] == 2
 
 
+@pytest.mark.parametrize(
+    "iv_type, components",
+    [
+        (amr.IntVect1D, [1]),
+        (amr.IntVect2D, [1, 2]),
+        (amr.IntVect3D, [1, 2, 3]),
+    ],
+)
+def test_iv_numpy_components(iv_type, components):
+    obj = iv_type(components).numpy()
+    np.testing.assert_array_equal(obj, components)
+
+
 def test_iv_iter():
     a0 = amr.IntVect(4)
     b0 = amr.IntVect(2)
