@@ -44,4 +44,14 @@ namespace pyAMReX
     {
         return py::dtype::of<T>().attr("str").template cast<std::string>();
     }
+
+    /** py::array_t<T> that also requires alignment
+     *
+     * A plain py::array_t<T> passes misaligned arrays through, e.g., from an offset
+     * into a buffer or a field of a packed record, and accessing those through a T*
+     * is undefined behavior. With this, NumPy makes an aligned copy instead.
+     */
+    template <typename T>
+    using aligned_array_t = py::array_t<T,
+        static_cast<int>(py::array::forcecast) | static_cast<int>(py::detail::npy_api::NPY_ARRAY_ALIGNED_)>;
 }

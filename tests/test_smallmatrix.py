@@ -24,6 +24,18 @@ def test_smallmatrix():
             v += 1
 
 
+def test_smallmatrix_misaligned_source():
+    """Copies the same values as from an aligned source"""
+    x = np.arange(18.0).reshape(3, 6)
+    misaligned = np.frombuffer(bytearray(145), "d", offset=1).reshape(3, 6)
+    misaligned[:] = x
+    assert not misaligned.flags.aligned
+
+    expected = amr.SmallMatrix_3x6_F_SI1_double(x)
+    actual = amr.SmallMatrix_3x6_F_SI1_double(misaligned)
+    np.testing.assert_array_equal(actual.to_numpy(), expected.to_numpy())
+
+
 def test_smallvector():
     cv1 = amr.SmallMatrix_6x1_F_SI1_double()
     rv1 = amr.SmallMatrix_1x6_F_SI1_double()

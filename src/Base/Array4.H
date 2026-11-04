@@ -115,21 +115,6 @@ namespace pyAMReX
         return info;
     }
 
-    /** Does an array that NumPy made from a source view memory of that source?
-     *
-     * Conversions of type or byte order are temporary copies. An __array__ method
-     * can return anything, e.g., a view of a temporary, but NumPy only calls it if
-     * the source has none of the protocols that describe its own memory.
-     */
-    inline bool
-    is_view_of_source (py::array const & arr, py::object const & src)
-    {
-        if (arr.is(src)) { return true; }
-        if (arr.owndata()) { return false; }
-        return py::isinstance<py::array>(src) || PyObject_CheckBuffer(src.ptr()) ||
-               py::hasattr(src, "__array_struct__") || py::hasattr(src, "__array_interface__");
-    }
-
     template< typename T >
     void make_Array4(py::module &m, std::string typestr)
     {
@@ -167,14 +152,21 @@ namespace pyAMReX
             //.def(py::init< T*, Dim3 const &, Dim3 const &, int >())
 
             /* init from a numpy or other buffer protocol array: non-owning view
+             *
+             * NumPy normalizes a source to an aligned array of type T. If that array
+             * owns its data and is not the source, then it is a converted copy that
+             * writes would not reach, so we reject it. Otherwise, it is the source or
+             * views memory that its base objects hold. The source itself might not
+             * hold that memory, e.g., an __array_interface__ property can create a
+             * buffer on each access. So the Array4 keeps the normalized array alive.
+             * This needs the new Python object, which py::init does not expose.
              */
-            .def(py::init([](py::object const & src) {
-                auto arr = py::array_t<T>::ensure(src);
-                if (!arr || !is_view_of_source(arr, src))
+            .def("__init__", [](py::detail::value_and_holder & v_h, py::object const & src) {
+                auto arr = pyAMReX::aligned_array_t<T>::ensure(src);
+                if (!arr || (!arr.is(src) && arr.owndata()))
                     throw py::type_error("Array4 is a non-owning view, but this source cannot be "
                         "viewed as '" + pyAMReX::array_typestr<T_no_cv>() + "' without a temporary. "
-                        "Convert it first, e.g., with numpy.asarray(source, dtype=...), and keep "
-                        "the result alive.");
+                        "Copy it first, e.g., with numpy.array(source, dtype=..., order='C').");
 
                 py::buffer_info buf = arr.request();
 
@@ -185,6 +177,15 @@ namespace pyAMReX
                 //   Likewise in 1D.
                 //   We could also add support for 4D numpy arrays, treating the slowest
                 //   varying index as component "n".
+
+                // the i index has unit stride, and all strides are whole elements
+                auto const item_size = static_cast<py::ssize_t>(sizeof(T));
+                if ((buf.shape.at(2) > 1 && buf.strides.at(2) != item_size) ||
+                    buf.strides.at(1) % item_size != 0 || buf.strides.at(0) % item_size != 0)
+                    throw py::value_error("Array4 is a non-owning view, but it cannot represent "
+                        "the strides of this source: the last axis needs a stride of one element "
+                        "and the others whole elements. Copy it first, e.g., with "
+                        "numpy.array(source, order='C').");
 
                 auto a4 = std::make_unique< Array4<T> >();
                 a4.get()->p = static_cast<T*>(buf.ptr);
@@ -205,15 +206,16 @@ namespace pyAMReX
                 //  a4.set_stride<2>(buf.strides.at(0));
                 // Unfortunately, amrex::Array4 does not have a public function for setting
                 // strides, and stride<n> is stored at stride.a[n-1].
-                a4.get()->stride.a[0] = (int)buf.strides.at(1) / sizeof(T);
-                a4.get()->stride.a[1] = (int)buf.strides.at(0) / sizeof(T);
+                a4.get()->stride.a[0] = static_cast<Long>(buf.strides.at(1) / item_size);
+                a4.get()->stride.a[1] = static_cast<Long>(buf.strides.at(0) / item_size);
                 // 3D == no component: stride here should not matter
                 a4.get()->stride.a[2] = a4.get()->template get_stride<2>() * (int)buf.shape.at(0);
 
                 // todo: we could check and store here if the array buffer we got is read-only
 
-                return a4;
-            }), py::keep_alive<1, 2>())
+                v_h.value_ptr() = a4.release();
+                py::detail::keep_alive_impl(py::handle(reinterpret_cast<PyObject *>(v_h.inst)), arr);
+            }, py::detail::is_new_style_constructor())
 
             /* init from __cuda_array_interface__: non-owning view
              * TODO

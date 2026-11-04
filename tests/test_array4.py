@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
 
 import ctypes
+import gc
+import platform
+import sys
+import weakref
 
 import numpy as np
 import pytest
@@ -127,32 +131,125 @@ def test_array4_view_sources():
             self.x = x
             self.__array_interface__ = x.__array_interface__
 
+    class ArrayMethod:
+        def __init__(self, x):
+            self.x = x
+
+        def __array__(self, dtype=None, copy=None):
+            return self.x[:]
+
     class Subclass(np.ndarray):
         pass
 
-    x = np.ones((2, 3, 4))
-    for src in (x, x[:, ::2, :], x.view(Subclass), memoryview(x), Interface(x)):
-        assert np.shares_memory(x, np.array(amr.Array4_double(src), copy=False))
+    x = np.arange(24.0).reshape(2, 3, 4)
+    for src in (
+        x,
+        x[:, ::2, :],
+        x[:, ::-1, :],
+        x[:, :, ::4],  # one element: its stride does not matter
+        x.view(Subclass),
+        memoryview(x),
+        Interface(x),
+        ArrayMethod(x),
+    ):
+        a4 = amr.Array4_double(src)
+        dst = np.array(a4, copy=False)
+        assert np.shares_memory(x, dst)
+        np.testing.assert_array_equal(dst[0], np.asarray(src))
+        assert a4[0, 0, 0] == np.asarray(src)[0, 0, 0]
+
+
+@pytest.mark.skipif(
+    platform.python_implementation() != "CPython",
+    reason="Checks when memory is freed",
+)
+def test_array4_keeps_source_memory_alive():
+    """The source might not hold the memory that it exposes"""
+
+    class Source:
+        def memory(self):
+            m = np.full((2, 3, 4), 3.0)
+            self.ref = weakref.ref(m)
+            return m
+
+    class Interface(Source):
+        @property
+        def __array_interface__(self):
+            return {
+                "data": memoryview(self.memory()),
+                "shape": (2, 3, 4),
+                "typestr": np.dtype("d").str,
+                "version": 3,
+            }
+
+    class ArrayMethod(Source):
+        def __array__(self, dtype=None, copy=None):
+            return self.memory()[:]
+
+    class Buffer(Source):  # Python 3.12+
+        def __buffer__(self, flags):
+            return memoryview(self.memory())
+
+    class BrokenBuffer(ArrayMethod):  # Python 3.12+
+        def __buffer__(self, flags):
+            raise BufferError
+
+    sources = [Interface(), ArrayMethod()]
+    if sys.version_info >= (3, 12):
+        sources += [Buffer(), BrokenBuffer()]
+    for src in sources:
+        a4 = amr.Array4_double(src)
+        gc.collect()
+        assert src.ref() is not None
+        assert a4[0, 0, 0] == 3.0
+        del a4
+        gc.collect()
+        assert src.ref() is None
 
 
 def test_array4_rejects_temporaries():
-    """A view of a temporary would dangle after init"""
+    """Writes to a view of a converted copy would not reach the source"""
 
-    class ViewOfTemporary:
+    class Copy:
         def __array__(self, dtype=None, copy=None):
-            return np.ones((2, 3, 4), dtype=dtype)[:]
+            return np.ones((2, 3, 4), dtype=dtype)
 
     swapped = np.dtype("d").newbyteorder("S")
     for src in (
         np.ones((2, 3, 4), dtype=np.float32),
         np.ones((2, 3, 4), dtype=np.int64),
         np.ones((2, 3, 4), dtype=swapped),
+        np.frombuffer(bytearray(193), "d", offset=1).reshape(2, 3, 4),  # misaligned
         memoryview(np.ones((2, 3, 4), dtype=np.float32)),
         [[[1.0]]],
-        ViewOfTemporary(),
+        Copy(),
     ):
         with pytest.raises(TypeError, match="non-owning view"):
             amr.Array4_double(src)
+
+
+def test_array4_rejects_strides():
+    """The fastest varying index of an Array4 has unit stride"""
+    for src in (
+        np.ones((2, 3, 4), order="F"),
+        np.ones((2, 3, 8))[:, :, ::2],
+        np.zeros((2, 3, 4), dtype=[("a", "d"), ("b", "d")])["a"],
+    ):
+        with pytest.raises(ValueError, match="non-owning view"):
+            amr.Array4_double(src)
+
+    # misaligned or a wrong stride, depending on the alignment of double
+    packed = np.zeros((2, 3, 4), dtype=[("a", "f8"), ("b", "f4")])["a"]
+    with pytest.raises((TypeError, ValueError), match="non-owning view"):
+        amr.Array4_double(packed)
+
+
+@pytest.mark.skipif(sys.maxsize < 2**32, reason="Requires 64-bit addressing")
+def test_array4_large_strides():
+    """Strides beyond 32 bit, not accessed: this memory does not exist"""
+    strides = (2**32, 32, 8)
+    x = np.lib.stride_tricks.as_strided(np.ones((2, 3, 4)), strides=strides)
+    assert amr.Array4_double(x).__array_interface__["strides"][1:] == strides
 
 
 def test_array4_dlpack_capsules():
