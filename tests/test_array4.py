@@ -131,17 +131,22 @@ def test_array4_view_sources():
             self.x = x
             self.__array_interface__ = x.__array_interface__
 
-    class ArrayMethod:
+    class StoredArray:
         def __init__(self, x):
             self.x = x
 
+        def __array__(self, dtype=None, copy=None):
+            return self.x
+
+    class ViewOfStoredArray(StoredArray):
         def __array__(self, dtype=None, copy=None):
             return self.x[:]
 
     class Subclass(np.ndarray):
         pass
 
-    x = np.arange(24.0).reshape(2, 3, 4)
+    x = np.arange(24.0).reshape(2, 3, 4).copy()
+    assert x.flags.owndata
     for src in (
         x,
         x[:, ::2, :],
@@ -150,7 +155,8 @@ def test_array4_view_sources():
         x.view(Subclass),
         memoryview(x),
         Interface(x),
-        ArrayMethod(x),
+        StoredArray(x),
+        ViewOfStoredArray(x),
     ):
         a4 = amr.Array4_double(src)
         dst = np.array(a4, copy=False)

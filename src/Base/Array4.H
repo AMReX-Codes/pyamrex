@@ -154,16 +154,19 @@ namespace pyAMReX
             /* init from a numpy or other buffer protocol array: non-owning view
              *
              * NumPy normalizes a source to an aligned array of type T. If that array
-             * owns its data and is not the source, then it is a converted copy that
-             * writes would not reach, so we reject it. Otherwise, it is the source or
-             * views memory that its base objects hold. The source itself might not
-             * hold that memory, e.g., an __array_interface__ property can create a
-             * buffer on each access. So the Array4 keeps the normalized array alive.
-             * This needs the new Python object, which py::init does not expose.
+             * owns its data and nothing else references it, then it is a temporary
+             * that writes would not reach, e.g., a converted copy, so we reject it.
+             * Otherwise, others hold it too, e.g., it is the source or an array that
+             * the source stores, or it views memory that its base objects hold. The
+             * source itself might not hold that memory, e.g., an __array_interface__
+             * property can create a buffer on each access. So the Array4 keeps the
+             * normalized array alive, which is what makes the view memory-safe, whatever
+             * the reference count says. This needs the new Python object, which
+             * py::init does not expose.
              */
             .def("__init__", [](py::detail::value_and_holder & v_h, py::object const & src) {
                 auto arr = pyAMReX::aligned_array_t<T>::ensure(src);
-                if (!arr || (!arr.is(src) && arr.owndata()))
+                if (!arr || (arr.owndata() && arr.ref_count() == 1))
                     throw py::type_error("Array4 is a non-owning view, but this source cannot be "
                         "viewed as '" + pyAMReX::array_typestr<T_no_cv>() + "' without a temporary. "
                         "Copy it first, e.g., with numpy.array(source, dtype=..., order='C').");
