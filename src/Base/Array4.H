@@ -156,17 +156,22 @@ namespace pyAMReX
              * NumPy normalizes a source to an aligned array of type T. If that array
              * owns its data and nothing else references it, then it is a temporary
              * that writes would not reach, e.g., a converted copy, so we reject it.
-             * Otherwise, others hold it too, e.g., it is the source or an array that
-             * the source stores, or it views memory that its base objects hold. The
-             * source itself might not hold that memory, e.g., an __array_interface__
-             * property can create a buffer on each access. So the Array4 keeps the
-             * normalized array alive, which is what makes the view memory-safe, whatever
+             * This check is best effort: it relies on CPython reference counts and
+             * misses a temporary that an __array__ method wraps in a view or subclass.
+             *
+             * Either object can be the only owner of the memory: an __array__ method
+             * can return a view without a reference to the source, and an
+             * __array_interface__ property can create a buffer on each access. So the
+             * Array4 keeps both alive, which is what makes the view memory-safe, whatever
              * the reference count says. This needs the new Python object, which
              * py::init does not expose.
+             *
+             * Keep this overload last: it matches any argument, so later ones never run.
              */
             .def("__init__", [](py::detail::value_and_holder & v_h, py::object const & src) {
-                auto arr = pyAMReX::aligned_array_t<T>::ensure(src);
-                if (!arr || (arr.owndata() && arr.ref_count() == 1))
+                // on failure, this raises the error from the source
+                pyAMReX::aligned_array_t<T> arr(src);
+                if (arr.owndata() && arr.ref_count() == 1)
                     throw py::type_error("Array4 is a non-owning view, but this source cannot be "
                         "viewed as '" + pyAMReX::array_typestr<T_no_cv>() + "' without a temporary. "
                         "Copy it first, e.g., with numpy.array(source, dtype=..., order='C').");
@@ -217,8 +222,13 @@ namespace pyAMReX
                 // todo: we could check and store here if the array buffer we got is read-only
 
                 v_h.value_ptr() = a4.release();
-                py::detail::keep_alive_impl(py::handle(reinterpret_cast<PyObject *>(v_h.inst)), arr);
-            }, py::detail::is_new_style_constructor())
+                auto const self = py::handle(reinterpret_cast<PyObject *>(v_h.inst));
+                py::detail::keep_alive_impl(self, arr);
+                py::detail::keep_alive_impl(self, src);
+            }, py::detail::is_new_style_constructor(),
+            "Non-owning view of a 3D array of this type, e.g., a NumPy array.\n\n"
+            "Raises if the view would need a converted copy or has strides that an Array4 "
+            "cannot represent.")
 
             /* init from __cuda_array_interface__: non-owning view
              * TODO

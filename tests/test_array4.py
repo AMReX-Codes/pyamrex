@@ -213,6 +213,49 @@ def test_array4_keeps_source_memory_alive():
         assert src.ref() is None
 
 
+@pytest.mark.skipif(
+    platform.python_implementation() != "CPython",
+    reason="Checks when memory is freed",
+)
+def test_array4_keeps_source_alive():
+    """The source might own memory that its array does not reference"""
+
+    class Source:
+        def __init__(self):
+            self.memory = (ctypes.c_double * 24)(*[3.0] * 24)
+
+        def __array__(self, dtype=None, copy=None):
+            address = ctypes.addressof(self.memory)
+            view = (ctypes.c_double * 24).from_address(address)
+            return np.frombuffer(view, "d").reshape(2, 3, 4)
+
+    src = Source()
+    ref = weakref.ref(src)
+    a4 = amr.Array4_double(src)
+    del src
+    gc.collect()
+    assert ref() is not None
+    assert a4[0, 0, 0] == 3.0
+    del a4
+    gc.collect()
+    assert ref() is None
+
+
+def test_array4_raises_source_errors():
+    """An error from the source is not replaced by our own"""
+
+    class Raises:
+        def __array__(self, dtype=None, copy=None):
+            raise RuntimeError("no implicit conversion")
+
+    with pytest.raises(RuntimeError, match="no implicit conversion"):
+        amr.Array4_double(Raises())
+
+
+@pytest.mark.skipif(
+    platform.python_implementation() != "CPython",
+    reason="Relies on reference counts",
+)
 def test_array4_rejects_temporaries():
     """Writes to a view of a converted copy would not reach the source"""
 
