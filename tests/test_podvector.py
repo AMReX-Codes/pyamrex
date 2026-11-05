@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import importlib.util
 import sys
 
 import numpy as np
@@ -46,6 +47,33 @@ def test_array_interface():
 
     podv[1] = 5
     assert arr[1] == podv[1] == 5
+
+
+def test_canonical_dtype():
+    """NumPy's one scalar type per kind and size, on any C data model"""
+    for vec in (
+        amr.PODVector_real_std(1),
+        amr.PODVector_int_std(1),
+        amr.PODVector_uint64_std(1),
+        amr.Vector_int([1]),
+    ):
+        dtype = np.array(vec, copy=False).dtype
+        assert dtype.type is np.dtype(dtype.str).type
+
+
+@pytest.mark.skipif(
+    importlib.util.find_spec("pandas") is None, reason="pandas is not available"
+)
+@pytest.mark.parametrize("name", ["real", "int", "uint64"])
+def test_pandas_merge(name):
+    """pandas merges on canonical types only, e.g., for particle idcpu"""
+    import pandas as pd
+
+    keys = getattr(amr, f"PODVector_{name}_std")(3).to_numpy(copy=True)
+    # unsorted, because sorted keys skip the type lookup in pandas
+    keys[:] = [2, 0, 1]
+    df = pd.DataFrame({"key": keys})
+    assert len(df.merge(df, on="key")) == 3
 
 
 def test_from_numpy():
