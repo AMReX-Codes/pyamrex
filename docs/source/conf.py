@@ -22,6 +22,7 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
+import datetime
 import json
 import os
 import shutil
@@ -86,7 +87,7 @@ master_doc = "index"
 
 # General information about the project.
 project = "pyAMReX"
-copyright = "2023, The Regents of the University of California, through Lawrence Berkeley National Laboratory, National Renewable Energy Laboratory Alliance for Sustainable Energy, LLC and Lawrence Livermore National Security, LLC (subject to receipt of any required approvals from the U.S. Dept. of Energy)"
+copyright = f"2023-{datetime.date.today().year}, The Regents of the University of California, through Lawrence Berkeley National Laboratory, National Renewable Energy Laboratory Alliance for Sustainable Energy, LLC and Lawrence Livermore National Security, LLC (subject to receipt of any required approvals from the U.S. Dept. of Energy)"
 author = "AMReX collaboration"
 
 # Parse pyAMReX version information
