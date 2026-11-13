@@ -187,11 +187,19 @@ namespace pyAMReX
                 //  a4.set_stride<1>(buf.strides.at(1));
                 //  a4.set_stride<2>(buf.strides.at(0));
                 // Unfortunately, amrex::Array4 does not have a public function for setting
-                // strides, and stride<n> is stored at stride.a[n-1].
+                // strides. The j and k strides are stored at stride.a[0] and stride.a[1].
                 a4.get()->stride.a[0] = (int)buf.strides.at(1) / sizeof(T);
                 a4.get()->stride.a[1] = (int)buf.strides.at(0) / sizeof(T);
                 // 3D == no component: stride here should not matter
-                a4.get()->stride.a[2] = a4.get()->template get_stride<2>() * (int)buf.shape.at(0);
+                auto const nstride = a4.get()->template get_stride<2>() * (Long)buf.shape.at(0);
+                // Since AMReX-Codes/amrex#6225, the component stride of an Array4 is stored
+                // separately in stride.n (and stride.a has only two elements); before that,
+                // it was stored at stride.a[2].
+                if constexpr (requires { a4.get()->stride.n; }) {
+                    a4.get()->stride.n = nstride;
+                } else {
+                    a4.get()->stride.a[2] = nstride;
+                }
 
                 // todo: we could check and store here if the array buffer we got is read-only
 
