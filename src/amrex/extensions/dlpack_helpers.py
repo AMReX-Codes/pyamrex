@@ -62,9 +62,23 @@ def dlpack_to_numpy(self, copy=False):
     return np.from_dlpack(self)
 
 
+def _pyamrex_module(obj):
+    """The pyAMReX module (e.g., amrex.space3d) of a pyAMReX object, or None.
+
+    Found through the MRO, so this also works for Python subclasses and for
+    subclasses bound by application codes.
+    """
+    import sys
+
+    for cls in type(obj).__mro__:
+        if cls.__module__.startswith("amrex."):
+            return sys.modules[cls.__module__]
+    return None
+
+
 def _is_pyamrex(obj):
     """Whether obj is a pyAMReX object (or a Python subclass of one)."""
-    return any(c.__module__.startswith("amrex.") for c in type(obj).__mro__)
+    return _pyamrex_module(obj) is not None
 
 
 class _SynchronizedExport:

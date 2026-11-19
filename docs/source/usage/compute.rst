@@ -116,6 +116,30 @@ Here is the general structure for computing on particles:
                :start-after: # Manual: Pure SoA Compute PC Pandas START
                :end-before: # Manual: Pure SoA Compute PC Pandas END
 
+         .. tab-item:: Add particles
+
+            ``add_arrays`` adds particles to a container, with one array or scalar per particle component.
+            The arrays can be NumPy, CuPy or dpnp arrays, pyAMReX PODVectors or array-likes; scalars are broadcast.
+            With ``local=True`` (default), every MPI rank adds its own particles; with ``local=False``, the particles of the root rank are added.
+            ``distribute="redistribute"`` (default) then calls ``redistribute()``, which moves each particle to the rank that owns its position.
+            ``distribute="equally"`` splits the particles of the root evenly (1/N) over the MPI ranks that own a box, e.g., when their position does not decide their rank.
+            ``distribute="none"`` keeps them where they were added, e.g., to add several batches before one ``redistribute()``.
+
+            .. literalinclude:: ../../../tests/test_particleContainer.py
+               :language: python3
+               :dedent: 4
+               :start-after: # Manual: Pure SoA Add Arrays START
+               :end-before: # Manual: Pure SoA Add Arrays END
+
+            ``add_df`` is the counterpart of ``to_df``: it adds particles from a DataFrame, one column per component.
+            With ``local=False``, it is the inverse of ``to_df(local=False)``.
+
+            .. literalinclude:: ../../../tests/test_particleContainer.py
+               :language: python3
+               :dedent: 4
+               :start-after: # Manual: Pure SoA Add DF START
+               :end-before: # Manual: Pure SoA Add DF END
+
 
    .. tab-item:: Legacy (AoS + SoA) Layout
 

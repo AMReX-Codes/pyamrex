@@ -19,5 +19,16 @@ void init_ParallelDescriptor(py::module &m)
        .def("IOProcessor", py::overload_cast<>(&ParallelDescriptor::IOProcessor))
        .def("IOProcessorNumber", py::overload_cast<>(&ParallelDescriptor::IOProcessorNumber))
    ;
+#ifdef AMREX_USE_MPI
+    mpd.def("Communicator",
+        []() { return static_cast<int>(MPI_Comm_c2f(ParallelDescriptor::Communicator())); },
+        R"pbdoc(
+The MPI communicator of AMReX, as a Fortran handle (int).
+
+Use ``mpi4py.MPI.Comm.f2py(amr.ParallelDescriptor.Communicator())`` to get an
+mpi4py communicator. It is owned by AMReX: do not free it.
+)pbdoc"
+    );
+#endif
     // ...
 }
