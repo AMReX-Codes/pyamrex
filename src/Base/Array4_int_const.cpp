@@ -14,6 +14,7 @@ void init_Array4_int_const(py::module &m)
 {
     using namespace pyAMReX;
 
+    make_Array4< char const >(m, "char_const");
     make_Array4< short const >(m, "short_const");
     make_Array4< int const >(m, "int_const");
     make_Array4< long const >(m, "long_const");

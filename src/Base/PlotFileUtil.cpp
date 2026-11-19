@@ -4,8 +4,12 @@
  */
 #include "pyAMReX.H"
 
+#include <AMReX_Geometry.H>
+#include <AMReX_IntVect.H>
+#include <AMReX_MultiFab.H>
 #include <AMReX_PlotFileUtil.H>
 #include <AMReX_Print.H>
+#include <AMReX_REAL.H>
 #include <AMReX_Vector.H>
 
 #include <sstream>
@@ -64,6 +68,33 @@ void init_PlotFileUtil(py::module &m) {
         py::arg("ref_ratio"), py::arg("versionName") = "HyperCLaw-V1.1",
         py::arg("levelPrefix") = "Level_", py::arg("mfPrefix") = "Cell",
         py::arg_v("extra_dirs", std::vector<std::string>(), "list[str]"));
+
+  m.def("level_path", &amrex::LevelPath,
+        "return the path of the Level directory, e.g., Level_5",
+        py::arg("level"), py::arg("levelPrefix") = "Level_");
+  m.def("multifab_header_path", &amrex::MultiFabHeaderPath,
+        "return the path of the MultiFab to write to the header, "
+        "e.g., Level_5/Cell",
+        py::arg("level"), py::arg("levelPrefix") = "Level_",
+        py::arg("mfPrefix") = "Cell");
+  m.def("level_full_path", &amrex::LevelFullPath,
+        "return the full path of the Level directory, e.g., "
+        "plt00005/Level_5",
+        py::arg("level"), py::arg("plotfilename"),
+        py::arg("levelPrefix") = "Level_");
+  m.def("multifab_file_full_prefix", &amrex::MultiFabFileFullPrefix,
+        "return the full path MultiFab prefix, e.g., plt00005/Level_5/Cell",
+        py::arg("level"), py::arg("plotfilename"),
+        py::arg("levelPrefix") = "Level_", py::arg("mfPrefix") = "Cell");
+  m.def("pre_build_director_hierarchy", &amrex::PreBuildDirectorHierarchy,
+        "prebuild a hierarchy of directories. dirName is built first; if "
+        "dirName exists, it is renamed. Then dirName/Level_0 .. "
+        "dirName/Level_{nSubDirs-1} are built. If callBarrier is true, "
+        "ParallelDescriptor::Barrier() is called after all directories "
+        "are built; ParallelDescriptor::IOProcessor() creates the "
+        "directories",
+        py::arg("dirName"), py::arg("subDirPrefix"), py::arg("nSubDirs"),
+        py::arg("callBarrier"));
 
   py::class_<PlotFileData>(m, "PlotFileData")
       // explicitly provide constructor argument types

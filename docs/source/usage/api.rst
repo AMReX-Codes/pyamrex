@@ -251,6 +251,31 @@ Data Containers
    :members:
    :undoc-members:
 
+MultiFab Operations
+"""""""""""""""""""
+
+Averaging operations between AMR levels and between data centerings.
+Functions that take one ``MultiFab`` per coordinate direction expect a list
+of exactly ``AMREX_SPACEDIM`` entries and raise ``ValueError`` otherwise.
+
+.. autofunction:: amrex.space3d.average_down
+
+.. autofunction:: amrex.space3d.average_down_faces
+
+.. autofunction:: amrex.space3d.average_down_edges
+
+.. autofunction:: amrex.space3d.average_down_nodal
+
+.. autofunction:: amrex.space3d.average_node_to_cellcenter
+
+.. autofunction:: amrex.space3d.average_edge_to_cellcenter
+
+.. autofunction:: amrex.space3d.average_face_to_cellcenter
+
+.. autofunction:: amrex.space3d.average_cellcenter_to_face
+
+.. autofunction:: amrex.space3d.sum_fine_to_coarse
+
 Small Matrices and Vectors
 """"""""""""""""""""""""""
 
@@ -278,6 +303,27 @@ Utility
 .. autoclass:: amrex.space3d.PlotFileData
    :members:
    :undoc-members:
+
+Plotfile paths and directories, e.g. to write a multi-level plotfile
+incrementally:
+
+.. autofunction:: amrex.space3d.level_path
+
+.. autofunction:: amrex.space3d.multifab_header_path
+
+.. autofunction:: amrex.space3d.level_full_path
+
+.. autofunction:: amrex.space3d.multifab_file_full_prefix
+
+.. autofunction:: amrex.space3d.pre_build_director_hierarchy
+
+.. autofunction:: amrex.space3d.util_create_directory
+
+.. autofunction:: amrex.space3d.util_create_clean_directory
+
+.. autofunction:: amrex.space3d.util_create_directory_destructive
+
+.. autofunction:: amrex.space3d.file_exists
 
 
 .. _usage-api-amrcore:
@@ -342,6 +388,56 @@ particle metadata broker returned by ``core.get_par_gdb()``.
    :undoc-members:
 
 .. autoclass:: amrex.space3d.AmrParGDB
+   :members:
+   :undoc-members:
+
+Interpolaters
+"""""""""""""
+
+Interpolaters map data from coarse to fine levels. They cannot (yet) be
+implemented in Python, since their per-FAB ``interp`` methods are called in
+performance-critical inner loops. Use the global instances below, which are
+the same objects as their C++ counterparts:
+
+``pc_interp``, ``node_bilinear_interp``, ``cell_bilinear_interp``,
+``cell_cons_interp``, ``lincc_interp``, ``protected_interp``,
+``quartic_interp``, ``quadratic_interp``, ``cell_quartic_interp``,
+``face_linear_interp``, ``face_divfree_interp``, ``face_cons_linear_interp``
+and the ``MFInterpolater`` variants ``mf_pc_interp``,
+``mf_cell_cons_interp``, ``mf_lincc_interp``,
+``mf_linear_slope_minmax_interp``, ``mf_cell_bilinear_interp`` and
+``mf_node_bilinear_interp``.
+
+.. autoclass:: amrex.space3d.InterpBase
+   :members:
+   :undoc-members:
+
+.. autoclass:: amrex.space3d.Interpolater
+   :members:
+   :undoc-members:
+
+.. autoclass:: amrex.space3d.MFInterpolater
+   :members:
+   :undoc-members:
+
+FillPatch
+"""""""""
+
+Fill a ``MultiFab``, including its ghost cells, from same-level and/or
+coarse-level data. ``mapper`` accepts any ``Interpolater`` or
+``MFInterpolater``; ``physbcf`` accepts ``PhysBCFunctNoOp``,
+``PhysBCFunct_CpuBndryFuncFab`` or a Python ``PhysBCFunctUser``.
+
+.. autofunction:: amrex.space3d.fill_patch_single_level
+
+.. autofunction:: amrex.space3d.fill_patch_two_levels
+
+.. autofunction:: amrex.space3d.interp_from_coarse_level
+
+Flux Registers
+""""""""""""""
+
+.. autoclass:: amrex.space3d.FluxRegister
    :members:
    :undoc-members:
 
