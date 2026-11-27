@@ -8,8 +8,17 @@ else
   CVER=4.13.6
 fi
 
-wget https://github.com/ccache/ccache/releases/download/v${CVER}/ccache-${CVER}-linux-x86_64-glibc.tar.xz
-tar xvf ccache-${CVER}-linux-x86_64-glibc.tar.xz
-sudo mv -f ccache-${CVER}-linux-x86_64-glibc/ccache /usr/local/bin/
-sudo rm -rf ccache-${CVER}-linux-x86_64-glibc
-sudo rm -f ccache-${CVER}-linux-x86_64-glibc.tar.xz
+# ccache publishes Linux release binaries named after `uname -m`, which covers
+# the x64 and the arm64 GitHub-hosted runners.
+CARCH=$(uname -m)
+case "${CARCH}" in
+  x86_64|aarch64) ;;
+  *) echo "No ccache ${CVER} release binary for ${CARCH}" >&2; exit 1 ;;
+esac
+CNAME=ccache-${CVER}-linux-${CARCH}-glibc
+
+wget https://github.com/ccache/ccache/releases/download/v${CVER}/${CNAME}.tar.xz
+tar xvf ${CNAME}.tar.xz
+sudo mv -f ${CNAME}/ccache /usr/local/bin/
+sudo rm -rf ${CNAME}
+sudo rm -f ${CNAME}.tar.xz

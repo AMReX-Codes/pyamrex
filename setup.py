@@ -18,6 +18,14 @@ from setuptools import Extension, setup
 from setuptools.command.build import build
 from setuptools.command.build_ext import build_ext
 
+# setuptools platform name -> Visual Studio generator platform (-A)
+WIN_PLAT_TO_CMAKE = {
+    "win32": "Win32",
+    "win-amd64": "x64",
+    "win-arm32": "ARM",
+    "win-arm64": "ARM64",
+}
+
 
 class CopyPreBuild(build):
     def initialize_options(self):
@@ -160,11 +168,16 @@ class CMakeBuild(build_ext):
                     cfg.upper(), os.path.join(extdir, "amrex")
                 ),
             ]
-            generator_platform = os.environ.get("CMAKE_GENERATOR_PLATFORM")
+            # Target architecture (-A): an explicit CMAKE_GENERATOR_PLATFORM
+            # wins, else match the platform setuptools builds for (the
+            # interpreter, or VSCMD_ARG_TGT_ARCH when cross-compiling).
+            # Visual Studio would otherwise default to the host architecture.
+            #   https://cmake.org/cmake/help/latest/envvar/CMAKE_GENERATOR_PLATFORM.html
+            generator_platform = os.environ.get(
+                "CMAKE_GENERATOR_PLATFORM"
+            ) or WIN_PLAT_TO_CMAKE.get(self.plat_name)
             if generator_platform:
                 cmake_args += ["-A", generator_platform]
-            elif sys.maxsize > 2**32:
-                cmake_args += ["-A", "x64"]
         else:
             cmake_args += ["-DCMAKE_BUILD_TYPE=" + cfg]
 
