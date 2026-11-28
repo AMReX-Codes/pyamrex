@@ -39,6 +39,76 @@ jobs:
       shell: cmd
       run: python3 -m pytest tests
 
+  msvc_x86:
+    name: MSVC x86 w/o MPI Static Release
+    runs-on: windows-latest
+    env:
+      CMAKE_BUILD_PARALLEL_LEVEL: 4
+    steps:
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+    - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+      with:
+        # oldest CPython with NumPy win32 wheels
+        python-version: '3.12'
+        architecture: x86
+    - name: Build & Install
+      env:
+        # Work-around for windows-latest GH runner issue, see
+        # https://github.com/actions/runner-images/issues/10004
+        CXXFLAGS: "/D_DISABLE_CONSTEXPR_MUTEX_CONSTRUCTOR"
+        AMREX_SPACEDIM: 3
+      run: |
+        # setup.py targets the interpreter's platform: fail if this is not win32
+        python -c "import sysconfig; p = sysconfig.get_platform(); assert p == 'win32', p"
+        if(!$?) { Exit $LASTEXITCODE }
+
+        # no pandas: it ships no win32 wheels
+        python -m pip install -U pip
+        python -m pip install -U pytest
+        python -m pip install -v .
+        if(!$?) { Exit $LASTEXITCODE }
+
+        python -c "import amrex.space3d as amr; print(amr.__version__)"
+        if(!$?) { Exit $LASTEXITCODE }
+    - name: Unit tests
+      shell: cmd
+      run: python -m pytest tests
+
+  msvc_arm64:
+    name: MSVC ARM64 w/o MPI Static Release
+    runs-on: windows-11-arm
+    env:
+      CMAKE_BUILD_PARALLEL_LEVEL: 4
+    steps:
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+    - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+      with:
+        python-version: '3.x'
+        architecture: arm64
+    - name: Build & Install
+      env:
+        # Work-around for windows-latest GH runner issue, see
+        # https://github.com/actions/runner-images/issues/10004
+        CXXFLAGS: "/D_DISABLE_CONSTEXPR_MUTEX_CONSTRUCTOR"
+        AMREX_SPACEDIM: 3
+      run: |
+        # setup.py targets the interpreter's platform: fail if this is not
+        # win-arm64. Windows on Arm also runs x64 Python under emulation, and
+        # platform.machine() reports the native ARM64 even then.
+        python -c "import sysconfig; p = sysconfig.get_platform(); assert p == 'win-arm64', p"
+        if(!$?) { Exit $LASTEXITCODE }
+
+        python -m pip install -U pip
+        python -m pip install -U pandas pytest
+        python -m pip install -v .
+        if(!$?) { Exit $LASTEXITCODE }
+
+        python -c "import amrex.space3d as amr; print(amr.__version__)"
+        if(!$?) { Exit $LASTEXITCODE }
+    - name: Unit tests
+      shell: cmd
+      run: python -m pytest tests
+
   clang:
     name: Clang w/o MPI Shared Debug
     runs-on: windows-latest
